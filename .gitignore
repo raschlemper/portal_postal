@@ -71,3 +71,4 @@ project.xml
 build-impl.xml
 genfiles.properties
 build.xml
+.svn/
