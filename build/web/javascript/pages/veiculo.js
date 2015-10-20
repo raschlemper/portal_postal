@@ -1,4 +1,6 @@
-var Veiculo = function(form) {
+var VeiculoController = function(form) {
+    
+    var veiculo = {};
                                 
     var tipos = [{'key': 'motos', 'value': 'Moto'},
                  {'key': 'carros', 'value': 'Carro'},
@@ -16,9 +18,12 @@ var Veiculo = function(form) {
 
     var situacao = [{'key': 'ativo', 'value': 'Ativo'},  
                     {'key': 'inativo', 'value': 'Inativo'},  
-                    {'key': 'manutencao', 'value': 'Manutenção'}];    
+                    {'key': 'manutencao', 'value': 'Manutenção'}];  
+              
+    
+    // acoes /////////     
 
-    var pesquisarTodos = function(tipo) {
+    var pesquisarTodos = function() {
         $.ajax({
             method: "GET",
             url: "/Portal_Postal_Web/veiculo?action=all",
@@ -28,45 +33,6 @@ var Veiculo = function(form) {
             addVeiculos(data);
         });
     };  
-
-    function editar(idUsuario) {
-        $.ajax({
-            method: "POST",
-            url: "ajax/veiculo_editar_dialog.jsp",
-            data: {idUsuario: idUsuario},
-            dataType: 'html'
-        }).done(function(retorno) {
-            editarModal(retorno);
-        });
-    }
-
-    var editarModal = function(retorno) {
-        bootbox.dialog({
-            title: "Editar Veículo",
-            message: retorno,
-            animate: true,
-            onEscape: true,
-            className: "modal-lgWidth",
-            callback: init(),
-            buttons: {
-                Cancelar: {
-                    label:"<i class='fa fa-lg fa-times fa-spc'></i> CANCELAR",
-                    className: "btn btn-default",
-                    callback: function() {
-                        bootbox.hideAll();
-                    }
-                },
-                success: {
-                    label: "<i class='fa fa-lg fa-save fa-spc'></i> SALVAR",
-                    className: "btn btn-success",
-                    callback: function() {                                    
-                        veiculo.acoes.salvar(document.veiculoEditForm);
-                    }
-                }
-            }
-        });
-        return false;
-    }
 
     var addVeiculos = function(veiculos) {                      
         var html = '<tr>' + 
@@ -90,6 +56,112 @@ var Veiculo = function(form) {
         var template = _.template(html);
         _.map(veiculos, function(veiculo) {
             $('#datatable-veiculos tbody').append(template(veiculo));                        
+        });
+    };    
+
+    var pesquisar = function(idVeiculo) {
+        $.ajax({
+            method: "GET",
+            url: "/Portal_Postal_Web/veiculo?action=get",
+            data: { idVeiculo: idVeiculo },
+            dataType: 'json',
+        }).done(function(data) {
+            veiculo = data;
+            console.log(veiculo);
+        });
+    };  
+
+    function editar(idVeiculo) {
+        $.ajax({
+            method: "POST",
+            url: "ajax/veiculo_editar_dialog.jsp",
+            data: {idVeiculo: idVeiculo},
+            dataType: 'html'
+        }).done(function(retorno) {
+            editarModal(retorno);
+        });
+    };
+
+    var editarModal = function(retorno) {
+        bootbox.dialog({
+            title: "Editar Veículo",
+            message: retorno,
+            animate: true,
+            onEscape: true,
+            className: "modal-lgWidth",
+            callback: init(),
+            buttons: {
+                Cancelar: {
+                    label:"<i class='fa fa-lg fa-times fa-spc'></i> CANCELAR",
+                    className: "btn btn-default",
+                    callback: function() {
+                        bootbox.hideAll();
+                    }
+                },
+                success: {
+                    label: "<i class='fa fa-lg fa-save fa-spc'></i> SALVAR",
+                    className: "btn btn-success",
+                    name: 'salvar',
+                    callback: function() {                                    
+                        veiculo.acoes.salvar();
+                    }
+                }
+            }
+        });
+        return false;
+    };
+    
+    var salvar = function() {
+        if(!validarCampoPlaca()) return false;
+        if(!validarCampoAnoFabricacao()) return false;
+        if(!validarCampoAnoModelo()) return false;
+        if(!validarCampoRenavam()) return false;
+        if(!validarCampoQuilometragem()) return false;
+        form.submit();
+    };  
+
+    var validarCampoPlaca = function() {
+        if(form.placa.value) return true;
+        alert('Preencha a placa do veículo!');
+        return false;
+    };  
+
+    var validarCampoAnoFabricacao = function() {
+        if(!form.anoFabricacao.value) return true;
+        var anoCorrente = (new Date).getFullYear() + 1;
+        if(form.anoFabricacao.value >= 1970 && form.anoFabricacao.value <= anoCorrente) return true;
+        alert('Preencha o ano de fabricação do veículo com valores entre 1970 e ' + anoCorrente + '!');
+        return false;
+    };  
+
+    var validarCampoAnoModelo = function() {
+        if(!form.anoModelo.value) return true;
+        var anoCorrente = (new Date).getFullYear() + 1;
+        if(form.anoModelo.value >= 1970 && form.anoModelo.value <= anoCorrente) return true;
+        alert('Preencha o ano do modelo do veículo com valores entre 1970 e ' + anoCorrente + '!');
+        return false;
+    };
+
+    var validarCampoRenavam = function() {
+        if(form.renavam.value) return true;
+        alert('Preencha o renavam do veículo!');
+        return false;
+    };    
+
+    var validarCampoQuilometragem = function() {
+        if(form.quilometragem.value) return true;
+        alert('Preencha a quilometragem do veículo!');
+        return false;
+    }; 
+    
+    
+    // funcoes /////////
+
+    var loading = function() {
+        $( document ).ajaxStart(function() {
+            waitMsg();
+        }).ajaxStop(function() {
+            fechaMsg();       
         });
     }
 
@@ -208,6 +280,9 @@ var Veiculo = function(form) {
         while(select.options.length > 0) { select.remove(select.options.length - 1); }        
     }
 
+
+    // mascara /////////
+    
     var addMascaraPlaca = function() {
         $(".placa").mask('SSS-DDDD', {translation: {'S': {pattern: /[A-Za-z]/},
                                                     'D': {pattern: /[0-9]/}}});
@@ -231,14 +306,17 @@ var Veiculo = function(form) {
         $(".number").mask('DDD.DDD', {translation: {'D': {pattern: /[0-9]/}}, reverse: true});
     };
 
+    
+    // eventos /////////
+    
     var addTipoEventListener = function() {   
-        $( ".tipo" ).change(function() {
+        form.tipo.addEventListener('change', function() {
             setMarcaVeiculo(this.value);
         });
     };
 
     var addMarcaEventListener = function() {  
-        $( ".marca" ).change(function() {
+        form.marca.addEventListener('change', function() {
             var tipo = $(".tipo").value;
             var marca = JSON.parse(this.value);
             setModeloVeiculo(tipo, marca.id);
@@ -246,63 +324,11 @@ var Veiculo = function(form) {
     };
 
     var addSalvarEventListener = function() {  
-        $( "#salvar" ).click(function() {
+        if(!form.salvar) return;
+        form.salvar.addEventListener('click', function() {
             return salvar(this.form);
         });
-    };
-
-    // Preencher Campos
-    var salvar = function(form) {
-        if(!form) return;
-        if(!validarCampoPlaca(form)) return false;
-        if(!validarCampoAnoFabricacao(form)) return false;
-        if(!validarCampoAnoModelo(form)) return false;
-        if(!validarCampoRenavam(form)) return false;
-        if(!validarCampoQuilometragem(form)) return false;
-        form.submit();
-    };  
-
-    var validarCampoPlaca = function(form) {
-        if(form.placa.value) return true;
-        alert('Preencha a placa do veículo!');
-        return false;
-    };  
-
-    var validarCampoAnoFabricacao = function(form) {
-        if(!form.anoFabricacao.value) return true;
-        var anoCorrente = (new Date).getFullYear() + 1;
-        if(form.anoFabricacao.value >= 1970 && form.anoFabricacao.value <= anoCorrente) return true;
-        alert('Preencha o ano de fabricação do veículo com valores entre 1970 e ' + anoCorrente + '!');
-        return false;
-    };  
-
-    var validarCampoAnoModelo = function(form) {
-        if(!form.anoModelo.value) return true;
-        var anoCorrente = (new Date).getFullYear() + 1;
-        if(form.anoModelo.value >= 1970 && form.anoModelo.value <= anoCorrente) return true;
-        alert('Preencha o ano do modelo do veículo com valores entre 1970 e ' + anoCorrente + '!');
-        return false;
-    };
-
-    var validarCampoRenavam = function(form) {
-        if(form.renavam.value) return true;
-        alert('Preencha o renavam do veículo!');
-        return false;
-    };    
-
-    var validarCampoQuilometragem = function(form) {
-        if(form.quilometragem.value) return true;
-        alert('Preencha a quilometragem do veículo!');
-        return false;
-    };  
-
-    var loading = function() {
-        $( document ).ajaxStart(function() {
-            waitMsg();
-        }).ajaxStop(function() {
-            fechaMsg();       
-        });
-    }
+    }; 
 
     return {
         listas: {
@@ -313,6 +339,7 @@ var Veiculo = function(form) {
         },
         acoes: {
             pesquisarTodos: pesquisarTodos,
+            pesquisar: pesquisar,
             editar: editar,                       
             salvar: salvar
         },

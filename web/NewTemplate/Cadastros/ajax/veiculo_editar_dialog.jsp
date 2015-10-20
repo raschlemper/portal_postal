@@ -8,6 +8,7 @@
 
     String nomeBD = (String) session.getAttribute("empresa");
     if (nomeBD == null) return;
+    Integer idVeiculo = Integer.parseInt(request.getParameter("idVeiculo"));
 
 //    int idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
 //    Entidade.Usuario col = Controle.contrUsuario.consultaUsuarioById(idUsuario, nomeBD);
@@ -26,6 +27,7 @@
     <ul class="list-unstyled">
         <li class="list-group-item">
             <div class="row form-horizontal">
+                <input type="hidden" name="idVeiculo" value="<%= idVeiculo %>"/>
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <label class="small">Tipo</label>
                     <div class="input-group">
@@ -118,13 +120,14 @@
     
         <script type="text/javascript">  
             
-            var veiculo = new Veiculo(veiculoEditForm); 
+            var veiculo = new VeiculoController(veiculoEditForm); 
             
             var init = function(form) {
 //                veiculo.funcoes.loading();
                 addPageListas();
                 addMascaras();
                 addPageEventos();
+                veiculo.acoes.pesquisar(veiculoEditForm.idVeiculo.value);
             };
             
             var addPageListas = function() { 
