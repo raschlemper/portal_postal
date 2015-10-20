@@ -66,9 +66,9 @@ buildNumber.properties
 .mvn/timing.properties
 
 ## GERAL ##
-ant-deploy.xml
-project.xml
-build-impl.xml
-genfiles.properties
-build.xml
 .svn/
+dist/
+build/
+nbproject/
+build.xml
+catalog.xml
