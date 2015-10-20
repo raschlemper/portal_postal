@@ -140,6 +140,7 @@ public class ServVeiculo extends HttpServlet {
     
     private Veiculo getVeiculoFromRequest(HttpServletRequest request) {
         Veiculo veiculo = new Veiculo();
+<<<<<<< HEAD
         veiculo.setId(request.getParameter("id") != null ? Integer.parseInt(request.getParameter("id")) : null);
         JSONObject marca = new JSONObject(request.getParameter("marca"));
         veiculo.setMarca(marca.getString("name"));
@@ -155,11 +156,42 @@ public class ServVeiculo extends HttpServlet {
         String quilometragem = request.getParameter("quilometragem");
         String quilometragemSF = (quilometragem != null && !quilometragem.equals("") ? quilometragem.replace(".", "") : null);
         veiculo.setQuilometragem(quilometragemSF != null && !quilometragemSF.equals("") ? Integer.parseInt(quilometragemSF) : null);
+=======
+        veiculo.setId(getIntegerParameter(request.getParameter("idVeiculo")));
+        veiculo.setMarca(getJsonParameter(request.getParameter("marca"), "name"));
+        veiculo.setModelo(getJsonParameter(request.getParameter("modelo"), "name"));
+        veiculo.setPlaca(request.getParameter("placa"));
+        veiculo.setAnoFabricacao(getIntegerParameter(request.getParameter("anoFabricacao")));
+        veiculo.setAnoModelo(getIntegerParameter(request.getParameter("anoModelo")));
+        veiculo.setChassis(request.getParameter("chassis"));
+        veiculo.setRenavam(request.getParameter("renavam"));
+        veiculo.setQuilometragem(getQuilometragemParameter(request.getParameter("quilometragem")));
+>>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
         veiculo.setCombustivel(request.getParameter("combustivel"));
         veiculo.setStatus(request.getParameter("status"));
         veiculo.setSituacao(request.getParameter("situacao"));
         return veiculo;
     }
+<<<<<<< HEAD
             
+=======
+          
+    private String getJsonParameter(String parameter, String campo) {
+        if(parameter != null) { return new JSONObject(parameter).getString(campo); }
+        return null;
+    }
+          
+    private Integer getIntegerParameter(String parameter) {
+        if(parameter != null) { return Integer.parseInt(parameter); }
+        return null;
+    }
+          
+    private Integer getQuilometragemParameter(String parameter) {
+        if(parameter != null && !parameter.equals("")) { 
+            return getIntegerParameter(parameter.replace(".", "")); 
+        }
+        return null;
+    }
+>>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
 
 }

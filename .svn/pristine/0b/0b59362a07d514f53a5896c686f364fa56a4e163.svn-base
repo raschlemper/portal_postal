@@ -6,26 +6,16 @@
         <title>Portal Postal</title>
         <%@ include file="../includes/Css_js.jsp" %>
 
-<<<<<<< HEAD
-        <link href="css/YTPlayer.css" media="all" rel="stylesheet" type="text/css">
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
-        <script src="inc/jquery.mb.YTPlayer.js"></script>
-=======
         <!--<link href="css/YTPlayer.css" media="all" rel="stylesheet" type="text/css">
         
         <script src="inc/jquery.mb.YTPlayer.js"></script>-->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
->>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
         <style>
             body {
                 border: none;
                 margin: 0;
                 padding: 30px;
-<<<<<<< HEAD
-                background: #1f1f1f;
-=======
                 //background: #1f1f1f;
->>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
                 font: normal 16px/20px Lekton, sans-serif;
             }
 
@@ -58,11 +48,7 @@
 
             .card-container.card {
                 width: 350px;
-<<<<<<< HEAD
-                padding: 40px 40px;
-=======
                 padding: 30px 30px;
->>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
             }
 
             .btn {
@@ -158,13 +144,8 @@
 
             .btn-signin {
                 /*background-color: #4d90fe; */
-<<<<<<< HEAD
-                background-color: rgb(104, 145, 162);
-                /* background-color: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));*/
-=======
                 //background-color: rgb(104, 145, 162);
                 //background-color: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
->>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
                 padding: 0px;
                 font-weight: 700;
                 font-size: 14px;
@@ -179,32 +160,10 @@
                 transition: all 0.218s;
             }
 
-<<<<<<< HEAD
-            .btn-signin:hover,
-            .btn-signin:active,
-            .btn-signin:focus {
-                background-color: rgb(12, 97, 33);
-            }
-
-            .forgot-password {
-                color: rgb(104, 145, 162);
-            }
-
-            .forgot-password:hover,
-            .forgot-password:active,
-            .forgot-password:focus{
-                color: rgb(12, 97, 33);
-            }
-        </style>
-
-        <script>
-            var isIframe = function () {
-=======
         </style>
 
         <script>
            /* var isIframe = function () {
->>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
                 var isIframe = false;
                 try {
                     //try to access the document object
@@ -218,12 +177,6 @@
             };
 
             jQuery(function () {
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
                 var myPlayer = jQuery("#bgndVideo").YTPlayer({
                     onReady: function (player) {
                         YTPConsole.append(player.id + " player is ready");
@@ -231,10 +184,6 @@
                     }
                 });
 
-<<<<<<< HEAD
-                /* DEBUG ******************************************************************************************/
-=======
->>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
 
                 var YTPConsole = jQuery("#eventListener");
                 // EVENT: YTPStart YTPEnd YTPLoop YTPPause YTPBuffering
@@ -273,11 +222,7 @@
                     }
                 });
 
-<<<<<<< HEAD
-                /* DEBUG END ******************************************************************************************/
-=======
                 
->>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
 
             });
 
@@ -287,37 +232,6 @@
                 jQuery('#bgndVideo').changeMovie({videoURL: vID});
                 $("#vidData").toggle(1000);
                 v = !v;
-<<<<<<< HEAD
-            }
-        </script>
-    </head>
-    <body>
-        <div id="wrapper" style="position:relative; padding:30px 20px;z-index:10">
-            <div class="container">
-                <div class="card card-container">
-                    
-                    <img class="profile-img" src="../../imagensNew/logoNova.png" style="padding-left: 40px;" height="120" alt=""/>
-                    <p id="profile-name" class="profile-name-card"></p>
-                    <form class="form-signin">
-                        <span id="reauth-email" class="reauth-email"></span>
-                        <input type="email" id="inputEmail" class="form-control" placeholder="Login" required autofocus>
-                        <input type="password" id="inputPassword" class="form-control" placeholder="Senha" required>
-                        <div id="remember" class="checkbox">
-                            <label>
-                                <input type="checkbox" value="remember-me"> Lembrar login
-                            </label>
-                        </div>
-                        <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Entrar</button>
-                    </form><!-- /form -->
-                    <a href="#" class="forgot-password">
-                        Esqueceu a Senha?
-                    </a>
-                </div><!-- /card-container -->
-            </div>
-        </div>
-        <a id="bgndVideo" class="player"data-property="{videoURL:'Plw2AU50DAQ',containment:'body', showControls:true, autoPlay:true, loop:true, vol:50, mute:true, startAt:10, opacity:1, addRaster:true, quality:'default', optimizeDisplay:true}">My video</a> 
-        <!--BsekcY04xvQ-->
-=======
             }*/
         </script>
     </head>
@@ -347,6 +261,5 @@
         </div>
         <!--<a id="bgndVideo" class="player"data-property="{videoURL:'Plw2AU50DAQ',containment:'body', showControls:true, autoPlay:true, loop:true, vol:50, mute:true, startAt:10, opacity:1, addRaster:true, quality:'default', optimizeDisplay:true}">My video</a> 
         BsekcY04xvQ-->
->>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
     </body>
 </html>

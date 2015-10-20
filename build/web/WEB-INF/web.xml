@@ -1066,6 +1066,10 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
+<<<<<<< HEAD
         <welcome-file>index.jsp</welcome-file>
+=======
+        <welcome-file>index_old.jsp</welcome-file>
+>>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
     </welcome-file-list>
 </web-app>

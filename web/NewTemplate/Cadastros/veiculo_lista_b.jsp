@@ -123,7 +123,11 @@
                                         <li class="list-group-item">
                                             <dd style="width: 100%;">
                                                 <div class="buttons">
+<<<<<<< HEAD
                                                     <button type="button" class="btn btn-success" id="salvar"><i class="fa fa-lg fa-spc fa-save"></i> SALVAR DADOS</button>
+=======
+                                                    <button type="button" class="btn btn-success" name="salvar"><i class="fa fa-lg fa-spc fa-save"></i> SALVAR DADOS</button>
+>>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
                                                 </div>
                                             </dd>
                                         </li>
@@ -161,7 +165,11 @@
         </div>
         <script type="text/javascript">  
             
+<<<<<<< HEAD
             var veiculo = new Veiculo(veiculoForm); 
+=======
+            var veiculo = new VeiculoController(veiculoForm); 
+>>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
             
             var init = function(form) {
 //                veiculo.funcoes.loading();

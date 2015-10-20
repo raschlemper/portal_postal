@@ -778,8 +778,13 @@ public interface AtendeCliente {
      * @param cep
      * @return
      *     returns br.com.correios.bsb.sigep.master.bean.cliente.EnderecoERP
+<<<<<<< HEAD
      * @throws SQLException_Exception
      * @throws SigepClienteException
+=======
+     * @throws SigepClienteException
+     * @throws SQLException_Exception
+>>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
      */
     @WebMethod
     @WebResult(targetNamespace = "")

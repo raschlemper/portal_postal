@@ -1,4 +1,0 @@
-NOME;EMPRESA;CPF;CEP;ENDEREÇO;NUMERO;COMPLEMENTO;BAIRRO;CIDADE;UF;AOS_CUIDADOS;NOTA_FISCAL;SERVICO;SERV_ADICIONAIS;VALOR_DECLARADO;OBSERVAÇÔES;CONTEUDO
-Rodrigo da Silva;Unimed;123.456.789-10;88000-000;Av. Brasil;150;Ap. 502;Centro;Florianópolis;SC;Fernando;1237289;SEDEX;ARVD;150.25;;
-João Pereira;;;15200-000;Av. 23 de Março;250;;Centro;São Paulo;SP;;;PAC;;;;
-Pedro Nogueira;;;88035-200;Rua Mauricio Spalding;220;;Centro;Florianópolis;SC;;;ESEDEX;MP;;Observções de Teste;Produtos Eletrônicos
