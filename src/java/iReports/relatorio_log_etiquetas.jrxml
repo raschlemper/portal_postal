@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4cede540-268e-40e0-b07f-2380b35f265b">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="parameter1" class="java.lang.String"/>
+	<parameter name="idCliente" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT 
+	faixaIni, faixaFim, servico, nomeFantasia, IF(cliente.cartaoPostagem = '', '000', cliente.cartaoPostagem) AS cartao,  DATE_FORMAT(dataHora, '%d/%m/%Y %T') AS DATA
+FROM 
+	log_etiquetas_cli  AS l
+LEFT JOIN 
+	cliente ON codigo = l.idCliente
+WHERE
+	l.idCliente = $P{idCliente} AND l.id NOT IN (SELECT idImportacao FROM cliente_etiquetas WHERE idImportacao = l.id AND utilizada = 1)
+ORDER BY 
+	dataHora DESC]]>
+	</queryString>
+	<field name="faixaIni" class="java.lang.String"/>
+	<field name="faixaFim" class="java.lang.String"/>
+	<field name="servico" class="java.lang.String"/>
+	<field name="nomeFantasia" class="java.lang.String"/>
+	<field name="cartao" class="java.lang.String"/>
+	<field name="data" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="33" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="55d901f2-c7e6-4b6c-a118-9b7f28671d5e" x="0" y="0" width="555" height="25"/>
+				<textElement textAlignment="Center">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RELATÓRIO DE ETIQUETAS CADASTRADAS]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="e3a0f7c7-aa48-48c7-b38a-05df790b6600" x="0" y="24" width="555" height="1"/>
+			</line>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="86fc1fae-e5f8-4195-a282-3cea7aea7f12" x="0" y="2" width="150" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[FAIXA INICIAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d3085d71-9f2f-4e05-ba71-66f18c57f04e" x="150" y="2" width="150" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[FAIXA FINAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1a9c71ec-7c73-4309-a5c5-e4928e63f36b" x="300" y="2" width="135" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[DATA CRIAÇÃO / CLIENTE]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="dbc9d966-0a10-45b0-ac87-4706fda9d34c" x="0" y="21" width="555" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="ae588a25-68d1-41db-a137-dfd39093226e" x="435" y="2" width="120" height="19"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[CARTÃO POSTAGEM]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="61" splitType="Stretch">
+			<textField>
+				<reportElement uuid="2f813eb2-7b67-4356-ae36-4be0dbced43f" x="300" y="13" width="135" height="36"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{nomeFantasia}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="965bfd64-66e5-4a0a-9812-effb3a7f6a0f" x="0" y="55" width="555" height="1"/>
+			</line>
+			<componentElement>
+				<reportElement uuid="4d63e08e-a105-425d-a89b-03fce0fdbc83" x="0" y="0" width="150" height="49"/>
+				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" moduleWidth="1.2" textPosition="bottom">
+					<jr:codeExpression><![CDATA[$F{faixaIni}]]></jr:codeExpression>
+				</jr:Code128>
+			</componentElement>
+			<componentElement>
+				<reportElement uuid="762e14b2-7dd0-40c5-bf5b-f6a8c616c8c0" x="150" y="0" width="150" height="49"/>
+				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" moduleWidth="1.2" textPosition="bottom">
+					<jr:codeExpression><![CDATA[$F{faixaFim}]]></jr:codeExpression>
+				</jr:Code128>
+			</componentElement>
+			<componentElement>
+				<reportElement uuid="8d99a6a4-aac9-4d06-8e63-4ac641c795ce" x="435" y="0" width="120" height="49"/>
+				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" moduleWidth="1.2" textPosition="bottom">
+					<jr:codeExpression><![CDATA[$F{cartao}]]></jr:codeExpression>
+				</jr:Code128>
+			</componentElement>
+			<textField>
+				<reportElement uuid="3ef74bf8-f738-4595-b1f7-202730428d82" x="300" y="0" width="135" height="13"/>
+				<textElement verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{data}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="27" splitType="Stretch">
+			<textField>
+				<reportElement uuid="f1385f63-bcc7-4b90-80da-31953b2e7c2a" x="376" y="14" width="105" height="13"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="cfd33232-7ab8-484b-8919-3d183f31bf21" x="481" y="14" width="64" height="13"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
