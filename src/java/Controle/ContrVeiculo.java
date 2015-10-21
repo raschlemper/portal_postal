@@ -91,7 +91,7 @@ public class ContrVeiculo {
     
     public static boolean alterar(String nomeBD, Veiculo veiculo) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "UPDATE cliente"
+        String sql = "UPDATE veiculos"
                 + " SET tipo = ?, marca = ?, modelo = ?, placa = ?, anoFabricacao = ?, anoModelo = ?, chassis = ?, renavam = ?, "
                 + " quilometragem = ?, combustivel = ?, status = ?, situacao = ? WHERE idVeiculo = ? ";
         try {
@@ -126,7 +126,7 @@ public class ContrVeiculo {
     
     public static boolean limpar(String nomeBD, Veiculo veiculo) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "DELETE FROM veiculo WHERE idCliente = ? ";
+        String sql = "DELETE FROM veiculos WHERE idVeiculo = ? ";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, veiculo.getId());

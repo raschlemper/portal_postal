@@ -363,8 +363,6 @@
                             init:true
                         });
                     </script>
-
-
                 </div>
             </div>
         </div>

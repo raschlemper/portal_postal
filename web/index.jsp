@@ -4,6 +4,21 @@
 
     <head>
         <title>Portal Postal</title>
+        
+        <!--[if lte IE 8]>
+
+	<script type="text/javascript">
+
+	var htmlshim='abbr,article,aside,audio,canvas,details,figcaption,figure,footer,header,mark,meter,nav,output,progress,section,summary,time,video'.split(',');
+
+	var htmlshimtotal=htmlshim.length;
+
+	for(var i=0;i<htmlshimtotal;i++) document.createElement(htmlshim[i]);
+
+	</script>
+
+	<![endif]-->
+        
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <meta name="description" content="Portal Postal Sistema para Gestão de Pré Postagem para AGF Agência Franqueada dos Correios"/>

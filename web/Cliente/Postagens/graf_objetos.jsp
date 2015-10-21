@@ -181,7 +181,7 @@
                         }],
                     tooltip: {
                         formatter: function() {
-                            return ''+ this.x +': '+ this.y + (this.series.name == 'Quantidade de Obj. Entregues' ? ' Objetos' : ' Dias');
+                            return ''+ this.x +': '+ this.y + (this.series.name === 'Quantidade de Obj. Entregues' ? ' Objetos' : ' Dias');
                         }
                     },
                     series: [ {
@@ -280,7 +280,7 @@
                         }],
                     tooltip: {
                         formatter: function() {
-                            return ''+ this.x +': '+ this.y + (this.series.name == 'Quantidade de Obj. Postados' ? ' Obj. Postados' : ' Obj. Entregues');
+                            return ''+ this.x +': '+ this.y + (this.series.name === 'Quantidade de Obj. Postados' ? ' Obj. Postados' : ' Obj. Entregues');
                         }
                     },
                     series: [ {

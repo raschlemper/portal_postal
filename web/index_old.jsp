@@ -1,3 +1,4 @@
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -6,6 +7,20 @@
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 
         <title>Portal Postal</title>
+        
+        <!--[if lte IE 8]>
+
+	<script type="text/javascript">
+
+	var htmlshim='abbr,article,aside,audio,canvas,details,figcaption,figure,footer,header,mark,meter,nav,output,progress,section,summary,time,video'.split(',');
+
+	var htmlshimtotal=htmlshim.length;
+
+	for(var i=0;i<htmlshimtotal;i++) document.createElement(htmlshim[i]);
+
+	</script>
+
+	<![endif]-->
 
         <link rel="stylesheet" type="text/css" href="css/estilo.css" />
         <script type="text/javascript" src="javascript/cookie.js"></script>
@@ -52,7 +67,7 @@
         </script>
     </head>
     <body onload="LerCookie('hoitoLogin');" style="background: white;">
-        <%@ include file="../../Includes/telaMsg.jsp" %>
+        <%@ include file="Includes/telaMsg.jsp" %>
         <div id="divPrincipal" align="center" style="margin-top:50px;">
             <table style="height: 600px;" border="0" cellspacing="0"  >
                 <tr>

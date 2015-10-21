@@ -17,4 +17,5 @@
     },
     "buildConfig": { "uglify": true }
   }
+  
 }

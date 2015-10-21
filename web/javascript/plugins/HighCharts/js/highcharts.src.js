@@ -1200,7 +1200,7 @@ defaultOptions = {
 			cursor: 'pointer',
 			color: '#909090',
 			fontSize: '10px'
-		}
+		} 
 	}
 };
 

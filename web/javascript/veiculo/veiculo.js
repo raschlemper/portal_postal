@@ -19,12 +19,11 @@ var VeiculoController = function(form) {
                     {'key': 'manutencao', 'value': 'Manutenção'}];
                
     var init = function(veiculo) {  
-//      loading();
+//        loading();
         addListas(veiculo);   
         addValueForm(veiculo);   
         addMascaras();
         addEventos(veiculo);
-        pesquisarTodos();
     }
     
     var addListas = function(veiculo) {  
@@ -37,11 +36,12 @@ var VeiculoController = function(form) {
     var addValueForm = function(veiculo) {  
         if(!veiculo) return;
         form.placa.value = veiculo.placa;
-        form.anoFabricacao.value = veiculo.anoFabricacao > 0 || null;
-        form.anoModelo.value = veiculo.anoModelo > 0 || null;
+        form.anoFabricacao.value = (veiculo.anoFabricacao > 0 ? veiculo.anoFabricacao : null);
+        form.anoModelo.value = (veiculo.anoModelo > 0 ? veiculo.anoModelo : null);
         form.chassis.value = veiculo.chassis;
         form.renavam.value = veiculo.renavam;
-        form.quilometragem.value = veiculo.quilometragem;
+        var km = veiculo.quilometragem.toString().replace(/(.)(?=(\d{3})+$)/g,'$1.');
+        form.quilometragem.value = km;
     }
 
     var addMascaras = function() {

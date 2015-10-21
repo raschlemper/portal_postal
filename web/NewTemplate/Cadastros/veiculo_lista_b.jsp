@@ -160,7 +160,8 @@
             </div>
         </div>
         <script type="text/javascript">             
-            var veiculo = new VeiculoController(veiculoForm);             
+            var veiculo = new VeiculoController(veiculoForm);     
+            veiculo.acoes.pesquisarTodos();
         </script>
     </body>
 </html>

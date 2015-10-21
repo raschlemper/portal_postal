@@ -23,7 +23,7 @@
 //    ArrayList<Integer> listaAcConsol = col.getListaAcessosConsolidador();
 
 %>
-<form name="veiculoEditForm" action="${pageContext.request.contextPath}/veiculo/update" method="post">
+<form name="veiculoEditForm" action="${pageContext.request.contextPath}/veiculo?action=save" method="post">
     <ul class="list-unstyled">
         <li class="list-group-item">
             <div class="row form-horizontal">

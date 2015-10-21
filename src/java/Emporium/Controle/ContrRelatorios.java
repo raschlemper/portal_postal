@@ -189,7 +189,7 @@ public class ContrRelatorios {
         }
 
 
-        String strQuery = "SELECT COUNT(codStatus) AS qtdObjetos, COUNT(IF(codStatus=1,1,NULL)) AS QtdEntregues, " + group + "(dataPostagem) AS agrupamento"
+        String strQuery = "SELECT COUNT(codStatus) AS qtdObjetos, COUNT(IF(codStatus=99,1,NULL)) AS QtdEntregues, " + group + "(dataPostagem) AS agrupamento"
                 + " FROM movimentacao " + clausulaWhere
                 + " GROUP BY agrupamento"
                 + " ORDER BY dataPostagem;";

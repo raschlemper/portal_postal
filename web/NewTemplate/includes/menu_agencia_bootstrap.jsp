@@ -71,7 +71,7 @@
                 <li><a href="../../NewTemplate/Cadastros/usuario_lista_b.jsp">Usuários da Agência</a></li>
                     <%}%>
                 <li><a href="../../NewTemplate/Cadastros/cliente_lista_b.jsp">Clientes</a></li>
-                <li><a href="${pageContext.request.contextPath}/veiculo/">Veículos</a></li>
+                <li><a href="${pageContext.request.contextPath}/veiculo">Veículos</a></li>
                 <%if (empMenu.getColeta() == 1) {%><li><a href="../../NewTemplate/Cadastros/config_hora_coleta_b.jsp">Horário da Coleta</a></li><%}%>
                 <%if (empMenu.getChamada() == 1) {%><li><a href="../../NewTemplate/Cadastros/cliente_log_contrato_b.jsp">Verificação de Contratos</a></li><%}%>
             </ul>
