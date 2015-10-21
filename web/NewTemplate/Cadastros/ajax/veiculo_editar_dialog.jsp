@@ -8,10 +8,7 @@
 
     String nomeBD = (String) session.getAttribute("empresa");
     if (nomeBD == null) return;
-<<<<<<< HEAD
-=======
     Integer idVeiculo = Integer.parseInt(request.getParameter("idVeiculo"));
->>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
 
 //    int idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
 //    Entidade.Usuario col = Controle.contrUsuario.consultaUsuarioById(idUsuario, nomeBD);
@@ -30,10 +27,7 @@
     <ul class="list-unstyled">
         <li class="list-group-item">
             <div class="row form-horizontal">
-<<<<<<< HEAD
-=======
                 <input type="hidden" name="idVeiculo" value="<%= idVeiculo %>"/>
->>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <label class="small">Tipo</label>
                     <div class="input-group">
@@ -124,45 +118,44 @@
 </form>
     
     
-        <script type="text/javascript">  
+        <script type="text/javascript"> 
             
-<<<<<<< HEAD
-            var veiculo = new Veiculo(veiculoEditForm); 
-=======
-            var veiculo = new VeiculoController(veiculoEditForm); 
->>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
+            var veiculoCtrl = new VeiculoController(veiculoEditForm); 
             
-            var init = function(form) {
+            var eventVeiculo = { veiculo: veiculoCtrl.veiculo };
+            
+            watch(eventVeiculo, "veiculo", function(){
+                alert("attr1 changes!");
+            });
+            
+            var init = function() {
 //                veiculo.funcoes.loading();
                 addPageListas();
                 addMascaras();
                 addPageEventos();
-<<<<<<< HEAD
-=======
-                veiculo.acoes.pesquisar(veiculoEditForm.idVeiculo.value);
->>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
+                veiculoCtrl.acoes.pesquisar(veiculoEditForm.idVeiculo.value);
             };
             
             var addPageListas = function() { 
-                veiculo.funcoes.setTipoVeiculo(1);                
-                veiculo.funcoes.setCombustivel();
-                veiculo.funcoes.setEstado();
-                veiculo.funcoes.setSituacao();                
-                veiculo.acoes.pesquisarTodos();
+                veiculoCtrl.funcoes.setTipoVeiculo(1);                
+                veiculoCtrl.funcoes.setCombustivel();
+                veiculoCtrl.funcoes.setEstado();
+                veiculoCtrl.funcoes.setSituacao();                
+                veiculoCtrl.acoes.pesquisarTodos();
             }
             
             var addMascaras = function() {
-                veiculo.mascara.addMascaraPlaca();
-                veiculo.mascara.addMascaraAno();
-                veiculo.mascara.addMascaraChassis();
-                veiculo.mascara.addMascaraRenavam();
-                veiculo.mascara.addMascaraNumber();
+                veiculoCtrl.mascara.addMascaraPlaca();
+                veiculoCtrl.mascara.addMascaraAno();
+                veiculoCtrl.mascara.addMascaraChassis();
+                veiculoCtrl.mascara.addMascaraRenavam();
+                veiculoCtrl.mascara.addMascaraNumber();
             }
             
             var addPageEventos = function() { 
-                veiculo.eventos.addTipoEventListener();
-                veiculo.eventos.addMarcaEventListener();
-                veiculo.eventos.addSalvarEventListener();
+                veiculoCtrl.eventos.addTipoEventListener();
+                veiculoCtrl.eventos.addMarcaEventListener();
+                veiculoCtrl.eventos.addSalvarEventListener();
             };
             
             init();

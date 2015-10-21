@@ -1,9 +1,4 @@
 
-<<<<<<< HEAD
-/* global bootbox */
-
-=======
->>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
 function getHTTPObject() {
     var xmlhttp;
     if (window.XMLHttpRequest) {

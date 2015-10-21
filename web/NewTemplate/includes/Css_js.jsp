@@ -52,6 +52,7 @@
 <script type="text/javascript" language="javascript" src="../../plugins/underscore/underscore.js"></script>
 <script type="text/javascript" language="javascript" src="../../plugins/underscore/underscoreConfig.js"></script>
 <script type="text/javascript" language="javascript" src="../../plugins/jquery-mask/jquery-mask.js"></script>
+<script type="text/javascript" language="javascript" src="../../plugins/watch/watch.js"></script>
 
 <!-- Custom Theme JavaScript -->
 <script src="../../plugins/metisMenu/dist/metisMenu.js" type="text/javascript"></script>
@@ -65,7 +66,7 @@
 <script type="text/javascript" src="../../javascript/ddslick.js"></script>
 
 <!-- JavaScript Pages -->
-<script type="text/javascript" src="../../javascript/pages/veiculo.js"></script>
+<script type="text/javascript" src="../../javascript/veiculo/veiculo.js"></script>
 
 
 <!-- Bootstrap Core JavaScript -->

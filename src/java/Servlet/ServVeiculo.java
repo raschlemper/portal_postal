@@ -140,23 +140,6 @@ public class ServVeiculo extends HttpServlet {
     
     private Veiculo getVeiculoFromRequest(HttpServletRequest request) {
         Veiculo veiculo = new Veiculo();
-<<<<<<< HEAD
-        veiculo.setId(request.getParameter("id") != null ? Integer.parseInt(request.getParameter("id")) : null);
-        JSONObject marca = new JSONObject(request.getParameter("marca"));
-        veiculo.setMarca(marca.getString("name"));
-        JSONObject modelo = new JSONObject(request.getParameter("modelo"));
-        veiculo.setModelo(modelo.getString("name"));
-        veiculo.setPlaca(request.getParameter("placa"));
-        String anoFabricacao = request.getParameter("anoFabricacao");
-        veiculo.setAnoFabricacao(anoFabricacao != null && !anoFabricacao.equals("") ? Integer.parseInt(anoFabricacao) : null);
-        String anoModelo = request.getParameter("anoModelo");
-        veiculo.setAnoModelo(anoModelo != null && !anoModelo.equals("") ? Integer.parseInt(anoModelo) : null);
-        veiculo.setChassis(request.getParameter("chassis"));
-        veiculo.setRenavam(request.getParameter("renavam"));
-        String quilometragem = request.getParameter("quilometragem");
-        String quilometragemSF = (quilometragem != null && !quilometragem.equals("") ? quilometragem.replace(".", "") : null);
-        veiculo.setQuilometragem(quilometragemSF != null && !quilometragemSF.equals("") ? Integer.parseInt(quilometragemSF) : null);
-=======
         veiculo.setId(getIntegerParameter(request.getParameter("idVeiculo")));
         veiculo.setMarca(getJsonParameter(request.getParameter("marca"), "name"));
         veiculo.setModelo(getJsonParameter(request.getParameter("modelo"), "name"));
@@ -166,15 +149,11 @@ public class ServVeiculo extends HttpServlet {
         veiculo.setChassis(request.getParameter("chassis"));
         veiculo.setRenavam(request.getParameter("renavam"));
         veiculo.setQuilometragem(getQuilometragemParameter(request.getParameter("quilometragem")));
->>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
         veiculo.setCombustivel(request.getParameter("combustivel"));
         veiculo.setStatus(request.getParameter("status"));
         veiculo.setSituacao(request.getParameter("situacao"));
         return veiculo;
     }
-<<<<<<< HEAD
-            
-=======
           
     private String getJsonParameter(String parameter, String campo) {
         if(parameter != null) { return new JSONObject(parameter).getString(campo); }
@@ -192,6 +171,5 @@ public class ServVeiculo extends HttpServlet {
         }
         return null;
     }
->>>>>>> 15fb54610b7beb8f76f41222d8398fe1b55016ba
 
 }
