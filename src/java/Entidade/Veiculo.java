@@ -12,6 +12,7 @@ package Entidade;
 public class Veiculo {
     
     private Integer id;
+    private String tipo;
     private String marca;
     private String modelo; 
     private String placa;
@@ -26,8 +27,10 @@ public class Veiculo {
     
     public Veiculo() {}
 
-    public Veiculo(Integer id, String marca, String modelo, String placa, Integer anoFabricacao, Integer anoModelo, String chassis, String renavam, Integer quilometragem, String combustivel, String status, String situacao) {
+    public Veiculo(Integer id, String tipo, String marca, String modelo, String placa, Integer anoFabricacao, Integer anoModelo, String chassis, 
+            String renavam, Integer quilometragem, String combustivel, String status, String situacao) {
         this.id = id;
+        this.tipo = tipo;
         this.marca = marca;
         this.modelo = modelo;
         this.placa = placa;
@@ -47,6 +50,14 @@ public class Veiculo {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     public String getMarca() {

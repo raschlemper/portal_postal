@@ -159,41 +159,8 @@
                 </div> 
             </div>
         </div>
-        <script type="text/javascript"> 
-            
-            var veiculo = new VeiculoController(veiculoForm); 
-            
-            var init = function(form) {
-//                veiculo.funcoes.loading();
-                addPageListas();
-                addMascaras();
-                addPageEventos();
-            };
-            
-            var addPageListas = function() { 
-                veiculo.funcoes.setTipoVeiculo(1);                
-                veiculo.funcoes.setCombustivel();
-                veiculo.funcoes.setEstado();
-                veiculo.funcoes.setSituacao();                
-                veiculo.acoes.pesquisarTodos();
-            }
-            
-            var addMascaras = function() {
-                veiculo.mascara.addMascaraPlaca();
-                veiculo.mascara.addMascaraAno();
-                veiculo.mascara.addMascaraChassis();
-                veiculo.mascara.addMascaraRenavam();
-                veiculo.mascara.addMascaraNumber();
-            }
-            
-            var addPageEventos = function() { 
-                veiculo.eventos.addTipoEventListener();
-                veiculo.eventos.addMarcaEventListener();
-                veiculo.eventos.addSalvarEventListener();
-            };
-            
-            init();
-            
+        <script type="text/javascript">             
+            var veiculo = new VeiculoController(veiculoForm);             
         </script>
     </body>
 </html>

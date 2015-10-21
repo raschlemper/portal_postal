@@ -61,24 +61,25 @@ public class ContrVeiculo {
 
     public static void inserir(String nomeBD, Veiculo veiculo) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "INSERT INTO veiculos (marca, modelo, placa, anoFabricacao, anoModelo, chassis, renavam, quilometragem, "
-                + "combustivel, status, situacao) values(?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO veiculos (tipo, marca, modelo, placa, anoFabricacao, anoModelo, chassis, renavam, quilometragem, "
+                + "combustivel, status, situacao) values(?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, veiculo.getMarca());
-            ps.setString(2, veiculo.getModelo());
-            ps.setString(3, veiculo.getPlaca());
-            if(veiculo.getAnoFabricacao() == null) { ps.setNull(4, Types.INTEGER); }
-            else { ps.setInt(4, veiculo.getAnoFabricacao()); }
-            if(veiculo.getAnoModelo() == null) { ps.setNull(5, Types.INTEGER); }
-            else { ps.setInt(5, veiculo.getAnoModelo()); }
-            if(veiculo.getChassis() == null) { ps.setNull(6, Types.VARCHAR); }
-            else { ps.setString(6, veiculo.getChassis()); }
-            ps.setString(7, veiculo.getRenavam());
-            ps.setInt(8, veiculo.getQuilometragem());
-            ps.setString(9, veiculo.getCombustivel());
-            ps.setString(10, veiculo.getStatus());
-            ps.setString(11, veiculo.getSituacao());
+            ps.setString(1, veiculo.getTipo());
+            ps.setString(2, veiculo.getMarca());
+            ps.setString(3, veiculo.getModelo());
+            ps.setString(4, veiculo.getPlaca());
+            if(veiculo.getAnoFabricacao() == null) { ps.setNull(5, Types.INTEGER); }
+            else { ps.setInt(5, veiculo.getAnoFabricacao()); }
+            if(veiculo.getAnoModelo() == null) { ps.setNull(6, Types.INTEGER); }
+            else { ps.setInt(6, veiculo.getAnoModelo()); }
+            if(veiculo.getChassis() == null) { ps.setNull(7, Types.VARCHAR); }
+            else { ps.setString(7, veiculo.getChassis()); }
+            ps.setString(8, veiculo.getRenavam());
+            ps.setInt(9, veiculo.getQuilometragem());
+            ps.setString(10, veiculo.getCombustivel());
+            ps.setString(11, veiculo.getStatus());
+            ps.setString(12, veiculo.getSituacao());
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
@@ -91,25 +92,26 @@ public class ContrVeiculo {
     public static boolean alterar(String nomeBD, Veiculo veiculo) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "UPDATE cliente"
-                + " SET marca = ?, modelo = ?, placa = ?, anoFabricacao = ?, anoModelo = ?, chassis = ?, renavam = ?, "
+                + " SET tipo = ?, marca = ?, modelo = ?, placa = ?, anoFabricacao = ?, anoModelo = ?, chassis = ?, renavam = ?, "
                 + " quilometragem = ?, combustivel = ?, status = ?, situacao = ? WHERE idVeiculo = ? ";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, veiculo.getMarca());
-            ps.setString(2, veiculo.getModelo());
-            ps.setString(3, veiculo.getPlaca());
-            if(veiculo.getAnoFabricacao() == null) { ps.setNull(4, Types.INTEGER); }
-            else { ps.setInt(4, veiculo.getAnoFabricacao()); }
-            if(veiculo.getAnoModelo() == null) { ps.setNull(5, Types.INTEGER); }
-            else { ps.setInt(5, veiculo.getAnoModelo()); }
-            if(veiculo.getChassis() == null) { ps.setNull(6, Types.VARCHAR); }
-            else { ps.setString(6, veiculo.getChassis()); }
-            ps.setString(7, veiculo.getRenavam());
-            ps.setInt(8, veiculo.getQuilometragem());
-            ps.setString(9, veiculo.getCombustivel());
-            ps.setString(10, veiculo.getStatus());
-            ps.setString(11, veiculo.getSituacao());
-            ps.setInt(12, veiculo.getId());
+            ps.setString(1, veiculo.getTipo());
+            ps.setString(2, veiculo.getMarca());
+            ps.setString(3, veiculo.getModelo());
+            ps.setString(4, veiculo.getPlaca());
+            if(veiculo.getAnoFabricacao() == null) { ps.setNull(5, Types.INTEGER); }
+            else { ps.setInt(5, veiculo.getAnoFabricacao()); }
+            if(veiculo.getAnoModelo() == null) { ps.setNull(6, Types.INTEGER); }
+            else { ps.setInt(6, veiculo.getAnoModelo()); }
+            if(veiculo.getChassis() == null) { ps.setNull(7, Types.VARCHAR); }
+            else { ps.setString(7, veiculo.getChassis()); }
+            ps.setString(8, veiculo.getRenavam());
+            ps.setInt(9, veiculo.getQuilometragem());
+            ps.setString(10, veiculo.getCombustivel());
+            ps.setString(11, veiculo.getStatus());
+            ps.setString(12, veiculo.getSituacao());
+            ps.setInt(13, veiculo.getId());
             ps.executeUpdate();
             ps.close();
             return true;
@@ -142,6 +144,7 @@ public class ContrVeiculo {
     private static Veiculo criarVeiculo(ResultSet result) throws SQLException {
         return new Veiculo(
             result.getInt("idVeiculo"),
+            result.getString("tipo"),  
             result.getString("marca"),  
             result.getString("modelo"),  
             result.getString("placa"),

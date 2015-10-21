@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import = "java.util.ArrayList,java.sql.Timestamp, java.util.Date, java.text.SimpleDateFormat"%>
+<%@page import = "java.util.ArrayList,java.sql.Timestamp, java.util.Date, java.text.SimpleDateFormat"%>
 <%
     /*AJAX*/
     response.setContentType("text/xml");
@@ -115,49 +115,10 @@
             </div>
         </li>
     </ul>
-</form>
-    
-    
-        <script type="text/javascript"> 
-            
-            var veiculoCtrl = new VeiculoController(veiculoEditForm); 
-            
-            var eventVeiculo = { veiculo: veiculoCtrl.veiculo };
-            
-            watch(eventVeiculo, "veiculo", function(){
-                alert("attr1 changes!");
-            });
-            
-            var init = function() {
-//                veiculo.funcoes.loading();
-                addPageListas();
-                addMascaras();
-                addPageEventos();
-                veiculoCtrl.acoes.pesquisar(veiculoEditForm.idVeiculo.value);
-            };
-            
-            var addPageListas = function() { 
-                veiculoCtrl.funcoes.setTipoVeiculo(1);                
-                veiculoCtrl.funcoes.setCombustivel();
-                veiculoCtrl.funcoes.setEstado();
-                veiculoCtrl.funcoes.setSituacao();                
-                veiculoCtrl.acoes.pesquisarTodos();
-            }
-            
-            var addMascaras = function() {
-                veiculoCtrl.mascara.addMascaraPlaca();
-                veiculoCtrl.mascara.addMascaraAno();
-                veiculoCtrl.mascara.addMascaraChassis();
-                veiculoCtrl.mascara.addMascaraRenavam();
-                veiculoCtrl.mascara.addMascaraNumber();
-            }
-            
-            var addPageEventos = function() { 
-                veiculoCtrl.eventos.addTipoEventListener();
-                veiculoCtrl.eventos.addMarcaEventListener();
-                veiculoCtrl.eventos.addSalvarEventListener();
-            };
-            
-            init();
-            
-        </script>
+</form>   
+<script type="text/javascript"> 
+    $(function() {            
+        var veiculoCtrl = new VeiculoController(veiculoEditForm); 
+        veiculoCtrl.acoes.pesquisar(veiculoEditForm.idVeiculo.value);
+    });            
+</script>

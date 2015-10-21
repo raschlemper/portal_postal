@@ -141,6 +141,7 @@ public class ServVeiculo extends HttpServlet {
     private Veiculo getVeiculoFromRequest(HttpServletRequest request) {
         Veiculo veiculo = new Veiculo();
         veiculo.setId(getIntegerParameter(request.getParameter("idVeiculo")));
+        veiculo.setTipo(request.getParameter("tipo"));
         veiculo.setMarca(getJsonParameter(request.getParameter("marca"), "name"));
         veiculo.setModelo(getJsonParameter(request.getParameter("modelo"), "name"));
         veiculo.setPlaca(request.getParameter("placa"));
@@ -156,20 +157,18 @@ public class ServVeiculo extends HttpServlet {
     }
           
     private String getJsonParameter(String parameter, String campo) {
-        if(parameter != null) { return new JSONObject(parameter).getString(campo); }
-        return null;
+        if(parameter == null) return null;
+        return new JSONObject(parameter).getString(campo);
     }
           
     private Integer getIntegerParameter(String parameter) {
-        if(parameter != null) { return Integer.parseInt(parameter); }
-        return null;
+        if(parameter == null || parameter.equals("")) return null;
+        return Integer.parseInt(parameter);
     }
           
     private Integer getQuilometragemParameter(String parameter) {
-        if(parameter != null && !parameter.equals("")) { 
-            return getIntegerParameter(parameter.replace(".", "")); 
-        }
-        return null;
+        if(parameter == null || parameter.equals("")) return null;
+        return getIntegerParameter(parameter.replace(".", "")); 
     }
 
 }
