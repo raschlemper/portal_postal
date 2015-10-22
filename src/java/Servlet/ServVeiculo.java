@@ -113,8 +113,13 @@ public class ServVeiculo extends HttpServlet {
     
     private void save(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {        
         Veiculo veiculo = getVeiculoFromRequest(request);
-        if(veiculo.getId() != null) { update(request, response); }
-        else { create(request, response); }
+        if(existeVeiculo(veiculo)) {
+            this.sessao.setAttribute("msg", "Este Veículo já foi cadastrado!");
+            response.sendRedirect(request.getHeader("referer"));  
+        } else {
+            if(veiculo.getId() != null) { update(request, response); }
+            else { create(request, response); }
+        }
     }
     
     private void create(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {               
@@ -136,6 +141,12 @@ public class ServVeiculo extends HttpServlet {
         Controle.ContrVeiculo.limpar(this.nomeBD, veiculo);
         this.sessao.setAttribute("msg", "Veículo removido com sucesso! " + veiculo.getId());
         response.sendRedirect(request.getHeader("referer"));
+    }
+    
+    private boolean existeVeiculo(Veiculo veiculo) {
+        List<Veiculo> veiculos = Controle.ContrVeiculo.consultaByCamposUnicos(this.nomeBD, veiculo);
+        if(veiculos.isEmpty()) return false;
+        return true;
     }
     
     private Veiculo getVeiculoFromRequest(HttpServletRequest request) {

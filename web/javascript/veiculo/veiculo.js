@@ -19,7 +19,7 @@ var VeiculoController = function(form) {
                     {'key': 'manutencao', 'value': 'Manutenção'}];
                
     var init = function(veiculo) {  
-//        loading();
+        loading();
         addListas(veiculo);   
         addValueForm(veiculo);   
         addMascaras();
@@ -64,7 +64,7 @@ var VeiculoController = function(form) {
     var pesquisarTodos = function() {
         $.ajax({
             method: "GET",
-            url: "../../veiculo?action=all",
+            url: Configuracao.contextPath + "/veiculo?action=all",
             data: { },
             dataType: 'json',
         }).done(function(data) {
@@ -82,12 +82,12 @@ var VeiculoController = function(form) {
                       '<td class="number">{{quilometragem}}</td>' +
                       '<td>{{situacao}}</td>' +
                       '<td align="center">' +
-                            '<button class="btn btn-sm btn-warning" onclick="veiculo.acoes.editar({{id}})">' +
+                            '<button class="btn btn-sm btn-warning" onclick="veiculoCtrl.acoes.editar({{id}})">' +
                                 '<i class="fa fa-lg fa-pencil"></i>' +
                             '</button>' +
                       '</td>' +
                       '<td align="center">' +
-                            '<a class="btn btn-sm btn-danger" href="${pageContext.request.contextPath}/veiculo?action=delete&id={{id}}">' +
+                            '<a class="btn btn-sm btn-danger" href="' + Configuracao.contextPath + '/veiculo?action=delete&idVeiculo={{id}}">' +
                                 '<i class="fa fa-lg fa-trash"></i>' +
                             '</a>' +
                       '</td>' +
@@ -101,7 +101,7 @@ var VeiculoController = function(form) {
     var pesquisar = function(idVeiculo) {
         $.ajax({
             method: "GET",
-            url: "/Portal_Postal_Web/veiculo?action=get",
+            url: Configuracao.contextPath + "/veiculo?action=get",
             data: { idVeiculo: idVeiculo },
             dataType: 'json',
         }).done(function(data) {
@@ -112,9 +112,10 @@ var VeiculoController = function(form) {
     var editar = function(idVeiculo) {
         $.ajax({
             method: "POST",
-            url: "ajax/veiculo_editar_dialog.jsp",
+            url: Configuracao.getContextPathActual + "/ajax/veiculo_editar_dialog.jsp",
             data: {idVeiculo: idVeiculo},
-            dataType: 'html'
+            dataType: 'html',
+            global: false,
         }).done(function(retorno) {
             editarModal(retorno);
         });
@@ -193,13 +194,13 @@ var VeiculoController = function(form) {
     
     // funcoes /////////
 
-    var loading = function() {
+    var loading = function() {        
         $( document ).ajaxStart(function() {
             waitMsg();
         }).ajaxStop(function() {
-            fechaMsg();    
+            $('.my-modal').modal('hide'); 
         });
-    }
+    }  
 
     var setTipoVeiculo = function(veiculo) {
         if(veiculo) addTipos(veiculo.tipo, veiculo);                            

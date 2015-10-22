@@ -140,6 +140,28 @@ public class ContrVeiculo {
             Conexao.desconectar(conn);
         }
     }
+
+    public static List<Veiculo> consultaByCamposUnicos(String nomeBD, Veiculo veiculo) {
+        Connection con = Conexao.conectar(nomeBD);
+        String sql = "SELECT * FROM veiculos WHERE chassis = ? OR renavam = ? OR placa = ? ";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, veiculo.getChassis());
+            ps.setString(2, veiculo.getRenavam());
+            ps.setString(3, veiculo.getPlaca());
+            ResultSet result = (ResultSet) ps.executeQuery();
+            List<Veiculo> listaVeiculos = new ArrayList<Veiculo>();
+            while(result.next()) {
+                listaVeiculos.add(criarVeiculo(result));                        
+            }
+            return listaVeiculos;
+        } catch (SQLException e) {
+            Logger.getLogger(ContrVeiculo.class.getName()).log(Level.WARNING, e.getMessage(), e);
+            return null;
+        } finally {
+            Conexao.desconectar(con);
+        }
+    }
     
     private static Veiculo criarVeiculo(ResultSet result) throws SQLException {
         return new Veiculo(

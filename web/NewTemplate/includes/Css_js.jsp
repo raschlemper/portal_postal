@@ -66,7 +66,8 @@
 <script type="text/javascript" src="../../javascript/ddslick.js"></script>
 
 <!-- JavaScript Pages -->
-<script type="text/javascript" src="../../javascript/veiculo/veiculo.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculo.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/config.js"></script>
 
 
 <!-- Bootstrap Core JavaScript -->
