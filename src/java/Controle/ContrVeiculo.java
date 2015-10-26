@@ -25,7 +25,7 @@ public class ContrVeiculo {
 
     public static List<Veiculo> consultaTodos(String nomeBD) {
         Connection con = Conexao.conectar(nomeBD);
-        String sql = "SELECT * FROM veiculos";
+        String sql = "SELECT * FROM veiculo";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet result = (ResultSet) ps.executeQuery();
@@ -44,7 +44,7 @@ public class ContrVeiculo {
 
     public static Veiculo consulta(String nomeBD, Veiculo veiculo) {
         Connection con = Conexao.conectar(nomeBD);
-        String sql = "SELECT * FROM veiculos WHERE idVeiculo = ?";
+        String sql = "SELECT * FROM veiculo WHERE idVeiculo = ?";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, veiculo.getId());
@@ -61,7 +61,7 @@ public class ContrVeiculo {
 
     public static void inserir(String nomeBD, Veiculo veiculo) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "INSERT INTO veiculos (tipo, marca, modelo, placa, anoFabricacao, anoModelo, chassis, renavam, quilometragem, "
+        String sql = "INSERT INTO veiculo (tipo, marca, modelo, placa, anoFabricacao, anoModelo, chassis, renavam, quilometragem, "
                 + "combustivel, status, situacao) values(?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -91,7 +91,7 @@ public class ContrVeiculo {
     
     public static boolean alterar(String nomeBD, Veiculo veiculo) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "UPDATE veiculos"
+        String sql = "UPDATE veiculo "
                 + " SET tipo = ?, marca = ?, modelo = ?, placa = ?, anoFabricacao = ?, anoModelo = ?, chassis = ?, renavam = ?, "
                 + " quilometragem = ?, combustivel = ?, status = ?, situacao = ? WHERE idVeiculo = ? ";
         try {
@@ -126,7 +126,7 @@ public class ContrVeiculo {
     
     public static boolean limpar(String nomeBD, Veiculo veiculo) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "DELETE FROM veiculos WHERE idVeiculo = ? ";
+        String sql = "DELETE FROM veiculo WHERE idVeiculo = ? ";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, veiculo.getId());
@@ -141,14 +141,12 @@ public class ContrVeiculo {
         }
     }
 
-    public static List<Veiculo> consultaByCamposUnicos(String nomeBD, Veiculo veiculo) {
+    public static List<Veiculo> consultaByPlaca(String nomeBD, Veiculo veiculo) {
         Connection con = Conexao.conectar(nomeBD);
-        String sql = "SELECT * FROM veiculos WHERE chassis = ? OR renavam = ? OR placa = ? ";
+        String sql = "SELECT * FROM veiculo WHERE placa = ? ";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, veiculo.getChassis());
-            ps.setString(2, veiculo.getRenavam());
-            ps.setString(3, veiculo.getPlaca());
+            ps.setString(1, veiculo.getPlaca());
             ResultSet result = (ResultSet) ps.executeQuery();
             List<Veiculo> listaVeiculos = new ArrayList<Veiculo>();
             while(result.next()) {

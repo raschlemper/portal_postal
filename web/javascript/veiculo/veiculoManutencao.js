@@ -1,22 +1,8 @@
-var VeiculoController = function(form) {
+var VeiculoManutencaoController = function(form) {
                                 
-    var tipos = [{'key': 'motos', 'value': 'Moto'},
-                 {'key': 'carros', 'value': 'Carro'},
-                 {'key': 'caminhoes', 'value': 'Caminhão'}];
-
-    var combustiveis = [{'key': 'gasolina', 'value': 'Gasolina'},  
-                        {'key': 'etanol', 'value': 'Etanol'},
-                        {'key': 'disel', 'value': 'Disel'},
-                        {'key': 'gas', 'value': 'Gás Natural Veicular'},
-                        {'key': 'flex', 'value': 'Gasolina/Álcool'}];
-
-    var status = [{'key': 'novo', 'value': 'Novo'},  
-                   {'key': 'seminovo', 'value': 'Seminovo'},  
-                   {'key': 'usado', 'value': 'Usado'}];
-
-    var situacao = [{'key': 'ativo', 'value': 'Ativo'},  
-                    {'key': 'inativo', 'value': 'Inativo'},  
-                    {'key': 'manutencao', 'value': 'Manutenção'}];
+    var tipos = [{'key': 'programada', 'value': 'Programada'},
+                 {'key': 'rotina', 'value': 'Rotina'},
+                 {'key': 'trocaoleo', 'value': 'Troca de Óleo'}];
                
     var init = function(veiculo) {  
         loading();
@@ -26,11 +12,9 @@ var VeiculoController = function(form) {
         addEventos(veiculo);
     }
     
-    var addListas = function(veiculo) {  
-        setTipoVeiculo(veiculo);
-        setCombustivel(veiculo);
-        setEstado(veiculo);
-        setSituacao(veiculo);              
+    var addListas = function(manutencao) {  
+        setTipoManutencao(manutencao);
+        setVeiculos(manutencao);        
     }
     
     var addValueForm = function(veiculo) {  
@@ -53,8 +37,6 @@ var VeiculoController = function(form) {
     }
 
     var addEventos = function() { 
-        addTipoEventListener();
-        addMarcaEventListener();
         addSalvarEventListener();
     };          
     
@@ -64,15 +46,15 @@ var VeiculoController = function(form) {
     var pesquisarTodos = function() {
         $.ajax({
             method: "GET",
-            url: Configuracao.contextPath + "/veiculo?action=all",
+            url: Configuracao.contextPath + "/veiculo/manutencao?action=all",
             data: { },
             dataType: 'json',
         }).done(function(data) {
-            addVeiculos(data);
+            addManutencoes(data);
         });
     };  
     
-    var addVeiculos = function(veiculos) {  
+    var addManutencoes = function(veiculos) {  
         $('#datatable-veiculos tbody').html('');
         var html = '<tr>' + 
                       '<td>{{modelo}}</td>' +
@@ -82,12 +64,12 @@ var VeiculoController = function(form) {
                       '<td class="number">{{quilometragem}}</td>' +
                       '<td>{{situacao}}</td>' +
                       '<td align="center">' +
-                            '<button class="btn btn-sm btn-warning" onclick="veiculoCtrl.acoes.editar({{id}})">' +
+                            '<button class="btn btn-sm btn-warning" onclick="veiculoManutencaoCtrl.acoes.editar({{id}})">' +
                                 '<i class="fa fa-lg fa-pencil"></i>' +
                             '</button>' +
                       '</td>' +
                       '<td align="center">' +
-                            '<a class="btn btn-sm btn-danger" href="' + Configuracao.contextPath + '/veiculo?action=delete&idVeiculo={{id}}">' +
+                            '<a class="btn btn-sm btn-danger" href="' + Configuracao.contextPath + '/veiculo/manutencao?action=delete&idVeiculo={{id}}">' +
                                 '<i class="fa fa-lg fa-trash"></i>' +
                             '</a>' +
                       '</td>' +
@@ -101,7 +83,7 @@ var VeiculoController = function(form) {
     var pesquisar = function(idVeiculo) {
         $.ajax({
             method: "GET",
-            url: Configuracao.contextPath + "/veiculo?action=get",
+            url: Configuracao.contextPath + "/veiculo/manutencao?action=get",
             data: { idVeiculo: idVeiculo },
             dataType: 'json',
         }).done(function(data) {
@@ -112,7 +94,7 @@ var VeiculoController = function(form) {
     var editar = function(idVeiculo) {
         $.ajax({
             method: "POST",
-            url: Configuracao.getContextPathActual + "/veiculo_editar_dialog.jsp",
+            url: Configuracao.getContextPathActual + "/manutencao/veiculo_manutencao_editar_dialog.jsp",
             data: {idVeiculo: idVeiculo},
             dataType: 'html',
             global: false,
@@ -123,7 +105,7 @@ var VeiculoController = function(form) {
 
     var editarModal = function(retorno) {
         bootbox.dialog({
-            title: "Editar Veículo",
+            title: "Editar Manutenção Veículo",
             message: retorno,
             animate: true,
             onEscape: true,
@@ -140,7 +122,7 @@ var VeiculoController = function(form) {
                     label: "<i class='fa fa-lg fa-save fa-spc'></i> SALVAR",
                     className: "btn btn-success",
                     callback: function() {  
-                        salvar(veiculoEditForm);
+                        salvar(veiculoManutencaoEditForm);
                     }
                 }
             }
@@ -200,14 +182,14 @@ var VeiculoController = function(form) {
         }).ajaxStop(function() {
             $('.my-modal').modal('hide'); 
         });
-    };  
+    }  
 
-    var setTipoVeiculo = function(veiculo) {
-        if(veiculo) addTipos(veiculo.tipo, veiculo);                            
-        else addTipos(tipos[1].key, veiculo);                            
+    var setTipoManutencao = function(manutencao) {
+        if(manutencao) addTipos(manutencao.tipo, manutencao);                            
+        else addTipos(tipos[0].key, manutencao);                            
     };
 
-    var addTipos = function(value, veiculo) {
+    var addTipos = function(value) {
         var select = form.tipo;
         removeOptions(select);
         _.map(tipos, function(tipo) {
@@ -217,119 +199,36 @@ var VeiculoController = function(form) {
             select.add(option);
         });
         select.value = value;
-        setMarcaVeiculo(value, veiculo);
     };  
 
-    var setMarcaVeiculo = function(tipo, veiculo) {
+    var setVeiculos = function(manutencao) {
         $.ajax({
             method: "GET",
-            url: "http://fipeapi.appspot.com/api/1/" + tipo + "/marcas.json",
+            url: Configuracao.contextPath + "/veiculo?action=all",
             data: { },
-            dataType: 'jsonp',
+            dataType: 'json',
         }).done(function(data) {
-            addMarcas(tipo, data, veiculo);
+            addVeiculos(data, manutencao);
         });
     };
     
-    var getMarcaSelected = function(marcas, veiculo) {
-        if(!veiculo) return JSON.parse(form.marca.value);
-        return _.find(marcas, function(marca) {
-            return marca.name === veiculo.marca;
-        });
+    var getVeiculoSelected = function(manutencao) {
+        if(!manutencao) return form.veiculo.value;
+        return manutencao.idVeiculo;
     }
 
-    var addMarcas = function(tipo, marcas, veiculo) {
-        var select = form.marca;
+    var addVeiculos = function(veiculos, manutencao) {
+        var select = form.veiculo;
         removeOptions(select);
-        _.map(marcas, function(marca) {
+        _.map(veiculos, function(veiculo) {
             var option = document.createElement("option");
-            option.text = marca.name;
-            option.value = JSON.stringify(marca);
+            option.text = veiculo.modelo;
+            option.value = veiculo.id;
             select.add(option);
         });
-        var selected = getMarcaSelected(marcas, veiculo);
-        select.value = JSON.stringify(selected);
-        setModeloVeiculo(tipo, selected.id, veiculo);
+        var selected = getVeiculoSelected(manutencao);
+        select.value = selected;
     };
-
-    var setModeloVeiculo = function(tipo, marca, veiculo) {
-        $.ajax({
-            method: "GET",
-            url: "http://fipeapi.appspot.com/api/1/" + tipo + "/veiculos/" + marca + ".json",
-            data: { },
-            dataType: 'jsonp',
-        }).done(function(data) {
-            addModelos(data, veiculo);  
-        });
-    };
-    
-    var getModeloSelected = function(modelos, veiculo) {
-        if(!veiculo) return JSON.parse(form.modelo.value);
-        return _.find(modelos, function(modelo) {
-            return modelo.name === veiculo.modelo;
-        });
-    }
-
-    var addModelos = function(modelos, veiculo) {
-        var select = form.modelo;
-        removeOptions(select);
-        _.map(modelos, function(modelo) {
-            var option = document.createElement("option");
-            option.text = modelo.name;
-            option.value = JSON.stringify(modelo);
-            select.add(option);
-        });
-        var selected = getModeloSelected(modelos, veiculo);
-        select.value = JSON.stringify(selected);
-    };
-
-    var setCombustivel = function(veiculo) {
-        addCombustiveis(veiculo);                            
-    };
-
-    var addCombustiveis = function(veiculo) {
-        var select = form.combustivel;
-        removeOptions(select);
-        _.map(combustiveis, function(combustivel) {
-            var option = document.createElement("option");
-            option.text = combustivel.value;
-            option.value = combustivel.key;
-            select.add(option);
-        });  
-        if(veiculo) select.value = veiculo.combustivel;        
-    };  
-
-    var setEstado = function(veiculo) {
-        addStatus(veiculo);                            
-    };
-
-    var addStatus = function(veiculo) {
-        var select = form.status;
-        removeOptions(select);
-        _.map(status, function(item) {
-            var option = document.createElement("option");
-            option.text = item.value;
-            option.value = item.key;
-            select.add(option);
-        }); 
-        if(veiculo) select.value = veiculo.status;        
-    };   
-
-    var setSituacao = function(veiculo) {
-        addSituacao(veiculo);                            
-    };
-
-    var addSituacao = function(veiculo) {
-        var select = form.situacao;
-        removeOptions(select);
-        _.map(situacao, function(item) {
-            var option = document.createElement("option");
-            option.text = item.value;
-            option.value = item.key;
-            select.add(option);
-        }); 
-        if(veiculo) select.value = veiculo.situacao;  
-    };  
     
     var removeOptions = function(select) {
         while(select.options.length > 0) { select.remove(select.options.length - 1); }        
@@ -363,20 +262,6 @@ var VeiculoController = function(form) {
     
     
     // eventos /////////
-    
-    var addTipoEventListener = function() {   
-        form.tipo.addEventListener('change', function() {
-            setMarcaVeiculo(this.value);
-        });
-    };
-
-    var addMarcaEventListener = function() {  
-        form.marca.addEventListener('change', function() {
-            var tipo = form.tipo.value;
-            var marca = JSON.parse(this.value);
-            setModeloVeiculo(tipo.value, marca.id, null);
-        });
-    };
 
     var addSalvarEventListener = function() { 
         if(!form.salvar) return;
@@ -389,10 +274,7 @@ var VeiculoController = function(form) {
     
     return {     
         listas: {
-            tipos: tipos,
-            combustiveis: combustiveis,
-            status: status,
-            situacao: situacao
+            tipos: tipos
         },
         acoes: {
             pesquisarTodos: pesquisarTodos,
@@ -402,12 +284,8 @@ var VeiculoController = function(form) {
         },
         funcoes: {
             loading: loading,
-            setTipoVeiculo: setTipoVeiculo,
-            setMarcaVeiculo: setMarcaVeiculo,
-            setModeloVeiculo: setModeloVeiculo,
-            setCombustivel: setCombustivel,
-            setEstado: setEstado,
-            setSituacao: setSituacao
+            setTipoManutencao: setTipoManutencao,
+            setVeiculos: setVeiculos
         },
         mascara: {
             addMascaraPlaca: addMascaraPlaca,
@@ -417,8 +295,6 @@ var VeiculoController = function(form) {
             addMascaraNumber: addMascaraNumber
         },
         eventos: {
-            addTipoEventListener: addTipoEventListener,
-            addMarcaEventListener: addMarcaEventListener,
             addSalvarEventListener: addSalvarEventListener
         }
     }

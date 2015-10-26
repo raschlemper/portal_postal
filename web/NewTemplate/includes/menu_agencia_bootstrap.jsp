@@ -71,7 +71,6 @@
                 <li><a href="../../NewTemplate/Cadastros/usuario_lista_b.jsp">Usuários da Agência</a></li>
                     <%}%>
                 <li><a href="../../NewTemplate/Cadastros/cliente_lista_b.jsp">Clientes</a></li>
-                <li><a href="${pageContext.request.contextPath}/veiculo">Veículos</a></li>
                 <%if (empMenu.getColeta() == 1) {%><li><a href="../../NewTemplate/Cadastros/config_hora_coleta_b.jsp">Horário da Coleta</a></li><%}%>
                 <%if (empMenu.getChamada() == 1) {%><li><a href="../../NewTemplate/Cadastros/cliente_log_contrato_b.jsp">Verificação de Contratos</a></li><%}%>
             </ul>
@@ -79,6 +78,15 @@
        <!--    -->
 
         <%}%>
+        
+        <li><a href="#">
+                <span class="fa-stack fa-lg pull-left"><i class="fa fa-car fa-stack-1x "></i></span> Veículos <span style="margin: 5px 10px 0 0;" class="fa-stack fa-fw pull-right"><i id="arrow" class="fa fa-chevron-down fa-stack-1x "></i></span>
+            </a>
+            <ul class="nav-pills nav-stacked" style="list-style-type:none;">
+                <li><a href="${pageContext.request.contextPath}/veiculo">Cadastro</a></li>
+                <li><a href="${pageContext.request.contextPath}/veiculo/manutencao">Manutenção</a></li>
+            </ul>
+        </li>
         <li>
             <a href="../../Agencia/Relatorio/painel_etiquetas.jsp"><span class="fa-stack fa-lg pull-left"><i class="fa fa-info-circle fa-stack-1x "></i></span> Acessar Layout Antigo</a>
         </li>

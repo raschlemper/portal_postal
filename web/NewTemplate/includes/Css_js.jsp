@@ -67,6 +67,7 @@
 
 <!-- JavaScript Pages -->
 <script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculo.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoManutencao.js"></script>
 <script type="text/javascript" language="javascript" src="../../javascript/veiculo/config.js"></script>
 
 
