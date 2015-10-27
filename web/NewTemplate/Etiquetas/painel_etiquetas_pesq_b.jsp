@@ -460,7 +460,7 @@
                         $target.slideToggle();
                     });
                     
-                    LoadDataTablesScripts(AllTables);   
+                    LoadDataTablesScripts(AllTables);    
                     
                 });
 

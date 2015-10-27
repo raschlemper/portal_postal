@@ -144,9 +144,11 @@ public class ContrVeiculo {
     public static List<Veiculo> consultaByPlaca(String nomeBD, Veiculo veiculo) {
         Connection con = Conexao.conectar(nomeBD);
         String sql = "SELECT * FROM veiculo WHERE placa = ? ";
+        if(veiculo.getId() != null) { sql += " AND idVeiculo <> ? "; }
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, veiculo.getPlaca());
+            if(veiculo.getId() != null) { ps.setInt(2, veiculo.getId()); }
             ResultSet result = (ResultSet) ps.executeQuery();
             List<Veiculo> listaVeiculos = new ArrayList<Veiculo>();
             while(result.next()) {

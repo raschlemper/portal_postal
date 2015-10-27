@@ -18,6 +18,7 @@
                 message: "<%= msg2 %>",
                 animate: true,
                 onEscape: true,
+                className: "my-modal-msg",
                 buttons: {
                     "Cancelar": {
                         label:"<i class='fa fa-lg fa-spc fa-times'></i>FECHAR",

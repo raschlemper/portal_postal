@@ -1,4 +1,3 @@
-
 <%@page import="Entidade.Clientes"%>
 <%@page import="java.sql.Timestamp"%>
 <%@page import="java.util.ArrayList"%>
@@ -58,67 +57,51 @@
                         </div>
                         <div class="row">
                             <div class="well well-md">  
-                                <form class="form-inline" name="form1" action="" method="post" enctype="multipart/form-data">
+                                <form class="form-inline" name="formSro" action="../../ServSalvarArImg" method="post" enctype="multipart/form-data">
                                     <ul class="list-unstyled">
                                         <li class="list-group-item">
                                             <div>
                                                 <h4 class="subtitle">Digite o numero (SRO) da Etiqueta</h4>
-                                            </div>                        
+                                            </div>                       
                                             <div class="form-group" >           
-                                                  <div class="input-group">
-                                                <input class="form-control"  id="obj" type="text" name="sroRec"  maxlength="13" onkeypress="mascara(this, maskObjetoSRO);" placeholder="Digite a etiqueta aqui..." />
-                                                <span class="input-group-addon"><i class="fa fa-check"></i></span>
-                                                  </div>
+                                                <div class="input-group">
+                                                    <input class="form-control"  id="obj" type="text" name="sroRec"  maxlength="13" onkeyup="carregaSRO();" onblur="carregaSRO();" onkeypress="mascara(this, maskObjetoSRO);" placeholder="Digite a etiqueta aqui..." />
+                                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                                </div>
                                             </div>
+                                            <div id="cliRec" class="hidden">
+                                                <div>
+                                                    <h4 class="subtitle">Cliente</h4>
+                                                </div>
+                                                <h4 id="nomeCli">  </h4>
+                                            </div> 
                                             <div>
                                                 <h4 class="subtitle">Digite o nome do recebedor</h4>
                                             </div>                        
                                             <div class="form-group" >           
-                                                <input id="obj" class="form-control" size="60" type="text" name="nomeRec"  maxlength="40" onkeypress="" placeholder="Digite o nome do recebedor aqui..." />
+                                                <input id="nomeRec" class="form-control" size="60" type="text" name="nomeRec"  maxlength="40" onkeypress="" readonly placeholder="Digite o nome do recebedor aqui..." />
                                             </div>
+
+
                                             <div>
                                                 <h4 class="subtitle">Data do recebimento do AR</h4>
                                             </div> 
                                             <div class="form-group" >                        
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                                    <input type="text" id="dataRec" name="dataRec" class="form-control" value="" size="12" maxlength="10" onKeyPress="mascara(this, maskData)" />
+                                                    <input type="text" id="dataRec" name="dataRec" class="form-control" value="" size="12" maxlength="10" readonly onKeyPress="mascara(this, maskData)" />
 
                                                 </div>
                                             </div>
-
-                                            <div>
-                                                <h4 class="subtitle">Selecione o Cliente</h4>
-                                            </div> 
-                                            <div class="row">
-                                                <div class="form-group col-md-5" >
-                                                    <label class="small">Selecione um Cliente</label>
-                                                    <select class="populate placeholder" name="idClienteRec" id="idCliente">
-                                                        <option value="">-- Selecione um Cliente --</option>
-                                                        <%
-                                                            ArrayList<Clientes> listaCliente = Controle.contrCliente.getNomeCodigoMetodo(nomeBD);
-                                                            for (Clientes c : listaCliente) {
-                                                                if (idCliente == c.getCodigo()) {
-                                                                    out.println("<option selected value='" + c.getCodigo() + "'>[" + c.getCodigo() + "] " + c.getNome() + "</option>");
-                                                                } else {
-                                                                    out.println("<option value='" + c.getCodigo() + "'>[" + c.getCodigo() + "] " + c.getNome() + "</option>");
-                                                                }
-                                                            }
-                                                        %>
-                                                    </select>
-                                                </div>  
-                                            </div>
-
                                         </li>
-
                                         <li class="list-group-item">
-                                            <label>Escolha o arquivo da imagem do AR para importar</label><br/>
+                                            <label>Escolha a imagem do AR para importar</label><br/>
                                             <span class="btn btn-default btn-file"><i class="fa fa-folder-open"></i> Selecionar imagem <input type="file" name="arquivoRec" /></span>
                                             <input type="hidden" id="tipoForm" name="tipoFormRec" value="imagem" />
                                         </li>
 
                                         <li class="list-group-item">
-                                            <button type="button" class="btn btn-success" onclick="return validaForm();"><i class="fa fa-lg fa-spc fa-upload"></i> IMPORTAR AR</button>
+                                            <button type="button" class="btn btn-success" onclick="return validaFormSRO();"><i class="fa fa-lg fa-spc fa-save"></i> SALVAR</button>
                                         </li>
                                     </ul>   
                                 </form>
@@ -242,6 +225,7 @@
 
         <!-- /#wrapper -->
 
+        <!-- Formulário de validação Perído da Importação -->
         <script type="text/javascript">
             function selectCliente() {
                 $('#idCliente').select2();
@@ -352,6 +336,87 @@
 
                 LoadDataTablesScripts(AllTables);
             });
+        </script>
+
+        <!--Formulário de validação SRO da Etiqueta -->
+
+        <script type="text/javascript">
+            function selectCliente() {
+                $('#idCliente').select2();
+            }
+            function validaFormSRO() {
+
+
+                var form = document.formSro;
+                if (form.data.value === "") {
+                    alert("Preencha a Data de recebimento do AR!");
+                    return false;
+                } else {
+                    if (valida_data(form.data) === false) {
+                        return false;
+                    }
+                }
+
+                if (form.arquivo.value === "") {
+                    alert("Escolha o arquivo do movimento a ser importado!\nGeralmente encontrado em 'C:/movimento.txt'.");
+                    return false;
+                } else {
+                    var indexA = form.arquivo.value.lastIndexOf(".");
+                    var indexB = form.arquivo.value.length;
+                    var ext = form.arquivo.value.substring(indexA, indexB).toUpperCase();
+                    if (ext !== ".TXT") {
+                        alert("O arquivo a ser importado deve ser '.TXT' !");
+                        return false;
+                    }
+                }
+                waitMsg();
+                form.submit();
+            }
+
+            function AllTables() {
+                StartDataTable('dataTables-importArq');
+                LoadSelect2Script(MakeSelectDataTable('dataTables-importArq'));
+                fechaMsg();
+            }
+            $(document).ready(function () {
+                LoadSelect2Script(selectCliente);
+                $("#dataRec").datepicker({
+                    showAnim: 'slideDown',
+                    maxDate: new Date(),
+                    numberOfMonths: 1,
+                    onClose: function (selectedDate) {
+                        $("#dataRec").datepicker("option", "minDate", selectedDate);
+                    }
+                });
+                LoadDataTablesScripts(AllTables);
+            });
+
+
+            function carregaSRO() {
+
+                if ($('#obj').val().length === 13) {
+                    $.ajax({
+                        method: "POST",
+                         data: { sro: $('#obj').val()}, 
+                        url: "pesquisa.jsp",
+                        dataType: 'html'
+
+                    }).done(function (data) {
+                        if (data === 1) {
+                            bootbox.alert(data);
+                        } else {
+                            $('#cliRec').toggleClass('hidden');
+                            $("#nomeRec").prop("readonly", false);
+                            $("#dataRec").prop("readonly", false);
+                            $('#nomeCli').html(data);
+                        }
+
+
+                    });
+
+                }
+            }
+
         </script>
 
     </body>

@@ -4,8 +4,9 @@ var VeiculoManutencaoController = function(form) {
                  {'key': 'rotina', 'value': 'Rotina'},
                  {'key': 'trocaoleo', 'value': 'Troca de Óleo'}];
                
-    var init = function(veiculo) {  
-        loading();
+    var init = function(veiculo) { 
+        Configuracao.messageModal();
+        Configuracao.loadingModal();
         addListas(veiculo);   
         addValueForm(veiculo);   
         addMascaras();
@@ -13,27 +14,28 @@ var VeiculoManutencaoController = function(form) {
     }
     
     var addListas = function(manutencao) {  
-        setTipoManutencao(manutencao);
         setVeiculos(manutencao);        
+        setTipoManutencao(manutencao);
     }
     
-    var addValueForm = function(veiculo) {  
-        if(!veiculo) return;
-        form.placa.value = veiculo.placa;
-        form.anoFabricacao.value = (veiculo.anoFabricacao > 0 ? veiculo.anoFabricacao : null);
-        form.anoModelo.value = (veiculo.anoModelo > 0 ? veiculo.anoModelo : null);
-        form.chassis.value = veiculo.chassis;
-        form.renavam.value = veiculo.renavam;
-        var km = veiculo.quilometragem.toString().replace(/(.)(?=(\d{3})+$)/g,'$1.');
+    var addValueForm = function(manutencao) {  
+        if(!manutencao) return;
+        form.veiculo.value = manutencao.idVeiculo;
+        form.tipo.value = manutencao.tipo;
+        var km = manutencao.quilometragem.toString().replace(/(.)(?=(\d{3})+$)/g,'$1.');
         form.quilometragem.value = km;
+        var valor = manutencao.valor.toString().replace(/(.)(?=(\d{3})+$)/g,'$1.');
+        form.valor.value = valor;
+        form.data.value = manutencao.data;
+        form.dataAgendamento.value = manutencao.dataAgendamento;
+        form.dataEntrega.value = manutencao.dataEntrega;
+        form.descricao.value = manutencao.descricao;
     }
 
     var addMascaras = function() {
-        addMascaraPlaca();
-        addMascaraAno();
-        addMascaraChassis();
-        addMascaraRenavam();
         addMascaraNumber();
+        addMascaraNumeric();
+        addMascaraDate();
     }
 
     var addEventos = function() { 
@@ -54,48 +56,48 @@ var VeiculoManutencaoController = function(form) {
         });
     };  
     
-    var addManutencoes = function(veiculos) {  
-        $('#datatable-veiculos tbody').html('');
+    var addManutencoes = function(manutencoes) {  
+        $('#datatable-manutencoes tbody').html('');
         var html = '<tr>' + 
-                      '<td>{{modelo}}</td>' +
                       '<td class="placa">{{placa}}</td>' +
-                      '<td>{{anoFabricacao}}/{{anoModelo}}</td>' +
-                      '<td class="renavam">{{renavam}}</td>' +
-                      '<td class="number">{{quilometragem}}</td>' +
-                      '<td>{{situacao}}</td>' +
+                      '<td>{{tipo}}</td>' +
+                      '<td class="numeric">{{valor}}</td>' +
+                      '<td class="date">{{data}}</td>' +
+                      '<td class="date">{{dataAgendamento}}</td>' +
+                      '<td class="date">{{dataEntrega}}</td>' +
                       '<td align="center">' +
                             '<button class="btn btn-sm btn-warning" onclick="veiculoManutencaoCtrl.acoes.editar({{id}})">' +
                                 '<i class="fa fa-lg fa-pencil"></i>' +
                             '</button>' +
                       '</td>' +
                       '<td align="center">' +
-                            '<a class="btn btn-sm btn-danger" href="' + Configuracao.contextPath + '/veiculo/manutencao?action=delete&idVeiculo={{id}}">' +
+                            '<a class="btn btn-sm btn-danger" href="' + Configuracao.contextPath + '/veiculo/manutencao?action=delete&idVeiculoManutencao={{id}}">' +
                                 '<i class="fa fa-lg fa-trash"></i>' +
                             '</a>' +
                       '</td>' +
                    '</tr>';
         var template = _.template(html);
-        _.map(veiculos, function(veiculo) {
-            $('#datatable-veiculos tbody').append(template(veiculo));                        
+        _.map(manutencoes, function(manutencao) {
+            $('#datatable-manutencoes tbody').append(template(manutencao));                        
         });
     };    
 
-    var pesquisar = function(idVeiculo) {
+    var pesquisar = function(idVeiculoManutencao) {
         $.ajax({
             method: "GET",
             url: Configuracao.contextPath + "/veiculo/manutencao?action=get",
-            data: { idVeiculo: idVeiculo },
+            data: { idVeiculoManutencao: idVeiculoManutencao },
             dataType: 'json',
         }).done(function(data) {
             init(data);
         });
     }; 
 
-    var editar = function(idVeiculo) {
+    var editar = function(idVeiculoManutencao) {
         $.ajax({
             method: "POST",
             url: Configuracao.getContextPathActual + "/manutencao/veiculo_manutencao_editar_dialog.jsp",
-            data: {idVeiculo: idVeiculo},
+            data: {idVeiculoManutencao: idVeiculoManutencao},
             dataType: 'html',
             global: false,
         }).done(function(retorno) {
@@ -131,75 +133,42 @@ var VeiculoManutencaoController = function(form) {
     }
     
     var salvar = function(form) {
-        if(!validarCampoPlaca(form)) return false;
-        if(!validarCampoAnoFabricacao(form)) return false;
-        if(!validarCampoAnoModelo(form)) return false;
-        if(!validarCampoRenavam(form)) return false;
         if(!validarCampoQuilometragem(form)) return false;
+        if(!validarCampoValor(form)) return false;
+        if(!validarCampoData(form)) return false;
         form.submit();
     };  
-
-    var validarCampoPlaca = function(form) {
-        if(form.placa.value) return true;
-        alert('Preencha a placa do veículo!');
-        return false;
-    };  
-
-    var validarCampoAnoFabricacao = function(form) {
-        if(!form.anoFabricacao.value) return true;
-        var anoCorrente = (new Date).getFullYear() + 1;
-        if(form.anoFabricacao.value >= 1970 && form.anoFabricacao.value <= anoCorrente) return true;
-        alert('Preencha o ano de fabricação do veículo com valores entre 1970 e ' + anoCorrente + '!');
-        return false;
-    };  
-
-    var validarCampoAnoModelo = function(form) {
-        if(!form.anoModelo.value) return true;
-        var anoCorrente = (new Date).getFullYear() + 1;
-        if(form.anoModelo.value >= 1970 && form.anoModelo.value <= anoCorrente) return true;
-        alert('Preencha o ano do modelo do veículo com valores entre 1970 e ' + anoCorrente + '!');
-        return false;
-    };
-
-    var validarCampoRenavam = function(form) {
-        if(form.renavam.value) return true;
-        alert('Preencha o renavam do veículo!');
-        return false;
-    };    
-
+    
     var validarCampoQuilometragem = function(form) {
         if(form.quilometragem.value) return true;
         alert('Preencha a quilometragem do veículo!');
         return false;
     }; 
     
+    var validarCampoValor = function(form) {
+        if(form.valor.value) return true;
+        alert('Preencha o valor da manutenção!');
+        return false;
+    }; 
     
-    // funcoes /////////
-
-    var loading = function() {        
-        $( document ).ajaxStart(function() {
-            waitMsg();
-        }).ajaxStop(function() {
-            $('.my-modal').modal('hide'); 
-        });
-    }  
-
-    var setTipoManutencao = function(manutencao) {
-        if(manutencao) addTipos(manutencao.tipo, manutencao);                            
-        else addTipos(tipos[0].key, manutencao);                            
-    };
-
-    var addTipos = function(value) {
-        var select = form.tipo;
-        removeOptions(select);
-        _.map(tipos, function(tipo) {
-            var option = document.createElement("option");
-            option.text = tipo.value;
-            option.value = tipo.key;
-            select.add(option);
-        });
-        select.value = value;
+    var validarCampoData = function(form) {
+        if(form.data.value) {
+            var data = toDate(form.data.value);
+            if(!isNaN(data.getDate())) return true;
+            alert('A data da manutenção não é válida!');
+            return false; 
+        }
+        alert('Preencha a data da manutenção!');
+        return false;
     };  
+    
+    var toDate = function(data) {
+        var pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
+        return new Date(data.replace(pattern,'$3-$2-$1'));
+    }
+    
+    
+    // funcoes ///////// 
 
     var setVeiculos = function(manutencao) {
         $.ajax({
@@ -215,14 +184,14 @@ var VeiculoManutencaoController = function(form) {
     var getVeiculoSelected = function(manutencao) {
         if(!manutencao) return form.veiculo.value;
         return manutencao.idVeiculo;
-    }
+    };
 
     var addVeiculos = function(veiculos, manutencao) {
         var select = form.veiculo;
         removeOptions(select);
         _.map(veiculos, function(veiculo) {
             var option = document.createElement("option");
-            option.text = veiculo.modelo;
+            option.text = veiculo.marca + ' / ' + veiculo.modelo + ' (' + veiculo.placa + ')';
             option.value = veiculo.id;
             select.add(option);
         });
@@ -230,34 +199,44 @@ var VeiculoManutencaoController = function(form) {
         select.value = selected;
     };
     
+    var setTipoManutencao = function(manutencao) {
+        if(manutencao) addTipos(manutencao.tipo, manutencao);                            
+        else addTipos(tipos[0].key, manutencao);                            
+    };
+
+    var addTipos = function(value) {
+        var select = form.tipo;
+        removeOptions(select);
+        _.map(tipos, function(tipo) {
+            var option = document.createElement("option");
+            option.text = tipo.value;
+            option.value = tipo.key;
+            select.add(option);
+        });
+        select.value = value;
+    }; 
+    
     var removeOptions = function(select) {
         while(select.options.length > 0) { select.remove(select.options.length - 1); }        
-    }
+    };
 
 
     // mascara /////////
-    
-    var addMascaraPlaca = function() {
-        $(".placa").mask('SSS-DDDD', {translation: {'S': {pattern: /[A-Za-z]/},
-                                                    'D': {pattern: /[0-9]/}}});
-        $(".placa").keyup(function() { this.value = this.value.toUpperCase(); });
-    };
-
-    var addMascaraAno = function() {
-        $(".ano").mask('DDDD', {translation: {'D': {pattern: /[0-9]/}}});
-    };
-
-    var addMascaraChassis = function() {
-        $(".chassis").mask('XX.XX.XXXXX.X.X.XXXXXX', {translation: {'X': {pattern: /[A-Za-z0-9]/}}, reverse: true});
-        $(".chassis").keyup(function() { this.value = this.value.toUpperCase(); });
-    };
-
-    var addMascaraRenavam = function() {
-        $(".renavam").mask('DDDDDDDDDD-D', {translation: {'D': {pattern: /[0-9]/}}, reverse: true});
-    };
 
     var addMascaraNumber = function() {
         $(".number").mask('DDD.DDD', {translation: {'D': {pattern: /[0-9]/}}, reverse: true});
+    };
+
+    var addMascaraNumeric = function() {
+        $(".numeric").mask('#.##D,DD', {translation: {'D': {pattern: /[0-9]/}}, reverse: true});
+    };
+    
+    var addMascaraDate = function() {
+        $(".date").mask('DD/DD/DDDD', {translation: {'D': {pattern: /[0-9]/}}});
+        $(".date").datepicker({
+            showAnim: 'slideDown',
+            numberOfMonths: 1
+        });
     };
     
     
@@ -283,16 +262,13 @@ var VeiculoManutencaoController = function(form) {
             salvar: salvar
         },
         funcoes: {
-            loading: loading,
             setTipoManutencao: setTipoManutencao,
             setVeiculos: setVeiculos
         },
         mascara: {
-            addMascaraPlaca: addMascaraPlaca,
-            addMascaraAno: addMascaraAno,
-            addMascaraChassis: addMascaraChassis,
-            addMascaraRenavam: addMascaraRenavam,
-            addMascaraNumber: addMascaraNumber
+            addMascaraNumber: addMascaraNumber,
+            addMascaraNumeric: addMascaraNumeric,
+            addMascaraDate: addMascaraDate
         },
         eventos: {
             addSalvarEventListener: addSalvarEventListener

@@ -19,7 +19,8 @@ var VeiculoController = function(form) {
                     {'key': 'manutencao', 'value': 'Manutenção'}];
                
     var init = function(veiculo) {  
-        loading();
+        Configuracao.messageModal();
+        Configuracao.loadingModal();
         addListas(veiculo);   
         addValueForm(veiculo);   
         addMascaras();
@@ -193,14 +194,6 @@ var VeiculoController = function(form) {
     
     
     // funcoes /////////
-
-    var loading = function() {        
-        $( document ).ajaxStart(function() {
-            waitMsg();
-        }).ajaxStop(function() {
-            $('.my-modal').modal('hide'); 
-        });
-    };  
 
     var setTipoVeiculo = function(veiculo) {
         if(veiculo) addTipos(veiculo.tipo, veiculo);                            
@@ -401,7 +394,6 @@ var VeiculoController = function(form) {
             salvar: salvar
         },
         funcoes: {
-            loading: loading,
             setTipoVeiculo: setTipoVeiculo,
             setMarcaVeiculo: setMarcaVeiculo,
             setModeloVeiculo: setModeloVeiculo,

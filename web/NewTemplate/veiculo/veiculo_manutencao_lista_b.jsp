@@ -34,89 +34,58 @@
                                         </li>
                                         <li class="list-group-item" id="campos">
                                             <div class="row form-horizontal">
-                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Tipo</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-car"></i></span>
-                                                        <select class="form-control tipo" name="tipo"></select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Marca</label>
+                                                <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8">
+                                                    <label class="small">Veículo</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-car"></i></span>
                                                         <select class="form-control marca" name="veiculo"></select>
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Modelo</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-car"></i></span>
-                                                        <select class="form-control modelo" name="modelo"></select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Placa</label>
+                                                    <label class="small">Tipo</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="placa" class="form-control placa" placeholder="Placa"/>                                    
+                                                        <select class="form-control tipo" name="tipo"></select>
                                                     </div>
                                                 </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Ano Fabricação</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="anoFabricacao" class="form-control ano" placeholder="Ano de Fabricação"/>                                    
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Ano Modelo</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="anoModelo" class="form-control ano" placeholder="Ano do Modelo"/>                                    
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Chassis</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="chassis" class="form-control chassis" placeholder="Chassis"/>                                    
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Renavam</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="renavam" class="form-control renavam" placeholder="Renavam"/>                                    
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                                     <label class="small">Quilometragem</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
                                                         <input type="text" autocomplete="off" name="quilometragem" class="form-control number" placeholder="Quilometragem"/>                                    
                                                     </div>
                                                 </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Tipo Combustível</label>
+                                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <label class="small">Valor</label>
                                                     <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                                        <select class="form-control combustivel" name="combustivel"></select>
+                                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                                        <input type="text" autocomplete="off" name="valor" class="form-control numeric" placeholder="Valor"/>                                    
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Estado Veículo</label>
+                                                    <label class="small">Data</label>
                                                     <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                                        <select class="form-control status" name="status"></select>
+                                                        <input class="form-control date" type="text" name="data" placeholder="Data da manutenção" />
+                                                        <span class="input-group-addon" ><i class="fa fa-calendar"></i></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Situação</label>
+                                                    <label class="small">Data Agendamento</label>
                                                     <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                                        <select class="form-control situacao" name="situacao"></select>
+                                                        <input class="form-control date" type="text" name="dataAgendamento" placeholder="Data de prevista para manutenção" onKeyPress="mascara(this, maskData)" />
+                                                        <span class="input-group-addon" ><i class="fa fa-calendar"></i></span>
                                                     </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                                    <label class="small">Data Entrega</label>
+                                                    <div class="input-group">
+                                                        <input class="form-control date" type="text" name="dataEntrega" placeholder="Data de prevista para entrega" onKeyPress="mascara(this, maskData)" />
+                                                        <span class="input-group-addon" ><i class="fa fa-calendar"></i></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                    <label class="small">Descrição</label>
+                                                    <textarea class="form-control" rows="3" name="descricao" placeholder="Descrição da manutenção"></textarea>       
                                                 </div>
                                             </div>
                                         </li>
@@ -134,15 +103,15 @@
                                     <div class="panel-heading" >Lista com todos os veículos</div>
                                     <div class="panel-body no-padding">
                                         <div class="dataTable_wrapper no-padding">
-                                            <table class="table table-striped table-bordered table-hover table-condensed" id="datatable-veiculos">
+                                            <table class="table table-striped table-bordered table-hover table-condensed" id="datatable-manutencoes">
                                                 <thead>
                                                     <tr>
-                                                        <th>Modelo</th>
                                                         <th>Placa</th>
-                                                        <th>Fab./Mod.</th>
-                                                        <th>Renavam</th>
-                                                        <th>Km</th>
-                                                        <th>Situação</th>
+                                                        <th>Tipo</th>
+                                                        <th>Valor</th>
+                                                        <th>Data</th>
+                                                        <th>Agendamento</th>
+                                                        <th>Entrega</th>
                                                         <th class="no-sort" width="100">Alterar</th>
                                                         <th class="no-sort" width="100">Excluir</th>
                                                     </tr>

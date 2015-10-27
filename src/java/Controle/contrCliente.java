@@ -360,6 +360,33 @@ public class contrCliente {
         }
     }
 
+    public static Clientes consultaClienteBySRO(String sro, String nomeBD) {
+        
+        Connection conn = (Connection) Conexao.conectar(nomeBD);
+        String sql = "SELECT cliente.* FROM movimentacao LEFT JOIN cliente ON codigo = codCliente" +
+                    " WHERE numObjeto = '"+sro+"' ;";
+        System.out.println(sql);
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);            
+            ResultSet result = (ResultSet) valores.executeQuery();
+
+            if (result.next()) {
+                
+                String nome = result.getString("nome");
+                int idCliente = result.getInt("codigo");
+                
+                return new Clientes(idCliente, nome);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            ContrErroLog.inserir("Portal Postal - contrCliente", "SQLException", sql, e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+
     public static ArrayList<Clientes> getNomeCodigoMetodo(String nomeBD) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         String sql = "SELECT * FROM cliente ORDER BY nome";

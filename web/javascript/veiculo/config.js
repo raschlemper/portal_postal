@@ -1,4 +1,17 @@
-var Configuracao = function() {
+var Configuracao = function() {    
+
+    var messageModal = function() {
+        telaMsg();
+    };  
+
+    var loadingModal = function() {        
+        $( document ).ajaxStart(function() {
+            var isMsgOpen = $('.my-modal-msg').modal().is(':visible');
+            if(!isMsgOpen) waitMsg();
+        }).ajaxStop(function() {
+            $('.my-modal').modal('hide'); 
+        });
+    };  
     
     var getContextPath = function() {
         var location = window.location;
@@ -15,6 +28,8 @@ var Configuracao = function() {
     };
     
     return {
+        messageModal: messageModal,
+        loadingModal: loadingModal,
         contextPath: getContextPath(),
         getContextPathActual: getContextPathActual()
     }

@@ -9,19 +9,6 @@
     String nomeBD = (String) session.getAttribute("empresa");
     if (nomeBD == null) return;
     Integer idVeiculo = Integer.parseInt(request.getParameter("idVeiculo"));
-
-//    int idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
-//    Entidade.Usuario col = Controle.contrUsuario.consultaUsuarioById(idUsuario, nomeBD);
-//    String nome = col.getNome();
-//    String login = col.getLogin();
-//    String senha = col.getSenha();
-//    String email = col.getEmail();
-//    int nivelUs = col.getIdNivel();
-//    int usaPortal = col.getUsaPortalPostal();
-//    int usaConsolidador = col.getUsaConsolidador();
-//    ArrayList<Integer> listaAcPortal = col.getListaAcessosPortalPostal();
-//    ArrayList<Integer> listaAcConsol = col.getListaAcessosConsolidador();
-
 %>
 <form name="veiculoEditForm" action="${pageContext.request.contextPath}/veiculo?action=save" method="post">
     <ul class="list-unstyled">
@@ -119,6 +106,6 @@
 <script type="text/javascript"> 
     $(function() {            
         var veiculoCtrl = new VeiculoController(veiculoEditForm); 
-        veiculoCtrl.acoes.pesquisar(veiculoEditForm.idVeiculo.value);
+        veiculoCtrl.acoes.pesquisar(<%= idVeiculo %>);
     });            
 </script>
