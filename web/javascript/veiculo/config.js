@@ -11,6 +11,11 @@ var Configuracao = function() {
         }).ajaxStop(function() {
             $('.my-modal').modal('hide'); 
         });
+    };    
+
+    var closeModal = function() {
+        $('.my-modal').modal('hide'); 
+        $('.my-modal-msg').modal('hide'); 
     };  
     
     var getContextPath = function() {
@@ -30,6 +35,7 @@ var Configuracao = function() {
     return {
         messageModal: messageModal,
         loadingModal: loadingModal,
+        closeModal: closeModal,
         contextPath: getContextPath(),
         getContextPathActual: getContextPathActual()
     }

@@ -106,6 +106,7 @@ var VeiculoManutencaoController = function(form) {
     };
 
     var editarModal = function(retorno) {
+        Configuracao.closeModal();
         bootbox.dialog({
             title: "Editar Manutenção Veículo",
             message: retorno,

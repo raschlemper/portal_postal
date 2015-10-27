@@ -123,12 +123,13 @@ var VeiculoController = function(form) {
     };
 
     var editarModal = function(retorno) {
+        Configuracao.closeModal();
         bootbox.dialog({
             title: "Editar Veículo",
             message: retorno,
             animate: true,
             onEscape: true,
-            className: "modal-lgWidth",
+            className: "modal-lgWidth my-modal-edit",
             buttons: {
                 Cancelar: {
                     label:"<i class='fa fa-lg fa-times fa-spc'></i> CANCELAR",
