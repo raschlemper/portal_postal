@@ -3,14 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controle;
+package Veiculo.Controle;
 
-import Entidade.VeiculoManutencao;
+import Controle.ContrErroLog;
+import Veiculo.Entidade.Veiculo;
+import Veiculo.Entidade.VeiculoManutencao;
 import Util.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -24,13 +27,13 @@ public class ContrVeiculoManutencao {
 
     public static List<VeiculoManutencao> consultaTodos(String nomeBD) {
         Connection con = Conexao.conectar(nomeBD);
-        String sql = "SELECT * FROM veiculo_manutencao";
+        String sql = "SELECT * FROM veiculo_manutencao, veiculo WHERE veiculo.idVeiculo = veiculo_manutencao.idVeiculo ";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet result = (ResultSet) ps.executeQuery();
             List<VeiculoManutencao> listaVeiculos = new ArrayList<VeiculoManutencao>();
             while(result.next()) {
-                listaVeiculos.add(criarVeiculo(result));                        
+                listaVeiculos.add(criarVeiculoManutencao(result));                        
             }
             return listaVeiculos;
         } catch (SQLException e) {
@@ -43,12 +46,12 @@ public class ContrVeiculoManutencao {
 
     public static VeiculoManutencao consulta(String nomeBD, VeiculoManutencao veiculo) {
         Connection con = Conexao.conectar(nomeBD);
-        String sql = "SELECT * FROM veiculo_manutencao WHERE idVeiculoManutencao = ?";
+        String sql = "SELECT * FROM veiculo_manutencao, veiculo WHERE veiculo.idVeiculo = veiculo_manutencao.idVeiculo AND idVeiculoManutencao = ?";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, veiculo.getId());
             ResultSet result = (ResultSet) ps.executeQuery();
-            while(result.next()) { return criarVeiculo(result); }
+            while(result.next()) { return criarVeiculoManutencao(result); }
             return null;
         } catch (SQLException e) {
             Logger.getLogger(ContrVeiculoManutencao.class.getName()).log(Level.WARNING, e.getMessage(), e);
@@ -60,17 +63,20 @@ public class ContrVeiculoManutencao {
 
     public static void inserir(String nomeBD, VeiculoManutencao veiculo) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "INSERT INTO veiculo_manutencao (idVeiculo, tipo, quilometragem, data, dataAgendamento, dataEntrega, descricao) "
-                + " values(?,?,?,?,?,?,?) ";
+        String sql = "INSERT INTO veiculo_manutencao (idVeiculo, tipo, quilometragem, valor, data, dataAgendamento, dataEntrega, descricao) "
+                + " values(?,?,?,?,?,?,?,?) ";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, veiculo.getIdVeiculo());
+            ps.setInt(1, veiculo.getVeiculo().getId());
             ps.setString(2, veiculo.getTipo());
             ps.setInt(3, veiculo.getQuilometragem());
-            ps.setDate(4, new java.sql.Date(veiculo.getData().getTime()));
-            ps.setDate(5, new java.sql.Date(veiculo.getDataAgendamento().getTime()));
-            ps.setDate(6, new java.sql.Date(veiculo.getDataEntrega().getTime()));
-            ps.setString(7, veiculo.getDescricao());
+            ps.setDouble(4, veiculo.getValor());
+            ps.setDate(5, new java.sql.Date(veiculo.getData().getTime()));
+            if(veiculo.getDataAgendamento() == null) { ps.setNull(6, Types.DATE); }
+            else { ps.setDate(6, new java.sql.Date(veiculo.getDataAgendamento().getTime())); }
+            if(veiculo.getDataEntrega() == null) { ps.setNull(7, Types.DATE); }
+            else { ps.setDate(7, new java.sql.Date(veiculo.getDataEntrega().getTime())); }
+            ps.setString(8, veiculo.getDescricao());
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
@@ -123,17 +129,35 @@ public class ContrVeiculoManutencao {
         }
     }
     
-    private static VeiculoManutencao criarVeiculo(ResultSet result) throws SQLException {
+    private static VeiculoManutencao criarVeiculoManutencao(ResultSet result) throws SQLException {
         return new VeiculoManutencao(
-            result.getInt("idVeiculoManutencao"),
-            result.getInt("idVeiculo"),
-            result.getString("tipo"),  
-            result.getInt("quilometragem"),
-            result.getDouble("valor"),
-            result.getDate("data"),
-            result.getDate("dataAgendamento"),
-            result.getDate("dataEntrega"),
-            result.getString("descricao")  
+            result.getInt("veiculo_manutencao.idVeiculoManutencao"),
+            criarVeiculo(result),
+            result.getString("veiculo_manutencao.tipo"),  
+            result.getInt("veiculo_manutencao.quilometragem"),
+            result.getDouble("veiculo_manutencao.valor"),
+            result.getDate("veiculo_manutencao.data"),
+            result.getDate("veiculo_manutencao.dataAgendamento"),
+            result.getDate("veiculo_manutencao.dataEntrega"),
+            result.getString("veiculo_manutencao.descricao")  
+        );
+    }
+    
+    private static Veiculo criarVeiculo(ResultSet result) throws SQLException {
+        return new Veiculo(
+            result.getInt("veiculo.idVeiculo"),
+            result.getString("veiculo.tipo"),  
+            result.getString("veiculo.marca"),  
+            result.getString("veiculo.modelo"),  
+            result.getString("veiculo.placa"),
+            result.getInt("veiculo.anoFabricacao"),
+            result.getInt("veiculo.anoModelo"),
+            result.getString("veiculo.chassis"),
+            result.getString("veiculo.renavam"),
+            result.getInt("veiculo.quilometragem"),
+            result.getString("veiculo.combustivel"),
+            result.getString("veiculo.status"),
+            result.getString("veiculo.situacao")
         );
     }
     

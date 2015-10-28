@@ -74,7 +74,7 @@
 </form>   
 <script type="text/javascript"> 
     $(function() {            
-        var veiculoManutencaoCtrl = new VeiculoController(veiculoManutencaoEditForm); 
+        var veiculoManutencaoCtrl = new VeiculoManutencaoController(veiculoManutencaoEditForm); 
         veiculoManutencaoCtrl.acoes.pesquisar(<%= idVeiculoManutencao %>);
     });            
 </script>

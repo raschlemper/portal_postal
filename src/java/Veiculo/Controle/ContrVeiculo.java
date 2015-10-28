@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controle;
+package Veiculo.Controle;
 
-import Entidade.Veiculo;
+import Controle.ContrErroLog;
+import Veiculo.Entidade.Veiculo;
 import Util.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

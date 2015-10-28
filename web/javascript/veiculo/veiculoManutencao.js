@@ -5,7 +5,6 @@ var VeiculoManutencaoController = function(form) {
                  {'key': 'trocaoleo', 'value': 'Troca de Óleo'}];
                
     var init = function(veiculo) { 
-        Configuracao.messageModal();
         Configuracao.loadingModal();
         addListas(veiculo);   
         addValueForm(veiculo);   
@@ -96,7 +95,7 @@ var VeiculoManutencaoController = function(form) {
     var editar = function(idVeiculoManutencao) {
         $.ajax({
             method: "POST",
-            url: Configuracao.getContextPathActual + "/manutencao/veiculo_manutencao_editar_dialog.jsp",
+            url: Configuracao.getContextPathActual + "/veiculo_manutencao_editar_dialog.jsp",
             data: {idVeiculoManutencao: idVeiculoManutencao},
             dataType: 'html',
             global: false,
@@ -106,7 +105,6 @@ var VeiculoManutencaoController = function(form) {
     };
 
     var editarModal = function(retorno) {
-        Configuracao.closeModal();
         bootbox.dialog({
             title: "Editar Manutenção Veículo",
             message: retorno,
@@ -137,6 +135,8 @@ var VeiculoManutencaoController = function(form) {
         if(!validarCampoQuilometragem(form)) return false;
         if(!validarCampoValor(form)) return false;
         if(!validarCampoData(form)) return false;
+        if(!validarCampoDataAgendamento(form)) return false;
+        if(!validarCampoDataEntrega(form)) return false;
         form.submit();
     };  
     
@@ -163,6 +163,22 @@ var VeiculoManutencaoController = function(form) {
         return false;
     };  
     
+    var validarCampoDataAgendamento = function(form) {
+        if(!form.dataAgendamento.value) return true;
+        var data = toDate(form.dataAgendamento.value);
+        if(!isNaN(data.getDate())) return true;
+        alert('A data de agndamento da manutenção não é válida!');
+        return false; 
+    };   
+    
+    var validarCampoDataEntrega = function(form) {
+        if(!form.dataEntrega.value) return true;
+        var data = toDate(form.dataEntrega.value);
+        if(!isNaN(data.getDate())) return true;
+        alert('A data de entrega da manutenção não é válida!');
+        return false; 
+    };  
+       
     var toDate = function(data) {
         var pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
         return new Date(data.replace(pattern,'$3-$2-$1'));

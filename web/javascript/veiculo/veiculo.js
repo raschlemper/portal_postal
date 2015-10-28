@@ -19,7 +19,6 @@ var VeiculoController = function(form) {
                     {'key': 'manutencao', 'value': 'Manutenção'}];
                
     var init = function(veiculo) {  
-        Configuracao.messageModal();
         Configuracao.loadingModal();
         addListas(veiculo);   
         addValueForm(veiculo);   
@@ -123,7 +122,6 @@ var VeiculoController = function(form) {
     };
 
     var editarModal = function(retorno) {
-        Configuracao.closeModal();
         bootbox.dialog({
             title: "Editar Veículo",
             message: retorno,

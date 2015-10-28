@@ -1,41 +1,32 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Entidade;
+package Veiculo.Entidade;
 
-import java.util.Date;
-
-/**
- *
- * @author rafael
- */
-public class VeiculoManutencao {
+public class VeiculoManutencaoDTO {    
     
     private Integer id;
-    private Integer idVeiculo;
+    private Integer idVeiculo;    
+    private String placa;
     private String tipo;
     private Integer quilometragem;
     private Double valor;
-    private Date data;
-    private Date dataAgendamento;
-    private Date dataEntrega;
+    private String data;
+    private String dataAgendamento;
+    private String dataEntrega;
     private String descricao;
-    
-    public VeiculoManutencao() {}
 
-    public VeiculoManutencao(Integer id, Integer idVeiculo, String tipo, Integer quilometragem, 
-            Double valor, Date data, Date dataAgendamento, Date dataEntrega, String descricao) {
+    public VeiculoManutencaoDTO() { }
+
+    public VeiculoManutencaoDTO(Integer id, Integer idVeiculo, String placa, String tipo, Integer quilometragem, Double valor, String data, String dataAgendamento, String dataEntrega, String descricao) {
         this.id = id;
         this.idVeiculo = idVeiculo;
+        this.placa = placa;
         this.tipo = tipo;
         this.quilometragem = quilometragem;
+        this.valor = valor;
         this.data = data;
         this.dataAgendamento = dataAgendamento;
         this.dataEntrega = dataEntrega;
-        this.descricao = descricao;        
-    }  
+        this.descricao = descricao;
+    }
 
     public Integer getId() {
         return id;
@@ -51,6 +42,14 @@ public class VeiculoManutencao {
 
     public void setIdVeiculo(Integer idVeiculo) {
         this.idVeiculo = idVeiculo;
+    }
+
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
     }
 
     public String getTipo() {
@@ -77,27 +76,27 @@ public class VeiculoManutencao {
         this.valor = valor;
     }
 
-    public Date getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(String data) {
         this.data = data;
     }
 
-    public Date getDataAgendamento() {
+    public String getDataAgendamento() {
         return dataAgendamento;
     }
 
-    public void setDataAgendamento(Date dataAgendamento) {
+    public void setDataAgendamento(String dataAgendamento) {
         this.dataAgendamento = dataAgendamento;
     }
 
-    public Date getDataEntrega() {
+    public String getDataEntrega() {
         return dataEntrega;
     }
 
-    public void setDataEntrega(Date dataEntrega) {
+    public void setDataEntrega(String dataEntrega) {
         this.dataEntrega = dataEntrega;
     }
 
@@ -108,5 +107,6 @@ public class VeiculoManutencao {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+    
     
 }

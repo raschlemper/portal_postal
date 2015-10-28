@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Entidade;
+package Veiculo.Entidade;
 
 /**
  *
@@ -26,6 +26,10 @@ public class Veiculo {
     private String situacao;
     
     public Veiculo() {}
+
+    public Veiculo(Integer id) {
+        this.id = id;
+    }
 
     public Veiculo(Integer id, String tipo, String marca, String modelo, String placa, Integer anoFabricacao, Integer anoModelo, String chassis, 
             String renavam, Integer quilometragem, String combustivel, String status, String situacao) {

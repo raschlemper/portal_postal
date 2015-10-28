@@ -3,11 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Servlet;
+package Veiculo.Servlet;
 
 import Controle.ContrErroLog;
-import Entidade.Veiculo;
+import Veiculo.Controle.ContrVeiculoManutencao;
+import Veiculo.Entidade.Veiculo;
+import Veiculo.Entidade.VeiculoManutencao;
+import Veiculo.Entidade.VeiculoManutencaoDTO;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,8 +28,8 @@ import org.json.JSONObject;
  * @author rafael
  */
 
-@WebServlet("/veiculo")
-public class ServVeiculo extends HttpServlet {
+@WebServlet("/veiculo/manutencao")
+public class ServVeiculoManutencao extends HttpServlet {
     
     private HttpSession sessao;
     private String expira;
@@ -51,7 +57,7 @@ public class ServVeiculo extends HttpServlet {
             else if (usuario == null) { response.sendRedirect(this.login); }
             else { super.service(request, response); }
         } catch (Exception ex) {
-            int idErro = ContrErroLog.inserir("Portal Postal - ServVeiculo", "Exception", null, ex.toString());
+            int idErro = ContrErroLog.inserir("Portal Postal - ServVeiculoManutencao", "Exception", null, ex.toString());
             this.sessao.setAttribute("msg", "SYSTEM ERROR Nº: " + idErro + "; Ocorreu um erro inesperado!");
             response.sendRedirect(request.getHeader("referer"));
         }
@@ -60,7 +66,7 @@ public class ServVeiculo extends HttpServlet {
     private void servicePage(HttpServletRequest request) {
         String context = request.getContextPath();
         this.login = context.concat("/index.jsp?msgLog=3");        
-        this.page = context.concat("/NewTemplate/veiculo/veiculo_lista_b.jsp");        
+        this.page = context.concat("/NewTemplate/veiculo/veiculo_manutencao_lista_b.jsp");        
     }
     
     private String getAction(HttpServletRequest request) {
@@ -76,7 +82,7 @@ public class ServVeiculo extends HttpServlet {
             else if(action.equalsIgnoreCase(actions.SAVE.name())) { save(request, response); }
             else if(action.equalsIgnoreCase(actions.DELETE.name())) { delete(request, response); }
         } catch (Exception ex) {
-            int idErro = ContrErroLog.inserir("Portal Postal - ServVeiculo", "Exception", null, ex.toString());
+            int idErro = ContrErroLog.inserir("Portal Postal - ServVeiculoManutencao", "Exception", null, ex.toString());
             this.sessao.setAttribute("msg", "SYSTEM ERROR Nº: " + idErro + "; Ocorreu um erro inesperado!");
             response.sendRedirect(request.getHeader("referer"));
         }
@@ -97,79 +103,75 @@ public class ServVeiculo extends HttpServlet {
     }
     
     private void getAll(HttpServletRequest request, HttpServletResponse response) throws Exception { 
-        List<Veiculo> listaVeiculos = Controle.ContrVeiculo.consultaTodos(this.nomeBD);
-        JSONArray lista = new JSONArray(listaVeiculos);
+        List<VeiculoManutencao> listaVeiculos = ContrVeiculoManutencao.consultaTodos(this.nomeBD);
+        List<VeiculoManutencaoDTO> listaDTO = new ArrayList<VeiculoManutencaoDTO>();
+        for (VeiculoManutencao veiculo : listaVeiculos) {
+            listaDTO.add(getVeiculoManutencaoDTO(veiculo));
+        }
+        JSONArray lista = new JSONArray(listaDTO);
         response.setContentType("application/json");
         response.getWriter().write(lista.toString());
     }
     
     private void get(HttpServletRequest request, HttpServletResponse response) throws Exception {       
-        Veiculo veiculo = getVeiculoFromRequest(request);
-        veiculo = Controle.ContrVeiculo.consulta(this.nomeBD, veiculo);
-        JSONObject object = new JSONObject(veiculo);
+        VeiculoManutencao veiculo = getVeiculoFromRequest(request);
+        veiculo = ContrVeiculoManutencao.consulta(this.nomeBD, veiculo);
+        JSONObject object = new JSONObject(getVeiculoManutencaoDTO(veiculo));
         response.setContentType("application/json");
         response.getWriter().write(object.toString());
     }   
     
     private void save(HttpServletRequest request, HttpServletResponse response) throws Exception {        
-        Veiculo veiculo = getVeiculoFromRequest(request);
-        if(existeVeiculo(veiculo)) {
-            this.sessao.setAttribute("msg", "Este Veículo já foi cadastrado!");
-            response.sendRedirect(request.getHeader("referer"));  
-        } else {
-            if(veiculo.getId() != null) { update(request, response); }
-            else { create(request, response); }
-        }
+        VeiculoManutencao veiculo = getVeiculoFromRequest(request);
+        if(veiculo.getId() != null) { update(request, response); }
+        else { create(request, response); }
     }
     
     private void create(HttpServletRequest request, HttpServletResponse response) throws Exception {               
-        Veiculo veiculo = getVeiculoFromRequest(request);
-        Controle.ContrVeiculo.inserir(this.nomeBD, veiculo);
-        this.sessao.setAttribute("msg", "Veículo Inserido com sucesso!");
+        VeiculoManutencao veiculo = getVeiculoFromRequest(request);
+        ContrVeiculoManutencao.inserir(this.nomeBD, veiculo);
+        this.sessao.setAttribute("msg", "Manutenção do Veículo Inserida com sucesso!");
         response.sendRedirect(request.getHeader("referer"));        
     }
     
     private void update(HttpServletRequest request, HttpServletResponse response) throws Exception {               
-        Veiculo veiculo = getVeiculoFromRequest(request);
-        Controle.ContrVeiculo.alterar(this.nomeBD, veiculo);
-        this.sessao.setAttribute("msg", "Veículo Alterado com sucesso! " + veiculo.getId());
+        VeiculoManutencao veiculo = getVeiculoFromRequest(request);
+        ContrVeiculoManutencao.alterar(this.nomeBD, veiculo);
+        this.sessao.setAttribute("msg", "Manutenção do Veículo Alterada com sucesso! " + veiculo.getId());
         response.sendRedirect(request.getHeader("referer"));
     }
     
     private void delete(HttpServletRequest request, HttpServletResponse response) throws Exception {      
-        Veiculo veiculo = getVeiculoFromRequest(request);
-        Controle.ContrVeiculo.limpar(this.nomeBD, veiculo);
-        this.sessao.setAttribute("msg", "Veículo removido com sucesso! " + veiculo.getId());
+        VeiculoManutencao veiculo = getVeiculoFromRequest(request);
+        ContrVeiculoManutencao.limpar(this.nomeBD, veiculo);
+        this.sessao.setAttribute("msg", "Manutenção do Veículo removida com sucesso! " + veiculo.getId());
         response.sendRedirect(request.getHeader("referer"));
     }
     
-    private boolean existeVeiculo(Veiculo veiculo) {
-        List<Veiculo> veiculos = Controle.ContrVeiculo.consultaByPlaca(this.nomeBD, veiculo);
-        if(veiculos.isEmpty()) return false;
-        return true;
+    private VeiculoManutencao getVeiculoFromRequest(HttpServletRequest request) throws Exception {
+        VeiculoManutencao veiculoManutencao = new VeiculoManutencao();
+        veiculoManutencao.setId(getIntegerParameter(request.getParameter("idVeiculoManutencao")));
+        veiculoManutencao.setVeiculo(getVeiculo(request));
+        veiculoManutencao.setTipo(request.getParameter("tipo"));
+        veiculoManutencao.setQuilometragem(getQuilometragemParameter(request.getParameter("quilometragem")));        
+        veiculoManutencao.setValor(getDoubleParameter(request.getParameter("valor")));        
+        veiculoManutencao.setData(getDataParameter(request.getParameter("data")));       
+        veiculoManutencao.setDataAgendamento(getDataParameter(request.getParameter("dataAgendamento")));       
+        veiculoManutencao.setDataEntrega(getDataParameter(request.getParameter("dataEntrega")));
+        veiculoManutencao.setDescricao(request.getParameter("descricao"));
+        return veiculoManutencao;
     }
     
-    private Veiculo getVeiculoFromRequest(HttpServletRequest request) {
-        Veiculo veiculo = new Veiculo();
-        veiculo.setId(getIntegerParameter(request.getParameter("idVeiculo")));
-        veiculo.setTipo(request.getParameter("tipo"));
-        veiculo.setMarca(getJsonParameter(request.getParameter("marca"), "name"));
-        veiculo.setModelo(getJsonParameter(request.getParameter("modelo"), "name"));
-        veiculo.setPlaca(request.getParameter("placa"));
-        veiculo.setAnoFabricacao(getIntegerParameter(request.getParameter("anoFabricacao")));
-        veiculo.setAnoModelo(getIntegerParameter(request.getParameter("anoModelo")));
-        veiculo.setChassis(request.getParameter("chassis"));
-        veiculo.setRenavam(request.getParameter("renavam"));
-        veiculo.setQuilometragem(getQuilometragemParameter(request.getParameter("quilometragem")));
-        veiculo.setCombustivel(request.getParameter("combustivel"));
-        veiculo.setStatus(request.getParameter("status"));
-        veiculo.setSituacao(request.getParameter("situacao"));
+    private Veiculo getVeiculo(HttpServletRequest request) {
+        Veiculo veiculo = new Veiculo(
+            getIntegerParameter(request.getParameter("veiculo"))
+        );
         return veiculo;
     }
           
-    private String getJsonParameter(String parameter, String campo) {
-        if(parameter == null) return null;
-        return new JSONObject(parameter).getString(campo);
+    private Date getDataParameter(String parameter) throws Exception {
+        if(parameter == null || parameter.equals("")) return null;
+        return Util.FormatarData.getDateFromString(parameter, "dd/MM/yyyy");
     }
           
     private Integer getIntegerParameter(String parameter) {
@@ -177,9 +179,35 @@ public class ServVeiculo extends HttpServlet {
         return Integer.parseInt(parameter);
     }
           
+    private Double getDoubleParameter(String parameter) {
+        if(parameter == null || parameter.equals("")) return null;
+        return Double.parseDouble(parameter.replaceAll("\\.","").replace(",","."));
+    }
+          
     private Integer getQuilometragemParameter(String parameter) {
         if(parameter == null || parameter.equals("")) return null;
         return getIntegerParameter(parameter.replace(".", "")); 
     }
-
+    
+    private VeiculoManutencaoDTO getVeiculoManutencaoDTO(VeiculoManutencao veiculo) throws Exception {
+        VeiculoManutencaoDTO dto = new VeiculoManutencaoDTO(
+            veiculo.getId(),
+            veiculo.getVeiculo().getId(),
+            veiculo.getVeiculo().getPlaca(),
+            veiculo.getTipo(),
+            veiculo.getQuilometragem(),
+            veiculo.getValor(),
+            getDataDTO(veiculo.getData()),
+            getDataDTO(veiculo.getDataAgendamento()),
+            getDataDTO(veiculo.getDataEntrega()),
+            veiculo.getDescricao()
+        );
+        return dto;        
+    }
+    
+    private String getDataDTO(Date data) throws Exception {
+        if(data == null) return "";
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(data);
+    }
 }

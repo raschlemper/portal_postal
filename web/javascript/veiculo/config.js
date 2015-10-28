@@ -1,21 +1,13 @@
 var Configuracao = function() {    
-
-    var messageModal = function() {
-        telaMsg();
-    };  
-
+    
     var loadingModal = function() {        
         $( document ).ajaxStart(function() {
-            var isMsgOpen = $('.my-modal-msg').modal().is(':visible');
-            if(!isMsgOpen) waitMsg();
+            waitMsg();
         }).ajaxStop(function() {
             $('.my-modal').modal('hide'); 
+            var isEditOpen = $('.my-modal-edit').modal().is(':visible');
+            if(!isEditOpen) telaMsg();
         });
-    };    
-
-    var closeModal = function() {
-        $('.my-modal').modal('hide'); 
-        $('.my-modal-msg').modal('hide'); 
     };  
     
     var getContextPath = function() {
@@ -33,9 +25,7 @@ var Configuracao = function() {
     };
     
     return {
-        messageModal: messageModal,
         loadingModal: loadingModal,
-        closeModal: closeModal,
         contextPath: getContextPath(),
         getContextPathActual: getContextPathActual()
     }
