@@ -1,12 +1,14 @@
 var Configuracao = function() {    
     
+    var messageModal = function() {
+        telaMsg();        
+    }
+    
     var loadingModal = function() {        
         $( document ).ajaxStart(function() {
             waitMsg();
         }).ajaxStop(function() {
             $('.my-modal').modal('hide'); 
-            var isEditOpen = $('.my-modal-edit').modal().is(':visible');
-            if(!isEditOpen) telaMsg();
         });
     };  
     
@@ -25,6 +27,7 @@ var Configuracao = function() {
     };
     
     return {
+        messageModal: messageModal,
         loadingModal: loadingModal,
         contextPath: getContextPath(),
         getContextPathActual: getContextPathActual()

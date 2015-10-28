@@ -9,6 +9,7 @@ import Controle.ContrErroLog;
 import Veiculo.Entidade.Veiculo;
 import Veiculo.Entidade.VeiculoManutencao;
 import Util.Conexao;
+import static Veiculo.Controle.ContrVeiculo.consulta;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -61,7 +62,7 @@ public class ContrVeiculoManutencao {
         }
     }
 
-    public static void inserir(String nomeBD, VeiculoManutencao veiculo) {
+    public static VeiculoManutencao inserir(String nomeBD, VeiculoManutencao veiculo) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "INSERT INTO veiculo_manutencao (idVeiculo, tipo, quilometragem, valor, data, dataAgendamento, dataEntrega, descricao) "
                 + " values(?,?,?,?,?,?,?,?) ";
@@ -79,51 +80,57 @@ public class ContrVeiculoManutencao {
             ps.setString(8, veiculo.getDescricao());
             ps.executeUpdate();
             ps.close();
+            return consulta(nomeBD, veiculo);
         } catch (SQLException e) {
             ContrErroLog.inserir("HOITO - contrVeiculoManutencao", "SQLException", sql, e.toString());
+            return null;
         } finally {
             Conexao.desconectar(conn);
         }
     }
     
-    public static boolean alterar(String nomeBD, VeiculoManutencao veiculo) {
+    public static VeiculoManutencao alterar(String nomeBD, VeiculoManutencao veiculo) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "UPDATE veiculo_manutencao "
-                + " SET tipo = ?, quilometragem = ?, data = ?, placa = ?, dataAgendamento = ?, dataEntrega = ?, descricao = ? "
+                + " SET tipo = ?, quilometragem = ?, valor = ?, data = ?, dataAgendamento = ?, dataEntrega = ?, descricao = ? "
                 + "WHERE idVeiculoManutencao = ? ";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, veiculo.getTipo());
             ps.setInt(2, veiculo.getQuilometragem());
-            ps.setDate(3, new java.sql.Date(veiculo.getData().getTime()));
-            ps.setDate(4, new java.sql.Date(veiculo.getDataAgendamento().getTime()));
-            ps.setDate(5, new java.sql.Date(veiculo.getDataEntrega().getTime()));
-            ps.setString(6, veiculo.getDescricao());
-            ps.setInt(7, veiculo.getId());
+            ps.setDouble(3, veiculo.getValor());
+            ps.setDate(4, new java.sql.Date(veiculo.getData().getTime()));            
+            if(veiculo.getDataAgendamento() == null) { ps.setNull(5, Types.DATE); }
+            else { ps.setDate(5, new java.sql.Date(veiculo.getDataAgendamento().getTime())); }
+            if(veiculo.getDataEntrega() == null) { ps.setNull(6, Types.DATE); }
+            else { ps.setDate(6, new java.sql.Date(veiculo.getDataEntrega().getTime())); }
+            ps.setString(7, veiculo.getDescricao());
+            ps.setInt(8, veiculo.getId());
             ps.executeUpdate();
             ps.close();
-            return true;
+            return consulta(nomeBD, veiculo);
         } catch (SQLException e) {
             System.out.println(e);
             ContrErroLog.inserir("HOITO - contrVeiculoManutencao", "SQLException", sql, e.toString());
-            return false;
+            return null;
         } finally {
             Conexao.desconectar(conn);
         }
     }
     
-    public static boolean limpar(String nomeBD, VeiculoManutencao veiculo) {
+    public static VeiculoManutencao limpar(String nomeBD, VeiculoManutencao veiculo) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "DELETE FROM veiculo_manutencao WHERE idVeiculoManutencao = ? ";
         try {
+            veiculo = consulta(nomeBD, veiculo);
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, veiculo.getId());
             ps.executeUpdate();
             ps.close();
-            return true;
+            return veiculo;
         } catch (SQLException e) {
             ContrErroLog.inserir("HOITO - contrVeiculoManutencao", "SQLException", sql, e.toString());
-            return false;
+            return null;
         } finally {
             Conexao.desconectar(conn);
         }

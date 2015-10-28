@@ -162,6 +162,7 @@
         <script type="text/javascript">             
             var veiculoCtrl = new VeiculoController(veiculoForm); 
             veiculoCtrl.acoes.pesquisarTodos();
+            Configuracao.messageModal();
         </script>
     </body>
 </html>

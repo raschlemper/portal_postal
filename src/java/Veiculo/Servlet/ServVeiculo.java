@@ -8,6 +8,7 @@ package Veiculo.Servlet;
 import Controle.ContrErroLog;
 import Veiculo.Controle.ContrVeiculo;
 import Veiculo.Entidade.Veiculo;
+import Veiculo.Entidade.VeiculoManutencao;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -125,22 +126,22 @@ public class ServVeiculo extends HttpServlet {
     
     private void create(HttpServletRequest request, HttpServletResponse response) throws Exception {               
         Veiculo veiculo = getVeiculoFromRequest(request);
-        ContrVeiculo.inserir(this.nomeBD, veiculo);
-        this.sessao.setAttribute("msg", "Veículo Inserido com sucesso!");
+        veiculo = ContrVeiculo.inserir(this.nomeBD, veiculo);
+        this.sessao.setAttribute("msg", "Veículo Inserido " + getMsgToClient(veiculo) +  " com sucesso!");
         response.sendRedirect(request.getHeader("referer"));        
     }
     
     private void update(HttpServletRequest request, HttpServletResponse response) throws Exception {               
         Veiculo veiculo = getVeiculoFromRequest(request);
-        ContrVeiculo.alterar(this.nomeBD, veiculo);
-        this.sessao.setAttribute("msg", "Veículo " + veiculo.getModelo() + " (" +veiculo.getPlaca() + ")" + " Alterado com sucesso!");
+        veiculo = ContrVeiculo.alterar(this.nomeBD, veiculo);
+        this.sessao.setAttribute("msg", "Veículo " + getMsgToClient(veiculo) + " Alterado com sucesso!");
         response.sendRedirect(request.getHeader("referer"));
     }
     
     private void delete(HttpServletRequest request, HttpServletResponse response) throws Exception {      
         Veiculo veiculo = getVeiculoFromRequest(request);
-        ContrVeiculo.limpar(this.nomeBD, veiculo);
-        this.sessao.setAttribute("msg", "Veículo removido com sucesso! " + veiculo.getId());
+        veiculo = ContrVeiculo.limpar(this.nomeBD, veiculo);
+        this.sessao.setAttribute("msg", "Veículo " + getMsgToClient(veiculo) + " removido com sucesso! " + veiculo.getId());
         response.sendRedirect(request.getHeader("referer"));
     }
     
@@ -181,6 +182,10 @@ public class ServVeiculo extends HttpServlet {
     private Integer getQuilometragemParameter(String parameter) {
         if(parameter == null || parameter.equals("")) return null;
         return getIntegerParameter(parameter.replace(".", "")); 
+    }
+    
+    private String getMsgToClient(Veiculo veiculo) {
+        return veiculo.getModelo() + " (" +veiculo.getPlaca() + ")";        
     }
 
 }

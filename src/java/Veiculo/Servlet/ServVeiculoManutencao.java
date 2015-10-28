@@ -129,22 +129,22 @@ public class ServVeiculoManutencao extends HttpServlet {
     
     private void create(HttpServletRequest request, HttpServletResponse response) throws Exception {               
         VeiculoManutencao veiculo = getVeiculoFromRequest(request);
-        ContrVeiculoManutencao.inserir(this.nomeBD, veiculo);
-        this.sessao.setAttribute("msg", "Manutenção do Veículo Inserida com sucesso!");
+        veiculo = ContrVeiculoManutencao.inserir(this.nomeBD, veiculo);
+        this.sessao.setAttribute("msg", "Manutenção do Veículo " + getMsgToClient(veiculo) + " Inserida com sucesso!");
         response.sendRedirect(request.getHeader("referer"));        
     }
     
     private void update(HttpServletRequest request, HttpServletResponse response) throws Exception {               
         VeiculoManutencao veiculo = getVeiculoFromRequest(request);
-        ContrVeiculoManutencao.alterar(this.nomeBD, veiculo);
-        this.sessao.setAttribute("msg", "Manutenção do Veículo Alterada com sucesso! " + veiculo.getId());
+        veiculo = ContrVeiculoManutencao.alterar(this.nomeBD, veiculo);
+        this.sessao.setAttribute("msg", "Manutenção do Veículo " + getMsgToClient(veiculo) + " Alterada com sucesso! ");
         response.sendRedirect(request.getHeader("referer"));
     }
     
     private void delete(HttpServletRequest request, HttpServletResponse response) throws Exception {      
         VeiculoManutencao veiculo = getVeiculoFromRequest(request);
-        ContrVeiculoManutencao.limpar(this.nomeBD, veiculo);
-        this.sessao.setAttribute("msg", "Manutenção do Veículo removida com sucesso! " + veiculo.getId());
+        veiculo = ContrVeiculoManutencao.limpar(this.nomeBD, veiculo);
+        this.sessao.setAttribute("msg", "Manutenção do Veículo " + getMsgToClient(veiculo) + " removida com sucesso! ");
         response.sendRedirect(request.getHeader("referer"));
     }
     
@@ -209,5 +209,9 @@ public class ServVeiculoManutencao extends HttpServlet {
         if(data == null) return "";
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         return sdf.format(data);
+    }
+    
+    private String getMsgToClient(VeiculoManutencao veiculo) {
+        return veiculo.getVeiculo().getModelo() + " (" +veiculo.getVeiculo().getPlaca() + ")";        
     }
 }

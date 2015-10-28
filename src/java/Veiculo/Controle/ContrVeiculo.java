@@ -8,6 +8,7 @@ package Veiculo.Controle;
 import Controle.ContrErroLog;
 import Veiculo.Entidade.Veiculo;
 import Util.Conexao;
+import static Veiculo.Controle.ContrVeiculoManutencao.consulta;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -60,7 +61,7 @@ public class ContrVeiculo {
         }
     }
 
-    public static void inserir(String nomeBD, Veiculo veiculo) {
+    public static Veiculo inserir(String nomeBD, Veiculo veiculo) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "INSERT INTO veiculo (tipo, marca, modelo, placa, anoFabricacao, anoModelo, chassis, renavam, quilometragem, "
                 + "combustivel, status, situacao) values(?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -83,14 +84,16 @@ public class ContrVeiculo {
             ps.setString(12, veiculo.getSituacao());
             ps.executeUpdate();
             ps.close();
+            return consulta(nomeBD, veiculo);
         } catch (SQLException e) {
             ContrErroLog.inserir("HOITO - contrVeiculo", "SQLException", sql, e.toString());
+            return null;
         } finally {
             Conexao.desconectar(conn);
         }
     }
     
-    public static boolean alterar(String nomeBD, Veiculo veiculo) {
+    public static Veiculo alterar(String nomeBD, Veiculo veiculo) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "UPDATE veiculo "
                 + " SET tipo = ?, marca = ?, modelo = ?, placa = ?, anoFabricacao = ?, anoModelo = ?, chassis = ?, renavam = ?, "
@@ -115,28 +118,29 @@ public class ContrVeiculo {
             ps.setInt(13, veiculo.getId());
             ps.executeUpdate();
             ps.close();
-            return true;
+            return consulta(nomeBD, veiculo);
         } catch (SQLException e) {
             System.out.println(e);
             ContrErroLog.inserir("HOITO - contrVeiculo", "SQLException", sql, e.toString());
-            return false;
+            return null;
         } finally {
             Conexao.desconectar(conn);
         }
     }
     
-    public static boolean limpar(String nomeBD, Veiculo veiculo) {
+    public static Veiculo limpar(String nomeBD, Veiculo veiculo) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "DELETE FROM veiculo WHERE idVeiculo = ? ";
         try {
+            veiculo = consulta(nomeBD, veiculo);
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, veiculo.getId());
             ps.executeUpdate();
             ps.close();
-            return true;
+            return veiculo;
         } catch (SQLException e) {
             ContrErroLog.inserir("HOITO - contrVeiculo", "SQLException", sql, e.toString());
-            return false;
+            return null;
         } finally {
             Conexao.desconectar(conn);
         }

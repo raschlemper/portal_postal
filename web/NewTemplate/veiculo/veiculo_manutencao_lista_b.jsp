@@ -131,6 +131,7 @@
         <script type="text/javascript">             
             var veiculoManutencaoCtrl = new VeiculoManutencaoController(veiculoManutencaoForm); 
             veiculoManutencaoCtrl.acoes.pesquisarTodos();
+            Configuracao.messageModal();
         </script>
     </body>
 </html>
