@@ -7,13 +7,11 @@ package Veiculo.Servlet;
 
 import Controle.ContrErroLog;
 import Veiculo.Controle.ContrVeiculoManutencao;
-import Veiculo.Entidade.Veiculo;
 import Veiculo.Entidade.VeiculoManutencao;
 import Veiculo.Entidade.VeiculoManutencaoDTO;
+import Veiculo.builder.VeiculoManutencaoBuilder;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -149,66 +147,13 @@ public class ServVeiculoManutencao extends HttpServlet {
     }
     
     private VeiculoManutencao getVeiculoFromRequest(HttpServletRequest request) throws Exception {
-        VeiculoManutencao veiculoManutencao = new VeiculoManutencao();
-        veiculoManutencao.setId(getIntegerParameter(request.getParameter("idVeiculoManutencao")));
-        veiculoManutencao.setVeiculo(getVeiculo(request));
-        veiculoManutencao.setTipo(request.getParameter("tipo"));
-        veiculoManutencao.setQuilometragem(getQuilometragemParameter(request.getParameter("quilometragem")));        
-        veiculoManutencao.setValor(getDoubleParameter(request.getParameter("valor")));        
-        veiculoManutencao.setData(getDataParameter(request.getParameter("data")));       
-        veiculoManutencao.setDataAgendamento(getDataParameter(request.getParameter("dataAgendamento")));       
-        veiculoManutencao.setDataEntrega(getDataParameter(request.getParameter("dataEntrega")));
-        veiculoManutencao.setDescricao(request.getParameter("descricao"));
-        return veiculoManutencao;
-    }
-    
-    private Veiculo getVeiculo(HttpServletRequest request) {
-        Veiculo veiculo = new Veiculo(
-            getIntegerParameter(request.getParameter("veiculo"))
-        );
-        return veiculo;
-    }
-          
-    private Date getDataParameter(String parameter) throws Exception {
-        if(parameter == null || parameter.equals("")) return null;
-        return Util.FormatarData.getDateFromString(parameter, "dd/MM/yyyy");
-    }
-          
-    private Integer getIntegerParameter(String parameter) {
-        if(parameter == null || parameter.equals("")) return null;
-        return Integer.parseInt(parameter);
-    }
-          
-    private Double getDoubleParameter(String parameter) {
-        if(parameter == null || parameter.equals("")) return null;
-        return Double.parseDouble(parameter.replaceAll("\\.","").replace(",","."));
-    }
-          
-    private Integer getQuilometragemParameter(String parameter) {
-        if(parameter == null || parameter.equals("")) return null;
-        return getIntegerParameter(parameter.replace(".", "")); 
+        VeiculoManutencaoBuilder builder = new VeiculoManutencaoBuilder();
+        return builder.toEntidade(request);
     }
     
     private VeiculoManutencaoDTO getVeiculoManutencaoDTO(VeiculoManutencao veiculo) throws Exception {
-        VeiculoManutencaoDTO dto = new VeiculoManutencaoDTO(
-            veiculo.getId(),
-            veiculo.getVeiculo().getId(),
-            veiculo.getVeiculo().getPlaca(),
-            veiculo.getTipo(),
-            veiculo.getQuilometragem(),
-            veiculo.getValor(),
-            getDataDTO(veiculo.getData()),
-            getDataDTO(veiculo.getDataAgendamento()),
-            getDataDTO(veiculo.getDataEntrega()),
-            veiculo.getDescricao()
-        );
-        return dto;        
-    }
-    
-    private String getDataDTO(Date data) throws Exception {
-        if(data == null) return "";
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        return sdf.format(data);
+        VeiculoManutencaoBuilder builder = new VeiculoManutencaoBuilder();
+        return builder.toDTO(veiculo);
     }
     
     private String getMsgToClient(VeiculoManutencao veiculo) {

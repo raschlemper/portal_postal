@@ -8,7 +8,7 @@ package Veiculo.Controle;
 import Controle.ContrErroLog;
 import Veiculo.Entidade.Veiculo;
 import Util.Conexao;
-import static Veiculo.Controle.ContrVeiculoManutencao.consulta;
+import Veiculo.builder.VeiculoBuilder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,21 +27,18 @@ public class ContrVeiculo {
 
     public static List<Veiculo> consultaTodos(String nomeBD) {
         Connection con = Conexao.conectar(nomeBD);
+        List<Veiculo> listaVeiculos = new ArrayList<Veiculo>();
         String sql = "SELECT * FROM veiculo";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet result = (ResultSet) ps.executeQuery();
-            List<Veiculo> listaVeiculos = new ArrayList<Veiculo>();
-            while(result.next()) {
-                listaVeiculos.add(criarVeiculo(result));                        
-            }
-            return listaVeiculos;
+            while(result.next()) { listaVeiculos.add(criarVeiculo(result)); }
         } catch (SQLException e) {
             Logger.getLogger(ContrVeiculo.class.getName()).log(Level.WARNING, e.getMessage(), e);
-            return null;
         } finally {
             Conexao.desconectar(con);
         }
+        return listaVeiculos;
     }
 
     public static Veiculo consulta(String nomeBD, Veiculo veiculo) {
@@ -52,13 +49,12 @@ public class ContrVeiculo {
             ps.setInt(1, veiculo.getId());
             ResultSet result = (ResultSet) ps.executeQuery();
             while(result.next()) { return criarVeiculo(result); }
-            return null;
         } catch (SQLException e) {
             Logger.getLogger(ContrVeiculo.class.getName()).log(Level.WARNING, e.getMessage(), e);
-            return null;
         } finally {
             Conexao.desconectar(con);
         }
+        return null;
     }
 
     public static Veiculo inserir(String nomeBD, Veiculo veiculo) {
@@ -87,10 +83,10 @@ public class ContrVeiculo {
             return consulta(nomeBD, veiculo);
         } catch (SQLException e) {
             ContrErroLog.inserir("HOITO - contrVeiculo", "SQLException", sql, e.toString());
-            return null;
         } finally {
             Conexao.desconectar(conn);
         }
+        return null;
     }
     
     public static Veiculo alterar(String nomeBD, Veiculo veiculo) {
@@ -120,12 +116,11 @@ public class ContrVeiculo {
             ps.close();
             return consulta(nomeBD, veiculo);
         } catch (SQLException e) {
-            System.out.println(e);
             ContrErroLog.inserir("HOITO - contrVeiculo", "SQLException", sql, e.toString());
-            return null;
         } finally {
             Conexao.desconectar(conn);
         }
+        return null;
     }
     
     public static Veiculo limpar(String nomeBD, Veiculo veiculo) {
@@ -140,10 +135,10 @@ public class ContrVeiculo {
             return veiculo;
         } catch (SQLException e) {
             ContrErroLog.inserir("HOITO - contrVeiculo", "SQLException", sql, e.toString());
-            return null;
         } finally {
             Conexao.desconectar(conn);
         }
+        return null;
     }
 
     public static List<Veiculo> consultaByPlaca(String nomeBD, Veiculo veiculo) {
@@ -162,28 +157,15 @@ public class ContrVeiculo {
             return listaVeiculos;
         } catch (SQLException e) {
             Logger.getLogger(ContrVeiculo.class.getName()).log(Level.WARNING, e.getMessage(), e);
-            return null;
         } finally {
             Conexao.desconectar(con);
         }
+        return null;
     }
     
     private static Veiculo criarVeiculo(ResultSet result) throws SQLException {
-        return new Veiculo(
-            result.getInt("idVeiculo"),
-            result.getString("tipo"),  
-            result.getString("marca"),  
-            result.getString("modelo"),  
-            result.getString("placa"),
-            result.getInt("anoFabricacao"),
-            result.getInt("anoModelo"),
-            result.getString("chassis"),
-            result.getString("renavam"),
-            result.getInt("quilometragem"),
-            result.getString("combustivel"),
-            result.getString("status"),
-            result.getString("situacao")
-        );
+        VeiculoBuilder builder = new VeiculoBuilder();
+        return builder.toEntidade(result);
     }
     
 }

@@ -8,8 +8,10 @@ package Veiculo.Servlet;
 import Controle.ContrErroLog;
 import Veiculo.Controle.ContrVeiculo;
 import Veiculo.Entidade.Veiculo;
-import Veiculo.Entidade.VeiculoManutencao;
+import Veiculo.Entidade.VeiculoDTO;
+import Veiculo.builder.VeiculoBuilder;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -100,7 +102,11 @@ public class ServVeiculo extends HttpServlet {
     
     private void getAll(HttpServletRequest request, HttpServletResponse response) throws Exception { 
         List<Veiculo> listaVeiculos = ContrVeiculo.consultaTodos(this.nomeBD);
-        JSONArray lista = new JSONArray(listaVeiculos);
+        List<VeiculoDTO> listaDTO = new ArrayList<VeiculoDTO>();
+        for (Veiculo veiculo : listaVeiculos) {
+            listaDTO.add(getVeiculoDTO(veiculo));
+        }
+        JSONArray lista = new JSONArray(listaDTO);
         response.setContentType("application/json");
         response.getWriter().write(lista.toString());
     }
@@ -108,7 +114,7 @@ public class ServVeiculo extends HttpServlet {
     private void get(HttpServletRequest request, HttpServletResponse response) throws Exception {       
         Veiculo veiculo = getVeiculoFromRequest(request);
         veiculo = ContrVeiculo.consulta(this.nomeBD, veiculo);
-        JSONObject object = new JSONObject(veiculo);
+        JSONObject object = new JSONObject(getVeiculoDTO(veiculo));
         response.setContentType("application/json");
         response.getWriter().write(object.toString());
     }   
@@ -152,36 +158,13 @@ public class ServVeiculo extends HttpServlet {
     }
     
     private Veiculo getVeiculoFromRequest(HttpServletRequest request) {
-        Veiculo veiculo = new Veiculo();
-        veiculo.setId(getIntegerParameter(request.getParameter("idVeiculo")));
-        veiculo.setTipo(request.getParameter("tipo"));
-        veiculo.setMarca(getJsonParameter(request.getParameter("marca"), "name"));
-        veiculo.setModelo(getJsonParameter(request.getParameter("modelo"), "name"));
-        veiculo.setPlaca(request.getParameter("placa"));
-        veiculo.setAnoFabricacao(getIntegerParameter(request.getParameter("anoFabricacao")));
-        veiculo.setAnoModelo(getIntegerParameter(request.getParameter("anoModelo")));
-        veiculo.setChassis(request.getParameter("chassis"));
-        veiculo.setRenavam(request.getParameter("renavam"));
-        veiculo.setQuilometragem(getQuilometragemParameter(request.getParameter("quilometragem")));
-        veiculo.setCombustivel(request.getParameter("combustivel"));
-        veiculo.setStatus(request.getParameter("status"));
-        veiculo.setSituacao(request.getParameter("situacao"));
-        return veiculo;
+        VeiculoBuilder builder = new VeiculoBuilder();
+        return builder.toEntidade(request);
     }
-          
-    private String getJsonParameter(String parameter, String campo) {
-        if(parameter == null) return null;
-        return new JSONObject(parameter).getString(campo);
-    }
-          
-    private Integer getIntegerParameter(String parameter) {
-        if(parameter == null || parameter.equals("")) return null;
-        return Integer.parseInt(parameter);
-    }
-          
-    private Integer getQuilometragemParameter(String parameter) {
-        if(parameter == null || parameter.equals("")) return null;
-        return getIntegerParameter(parameter.replace(".", "")); 
+    
+    private VeiculoDTO getVeiculoDTO(Veiculo veiculo) throws Exception {
+        VeiculoBuilder builder = new VeiculoBuilder();
+        return builder.toDTO(veiculo);
     }
     
     private String getMsgToClient(Veiculo veiculo) {

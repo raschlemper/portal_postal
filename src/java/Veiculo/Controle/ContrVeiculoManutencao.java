@@ -6,10 +6,9 @@
 package Veiculo.Controle;
 
 import Controle.ContrErroLog;
-import Veiculo.Entidade.Veiculo;
 import Veiculo.Entidade.VeiculoManutencao;
 import Util.Conexao;
-import static Veiculo.Controle.ContrVeiculo.consulta;
+import Veiculo.builder.VeiculoManutencaoBuilder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -38,11 +37,12 @@ public class ContrVeiculoManutencao {
             }
             return listaVeiculos;
         } catch (SQLException e) {
-            Logger.getLogger(ContrVeiculo.class.getName()).log(Level.WARNING, e.getMessage(), e);
-            return null;
+            System.out.println(e);
+//            Logger.getLogger(ContrVeiculo.class.getName()).log(Level.WARNING, e.getMessage(), e);
         } finally {
             Conexao.desconectar(con);
         }
+        return new ArrayList();
     }
 
     public static VeiculoManutencao consulta(String nomeBD, VeiculoManutencao veiculo) {
@@ -55,11 +55,12 @@ public class ContrVeiculoManutencao {
             while(result.next()) { return criarVeiculoManutencao(result); }
             return null;
         } catch (SQLException e) {
-            Logger.getLogger(ContrVeiculoManutencao.class.getName()).log(Level.WARNING, e.getMessage(), e);
-            return null;
+            System.out.println(e);
+//            Logger.getLogger(ContrVeiculoManutencao.class.getName()).log(Level.WARNING, e.getMessage(), e);
         } finally {
             Conexao.desconectar(con);
         }
+        return null;
     }
 
     public static VeiculoManutencao inserir(String nomeBD, VeiculoManutencao veiculo) {
@@ -82,11 +83,12 @@ public class ContrVeiculoManutencao {
             ps.close();
             return consulta(nomeBD, veiculo);
         } catch (SQLException e) {
-            ContrErroLog.inserir("HOITO - contrVeiculoManutencao", "SQLException", sql, e.toString());
-            return null;
+            System.out.println(e);
+//            ContrErroLog.inserir("HOITO - contrVeiculoManutencao", "SQLException", sql, e.toString());
         } finally {
             Conexao.desconectar(conn);
         }
+        return null;
     }
     
     public static VeiculoManutencao alterar(String nomeBD, VeiculoManutencao veiculo) {
@@ -111,11 +113,11 @@ public class ContrVeiculoManutencao {
             return consulta(nomeBD, veiculo);
         } catch (SQLException e) {
             System.out.println(e);
-            ContrErroLog.inserir("HOITO - contrVeiculoManutencao", "SQLException", sql, e.toString());
-            return null;
+//            ContrErroLog.inserir("HOITO - contrVeiculoManutencao", "SQLException", sql, e.toString());
         } finally {
             Conexao.desconectar(conn);
         }
+        return null;
     }
     
     public static VeiculoManutencao limpar(String nomeBD, VeiculoManutencao veiculo) {
@@ -129,43 +131,17 @@ public class ContrVeiculoManutencao {
             ps.close();
             return veiculo;
         } catch (SQLException e) {
-            ContrErroLog.inserir("HOITO - contrVeiculoManutencao", "SQLException", sql, e.toString());
-            return null;
+            System.out.println(e);
+//            ContrErroLog.inserir("HOITO - contrVeiculoManutencao", "SQLException", sql, e.toString());
         } finally {
             Conexao.desconectar(conn);
         }
+        return null;
     }
     
     private static VeiculoManutencao criarVeiculoManutencao(ResultSet result) throws SQLException {
-        return new VeiculoManutencao(
-            result.getInt("veiculo_manutencao.idVeiculoManutencao"),
-            criarVeiculo(result),
-            result.getString("veiculo_manutencao.tipo"),  
-            result.getInt("veiculo_manutencao.quilometragem"),
-            result.getDouble("veiculo_manutencao.valor"),
-            result.getDate("veiculo_manutencao.data"),
-            result.getDate("veiculo_manutencao.dataAgendamento"),
-            result.getDate("veiculo_manutencao.dataEntrega"),
-            result.getString("veiculo_manutencao.descricao")  
-        );
-    }
-    
-    private static Veiculo criarVeiculo(ResultSet result) throws SQLException {
-        return new Veiculo(
-            result.getInt("veiculo.idVeiculo"),
-            result.getString("veiculo.tipo"),  
-            result.getString("veiculo.marca"),  
-            result.getString("veiculo.modelo"),  
-            result.getString("veiculo.placa"),
-            result.getInt("veiculo.anoFabricacao"),
-            result.getInt("veiculo.anoModelo"),
-            result.getString("veiculo.chassis"),
-            result.getString("veiculo.renavam"),
-            result.getInt("veiculo.quilometragem"),
-            result.getString("veiculo.combustivel"),
-            result.getString("veiculo.status"),
-            result.getString("veiculo.situacao")
-        );
+        VeiculoManutencaoBuilder builder = new VeiculoManutencaoBuilder();
+        return builder.toEntidade(result);
     }
     
 }
