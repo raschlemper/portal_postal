@@ -82,6 +82,7 @@ public class ServVeiculoManutencao extends HttpServlet {
         } catch (Exception ex) {
             int idErro = ContrErroLog.inserir("Portal Postal - ServVeiculoManutencao", "Exception", null, ex.toString());
             this.sessao.setAttribute("msg", "SYSTEM ERROR Nº: " + idErro + "; Ocorreu um erro inesperado!");
+            System.err.println(ex);
             response.sendRedirect(request.getHeader("referer"));
         }
     }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Veiculo.Controle;
 
 import Controle.ContrErroLog;
@@ -13,16 +8,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author rafael
- */
 public class ContrVeiculo {
 
     public static List<Veiculo> consultaTodos(String nomeBD) {
@@ -59,10 +51,10 @@ public class ContrVeiculo {
 
     public static Veiculo inserir(String nomeBD, Veiculo veiculo) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "INSERT INTO veiculo (tipo, marca, modelo, placa, anoFabricacao, anoModelo, chassis, renavam, quilometragem, "
-                + "combustivel, status, situacao) values(?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO veiculo (tipo, marca, modelo, placa, anoFabricacao, anoModelo, chassis, renavam, quilometragem, combustivel, status, situacao) "
+                   + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
-            PreparedStatement ps = conn.prepareStatement(sql);
+            PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, veiculo.getTipo());
             ps.setString(2, veiculo.getMarca());
             ps.setString(3, veiculo.getModelo());
@@ -79,21 +71,22 @@ public class ContrVeiculo {
             ps.setString(11, veiculo.getStatus());
             ps.setString(12, veiculo.getSituacao());
             ps.executeUpdate();
+            veiculo.setId(getLastId(ps));
             ps.close();
-            return consulta(nomeBD, veiculo);
         } catch (SQLException e) {
             ContrErroLog.inserir("HOITO - contrVeiculo", "SQLException", sql, e.toString());
         } finally {
             Conexao.desconectar(conn);
         }
-        return null;
+        return consulta(nomeBD, veiculo);
     }
     
     public static Veiculo alterar(String nomeBD, Veiculo veiculo) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "UPDATE veiculo "
-                + " SET tipo = ?, marca = ?, modelo = ?, placa = ?, anoFabricacao = ?, anoModelo = ?, chassis = ?, renavam = ?, "
-                + " quilometragem = ?, combustivel = ?, status = ?, situacao = ? WHERE idVeiculo = ? ";
+                   + "SET tipo = ?, marca = ?, modelo = ?, placa = ?, anoFabricacao = ?, anoModelo = ?, "
+                   + "chassis = ?, renavam = ?, quilometragem = ?, combustivel = ?, status = ?, situacao = ? "
+                   + "WHERE idVeiculo = ? ";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, veiculo.getTipo());
@@ -114,13 +107,12 @@ public class ContrVeiculo {
             ps.setInt(13, veiculo.getId());
             ps.executeUpdate();
             ps.close();
-            return consulta(nomeBD, veiculo);
         } catch (SQLException e) {
             ContrErroLog.inserir("HOITO - contrVeiculo", "SQLException", sql, e.toString());
         } finally {
             Conexao.desconectar(conn);
         }
-        return null;
+        return consulta(nomeBD, veiculo);
     }
     
     public static Veiculo limpar(String nomeBD, Veiculo veiculo) {
@@ -132,13 +124,12 @@ public class ContrVeiculo {
             ps.setInt(1, veiculo.getId());
             ps.executeUpdate();
             ps.close();
-            return veiculo;
         } catch (SQLException e) {
             ContrErroLog.inserir("HOITO - contrVeiculo", "SQLException", sql, e.toString());
         } finally {
             Conexao.desconectar(conn);
         }
-        return null;
+        return veiculo;
     }
 
     public static List<Veiculo> consultaByPlaca(String nomeBD, Veiculo veiculo) {
@@ -159,6 +150,14 @@ public class ContrVeiculo {
             Logger.getLogger(ContrVeiculo.class.getName()).log(Level.WARNING, e.getMessage(), e);
         } finally {
             Conexao.desconectar(con);
+        }
+        return null;
+    }
+    
+    private static Integer getLastId(PreparedStatement ps) throws SQLException {
+        ResultSet rs = ps.getGeneratedKeys();
+        if(rs.next()) {
+            return rs.getInt(1);
         }
         return null;
     }
