@@ -1,10 +1,8 @@
 package Veiculo.builder;
 
-import Veiculo.Entidade.Veiculo;
 import Veiculo.Entidade.VeiculoManutencao;
 import Veiculo.Entidade.VeiculoManutencaoDTO;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -68,23 +66,5 @@ public class VeiculoManutencaoBuilder extends Builder<VeiculoManutencao, Veiculo
         }
         return null;
     } 
-    
-    private static Veiculo getVeiculo(ResultSet result) throws SQLException {
-        return new Veiculo(
-            result.getInt("veiculo.idVeiculo"),
-            result.getString("veiculo.tipo"),  
-            result.getString("veiculo.marca"),  
-            result.getString("veiculo.modelo"),  
-            result.getString("veiculo.placa"),
-            result.getInt("veiculo.anoFabricacao"),
-            result.getInt("veiculo.anoModelo"),
-            result.getString("veiculo.chassis"),
-            result.getString("veiculo.renavam"),
-            result.getInt("veiculo.quilometragem"),
-            result.getString("veiculo.combustivel"),
-            result.getString("veiculo.status"),
-            result.getString("veiculo.situacao")
-        );
-    }
     
 }

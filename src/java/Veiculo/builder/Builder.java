@@ -2,6 +2,7 @@ package Veiculo.builder;
 
 import Veiculo.Entidade.Veiculo;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
@@ -45,6 +46,24 @@ public abstract class Builder<E,T> {
         if(data == null) return "";
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         return sdf.format(data);
+    }
+    
+    protected static Veiculo getVeiculo(ResultSet result) throws SQLException {
+        return new Veiculo(
+            result.getInt("veiculo.idVeiculo"),
+            result.getString("veiculo.tipo"),  
+            result.getString("veiculo.marca"),  
+            result.getString("veiculo.modelo"),  
+            result.getString("veiculo.placa"),
+            result.getInt("veiculo.anoFabricacao"),
+            result.getInt("veiculo.anoModelo"),
+            result.getString("veiculo.chassis"),
+            result.getString("veiculo.renavam"),
+            result.getInt("veiculo.quilometragem"),
+            result.getString("veiculo.combustivel"),
+            result.getString("veiculo.status"),
+            result.getString("veiculo.situacao")
+        );
     }
         
     public abstract E toEntidade(HttpServletRequest request); 
