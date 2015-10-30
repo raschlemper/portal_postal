@@ -147,7 +147,7 @@ public class ServVeiculo extends HttpServlet {
     private void delete(HttpServletRequest request, HttpServletResponse response) throws Exception {      
         Veiculo veiculo = getVeiculoFromRequest(request);
         veiculo = ContrVeiculo.limpar(this.nomeBD, veiculo);
-        this.sessao.setAttribute("msg", "Veículo " + getMsgToClient(veiculo) + " removido com sucesso! " + veiculo.getId());
+        this.sessao.setAttribute("msg", "Veículo " + getMsgToClient(veiculo) + " removido com sucesso!");
         response.sendRedirect(request.getHeader("referer"));
     }
     
