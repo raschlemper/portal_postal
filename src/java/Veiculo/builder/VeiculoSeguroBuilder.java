@@ -1,7 +1,7 @@
 package Veiculo.builder;
 
 import Veiculo.Entidade.VeiculoSeguro;
-import Veiculo.EntidadDTO;
+import Veiculo.Entidade.VeiculoSeguroDTO;
 import java.sql.ResultSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,11 +14,10 @@ public class VeiculoSeguroBuilder extends Builder<VeiculoSeguro, VeiculoSeguroDT
             VeiculoSeguro veiculo = new VeiculoSeguro();
             veiculo.setId(getIntegerParameter(request.getParameter("idVeiculoSeguro")));
             veiculo.setVeiculo(getVeiculo(request));
-            veiculo.setNumeroMulta(getIntegerParameter(request.getParameter("numeroMulta")));      
-            veiculo.setData(getDataParameter(request.getParameter("data")));      
-            veiculo.setValor(getDoubleParameter(request.getParameter("valor")));
-            veiculo.setLocal(request.getParameter("local"));
-            veiculo.setDescricao(request.getParameter("descricao"));
+            veiculo.setNumeroSeguro(getIntegerParameter(request.getParameter("numeroSeguro")));      
+            veiculo.setAssegurado(request.getParameter("assegurado"));      
+            veiculo.setValorFranquia(getDoubleParameter(request.getParameter("valorFranquia")));
+            veiculo.setIndenizacao(request.getParameter("indenizacao"));
             return veiculo;     
         } catch (Exception ex) {
             Logger.getLogger(VeiculoSeguroBuilder.class.getName()).log(Level.SEVERE, null, ex);
@@ -31,11 +30,10 @@ public class VeiculoSeguroBuilder extends Builder<VeiculoSeguro, VeiculoSeguroDT
             return new VeiculoSeguro(
                 result.getInt("veiculo_manutencao.idVeiculoSeguro"),
                 getVeiculo(result),
-                result.getInt("veiculo_manutencao.numeroMulta"),  
-                result.getDate("veiculo_manutencao.data"),
-                result.getDouble("veiculo_manutencao.valor"),
-                result.getString("veiculo_manutencao.local"),
-                result.getString("veiculo_manutencao.descricao")
+                result.getInt("veiculo_manutencao.numeroSeguro"),  
+                result.getString("veiculo_manutencao.assegurado"),
+                result.getDouble("veiculo_manutencao.valorFranquia"),
+                result.getString("veiculo_manutencao.indenizacao")
             );
         } catch (Exception ex) {
             Logger.getLogger(VeiculoSeguroBuilder.class.getName()).log(Level.SEVERE, null, ex);
@@ -49,11 +47,10 @@ public class VeiculoSeguroBuilder extends Builder<VeiculoSeguro, VeiculoSeguroDT
                 veiculo.getId(),
                 veiculo.getVeiculo().getId(),
                 veiculo.getVeiculo().getPlaca(),
-                veiculo.getNumeroMulta(),
-                veiculo.getData(),
-                veiculo.getValor(),
-                veiculo.getLocal(),
-                veiculo.getDescricao()
+                veiculo.getNumeroSeguro(),
+                veiculo.getAssegurado(),
+                veiculo.getValorFranquia(),
+                veiculo.getIndenizacao()
             );      
         } catch (Exception ex) {
             Logger.getLogger(VeiculoSeguroBuilder.class.getName()).log(Level.SEVERE, null, ex);

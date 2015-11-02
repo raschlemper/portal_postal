@@ -6,6 +6,7 @@ public class VeiculoSinistroDTO {
     
     private Integer id;
     private Integer idVeiculo;   
+    private String placa;
     private String tipo;
     private Integer boletimOcorrencia;
     private Date data;
@@ -15,9 +16,11 @@ public class VeiculoSinistroDTO {
     
     public VeiculoSinistroDTO() { }
 
-    public VeiculoSinistroDTO(Integer id, Integer idVeiculo, String tipo, Integer boletimOcorrencia, Date data, String local, String responsavel, String descricao) {
+    public VeiculoSinistroDTO(Integer id, Integer idVeiculo, String placa, String tipo, Integer boletimOcorrencia, Date data, String local, String responsavel, 
+            String descricao) {
         this.id = id;
         this.idVeiculo = idVeiculo;
+        this.placa = placa;
         this.tipo = tipo;
         this.boletimOcorrencia = boletimOcorrencia;
         this.data = data;
@@ -40,6 +43,14 @@ public class VeiculoSinistroDTO {
 
     public void setIdVeiculo(Integer idVeiculo) {
         this.idVeiculo = idVeiculo;
+    }
+
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
     }
 
     public String getTipo() {

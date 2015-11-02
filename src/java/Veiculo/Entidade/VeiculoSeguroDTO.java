@@ -4,6 +4,7 @@ public class VeiculoSeguroDTO {
     
     private Integer id;
     private Integer idVeiculo;   
+    private String placa;
     private Integer numeroSeguro;
     private String assegurado;
     private Double valorFranquia;
@@ -11,9 +12,10 @@ public class VeiculoSeguroDTO {
 
     public VeiculoSeguroDTO() { }
 
-    public VeiculoSeguroDTO(Integer id, Integer idVeiculo, Integer numeroSeguro, String assegurado, Double valorFranquia, String indenizacao) {
+    public VeiculoSeguroDTO(Integer id, Integer idVeiculo, String placa, Integer numeroSeguro, String assegurado, Double valorFranquia, String indenizacao) {
         this.id = id;
         this.idVeiculo = idVeiculo;
+        this.placa = placa;
         this.numeroSeguro = numeroSeguro;
         this.assegurado = assegurado;
         this.valorFranquia = valorFranquia;
@@ -34,6 +36,14 @@ public class VeiculoSeguroDTO {
 
     public void setIdVeiculo(Integer idVeiculo) {
         this.idVeiculo = idVeiculo;
+    }
+
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
     }
 
     public Integer getNumeroSeguro() {
