@@ -103,6 +103,7 @@ public class ServVeiculoCombustivel extends HttpServlet {
     
     private void getAll(HttpServletRequest request, HttpServletResponse response) throws Exception { 
         List<VeiculoCombustivel> listaVeiculos = ContrVeiculoCombustivel.consultaTodos(this.nomeBD);
+        if(listaVeiculos.isEmpty()) return;
         List<VeiculoCombustivelDTO> listaDTO = new ArrayList<VeiculoCombustivelDTO>();
         for (VeiculoCombustivel veiculo : listaVeiculos) {
             listaDTO.add(getVeiculoCombustivelDTO(veiculo));
@@ -112,9 +113,25 @@ public class ServVeiculoCombustivel extends HttpServlet {
         response.getWriter().write(lista.toString());
     }
     
-    private void get(HttpServletRequest request, HttpServletResponse response) throws Exception {       
+    private void get(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String method = request.getParameter("method");
+        if(method != null && method.equalsIgnoreCase("last")) { getLastVeiculoCombustivel(request, response); }
+        else { getVeiculoCombustivel(request, response); }
+    }   
+    
+    private void getVeiculoCombustivel(HttpServletRequest request, HttpServletResponse response) throws Exception {       
         VeiculoCombustivel veiculo = getVeiculoFromRequest(request);
         veiculo = ContrVeiculoCombustivel.consulta(this.nomeBD, veiculo);
+        if(veiculo == null) return;
+        JSONObject object = new JSONObject(getVeiculoCombustivelDTO(veiculo));
+        response.setContentType("application/json");
+        response.getWriter().write(object.toString());
+    }   
+    
+    private void getLastVeiculoCombustivel(HttpServletRequest request, HttpServletResponse response) throws Exception {       
+        VeiculoCombustivel veiculo = getVeiculoFromRequest(request);
+        veiculo = ContrVeiculoCombustivel.consultaUltimoCombustivelCadastrado(this.nomeBD, veiculo.getVeiculo());
+        if(veiculo == null) return;
         JSONObject object = new JSONObject(getVeiculoCombustivelDTO(veiculo));
         response.setContentType("application/json");
         response.getWriter().write(object.toString());

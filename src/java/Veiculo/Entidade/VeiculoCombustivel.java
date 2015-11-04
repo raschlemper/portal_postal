@@ -70,7 +70,9 @@ public class VeiculoCombustivel {
     }
 
     public Double getValorUnitario() {
-        if(valorUnitario == null) { valorUnitario = this.valorTotal / this.quantidade; }
+        if(valorUnitario == null && valorTotal != null && quantidade != null) { 
+            valorUnitario = valorTotal / quantidade; 
+        }
         return valorUnitario;
     }
 
@@ -88,7 +90,9 @@ public class VeiculoCombustivel {
     }
 
     public Integer getMedia() {
-        if(media == null) { media = this.quilometragemPercorrida / this.quantidade; }
+        if(media == null && quilometragemPercorrida != null && quantidade != null) { 
+            media = quilometragemPercorrida / quantidade; 
+        }
         return media;
     }
 
@@ -122,7 +126,9 @@ public class VeiculoCombustivel {
     }
 
     public Integer getQuilometragemPercorrida() {
-        if(quilometragemPercorrida == null) { quilometragemPercorrida = this.quilometragemFinal / this.quilometragemInicial; }
+        if(quilometragemPercorrida == null && quilometragemInicial != null && quilometragemFinal != null) { 
+            quilometragemPercorrida = quilometragemFinal / quilometragemInicial; 
+        }
         return quilometragemPercorrida;
     }
 

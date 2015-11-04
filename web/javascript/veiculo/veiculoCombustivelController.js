@@ -20,6 +20,8 @@ var VeiculoCombustivelController = function(form) {
     }
 
     var addEventos = function() { 
+        addVeiculoEventListener();
+        addQuilometragemEventListener();
         addSalvarEventListener();
     };          
     
@@ -64,6 +66,13 @@ var VeiculoCombustivelController = function(form) {
         .done(function(data) {
             init(data);
         });
+    };   
+
+    var pesquisarUltimo = function(idVeiculo) {
+        VeiculoService.pesquisarUltimoVeiculoCombustivel(idVeiculo)
+        .done(function(data) {
+            form.quilometragemInicial.value = data.quilometragemFinal;
+        });
     }; 
 
     var editar = function(idVeiculoCombustivel) {
@@ -101,39 +110,12 @@ var VeiculoCombustivelController = function(form) {
     }
     
     var salvar = function(form) {
-        if(!validarCampoQuantidade(form)) return false;
-        if(!validarCampoData(form)) return false;
-        if(!validarCampoValor(form)) return false;
+        if(!VeiculoValidacao.validarCampoQuantidade(form)) return false;
+        if(!VeiculoValidacao.validarCampoData(form)) return false;
+        if(!VeiculoValidacao.validarCampoValor(form)) return false;
+        if(!VeiculoValidacao.validarQuilometragemFinal(form)) return false;
         form.submit();
     }; 
-    
-    var validarCampoQuantidade = function(form) {
-        if(form.quantidade.value) return true;
-        alert('Preencha a quantidade de litros abastecidos!');
-        return false;
-    };
-    
-    var validarCampoData = function(form) {
-        if(form.data.value) {
-            var data = toDate(form.data.value);
-            if(!isNaN(data.getDate())) return true;
-            alert('A data do abstecimento não é válida!');
-            return false; 
-        }
-        alert('Preencha a data de abastecimento!');
-        return false;
-    };  
-    
-    var validarCampoValor = function(form) {
-        if(form.valorTotal.value) return true;
-        alert('Preencha o valor total do abastecimento!');
-        return false;
-    }; 
-       
-    var toDate = function(data) {
-        var pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
-        return new Date(data.replace(pattern,'$3-$2-$1'));
-    }
     
     
     // funcoes ///////// 
@@ -142,13 +124,11 @@ var VeiculoCombustivelController = function(form) {
         if(!combustivel) return;
         form.veiculo.value = combustivel.idVeiculo;
         form.tipo.value = combustivel.tipo;
-        var quantidade = combustivel.quantidade.toString().replace(/(.)(?=(\d{3})+$)/g,'$1.');
-        form.quantidade.value = quantidade;
+        form.quantidade.value = VeiculoFormatador.toNumber(combustivel.quantidade);
         form.data.value = combustivel.data;
-        var valorTotal = combustivel.valorTotal.toString().replace(/(.)(?=(\d{3})+$)/g,'$1.');
-        form.valorTotal.value = valorTotal;
-        form.quilometragemInicial.value = combustivel.quilometragemInicial;
-        form.quilometragemFinal.value = combustivel.quilometragemFinal;
+        form.valorTotal.value = VeiculoFormatador.toNumeric(combustivel.valorTotal);
+        form.quilometragemInicial.value = VeiculoFormatador.toNumber(combustivel.quilometragemInicial);
+        form.quilometragemFinal.value = VeiculoFormatador.toNumber(combustivel.quilometragemFinal);
     }
 
     var setVeiculos = function(combustivel) {
@@ -174,6 +154,7 @@ var VeiculoCombustivelController = function(form) {
         });
         var selected = getVeiculoSelected(combustivel);
         select.value = selected;
+        pesquisarUltimo(form.veiculo.value);
     };
     
     var setTipoCombustivel = function(combustivel) {
@@ -199,6 +180,18 @@ var VeiculoCombustivelController = function(form) {
     
     
     // eventos /////////
+    
+    var addVeiculoEventListener = function() {   
+        form.veiculo.addEventListener('change', function() {
+            pesquisarUltimo(this.value);
+        });
+    };
+    
+    var addQuilometragemEventListener = function() {   
+        form.quilometragemFinal.addEventListener('blur', function() {
+            VeiculoValidacao.validarQuilometragemFinal(form);
+        });
+    };
 
     var addSalvarEventListener = function() { 
         if(!form.salvar) return;
@@ -222,6 +215,8 @@ var VeiculoCombustivelController = function(form) {
             setVeiculos: setVeiculos
         },
         eventos: {
+            addVeiculoEventListener: addVeiculoEventListener,
+            addQuilometragemEventListener: addQuilometragemEventListener,
             addSalvarEventListener: addSalvarEventListener
         }
     }

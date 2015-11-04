@@ -3,6 +3,7 @@ package Veiculo.Controle;
 import Controle.ContrErroLog;
 import Veiculo.Entidade.VeiculoCombustivel;
 import Util.Conexao;
+import Veiculo.Entidade.Veiculo;
 import Veiculo.builder.VeiculoCombustivelBuilder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -123,6 +124,25 @@ public class ContrVeiculoCombustivel {
             Conexao.desconectar(conn);
         }
         return veiculoCombustivel;
+    }
+    
+    public static VeiculoCombustivel consultaUltimoCombustivelCadastrado(String nomeBD, Veiculo veiculo) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "SELECT MAX(idVeiculoCombustivel) as idVeiculoCombustivel FROM veiculo_combustivel WHERE idVeiculo = ? ";  
+        VeiculoCombustivel veiculoCombustivel = new VeiculoCombustivel();
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, veiculo.getId());
+            ResultSet result = (ResultSet) ps.executeQuery();
+            while(result.next()) { 
+                veiculoCombustivel.setId(result.getInt("idVeiculoCombustivel"));
+            }
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());
+        } finally {
+            Conexao.desconectar(conn);
+        }
+        return consulta(nomeBD, veiculoCombustivel);
     }
     
     private static Integer getLastId(PreparedStatement ps) throws SQLException {

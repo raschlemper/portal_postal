@@ -89,6 +89,15 @@ var VeiculoService = function() {
             data: { idVeiculoCombustivel: idVeiculoCombustivel },
             dataType: 'json'
         });
+    };     
+
+    app.pesquisarUltimoVeiculoCombustivel = function(idVeiculo) {
+        return $.ajax({
+            method: "GET",
+            url: Configuracao.contextPath + "/veiculo/combustivel?action=get&method=last",
+            data: { veiculo: idVeiculo },
+            dataType: 'json'
+        });
     }; 
 
     app.editarVeiculoCombustivel = function(idVeiculoCombustivel) {
