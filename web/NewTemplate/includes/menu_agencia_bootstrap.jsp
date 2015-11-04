@@ -85,6 +85,7 @@
             <ul class="nav-pills nav-stacked" style="list-style-type:none;">
                 <li><a href="${pageContext.request.contextPath}/veiculo">Cadastro</a></li>
                 <li><a href="${pageContext.request.contextPath}/veiculo/manutencao">Manutenção</a></li>
+                <li><a href="${pageContext.request.contextPath}/veiculo/combustivel">Combustível</a></li>
             </ul>
         </li>
         <li>

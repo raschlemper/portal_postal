@@ -21,16 +21,16 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <h4 class="page-header">
-                                    <b class="text-primary"><i class="fa fa-gears"></i> Veículos</b> > <small>Manutenção</small>
+                                    <b class="text-primary"><i class="fa fa-gears"></i> Veículos</b> > <small>Combustível</small>
                                 </h4>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
-                                <form name="veiculoManutencaoForm" action="${pageContext.request.contextPath}/veiculo/manutencao?action=save" method="post">
+                                <form name="veiculoCombustivelForm" action="${pageContext.request.contextPath}/veiculo/combustivel?action=save" method="post">
                                     <ul class="list-unstyled">
                                         <li class="list-group-item list-group-heading">
-                                            <label>Inserir manutenção veículo</label>
+                                            <label>Inserir combustível veículo</label>
                                         </li>
                                         <li class="list-group-item" id="campos">
                                             <div class="row form-horizontal">
@@ -48,44 +48,40 @@
                                                         <select class="form-control tipo" name="tipo"></select>
                                                     </div>
                                                 </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                                    <label class="small">Quilometragem</label>
+                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                                    <label class="small">Quantidade</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="quilometragem" class="form-control number" placeholder="Quilometragem"/>                                    
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                                    <label class="small">Valor</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="valor" class="form-control numeric" placeholder="Valor"/>                                    
+                                                        <input type="text" autocomplete="off" name="quantidade" class="form-control number" placeholder="quantidade"/>                                    
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                                                     <label class="small">Data</label>
                                                     <div class="input-group">
-                                                        <input class="form-control date" type="text" name="data" placeholder="Data da manutenção" />
+                                                        <input class="form-control date" type="text" name="data" placeholder="Data" />
                                                         <span class="input-group-addon" ><i class="fa fa-calendar"></i></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Data Agendamento</label>
+                                                    <label class="small">Valor Total</label>
                                                     <div class="input-group">
-                                                        <input class="form-control date" type="text" name="dataAgendamento" placeholder="Data de prevista para manutenção" />
-                                                        <span class="input-group-addon" ><i class="fa fa-calendar"></i></span>
+                                                        <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
+                                                        <input type="text" autocomplete="off" name="valorTotal" class="form-control numeric" placeholder="Valor"/>                                    
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Data Entrega</label>
+                                                    <label class="small">Quilometragem Inicial</label>
                                                     <div class="input-group">
-                                                        <input class="form-control date" type="text" name="dataEntrega" placeholder="Data de prevista para entrega" />
-                                                        <span class="input-group-addon" ><i class="fa fa-calendar"></i></span>
+                                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                                        <input type="text" autocomplete="off" name="quilometragemInicial" class="form-control number" placeholder="Quilometragem Inicial" />
                                                     </div>
                                                 </div>
-                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                                    <label class="small">Descrição</label>
-                                                    <textarea class="form-control" rows="3" name="descricao" placeholder="Descrição da manutenção"></textarea>       
+                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                                    <label class="small">Quilometragem Final</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                                        <input type="text" autocomplete="off" name="quilometragemFinal" class="form-control number" placeholder="Quilometragem Final" />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </li>
@@ -100,7 +96,7 @@
                                 </form>     
                                 
                                 <div class="panel panel-default">
-                                    <div class="panel-heading" >Lista com todos as manutenções</div>
+                                    <div class="panel-heading" >Lista com todos os abastecimentos</div>
                                     <div class="panel-body no-padding">
                                         <div class="dataTable_wrapper no-padding">
                                             <table class="table table-striped table-bordered table-hover table-condensed" id="datatable-manutencoes">
@@ -108,10 +104,10 @@
                                                     <tr>
                                                         <th>Placa</th>
                                                         <th>Tipo</th>
-                                                        <th>Valor</th>
                                                         <th>Data</th>
-                                                        <th>Agendamento</th>
-                                                        <th>Entrega</th>
+                                                        <th>Quantidade</th>
+                                                        <th>Valor Total</th>
+                                                        <th>Média</th>
                                                         <th class="no-sort" width="100">Alterar</th>
                                                         <th class="no-sort" width="100">Excluir</th>
                                                     </tr>
@@ -129,8 +125,8 @@
             </div>
         </div>
         <script type="text/javascript">             
-            var veiculoManutencaoCtrl = new VeiculoManutencaoController(veiculoManutencaoForm); 
-            veiculoManutencaoCtrl.acoes.pesquisarTodos();
+            var veiculoCombustivelCtrl = new VeiculoCombustivelController(veiculoCombustivelForm); 
+            veiculoCombustivelCtrl.acoes.pesquisarTodos();
             Configuracao.messageModal();
         </script>
     </body>

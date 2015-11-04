@@ -30,10 +30,9 @@ public class VeiculoManutencaoBuilder extends Builder<VeiculoManutencao, Veiculo
 
     public VeiculoManutencao toEntidade(ResultSet result) {
         try {
-            VeiculoBuilder builder = new VeiculoBuilder();
             return new VeiculoManutencao(
                 result.getInt("veiculo_manutencao.idVeiculoManutencao"),
-                builder.toEntidade(result),
+                getVeiculo(result),
                 result.getString("veiculo_manutencao.tipo"),  
                 result.getInt("veiculo_manutencao.quilometragem"),
                 result.getDouble("veiculo_manutencao.valor"),

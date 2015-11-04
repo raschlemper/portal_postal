@@ -48,7 +48,7 @@ public abstract class Builder<E,T> {
         return sdf.format(data);
     }
     
-    protected static Veiculo getVeiculo(ResultSet result) throws SQLException {
+    protected Veiculo getVeiculo(ResultSet result) throws SQLException {
         return new Veiculo(
             result.getInt("veiculo.idVeiculo"),
             result.getString("veiculo.tipo"),  

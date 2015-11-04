@@ -39,7 +39,7 @@
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                     <label class="small">Valor</label>
                     <div class="input-group">
-                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                        <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
                         <input type="text" autocomplete="off" name="valor" class="form-control numeric" placeholder="Valor"/>                                    
                     </div>
                 </div>

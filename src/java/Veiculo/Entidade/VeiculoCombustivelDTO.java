@@ -1,7 +1,5 @@
 package Veiculo.Entidade;
 
-import java.util.Date;
-
 public class VeiculoCombustivelDTO {    
     
     private Integer id;

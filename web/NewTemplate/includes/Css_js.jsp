@@ -66,9 +66,13 @@
 <script type="text/javascript" src="../../javascript/ddslick.js"></script>
 
 <!-- JavaScript Pages -->
-<script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculo.js"></script>
-<script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoManutencao.js"></script>
 <script type="text/javascript" language="javascript" src="../../javascript/veiculo/config.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoConstantes.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoMascara.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoController.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoManutencaoController.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoCombustivelController.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoService.js"></script>
 
 
 <!-- Bootstrap Core JavaScript -->
