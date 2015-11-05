@@ -7,7 +7,7 @@ public class VeiculoCombustivelDTO {
     private String placa;
     private String tipo;
     private Integer quantidade;
-    private Double valor;
+    private Double valorUnitario;
     private String data; 
     private Integer media;
     private Double valorTotal;
@@ -17,13 +17,13 @@ public class VeiculoCombustivelDTO {
 
     public VeiculoCombustivelDTO() { }
 
-    public VeiculoCombustivelDTO(Integer id, Integer idVeiculo, String placa, String tipo, Integer quantidade, Double valor, String data, Integer media, Double valorTotal, Integer quilometragemInicial, Integer quilometragemFinal, Integer quilometragemPercorrida) {
+    public VeiculoCombustivelDTO(Integer id, Integer idVeiculo, String placa, String tipo, Integer quantidade, Double valorUnitario, String data, Integer media, Double valorTotal, Integer quilometragemInicial, Integer quilometragemFinal, Integer quilometragemPercorrida) {
         this.id = id;
         this.idVeiculo = idVeiculo;
         this.placa = placa;
         this.tipo = tipo;
         this.quantidade = quantidade;
-        this.valor = valor;
+        this.valorUnitario = valorUnitario;
         this.data = data;
         this.media = media;
         this.valorTotal = valorTotal;
@@ -72,12 +72,12 @@ public class VeiculoCombustivelDTO {
         this.quantidade = quantidade;
     }
 
-    public Double getValor() {
-        return valor;
+    public Double getValorUnitario() {
+        return valorUnitario;
     }
 
-    public void setValor(Double valor) {
-        this.valor = valor;
+    public void setValorUnitario(Double valorUnitario) {
+        this.valorUnitario = valorUnitario;
     }
 
     public String getData() {

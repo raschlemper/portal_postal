@@ -94,7 +94,7 @@ var VeiculoService = function() {
     app.pesquisarUltimoVeiculoCombustivel = function(idVeiculo) {
         return $.ajax({
             method: "GET",
-            url: Configuracao.contextPath + "/veiculo/combustivel?action=get&method=last",
+            url: Configuracao.contextPath + "/veiculo/combustivel?action=last",
             data: { veiculo: idVeiculo },
             dataType: 'json'
         });

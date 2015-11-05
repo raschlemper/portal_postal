@@ -42,7 +42,7 @@ var VeiculoCombustivelController = function(form) {
                       '<td>{{tipo}}</td>' +
                       '<td class="date">{{data}}</td>' +
                       '<td class="number">{{quantidade}}</td>' +
-                      '<td class="numeric">{{valorTotal}}</td>' +
+                      '<td class="numeric">{{valorUnitario}}</td>' +
                       '<td class="number">{{media}}</td>' +
                       '<td align="center">' +
                             '<button class="btn btn-sm btn-warning" onclick="veiculoCombustivelCtrl.acoes.editar({{id}})">' +
@@ -110,11 +110,36 @@ var VeiculoCombustivelController = function(form) {
     }
     
     var salvar = function(form) {
-        if(!VeiculoValidacao.validarCampoQuantidade(form)) return false;
-        if(!VeiculoValidacao.validarCampoData(form)) return false;
-        if(!VeiculoValidacao.validarCampoValor(form)) return false;
-        if(!VeiculoValidacao.validarQuilometragemFinal(form)) return false;
+        if(!validarCampoQuantidade(form)) return false;
+        if(!validarCampoData(form)) return false;
+        if(!validarCampoValor(form)) return false;
+        if(!validarCampoQuilometragemFinal(form)) return false;
         form.submit();
+    }; 
+    
+    var validarCampoQuantidade = function(form) {
+        var msg = 'Preencha a quantidade de litros abastecidos!';
+        return VeiculoValidacao.campoNotNull(form.quantidade.value, msg);
+    }; 
+    
+    var validarCampoValor = function(form) {
+        var msg = 'Preencha o valor total do abastecimento!';
+        return VeiculoValidacao.campoNotNull(form.valorTotal.value, msg);
+    };
+    
+    var validarCampoData = function(form) {
+        var msg = 'Preencha a data de abastecimento!';
+        var msgValida = 'A data do abstecimento não é válida!';
+        if(!VeiculoValidacao.campoNotNull(form.data.value, msg)) { return false; };
+        return VeiculoValidacao.campoData(form.data.value, msgValida);
+    }; 
+    
+    var validarCampoQuilometragemFinal = function(form) {
+        var msg = 'Preencha a quilometragem do veículo!';
+        var msgMenor = 'A quilometragem não pode ser inferior ou igual a última quilometragem inserida ' +
+                'para este veículo (' + VeiculoFormatador.toNumber(form.quilometragemInicial.value) + ')!';
+        if(!VeiculoValidacao.campoNotNull(form.quilometragemFinal.value, msg)) { return false; };
+        return VeiculoValidacao.campoMenorIgualQue(form.quilometragemFinal.value, form.quilometragemInicial.value, msgMenor);
     }; 
     
     
@@ -189,7 +214,7 @@ var VeiculoCombustivelController = function(form) {
     
     var addQuilometragemEventListener = function() {   
         form.quilometragemFinal.addEventListener('blur', function() {
-            VeiculoValidacao.validarQuilometragemFinal(form);
+            validarCampoQuilometragemFinal(form);
         });
     };
 

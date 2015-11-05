@@ -34,7 +34,7 @@
                                         </li>
                                         <li class="list-group-item" id="campos">
                                             <div class="row form-horizontal">
-                                                <input type="hidden" name="quilometragemInicial" value="" />
+                                                <input type="hidden" name="quilometragemInicial" value="0" />
                                                 <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8">
                                                     <label class="small">Veículo</label>
                                                     <div class="input-group">
@@ -100,7 +100,7 @@
                                                         <th>Tipo</th>
                                                         <th>Data</th>
                                                         <th>Quantidade</th>
-                                                        <th>Valor Total</th>
+                                                        <th>Valor Unitário</th>
                                                         <th>Média</th>
                                                         <th class="no-sort" width="100">Alterar</th>
                                                         <th class="no-sort" width="100">Excluir</th>

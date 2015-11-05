@@ -36,7 +36,7 @@ public class ServVeiculoCombustivel extends HttpServlet {
     private String page;
     private String usuario;
     
-    private enum actions{ ALL, GET, SAVE, DELETE };         
+    private enum actions{ ALL, GET, SAVE, DELETE, LAST };         
     
     @Override
     public String getServletInfo() {
@@ -79,6 +79,7 @@ public class ServVeiculoCombustivel extends HttpServlet {
             else if(action.equalsIgnoreCase(actions.GET.name())) { get(request, response); }
             else if(action.equalsIgnoreCase(actions.SAVE.name())) { save(request, response); }
             else if(action.equalsIgnoreCase(actions.DELETE.name())) { delete(request, response); }
+            else if(action.equalsIgnoreCase(actions.LAST.name())) { getLastVeiculoCombustivel(request, response); }
         } catch (Exception ex) {
             int idErro = ContrErroLog.inserir("Portal Postal - ServVeiculoCombustivel", "Exception", null, ex.toString());
             this.sessao.setAttribute("msg", "SYSTEM ERROR Nº: " + idErro + "; Ocorreu um erro inesperado!");
@@ -113,13 +114,7 @@ public class ServVeiculoCombustivel extends HttpServlet {
         response.getWriter().write(lista.toString());
     }
     
-    private void get(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String method = request.getParameter("method");
-        if(method != null && method.equalsIgnoreCase("last")) { getLastVeiculoCombustivel(request, response); }
-        else { getVeiculoCombustivel(request, response); }
-    }   
-    
-    private void getVeiculoCombustivel(HttpServletRequest request, HttpServletResponse response) throws Exception {       
+    private void get(HttpServletRequest request, HttpServletResponse response) throws Exception {      
         VeiculoCombustivel veiculo = getVeiculoFromRequest(request);
         veiculo = ContrVeiculoCombustivel.consulta(this.nomeBD, veiculo);
         if(veiculo == null) return;

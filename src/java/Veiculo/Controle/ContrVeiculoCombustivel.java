@@ -100,6 +100,7 @@ public class ContrVeiculoCombustivel {
             ps.setInt(8, veiculoCombustivel.getQuilometragemFinal());
             ps.setInt(9, veiculoCombustivel.getQuilometragemPercorrida());
             ps.setInt(10, veiculoCombustivel.getId());
+            ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
             ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());

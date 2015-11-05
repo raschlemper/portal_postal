@@ -127,7 +127,7 @@ public class VeiculoCombustivel {
 
     public Integer getQuilometragemPercorrida() {
         if(quilometragemPercorrida == null && quilometragemInicial != null && quilometragemFinal != null) { 
-            quilometragemPercorrida = quilometragemFinal / quilometragemInicial; 
+            quilometragemPercorrida = quilometragemFinal - quilometragemInicial; 
         }
         return quilometragemPercorrida;
     }
