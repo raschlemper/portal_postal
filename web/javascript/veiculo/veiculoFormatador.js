@@ -1,12 +1,25 @@
 var VeiculoFormatador = function() {
     var app = {};
     
-    app.toNumber = function(value) {
-        return value.toString().replace(/(.)(?=(\d{3})+$)/g,'$1.');
+    app.toNumberUs = function(value) {
+        value = numeral().unformat(value);
+        return parseInt(value);
     };
     
-    app.toNumeric = function(value) {
-        return value.toString().replace(/(.)(?=(\d{3})+(\d{2}))/g,'$1.');
+    app.toNumberBr = function(value) {
+        numeral.language("pt-br");
+        //value = numeral().unformat(value);
+        return numeral(value).format('0,0');
+    };
+    
+    app.toNumericUs = function(value) {
+        value = numeral(value).format('0,0.00');
+        return parseInt(value);
+    };
+    
+    app.toNumericBr = function(value) {
+        numeral.language("pt-br");
+        return numeral(value).format('0,0.00');
     };
        
     app.toDate = function(data) {

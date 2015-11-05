@@ -70,14 +70,10 @@ public class VeiculoCombustivel {
     }
 
     public Double getValorUnitario() {
-        if(valorUnitario == null && valorTotal != null && quantidade != null) { 
-            valorUnitario = valorTotal / quantidade; 
-        }
         return valorUnitario;
     }
 
     public void setValorUnitario(Double valorUnitario) {
-        if(valorUnitario == null) { valorUnitario = getValorUnitario(); }
         this.valorUnitario = valorUnitario;
     }
 
@@ -90,14 +86,10 @@ public class VeiculoCombustivel {
     }
 
     public Integer getMedia() {
-        if(media == null && quilometragemPercorrida != null && quantidade != null) { 
-            media = quilometragemPercorrida / quantidade; 
-        }
         return media;
     }
 
     public void setMedia(Integer media) {
-        if(media == null) { media = getMedia(); }
         this.media = media;
     }
 
@@ -126,14 +118,10 @@ public class VeiculoCombustivel {
     }
 
     public Integer getQuilometragemPercorrida() {
-        if(quilometragemPercorrida == null && quilometragemInicial != null && quilometragemFinal != null) { 
-            quilometragemPercorrida = quilometragemFinal - quilometragemInicial; 
-        }
         return quilometragemPercorrida;
     }
 
     public void setQuilometragemPercorrida(Integer quilometragemPercorrida) {
-        if(quilometragemPercorrida == null) { quilometragemPercorrida = getQuilometragemPercorrida(); }
         this.quilometragemPercorrida = quilometragemPercorrida;
     }
     

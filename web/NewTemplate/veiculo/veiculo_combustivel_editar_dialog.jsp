@@ -15,7 +15,6 @@
         <li class="list-group-item">
             <div class="row form-horizontal">
                 <input type="hidden" name="idVeiculoCombustivel" value="<%= idVeiculoCombustivel %>"/>
-                <input type="hidden" name="quilometragemInicial" value="" />
                 <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8">
                     <label class="small">Veículo</label>
                     <div class="input-group">
@@ -31,13 +30,6 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                    <label class="small">Quantidade</label>
-                    <div class="input-group">
-                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                        <input type="text" autocomplete="off" name="quantidade" class="form-control number" placeholder="quantidade"/>                                    
-                    </div>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
                     <label class="small">Data</label>
                     <div class="input-group">
                         <input class="form-control date" type="text" name="data" placeholder="Data" />
@@ -45,17 +37,52 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                    <label class="small">Valor Total</label>
+                    <label class="small">Quilometragem Anterior</label>
                     <div class="input-group">
-                        <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
-                        <input type="text" autocomplete="off" name="valorTotal" class="form-control numeric" placeholder="Valor"/>                                    
+                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                        <input type="text" autocomplete="off" name="quilometragemInicial" class="form-control number" readonly/>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                    <label class="small">Quilometragem</label>
+                    <label class="small">Quilometragem Atual</label>
                     <div class="input-group">
                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                        <input type="text" autocomplete="off" name="quilometragemFinal" class="form-control number" placeholder="Quilometragem" />
+                        <input type="text" autocomplete="off" name="quilometragemFinal" class="form-control number" placeholder="Quilometragem Atual" />
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                    <label class="small">Quilometragem Percorrida</label>
+                    <div class="input-group">
+                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                        <input type="text" autocomplete="off" name="quilometragemPercorrida" class="form-control number" readonly/>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                    <label class="small">Quantidade</label>
+                    <div class="input-group">
+                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                        <input type="text" autocomplete="off" name="quantidade" class="form-control number" placeholder="Quantidade"/>                                    
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                    <label class="small">Valor Total</label>
+                    <div class="input-group">
+                        <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
+                        <input type="text" autocomplete="off" name="valorTotal" class="form-control numeric" placeholder="Valor Total"/>                                    
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                    <label class="small">Valor Unitário</label>
+                    <div class="input-group">
+                        <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
+                        <input type="text" autocomplete="off" name="valorUnitario" class="form-control numeric" readonly/>                                    
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                    <label class="small">Média</label>
+                    <div class="input-group">
+                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                        <input type="text" autocomplete="off" name="media" class="form-control number" readonly/>                                    
                     </div>
                 </div>
             </div>

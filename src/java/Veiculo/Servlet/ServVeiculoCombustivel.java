@@ -104,31 +104,32 @@ public class ServVeiculoCombustivel extends HttpServlet {
     
     private void getAll(HttpServletRequest request, HttpServletResponse response) throws Exception { 
         List<VeiculoCombustivel> listaVeiculos = ContrVeiculoCombustivel.consultaTodos(this.nomeBD);
-        if(listaVeiculos.isEmpty()) return;
+        response.setContentType("application/json");
         List<VeiculoCombustivelDTO> listaDTO = new ArrayList<VeiculoCombustivelDTO>();
         for (VeiculoCombustivel veiculo : listaVeiculos) {
             listaDTO.add(getVeiculoCombustivelDTO(veiculo));
         }
         JSONArray lista = new JSONArray(listaDTO);
-        response.setContentType("application/json");
         response.getWriter().write(lista.toString());
     }
     
     private void get(HttpServletRequest request, HttpServletResponse response) throws Exception {      
         VeiculoCombustivel veiculo = getVeiculoFromRequest(request);
         veiculo = ContrVeiculoCombustivel.consulta(this.nomeBD, veiculo);
-        if(veiculo == null) return;
-        JSONObject object = new JSONObject(getVeiculoCombustivelDTO(veiculo));
         response.setContentType("application/json");
+        JSONObject object = null;
+        if(veiculo == null) { object = new JSONObject(new VeiculoCombustivelDTO()); }
+        else { object = new JSONObject(getVeiculoCombustivelDTO(veiculo)); }
         response.getWriter().write(object.toString());
     }   
     
     private void getLastVeiculoCombustivel(HttpServletRequest request, HttpServletResponse response) throws Exception {       
         VeiculoCombustivel veiculo = getVeiculoFromRequest(request);
         veiculo = ContrVeiculoCombustivel.consultaUltimoCombustivelCadastrado(this.nomeBD, veiculo.getVeiculo());
-        if(veiculo == null) return;
-        JSONObject object = new JSONObject(getVeiculoCombustivelDTO(veiculo));
         response.setContentType("application/json");
+        JSONObject object = null;
+        if(veiculo == null) { object = new JSONObject(new VeiculoCombustivelDTO()); }
+        else { object = new JSONObject(getVeiculoCombustivelDTO(veiculo)); }
         response.getWriter().write(object.toString());
     }   
     

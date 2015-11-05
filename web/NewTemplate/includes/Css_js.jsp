@@ -53,6 +53,8 @@
 <script type="text/javascript" language="javascript" src="../../plugins/underscore/underscoreConfig.js"></script>
 <script type="text/javascript" language="javascript" src="../../plugins/jquery-mask/jquery-mask.js"></script>
 <script type="text/javascript" language="javascript" src="../../plugins/watch/watch.js"></script>
+<script type="text/javascript" language="javascript" src="../../plugins/numeral/numeral.js"></script>
+<script type="text/javascript" language="javascript" src="../../plugins/numeral/pt-br.js"></script>
 
 <!-- Custom Theme JavaScript -->
 <script src="../../plugins/metisMenu/dist/metisMenu.js" type="text/javascript"></script>

@@ -22,7 +22,7 @@ public class VeiculoCombustivelBuilder extends Builder<VeiculoCombustivel, Veicu
             veiculo.setQuilometragemFinal(getNumericParameter(request.getParameter("quilometragemFinal")));
             veiculo.setQuilometragemPercorrida(getNumericParameter(request.getParameter("quilometragemPercorrida")));
             veiculo.setValorUnitario(getDoubleParameter(request.getParameter("valorUnitario")));        
-            veiculo.setMedia(getIntegerParameter(request.getParameter("media")));       
+            veiculo.setMedia(getNumericParameter(request.getParameter("media")));       
             return veiculo;     
         } catch (Exception ex) {
             Logger.getLogger(VeiculoCombustivelBuilder.class.getName()).log(Level.SEVERE, null, ex);

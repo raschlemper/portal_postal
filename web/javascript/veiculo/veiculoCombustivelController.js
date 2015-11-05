@@ -21,7 +21,10 @@ var VeiculoCombustivelController = function(form) {
 
     var addEventos = function() { 
         addVeiculoEventListener();
-        addQuilometragemEventListener();
+        addQuilometragemInicialEventListener();
+        addQuilometragemFinalEventListener();
+        addQuantidadeEventListener();
+        addValorTotalEventListener(),
         addSalvarEventListener();
     };          
     
@@ -71,7 +74,15 @@ var VeiculoCombustivelController = function(form) {
     var pesquisarUltimo = function(idVeiculo) {
         VeiculoService.pesquisarUltimoVeiculoCombustivel(idVeiculo)
         .done(function(data) {
-            form.quilometragemInicial.value = data.quilometragemFinal;
+            if(!data.quilometragemFinal) { pesquisarVeiculo(idVeiculo); } 
+            else { setQuilometragemFinal(data.quilometragemFinal); }
+        });
+    };   
+
+    var pesquisarVeiculo = function(idVeiculo) {
+        VeiculoService.pesquisarVeiculo(idVeiculo)
+        .done(function(data) {
+            setQuilometragemFinal(data.quilometragem);
         });
     }; 
 
@@ -113,7 +124,9 @@ var VeiculoCombustivelController = function(form) {
         if(!validarCampoQuantidade(form)) return false;
         if(!validarCampoData(form)) return false;
         if(!validarCampoValor(form)) return false;
-        if(!validarCampoQuilometragemFinal(form)) return false;
+        if(!form.idVeiculoCombustivel) {
+            if(!validarCampoQuilometragemFinal(form)) return false;
+        }
         form.submit();
     }; 
     
@@ -137,7 +150,7 @@ var VeiculoCombustivelController = function(form) {
     var validarCampoQuilometragemFinal = function(form) {
         var msg = 'Preencha a quilometragem do veículo!';
         var msgMenor = 'A quilometragem não pode ser inferior ou igual a última quilometragem inserida ' +
-                'para este veículo (' + VeiculoFormatador.toNumber(form.quilometragemInicial.value) + ')!';
+                'para este veículo (' + VeiculoFormatador.toNumberBr(form.quilometragemInicial.value) + ')!';
         if(!VeiculoValidacao.campoNotNull(form.quilometragemFinal.value, msg)) { return false; };
         return VeiculoValidacao.campoMenorIgualQue(form.quilometragemFinal.value, form.quilometragemInicial.value, msgMenor);
     }; 
@@ -149,11 +162,14 @@ var VeiculoCombustivelController = function(form) {
         if(!combustivel) return;
         form.veiculo.value = combustivel.idVeiculo;
         form.tipo.value = combustivel.tipo;
-        form.quantidade.value = VeiculoFormatador.toNumber(combustivel.quantidade);
         form.data.value = combustivel.data;
-        form.valorTotal.value = VeiculoFormatador.toNumeric(combustivel.valorTotal);
-        form.quilometragemInicial.value = VeiculoFormatador.toNumber(combustivel.quilometragemInicial);
-        form.quilometragemFinal.value = VeiculoFormatador.toNumber(combustivel.quilometragemFinal);
+        form.quilometragemInicial.value = VeiculoFormatador.toNumberBr(combustivel.quilometragemInicial);
+        form.quilometragemFinal.value = VeiculoFormatador.toNumberBr(combustivel.quilometragemFinal);
+        form.quilometragemPercorrida.value = VeiculoFormatador.toNumberBr(combustivel.quilometragemPercorrida);
+        form.quantidade.value = VeiculoFormatador.toNumberBr(combustivel.quantidade);
+        form.valorUnitario.value = VeiculoFormatador.toNumericBr(combustivel.valorUnitario);
+        form.valorTotal.value = VeiculoFormatador.toNumericBr(combustivel.valorTotal);
+        form.media.value = VeiculoFormatador.toNumberBr(combustivel.media);
     }
 
     var setVeiculos = function(combustivel) {
@@ -203,6 +219,45 @@ var VeiculoCombustivelController = function(form) {
         while(select.options.length > 0) { select.remove(select.options.length - 1); }        
     };
     
+    var setQuilometragemPercorrida = function(form) {
+        if(form.quilometragemInicial.value && form.quilometragemFinal.value) {
+            var quilometragemInicial = VeiculoFormatador.toNumberUs(form.quilometragemInicial.value);
+            var quilometragemFinal = VeiculoFormatador.toNumberUs(form.quilometragemFinal.value);
+            var quilometragem = 0;
+            if(quilometragemFinal > quilometragemInicial) { 
+                quilometragem = quilometragemFinal - quilometragemInicial; 
+            }
+            form.quilometragemPercorrida.value = VeiculoFormatador.toNumberBr(quilometragem); 
+        } else {
+            form.quilometragemPercorrida.value = null; 
+        }
+    }
+    
+    var setValorUnitario = function(form) {
+        if(form.quantidade.value && form.valorTotal.value) {
+            var quantidade = VeiculoFormatador.toNumberUs(form.quantidade.value);
+            var valorTotal = VeiculoFormatador.toNumericUs(form.valorTotal.value);
+            var valor = valorTotal / quantidade; 
+            form.valorUnitario.value = VeiculoFormatador.toNumericBr(valor.toFixed(2)); 
+        } else {
+            form.valorUnitario.value = null; 
+        }
+    }
+    
+    var setMedia = function(form) {
+        if(form.quilometragemPercorrida.value && form.quantidade.value) {
+            var quilometragemPercorrida = VeiculoFormatador.toNumberUs(form.quilometragemPercorrida.value);
+            var quantidade = VeiculoFormatador.toNumberUs(form.quantidade.value);
+            var valor = quilometragemPercorrida / quantidade; 
+            form.media.value = VeiculoFormatador.toNumberBr(valor); 
+        }else {
+            form.media.value = null;  
+        }
+    }
+    
+    var setQuilometragemFinal = function(value) {
+        form.quilometragemInicial.value = VeiculoFormatador.toNumberBr(value);
+    }
     
     // eventos /////////
     
@@ -212,9 +267,30 @@ var VeiculoCombustivelController = function(form) {
         });
     };
     
-    var addQuilometragemEventListener = function() {   
+    var addQuilometragemInicialEventListener = function() {   
+        form.quilometragemInicial.addEventListener('blur', function() {
+            setQuilometragemPercorrida(form);
+        });
+    };
+    
+    var addQuilometragemFinalEventListener = function() {   
         form.quilometragemFinal.addEventListener('blur', function() {
             validarCampoQuilometragemFinal(form);
+            setQuilometragemPercorrida(form);
+            setMedia(form);
+        });
+    };
+    
+    var addQuantidadeEventListener = function() {   
+        form.quantidade.addEventListener('blur', function() {
+            setValorUnitario(form);
+            setMedia(form);
+        });
+    };
+    
+    var addValorTotalEventListener = function() {   
+        form.valorTotal.addEventListener('blur', function() {
+            setValorUnitario(form);
         });
     };
 
@@ -241,7 +317,10 @@ var VeiculoCombustivelController = function(form) {
         },
         eventos: {
             addVeiculoEventListener: addVeiculoEventListener,
-            addQuilometragemEventListener: addQuilometragemEventListener,
+            addQuilometragemInicialEventListener: addQuilometragemInicialEventListener,
+            addQuilometragemFinalEventListener: addQuilometragemFinalEventListener,
+            addQuantidadeEventListener: addQuantidadeEventListener,
+            addValorTotalEventListener: addValorTotalEventListener,
             addSalvarEventListener: addSalvarEventListener
         }
     }
