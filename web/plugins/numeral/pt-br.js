@@ -29,6 +29,6 @@
     }
     // Browser
     if (typeof window !== 'undefined' && this.numeral && this.numeral.language) {
-        numeral.language('pt-br', language);
+        //numeral.language('pt-br', language);
     }
 }());

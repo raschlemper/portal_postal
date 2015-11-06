@@ -14,7 +14,7 @@ var VeiculoFormatador = function() {
     
     app.toNumericUs = function(value) {
         value = numeral(value).format('0,0.00');
-        return parseInt(value);
+        return Number(value);
     };
     
     app.toNumericBr = function(value) {

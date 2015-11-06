@@ -9,7 +9,6 @@ public class VeiculoCombustivelDTO {
     private Integer quantidade;
     private Double valorUnitario;
     private String data; 
-    private Integer media;
     private Double valorTotal;
     private Integer quilometragemInicial;
     private Integer quilometragemFinal;
@@ -17,7 +16,8 @@ public class VeiculoCombustivelDTO {
 
     public VeiculoCombustivelDTO() { }
 
-    public VeiculoCombustivelDTO(Integer id, Integer idVeiculo, String placa, String tipo, Integer quantidade, Double valorUnitario, String data, Integer media, Double valorTotal, Integer quilometragemInicial, Integer quilometragemFinal, Integer quilometragemPercorrida) {
+    public VeiculoCombustivelDTO(Integer id, Integer idVeiculo, String placa, String tipo, Integer quantidade, Double valorUnitario, String data, 
+            Double valorTotal, Integer quilometragemInicial, Integer quilometragemFinal, Integer quilometragemPercorrida) {
         this.id = id;
         this.idVeiculo = idVeiculo;
         this.placa = placa;
@@ -25,7 +25,6 @@ public class VeiculoCombustivelDTO {
         this.quantidade = quantidade;
         this.valorUnitario = valorUnitario;
         this.data = data;
-        this.media = media;
         this.valorTotal = valorTotal;
         this.quilometragemInicial = quilometragemInicial;
         this.quilometragemFinal = quilometragemFinal;
@@ -86,14 +85,6 @@ public class VeiculoCombustivelDTO {
 
     public void setData(String data) {
         this.data = data;
-    }
-
-    public Integer getMedia() {
-        return media;
-    }
-
-    public void setMedia(Integer media) {
-        this.media = media;
     }
 
     public Double getValorTotal() {

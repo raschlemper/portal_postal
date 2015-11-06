@@ -56,27 +56,6 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                                                    <label class="small">Quilometragem Anterior</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="quilometragemInicial" class="form-control number" readonly/>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                                                    <label class="small">Quilometragem Atual</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="quilometragemFinal" class="form-control number" placeholder="Quilometragem Atual" />
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                                                    <label class="small">Quilometragem Percorrida</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="quilometragemPercorrida" class="form-control number" readonly/>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
                                                     <label class="small">Quantidade</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
@@ -94,14 +73,28 @@
                                                     <label class="small">Valor Unitário</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
-                                                        <input type="text" autocomplete="off" name="valorUnitario" class="form-control numeric" readonly/>                                    
+                                                        <input type="text" autocomplete="off" name="valorUnitario" class="form-control numeric" placeholder="Valor Unitário"/>                                    
                                                     </div>
                                                 </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                                                    <label class="small">Média</label>
+                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                                    <label class="small">Quilometragem Anterior</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="media" class="form-control number" readonly/>                                    
+                                                        <input type="text" autocomplete="off" name="quilometragemInicial" class="form-control number" readonly/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                                    <label class="small">Quilometragem Atual</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                                        <input type="text" autocomplete="off" name="quilometragemFinal" class="form-control number" placeholder="Quilometragem Atual" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                                    <label class="small">Quilometragem Percorrida</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                                        <input type="text" autocomplete="off" name="quilometragemPercorrida" class="form-control number" readonly/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -126,9 +119,10 @@
                                                         <th>Placa</th>
                                                         <th>Tipo</th>
                                                         <th>Data</th>
+                                                        <th>Km</th>
                                                         <th>Quantidade</th>
                                                         <th>Valor Unitário</th>
-                                                        <th>Média</th>
+                                                        <th>Valor Total</th>
                                                         <th class="no-sort" width="100">Alterar</th>
                                                         <th class="no-sort" width="100">Excluir</th>
                                                     </tr>

@@ -21,8 +21,7 @@ public class VeiculoCombustivelBuilder extends Builder<VeiculoCombustivel, Veicu
             veiculo.setQuilometragemInicial(getNumericParameter(request.getParameter("quilometragemInicial")));
             veiculo.setQuilometragemFinal(getNumericParameter(request.getParameter("quilometragemFinal")));
             veiculo.setQuilometragemPercorrida(getNumericParameter(request.getParameter("quilometragemPercorrida")));
-            veiculo.setValorUnitario(getDoubleParameter(request.getParameter("valorUnitario")));        
-            veiculo.setMedia(getNumericParameter(request.getParameter("media")));       
+            veiculo.setValorUnitario(getDoubleParameter(request.getParameter("valorUnitario")));  
             return veiculo;     
         } catch (Exception ex) {
             Logger.getLogger(VeiculoCombustivelBuilder.class.getName()).log(Level.SEVERE, null, ex);
@@ -39,7 +38,6 @@ public class VeiculoCombustivelBuilder extends Builder<VeiculoCombustivel, Veicu
                 result.getInt("veiculo_combustivel.quantidade"),
                 result.getDouble("veiculo_combustivel.valorUnitario"),
                 result.getDate("veiculo_combustivel.data"),
-                result.getInt("veiculo_combustivel.media"),
                 result.getDouble("veiculo_combustivel.valorTotal"),
                 result.getInt("veiculo_combustivel.quilometragemInicial"),
                 result.getInt("veiculo_combustivel.quilometragemFinal"),
@@ -61,7 +59,6 @@ public class VeiculoCombustivelBuilder extends Builder<VeiculoCombustivel, Veicu
                 veiculo.getQuantidade(),
                 veiculo.getValorUnitario(),
                 getDataDTO(veiculo.getData()),
-                veiculo.getMedia(),
                 veiculo.getValorTotal(),
                 veiculo.getQuilometragemInicial(),
                 veiculo.getQuilometragemFinal(),

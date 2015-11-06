@@ -55,9 +55,9 @@ public class ContrVeiculoCombustivel {
 
     public static VeiculoCombustivel inserir(String nomeBD, VeiculoCombustivel veiculoCombustivel) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "INSERT INTO veiculo_combustivel (idVeiculo, tipo, quantidade, valorUnitario, data, media, valorTotal, "
+        String sql = "INSERT INTO veiculo_combustivel (idVeiculo, tipo, quantidade, valorUnitario, data, valorTotal, "
                    + "quilometragemInicial, quilometragemFinal, quilometragemPercorrida) "
-                   + "VALUES(?,?,?,?,?,?,?,?,?,?) ";
+                   + "VALUES(?,?,?,?,?,?,?,?,?) ";
         try {
             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, veiculoCombustivel.getVeiculo().getId());
@@ -65,11 +65,10 @@ public class ContrVeiculoCombustivel {
             ps.setInt(3, veiculoCombustivel.getQuantidade());
             ps.setDouble(4, veiculoCombustivel.getValorUnitario());
             ps.setDate(5, new java.sql.Date(veiculoCombustivel.getData().getTime()));
-            ps.setInt(6, veiculoCombustivel.getMedia());
-            ps.setDouble(7, veiculoCombustivel.getValorTotal());
-            ps.setInt(8, veiculoCombustivel.getQuilometragemInicial());
-            ps.setInt(9, veiculoCombustivel.getQuilometragemFinal());
-            ps.setInt(10, veiculoCombustivel.getQuilometragemPercorrida());
+            ps.setDouble(6, veiculoCombustivel.getValorTotal());
+            ps.setInt(7, veiculoCombustivel.getQuilometragemInicial());
+            ps.setInt(8, veiculoCombustivel.getQuilometragemFinal());
+            ps.setInt(9, veiculoCombustivel.getQuilometragemPercorrida());
             ps.executeUpdate();
             veiculoCombustivel.setId(getLastId(ps));
             ps.close();
@@ -84,7 +83,7 @@ public class ContrVeiculoCombustivel {
     public static VeiculoCombustivel alterar(String nomeBD, VeiculoCombustivel veiculoCombustivel) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "UPDATE veiculo_combustivel "
-                   + "SET tipo = ?, quantidade = ?, valorUnitario = ?, data = ?, media = ?, valorTotal = ?, quilometragemInicial = ?, "
+                   + "SET tipo = ?, quantidade = ?, valorUnitario = ?, data = ?, valorTotal = ?, quilometragemInicial = ?, "
                    + "quilometragemFinal = ?, quilometragemPercorrida = ? "
                    + "WHERE idVeiculoCombustivel = ? ";
         try {
@@ -93,12 +92,11 @@ public class ContrVeiculoCombustivel {
             ps.setInt(2, veiculoCombustivel.getQuantidade());
             ps.setDouble(3, veiculoCombustivel.getValorUnitario());
             ps.setDate(4, new java.sql.Date(veiculoCombustivel.getData().getTime()));
-            ps.setInt(5, veiculoCombustivel.getMedia());
-            ps.setDouble(6, veiculoCombustivel.getValorTotal());
-            ps.setInt(7, veiculoCombustivel.getQuilometragemInicial());
-            ps.setInt(8, veiculoCombustivel.getQuilometragemFinal());
-            ps.setInt(9, veiculoCombustivel.getQuilometragemPercorrida());
-            ps.setInt(10, veiculoCombustivel.getId());
+            ps.setDouble(5, veiculoCombustivel.getValorTotal());
+            ps.setInt(6, veiculoCombustivel.getQuilometragemInicial());
+            ps.setInt(7, veiculoCombustivel.getQuilometragemFinal());
+            ps.setInt(8, veiculoCombustivel.getQuilometragemPercorrida());
+            ps.setInt(9, veiculoCombustivel.getId());
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {

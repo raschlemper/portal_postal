@@ -21,7 +21,7 @@ var VeiculoCombustivelController = function(form) {
 
     var addEventos = function() { 
         addVeiculoEventListener();
-        addQuilometragemInicialEventListener();
+        addValorUnitarioEventListener();
         addQuilometragemFinalEventListener();
         addQuantidadeEventListener();
         addValorTotalEventListener(),
@@ -44,9 +44,10 @@ var VeiculoCombustivelController = function(form) {
                       '<td class="placa">{{placa}}</td>' +
                       '<td>{{tipo}}</td>' +
                       '<td class="date">{{data}}</td>' +
+                      '<td class="number">{{quilometragemPercorrida}}</td>' +
                       '<td class="number">{{quantidade}}</td>' +
                       '<td class="numeric">{{valorUnitario}}</td>' +
-                      '<td class="number">{{media}}</td>' +
+                      '<td class="numeric">{{valorTotal}}</td>' +
                       '<td align="center">' +
                             '<button class="btn btn-sm btn-warning" onclick="veiculoCombustivelCtrl.acoes.editar({{id}})">' +
                                 '<i class="fa fa-lg fa-pencil"></i>' +
@@ -169,7 +170,6 @@ var VeiculoCombustivelController = function(form) {
         form.quantidade.value = VeiculoFormatador.toNumberBr(combustivel.quantidade);
         form.valorUnitario.value = VeiculoFormatador.toNumericBr(combustivel.valorUnitario);
         form.valorTotal.value = VeiculoFormatador.toNumericBr(combustivel.valorTotal);
-        form.media.value = VeiculoFormatador.toNumberBr(combustivel.media);
     }
 
     var setVeiculos = function(combustivel) {
@@ -233,6 +233,17 @@ var VeiculoCombustivelController = function(form) {
         }
     }
     
+    var setValorTotal = function(form) {
+        if(form.quantidade.value && form.valorUnitario.value) {
+            var quantidade = VeiculoFormatador.toNumberUs(form.quantidade.value);
+            var valorUnitario = VeiculoFormatador.toNumericUs(form.valorUnitario.value);
+            var valor = valorUnitario * quantidade; 
+            form.valorTotal.value = VeiculoFormatador.toNumericBr(valor.toFixed(2)); 
+        } else { 
+            if(form.valorTotal.value) { setValorUnitario(form); }
+        }
+    }
+    
     var setValorUnitario = function(form) {
         if(form.quantidade.value && form.valorTotal.value) {
             var quantidade = VeiculoFormatador.toNumberUs(form.quantidade.value);
@@ -240,21 +251,10 @@ var VeiculoCombustivelController = function(form) {
             var valor = valorTotal / quantidade; 
             form.valorUnitario.value = VeiculoFormatador.toNumericBr(valor.toFixed(2)); 
         } else {
-            form.valorUnitario.value = null; 
+            if(form.valorUnitario.value) { setValorTotal(form); }
         }
     }
-    
-    var setMedia = function(form) {
-        if(form.quilometragemPercorrida.value && form.quantidade.value) {
-            var quilometragemPercorrida = VeiculoFormatador.toNumberUs(form.quilometragemPercorrida.value);
-            var quantidade = VeiculoFormatador.toNumberUs(form.quantidade.value);
-            var valor = quilometragemPercorrida / quantidade; 
-            form.media.value = VeiculoFormatador.toNumberBr(valor); 
-        }else {
-            form.media.value = null;  
-        }
-    }
-    
+        
     var setQuilometragemFinal = function(value) {
         form.quilometragemInicial.value = VeiculoFormatador.toNumberBr(value);
     }
@@ -267,9 +267,21 @@ var VeiculoCombustivelController = function(form) {
         });
     };
     
-    var addQuilometragemInicialEventListener = function() {   
-        form.quilometragemInicial.addEventListener('blur', function() {
-            setQuilometragemPercorrida(form);
+    var addQuantidadeEventListener = function() {   
+        form.quantidade.addEventListener('blur', function() {
+            setValorUnitario(form);
+        });
+    };
+    
+    var addValorTotalEventListener = function() {   
+        form.valorTotal.addEventListener('blur', function() {
+            setValorUnitario(form);
+        });
+    };
+    
+    var addValorUnitarioEventListener = function() {   
+        form.valorUnitario.addEventListener('blur', function() {
+            setValorTotal(form);
         });
     };
     
@@ -277,20 +289,6 @@ var VeiculoCombustivelController = function(form) {
         form.quilometragemFinal.addEventListener('blur', function() {
             validarCampoQuilometragemFinal(form);
             setQuilometragemPercorrida(form);
-            setMedia(form);
-        });
-    };
-    
-    var addQuantidadeEventListener = function() {   
-        form.quantidade.addEventListener('blur', function() {
-            setValorUnitario(form);
-            setMedia(form);
-        });
-    };
-    
-    var addValorTotalEventListener = function() {   
-        form.valorTotal.addEventListener('blur', function() {
-            setValorUnitario(form);
         });
     };
 
@@ -317,7 +315,7 @@ var VeiculoCombustivelController = function(form) {
         },
         eventos: {
             addVeiculoEventListener: addVeiculoEventListener,
-            addQuilometragemInicialEventListener: addQuilometragemInicialEventListener,
+            addQuilometragemInicialEventListener: addValorUnitarioEventListener,
             addQuilometragemFinalEventListener: addQuilometragemFinalEventListener,
             addQuantidadeEventListener: addQuantidadeEventListener,
             addValorTotalEventListener: addValorTotalEventListener,

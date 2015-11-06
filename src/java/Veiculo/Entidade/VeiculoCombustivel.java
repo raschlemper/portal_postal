@@ -10,7 +10,6 @@ public class VeiculoCombustivel {
     private Integer quantidade;
     private Double valorUnitario;
     private Date data; 
-    private Integer media;
     private Double valorTotal;
     private Integer quilometragemInicial;
     private Integer quilometragemFinal;
@@ -22,7 +21,7 @@ public class VeiculoCombustivel {
         this.id = id;
     }
 
-    public VeiculoCombustivel(Integer id, Veiculo veiculo, String tipo, Integer quantidade, Double valorUnitario, Date data, Integer media, Double valorTotal, 
+    public VeiculoCombustivel(Integer id, Veiculo veiculo, String tipo, Integer quantidade, Double valorUnitario, Date data, Double valorTotal, 
             Integer quilometragemInicial, Integer quilometragemFinal, Integer quilometragemPercorrida) {
         this.id = id;
         this.veiculo = veiculo;
@@ -30,7 +29,6 @@ public class VeiculoCombustivel {
         this.quantidade = quantidade;
         this.valorUnitario = valorUnitario;
         this.data = data;
-        this.media = media;
         this.valorTotal = valorTotal;
         this.quilometragemInicial = quilometragemInicial;
         this.quilometragemFinal = quilometragemFinal;
@@ -83,14 +81,6 @@ public class VeiculoCombustivel {
 
     public void setData(Date data) {
         this.data = data;
-    }
-
-    public Integer getMedia() {
-        return media;
-    }
-
-    public void setMedia(Integer media) {
-        this.media = media;
     }
 
     public Double getValorTotal() {
