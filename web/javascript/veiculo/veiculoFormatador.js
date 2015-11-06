@@ -8,12 +8,12 @@ var VeiculoFormatador = function() {
     
     app.toNumberBr = function(value) {
         numeral.language("pt-br");
-        //value = numeral().unformat(value);
         return numeral(value).format('0,0');
     };
     
     app.toNumericUs = function(value) {
-        value = numeral(value).format('0,0.00');
+        value = numeral().unformat(value);
+        //value = numeral(value).format('0,0.00');
         return Number(value);
     };
     

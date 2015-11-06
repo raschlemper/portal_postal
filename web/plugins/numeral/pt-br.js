@@ -28,7 +28,7 @@
         module.exports = language;
     }
     // Browser
-    if (typeof window !== 'undefined' && this.numeral && this.numeral.language) {
-        //numeral.language('pt-br', language);
+    if (typeof window !== 'undefined' && numeral && numeral.language) {
+        numeral.language('pt-br', language);
     }
 }());

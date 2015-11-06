@@ -1,5 +1,7 @@
 package Veiculo.Entidade;
 
+import java.text.DecimalFormat;
+
 public class VeiculoCombustivelDTO {    
     
     private Integer id;
@@ -13,6 +15,9 @@ public class VeiculoCombustivelDTO {
     private Integer quilometragemInicial;
     private Integer quilometragemFinal;
     private Integer quilometragemPercorrida;
+    
+    private DecimalFormat decimalFormat = new DecimalFormat("#.##");
+
 
     public VeiculoCombustivelDTO() { }
 
@@ -87,8 +92,8 @@ public class VeiculoCombustivelDTO {
         this.data = data;
     }
 
-    public Double getValorTotal() {
-        return valorTotal;
+    public String getValorTotal() {
+        return decimalFormat.format(valorTotal);
     }
 
     public void setValorTotal(Double valorTotal) {
