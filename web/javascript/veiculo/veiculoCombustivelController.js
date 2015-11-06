@@ -46,8 +46,8 @@ var VeiculoCombustivelController = function(form) {
                       '<td class="date">{{data}}</td>' +
                       '<td class="number">{{quilometragemPercorrida}}</td>' +
                       '<td class="number">{{quantidade}}</td>' +
-                      '<td class="numeric">{{valorUnitario}}</td>' +
-                      '<td class="numeric">{{valorTotal}}</td>' +
+                      '<td class="numeric">{{valorUnitarioFormat}}</td>' +
+                      '<td class="numeric">{{valorTotalFormat}}</td>' +
                       '<td align="center">' +
                             '<button class="btn btn-sm btn-warning" onclick="veiculoCombustivelCtrl.acoes.editar({{id}})">' +
                                 '<i class="fa fa-lg fa-pencil"></i>' +
@@ -173,9 +173,21 @@ var VeiculoCombustivelController = function(form) {
     }
 
     var setVeiculos = function(combustivel) {
+        if(combustivel) { setVeiculo(combustivel); }
+        else { setVeiculosTodos(combustivel); }
+    };
+
+    var setVeiculosTodos = function(combustivel) {
         VeiculoService.pesquisarTodosVeiculos()
         .done(function(data) {
             addVeiculos(data, combustivel);
+        });
+    };
+
+    var setVeiculo = function(combustivel) {
+        VeiculoService.pesquisarVeiculo(combustivel.idVeiculo)
+        .done(function(data) {
+            addVeiculo(data, combustivel);
         });
     };
     
@@ -186,16 +198,14 @@ var VeiculoCombustivelController = function(form) {
 
     var addVeiculos = function(veiculos, combustivel) {
         var select = form.veiculo;
-        removeOptions(select);
-        _.map(veiculos, function(veiculo) {
-            var option = document.createElement("option");
-            option.text = veiculo.marca + ' / ' + veiculo.modelo + ' (' + veiculo.placa + ')';
-            option.value = veiculo.id;
-            select.add(option);
-        });
-        var selected = getVeiculoSelected(combustivel);
-        select.value = selected;
-        pesquisarUltimo(form.veiculo.value);
+        VeiculoDropdown.veiculos(select, veiculos);
+        select.value = getVeiculoSelected(combustivel);
+        pesquisarUltimo(select.value);
+    };
+
+    var addVeiculo = function(veiculo) {
+        var select = form.veiculo;
+        VeiculoDropdown.veiculo(select, veiculo);
     };
     
     var setTipoCombustivel = function(combustivel) {
@@ -205,19 +215,9 @@ var VeiculoCombustivelController = function(form) {
 
     var addTipos = function(value) {
         var select = form.tipo;
-        removeOptions(select);
-        _.map(VeiculoConstantes.tiposCombustivel, function(tipo) {
-            var option = document.createElement("option");
-            option.text = tipo.value;
-            option.value = tipo.key;
-            select.add(option);
-        });
+        VeiculoDropdown.tiposCombustivel(select, VeiculoConstantes.tiposCombustivel);
         select.value = value;
     }; 
-    
-    var removeOptions = function(select) {
-        while(select.options.length > 0) { select.remove(select.options.length - 1); }        
-    };
     
     var setQuilometragemPercorrida = function(form) {
         if(form.quilometragemInicial.value && form.quilometragemFinal.value) {

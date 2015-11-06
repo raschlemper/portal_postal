@@ -16,8 +16,7 @@ public class VeiculoCombustivelDTO {
     private Integer quilometragemFinal;
     private Integer quilometragemPercorrida;
     
-    private DecimalFormat decimalFormat = new DecimalFormat("#.##");
-
+    private DecimalFormat decimalFormat = new DecimalFormat("####0.00");
 
     public VeiculoCombustivelDTO() { }
 
@@ -80,6 +79,10 @@ public class VeiculoCombustivelDTO {
         return valorUnitario;
     }
 
+    public String getValorUnitarioFormat() {
+        return decimalFormat.format(valorUnitario);
+    }
+
     public void setValorUnitario(Double valorUnitario) {
         this.valorUnitario = valorUnitario;
     }
@@ -92,7 +95,11 @@ public class VeiculoCombustivelDTO {
         this.data = data;
     }
 
-    public String getValorTotal() {
+    public Double getValorTotal() {
+        return valorTotal;
+    }
+
+    public String getValorTotalFormat() {
         return decimalFormat.format(valorTotal);
     }
 

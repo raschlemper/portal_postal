@@ -73,6 +73,7 @@
 <script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoMascara.js"></script>
 <script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoValidacao.js"></script>
 <script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoFormatador.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoDropdown.js"></script>
 <script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoController.js"></script>
 <script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoManutencaoController.js"></script>
 <script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoCombustivelController.js"></script>
