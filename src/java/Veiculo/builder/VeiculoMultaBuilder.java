@@ -14,7 +14,7 @@ public class VeiculoMultaBuilder extends Builder<VeiculoMulta, VeiculoMultaDTO>{
             VeiculoMulta veiculo = new VeiculoMulta();
             veiculo.setId(getIntegerParameter(request.getParameter("idVeiculoMulta")));
             veiculo.setVeiculo(getVeiculo(request));
-            veiculo.setNumeroMulta(getIntegerParameter(request.getParameter("numeroMulta")));      
+            veiculo.setNumeroMulta(getNumericParameter(request.getParameter("numeroMulta")));      
             veiculo.setData(getDataParameter(request.getParameter("data")));      
             veiculo.setValor(getDoubleParameter(request.getParameter("valor")));
             veiculo.setLocal(request.getParameter("local"));
@@ -29,13 +29,13 @@ public class VeiculoMultaBuilder extends Builder<VeiculoMulta, VeiculoMultaDTO>{
     public VeiculoMulta toEntidade(ResultSet result) {
         try {
             return new VeiculoMulta(
-                result.getInt("veiculo_manutencao.idVeiculoMulta"),
+                result.getInt("veiculo_multa.idVeiculoMulta"),
                 getVeiculo(result),
-                result.getInt("veiculo_manutencao.numeroMulta"),  
-                result.getDate("veiculo_manutencao.data"),
-                result.getDouble("veiculo_manutencao.valor"),
-                result.getString("veiculo_manutencao.local"),
-                result.getString("veiculo_manutencao.descricao")
+                result.getInt("veiculo_multa.numeroMulta"),  
+                result.getDate("veiculo_multa.data"),
+                result.getDouble("veiculo_multa.valor"),
+                result.getString("veiculo_multa.local"),
+                result.getString("veiculo_multa.descricao")
             );
         } catch (Exception ex) {
             Logger.getLogger(VeiculoMultaBuilder.class.getName()).log(Level.SEVERE, null, ex);
@@ -50,7 +50,7 @@ public class VeiculoMultaBuilder extends Builder<VeiculoMulta, VeiculoMultaDTO>{
                 veiculo.getVeiculo().getId(),
                 veiculo.getVeiculo().getPlaca(),
                 veiculo.getNumeroMulta(),
-                veiculo.getData(),
+                getDataDTO(veiculo.getData()),
                 veiculo.getValor(),
                 veiculo.getLocal(),
                 veiculo.getDescricao()

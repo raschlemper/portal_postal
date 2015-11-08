@@ -88,6 +88,7 @@ public class ContrVeiculoMulta {
             ps.setString(4, veiculoMulta.getLocal());
             ps.setString(5, veiculoMulta.getDescricao());
             ps.setInt(6, veiculoMulta.getId());
+            ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
             ContrErroLog.inserir("HOITO - contrVeiculoMulta", "SQLException", sql, e.toString());

@@ -1,11 +1,21 @@
 var VeiculoManutencaoController = function(form) {
                
-    var init = function(veiculo) { 
+    var init = function(idVeiculo) {  
         Configuracao.loadingModal();
-        addListas(veiculo);   
-        setValueForm(veiculo);   
-        addMascaras();
-        addEventos(veiculo);
+        if(idVeiculo) { pesquisar(idVeiculo); }
+        else {
+            addListas();   
+            setValueForm();   
+            addMascaras();
+            addEventos();
+        }
+    }
+               
+    var initEdit = function(manutencao) { 
+        addListas(manutencao);   
+        addMascaras(manutencao);
+        addEventos(manutencao);
+        setValueForm(manutencao);   
     }
     
     var addListas = function(manutencao) {  
@@ -13,13 +23,13 @@ var VeiculoManutencaoController = function(form) {
         setTipoManutencao(manutencao);
     }
 
-    var addMascaras = function() {
+    var addMascaras = function(manutencao) {
         VeiculoMascara.addMascaraNumber();
         VeiculoMascara.addMascaraNumeric();
         VeiculoMascara.addMascaraDate();
     }
 
-    var addEventos = function() { 
+    var addEventos = function(manutencao) { 
         addSalvarEventListener();
     };          
     
@@ -27,7 +37,7 @@ var VeiculoManutencaoController = function(form) {
     // acoes /////////     
 
     var pesquisarTodos = function() {
-        VeiculoService.pesquisarTodosVeiculosManutencao()
+        VeiculoManutencaoService.pesquisarTodosVeiculosManutencao()
         .done(function(data) {
             addManutencoes(data);
         });
@@ -60,14 +70,14 @@ var VeiculoManutencaoController = function(form) {
     };    
 
     var pesquisar = function(idVeiculoManutencao) {
-        VeiculoService.pesquisarVeiculoManutencao(idVeiculoManutencao)
+        VeiculoManutencaoService.pesquisarVeiculoManutencao(idVeiculoManutencao)
         .done(function(data) {
-            init(data);
+            initEdit(data);
         });
     }; 
 
     var editar = function(idVeiculoManutencao) {
-        VeiculoService.editarVeiculoManutencao(idVeiculoManutencao)
+        VeiculoManutencaoService.editarVeiculoManutencao(idVeiculoManutencao)
         .done(function(retorno) {
             editarModal(retorno);
         });
@@ -110,48 +120,31 @@ var VeiculoManutencaoController = function(form) {
     }; 
     
     var validarCampoQuilometragem = function(form) {
-        if(form.quilometragem.value) return true;
-        alert('Preencha a quilometragem do veículo!');
-        return false;
+        var msg = 'Preencha a quilometragem do veículo!';
+        return VeiculoValidacao.campoNotNull(form.quilometragem.value, msg);
     }; 
     
     var validarCampoValor = function(form) {
-        if(form.valor.value) return true;
-        alert('Preencha o valor da manutenção!');
-        return false;
+        var msg = 'Preencha o valor da manutenção!';
+        return VeiculoValidacao.campoNotNull(form.valor.value, msg);
     }; 
     
     var validarCampoData = function(form) {
-        if(form.data.value) {
-            var data = toDate(form.data.value);
-            if(!isNaN(data.getDate())) return true;
-            alert('A data da manutenção não é válida!');
-            return false; 
-        }
-        alert('Preencha a data da manutenção!');
-        return false;
-    };  
+        var msg = 'Preencha a data da manutenção!';
+        var msgValida = 'A data da manutenção não é válida!';
+        if(!VeiculoValidacao.campoNotNull(form.data.value, msg)) { return false; };
+        return VeiculoValidacao.campoData(form.data.value, msgValida);
+    }; 
     
     var validarCampoDataAgendamento = function(form) {
-        if(!form.dataAgendamento.value) return true;
-        var data = toDate(form.dataAgendamento.value);
-        if(!isNaN(data.getDate())) return true;
-        alert('A data de agndamento da manutenção não é válida!');
-        return false; 
+        var msg = 'A data de agendamento da manutenção não é válida!';
+        return VeiculoValidacao.campoData(form.dataAgendamento.value, msg);
     };   
     
     var validarCampoDataEntrega = function(form) {
-        if(!form.dataEntrega.value) return true;
-        var data = toDate(form.dataEntrega.value);
-        if(!isNaN(data.getDate())) return true;
-        alert('A data de entrega da manutenção não é válida!');
-        return false; 
+        var msg = 'A data de entrega da manutenção não é válida!';
+        return VeiculoValidacao.campoData(form.dataEntrega.value, msg);
     };  
-       
-    var toDate = function(data) {
-        var pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
-        return new Date(data.replace(pattern,'$3-$2-$1'));
-    }
     
     
     // funcoes ///////// 
@@ -160,10 +153,8 @@ var VeiculoManutencaoController = function(form) {
         if(!manutencao) return;
         form.veiculo.value = manutencao.idVeiculo;
         form.tipo.value = manutencao.tipo;
-        var km = manutencao.quilometragem.toString().replace(/(.)(?=(\d{3})+$)/g,'$1.');
-        form.quilometragem.value = km;
-        var valor = manutencao.valor.toString().replace(/(.)(?=(\d{3})+$)/g,'$1.');
-        form.valor.value = valor;
+        form.quilometragem.value = VeiculoFormatador.toNumberBr(manutencao.quilometragem);
+        form.valor.value = VeiculoFormatador.toNumericBr(manutencao.valor);
         form.data.value = manutencao.data;
         form.dataAgendamento.value = manutencao.dataAgendamento;
         form.dataEntrega.value = manutencao.dataEntrega;
@@ -171,9 +162,21 @@ var VeiculoManutencaoController = function(form) {
     }
 
     var setVeiculos = function(manutencao) {
+        if(manutencao) { setVeiculo(manutencao); }
+        else { setVeiculosTodos(manutencao); }
+    };
+
+    var setVeiculosTodos = function(manutencao) {
         VeiculoService.pesquisarTodosVeiculos()
         .done(function(data) {
             addVeiculos(data, manutencao);
+        });
+    };
+
+    var setVeiculo = function(manutencao) {
+        VeiculoService.pesquisarVeiculo(manutencao.idVeiculo)
+        .done(function(data) {
+            addVeiculo(data, manutencao);
         });
     };
     
@@ -184,37 +187,25 @@ var VeiculoManutencaoController = function(form) {
 
     var addVeiculos = function(veiculos, manutencao) {
         var select = form.veiculo;
-        removeOptions(select);
-        _.map(veiculos, function(veiculo) {
-            var option = document.createElement("option");
-            option.text = veiculo.marca + ' / ' + veiculo.modelo + ' (' + veiculo.placa + ')';
-            option.value = veiculo.id;
-            select.add(option);
-        });
-        var selected = getVeiculoSelected(manutencao);
-        select.value = selected;
+        VeiculoDropdown.veiculos(select, veiculos);
+        select.value = getVeiculoSelected(manutencao);
+    };
+
+    var addVeiculo = function(veiculo) {
+        var select = form.veiculo;
+        VeiculoDropdown.veiculo(select, veiculo);
     };
     
     var setTipoManutencao = function(manutencao) {
         if(manutencao) addTipos(manutencao.tipo, manutencao);                            
-        else addTipos(VeiculoConstantes.tiposManutencao[0].key, manutencao);                            
+        else addTipos(VeiculoConstantes.manutencao[0].key, manutencao);                            
     };
 
     var addTipos = function(value) {
         var select = form.tipo;
-        removeOptions(select);
-        _.map(VeiculoConstantes.tiposManutencao, function(tipo) {
-            var option = document.createElement("option");
-            option.text = tipo.value;
-            option.value = tipo.key;
-            select.add(option);
-        });
+        VeiculoDropdown.tiposManutencao(select);
         select.value = value;
     }; 
-    
-    var removeOptions = function(select) {
-        while(select.options.length > 0) { select.remove(select.options.length - 1); }        
-    };
     
     
     // eventos /////////
@@ -226,9 +217,8 @@ var VeiculoManutencaoController = function(form) {
         });
     };   
     
-    init();
-    
     return { 
+        init: init, 
         acoes: {
             pesquisarTodos: pesquisarTodos,
             pesquisar: pesquisar,

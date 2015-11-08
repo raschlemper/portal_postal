@@ -38,14 +38,14 @@
                                                     <label class="small">Veículo</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-car"></i></span>
-                                                        <select class="form-control marca" name="veiculo"></select>
+                                                        <select class="form-control" name="veiculo"></select>
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                                                     <label class="small">Tipo</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <select class="form-control tipo" name="tipo"></select>
+                                                        <select class="form-control" name="tipo"></select>
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -58,7 +58,7 @@
                                                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                                     <label class="small">Valor</label>
                                                     <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                                        <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
                                                         <input type="text" autocomplete="off" name="valor" class="form-control numeric" placeholder="Valor"/>                                    
                                                     </div>
                                                 </div>
@@ -130,6 +130,7 @@
         </div>
         <script type="text/javascript">             
             var veiculoManutencaoCtrl = new VeiculoManutencaoController(veiculoManutencaoForm); 
+            veiculoManutencaoCtrl.init();
             veiculoManutencaoCtrl.acoes.pesquisarTodos();
             Configuracao.messageModal();
         </script>

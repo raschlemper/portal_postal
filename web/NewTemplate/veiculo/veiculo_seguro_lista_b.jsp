@@ -21,16 +21,16 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <h4 class="page-header">
-                                    <b class="text-primary"><i class="fa fa-gears"></i> Veículos</b> > <small>Combustível</small>
+                                    <b class="text-primary"><i class="fa fa-gears"></i> Veículos</b> > <small>Seguro</small>
                                 </h4>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
-                                <form name="veiculoCombustivelForm" action="${pageContext.request.contextPath}/veiculo/combustivel?action=save" method="post">
+                                <form name="veiculoSeguroForm" action="${pageContext.request.contextPath}/veiculo/seguro?action=save" method="post">
                                     <ul class="list-unstyled">
                                         <li class="list-group-item list-group-heading">
-                                            <label>Inserir combustível veículo</label>
+                                            <label>Inserir seguro veículo</label>
                                         </li>
                                         <li class="list-group-item" id="campos">
                                             <div class="row form-horizontal">
@@ -42,59 +42,31 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Tipo</label>
+                                                    <label class="small">Número</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <select class="form-control" name="tipo"></select>
+                                                        <input type="text" autocomplete="off" name="numeroSeguro" class="form-control number-full" placeholder="Número do seguro"/>                                    
                                                     </div>
                                                 </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                                                    <label class="small">Data</label>
-                                                    <div class="input-group">
-                                                        <input class="form-control date" type="text" name="data" placeholder="Data" />
-                                                        <span class="input-group-addon" ><i class="fa fa-calendar"></i></span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                                                    <label class="small">Quantidade</label>
+                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                                    <label class="small">Assegurado</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="quantidade" class="form-control number" placeholder="Quantidade"/>                                    
+                                                        <input class="form-control" type="text" name="assegurado" placeholder="Assegurado" />
                                                     </div>
                                                 </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                                                    <label class="small">Valor Total</label>
+                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                                    <label class="small">Valor Franquia</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
-                                                        <input type="text" autocomplete="off" name="valorTotal" class="form-control numeric" placeholder="Valor Total"/>                                    
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                                                    <label class="small">Valor Unitário</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
-                                                        <input type="text" autocomplete="off" name="valorUnitario" class="form-control numeric" placeholder="Valor Unitário"/>                                    
+                                                        <input type="text" autocomplete="off" name="valorFranquia" class="form-control numeric" placeholder="Valor da franquia"/>                                    
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Quilometragem Anterior</label>
+                                                    <label class="small">Indenização</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="quilometragemInicial" class="form-control number" readonly/>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Quilometragem Atual</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="quilometragemFinal" class="form-control number" placeholder="Quilometragem Atual" />
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Quilometragem Percorrida</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="quilometragemPercorrida" class="form-control number" readonly/>
+                                                        <select class="form-control" name="indenizacao"></select>
                                                     </div>
                                                 </div>
                                             </div>
@@ -110,19 +82,17 @@
                                 </form>     
                                 
                                 <div class="panel panel-default">
-                                    <div class="panel-heading" >Lista com todos os abastecimentos</div>
+                                    <div class="panel-heading" >Lista com todos os seguros</div>
                                     <div class="panel-body no-padding">
                                         <div class="dataTable_wrapper no-padding">
-                                            <table class="table table-striped table-bordered table-hover table-condensed" id="datatable-combustiveis">
+                                            <table class="table table-striped table-bordered table-hover table-condensed" id="datatable-seguros">
                                                 <thead>
                                                     <tr>
-                                                        <th>Placa</th>
-                                                        <th>Tipo</th>
-                                                        <th>Data</th>
-                                                        <th>Km</th>
-                                                        <th>Quantidade</th>
-                                                        <th>Valor Unitário</th>
-                                                        <th>Valor Total</th>
+                                                        <th>Veículo</th>
+                                                        <th>Número</th>
+                                                        <th>Assegurado</th>
+                                                        <th>Valor Franquia</th>
+                                                        <th>Indenizacao</th>
                                                         <th class="no-sort" width="100">Alterar</th>
                                                         <th class="no-sort" width="100">Excluir</th>
                                                     </tr>
@@ -140,9 +110,9 @@
             </div>
         </div>
         <script type="text/javascript">             
-            var veiculoCombustivelCtrl = new VeiculoCombustivelController(veiculoCombustivelForm); 
-            veiculoCombustivelCtrl.init();
-            veiculoCombustivelCtrl.acoes.pesquisarTodos();
+            var veiculoSeguroCtrl = new VeiculoSeguroController(veiculoSeguroForm); 
+            veiculoSeguroCtrl.init();
+            veiculoSeguroCtrl.acoes.pesquisarTodos();
             Configuracao.messageModal();
         </script>
     </body>

@@ -74,10 +74,18 @@
 <script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoValidacao.js"></script>
 <script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoFormatador.js"></script>
 <script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoDropdown.js"></script>
-<script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoController.js"></script>
-<script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoManutencaoController.js"></script>
-<script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoCombustivelController.js"></script>
-<script type="text/javascript" language="javascript" src="../../javascript/veiculo/veiculoService.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/controller/veiculoController.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/controller/veiculoCombustivelController.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/controller/veiculoManutencaoController.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/controller/veiculoMultaController.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/controller/veiculoSeguroController.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/controller/veiculoSinistroController.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/service/veiculoService.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/service/veiculoCombustivelService.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/service/veiculoManutencaoService.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/service/veiculoMultaService.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/service/veiculoSeguroService.js"></script>
+<script type="text/javascript" language="javascript" src="../../javascript/veiculo/service/veiculoSinistroService.js"></script>
 
 
 <!-- Bootstrap Core JavaScript -->

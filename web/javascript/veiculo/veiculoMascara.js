@@ -20,6 +20,10 @@ var VeiculoMascara = function() {
         $(".renavam").mask('DDDDDDDDDD-D', {translation: {'D': {pattern: /[0-9]/}}, reverse: true});
     };
 
+    app.addMascaraNumberFull = function() {
+        $(".number-full").mask('DDD.DDD.DDD.DDD.DDD', {translation: {'D': {pattern: /[0-9]/}}, reverse: true});
+    };
+
     app.addMascaraNumber = function() {
         $(".number").mask('DDD.DDD', {translation: {'D': {pattern: /[0-9]/}}, reverse: true});
     };

@@ -1,11 +1,21 @@
 var VeiculoCombustivelController = function(form) {
-               
-    var init = function(veiculo) { 
+    
+    var init = function(idVeiculoCombustivel) {
         Configuracao.loadingModal();
-        addListas(veiculo);   
-        setValueForm(veiculo);   
-        addMascaras();
-        addEventos(veiculo);
+        if(idVeiculoCombustivel) { pesquisar(idVeiculoCombustivel); }
+        else { 
+            addListas();
+            addMascaras();
+            addEventos();
+            setValueForm();           
+        }   
+    }
+               
+    var initEdit = function(combustivel) { 
+        addListas(combustivel);   
+        addMascaras(combustivel);
+        addEventos(combustivel);
+        setValueForm(combustivel);   
     }
     
     var addListas = function(combustivel) {  
@@ -13,13 +23,13 @@ var VeiculoCombustivelController = function(form) {
         setTipoCombustivel(combustivel);
     }
 
-    var addMascaras = function() {
+    var addMascaras = function(combustivel) {
         VeiculoMascara.addMascaraNumber();
         VeiculoMascara.addMascaraNumeric();
         VeiculoMascara.addMascaraDate();
     }
 
-    var addEventos = function() { 
+    var addEventos = function(combustivel) { 
         addVeiculoEventListener();
         addValorUnitarioEventListener();
         addQuilometragemFinalEventListener();
@@ -32,7 +42,7 @@ var VeiculoCombustivelController = function(form) {
     // acoes /////////     
 
     var pesquisarTodos = function() {
-        VeiculoService.pesquisarTodosVeiculosCombustivel()
+        VeiculoCombustivelService.pesquisarTodosVeiculosCombustivel()
         .done(function(data) {
             addCombustiveis(data);
         });
@@ -66,29 +76,29 @@ var VeiculoCombustivelController = function(form) {
     };    
 
     var pesquisar = function(idVeiculoCombustivel) {
-        VeiculoService.pesquisarVeiculoCombustivel(idVeiculoCombustivel)
+        VeiculoCombustivelService.pesquisarVeiculoCombustivel(idVeiculoCombustivel)
         .done(function(data) {
-            init(data);
+            initEdit(data);
         });
     };   
 
     var pesquisarUltimo = function(idVeiculo) {
-        VeiculoService.pesquisarUltimoVeiculoCombustivel(idVeiculo)
+        VeiculoCombustivelService.pesquisarUltimoVeiculoCombustivel(idVeiculo)
         .done(function(data) {
             if(!data.quilometragemFinal) { pesquisarVeiculo(idVeiculo); } 
-            else { setQuilometragemFinal(data.quilometragemFinal); }
+            else { setQuilometragemInicial(data.quilometragemFinal); }
         });
     };   
 
     var pesquisarVeiculo = function(idVeiculo) {
         VeiculoService.pesquisarVeiculo(idVeiculo)
         .done(function(data) {
-            setQuilometragemFinal(data.quilometragem);
+            setQuilometragemInicial(data.quilometragem);
         });
     }; 
 
     var editar = function(idVeiculoCombustivel) {
-        VeiculoService.editarVeiculoCombustivel(idVeiculoCombustivel)
+        VeiculoCombustivelService.editarVeiculoCombustivel(idVeiculoCombustivel)
         .done(function(retorno) {
             editarModal(retorno);
         });
@@ -153,7 +163,7 @@ var VeiculoCombustivelController = function(form) {
         var msgMenor = 'A quilometragem não pode ser inferior ou igual a última quilometragem inserida ' +
                 'para este veículo (' + VeiculoFormatador.toNumberBr(form.quilometragemInicial.value) + ')!';
         if(!VeiculoValidacao.campoNotNull(form.quilometragemFinal.value, msg)) { return false; };
-        return VeiculoValidacao.campoMenorIgualQue(form.quilometragemFinal.value, form.quilometragemInicial.value, msgMenor);
+        return VeiculoValidacao.campoMoreEqualThen(form.quilometragemFinal.value, form.quilometragemInicial.value, msgMenor);
     }; 
     
     
@@ -200,7 +210,7 @@ var VeiculoCombustivelController = function(form) {
         var select = form.veiculo;
         VeiculoDropdown.veiculos(select, veiculos);
         select.value = getVeiculoSelected(combustivel);
-        pesquisarUltimo(select.value);
+        if(!combustivel) { pesquisarUltimo(select.value); }
     };
 
     var addVeiculo = function(veiculo) {
@@ -210,12 +220,12 @@ var VeiculoCombustivelController = function(form) {
     
     var setTipoCombustivel = function(combustivel) {
         if(combustivel) addTipos(combustivel.tipo, combustivel);                            
-        else addTipos(VeiculoConstantes.tiposCombustivel[0].key, combustivel);                            
+        else addTipos(VeiculoConstantes.combustivel[0].key, combustivel);                            
     };
 
     var addTipos = function(value) {
         var select = form.tipo;
-        VeiculoDropdown.tiposCombustivel(select, VeiculoConstantes.tiposCombustivel);
+        VeiculoDropdown.tiposCombustivel(select);
         select.value = value;
     }; 
     
@@ -255,7 +265,7 @@ var VeiculoCombustivelController = function(form) {
         }
     }
         
-    var setQuilometragemFinal = function(value) {
+    var setQuilometragemInicial = function(value) {
         form.quilometragemInicial.value = VeiculoFormatador.toNumberBr(value);
     }
     
@@ -297,11 +307,10 @@ var VeiculoCombustivelController = function(form) {
         form.salvar.addEventListener('click', function() {
             return salvar(form);
         });
-    };   
-    
-    init();
+    };  
     
     return { 
+        init: init,
         acoes: {
             pesquisarTodos: pesquisarTodos,
             pesquisar: pesquisar,

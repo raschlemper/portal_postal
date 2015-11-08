@@ -9,14 +9,14 @@ public class VeiculoSinistroDTO {
     private String placa;
     private String tipo;
     private Integer boletimOcorrencia;
-    private Date data;
+    private String data;
     private String local;
     private String responsavel;
     private String descricao;
     
     public VeiculoSinistroDTO() { }
 
-    public VeiculoSinistroDTO(Integer id, Integer idVeiculo, String placa, String tipo, Integer boletimOcorrencia, Date data, String local, String responsavel, 
+    public VeiculoSinistroDTO(Integer id, Integer idVeiculo, String placa, String tipo, Integer boletimOcorrencia, String data, String local, String responsavel, 
             String descricao) {
         this.id = id;
         this.idVeiculo = idVeiculo;
@@ -69,11 +69,11 @@ public class VeiculoSinistroDTO {
         this.boletimOcorrencia = boletimOcorrencia;
     }
 
-    public Date getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(String data) {
         this.data = data;
     }
 

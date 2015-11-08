@@ -86,6 +86,9 @@
                 <li><a href="${pageContext.request.contextPath}/veiculo">Cadastro</a></li>
                 <li><a href="${pageContext.request.contextPath}/veiculo/manutencao">Manutenção</a></li>
                 <li><a href="${pageContext.request.contextPath}/veiculo/combustivel">Combustível</a></li>
+                <li><a href="${pageContext.request.contextPath}/veiculo/multa">Multa</a></li>
+                <li><a href="${pageContext.request.contextPath}/veiculo/seguro">Seguro</a></li>
+                <li><a href="${pageContext.request.contextPath}/veiculo/sinistro">Sinistro</a></li>
             </ul>
         </li>
         <li>

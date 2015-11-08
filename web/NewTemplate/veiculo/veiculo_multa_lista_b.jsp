@@ -21,16 +21,16 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <h4 class="page-header">
-                                    <b class="text-primary"><i class="fa fa-gears"></i> Veículos</b> > <small>Combustível</small>
+                                    <b class="text-primary"><i class="fa fa-gears"></i> Veículos</b> > <small>Multa</small>
                                 </h4>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
-                                <form name="veiculoCombustivelForm" action="${pageContext.request.contextPath}/veiculo/combustivel?action=save" method="post">
+                                <form name="veiculoMultaForm" action="${pageContext.request.contextPath}/veiculo/multa?action=save" method="post">
                                     <ul class="list-unstyled">
                                         <li class="list-group-item list-group-heading">
-                                            <label>Inserir combustível veículo</label>
+                                            <label>Inserir multa veículo</label>
                                         </li>
                                         <li class="list-group-item" id="campos">
                                             <div class="row form-horizontal">
@@ -42,60 +42,36 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Tipo</label>
+                                                    <label class="small">Número</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <select class="form-control" name="tipo"></select>
+                                                        <input type="text" autocomplete="off" name="numeroMulta" class="form-control number-full" placeholder="Número da multa"/>                                    
                                                     </div>
                                                 </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                                    <label class="small">Valor</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
+                                                        <input type="text" autocomplete="off" name="valor" class="form-control numeric" placeholder="Valor da multa"/>                                    
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                                                     <label class="small">Data</label>
                                                     <div class="input-group">
-                                                        <input class="form-control date" type="text" name="data" placeholder="Data" />
+                                                        <input class="form-control date" type="text" name="data" placeholder="Data da multa" />
                                                         <span class="input-group-addon" ><i class="fa fa-calendar"></i></span>
                                                     </div>
                                                 </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                                                    <label class="small">Quantidade</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="quantidade" class="form-control number" placeholder="Quantidade"/>                                    
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                                                    <label class="small">Valor Total</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
-                                                        <input type="text" autocomplete="off" name="valorTotal" class="form-control numeric" placeholder="Valor Total"/>                                    
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                                                    <label class="small">Valor Unitário</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
-                                                        <input type="text" autocomplete="off" name="valorUnitario" class="form-control numeric" placeholder="Valor Unitário"/>                                    
-                                                    </div>
-                                                </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Quilometragem Anterior</label>
+                                                    <label class="small">Local</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="quilometragemInicial" class="form-control number" readonly/>
+                                                        <input class="form-control" type="text" name="local" placeholder="Local da multa (endereço)" />
                                                     </div>
                                                 </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Quilometragem Atual</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="quilometragemFinal" class="form-control number" placeholder="Quilometragem Atual" />
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Quilometragem Percorrida</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="quilometragemPercorrida" class="form-control number" readonly/>
-                                                    </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                    <label class="small">Descrição</label>
+                                                    <textarea class="form-control" rows="3" name="descricao" placeholder="Descrição da multa"></textarea>       
                                                 </div>
                                             </div>
                                         </li>
@@ -110,19 +86,17 @@
                                 </form>     
                                 
                                 <div class="panel panel-default">
-                                    <div class="panel-heading" >Lista com todos os abastecimentos</div>
+                                    <div class="panel-heading" >Lista com todas as multas</div>
                                     <div class="panel-body no-padding">
                                         <div class="dataTable_wrapper no-padding">
-                                            <table class="table table-striped table-bordered table-hover table-condensed" id="datatable-combustiveis">
+                                            <table class="table table-striped table-bordered table-hover table-condensed" id="datatable-multas">
                                                 <thead>
                                                     <tr>
-                                                        <th>Placa</th>
-                                                        <th>Tipo</th>
+                                                        <th>Veículo</th>
+                                                        <th>Número</th>
+                                                        <th>Valor</th>
                                                         <th>Data</th>
-                                                        <th>Km</th>
-                                                        <th>Quantidade</th>
-                                                        <th>Valor Unitário</th>
-                                                        <th>Valor Total</th>
+                                                        <th>Local</th>
                                                         <th class="no-sort" width="100">Alterar</th>
                                                         <th class="no-sort" width="100">Excluir</th>
                                                     </tr>
@@ -140,9 +114,9 @@
             </div>
         </div>
         <script type="text/javascript">             
-            var veiculoCombustivelCtrl = new VeiculoCombustivelController(veiculoCombustivelForm); 
-            veiculoCombustivelCtrl.init();
-            veiculoCombustivelCtrl.acoes.pesquisarTodos();
+            var veiculoMultaCtrl = new VeiculoMultaController(veiculoMultaForm); 
+            veiculoMultaCtrl.init();
+            veiculoMultaCtrl.acoes.pesquisarTodos();
             Configuracao.messageModal();
         </script>
     </body>

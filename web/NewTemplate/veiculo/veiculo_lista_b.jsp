@@ -38,21 +38,21 @@
                                                     <label class="small">Tipo</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-car"></i></span>
-                                                        <select class="form-control tipo" name="tipo"></select>
+                                                        <select class="form-control" name="tipo"></select>
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                                                     <label class="small">Marca</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-car"></i></span>
-                                                        <select class="form-control marca" name="marca"></select>
+                                                        <select class="form-control" name="marca"></select>
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                                                     <label class="small">Modelo</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-car"></i></span>
-                                                        <select class="form-control modelo" name="modelo"></select>
+                                                        <select class="form-control" name="modelo"></select>
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -101,21 +101,21 @@
                                                     <label class="small">Tipo Combustível</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                                        <select class="form-control combustivel" name="combustivel"></select>
+                                                        <select class="form-control" name="combustivel"></select>
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                                                     <label class="small">Estado Veículo</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                                        <select class="form-control status" name="status"></select>
+                                                        <select class="form-control" name="status"></select>
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                                                     <label class="small">Situação</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                                        <select class="form-control situacao" name="situacao"></select>
+                                                        <select class="form-control" name="situacao"></select>
                                                     </div>
                                                 </div>
                                             </div>
@@ -161,6 +161,7 @@
         </div>
         <script type="text/javascript">             
             var veiculoCtrl = new VeiculoController(veiculoForm); 
+            veiculoCtrl.init();
             veiculoCtrl.acoes.pesquisarTodos();
             Configuracao.messageModal();
         </script>

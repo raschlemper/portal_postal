@@ -8,14 +8,14 @@ public class VeiculoMultaDTO {
     private Integer idVeiculo;    
     private String placa;
     private Integer numeroMulta;
-    private Date data; 
+    private String data; 
     private Double valor;
     private String local;
     private String descricao;
 
     public VeiculoMultaDTO() { }
 
-    public VeiculoMultaDTO(Integer id, Integer idVeiculo, String placa, Integer numeroMulta, Date data, Double valor, String local, String descricao) {
+    public VeiculoMultaDTO(Integer id, Integer idVeiculo, String placa, Integer numeroMulta, String data, Double valor, String local, String descricao) {
         this.id = id;
         this.idVeiculo = idVeiculo;
         this.placa = placa;
@@ -58,11 +58,11 @@ public class VeiculoMultaDTO {
         this.numeroMulta = numeroMulta;
     }
 
-    public Date getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(String data) {
         this.data = data;
     }
 

@@ -1,11 +1,21 @@
 var VeiculoController = function(form) {
                
-    var init = function(veiculo) {  
+    var init = function(idVeiculo) {  
         Configuracao.loadingModal();
+        if(idVeiculo) { pesquisar(idVeiculo); }
+        else {
+            addListas();   
+            setValueForm();   
+            addMascaras();
+            addEventos();
+        }
+    }
+               
+    var initEdit = function(veiculo) { 
         addListas(veiculo);   
-        setValueForm(veiculo);   
-        addMascaras();
+        addMascaras(veiculo);
         addEventos(veiculo);
+        setValueForm(veiculo);   
     }
     
     var addListas = function(veiculo) {  
@@ -15,7 +25,7 @@ var VeiculoController = function(form) {
         setSituacao(veiculo);              
     }
 
-    var addMascaras = function() {
+    var addMascaras = function(veiculo) {
         VeiculoMascara.addMascaraPlaca();
         VeiculoMascara.addMascaraAno();
         VeiculoMascara.addMascaraChassis();
@@ -23,7 +33,7 @@ var VeiculoController = function(form) {
         VeiculoMascara.addMascaraNumber();
     }
 
-    var addEventos = function() { 
+    var addEventos = function(veiculo) { 
         addTipoEventListener();
         addMarcaEventListener();
         addSalvarEventListener();
@@ -44,7 +54,7 @@ var VeiculoController = function(form) {
         var html = '<tr>' + 
                       '<td>{{modelo}}</td>' +
                       '<td class="placa">{{placa}}</td>' +
-                      '<td>{{anoFabricacao}}/{{anoModelo}}</td>' +
+                      '<td>{{anoFabricacaoModelo}}</td>' +
                       '<td class="renavam">{{renavam}}</td>' +
                       '<td class="number">{{quilometragem}}</td>' +
                       '<td>{{situacao}}</td>' +
@@ -68,7 +78,7 @@ var VeiculoController = function(form) {
     var pesquisar = function(idVeiculo) {
         VeiculoService.pesquisarVeiculo(idVeiculo)
         .done(function(data) {
-            init(data);
+            initEdit(data);
         });
     }; 
 
@@ -116,37 +126,30 @@ var VeiculoController = function(form) {
     }; 
 
     var validarCampoPlaca = function(form) {
-        if(form.placa.value) return true;
-        alert('Preencha a placa do veículo!');
-        return false;
+        var msg = 'Preencha a placa do veículo!';
+        return VeiculoValidacao.campoNotNull(form.placa.value, msg);
     };  
 
     var validarCampoAnoFabricacao = function(form) {
-        if(!form.anoFabricacao.value) return true;
+        var msg = 'Preencha o ano de fabricação do veículo com valores entre 1970 e ' + anoCorrente + '!';
         var anoCorrente = (new Date).getFullYear() + 1;
-        if(form.anoFabricacao.value >= 1970 && form.anoFabricacao.value <= anoCorrente) return true;
-        alert('Preencha o ano de fabricação do veículo com valores entre 1970 e ' + anoCorrente + '!');
-        return false;
+        return VeiculoValidacao.campoBetween(form.anoFabricacao.value, 1970, anoCorrente, msg);
     };  
 
     var validarCampoAnoModelo = function(form) {
-        if(!form.anoModelo.value) return true;
+        var msg = 'Preencha o ano do modelo do veículo com valores entre 1970 e ' + anoCorrente + '!';
         var anoCorrente = (new Date).getFullYear() + 1;
-        if(form.anoModelo.value >= 1970 && form.anoModelo.value <= anoCorrente) return true;
-        alert('Preencha o ano do modelo do veículo com valores entre 1970 e ' + anoCorrente + '!');
-        return false;
+        return VeiculoValidacao.campoBetween(form.anoModelo.value, 1970, anoCorrente, msg);
     };
 
     var validarCampoRenavam = function(form) {
-        if(form.renavam.value) return true;
-        alert('Preencha o renavam do veículo!');
-        return false;
+        var msg = 'Preencha o renavam do veículo!';
+        return VeiculoValidacao.campoNotNull(form.renavam.value, msg);
     };  
     
     var validarCampoQuilometragem = function(form) {
-        if(form.quilometragem.value) return true;
-        alert('Preencha a quilometragem do veículo!');
-        return false;
+        var msg = 'Preencha a quilometragem do veículo!';
+        return VeiculoValidacao.campoNotNull(form.quilometragem.value, msg);
     }; 
     
     
@@ -155,28 +158,21 @@ var VeiculoController = function(form) {
     var setValueForm = function(veiculo) {  
         if(!veiculo) return;
         form.placa.value = veiculo.placa;
-        form.anoFabricacao.value = (veiculo.anoFabricacao > 0 ? veiculo.anoFabricacao : null);
-        form.anoModelo.value = (veiculo.anoModelo > 0 ? veiculo.anoModelo : null);
+        form.anoFabricacao.value = veiculo.anoFabricacaoFormat;
+        form.anoModelo.value = veiculo.anoModeloFormat;
         form.chassis.value = veiculo.chassis;
         form.renavam.value = veiculo.renavam;
-        var km = veiculo.quilometragem.toString().replace(/(.)(?=(\d{3})+$)/g,'$1.');
-        form.quilometragem.value = km;
+        form.quilometragem.value = VeiculoFormatador.toNumberBr(veiculo.quilometragem);
     }
 
     var setTipoVeiculo = function(veiculo) {
         if(veiculo) addTipos(veiculo.tipo, veiculo);                            
-        else addTipos(VeiculoConstantes.tipos[1].key, veiculo);                            
+        else addTipos(VeiculoConstantes.tipo[1].key, veiculo);                            
     };
 
     var addTipos = function(value, veiculo) {
         var select = form.tipo;
-        removeOptions(select);
-        _.map(VeiculoConstantes.tipos, function(tipo) {
-            var option = document.createElement("option");
-            option.text = tipo.value;
-            option.value = tipo.key;
-            select.add(option);
-        });
+        VeiculoDropdown.tiposVeiculo(select);
         select.value = value;
         setMarcaVeiculo(value, veiculo);
     };  
@@ -197,13 +193,7 @@ var VeiculoController = function(form) {
 
     var addMarcas = function(tipo, marcas, veiculo) {
         var select = form.marca;
-        removeOptions(select);
-        _.map(marcas, function(marca) {
-            var option = document.createElement("option");
-            option.text = marca.name;
-            option.value = JSON.stringify(marca);
-            select.add(option);
-        });
+        VeiculoDropdown.marcasVeiculo(select, marcas);
         var selected = getMarcaSelected(marcas, veiculo);
         select.value = JSON.stringify(selected);
         setModeloVeiculo(tipo, selected.id, veiculo);
@@ -225,13 +215,7 @@ var VeiculoController = function(form) {
 
     var addModelos = function(modelos, veiculo) {
         var select = form.modelo;
-        removeOptions(select);
-        _.map(modelos, function(modelo) {
-            var option = document.createElement("option");
-            option.text = modelo.name;
-            option.value = JSON.stringify(modelo);
-            select.add(option);
-        });
+        VeiculoDropdown.modelosVeiculo(select, modelos);
         var selected = getModeloSelected(modelos, veiculo);
         select.value = JSON.stringify(selected);
     };
@@ -242,13 +226,7 @@ var VeiculoController = function(form) {
 
     var addCombustiveis = function(veiculo) {
         var select = form.combustivel;
-        removeOptions(select);
-        _.map(VeiculoConstantes.combustiveis, function(combustivel) {
-            var option = document.createElement("option");
-            option.text = combustivel.value;
-            option.value = combustivel.key;
-            select.add(option);
-        });  
+        VeiculoDropdown.tiposCombustivel(select);
         if(veiculo) select.value = veiculo.combustivel;        
     };  
 
@@ -258,13 +236,7 @@ var VeiculoController = function(form) {
 
     var addStatus = function(veiculo) {
         var select = form.status;
-        removeOptions(select);
-        _.map(VeiculoConstantes.status, function(item) {
-            var option = document.createElement("option");
-            option.text = item.value;
-            option.value = item.key;
-            select.add(option);
-        }); 
+        VeiculoDropdown.tiposStatus(select);
         if(veiculo) select.value = veiculo.status;        
     };   
 
@@ -274,19 +246,9 @@ var VeiculoController = function(form) {
 
     var addSituacao = function(veiculo) {
         var select = form.situacao;
-        removeOptions(select);
-        _.map(VeiculoConstantes.situacao, function(item) {
-            var option = document.createElement("option");
-            option.text = item.value;
-            option.value = item.key;
-            select.add(option);
-        }); 
+        VeiculoDropdown.tiposSituacao(select);
         if(veiculo) select.value = veiculo.situacao;  
     };  
-    
-    var removeOptions = function(select) {
-        while(select.options.length > 0) { select.remove(select.options.length - 1); }        
-    }
 
 
     // eventos /////////
@@ -312,9 +274,8 @@ var VeiculoController = function(form) {
         });
     };   
     
-    init();
-    
-    return {    
+    return { 
+        init: init,   
         acoes: {
             pesquisarTodos: pesquisarTodos,
             pesquisar: pesquisar,

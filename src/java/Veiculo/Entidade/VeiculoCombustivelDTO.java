@@ -16,7 +16,7 @@ public class VeiculoCombustivelDTO {
     private Integer quilometragemFinal;
     private Integer quilometragemPercorrida;
     
-    private DecimalFormat decimalFormat = new DecimalFormat("####0.00");
+    private DecimalFormat decimalFormat = new DecimalFormat("#,###0.00");
 
     public VeiculoCombustivelDTO() { }
 

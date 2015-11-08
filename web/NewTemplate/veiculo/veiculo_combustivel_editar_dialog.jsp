@@ -26,7 +26,7 @@
                     <label class="small">Tipo</label>
                     <div class="input-group">
                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                        <select class="form-control tipo" name="tipo"></select>
+                        <select class="form-control" name="tipo"></select>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
@@ -86,6 +86,6 @@
 <script type="text/javascript"> 
     $(function() {            
         var veiculoCombustivelCtrl = new VeiculoCombustivelController(veiculoCombustivelEditForm); 
-        veiculoCombustivelCtrl.acoes.pesquisar(<%= idVeiculoCombustivel %>);
+        veiculoCombustivelCtrl.init(<%= idVeiculoCombustivel %>);
     });            
 </script>

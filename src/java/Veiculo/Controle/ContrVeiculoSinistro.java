@@ -90,6 +90,7 @@ public class ContrVeiculoSinistro {
             ps.setString(5, veiculoSinistro.getResponsavel());
             ps.setString(6, veiculoSinistro.getDescricao());
             ps.setInt(7, veiculoSinistro.getId());
+            ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
             ContrErroLog.inserir("HOITO - contrVeiculoSinistro", "SQLException", sql, e.toString());

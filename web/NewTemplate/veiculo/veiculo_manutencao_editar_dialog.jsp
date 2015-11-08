@@ -19,14 +19,14 @@
                     <label class="small">Veículo</label>
                     <div class="input-group">
                         <span class="input-group-addon" ><i class="fa fa-car"></i></span>
-                        <select class="form-control marca" name="veiculo"></select>
+                        <select class="form-control" name="veiculo" disabled="true"></select>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <label class="small">Tipo</label>
                     <div class="input-group">
                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                        <select class="form-control tipo" name="tipo"></select>
+                        <select class="form-control" name="tipo"></select>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -53,14 +53,14 @@
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <label class="small">Data Agendamento</label>
                     <div class="input-group">
-                        <input class="form-control date" type="text" name="dataAgendamento" placeholder="Data de prevista para manutenção" onKeyPress="mascara(this, maskData)" />
+                        <input class="form-control date" type="text" name="dataAgendamento" placeholder="Data de prevista para manutenção"/>
                         <span class="input-group-addon" ><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <label class="small">Data Entrega</label>
                     <div class="input-group">
-                        <input class="form-control date" type="text" name="dataEntrega" placeholder="Data de prevista para entrega" onKeyPress="mascara(this, maskData)" />
+                        <input class="form-control date" type="text" name="dataEntrega" placeholder="Data de prevista para entrega"/>
                         <span class="input-group-addon" ><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
@@ -75,6 +75,6 @@
 <script type="text/javascript"> 
     $(function() {            
         var veiculoManutencaoCtrl = new VeiculoManutencaoController(veiculoManutencaoEditForm); 
-        veiculoManutencaoCtrl.acoes.pesquisar(<%= idVeiculoManutencao %>);
+        veiculoManutencaoCtrl.init(<%= idVeiculoManutencao %>);
     });            
 </script>

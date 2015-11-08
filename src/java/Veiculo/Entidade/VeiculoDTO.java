@@ -82,6 +82,11 @@ public class VeiculoDTO {
     public Integer getAnoFabricacao() {
         return anoFabricacao;
     }
+    
+    public String getAnoFabricacaoFormat() {
+        if(this.anoFabricacao == 0) { return ""; }
+        return anoFabricacao.toString();
+    }
 
     public void setAnoFabricacao(Integer anoFabricacao) {
         this.anoFabricacao = anoFabricacao;
@@ -91,8 +96,20 @@ public class VeiculoDTO {
         return anoModelo;
     }
 
+    public String getAnoModeloFormat() {
+        if(this.anoModelo == 0) { return ""; }
+        return anoModelo.toString();
+    }
+
     public void setAnoModelo(Integer anoModelo) {
         this.anoModelo = anoModelo;
+    }   
+
+    public String getAnoFabricacaoModelo() {
+        if(this.anoModelo > 0 && this.anoFabricacao > 0) { 
+            return anoFabricacao + "/" + anoModelo;
+        }
+        return "";
     }
 
     public String getChassis() {

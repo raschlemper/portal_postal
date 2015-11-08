@@ -15,7 +15,7 @@ public class VeiculoSinistroBuilder extends Builder<VeiculoSinistro, VeiculoSini
             veiculo.setId(getIntegerParameter(request.getParameter("idVeiculoSinistro")));
             veiculo.setVeiculo(getVeiculo(request));
             veiculo.setTipo(request.getParameter("tipo"));      
-            veiculo.setBoletimOcorrencia(getIntegerParameter(request.getParameter("boletimOcorrencia")));      
+            veiculo.setBoletimOcorrencia(getNumericParameter(request.getParameter("boletimOcorrencia")));      
             veiculo.setData(getDataParameter(request.getParameter("data")));      
             veiculo.setLocal(request.getParameter("local"));
             veiculo.setResponsavel(request.getParameter("responsavel"));
@@ -30,14 +30,14 @@ public class VeiculoSinistroBuilder extends Builder<VeiculoSinistro, VeiculoSini
     public VeiculoSinistro toEntidade(ResultSet result) {
         try {
             return new VeiculoSinistro(
-                result.getInt("veiculo_manutencao.idVeiculoSinistro"),
+                result.getInt("veiculo_sinistro.idVeiculoSinistro"),
                 getVeiculo(result),
-                result.getString("veiculo_manutencao.tipo"),  
-                result.getInt("veiculo_manutencao.boletimOcorrencia"),  
-                result.getDate("veiculo_manutencao.data"),
-                result.getString("veiculo_manutencao.local"),
-                result.getString("veiculo_manutencao.responsavel"),
-                result.getString("veiculo_manutencao.descricao")
+                result.getString("veiculo_sinistro.tipo"),  
+                result.getInt("veiculo_sinistro.boletimOcorrencia"),  
+                result.getDate("veiculo_sinistro.data"),
+                result.getString("veiculo_sinistro.local"),
+                result.getString("veiculo_sinistro.responsavel"),
+                result.getString("veiculo_sinistro.descricao")
             );
         } catch (Exception ex) {
             Logger.getLogger(VeiculoSinistroBuilder.class.getName()).log(Level.SEVERE, null, ex);
@@ -53,7 +53,7 @@ public class VeiculoSinistroBuilder extends Builder<VeiculoSinistro, VeiculoSini
                 veiculo.getVeiculo().getPlaca(),
                 veiculo.getTipo(),
                 veiculo.getBoletimOcorrencia(),
-                veiculo.getData(),
+                getDataDTO(veiculo.getData()),
                 veiculo.getLocal(),
                 veiculo.getResponsavel(),
                 veiculo.getDescricao()

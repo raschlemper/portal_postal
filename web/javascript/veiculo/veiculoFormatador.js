@@ -13,7 +13,6 @@ var VeiculoFormatador = function() {
     
     app.toNumericUs = function(value) {
         value = numeral().unformat(value);
-        //value = numeral(value).format('0,0.00');
         return Number(value);
     };
     

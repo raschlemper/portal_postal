@@ -86,6 +86,7 @@ public class ContrVeiculoSeguro {
             ps.setDouble(3, veiculoSeguro.getValorFranquia());
             ps.setString(4, veiculoSeguro.getIndenizacao());
             ps.setInt(5, veiculoSeguro.getId());
+            ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
             ContrErroLog.inserir("HOITO - contrVeiculoSeguro", "SQLException", sql, e.toString());
