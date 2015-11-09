@@ -35,7 +35,11 @@ var VeiculoConstantes = function() {
     app.responsavel = [{'key': 'motorista', 'value': 'Motorista'},
                        {'key': 'terceiros', 'value': 'Terceiros'}];
              
-             
+    app.getValue = function(list, key) {
+        var value = _.find(list, function(item){ return item.key == key; });
+        if(!value) { value = {'key': 'nenhum', 'value': ''} }
+        return value;
+    }
              
     return app;         
 }();

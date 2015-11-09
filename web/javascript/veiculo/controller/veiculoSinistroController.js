@@ -47,8 +47,7 @@ var VeiculoSinistroController = function(form) {
         $('#datatable-sinistros tbody').html('');
         var html = '<tr>' + 
                       '<td class="placa">{{placa}}</td>' +
-                      '<td class="number-full">{{numeroSinistro}}</td>' +
-                      '<td class="numeric">{{valor}}</td>' +
+                      '<td class="number-full">{{boletimOcorrencia}}</td>' +
                       '<td class="date">{{data}}</td>' +
                       '<td>{{local}}</td>' +
                       '<td>{{tipo}}</td>' +
@@ -66,6 +65,10 @@ var VeiculoSinistroController = function(form) {
                    '</tr>';
         var template = _.template(html);
         _.map(sinistros, function(sinistro) {
+            var tipo = VeiculoConstantes.getValue(VeiculoConstantes.sinistro, sinistro.tipo);
+            sinistro.tipo = tipo.value;
+            var responsavel = VeiculoConstantes.getValue(VeiculoConstantes.responsavel, sinistro.responsavel);
+            sinistro.responsavel = responsavel.value;
             $('#datatable-sinistros tbody').append(template(sinistro));                        
         });
     };    
@@ -119,7 +122,7 @@ var VeiculoSinistroController = function(form) {
     
     var validarCampoNumeroSinistro = function(form) {
        var msg = 'Preencha o numero da sinistro!';
-        return VeiculoValidacao.campoNotNull(form.numeroSinistro.value, msg);
+        return VeiculoValidacao.campoNotNull(form.boletimOcorrencia.value, msg);
     }; 
     
     var validarCampoData = function(form) {
@@ -135,7 +138,7 @@ var VeiculoSinistroController = function(form) {
     var setValueForm = function(sinistro) {  
         if(!sinistro) return;
         form.veiculo.value = sinistro.idVeiculo;
-        form.numeroSinistro.value = sinistro.numeroSinistro;
+        form.boletimOcorrencia.value = sinistro.boletimOcorrencia;
         form.data.value = sinistro.data;
         form.local.value = sinistro.local;
         form.tipo.value = sinistro.tipo;

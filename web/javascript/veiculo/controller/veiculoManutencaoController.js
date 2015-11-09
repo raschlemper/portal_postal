@@ -65,6 +65,8 @@ var VeiculoManutencaoController = function(form) {
                    '</tr>';
         var template = _.template(html);
         _.map(manutencoes, function(manutencao) {
+            var tipo = VeiculoConstantes.getValue(VeiculoConstantes.manutencao, manutencao.tipo);
+            manutencao.tipo = tipo.value;
             $('#datatable-manutencoes tbody').append(template(manutencao));                        
         });
     };    

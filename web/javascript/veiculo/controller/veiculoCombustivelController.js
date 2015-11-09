@@ -71,7 +71,9 @@ var VeiculoCombustivelController = function(form) {
                    '</tr>';
         var template = _.template(html);
         _.map(combustiveis, function(combustivel) {
-            $('#datatable-manutencoes tbody').append(template(combustivel));                        
+            var tipo = VeiculoConstantes.getValue(VeiculoConstantes.combustivel, combustivel.tipo);
+            combustivel.tipo = tipo.value;
+            $('#datatable-combustiveis tbody').append(template(combustivel));                        
         });
     };    
 

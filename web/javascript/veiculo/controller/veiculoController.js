@@ -71,6 +71,14 @@ var VeiculoController = function(form) {
                    '</tr>';
         var template = _.template(html);
         _.map(veiculos, function(veiculo) {
+            var tipo = VeiculoConstantes.getValue(VeiculoConstantes.tipo, veiculo.tipo);
+            veiculo.tipo = tipo.value;
+            var combustivel = VeiculoConstantes.getValue(VeiculoConstantes.combustivel, veiculo.combustivel);
+            veiculo.combustivel = combustivel.value;
+            var status = VeiculoConstantes.getValue(VeiculoConstantes.status, veiculo.status);
+            veiculo.status = status.value;
+            var situacao = VeiculoConstantes.getValue(VeiculoConstantes.situacao, veiculo.situacao);
+            veiculo.situacao = situacao.value;
             $('#datatable-veiculos tbody').append(template(veiculo));                        
         });
     };    

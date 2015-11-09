@@ -63,6 +63,8 @@ var VeiculoSeguroController = function(form) {
                    '</tr>';
         var template = _.template(html);
         _.map(seguros, function(seguro) {
+            var indenizacao = VeiculoConstantes.getValue(VeiculoConstantes.seguro, seguro.indenizacao);
+            seguro.indenizacao = indenizacao.value;
             $('#datatable-seguros tbody').append(template(seguro));                        
         });
     };    
