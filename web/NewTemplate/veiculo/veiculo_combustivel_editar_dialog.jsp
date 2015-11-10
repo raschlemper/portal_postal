@@ -32,7 +32,7 @@
                 <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
                     <label class="small">Data</label>
                     <div class="input-group">
-                        <input class="form-control date" type="text" name="data" placeholder="Data" />
+                        <input class="form-control date" type="text" name="data" placeholder="Data do abastecimento" />
                         <span class="input-group-addon" ><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
@@ -40,21 +40,21 @@
                     <label class="small">Quantidade</label>
                     <div class="input-group">
                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                        <input type="text" autocomplete="off" name="quantidade" class="form-control number" placeholder="Quantidade"/>                                    
+                        <input type="text" autocomplete="off" name="quantidade" class="form-control number" placeholder="Quantidade do abastecimento em litros"/>                                    
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
                     <label class="small">Valor Total</label>
                     <div class="input-group">
                         <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
-                        <input type="text" autocomplete="off" name="valorTotal" class="form-control numeric" placeholder="Valor Total"/>                                    
+                        <input type="text" autocomplete="off" name="valorTotal" class="form-control numeric" placeholder="Valor total do abastecimento"/>                                    
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
                     <label class="small">Valor Unitário</label>
                     <div class="input-group">
                         <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
-                        <input type="text" autocomplete="off" name="valorUnitario" class="form-control numeric" placeholder="Valor Unitário"/>                                    
+                        <input type="text" autocomplete="off" name="valorUnitario" class="form-control numeric" placeholder="Valor unitário do abastecimento"/>                                    
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">

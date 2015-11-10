@@ -89,7 +89,7 @@ var VeiculoSinistroController = function(form) {
 
     var editarModal = function(retorno) {
         bootbox.dialog({
-            title: "Editar Sinistro Ve√≠culo",
+            title: "Editar Sinistro VeÌculo",
             message: retorno,
             animate: true,
             onEscape: true,
@@ -127,7 +127,7 @@ var VeiculoSinistroController = function(form) {
     
     var validarCampoData = function(form) {
         var msg = 'Preencha a data da sinistro!';
-        var msgValida = 'A data da manuten√ß√£o n√£o √© v√°lida!';
+        var msgValida = 'A data da manutenÁ„o n„o È v·lida!';
         if(!VeiculoValidacao.campoNotNull(form.data.value, msg)) { return false; };
         return VeiculoValidacao.campoData(form.data.value, msgValida);
     }; 

@@ -108,7 +108,7 @@ var VeiculoCombustivelController = function(form) {
 
     var editarModal = function(retorno) {
         bootbox.dialog({
-            title: "Editar Combust√≠vel Ve√≠culo",
+            title: "Editar CombustÌvel VeÌculo",
             message: retorno,
             animate: true,
             onEscape: true,
@@ -155,15 +155,15 @@ var VeiculoCombustivelController = function(form) {
     
     var validarCampoData = function(form) {
         var msg = 'Preencha a data de abastecimento!';
-        var msgValida = 'A data do abstecimento n√£o √© v√°lida!';
+        var msgValida = 'A data do abstecimento n„o È v·lida!';
         if(!VeiculoValidacao.campoNotNull(form.data.value, msg)) { return false; };
         return VeiculoValidacao.campoData(form.data.value, msgValida);
     }; 
     
     var validarCampoQuilometragemFinal = function(form) {
-        var msg = 'Preencha a quilometragem do ve√≠culo!';
-        var msgMenor = 'A quilometragem n√£o pode ser inferior ou igual a √∫ltima quilometragem inserida ' +
-                'para este ve√≠culo (' + VeiculoFormatador.toNumberBr(form.quilometragemInicial.value) + ')!';
+        var msg = 'Preencha a quilometragem do veÌculo!';
+        var msgMenor = 'A quilometragem n„o pode ser inferior ou igual a ˙ltima quilometragem inserida ' +
+                'para este veÌculo (' + VeiculoFormatador.toNumberBr(form.quilometragemInicial.value) + ')!';
         if(!VeiculoValidacao.campoNotNull(form.quilometragemFinal.value, msg)) { return false; };
         return VeiculoValidacao.campoMoreEqualThen(form.quilometragemFinal.value, form.quilometragemInicial.value, msgMenor);
     }; 

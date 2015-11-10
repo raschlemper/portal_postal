@@ -87,7 +87,7 @@ var VeiculoManutencaoController = function(form) {
 
     var editarModal = function(retorno) {
         bootbox.dialog({
-            title: "Editar Manuten√ß√£o Ve√≠culo",
+            title: "Editar ManutenÁ„o VeÌculo",
             message: retorno,
             animate: true,
             onEscape: true,
@@ -122,29 +122,29 @@ var VeiculoManutencaoController = function(form) {
     }; 
     
     var validarCampoQuilometragem = function(form) {
-        var msg = 'Preencha a quilometragem do ve√≠culo!';
+        var msg = 'Preencha a quilometragem do veÌculo!';
         return VeiculoValidacao.campoNotNull(form.quilometragem.value, msg);
     }; 
     
     var validarCampoValor = function(form) {
-        var msg = 'Preencha o valor da manuten√ß√£o!';
+        var msg = 'Preencha o valor da manutenÁ„o!';
         return VeiculoValidacao.campoNotNull(form.valor.value, msg);
     }; 
     
     var validarCampoData = function(form) {
-        var msg = 'Preencha a data da manuten√ß√£o!';
-        var msgValida = 'A data da manuten√ß√£o n√£o √© v√°lida!';
+        var msg = 'Preencha a data da manutenÁ„o!';
+        var msgValida = 'A data da manutenÁ„o n„o È v·lida!';
         if(!VeiculoValidacao.campoNotNull(form.data.value, msg)) { return false; };
         return VeiculoValidacao.campoData(form.data.value, msgValida);
     }; 
     
     var validarCampoDataAgendamento = function(form) {
-        var msg = 'A data de agendamento da manuten√ß√£o n√£o √© v√°lida!';
+        var msg = 'A data de agendamento da manutenÁ„o n„o È v·lida!';
         return VeiculoValidacao.campoData(form.dataAgendamento.value, msg);
     };   
     
     var validarCampoDataEntrega = function(form) {
-        var msg = 'A data de entrega da manuten√ß√£o n√£o √© v√°lida!';
+        var msg = 'A data de entrega da manutenÁ„o n„o È v·lida!';
         return VeiculoValidacao.campoData(form.dataEntrega.value, msg);
     };  
     
