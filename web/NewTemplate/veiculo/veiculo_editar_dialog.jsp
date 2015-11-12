@@ -47,35 +47,35 @@
                     <label class="small">Ano Fabricação</label>
                     <div class="input-group">
                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                        <input type="text" autocomplete="off" name="anoFabricacao" class="form-control ano" placeholder="Ano de Fabricação"/>                                    
+                        <input type="text" autocomplete="off" name="anoFabricacao" class="form-control ano" placeholder="Ano de fabricação do veículo"/>                                    
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <label class="small">Ano Modelo</label>
                     <div class="input-group">
                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                        <input type="text" autocomplete="off" name="anoModelo" class="form-control ano" placeholder="Ano do Modelo"/>                                    
+                        <input type="text" autocomplete="off" name="anoModelo" class="form-control ano" placeholder="Ano do modelo do veículo"/>                                    
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <label class="small">Chassis</label>
                     <div class="input-group">
                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                        <input type="text" autocomplete="off" name="chassis" class="form-control chassis" placeholder="Chassis"/>                                    
+                        <input type="text" autocomplete="off" name="chassis" class="form-control chassis" placeholder="Chassis do veículo"/>                                    
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <label class="small">Renavam</label>
                     <div class="input-group">
                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                        <input type="text" autocomplete="off" name="renavam" class="form-control renavam" placeholder="Renavam"/>                                    
+                        <input type="text" autocomplete="off" name="renavam" class="form-control renavam" placeholder="Renavam do veículo"/>                                    
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <label class="small">Quilometragem</label>
                     <div class="input-group">
                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                        <input type="text" autocomplete="off" name="quilometragem" class="form-control number" placeholder="Quilometragem"/>                                    
+                        <input type="text" autocomplete="off" name="quilometragem" class="form-control number" placeholder="Quilometragem do veículo"/>                                    
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">

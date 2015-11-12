@@ -45,7 +45,7 @@
                                                     <label class="small">Número</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="numeroSinistro" class="form-control number-full" placeholder="Número do sinistro"/>                                    
+                                                        <input type="text" autocomplete="off" name="boletimOcorrencia" class="form-control number-full" placeholder="Número do sinistro"/>                                    
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
@@ -101,7 +101,6 @@
                                                     <tr>
                                                         <th>Veículo</th>
                                                         <th>Número</th>
-                                                        <th>Valor</th>
                                                         <th>Data</th>
                                                         <th>Local</th>
                                                         <th>Tipo</th>

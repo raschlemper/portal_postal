@@ -65,6 +65,8 @@ var VeiculoManutencaoController = function(form) {
                    '</tr>';
         var template = _.template(html);
         _.map(manutencoes, function(manutencao) {
+            var tipo = VeiculoConstantes.getValue(VeiculoConstantes.manutencao, manutencao.tipo);
+            manutencao.tipo = tipo.value;
             $('#datatable-manutencoes tbody').append(template(manutencao));                        
         });
     };    
@@ -85,7 +87,11 @@ var VeiculoManutencaoController = function(form) {
 
     var editarModal = function(retorno) {
         bootbox.dialog({
+<<<<<<< HEAD
             title: "Editar Manuten\u00E7\u00E3o Ve\u00EDculo",
+=======
+            title: "Editar Manutenção Veículo",
+>>>>>>> 175902c9d28a837edc35f1159eb3fc0bbaaa09ae
             message: retorno,
             animate: true,
             onEscape: true,
@@ -120,29 +126,50 @@ var VeiculoManutencaoController = function(form) {
     }; 
     
     var validarCampoQuilometragem = function(form) {
+<<<<<<< HEAD
         var msg = 'Preencha a quilometragem do ve\u00EDculo!';
+=======
+        var msg = 'Preencha a quilometragem do veículo!';
+>>>>>>> 175902c9d28a837edc35f1159eb3fc0bbaaa09ae
         return VeiculoValidacao.campoNotNull(form.quilometragem.value, msg);
     }; 
     
     var validarCampoValor = function(form) {
+<<<<<<< HEAD
         var msg = 'Preencha o valor da manuten\u00E7\u00E3o!';
+=======
+        var msg = 'Preencha o valor da manutenção!';
+>>>>>>> 175902c9d28a837edc35f1159eb3fc0bbaaa09ae
         return VeiculoValidacao.campoNotNull(form.valor.value, msg);
     }; 
     
     var validarCampoData = function(form) {
+<<<<<<< HEAD
         var msg = 'Preencha a data da manuten\u00E7\u00E3o!';
         var msgValida = 'A data da manuten\u00E7\u00E3o n\u00E3o \u00E9 v\u00E1lida!';
+=======
+        var msg = 'Preencha a data da manutenção!';
+        var msgValida = 'A data da manutenção não é válida!';
+>>>>>>> 175902c9d28a837edc35f1159eb3fc0bbaaa09ae
         if(!VeiculoValidacao.campoNotNull(form.data.value, msg)) { return false; };
         return VeiculoValidacao.campoData(form.data.value, msgValida);
     }; 
     
     var validarCampoDataAgendamento = function(form) {
+<<<<<<< HEAD
         var msg = 'A data de agendamento da manuten\u00E7\u00E3o n\u00E3o \u00E9 v\u00E1lida!';
+=======
+        var msg = 'A data de agendamento da manutenção não é válida!';
+>>>>>>> 175902c9d28a837edc35f1159eb3fc0bbaaa09ae
         return VeiculoValidacao.campoData(form.dataAgendamento.value, msg);
     };   
     
     var validarCampoDataEntrega = function(form) {
+<<<<<<< HEAD
         var msg = 'A data de entrega da manuten\u00E7\u00E3o n\u00E3o \u00E9 v\u00E1lida!';
+=======
+        var msg = 'A data de entrega da manutenção não é válida!';
+>>>>>>> 175902c9d28a837edc35f1159eb3fc0bbaaa09ae
         return VeiculoValidacao.campoData(form.dataEntrega.value, msg);
     };  
     

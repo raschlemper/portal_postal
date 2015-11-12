@@ -52,14 +52,14 @@
                                                     <label class="small">Quilometragem</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                                        <input type="text" autocomplete="off" name="quilometragem" class="form-control number" placeholder="Quilometragem"/>                                    
+                                                        <input type="text" autocomplete="off" name="quilometragem" class="form-control number" placeholder="Quilometragem do veículo"/>                                    
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                                     <label class="small">Valor</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
-                                                        <input type="text" autocomplete="off" name="valor" class="form-control numeric" placeholder="Valor"/>                                    
+                                                        <input type="text" autocomplete="off" name="valor" class="form-control numeric" placeholder="Valor da manutenção"/>                                    
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -72,14 +72,14 @@
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                                                     <label class="small">Data Agendamento</label>
                                                     <div class="input-group">
-                                                        <input class="form-control date" type="text" name="dataAgendamento" placeholder="Data de prevista para manutenção" />
+                                                        <input class="form-control date" type="text" name="dataAgendamento" placeholder="Data de prevista da manutenção" />
                                                         <span class="input-group-addon" ><i class="fa fa-calendar"></i></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                                                     <label class="small">Data Entrega</label>
                                                     <div class="input-group">
-                                                        <input class="form-control date" type="text" name="dataEntrega" placeholder="Data de prevista para entrega" />
+                                                        <input class="form-control date" type="text" name="dataEntrega" placeholder="Data de prevista para entrega da manutenção" />
                                                         <span class="input-group-addon" ><i class="fa fa-calendar"></i></span>
                                                     </div>
                                                 </div>

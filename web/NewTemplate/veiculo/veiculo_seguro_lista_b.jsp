@@ -59,7 +59,7 @@
                                                     <label class="small">Valor Franquia</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
-                                                        <input type="text" autocomplete="off" name="valorFranquia" class="form-control numeric" placeholder="Valor da franquia"/>                                    
+                                                        <input type="text" autocomplete="off" name="valorFranquia" class="form-control numeric" placeholder="Valor da franquia do seguro"/>                                    
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">

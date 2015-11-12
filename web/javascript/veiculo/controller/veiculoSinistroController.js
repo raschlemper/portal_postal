@@ -47,8 +47,7 @@ var VeiculoSinistroController = function(form) {
         $('#datatable-sinistros tbody').html('');
         var html = '<tr>' + 
                       '<td class="placa">{{placa}}</td>' +
-                      '<td class="number-full">{{numeroSinistro}}</td>' +
-                      '<td class="numeric">{{valor}}</td>' +
+                      '<td class="number-full">{{boletimOcorrencia}}</td>' +
                       '<td class="date">{{data}}</td>' +
                       '<td>{{local}}</td>' +
                       '<td>{{tipo}}</td>' +
@@ -66,6 +65,10 @@ var VeiculoSinistroController = function(form) {
                    '</tr>';
         var template = _.template(html);
         _.map(sinistros, function(sinistro) {
+            var tipo = VeiculoConstantes.getValue(VeiculoConstantes.sinistro, sinistro.tipo);
+            sinistro.tipo = tipo.value;
+            var responsavel = VeiculoConstantes.getValue(VeiculoConstantes.responsavel, sinistro.responsavel);
+            sinistro.responsavel = responsavel.value;
             $('#datatable-sinistros tbody').append(template(sinistro));                        
         });
     };    
@@ -86,7 +89,11 @@ var VeiculoSinistroController = function(form) {
 
     var editarModal = function(retorno) {
         bootbox.dialog({
+<<<<<<< HEAD
             title: "Editar Sinistro Ve\u00EDculo",
+=======
+            title: "Editar Sinistro Veículo",
+>>>>>>> 175902c9d28a837edc35f1159eb3fc0bbaaa09ae
             message: retorno,
             animate: true,
             onEscape: true,
@@ -118,13 +125,22 @@ var VeiculoSinistroController = function(form) {
     }; 
     
     var validarCampoNumeroSinistro = function(form) {
+<<<<<<< HEAD
        var msg = 'Preencha o n\u00FAmero da sinistro!';
         return VeiculoValidacao.campoNotNull(form.numeroSinistro.value, msg);
+=======
+       var msg = 'Preencha o numero da sinistro!';
+        return VeiculoValidacao.campoNotNull(form.boletimOcorrencia.value, msg);
+>>>>>>> 175902c9d28a837edc35f1159eb3fc0bbaaa09ae
     }; 
     
     var validarCampoData = function(form) {
         var msg = 'Preencha a data da sinistro!';
+<<<<<<< HEAD
         var msgValida = 'A data do sinistro n\u00E3o \u00E9 v\u00E1lida!';
+=======
+        var msgValida = 'A data da manutenção não é válida!';
+>>>>>>> 175902c9d28a837edc35f1159eb3fc0bbaaa09ae
         if(!VeiculoValidacao.campoNotNull(form.data.value, msg)) { return false; };
         return VeiculoValidacao.campoData(form.data.value, msgValida);
     }; 
@@ -135,7 +151,7 @@ var VeiculoSinistroController = function(form) {
     var setValueForm = function(sinistro) {  
         if(!sinistro) return;
         form.veiculo.value = sinistro.idVeiculo;
-        form.numeroSinistro.value = sinistro.numeroSinistro;
+        form.boletimOcorrencia.value = sinistro.boletimOcorrencia;
         form.data.value = sinistro.data;
         form.local.value = sinistro.local;
         form.tipo.value = sinistro.tipo;
