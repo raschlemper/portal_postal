@@ -85,7 +85,7 @@ var VeiculoManutencaoController = function(form) {
 
     var editarModal = function(retorno) {
         bootbox.dialog({
-            title: "Editar Manutenção Veículo",
+            title: "Editar Manuten\u00E7\u00E3o Ve\u00EDculo",
             message: retorno,
             animate: true,
             onEscape: true,
@@ -120,29 +120,29 @@ var VeiculoManutencaoController = function(form) {
     }; 
     
     var validarCampoQuilometragem = function(form) {
-        var msg = 'Preencha a quilometragem do veículo!';
+        var msg = 'Preencha a quilometragem do ve\u00EDculo!';
         return VeiculoValidacao.campoNotNull(form.quilometragem.value, msg);
     }; 
     
     var validarCampoValor = function(form) {
-        var msg = 'Preencha o valor da manutenção!';
+        var msg = 'Preencha o valor da manuten\u00E7\u00E3o!';
         return VeiculoValidacao.campoNotNull(form.valor.value, msg);
     }; 
     
     var validarCampoData = function(form) {
-        var msg = 'Preencha a data da manutenção!';
-        var msgValida = 'A data da manutenção não é válida!';
+        var msg = 'Preencha a data da manuten\u00E7\u00E3o!';
+        var msgValida = 'A data da manuten\u00E7\u00E3o n\u00E3o \u00E9 v\u00E1lida!';
         if(!VeiculoValidacao.campoNotNull(form.data.value, msg)) { return false; };
         return VeiculoValidacao.campoData(form.data.value, msgValida);
     }; 
     
     var validarCampoDataAgendamento = function(form) {
-        var msg = 'A data de agendamento da manutenção não é válida!';
+        var msg = 'A data de agendamento da manuten\u00E7\u00E3o n\u00E3o \u00E9 v\u00E1lida!';
         return VeiculoValidacao.campoData(form.dataAgendamento.value, msg);
     };   
     
     var validarCampoDataEntrega = function(form) {
-        var msg = 'A data de entrega da manutenção não é válida!';
+        var msg = 'A data de entrega da manuten\u00E7\u00E3o n\u00E3o \u00E9 v\u00E1lida!';
         return VeiculoValidacao.campoData(form.dataEntrega.value, msg);
     };  
     

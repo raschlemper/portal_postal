@@ -83,7 +83,7 @@ var VeiculoMultaController = function(form) {
 
     var editarModal = function(retorno) {
         bootbox.dialog({
-            title: "Editar Multa Veículo",
+            title: "Editar Multa Ve\u00EDculo",
             message: retorno,
             animate: true,
             onEscape: true,
@@ -116,7 +116,7 @@ var VeiculoMultaController = function(form) {
     }; 
     
     var validarCampoNumeroMulta = function(form) {
-       var msg = 'Preencha o numero da multa!';
+       var msg = 'Preencha o n\u00FAmero da multa!';
         return VeiculoValidacao.campoNotNull(form.numeroMulta.value, msg);
     }; 
     
@@ -127,7 +127,7 @@ var VeiculoMultaController = function(form) {
     
     var validarCampoData = function(form) {
         var msg = 'Preencha a data da multa!';
-        var msgValida = 'A data da manutenção não é válida!';
+        var msgValida = 'A data da multa n\u00E3o \u00E9 v\u00E1lida!';
         if(!VeiculoValidacao.campoNotNull(form.data.value, msg)) { return false; };
         return VeiculoValidacao.campoData(form.data.value, msgValida);
     }; 

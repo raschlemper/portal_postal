@@ -83,7 +83,7 @@ var VeiculoSeguroController = function(form) {
 
     var editarModal = function(retorno) {
         bootbox.dialog({
-            title: "Editar Seguro Veículo",
+            title: "Editar Seguro Ve\u00EDculo",
             message: retorno,
             animate: true,
             onEscape: true,
@@ -116,7 +116,7 @@ var VeiculoSeguroController = function(form) {
     }; 
     
     var validarCampoNumeroSeguro = function(form) {
-       var msg = 'Preencha o numero da seguro!';
+       var msg = 'Preencha o n\u00FAmero da seguro!';
         return VeiculoValidacao.campoNotNull(form.numeroSeguro.value, msg);
     }; 
     

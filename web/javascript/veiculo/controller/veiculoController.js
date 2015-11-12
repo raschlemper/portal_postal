@@ -91,7 +91,7 @@ var VeiculoController = function(form) {
 
     var editarModal = function(retorno) {
         bootbox.dialog({
-            title: "Editar Veículo",
+            title: "Editar Ve\u00EDculo",
             message: retorno,
             animate: true,
             onEscape: true,
@@ -126,29 +126,29 @@ var VeiculoController = function(form) {
     }; 
 
     var validarCampoPlaca = function(form) {
-        var msg = 'Preencha a placa do veículo!';
+        var msg = 'Preencha a placa do ve\u00EDculo!';
         return VeiculoValidacao.campoNotNull(form.placa.value, msg);
     };  
 
     var validarCampoAnoFabricacao = function(form) {
-        var msg = 'Preencha o ano de fabricação do veículo com valores entre 1970 e ' + anoCorrente + '!';
+        var msg = 'Preencha o ano de fabrica\u00E7\u00E3o do ve\u00EDculo com valores entre 1970 e ' + anoCorrente + '!';
         var anoCorrente = (new Date).getFullYear() + 1;
         return VeiculoValidacao.campoBetween(form.anoFabricacao.value, 1970, anoCorrente, msg);
     };  
 
     var validarCampoAnoModelo = function(form) {
-        var msg = 'Preencha o ano do modelo do veículo com valores entre 1970 e ' + anoCorrente + '!';
+        var msg = 'Preencha o ano do modelo do ve\u00EDculo com valores entre 1970 e ' + anoCorrente + '!';
         var anoCorrente = (new Date).getFullYear() + 1;
         return VeiculoValidacao.campoBetween(form.anoModelo.value, 1970, anoCorrente, msg);
     };
 
     var validarCampoRenavam = function(form) {
-        var msg = 'Preencha o renavam do veículo!';
+        var msg = 'Preencha o renavam do ve\u00EDculo!';
         return VeiculoValidacao.campoNotNull(form.renavam.value, msg);
     };  
     
     var validarCampoQuilometragem = function(form) {
-        var msg = 'Preencha a quilometragem do veículo!';
+        var msg = 'Preencha a quilometragem do ve\u00EDculo!';
         return VeiculoValidacao.campoNotNull(form.quilometragem.value, msg);
     }; 
     
