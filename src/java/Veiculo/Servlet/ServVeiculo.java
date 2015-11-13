@@ -9,6 +9,7 @@ import Controle.ContrErroLog;
 import Veiculo.Controle.ContrVeiculo;
 import Veiculo.Entidade.Veiculo;
 import Veiculo.Entidade.VeiculoDTO;
+import Veiculo.Validacao.VeiculoValidacao;
 import Veiculo.builder.VeiculoBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -121,6 +122,7 @@ public class ServVeiculo extends HttpServlet {
     
     private void save(HttpServletRequest request, HttpServletResponse response) throws Exception {        
         Veiculo veiculo = getVeiculoFromRequest(request);
+        if(!validation(veiculo)) { return; }
         if(existeVeiculo(veiculo)) {
             this.sessao.setAttribute("msg", "Este Veículo já foi cadastrado!");
             response.sendRedirect(request.getHeader("referer"));  
@@ -169,6 +171,15 @@ public class ServVeiculo extends HttpServlet {
     
     private String getMsgToClient(Veiculo veiculo) {
         return veiculo.getModelo() + " (" +veiculo.getPlaca() + ")";        
+    }
+    
+    private boolean validation(Veiculo veiculo) {
+        VeiculoValidacao validacao = new VeiculoValidacao();
+        if(!validacao.validar(veiculo)) {
+            this.sessao.setAttribute("msg", validacao.getMsg());
+            return false;
+        }        
+        return true;
     }
 
 }
