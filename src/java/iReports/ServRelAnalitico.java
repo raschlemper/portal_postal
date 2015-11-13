@@ -9,6 +9,7 @@ import Entidade.Clientes;
 import Util.Conexao;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -28,9 +29,8 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 public class ServRelAnalitico extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -45,7 +45,7 @@ public class ServRelAnalitico extends HttpServlet {
 
         try {
             Clientes cli = contrCliente.consultaClienteById(idCliente, nomeBD);
-            
+
             // mapa de parâmetros do relatório (ainda vamos aprender a usar)
             Map parametros = new HashMap();
             //parametros.put("idCliente", 283);
@@ -59,6 +59,7 @@ public class ServRelAnalitico extends HttpServlet {
             parametros.put("urlLogoCli", "http://localhost:8084" + cli.getUrl_logo());
 
             byte[] bytes = null;
+            Connection conn = Conexao.conectar(nomeBD);
             try {
                 InputStream in = getClass().getResourceAsStream("relatorio_analitico.jrxml");
                 JasperDesign jasperDesign = JRXmlLoader.load(in);
@@ -67,10 +68,12 @@ public class ServRelAnalitico extends HttpServlet {
                 jasperDesign.setQuery(query);
                 JasperReport jr = JasperCompileManager.compileReport(jasperDesign);
 
-                JasperPrint impressao = JasperFillManager.fillReport(jr, parametros, Conexao.conectar(nomeBD));
+                JasperPrint impressao = JasperFillManager.fillReport(jr, parametros, conn);
+                Conexao.desconectar(conn);
                 bytes = JasperExportManager.exportReportToPdf(impressao);
 
             } catch (Exception e) {
+                Conexao.desconectar(conn);
                 e.printStackTrace();
                 return;
             }
@@ -92,8 +95,7 @@ public class ServRelAnalitico extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -107,8 +109,7 @@ public class ServRelAnalitico extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response

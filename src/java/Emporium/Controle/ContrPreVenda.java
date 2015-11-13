@@ -295,7 +295,6 @@ public class ContrPreVenda {
                 + " LEFT JOIN pre_venda_destinatario AS d ON p.idDestinatario = d.idDestinatario"
                 + " WHERE p.idCliente = " + idCliente + " AND inutilizada = 0 AND impresso = " + impresso + " " + cons + " " + hj + " " + nv;
 
-        System.out.println(sql);
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();

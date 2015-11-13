@@ -159,6 +159,7 @@
                                                             }
 
                                                             Clientes cli = contrCliente.consultaClienteById(Integer.parseInt(c[0]), nomeBD);
+                                                            if(cli != null){
 
                                                             String cnpj = cli.getCnpj().trim();
                                                             String cnpjSara = c[2].trim();
@@ -207,8 +208,7 @@
                                                         <td <%=cor%>><%= msgm%></td>
                                                         <td align="center"><a href="cliente_contrato_b.jsp?idCliente=<%= c[0]%>" class="btn btn-sm btn-warning" ><i class="fa fa-lg fa-pencil-square-o"></i></a></td>
                                                     </tr>
-                                                    <%}
-                                                            }%>
+                                                    <%}}}%>
                                                 </tbody>
                                             </table>
 

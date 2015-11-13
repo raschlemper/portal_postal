@@ -257,7 +257,7 @@ public class contrMovimentacao {
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();
-            System.out.println(sql);
+            
             ArrayList movimentacao = new ArrayList();
             for (int i = 0; result.next(); i++) {
                 Date dataPostagem = result.getDate("dataPostagem");

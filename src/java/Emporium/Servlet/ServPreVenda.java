@@ -25,9 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 public class ServPreVenda extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -57,8 +56,7 @@ public class ServPreVenda extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -72,8 +70,7 @@ public class ServPreVenda extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -101,127 +98,136 @@ public class ServPreVenda extends HttpServlet {
         String nomeUser = request.getParameter("nomeUser");
         int flagMulti = Integer.parseInt(request.getParameter("flagMulti"));
         int qtdPostagem = Integer.parseInt(request.getParameter("quantidade"));
-                        
+
         //DADOS DO DEPARTAMENTO
         int idDepartamento = 0;
         String cartaoPostagem = "";
         String departamento = request.getParameter("departamento");
-        if(!departamento.equals("")){
+        if (!departamento.equals("")) {
             String aux[] = departamento.split(";");
             idDepartamento = Integer.parseInt(aux[0]);
             departamento = aux[1];
             cartaoPostagem = aux[2];
         }
-        
+
         //DADOS DO CLIENTE
         Clientes cli = contrCliente.consultaClienteById(idCliente, nomeBD);
         String contrato = "";
-        if(cli != null && cli.getTemContrato() == 1){
+        if (cli != null && cli.getTemContrato() == 1) {
             contrato = cli.getNumContrato();
-            if(cartaoPostagem.equals("0") || cartaoPostagem.equals("")){
+            if (cartaoPostagem.equals("0") || cartaoPostagem.equals("")) {
                 cartaoPostagem = cli.getCartaoPostagem();
             }
-        }        
-        
+        }
+
         //SERVICOS ADICIONAIS
         int registro = 0;
-        if(servico.equals("CARTA")){
+        if (servico.equals("CARTA")) {
             int reg = Integer.parseInt(request.getParameter("tipoCarta"));
             //SE O SERVICO DE CARTA NAO TEM REGISTRO ELA É CARTA SIMPLES
-            if(reg == 0){
+            if (reg == 0) {
                 servico = "SIMPLES";
             }
-        }
-        
-        int codECT = ContrClienteContrato.consultaContratoClienteGrupoServ(idCliente, servico, nomeBD);
-        String tipoPost = "NAC";
-        if(servico.equals("OUTROS")){
-            String aux[] = request.getParameter("servico_1").split(";");
-            tipoPost = aux[2];
-            servico = aux[1];
-            codECT = Integer.parseInt(aux[0]);
         }        
-        
+
         int mp = Integer.parseInt(request.getParameter("mp"));
         int ar = Integer.parseInt(request.getParameter("ar"));
         float vd = Float.parseFloat(request.getParameter("vd"));
-        if(vd>0 && vd<12){
-            vd=12;
+        if (vd > 0 && vd < 12) {
+            vd = 12;
         }
-        float vlrCobrar = Float.parseFloat(request.getParameter("valor_cobrar"));        
-                
-        for (int i = 0; i < qtdPostagem; i++) {
-            //DADOS DO DESTINATARIO
-            int idDest = Integer.parseInt(request.getParameter("idDestinatario"));
-            String email_destinatario = request.getParameter("email_destinatario");
-            String celular = request.getParameter("celular");
-            String nome = FormataString.removeSpecialChars(request.getParameter("nome"));
-            String empresa = request.getParameter("empresa");
-            String cpf = request.getParameter("cpf_cnpj");
-            String cep = request.getParameter("cep");
-            String endereco = request.getParameter("endereco");
-            String numero = request.getParameter("numero");
-            if(request.getParameter("sn") != null){
-                numero = "S/N";
-            }
-            String complemento = request.getParameter("complemento");
-            String bairro = request.getParameter("bairro");
-            String cidade = request.getParameter("cidade");
-            String uf = request.getParameter("uf");
-            String aosCuidados = request.getParameter("aoscuidados");
-            String siglaPais = "BR";
-            String pais = "Brasil";
-            if(tipoPost.equals("INT")){                
-                String[] auxPais = request.getParameter("pais").split(";");
-                siglaPais = auxPais[0];
-                pais = auxPais[1];
-                uf = request.getParameter("estado");
-            }            
-            
-            if (idDest == 0) {
-                contrDestinatario.inserir(idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, pais, email_destinatario, celular, nomeBD);
-            } else {
-                contrDestinatario.editar(idDest, idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, pais, email_destinatario, celular, nomeBD);
-            }
-            int idDestinatario =  ContrPreVendaDest.inserir(idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, email_destinatario, celular, pais, nomeBD);
-
-            //PESQUISA QUAL AMARRACAO UTILIZADA
-            Amarracao am = ContrAmarracao.consultaAmarracaoByCep(cep, servico, nomeBD);
-            String siglaAmarracao = "- - -";
-            if(am != null){
-                siglaAmarracao = am.getSiglaAmarracao();
-            }else if(tipoPost.equals("INT")){
-                siglaAmarracao = "INT";
-            }
-            
-            //VERIFICA OS DADOS E PEGA O NUM DO OBJETO
-            String numObjeto = "avista";
-            String tipoEtiqueta = "SEM_REGISTRO";
-            //VERIFICA A QTD DE ETIQUETA
-            int qtdEtq = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ(servico, 0, idCliente, nomeBD);
-            if(codECT != 0 && qtdEtq != 0){
-                String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, nomeBD);  
-                if(etq != null){
-                    String aux[] = etq.split(";");
-                    numObjeto = aux[0];
-                    tipoEtiqueta = aux[1];
-                }
-            } else if ( codECT == 0 ){ 
-                ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico, tipo);
-                codECT = se.getCodECT();
-                if(codECT == 10014 && servico.equals("CARTA")){
-                    registro = Integer.parseInt(request.getParameter("tipoCarta"));
-                }
-                contrato = "";
-            }
-            
-            //VERIFICA A EXISTENCIA DE COMBO PARA O SERVIÇO
-            //codECT = ContrServicoCombo.consultaCodCombo(codECT, ar, mp, vd);
-
-            //INSERE PRE VENDA         
-            ContrPreVenda.inserir(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD);
-        }        
+        float vlrCobrar = Float.parseFloat(request.getParameter("valor_cobrar"));
         
+        int codECTsolicitado = ContrClienteContrato.consultaContratoClienteGrupoServ(idCliente, servico, nomeBD);
+        String tipoPost = "NAC";
+        if (servico.equals("OUTROS")) {
+            String aux[] = request.getParameter("servico_1").split(";");
+            tipoPost = aux[2];
+            servico = aux[1];
+            codECTsolicitado = Integer.parseInt(aux[0]);
+        }
+
+        //DADOS DO DESTINATARIO
+        int idDest = Integer.parseInt(request.getParameter("idDestinatario"));
+        String email_destinatario = request.getParameter("email_destinatario");
+        String celular = request.getParameter("celular");
+        String nome = FormataString.removeSpecialChars(request.getParameter("nome"));
+        String empresa = request.getParameter("empresa");
+        String cpf = request.getParameter("cpf_cnpj");
+        String cep = request.getParameter("cep");
+        String endereco = request.getParameter("endereco");
+        String numero = request.getParameter("numero");
+        if (request.getParameter("sn") != null) {
+            numero = "S/N";
+        }
+        String complemento = request.getParameter("complemento");
+        String bairro = request.getParameter("bairro");
+        String cidade = request.getParameter("cidade");
+        String uf = request.getParameter("uf");
+        String aosCuidados = request.getParameter("aoscuidados");
+        String siglaPais = "BR";
+        String pais = "Brasil";
+        if (tipoPost.equals("INT")) {
+            String[] auxPais = request.getParameter("pais").split(";");
+            siglaPais = auxPais[0];
+            pais = auxPais[1];
+            uf = request.getParameter("estado");
+        }
+
+        if (idDest == 0) {
+            contrDestinatario.inserir(idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, pais, email_destinatario, celular, nomeBD);
+        } else {
+            contrDestinatario.editar(idDest, idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, pais, email_destinatario, celular, nomeBD);
+        }
+
+        //PESQUISA QUAL AMARRACAO UTILIZADA
+        Amarracao am = ContrAmarracao.consultaAmarracaoByCep(cep, servico, nomeBD);
+        String siglaAmarracao = "- - -";
+        if (am != null) {
+            siglaAmarracao = am.getSiglaAmarracao();
+        } else if (tipoPost.equals("INT")) {
+            siglaAmarracao = "INT";
+        }
+        
+        for (int i = 0; i < qtdPostagem; i++) {            
+            
+            int idDestinatario = ContrPreVendaDest.inserir(idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, email_destinatario, celular, pais, nomeBD);
+            if(idDestinatario > 0){
+
+                //VERIFICA OS DADOS E PEGA O NUM DO OBJETO
+                String numObjeto = "avista";
+                String tipoEtiqueta = "SEM_REGISTRO";
+
+                //VERIFICA SE O CLIENTE TEM CONTRATO
+                int codECT = codECTsolicitado;            
+                //VERIFICA A QTD DE ETIQUETA
+                int qtdEtq = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ(servico, 0, idCliente, nomeBD);
+                if (codECT != 0 && qtdEtq != 0) {
+                    String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, nomeBD);
+                    if (etq != null) {
+                        String aux[] = etq.split(";");
+                        numObjeto = aux[0];
+                        tipoEtiqueta = aux[1];
+                    }
+                } else if (codECT == 0) {
+                    ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico, tipo);
+                    codECT = se.getCodECT();
+                    if (codECT == 10014 && servico.equals("CARTA")) {
+                        registro = Integer.parseInt(request.getParameter("tipoCarta"));
+                    }
+                    contrato = "";
+                }
+                //VERIFICA A EXISTENCIA DE COMBO PARA O SERVIÇO
+                //codECT = ContrServicoCombo.consultaCodCombo(codECT, ar, mp, vd);
+
+                //INSERE PRE VENDA      
+                ContrPreVenda.inserir(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD);
+            
+            }else{
+                response.sendRedirect("Cliente/Servicos/pre_postagem.jsp?Falha ao inserir o destinatario!");                
+            }
+        }
+
         response.sendRedirect("Cliente/Servicos/pre_postagem.jsp");
 
     }

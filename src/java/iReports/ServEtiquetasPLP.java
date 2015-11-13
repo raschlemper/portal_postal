@@ -13,6 +13,7 @@ import Util.Conexao;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -81,6 +82,7 @@ public class ServEtiquetasPLP extends HttpServlet {
                 parametros.put("urlLogoCli", url);                   
 
                 byte[] bytes = null;
+                Connection conn = Conexao.conectar(nomeBD);
                 try {
                     InputStream in = getClass().getResourceAsStream(url_jrxml);
                     JasperDesign jasperDesign = JRXmlLoader.load(in);                    
@@ -95,9 +97,11 @@ public class ServEtiquetasPLP extends HttpServlet {
                     jasperDesign.setQuery(query);
                     
                     JasperReport jr = JasperCompileManager.compileReport(jasperDesign);
-                    JasperPrint impressao = JasperFillManager.fillReport(jr, parametros, Conexao.conectar(nomeBD));
+                    JasperPrint impressao = JasperFillManager.fillReport(jr, parametros, conn);
+                    Conexao.desconectar(conn);
                     bytes = JasperExportManager.exportReportToPdf(impressao);
                 } catch (Exception e) {
+                    Conexao.desconectar(conn);
                     System.out.println(e);
                     e.printStackTrace();
                     return;

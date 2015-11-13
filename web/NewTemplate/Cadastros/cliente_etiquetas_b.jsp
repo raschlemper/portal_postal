@@ -357,7 +357,8 @@
                 var nIni = form.faixa_inicial.value.substring(0, 8);
                 var nFim = form.faixa_final.value.substring(0, 8);
                 var qtd = parseInt(nFim - nIni + 1);
-                if (form.qtd.value !== qtd) {
+                
+                if (parseInt(form.qtd.value) !== qtd) {
                     alert('Quantidade de Etiquetas não Confere!\n\nQuantidade Calculada pelo Sistema: ' + qtd);
                     return false;
                 }

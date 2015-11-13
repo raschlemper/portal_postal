@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
  */
 public class LogisticaReversa {
     
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     private int id;
     private int idCliente;
     private int range;

@@ -12,6 +12,7 @@ import Util.Conexao;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -119,15 +120,16 @@ public class ServOrdemServico extends HttpServlet {
                     parametros.put("TOTAL", os.getQtdObjetos()+"");               
 
                     byte[] bytes = null;
+                    Connection conn = Conexao.conectar(nomeBD);
                     try {
-
                         InputStream in = getClass().getResourceAsStream("ordem_servico.jrxml");
                         JasperDesign jasperDesign = JRXmlLoader.load(in);
                         JasperReport jr = JasperCompileManager.compileReport(jasperDesign);
-                        JasperPrint impressao = JasperFillManager.fillReport(jr, parametros, Conexao.conectar(nomeBD));
+                        JasperPrint impressao = JasperFillManager.fillReport(jr, parametros, conn);
+                        Conexao.desconectar(conn);
                         bytes = JasperExportManager.exportReportToPdf(impressao);
-
                     } catch (Exception e) {
+                        Conexao.desconectar(conn);
                         System.out.println(e);
                         e.printStackTrace();
                         return;

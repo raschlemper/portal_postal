@@ -86,7 +86,7 @@
                     sql += " AND siglaServAdicionais LIKE '%VD%'";
                 }
                 sql += " ORDER BY dataPostagem DESC";
-                System.out.println(sql);
+                
                 ArrayList movimentacao = Controle.contrMovimentacao.getConsultaSintetica(sql, nomeBD);
 
                 if (movimentacao.size() >= 1) {

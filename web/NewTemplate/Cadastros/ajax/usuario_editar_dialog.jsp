@@ -229,7 +229,7 @@
                         <option value="501" <%if (listaAcConsol.contains(501)) {%>selected<%}%> >OBJETO POSTAL</option>
                         <option value="502" <%if (listaAcConsol.contains(502)) {%>selected<%}%> >ORDENS DE SERVIÇO</option>
                         <option value="503" <%if (listaAcConsol.contains(503)) {%>selected<%}%> >EXPORTAÇÕES SECT REALIZADAS</option>
-                        <option value="503" <%if (listaAcConsol.contains(504)) {%>selected<%}%> >EXPORTAÇÕES SARA REALIZADAS</option>
+                        <option value="504" <%if (listaAcConsol.contains(504)) {%>selected<%}%> >EXPORTAÇÕES SARA REALIZADAS</option>
                     </select>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">

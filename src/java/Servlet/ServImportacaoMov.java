@@ -168,9 +168,9 @@ public class ServImportacaoMov extends HttpServlet {
     private String inserirDiretorio(FileItem item) throws IOException {
 
         String caminho = getServletContext().getRealPath("MovimentacaoImport");
-        System.out.println(caminho);
+        //System.out.println(caminho);
         caminho = "/var/lib/tomcat/webapps/PortalPostal/MovimentacaoImport";
-        System.out.println(caminho);    
+        //System.out.println(caminho);    
         //Cria o diretório caso ele não exista
         File diretorio = new File(caminho);
         if (!diretorio.exists()) {

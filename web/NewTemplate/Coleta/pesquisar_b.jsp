@@ -357,6 +357,11 @@
                                                                 int idColeta = col.getIdColeta();
                                                                 int idCli = col.getIdCliente();
                                                                 String nomeFantasia = col.getNomeFantasia();
+                                                                if(nomeFantasia == null){
+                                                                    nomeFantasia = "Cliente Cód. " +idCli+" não encontrado!";
+                                                                }else if(nomeFantasia.equals("")){
+                                                                    nomeFantasia = "Cliente Cód. " + idCli;
+                                                                }
                                                                 String tipo = col.getTipoColeta();
                                                                 String obs = col.getObs();
                                                                 String dataColeta = hr1.format(col.getDataHoraColeta());
@@ -401,14 +406,18 @@
                                                             <td>
                                                                 <%
                                                                     Clientes cli = Controle.contrCliente.consultaClienteById(idCli, nomeBD);
-                                                                    String rua = cli.getEndereco();
-                                                                    String compl = cli.getComplemento();
-                                                                    String bairro = cli.getBairro();
-                                                                    String cid = cli.getCidade();
-                                                                    String tel = cli.getTelefone();
+                                                                    String resultado = "CLIENTE CÓD. " + idCli + " NÃO ENCONTRADO";
+                                                                    String tel = "- - -";
+                                                                    if(cli != null){                                                                     
+                                                                        String rua = cli.getEndereco();
+                                                                        String compl = cli.getComplemento();
+                                                                        String bairro = cli.getBairro();
+                                                                        String cid = cli.getCidade();
+                                                                        tel = cli.getTelefone();
 
-                                                                    String resultado = rua + "<br/>" + compl + "<br/>" + bairro + "<br/>" + cid;
-                                                                    resultado = resultado.toUpperCase();
+                                                                        resultado = rua + "<br/>" + compl + "<br/>" + bairro + "<br/>" + cid;
+                                                                        resultado = resultado.toUpperCase();   
+                                                                    }
 
                                                                 %>
                                                                 <span class="popover-options">

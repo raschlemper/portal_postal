@@ -4,16 +4,12 @@
  */
 package iReports;
 
-import Controle.contrCliente;
-import Entidade.Clientes;
 import Util.Conexao;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
@@ -21,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
@@ -32,9 +27,8 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 public class ServRelatorioLogEtq extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -49,21 +43,22 @@ public class ServRelatorioLogEtq extends HttpServlet {
         if (expira == null) {
             response.sendRedirect("index.jsp?msgLog=3");
         } else {
-            try {
-                String idCliente = request.getParameter("idCliente");
-                String nomeBD = (String) sessao.getAttribute("empresa");
-                Map parametros = new HashMap();
-                parametros.put("nomeBD", nomeBD);
-                parametros.put("msg", "mensagem");
-                parametros.put("idCliente", idCliente);
+            String idCliente = request.getParameter("idCliente");
+            String nomeBD = (String) sessao.getAttribute("empresa");
+            Map parametros = new HashMap();
+            parametros.put("nomeBD", nomeBD);
+            parametros.put("msg", "mensagem");
+            parametros.put("idCliente", idCliente);
 
-                byte[] bytes = null;
+            byte[] bytes = null;
+            Connection conn = Conexao.conectar(nomeBD);
+            try {
                 InputStream in = getClass().getResourceAsStream("relatorio_log_etiquetas.jrxml");
                 JasperDesign jasperDesign = JRXmlLoader.load(in);
                 JasperReport jr = JasperCompileManager.compileReport(jasperDesign);
-                JasperPrint impressao = JasperFillManager.fillReport(jr, parametros, Conexao.conectar(nomeBD));
+                JasperPrint impressao = JasperFillManager.fillReport(jr, parametros, conn);
+                Conexao.desconectar(conn);
                 bytes = JasperExportManager.exportReportToPdf(impressao);
-
 
                 if (bytes != null && bytes.length > 0) {
                     response.setContentType("application/pdf");
@@ -74,18 +69,17 @@ public class ServRelatorioLogEtq extends HttpServlet {
                     ouputStream.flush();
                     ouputStream.close();
                 }
-                
             } catch (JRException ex) {
-                response.sendRedirect("/Agencia/Configuracao/cliente_etiquetas.jsp?idCliente=83&msg="+ex);
+                Conexao.desconectar(conn);
+                response.sendRedirect("/Agencia/Configuracao/cliente_etiquetas.jsp?idCliente=83&msg=" + ex);
             }
-                
+
         }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -99,8 +93,7 @@ public class ServRelatorioLogEtq extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response

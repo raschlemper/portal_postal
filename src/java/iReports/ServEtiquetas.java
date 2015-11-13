@@ -11,6 +11,7 @@ import Util.Conexao;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -62,6 +63,14 @@ public class ServEtiquetas extends HttpServlet {
             String url_jrxml = "etiquetas_reimp.jrxml";
             if(formato.equals("A4")){
                 url_jrxml = "etiquetas_reimp.jrxml";
+            }else if(formato.equals("ENV_DL")){
+                url_jrxml = "etiquetas_envelope_DL.jrxml";
+            }else if(formato.equals("ENV_C5")){
+                url_jrxml = "etiquetas_envelope_C5.jrxml";
+            }else if(formato.equals("ENV_B4")){
+                url_jrxml = "etiquetas_envelope_B4.jrxml";
+            }else if(formato.equals("ETQ_10x10")){
+                url_jrxml = "etiquetas_10x10.jrxml";
             }else if(formato.equals("ETQ_16x10")){
                 url_jrxml = "etiquetas_16x10.jrxml";
             }
@@ -108,6 +117,7 @@ public class ServEtiquetas extends HttpServlet {
                 
 
                 byte[] bytes = null;
+                Connection conn = Conexao.conectar(nomeBD);
                 try {
                     InputStream in = getClass().getResourceAsStream(url_jrxml);
                     JasperDesign jasperDesign = JRXmlLoader.load(in);                    
@@ -155,10 +165,12 @@ public class ServEtiquetas extends HttpServlet {
                     jasperDesign.setQuery(query);
                     
                     JasperReport jr = JasperCompileManager.compileReport(jasperDesign);
-                    JasperPrint impressao = JasperFillManager.fillReport(jr, parametros, Conexao.conectar(nomeBD));
+                    JasperPrint impressao = JasperFillManager.fillReport(jr, parametros, conn);
+                    Conexao.desconectar(conn);
                     bytes = JasperExportManager.exportReportToPdf(impressao);
 
-                } catch (Exception e) {
+                } catch (Exception e) {                    
+                    Conexao.desconectar(conn);
                     System.out.println(e);
                     e.printStackTrace();
                     return;

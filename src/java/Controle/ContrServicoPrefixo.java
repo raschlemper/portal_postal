@@ -49,6 +49,22 @@ public class ContrServicoPrefixo {
         }
     }
     
+    public static int excluirByPrefixo(String prefixo_servico, String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        try {
+            String sql = "DELETE FROM servicos_prefixos WHERE prefixo = ?;";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, prefixo_servico);
+            int i = pstmt.executeUpdate();
+            return i;
+        } catch (SQLException e) {
+            Logger.getLogger(ContrAmarracao.class.getName()).log(Level.WARNING, e.getMessage(), e);
+            return -1;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+    
     public static int excluirByServico(String grupo_servico, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         try {

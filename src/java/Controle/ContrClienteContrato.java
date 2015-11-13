@@ -217,7 +217,7 @@ public class ContrClienteContrato {
             for (int i = 0; result.next(); i++) {
                 codECT = result.getInt("codECT");
             }
-            System.out.println(sql2);
+            
             valores = conn.prepareStatement(sql2);
             result = (ResultSet) valores.executeQuery();
             if(result.next()){

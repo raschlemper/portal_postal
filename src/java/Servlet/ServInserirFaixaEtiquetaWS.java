@@ -4,6 +4,7 @@
  */
 package Servlet;
 
+import Controle.ContrServicoPrefixo;
 import Controle.contrCliente;
 import Entidade.Clientes;
 import Util.CalculoEtiqueta;
@@ -150,7 +151,14 @@ public class ServInserirFaixaEtiquetaWS extends HttpServlet {
                                             sql += " ('" + etiqueta + "', " + idImportacao + ", " + idCliente + ", " + servico + ", '" + grupoServ + "', '" + cartao + "', " + uso + "),";
                                         }
                                     }
+                                    
+                                    //INSERE ETIQUETAS NO BANCO DE DADOS PARA O CLIENTE
                                     Controle.ContrClienteEtiquetas.insereEtiquetas(sql, nomeBD);
+                                    //EXCLUIR O PREFIXO SOLICITADO CASO EXISTA
+                                    ContrServicoPrefixo.excluirByPrefixo(prefixo, nomeBD);
+                                    //INSERE ESTE PREFIXO COMO PREFIXO DE SEQ. LOGICA
+                                    Controle.ContrServicoPrefixo.inserir(grupoServ, "", prefixo, 0, 1, nomeBD);
+                                    
                                     sessao.setAttribute("msg", "Faixa de Etiqueta inserida com sucesso!");
 
                                 } else {

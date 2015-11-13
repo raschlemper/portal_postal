@@ -304,7 +304,13 @@
                                     <label>Tamanho da impressão:</label>
                                     <select style="width: 220px;" name="formato" id="formato">
                                         <option value="A4">Folha A4</option> 
-                                        <option value="ETQ_16x10">Etiqueta 16cm x 10cm</option> 
+                                        <option disabled>----------------</option>
+                                        <option value="ETQ_16x10">Etiqueta Adesiva - 16cm x 10cm</option> 
+                                        <option value="ETQ_10x10">Etiqueta Adesiva - 10cm x 10cm</option> 
+                                        <option disabled>----------------</option>
+                                        <option value="ENV_DL">Envelope Ofício / DL - 11,4cm x 22,9cm</option> 
+                                        <option value="ENV_C5">Envelope C5 - 16,2cm x 22,9cm</option> 
+                                        <option value="ENV_B4">Envelope B4 - 35,3cm x 25cm</option>
                                         <%--<option value="PIMACO_6288_1">PIMACO 6288 - Inicio 1/4</option> 
                                         <option value="PIMACO_6288_2">PIMACO 6288 - Inicio 2/4</option> 
                                         <option value="PIMACO_6288_3">PIMACO 6288 - Inicio 3/4</option> 

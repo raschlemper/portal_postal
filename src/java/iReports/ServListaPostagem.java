@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -89,17 +90,19 @@ public class ServListaPostagem extends HttpServlet {
                     parametros.put("TOTAL", os.getQtdObjetos() + "");
 
                     byte[] bytes = null;
+                    Connection conn = Conexao.conectar(nomeBD);
                     try {
 
                         InputStream in = getClass().getResourceAsStream("lista_postagem_fat.jrxml");
                         JasperDesign jasperDesign = JRXmlLoader.load(in);
                         JasperReport jr = JasperCompileManager.compileReport(jasperDesign);
-                        JasperPrint impressao = JasperFillManager.fillReport(jr, parametros, Conexao.conectar(nomeBD));
+                        JasperPrint impressao = JasperFillManager.fillReport(jr, parametros, conn);
 
                         InputStream in2 = getClass().getResourceAsStream("lista_postagem_av.jrxml");
                         JasperDesign jasperDesign2 = JRXmlLoader.load(in2);
                         JasperReport jr2 = JasperCompileManager.compileReport(jasperDesign2);
-                        JasperPrint impressao2 = JasperFillManager.fillReport(jr2, parametros, Conexao.conectar(nomeBD));
+                        JasperPrint impressao2 = JasperFillManager.fillReport(jr2, parametros, conn);
+                        Conexao.desconectar(conn);
                         //bytes = JasperExportManager.exportReportToPdf(impressao2);
                         List pages = impressao2.getPages();
                         for (int j = 0; j < pages.size(); j++) {
@@ -110,6 +113,7 @@ public class ServListaPostagem extends HttpServlet {
                         bytes = JasperExportManager.exportReportToPdf(impressao);
 
                     } catch (Exception e) {
+                    Conexao.desconectar(conn);
                         System.out.println(e);
                         e.printStackTrace();
                         return;

@@ -11,6 +11,7 @@ import Util.Conexao;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -85,6 +86,7 @@ public class ServEtiquetasAr extends HttpServlet {
                 }
 
                 byte[] bytes = null;
+                Connection conn = Conexao.conectar(nomeBD);
                 try {
                     InputStream in = getClass().getResourceAsStream(url_jrxml);
                     JasperDesign jasperDesign = JRXmlLoader.load(in);                    
@@ -119,10 +121,12 @@ public class ServEtiquetasAr extends HttpServlet {
                     jasperDesign.setQuery(query);
                     
                     JasperReport jr = JasperCompileManager.compileReport(jasperDesign); 
-                    JasperPrint impressao = JasperFillManager.fillReport(jr, parametros, Conexao.conectar(nomeBD));
+                    JasperPrint impressao = JasperFillManager.fillReport(jr, parametros, conn);
+                    Conexao.desconectar(conn);
                     bytes = JasperExportManager.exportReportToPdf(impressao);
 
                 } catch (Exception e) {
+                    Conexao.desconectar(conn);
                     e.printStackTrace();
                     return;
                 }

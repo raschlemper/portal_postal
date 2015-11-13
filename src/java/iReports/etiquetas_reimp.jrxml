@@ -208,15 +208,15 @@
 				<text><![CDATA[DESENVOLVIDO POR SCC4. WWW.SCC4.COM.BR]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="146" y="277" width="29" height="18" uuid="b6530c8f-54c0-4b8d-b476-259434e6bd8c"/>
-				<textElement>
+				<reportElement x="146" y="283" width="29" height="18" uuid="b6530c8f-54c0-4b8d-b476-259434e6bd8c"/>
+				<textElement textAlignment="Center">
 					<font size="14" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ar}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="146" y="298" width="29" height="18" uuid="21aed67b-cd0a-42e9-a466-0791ea705380"/>
-				<textElement>
+				<reportElement x="146" y="300" width="29" height="18" uuid="21aed67b-cd0a-42e9-a466-0791ea705380"/>
+				<textElement textAlignment="Center">
 					<font size="14" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{mp}]]></textFieldExpression>
@@ -371,6 +371,15 @@
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{celular}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="146" y="266" width="29" height="18" uuid="708ffae5-52be-4c20-89be-1100a64bf600">
+					<printWhenExpression><![CDATA[$F{vd}.equals( "VD" )]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["*"]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
