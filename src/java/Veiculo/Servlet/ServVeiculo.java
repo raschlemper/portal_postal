@@ -121,8 +121,8 @@ public class ServVeiculo extends HttpServlet {
     }   
     
     private void save(HttpServletRequest request, HttpServletResponse response) throws Exception {        
-        Veiculo veiculo = getVeiculoFromRequest(request);
         if(!validation(request, response)) return;
+        Veiculo veiculo = getVeiculoFromRequest(request);
         if(veiculo.getId() != null) { update(request, response); }
         else { create(request, response); }
     }

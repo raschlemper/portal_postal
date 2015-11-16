@@ -137,6 +137,7 @@ var VeiculoCombustivelController = function(form) {
         if(!validarCampoQuantidade(form)) return false;
         if(!validarCampoData(form)) return false;
         if(!validarCampoValor(form)) return false;
+        if(!validarCampoValorUnitario(form)) return false;
         if(!form.idVeiculoCombustivel) {
             if(!validarCampoQuilometragemFinal(form)) return false;
         }
@@ -151,6 +152,11 @@ var VeiculoCombustivelController = function(form) {
     var validarCampoValor = function(form) {
         var msg = 'Preencha o valor total do abastecimento!';
         return VeiculoValidacao.campoNotNull(form.valorTotal.value, msg);
+    };
+    
+    var validarCampoValorUnitario = function(form) {
+        var msg = 'Preencha o valor unitário do abastecimento!';
+        return VeiculoValidacao.campoNotNull(form.valorUnitario.value, msg);
     };
     
     var validarCampoData = function(form) {

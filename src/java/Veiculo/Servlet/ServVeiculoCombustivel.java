@@ -7,8 +7,11 @@ package Veiculo.Servlet;
 
 import Controle.ContrErroLog;
 import Veiculo.Controle.ContrVeiculoCombustivel;
+import Veiculo.Entidade.Veiculo;
 import Veiculo.Entidade.VeiculoCombustivel;
 import Veiculo.Entidade.VeiculoCombustivelDTO;
+import Veiculo.Validacao.VeiculoCombustivelValidacao;
+import Veiculo.Validacao.VeiculoValidacao;
 import Veiculo.builder.VeiculoCombustivelBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -134,7 +137,8 @@ public class ServVeiculoCombustivel extends HttpServlet {
     }   
     
     private void save(HttpServletRequest request, HttpServletResponse response) throws Exception {        
-        VeiculoCombustivel veiculo = getVeiculoFromRequest(request);
+        if(!validation(request, response)) return;
+        VeiculoCombustivel veiculo = getVeiculoFromRequest(request);        
         if(veiculo.getId() != null) { update(request, response); }
         else { create(request, response); }
     }
@@ -173,4 +177,16 @@ public class ServVeiculoCombustivel extends HttpServlet {
     private String getMsgToClient(VeiculoCombustivel veiculo) {
         return veiculo.getVeiculo().getModelo() + " (" +veiculo.getVeiculo().getPlaca() + ")";        
     }
+    
+    private boolean validation(HttpServletRequest request, HttpServletResponse response) throws Exception {       
+        VeiculoCombustivel veiculo = getVeiculoFromRequest(request);
+        VeiculoCombustivelValidacao validacao = new VeiculoCombustivelValidacao();
+        if(!validacao.validar(veiculo)) {
+            this.sessao.setAttribute("msg", validacao.getMsg());
+            response.sendRedirect(request.getHeader("referer")); 
+            return false;
+        } 
+        return true;
+    }
+    
 }
