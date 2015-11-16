@@ -1,5 +1,8 @@
 package Veiculo.Validacao;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 /**
  *
  * @author rafael
@@ -7,6 +10,7 @@ package Veiculo.Validacao;
 public abstract class Validacao<E> {  
     
     private String msg = null;
+    private final Calendar calendar = new GregorianCalendar();
 
     public String getMsg() {
         return msg;
@@ -16,39 +20,34 @@ public abstract class Validacao<E> {
         this.msg = msg;
     }    
     
+    protected Integer getAnoCorrente() {
+        return calendar.get(Calendar.YEAR);
+    }
+    
     protected boolean campoNotNull(Object value) {        
-        if(value != null) return true;
+        if(value != null && value != "") return true;
         return false;
     }
     
-    protected boolean campoBetween(Object value, comparatorInitial, comparatorFinal, msg) {
-        if(value) {
-            if(app.campoLessEqualThen(value, comparatorInitial) || app.campoMoreEqualThen(value, comparatorFinal)) {
-                return false;                 
-            }
+    protected boolean campoBetween(Object value, Integer comparatorInitial, Integer comparatorFinal) {
+        if(value == null) return true;
+        if(campoLessEqualThen(value, comparatorInitial) || campoMoreEqualThen(value, comparatorFinal)) {
+            return false;                 
         }
         return true;
     }
     
-    protected boolean campoLessEqualThen(Object value, comparator) {
-        var valueInt = parseInt(value.replace("\.", ""));
-        var comparatorInt = parseInt(comparator.replace("\.", ""));
-        if(valueInt >= comparatorInt) {
-            alert(msg);
-            return false;
-        }
+    protected boolean campoLessEqualThen(Object value, Integer comparator) {
+        Integer valueInt = Integer.parseInt(value.toString());
+        if(valueInt >= comparator) { return false; }
         return true;
-    }; 
+    }
     
     protected boolean campoMoreEqualThen(Object value, Integer comparator) {
-        var valueInt = parseInt(value.replace("\.", ""));
-        var comparatorInt = parseInt(comparator.replace("\.", ""));
-        if(valueInt <= comparatorInt) {
-            alert(msg);
-            return false;
-        }
+        Integer valueInt = Integer.parseInt(value.toString());
+        if(valueInt <= comparator) { return false; }
         return true;
-    }; 
+    }
         
     public abstract boolean validar(E object);
     

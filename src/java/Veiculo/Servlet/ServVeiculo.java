@@ -122,14 +122,9 @@ public class ServVeiculo extends HttpServlet {
     
     private void save(HttpServletRequest request, HttpServletResponse response) throws Exception {        
         Veiculo veiculo = getVeiculoFromRequest(request);
-        if(!validation(veiculo)) { return; }
-        if(existeVeiculo(veiculo)) {
-            this.sessao.setAttribute("msg", "Este Veículo já foi cadastrado!");
-            response.sendRedirect(request.getHeader("referer"));  
-        } else {
-            if(veiculo.getId() != null) { update(request, response); }
-            else { create(request, response); }
-        }
+        if(!validation(request, response)) return;
+        if(veiculo.getId() != null) { update(request, response); }
+        else { create(request, response); }
     }
     
     private void create(HttpServletRequest request, HttpServletResponse response) throws Exception {               
@@ -173,12 +168,18 @@ public class ServVeiculo extends HttpServlet {
         return veiculo.getModelo() + " (" +veiculo.getPlaca() + ")";        
     }
     
-    private boolean validation(Veiculo veiculo) {
+    private boolean validation(HttpServletRequest request, HttpServletResponse response) throws Exception {       
+        Veiculo veiculo = getVeiculoFromRequest(request);
         VeiculoValidacao validacao = new VeiculoValidacao();
         if(!validacao.validar(veiculo)) {
             this.sessao.setAttribute("msg", validacao.getMsg());
+            response.sendRedirect(request.getHeader("referer")); 
             return false;
-        }        
+        } else if(existeVeiculo(veiculo)) {
+            this.sessao.setAttribute("msg", "Este Veículo já foi cadastrado!");
+            response.sendRedirect(request.getHeader("referer"));  
+            return false;
+        } 
         return true;
     }
 
