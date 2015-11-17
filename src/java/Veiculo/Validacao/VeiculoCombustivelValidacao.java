@@ -43,14 +43,14 @@ public class VeiculoCombustivelValidacao extends Validacao<VeiculoCombustivel> {
     }           
 
     public boolean validarQuilometragemInicial(VeiculoCombustivel veiculo) {        
-        if(campoNotNull(veiculo.getQuilometragemFinal())) return true; 
-        setMsg("Preencha a quilometragem inicial do veículo!");  
+        if(campoNotNull(veiculo.getQuilometragemInicial())) return true; 
+        setMsg("Preencha a quilometragem anterior do veículo!");  
         return false;        
     }     
 
     public boolean validarQuilometragemFinal(VeiculoCombustivel veiculo) {        
         if(!campoNotNull(veiculo.getQuilometragemFinal())) { 
-            setMsg("Preencha a quilometragem final do veículo!"); 
+            setMsg("Preencha a quilometragem atual do veículo!"); 
             return false;
         }
         if(campoMoreEqualThen(veiculo.getQuilometragemFinal(), veiculo.getQuilometragemInicial())) {

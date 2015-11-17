@@ -118,7 +118,7 @@ var VeiculoSeguroController = function(form) {
     }; 
     
     var validarCampoNumeroSeguro = function(form) {
-       var msg = 'Preencha o n\u00FAmero da seguro!';
+       var msg = 'Preencha o n\u00FAmero do seguro!';
         return VeiculoValidacao.campoNotNull(form.numeroSeguro.value, msg);
     }; 
     

@@ -7,8 +7,12 @@ package Veiculo.Servlet;
 
 import Controle.ContrErroLog;
 import Veiculo.Controle.ContrVeiculoMulta;
+import Veiculo.Entidade.Veiculo;
 import Veiculo.Entidade.VeiculoMulta;
 import Veiculo.Entidade.VeiculoMultaDTO;
+import Veiculo.Validacao.Validacao;
+import Veiculo.Validacao.VeiculoMultaValidacao;
+import Veiculo.Validacao.VeiculoValidacao;
 import Veiculo.builder.VeiculoMultaBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -120,7 +124,8 @@ public class ServVeiculoMulta extends HttpServlet {
         response.getWriter().write(object.toString());
     }   
     
-    private void save(HttpServletRequest request, HttpServletResponse response) throws Exception {        
+    private void save(HttpServletRequest request, HttpServletResponse response) throws Exception {         
+        if(!validation(request, response)) return;      
         VeiculoMulta veiculo = getVeiculoFromRequest(request);
         if(veiculo.getId() != null) { update(request, response); }
         else { create(request, response); }
@@ -160,4 +165,16 @@ public class ServVeiculoMulta extends HttpServlet {
     private String getMsgToClient(VeiculoMulta veiculo) {
         return veiculo.getVeiculo().getModelo() + " (" +veiculo.getVeiculo().getPlaca() + ")";        
     }
+    
+    private boolean validation(HttpServletRequest request, HttpServletResponse response) throws Exception {       
+        VeiculoMulta veiculo = getVeiculoFromRequest(request);
+        Validacao validacao = new VeiculoMultaValidacao();
+        if(!validacao.validar(veiculo)) {
+            this.sessao.setAttribute("msg", validacao.getMsg());
+            response.sendRedirect(request.getHeader("referer")); 
+            return false;
+        }  
+        return true;
+    }
+    
 }

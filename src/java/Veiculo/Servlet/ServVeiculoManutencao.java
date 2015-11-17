@@ -7,8 +7,12 @@ package Veiculo.Servlet;
 
 import Controle.ContrErroLog;
 import Veiculo.Controle.ContrVeiculoManutencao;
+import Veiculo.Entidade.Veiculo;
 import Veiculo.Entidade.VeiculoManutencao;
 import Veiculo.Entidade.VeiculoManutencaoDTO;
+import Veiculo.Validacao.Validacao;
+import Veiculo.Validacao.VeiculoManutencaoValidacao;
+import Veiculo.Validacao.VeiculoValidacao;
 import Veiculo.builder.VeiculoManutencaoBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -120,7 +124,8 @@ public class ServVeiculoManutencao extends HttpServlet {
         response.getWriter().write(object.toString());
     }   
     
-    private void save(HttpServletRequest request, HttpServletResponse response) throws Exception {        
+    private void save(HttpServletRequest request, HttpServletResponse response) throws Exception {       
+        if(!validation(request, response)) return;       
         VeiculoManutencao veiculo = getVeiculoFromRequest(request);
         if(veiculo.getId() != null) { update(request, response); }
         else { create(request, response); }
@@ -159,5 +164,16 @@ public class ServVeiculoManutencao extends HttpServlet {
     
     private String getMsgToClient(VeiculoManutencao veiculo) {
         return veiculo.getVeiculo().getModelo() + " (" +veiculo.getVeiculo().getPlaca() + ")";        
+    }
+    
+    private boolean validation(HttpServletRequest request, HttpServletResponse response) throws Exception {       
+        VeiculoManutencao veiculo = getVeiculoFromRequest(request);
+        Validacao validacao = new VeiculoManutencaoValidacao();
+        if(!validacao.validar(veiculo)) {
+            this.sessao.setAttribute("msg", validacao.getMsg());
+            response.sendRedirect(request.getHeader("referer")); 
+            return false;
+        } 
+        return true;
     }
 }

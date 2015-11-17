@@ -10,6 +10,7 @@ import Veiculo.Controle.ContrVeiculoCombustivel;
 import Veiculo.Entidade.Veiculo;
 import Veiculo.Entidade.VeiculoCombustivel;
 import Veiculo.Entidade.VeiculoCombustivelDTO;
+import Veiculo.Validacao.Validacao;
 import Veiculo.Validacao.VeiculoCombustivelValidacao;
 import Veiculo.Validacao.VeiculoValidacao;
 import Veiculo.builder.VeiculoCombustivelBuilder;
@@ -180,7 +181,7 @@ public class ServVeiculoCombustivel extends HttpServlet {
     
     private boolean validation(HttpServletRequest request, HttpServletResponse response) throws Exception {       
         VeiculoCombustivel veiculo = getVeiculoFromRequest(request);
-        VeiculoCombustivelValidacao validacao = new VeiculoCombustivelValidacao();
+        Validacao validacao = new VeiculoCombustivelValidacao();
         if(!validacao.validar(veiculo)) {
             this.sessao.setAttribute("msg", validacao.getMsg());
             response.sendRedirect(request.getHeader("referer")); 

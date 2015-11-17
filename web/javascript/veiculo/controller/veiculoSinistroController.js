@@ -121,12 +121,12 @@ var VeiculoSinistroController = function(form) {
     }; 
     
     var validarCampoNumeroSinistro = function(form) {
-        var msg = 'Preencha o n\u00FAmero da sinistro!';
-        return VeiculoValidacao.campoNotNull(form.numeroSinistro.value, msg);
+        var msg = 'Preencha o n\u00FAmero do boletim de ocorr\u00EAncia!';
+        return VeiculoValidacao.campoNotNull(form.boletimOcorrencia.value, msg);
     }; 
     
     var validarCampoData = function(form) {
-        var msg = 'Preencha a data da sinistro!';
+        var msg = 'Preencha a data do sinistro!';
         var msgValida = 'A data do sinistro n\u00E3o \u00E9 v\u00E1lida!';
         if(!VeiculoValidacao.campoNotNull(form.data.value, msg)) { return false; };
         return VeiculoValidacao.campoData(form.data.value, msgValida);

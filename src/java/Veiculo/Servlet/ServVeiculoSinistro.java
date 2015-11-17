@@ -9,6 +9,8 @@ import Controle.ContrErroLog;
 import Veiculo.Controle.ContrVeiculoSinistro;
 import Veiculo.Entidade.VeiculoSinistro;
 import Veiculo.Entidade.VeiculoSinistroDTO;
+import Veiculo.Validacao.Validacao;
+import Veiculo.Validacao.VeiculoSinistroValidacao;
 import Veiculo.builder.VeiculoSinistroBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -120,7 +122,8 @@ public class ServVeiculoSinistro extends HttpServlet {
         response.getWriter().write(object.toString());
     }   
     
-    private void save(HttpServletRequest request, HttpServletResponse response) throws Exception {        
+    private void save(HttpServletRequest request, HttpServletResponse response) throws Exception {                
+        if(!validation(request, response)) return;
         VeiculoSinistro veiculo = getVeiculoFromRequest(request);
         if(veiculo.getId() != null) { update(request, response); }
         else { create(request, response); }
@@ -160,4 +163,16 @@ public class ServVeiculoSinistro extends HttpServlet {
     private String getMsgToClient(VeiculoSinistro veiculo) {
         return veiculo.getVeiculo().getModelo() + " (" +veiculo.getVeiculo().getPlaca() + ")";        
     }
+    
+    private boolean validation(HttpServletRequest request, HttpServletResponse response) throws Exception {       
+        VeiculoSinistro veiculo = getVeiculoFromRequest(request);
+        Validacao validacao = new VeiculoSinistroValidacao();
+        if(!validacao.validar(veiculo)) {
+            this.sessao.setAttribute("msg", validacao.getMsg());
+            response.sendRedirect(request.getHeader("referer")); 
+            return false;
+        } 
+        return true;
+    }
+    
 }

@@ -9,6 +9,7 @@ import Controle.ContrErroLog;
 import Veiculo.Controle.ContrVeiculo;
 import Veiculo.Entidade.Veiculo;
 import Veiculo.Entidade.VeiculoDTO;
+import Veiculo.Validacao.Validacao;
 import Veiculo.Validacao.VeiculoValidacao;
 import Veiculo.builder.VeiculoBuilder;
 import java.io.IOException;
@@ -170,7 +171,7 @@ public class ServVeiculo extends HttpServlet {
     
     private boolean validation(HttpServletRequest request, HttpServletResponse response) throws Exception {       
         Veiculo veiculo = getVeiculoFromRequest(request);
-        VeiculoValidacao validacao = new VeiculoValidacao();
+        Validacao validacao = new VeiculoValidacao();
         if(!validacao.validar(veiculo)) {
             this.sessao.setAttribute("msg", validacao.getMsg());
             response.sendRedirect(request.getHeader("referer")); 

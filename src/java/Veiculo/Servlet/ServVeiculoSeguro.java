@@ -9,6 +9,8 @@ import Controle.ContrErroLog;
 import Veiculo.Controle.ContrVeiculoSeguro;
 import Veiculo.Entidade.VeiculoSeguro;
 import Veiculo.Entidade.VeiculoSeguroDTO;
+import Veiculo.Validacao.Validacao;
+import Veiculo.Validacao.VeiculoSeguroValidacao;
 import Veiculo.builder.VeiculoSeguroBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -120,7 +122,8 @@ public class ServVeiculoSeguro extends HttpServlet {
         response.getWriter().write(object.toString());
     }   
     
-    private void save(HttpServletRequest request, HttpServletResponse response) throws Exception {        
+    private void save(HttpServletRequest request, HttpServletResponse response) throws Exception {           
+        if(!validation(request, response)) return;   
         VeiculoSeguro veiculo = getVeiculoFromRequest(request);
         if(veiculo.getId() != null) { update(request, response); }
         else { create(request, response); }
@@ -160,4 +163,16 @@ public class ServVeiculoSeguro extends HttpServlet {
     private String getMsgToClient(VeiculoSeguro veiculo) {
         return veiculo.getVeiculo().getModelo() + " (" +veiculo.getVeiculo().getPlaca() + ")";        
     }
+    
+    private boolean validation(HttpServletRequest request, HttpServletResponse response) throws Exception {       
+        VeiculoSeguro veiculo = getVeiculoFromRequest(request);
+        Validacao validacao = new VeiculoSeguroValidacao();
+        if(!validacao.validar(veiculo)) {
+            this.sessao.setAttribute("msg", validacao.getMsg());
+            response.sendRedirect(request.getHeader("referer")); 
+            return false;
+        }
+        return true;
+    }
+    
 }
