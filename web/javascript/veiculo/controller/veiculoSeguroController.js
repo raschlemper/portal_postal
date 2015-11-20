@@ -56,7 +56,7 @@ var VeiculoSeguroController = function(form) {
                             '</button>' +
                       '</td>' +
                       '<td align="center">' +
-                            '<a class="btn btn-sm btn-danger" href="' + Configuracao.contextPath + '/veiculo/seguro?action=delete&idVeiculoSeguro={{id}}">' +
+                            '<a class="btn btn-sm btn-danger" onclick="veiculoSeguroCtrl.acoes.excluir({{id}})">' +
                                 '<i class="fa fa-lg fa-trash"></i>' +
                             '</a>' +
                       '</td>' +
@@ -132,6 +132,28 @@ var VeiculoSeguroController = function(form) {
         return VeiculoValidacao.campoNotNull(form.valorFranquia.value, msg);
     }; 
     
+    var excluir = function(idVeiculoSeguro) {                
+        bootbox.confirm({
+            title: 'Excluir Seguro?',
+            message: 'Deseja realmente excluir este seguro?',
+            buttons: {
+                'cancel': {
+                    label: '<i class="fa fa-lg fa-times fa-spc"></i> CANCELAR',
+                    className: 'btn btn-default pull-left'
+                },
+                'confirm': {
+                    label: '<i class="fa fa-lg fa-trash fa-spc"></i> EXCLUIR',
+                    className: 'btn btn-danger pull-right'
+                }
+            },
+            callback: function(result) {
+                if(result){
+                    window.location = Configuracao.contextPath + '/veiculo/seguro?action=delete&idVeiculoSeguro=' + idVeiculoSeguro;
+                }
+            }
+        });
+    };
+    
     
     // funcoes ///////// 
     
@@ -206,7 +228,8 @@ var VeiculoSeguroController = function(form) {
             pesquisarTodos: pesquisarTodos,
             pesquisar: pesquisar,
             editar: editar,                       
-            salvar: salvar
+            salvar: salvar,
+            excluir: excluir
         },
         funcoes: {
             setValueForm: setValueForm,

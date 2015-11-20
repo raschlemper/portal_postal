@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -37,7 +38,8 @@ public class ContrVeiculoSeguro {
 
     public static VeiculoSeguro consulta(String nomeBD, VeiculoSeguro veiculoSeguro) {
         Connection con = Conexao.conectar(nomeBD);
-        String sql = "SELECT * FROM veiculo_seguro, veiculo WHERE veiculo.idVeiculo = veiculo_seguro.idVeiculo AND idVeiculoSeguro = ?";
+        String sql = "SELECT * FROM veiculo_seguro, veiculo WHERE veiculo.idVeiculo = veiculo_seguro.idVeiculo AND idVeiculoSeguro = ?"
+                + "ORDER BY veiculo_seguro.idVeiculo";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, veiculoSeguro.getId());
@@ -60,9 +62,12 @@ public class ContrVeiculoSeguro {
             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, veiculoSeguro.getVeiculo().getId());
             ps.setInt(2, veiculoSeguro.getNumeroSeguro());
-            ps.setString(3, veiculoSeguro.getAssegurado());
-            ps.setDouble(4, veiculoSeguro.getValorFranquia());
-            ps.setString(5, veiculoSeguro.getIndenizacao());
+            if(veiculoSeguro.getAssegurado() == null) { ps.setNull(3, Types.VARCHAR); }
+            else { ps.setString(3, veiculoSeguro.getAssegurado()); }
+            if(veiculoSeguro.getValorFranquia() == null) { ps.setNull(4, Types.DOUBLE); }
+            else { ps.setDouble(4, veiculoSeguro.getValorFranquia()); }
+            if(veiculoSeguro.getIndenizacao() == null) { ps.setNull(5, Types.VARCHAR); }
+            else { ps.setString(5, veiculoSeguro.getIndenizacao()); }
             ps.executeUpdate();
             veiculoSeguro.setId(getLastId(ps));
             ps.close();
@@ -82,9 +87,12 @@ public class ContrVeiculoSeguro {
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, veiculoSeguro.getNumeroSeguro());
-            ps.setString(2, veiculoSeguro.getAssegurado());
-            ps.setDouble(3, veiculoSeguro.getValorFranquia());
-            ps.setString(4, veiculoSeguro.getIndenizacao());
+            if(veiculoSeguro.getAssegurado() == null) { ps.setNull(2, Types.VARCHAR); }
+            else { ps.setString(2, veiculoSeguro.getAssegurado()); }
+            if(veiculoSeguro.getValorFranquia() == null) { ps.setNull(3, Types.DOUBLE); }
+            else { ps.setDouble(3, veiculoSeguro.getValorFranquia()); }
+            if(veiculoSeguro.getIndenizacao() == null) { ps.setNull(4, Types.VARCHAR); }
+            else { ps.setString(4, veiculoSeguro.getIndenizacao()); }
             ps.setInt(5, veiculoSeguro.getId());
             ps.executeUpdate();
             ps.close();

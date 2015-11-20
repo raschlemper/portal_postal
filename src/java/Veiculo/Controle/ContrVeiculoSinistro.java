@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -18,7 +19,8 @@ public class ContrVeiculoSinistro {
 
     public static List<VeiculoSinistro> consultaTodos(String nomeBD) {
         Connection con = Conexao.conectar(nomeBD);
-        String sql = "SELECT * FROM veiculo_sinistro, veiculo WHERE veiculo.idVeiculo = veiculo_sinistro.idVeiculo ";
+        String sql = "SELECT * FROM veiculo_sinistro, veiculo WHERE veiculo.idVeiculo = veiculo_sinistro.idVeiculo "
+                + "ORDER BY veiculo_sinistro.idVeiculo, veiculo_sinistro.data";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet result = (ResultSet) ps.executeQuery();
@@ -62,9 +64,11 @@ public class ContrVeiculoSinistro {
             ps.setString(2, veiculoSinistro.getTipo());
             ps.setInt(3, veiculoSinistro.getBoletimOcorrencia());
             ps.setDate(4, new java.sql.Date(veiculoSinistro.getData().getTime()));
-            ps.setString(5, veiculoSinistro.getLocal());
+            if(veiculoSinistro.getLocal() == null) { ps.setNull(5, Types.VARCHAR); }
+            else { ps.setString(5, veiculoSinistro.getLocal()); }
             ps.setString(6, veiculoSinistro.getResponsavel());
-            ps.setString(7, veiculoSinistro.getDescricao());
+            if(veiculoSinistro.getDescricao() == null) { ps.setNull(7, Types.VARCHAR); }
+            else { ps.setString(7, veiculoSinistro.getDescricao()); }
             ps.executeUpdate();
             veiculoSinistro.setId(getLastId(ps));
             ps.close();
@@ -86,9 +90,11 @@ public class ContrVeiculoSinistro {
             ps.setString(1, veiculoSinistro.getTipo());
             ps.setInt(2, veiculoSinistro.getBoletimOcorrencia());
             ps.setDate(3, new java.sql.Date(veiculoSinistro.getData().getTime()));
-            ps.setString(4, veiculoSinistro.getLocal());
+            if(veiculoSinistro.getLocal() == null) { ps.setNull(4, Types.VARCHAR); }
+            else { ps.setString(4, veiculoSinistro.getLocal()); }
             ps.setString(5, veiculoSinistro.getResponsavel());
-            ps.setString(6, veiculoSinistro.getDescricao());
+            if(veiculoSinistro.getDescricao() == null) { ps.setNull(6, Types.VARCHAR); }
+            else { ps.setString(6, veiculoSinistro.getDescricao()); }
             ps.setInt(7, veiculoSinistro.getId());
             ps.executeUpdate();
             ps.close();

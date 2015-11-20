@@ -64,7 +64,7 @@ var VeiculoCombustivelController = function(form) {
                             '</button>' +
                       '</td>' +
                       '<td align="center">' +
-                            '<a class="btn btn-sm btn-danger" href="' + Configuracao.contextPath + '/veiculo/combustivel?action=delete&idVeiculoCombustivel={{id}}">' +
+                            '<a class="btn btn-sm btn-danger" onclick="veiculoCombustivelCtrl.acoes.excluir({{id}})">' +
                                 '<i class="fa fa-lg fa-trash"></i>' +
                             '</a>' +
                       '</td>' +
@@ -173,6 +173,28 @@ var VeiculoCombustivelController = function(form) {
         if(!VeiculoValidacao.campoNotNull(form.quilometragemFinal.value, msg)) { return false; };
         return VeiculoValidacao.campoMoreEqualThen(form.quilometragemFinal.value, form.quilometragemInicial.value, msgMenor);
     }; 
+        
+    var excluir = function(idVeiculoCombustivel) {                
+        bootbox.confirm({
+            title: 'Excluir Abastecimento?',
+            message: 'Deseja realmente excluir este abstecimento?',
+            buttons: {
+                'cancel': {
+                    label: '<i class="fa fa-lg fa-times fa-spc"></i> CANCELAR',
+                    className: 'btn btn-default pull-left'
+                },
+                'confirm': {
+                    label: '<i class="fa fa-lg fa-trash fa-spc"></i> EXCLUIR',
+                    className: 'btn btn-danger pull-right'
+                }
+            },
+            callback: function(result) {
+                if(result){
+                    window.location = Configuracao.contextPath + '/veiculo/combustivel?action=delete&idVeiculoCombustivel=' + idVeiculoCombustivel;
+                }
+            }
+        });
+    };
     
     
     // funcoes ///////// 
@@ -323,7 +345,8 @@ var VeiculoCombustivelController = function(form) {
             pesquisarTodos: pesquisarTodos,
             pesquisar: pesquisar,
             editar: editar,                       
-            salvar: salvar
+            salvar: salvar,
+            excluir: excluir
         },
         funcoes: {
             setValueForm: setValueForm,

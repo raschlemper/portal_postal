@@ -12,7 +12,6 @@ import Veiculo.Entidade.VeiculoMulta;
 import Veiculo.Entidade.VeiculoMultaDTO;
 import Veiculo.Validacao.Validacao;
 import Veiculo.Validacao.VeiculoMultaValidacao;
-import Veiculo.Validacao.VeiculoValidacao;
 import Veiculo.builder.VeiculoMultaBuilder;
 import java.io.IOException;
 import java.util.ArrayList;

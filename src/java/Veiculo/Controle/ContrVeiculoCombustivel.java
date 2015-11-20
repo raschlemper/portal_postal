@@ -19,7 +19,8 @@ public class ContrVeiculoCombustivel {
 
     public static List<VeiculoCombustivel> consultaTodos(String nomeBD) {
         Connection con = Conexao.conectar(nomeBD);
-        String sql = "SELECT * FROM veiculo_combustivel, veiculo WHERE veiculo.idVeiculo = veiculo_combustivel.idVeiculo ";
+        String sql = "SELECT * FROM veiculo_combustivel, veiculo WHERE veiculo.idVeiculo = veiculo_combustivel.idVeiculo "
+                + "ORDER BY veiculo_combustivel.idVeiculo, veiculo_combustivel.data";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet result = (ResultSet) ps.executeQuery();

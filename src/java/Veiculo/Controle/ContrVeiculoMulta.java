@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -18,7 +19,8 @@ public class ContrVeiculoMulta {
 
     public static List<VeiculoMulta> consultaTodos(String nomeBD) {
         Connection con = Conexao.conectar(nomeBD);
-        String sql = "SELECT * FROM veiculo_multa, veiculo WHERE veiculo.idVeiculo = veiculo_multa.idVeiculo ";
+        String sql = "SELECT * FROM veiculo_multa, veiculo WHERE veiculo.idVeiculo = veiculo_multa.idVeiculo "
+                + "ORDER BY veiculo_multa.idVeiculo, veiculo_multa.data";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet result = (ResultSet) ps.executeQuery();
@@ -62,8 +64,10 @@ public class ContrVeiculoMulta {
             ps.setInt(2, veiculoMulta.getNumeroMulta());
             ps.setDate(3, new java.sql.Date(veiculoMulta.getData().getTime()));
             ps.setDouble(4, veiculoMulta.getValor());
-            ps.setString(5, veiculoMulta.getLocal());
-            ps.setString(6, veiculoMulta.getDescricao());
+            if(veiculoMulta.getLocal() == null) { ps.setNull(5, Types.VARCHAR); }
+            else { ps.setString(5, veiculoMulta.getLocal()); }
+            if(veiculoMulta.getDescricao() == null) { ps.setNull(6, Types.VARCHAR); }
+            else { ps.setString(6, veiculoMulta.getDescricao()); }
             ps.executeUpdate();
             veiculoMulta.setId(getLastId(ps));
             ps.close();
@@ -85,8 +89,10 @@ public class ContrVeiculoMulta {
             ps.setInt(1, veiculoMulta.getNumeroMulta());
             ps.setDate(2, new java.sql.Date(veiculoMulta.getData().getTime()));
             ps.setDouble(3, veiculoMulta.getValor());
-            ps.setString(4, veiculoMulta.getLocal());
-            ps.setString(5, veiculoMulta.getDescricao());
+            if(veiculoMulta.getLocal() == null) { ps.setNull(4, Types.VARCHAR); }
+            else { ps.setString(4, veiculoMulta.getLocal()); }
+            if(veiculoMulta.getDescricao() == null) { ps.setNull(5, Types.VARCHAR); }
+            else { ps.setString(5, veiculoMulta.getDescricao()); }
             ps.setInt(6, veiculoMulta.getId());
             ps.executeUpdate();
             ps.close();

@@ -58,7 +58,7 @@ var VeiculoManutencaoController = function(form) {
                             '</button>' +
                       '</td>' +
                       '<td align="center">' +
-                            '<a class="btn btn-sm btn-danger" href="' + Configuracao.contextPath + '/veiculo/manutencao?action=delete&idVeiculoManutencao={{id}}">' +
+                            '<a class="btn btn-sm btn-danger" onclick="veiculoManutencaoCtrl.acoes.excluir({{id}})">' +
                                 '<i class="fa fa-lg fa-trash"></i>' +
                             '</a>' +
                       '</td>' +
@@ -146,7 +146,29 @@ var VeiculoManutencaoController = function(form) {
     var validarCampoDataEntrega = function(form) {
         var msg = 'A data de entrega da manuten\u00E7\u00E3o n\u00E3o \u00E9 v\u00E1lida!';
         return VeiculoValidacao.campoData(form.dataEntrega.value, msg);
-    };  
+    }; 
+    
+    var excluir = function(idVeiculoManutencao) {                
+        bootbox.confirm({
+            title: 'Excluir Manuten\u00E7\u00E3o?',
+            message: 'Deseja realmente excluir esta manuten\u00E7\u00E3o?',
+            buttons: {
+                'cancel': {
+                    label: '<i class="fa fa-lg fa-times fa-spc"></i> CANCELAR',
+                    className: 'btn btn-default pull-left'
+                },
+                'confirm': {
+                    label: '<i class="fa fa-lg fa-trash fa-spc"></i> EXCLUIR',
+                    className: 'btn btn-danger pull-right'
+                }
+            },
+            callback: function(result) {
+                if(result){
+                    window.location = Configuracao.contextPath + '/veiculo/manutencao?action=delete&idVeiculoManutencao=' + idVeiculoManutencao;
+                }
+            }
+        });
+    };
     
     
     // funcoes ///////// 
@@ -225,7 +247,8 @@ var VeiculoManutencaoController = function(form) {
             pesquisarTodos: pesquisarTodos,
             pesquisar: pesquisar,
             editar: editar,                       
-            salvar: salvar
+            salvar: salvar,
+            excluir: excluir
         },
         funcoes: {
             setValueForm: setValueForm,

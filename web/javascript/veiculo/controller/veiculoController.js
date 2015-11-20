@@ -64,7 +64,7 @@ var VeiculoController = function(form) {
                             '</button>' +
                       '</td>' +
                       '<td align="center">' +
-                            '<a class="btn btn-sm btn-danger" href="' + Configuracao.contextPath + '/veiculo?action=delete&idVeiculo={{id}}">' +
+                            '<a class="btn btn-sm btn-danger" onclick="veiculoCtrl.acoes.excluir({{id}})">' +
                                 '<i class="fa fa-lg fa-trash"></i>' +
                             '</a>' +
                       '</td>' +
@@ -159,6 +159,29 @@ var VeiculoController = function(form) {
         var msg = 'Preencha a quilometragem do ve\u00EDculo!';
         return VeiculoValidacao.campoNotNull(form.quilometragem.value, msg);
     }; 
+        
+    var excluir = function(idVeiculo) {                
+        bootbox.confirm({
+            title: 'Excluir Ve\u00EDculo?',
+            message: 'Deseja realmente excluir este ve\u00EDculo?',
+            buttons: {
+                'cancel': {
+                    label: '<i class="fa fa-lg fa-times fa-spc"></i> CANCELAR',
+                    className: 'btn btn-default pull-left'
+                },
+                'confirm': {
+                    label: '<i class="fa fa-lg fa-trash fa-spc"></i> EXCLUIR',
+                    className: 'btn btn-danger pull-right'
+                }
+            },
+            callback: function(result) {
+                if(result){
+                    window.location = Configuracao.contextPath + '/veiculo?action=delete&idVeiculo=' + idVeiculo;
+                }
+            }
+        });
+    };
+
     
     
     // funcoes /////////
@@ -288,7 +311,8 @@ var VeiculoController = function(form) {
             pesquisarTodos: pesquisarTodos,
             pesquisar: pesquisar,
             editar: editar,                       
-            salvar: salvar
+            salvar: salvar,
+            excluir: excluir
         },
         funcoes: {
             setValueForm: setValueForm,

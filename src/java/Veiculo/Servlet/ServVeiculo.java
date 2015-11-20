@@ -166,7 +166,7 @@ public class ServVeiculo extends HttpServlet {
     }
     
     private String getMsgToClient(Veiculo veiculo) {
-        return veiculo.getModelo() + " (" +veiculo.getPlaca() + ")";        
+        return veiculo.getModelo() + " (" + veiculo.getPlaca() + ")";        
     }
     
     private boolean validation(HttpServletRequest request, HttpServletResponse response) throws Exception {       

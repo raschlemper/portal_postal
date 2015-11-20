@@ -7,12 +7,10 @@ package Veiculo.Servlet;
 
 import Controle.ContrErroLog;
 import Veiculo.Controle.ContrVeiculoCombustivel;
-import Veiculo.Entidade.Veiculo;
 import Veiculo.Entidade.VeiculoCombustivel;
 import Veiculo.Entidade.VeiculoCombustivelDTO;
 import Veiculo.Validacao.Validacao;
 import Veiculo.Validacao.VeiculoCombustivelValidacao;
-import Veiculo.Validacao.VeiculoValidacao;
 import Veiculo.builder.VeiculoCombustivelBuilder;
 import java.io.IOException;
 import java.util.ArrayList;

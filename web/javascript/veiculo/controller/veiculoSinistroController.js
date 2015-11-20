@@ -58,7 +58,7 @@ var VeiculoSinistroController = function(form) {
                             '</button>' +
                       '</td>' +
                       '<td align="center">' +
-                            '<a class="btn btn-sm btn-danger" href="' + Configuracao.contextPath + '/veiculo/sinistro?action=delete&idVeiculoSinistro={{id}}">' +
+                            '<a class="btn btn-sm btn-danger" onclick="veiculoSinistroCtrl.acoes.excluir({{id}})">' +
                                 '<i class="fa fa-lg fa-trash"></i>' +
                             '</a>' +
                       '</td>' +
@@ -131,6 +131,28 @@ var VeiculoSinistroController = function(form) {
         if(!VeiculoValidacao.campoNotNull(form.data.value, msg)) { return false; };
         return VeiculoValidacao.campoData(form.data.value, msgValida);
     }; 
+    
+    var excluir = function(idVeiculoSinistro) {                
+        bootbox.confirm({
+            title: 'Excluir Sinistro?',
+            message: 'Deseja realmente excluir este sinistro?',
+            buttons: {
+                'cancel': {
+                    label: '<i class="fa fa-lg fa-times fa-spc"></i> CANCELAR',
+                    className: 'btn btn-default pull-left'
+                },
+                'confirm': {
+                    label: '<i class="fa fa-lg fa-trash fa-spc"></i> EXCLUIR',
+                    className: 'btn btn-danger pull-right'
+                }
+            },
+            callback: function(result) {
+                if(result){
+                    window.location = Configuracao.contextPath + '/veiculo/sinistro?action=delete&idVeiculoSinistro=' + idVeiculoSinistro;
+                }
+            }
+        });
+    };
     
     
     // funcoes ///////// 
@@ -219,7 +241,8 @@ var VeiculoSinistroController = function(form) {
             pesquisarTodos: pesquisarTodos,
             pesquisar: pesquisar,
             editar: editar,                       
-            salvar: salvar
+            salvar: salvar,
+            excluir: excluir
         },
         funcoes: {
             setValueForm: setValueForm,

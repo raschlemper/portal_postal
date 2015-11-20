@@ -20,7 +20,7 @@ public class ContrVeiculo {
     public static List<Veiculo> consultaTodos(String nomeBD) {
         Connection con = Conexao.conectar(nomeBD);
         List<Veiculo> listaVeiculos = new ArrayList<Veiculo>();
-        String sql = "SELECT * FROM veiculo";
+        String sql = "SELECT * FROM veiculo ORDER BY tipo, marca, modelo, placa";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet result = (ResultSet) ps.executeQuery();
