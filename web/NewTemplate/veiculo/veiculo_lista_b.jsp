@@ -164,6 +164,15 @@
             veiculoCtrl.init();
             veiculoCtrl.acoes.pesquisarTodos();
             Configuracao.messageModal();
+
+            function AllTables() {
+                StartDataTable('dataTables-example');
+                LoadSelect2Script(MakeSelectDataTable('dataTables-example'));
+            }
+
+            $(document).ready(function() {
+                LoadDataTablesScripts(AllTables);
+            });
         </script>
     </body>
 </html>
