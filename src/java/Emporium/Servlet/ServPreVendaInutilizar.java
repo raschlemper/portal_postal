@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -79,17 +80,26 @@ public class ServPreVendaInutilizar extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String ids[] = request.getParameterValues("ids");
-        String nomeBD = request.getParameter("nomeBD");
-        if(ids != null && ids.length>0){
-            for (int i = 0; i < ids.length; i++) {
-                String id = ids[i];
-                int idVenda = Integer.parseInt(id);
-                ContrPreVenda.inutilizar(idVenda, nomeBD);
+        
+        HttpSession sessao = request.getSession();
+        String expira = (String) sessao.getAttribute("empresa");
+        if (expira == null) {
+            response.sendRedirect("index.jsp?msgLog=3");
+        } else {
+            String ids[] = request.getParameterValues("ids");
+            String nomeBD = request.getParameter("nomeBD");
+            if(ids != null && ids.length>0){
+                for (int i = 0; i < ids.length; i++) {
+                    String id = ids[i];
+                    int idVenda = Integer.parseInt(id);
+                    ContrPreVenda.inutilizar(idVenda, nomeBD);
+                }
             }
+            
+            sessao.setAttribute("msg", "Etiqueta inutilizada com sucesso!");
+            //response.sendRedirect("Agencia/Relatorio/painel_etiquetas_pend.jsp?msg=Etiqueta inutilizada com sucesso!");        
+            response.sendRedirect(request.getHeader("referer"));
         }
-
-        response.sendRedirect("Agencia/Relatorio/painel_etiquetas_pend.jsp?msg=Etiqueta inutilizada com sucesso!");
 
     }
 

@@ -18,6 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -26,9 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 public class ServPreVendasAtualiza extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -58,8 +58,7 @@ public class ServPreVendasAtualiza extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -73,8 +72,7 @@ public class ServPreVendasAtualiza extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -85,41 +83,48 @@ public class ServPreVendasAtualiza extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String nomeBD = request.getParameter("nomeBD");
-        Connection con = Conexao.conectar(nomeBD);
-        int cont = 0;
-        try {
-            String sqlDel = "UPDATE pre_venda SET inutilizada = 1 WHERE consolidado = 0 AND impresso = 1 AND inutilizada = 0 AND nomeServico <> 'SIMPLES' AND numObjeto <> 'avista' AND DATE(dataImpressao) < DATE_SUB(DATE(NOW()), INTERVAL 15 DAY);";
-            PreparedStatement valores1 = con.prepareStatement(sqlDel);
-            valores1.executeUpdate();
+        HttpSession sessao = request.getSession();
+        String expira = (String) sessao.getAttribute("empresa");
+        if (expira == null) {
+            response.sendRedirect("index.jsp?msgLog=3");
+        } else {
+            String nomeBD = request.getParameter("nomeBD");
+            Connection con = Conexao.conectar(nomeBD);
+            int cont = 0;
+            try {
+                String sqlDel = "UPDATE pre_venda SET inutilizada = 1 WHERE consolidado = 0 AND impresso = 1 AND inutilizada = 0 AND nomeServico <> 'SIMPLES' AND numObjeto <> 'avista' AND DATE(dataImpressao) < DATE_SUB(DATE(NOW()), INTERVAL 15 DAY);";
+                PreparedStatement valores1 = con.prepareStatement(sqlDel);
+                valores1.executeUpdate();
 
-            PreparedStatement valores = con.prepareStatement("SELECT numObjeto "
-                    + " FROM ("
-                    + "       SELECT DISTINCT numObjeto FROM pre_venda WHERE consolidado = 0 AND impresso = 1 AND inutilizada = 0 AND nomeServico <> 'SIMPLES' AND numObjeto <> 'avista'"
-                    + "       UNION ALL"
-                    + "       SELECT DISTINCT numObjeto FROM movimentacao WHERE dataPostagem >= DATE_SUB(DATE(NOW()), INTERVAL 15 DAY)"
-                    + ") AS tbl"
-                    + " GROUP BY numObjeto HAVING COUNT(*) > 1;");
-            ResultSet result = (ResultSet) valores.executeQuery();
-            String objs = "";
-            for (int i = 0; result.next(); i++) {
-                objs += "'" + result.getString("numObjeto") + "',";
-                cont++;
-            }
-            if (!objs.equals("")) {
-                objs = objs.substring(0, objs.lastIndexOf(","));
-                valores = con.prepareStatement("UPDATE pre_venda SET consolidado = 1 WHERE numObjeto IN (" + objs + ")");
-                valores.executeUpdate();
+                PreparedStatement valores = con.prepareStatement("SELECT numObjeto "
+                        + " FROM ("
+                        + "       SELECT DISTINCT numObjeto FROM pre_venda WHERE consolidado = 0 AND impresso = 1 AND inutilizada = 0 AND nomeServico <> 'SIMPLES' AND numObjeto <> 'avista'"
+                        + "       UNION ALL"
+                        + "       SELECT DISTINCT numObjeto FROM movimentacao WHERE dataPostagem >= DATE_SUB(DATE(NOW()), INTERVAL 15 DAY)"
+                        + ") AS tbl"
+                        + " GROUP BY numObjeto HAVING COUNT(*) > 1;");
+                ResultSet result = (ResultSet) valores.executeQuery();
+                String objs = "";
+                for (int i = 0; result.next(); i++) {
+                    objs += "'" + result.getString("numObjeto") + "',";
+                    cont++;
+                }
+                if (!objs.equals("")) {
+                    objs = objs.substring(0, objs.lastIndexOf(","));
+                    valores = con.prepareStatement("UPDATE pre_venda SET consolidado = 1 WHERE numObjeto IN (" + objs + ")");
+                    valores.executeUpdate();
+                }
+
+                valores.close();
+            } catch (SQLException e) {
+                Logger.getLogger(ContrAmarracao.class.getName()).log(Level.WARNING, e.getMessage(), e);
+            } finally {
+                Conexao.desconectar(con);
             }
 
-            valores.close();
-        } catch (SQLException e) {
-            Logger.getLogger(ContrAmarracao.class.getName()).log(Level.WARNING, e.getMessage(), e);
-        } finally {
-            Conexao.desconectar(con);
+            sessao.setAttribute("msg", cont + " Etiquetas Atualizadas com Sucesso!");
+            response.sendRedirect(request.getHeader("referer"));
         }
-
-        response.sendRedirect("Agencia/Relatorio/painel_etiquetas_pend.jsp?msg=" + cont + " Etiquetas Atualizadas com Sucesso!");
 
     }
 

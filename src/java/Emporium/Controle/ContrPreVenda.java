@@ -68,9 +68,9 @@ public class ContrPreVenda {
         }
     }
 
-    public static boolean alterar(int idCliente, String numObjeto, int idDestinatario, int idRemetente, int codECT, String contrato, String departamento, String aosCuidados, String obs, String conteudo, int peso, int altura, int largura, int comprimento, float vd, int ar, int mp, String siglaAmarracao, String nomeServico, String notaFiscal, float valor_cobrar, String tipo, int idDepartamento, String cartaoPostagem, int idUser, int id, int registro, String nomePreVenda, String tipo_etiqueta, String nomeBD) {
+    public static boolean alterar(int idCliente, String numObjeto, int idDestinatario, int idRemetente, int codECT, String contrato, String departamento, String aosCuidados, String obs, String conteudo, int peso, int altura, int largura, int comprimento, float vd, int ar, int mp, String siglaAmarracao, String nomeServico, String notaFiscal, float valor_cobrar, String tipo, int idDepartamento, String cartaoPostagem, int idUser, int id, int registro, String nomePreVenda, String tipo_etiqueta, String email, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "UPDATE pre_venda SET numObjeto=?, idCliente=?, idDestinatario=?, idRemetente=?, codECT=?, contrato=?, departamento=?, aos_cuidados=?, observacoes=?, conteudo=?, peso=?, altura=?, largura=?, comprimento=?, valor_declarado=?, aviso_recebimento=?, mao_propria=?, siglaAmarracao=?, nomeServico=?, notaFiscal=?, valor_cobrar=?, tipoEncomenda=?, idDepartamento=?, dataPreVenda=NOW(), cartaoPostagem=?, userPreVenda=?, registro=?, nomePreVenda=?, tipo_etiqueta=? WHERE id = ?;";
+        String sql = "UPDATE pre_venda SET numObjeto=?, idCliente=?, idDestinatario=?, idRemetente=?, codECT=?, contrato=?, departamento=?, aos_cuidados=?, observacoes=?, conteudo=?, peso=?, altura=?, largura=?, comprimento=?, valor_declarado=?, aviso_recebimento=?, mao_propria=?, siglaAmarracao=?, nomeServico=?, notaFiscal=?, valor_cobrar=?, tipoEncomenda=?, idDepartamento=?, dataPreVenda=NOW(), cartaoPostagem=?, userPreVenda=?, registro=?, nomePreVenda=?, tipo_etiqueta=?, email_destinatario=? WHERE id = ?;";
 
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
@@ -102,7 +102,8 @@ public class ContrPreVenda {
             valores.setInt(26, registro);
             valores.setString(27, nomePreVenda);
             valores.setString(28, tipo_etiqueta);
-            valores.setInt(29, id);
+            valores.setString(29, email);
+            valores.setInt(30, id);
             valores.executeUpdate();
             valores.close();
             return true;
@@ -240,7 +241,7 @@ public class ContrPreVenda {
 
                 int idOs = result.getInt("p.idOs");
                 String responsavel = result.getString("p.responsavel");
-                String email_destinatario = result.getString("p.email_destinatario");
+                String emailDes = result.getString("d.email");
 
                 int userPreVenda = result.getInt("p.userPreVenda");
                 int userImpresso = result.getInt("p.userImpressao");
@@ -257,7 +258,7 @@ public class ContrPreVenda {
                 String cartaoPostagem = result.getString("p.cartaoPostagem");
                 String metodo_insercao = result.getString("p.metodo_insercao");
 
-                PreVenda pv = new PreVenda(id, numObjeto, idCliente, idRemetente, idDestinatario, codECT, nomeServico, contrato, departamento, aos_cuidados, observacoes, conteudo, siglaAmarracao, peso, altura, largura, comprimento, valor_declarado, mao_propria, aviso_recebimento, nomeDes, empresaDes, cpfDes, enderecoDes, numeroDes, complementoDes, cidadeDes, ufDes, cepDes, bairroDes, notaFiscal, valor_cobrar, userPreVenda, dataPreVenda, dataImpresso, dataConsolidado, dataVenda, userImpresso, userConsolidado, userVenda, nomePreVenda, nomeImpresso, nomeConsolidado, nomeVenda, responsavel, email_destinatario, idOs, celularDes, cartaoPostagem, metodo_insercao);
+                PreVenda pv = new PreVenda(id, numObjeto, idCliente, idRemetente, idDestinatario, codECT, nomeServico, contrato, departamento, aos_cuidados, observacoes, conteudo, siglaAmarracao, peso, altura, largura, comprimento, valor_declarado, mao_propria, aviso_recebimento, nomeDes, empresaDes, cpfDes, enderecoDes, numeroDes, complementoDes, cidadeDes, ufDes, cepDes, bairroDes, notaFiscal, valor_cobrar, userPreVenda, dataPreVenda, dataImpresso, dataConsolidado, dataVenda, userImpresso, userConsolidado, userVenda, nomePreVenda, nomeImpresso, nomeConsolidado, nomeVenda, responsavel, emailDes, idOs, celularDes, cartaoPostagem, metodo_insercao);
                 lista.add(pv);
             }
             valores.close();
@@ -336,7 +337,7 @@ public class ContrPreVenda {
 
                 int idOs = result.getInt("p.idOs");
                 String responsavel = result.getString("p.responsavel");
-                String email_destinatario = result.getString("p.email_destinatario");
+                String emailDes = result.getString("d.email");
 
                 int userPreVenda = result.getInt("p.userPreVenda");
                 int userImpresso = result.getInt("p.userImpressao");
@@ -353,7 +354,7 @@ public class ContrPreVenda {
                 String cartaoPostagem = result.getString("p.cartaoPostagem");
                 String metodo_insercao = result.getString("p.metodo_insercao");
 
-                PreVenda pv = new PreVenda(id, numObjeto, idCliente, idRemetente, idDestinatario, codECT, nomeServico, contrato, departamento, aos_cuidados, observacoes, conteudo, siglaAmarracao, peso, altura, largura, comprimento, valor_declarado, mao_propria, aviso_recebimento, nomeDes, empresaDes, cpfDes, enderecoDes, numeroDes, complementoDes, cidadeDes, ufDes, cepDes, bairroDes, notaFiscal, valor_cobrar, userPreVenda, dataPreVenda, dataImpresso, dataConsolidado, dataVenda, userImpresso, userConsolidado, userVenda, nomePreVenda, nomeImpresso, nomeConsolidado, nomeVenda, responsavel, email_destinatario, idOs, celularDes, cartaoPostagem, metodo_insercao);
+                PreVenda pv = new PreVenda(id, numObjeto, idCliente, idRemetente, idDestinatario, codECT, nomeServico, contrato, departamento, aos_cuidados, observacoes, conteudo, siglaAmarracao, peso, altura, largura, comprimento, valor_declarado, mao_propria, aviso_recebimento, nomeDes, empresaDes, cpfDes, enderecoDes, numeroDes, complementoDes, cidadeDes, ufDes, cepDes, bairroDes, notaFiscal, valor_cobrar, userPreVenda, dataPreVenda, dataImpresso, dataConsolidado, dataVenda, userImpresso, userConsolidado, userVenda, nomePreVenda, nomeImpresso, nomeConsolidado, nomeVenda, responsavel, emailDes, idOs, celularDes, cartaoPostagem, metodo_insercao);
                 lista.add(pv);
             }
             valores.close();
@@ -421,7 +422,7 @@ public class ContrPreVenda {
 
                 int idOs = result.getInt("p.idOs");
                 String responsavel = result.getString("p.responsavel");
-                String email_destinatario = result.getString("p.email_destinatario");
+                String emailDes = result.getString("d.email");
 
                 int userPreVenda = result.getInt("p.userPreVenda");
                 int userImpresso = result.getInt("p.userImpressao");
@@ -438,7 +439,7 @@ public class ContrPreVenda {
                 String cartaoPostagem = result.getString("p.cartaoPostagem");
                 String metodo_insercao = result.getString("p.metodo_insercao");
 
-                PreVenda pv = new PreVenda(id, numObjeto, idCliente, idRemetente, idDestinatario, codECT, nomeServico, contrato, departamento, aos_cuidados, observacoes, conteudo, siglaAmarracao, peso, altura, largura, comprimento, valor_declarado, mao_propria, aviso_recebimento, nomeDes, empresaDes, cpfDes, enderecoDes, numeroDes, complementoDes, cidadeDes, ufDes, cepDes, bairroDes, notaFiscal, valor_cobrar, userPreVenda, dataPreVenda, dataImpresso, dataConsolidado, dataVenda, userImpresso, userConsolidado, userVenda, nomePreVenda, nomeImpresso, nomeConsolidado, nomeVenda, responsavel, email_destinatario, idOs, celularDes, cartaoPostagem, metodo_insercao);
+                PreVenda pv = new PreVenda(id, numObjeto, idCliente, idRemetente, idDestinatario, codECT, nomeServico, contrato, departamento, aos_cuidados, observacoes, conteudo, siglaAmarracao, peso, altura, largura, comprimento, valor_declarado, mao_propria, aviso_recebimento, nomeDes, empresaDes, cpfDes, enderecoDes, numeroDes, complementoDes, cidadeDes, ufDes, cepDes, bairroDes, notaFiscal, valor_cobrar, userPreVenda, dataPreVenda, dataImpresso, dataConsolidado, dataVenda, userImpresso, userConsolidado, userVenda, nomePreVenda, nomeImpresso, nomeConsolidado, nomeVenda, responsavel, emailDes, idOs, celularDes, cartaoPostagem, metodo_insercao);
                 lista.add(pv);
             }
             valores.close();
@@ -510,7 +511,7 @@ public class ContrPreVenda {
 
                 int idOs = result.getInt("p.idOs");
                 String responsavel = result.getString("p.responsavel");
-                String email_destinatario = result.getString("p.email_destinatario");
+                String emailDes = result.getString("d.email");
 
                 int userPreVenda = result.getInt("p.userPreVenda");
                 int userImpresso = result.getInt("p.userImpressao");
@@ -527,7 +528,7 @@ public class ContrPreVenda {
                 String cartaoPostagem = result.getString("p.cartaoPostagem");
                 String metodo_insercao = result.getString("p.metodo_insercao");
 
-                PreVenda pv = new PreVenda(id, numObjeto, idCliente, idRemetente, idDestinatario, codECT, nomeServico, contrato, departamento, aos_cuidados, observacoes, conteudo, siglaAmarracao, peso, altura, largura, comprimento, valor_declarado, mao_propria, aviso_recebimento, nomeDes, empresaDes, cpfDes, enderecoDes, numeroDes, complementoDes, cidadeDes, ufDes, cepDes, bairroDes, notaFiscal, valor_cobrar, userPreVenda, dataPreVenda, dataImpresso, dataConsolidado, dataVenda, userImpresso, userConsolidado, userVenda, nomePreVenda, nomeImpresso, nomeConsolidado, nomeVenda, responsavel, email_destinatario, idOs, celularDes, cartaoPostagem, metodo_insercao);
+                PreVenda pv = new PreVenda(id, numObjeto, idCliente, idRemetente, idDestinatario, codECT, nomeServico, contrato, departamento, aos_cuidados, observacoes, conteudo, siglaAmarracao, peso, altura, largura, comprimento, valor_declarado, mao_propria, aviso_recebimento, nomeDes, empresaDes, cpfDes, enderecoDes, numeroDes, complementoDes, cidadeDes, ufDes, cepDes, bairroDes, notaFiscal, valor_cobrar, userPreVenda, dataPreVenda, dataImpresso, dataConsolidado, dataVenda, userImpresso, userConsolidado, userVenda, nomePreVenda, nomeImpresso, nomeConsolidado, nomeVenda, responsavel, emailDes, idOs, celularDes, cartaoPostagem, metodo_insercao);
                 lista.add(pv);
             }
             valores.close();
@@ -588,7 +589,7 @@ public class ContrPreVenda {
 
                 int idOs = result.getInt("p.idOs");
                 String responsavel = result.getString("p.responsavel");
-                String email_destinatario = result.getString("p.email_destinatario");
+                String emailDes = result.getString("d.email");
 
                 int userPreVenda = result.getInt("p.userPreVenda");
                 int userImpresso = result.getInt("p.userImpressao");
@@ -605,7 +606,7 @@ public class ContrPreVenda {
                 String cartaoPostagem = result.getString("p.cartaoPostagem");
                 String metodo_insercao = result.getString("p.metodo_insercao");
 
-                lista = new PreVenda(id, numObjeto, idCliente, idRemetente, idDestinatario, codECT, nomeServico, contrato, departamento, aos_cuidados, observacoes, conteudo, siglaAmarracao, peso, altura, largura, comprimento, valor_declarado, mao_propria, aviso_recebimento, nomeDes, empresaDes, cpfDes, enderecoDes, numeroDes, complementoDes, cidadeDes, ufDes, cepDes, bairroDes, notaFiscal, valor_cobrar, userPreVenda, dataPreVenda, dataImpresso, dataConsolidado, dataVenda, userImpresso, userConsolidado, userVenda, nomePreVenda, nomeImpresso, nomeConsolidado, nomeVenda, responsavel, email_destinatario, idOs, celularDes, cartaoPostagem, metodo_insercao);
+                lista = new PreVenda(id, numObjeto, idCliente, idRemetente, idDestinatario, codECT, nomeServico, contrato, departamento, aos_cuidados, observacoes, conteudo, siglaAmarracao, peso, altura, largura, comprimento, valor_declarado, mao_propria, aviso_recebimento, nomeDes, empresaDes, cpfDes, enderecoDes, numeroDes, complementoDes, cidadeDes, ufDes, cepDes, bairroDes, notaFiscal, valor_cobrar, userPreVenda, dataPreVenda, dataImpresso, dataConsolidado, dataVenda, userImpresso, userConsolidado, userVenda, nomePreVenda, nomeImpresso, nomeConsolidado, nomeVenda, responsavel, emailDes, idOs, celularDes, cartaoPostagem, metodo_insercao);
             }
             valores.close();
             return lista;
@@ -666,7 +667,7 @@ public class ContrPreVenda {
 
                 int idOs = result.getInt("p.idOs");
                 String responsavel = result.getString("p.responsavel");
-                String email_destinatario = result.getString("p.email_destinatario");
+                String emailDes = result.getString("d.email");
 
                 int userPreVenda = result.getInt("p.userPreVenda");
                 int userImpresso = result.getInt("p.userImpressao");
@@ -682,7 +683,7 @@ public class ContrPreVenda {
                 Timestamp dataVenda = result.getTimestamp("p.dataVenda");
                 String metodo_insercao = result.getString("p.metodo_insercao");
 
-                lista = new PreVenda(id, numObjeto, idCliente, idRemetente, idDestinatario, codECT, nomeServico, contrato, departamento, aos_cuidados, observacoes, conteudo, siglaAmarracao, peso, altura, largura, comprimento, valor_declarado, mao_propria, aviso_recebimento, nomeDes, empresaDes, cpfDes, enderecoDes, numeroDes, complementoDes, cidadeDes, ufDes, cepDes, bairroDes, notaFiscal, valor_cobrar, userPreVenda, dataPreVenda, dataImpresso, dataConsolidado, dataVenda, userImpresso, userConsolidado, userVenda, nomePreVenda, nomeImpresso, nomeConsolidado, nomeVenda, responsavel, email_destinatario, idOs, celularDes, cartaoPostagem, metodo_insercao);
+                lista = new PreVenda(id, numObjeto, idCliente, idRemetente, idDestinatario, codECT, nomeServico, contrato, departamento, aos_cuidados, observacoes, conteudo, siglaAmarracao, peso, altura, largura, comprimento, valor_declarado, mao_propria, aviso_recebimento, nomeDes, empresaDes, cpfDes, enderecoDes, numeroDes, complementoDes, cidadeDes, ufDes, cepDes, bairroDes, notaFiscal, valor_cobrar, userPreVenda, dataPreVenda, dataImpresso, dataConsolidado, dataVenda, userImpresso, userConsolidado, userVenda, nomePreVenda, nomeImpresso, nomeConsolidado, nomeVenda, responsavel, emailDes, idOs, celularDes, cartaoPostagem, metodo_insercao);
             }
             valores.close();
             return lista;
@@ -742,7 +743,7 @@ public class ContrPreVenda {
 
                 int idOs = result.getInt("p.idOs");
                 String responsavel = result.getString("p.responsavel");
-                String email_destinatario = result.getString("p.email_destinatario");
+                String emailDes = result.getString("d.email");
 
                 int userPreVenda = result.getInt("p.userPreVenda");
                 int userImpresso = result.getInt("p.userImpressao");
@@ -759,7 +760,7 @@ public class ContrPreVenda {
                 String cartaoPostagem = result.getString("p.cartaoPostagem");
                 String metodo_insercao = result.getString("p.metodo_insercao");
 
-                PreVenda pv = new PreVenda(id, numObjeto, idCliente, idRemetente, idDestinatario, codECT, nomeServico, contrato, departamento, aos_cuidados, observacoes, conteudo, siglaAmarracao, peso, altura, largura, comprimento, valor_declarado, mao_propria, aviso_recebimento, nomeDes, empresaDes, cpfDes, enderecoDes, numeroDes, complementoDes, cidadeDes, ufDes, cepDes, bairroDes, notaFiscal, valor_cobrar, userPreVenda, dataPreVenda, dataImpresso, dataConsolidado, dataVenda, userImpresso, userConsolidado, userVenda, nomePreVenda, nomeImpresso, nomeConsolidado, nomeVenda, responsavel, email_destinatario, idOs, celularDes, cartaoPostagem, metodo_insercao);
+                PreVenda pv = new PreVenda(id, numObjeto, idCliente, idRemetente, idDestinatario, codECT, nomeServico, contrato, departamento, aos_cuidados, observacoes, conteudo, siglaAmarracao, peso, altura, largura, comprimento, valor_declarado, mao_propria, aviso_recebimento, nomeDes, empresaDes, cpfDes, enderecoDes, numeroDes, complementoDes, cidadeDes, ufDes, cepDes, bairroDes, notaFiscal, valor_cobrar, userPreVenda, dataPreVenda, dataImpresso, dataConsolidado, dataVenda, userImpresso, userConsolidado, userVenda, nomePreVenda, nomeImpresso, nomeConsolidado, nomeVenda, responsavel, emailDes, idOs, celularDes, cartaoPostagem, metodo_insercao);
                 lista.add(pv);
             }
             valores.close();
@@ -817,10 +818,10 @@ public class ContrPreVenda {
                 String cpfDes = result.getString("d.cpf_cnpj");
                 String complementoDes = result.getString("d.complemento");
                 String celularDes = result.getString("d.celular");
+                String emailDes = result.getString("d.email");
 
                 int idOs = result.getInt("p.idOs");
                 String responsavel = result.getString("p.responsavel");
-                String email_destinatario = result.getString("p.email_destinatario");
 
                 int userPreVenda = result.getInt("p.userPreVenda");
                 int userImpresso = result.getInt("p.userImpressao");
@@ -837,7 +838,7 @@ public class ContrPreVenda {
                 String cartaoPostagem = result.getString("p.cartaoPostagem");
                 String metodo_insercao = result.getString("p.metodo_insercao");
 
-                PreVenda pv = new PreVenda(id, numObjeto, idCliente, idRemetente, idDestinatario, codECT, nomeServico, contrato, departamento, aos_cuidados, observacoes, conteudo, siglaAmarracao, peso, altura, largura, comprimento, valor_declarado, mao_propria, aviso_recebimento, nomeDes, empresaDes, cpfDes, enderecoDes, numeroDes, complementoDes, cidadeDes, ufDes, cepDes, bairroDes, notaFiscal, valor_cobrar, userPreVenda, dataPreVenda, dataImpresso, dataConsolidado, dataVenda, userImpresso, userConsolidado, userVenda, nomePreVenda, nomeImpresso, nomeConsolidado, nomeVenda, responsavel, email_destinatario, idOs, celularDes, cartaoPostagem, metodo_insercao);
+                PreVenda pv = new PreVenda(id, numObjeto, idCliente, idRemetente, idDestinatario, codECT, nomeServico, contrato, departamento, aos_cuidados, observacoes, conteudo, siglaAmarracao, peso, altura, largura, comprimento, valor_declarado, mao_propria, aviso_recebimento, nomeDes, empresaDes, cpfDes, enderecoDes, numeroDes, complementoDes, cidadeDes, ufDes, cepDes, bairroDes, notaFiscal, valor_cobrar, userPreVenda, dataPreVenda, dataImpresso, dataConsolidado, dataVenda, userImpresso, userConsolidado, userVenda, nomePreVenda, nomeImpresso, nomeConsolidado, nomeVenda, responsavel, emailDes, idOs, celularDes, cartaoPostagem, metodo_insercao);
                 lista.add(pv);
             }
             valores.close();

@@ -85,10 +85,25 @@ public class FormataString {
                 ret[1] = "CARTA REG.";
                 ret[2] = "imagensNew/carta.png";
                 return ret;
+            case 81833: 
+                ret[0] = "81.833";
+                ret[1] = "E-SEDEX";
+                ret[2] = "imagensNew/esedex.png";
+                return ret;
             case 81019: 
                 ret[0] = "81.019";
                 ret[1] = "E-SEDEX";
                 ret[2] = "imagensNew/esedex.png";
+                return ret;
+            case 41238: 
+                ret[0] = "41.238";
+                ret[1] = "PAC PAG. NA ENTREGA";
+                ret[2] = "imagensNew/pac.png";
+                return ret;
+            case 41262: 
+                ret[0] = "41.262";
+                ret[1] = "PAC PAG. NA ENTREGA";
+                ret[2] = "imagensNew/pac.png";
                 return ret;
             case 41068: 
                 ret[0] = "41.068";
@@ -97,6 +112,16 @@ public class FormataString {
                 return ret;
             case 41106: 
                 ret[0] = "41.106";
+                ret[1] = "PAC";
+                ret[2] = "imagensNew/pac.png";
+                return ret;
+            case 41211: 
+                ret[0] = "41.211";
+                ret[1] = "PAC";
+                ret[2] = "imagensNew/pac.png";
+                return ret;
+            case 41491: 
+                ret[0] = "41.491";
                 ret[1] = "PAC";
                 ret[2] = "imagensNew/pac.png";
                 return ret;
@@ -125,6 +150,16 @@ public class FormataString {
                 ret[1] = "SEDEX";
                 ret[2] = "imagensNew/sedex.png";
                 return ret;
+            case 40568: 
+                ret[0] = "40.568";
+                ret[1] = "SEDEX";
+                ret[2] = "imagensNew/sedex.png";
+                return ret;
+            case 41408: 
+                ret[0] = "41.408";
+                ret[1] = "SEDEX";
+                ret[2] = "imagensNew/sedex.png";
+                return ret;
             case 40843: 
                 ret[0] = "40.843";
                 ret[1] = "SEDEX";
@@ -132,6 +167,11 @@ public class FormataString {
                 return ret;
             case 40215: 
                 ret[0] = "40.215";
+                ret[1] = "SEDEX 10";
+                ret[2] = "imagensNew/sedex10.png";
+                return ret;
+            case 40789: 
+                ret[0] = "40.789";
                 ret[1] = "SEDEX 10";
                 ret[2] = "imagensNew/sedex10.png";
                 return ret;
@@ -155,6 +195,26 @@ public class FormataString {
                 ret[1] = "SEDEX A COBRAR";
                 ret[2] = "imagensNew/sedex_cobrar.png";
                 return ret;
+            case 40630: 
+                ret[0] = "40.630";
+                ret[1] = "SEDEX PAG. NA ENTREGA";
+                ret[2] = "imagensNew/sedex_cobrar.png";
+                return ret;
+            case 40432: 
+                ret[0] = "40.432";
+                ret[1] = "SEDEX PAG. NA ENTREGA";
+                ret[2] = "imagensNew/sedex_cobrar.png";
+                return ret;
+            case 40440: 
+                ret[0] = "40.440";
+                ret[1] = "SEDEX PAG. NA ENTREGA";
+                ret[2] = "imagensNew/sedex_cobrar.png";
+                return ret;
+            case 40819: 
+                ret[0] = "40.819";
+                ret[1] = "SEDEX PAG. NA ENTREGA";
+                ret[2] = "imagensNew/sedex_cobrar.png";
+                return ret;
             case 10065:
                 ret[0] = "10.065";
                 ret[1] = "CARTA SIMPLES";
@@ -165,7 +225,11 @@ public class FormataString {
                 ret[1] = "CARTA SIMPLES";
                 ret[2] = "imagensNew/carta.png";
                 return ret;
-            default: return ret;
+            default: 
+                ret[0] = codEct+"";
+                ret[1] = "";
+                ret[2] = "imagensNew/carta.png";
+                return ret;
         }
     }
     

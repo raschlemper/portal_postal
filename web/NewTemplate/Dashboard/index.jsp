@@ -14,6 +14,8 @@
         SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM");
         DecimalFormat df = new DecimalFormat("0.00");
 
+        empresas empr = (empresas) session.getAttribute("emp");
+        
         Date dataAtual = new Date();
         String vDataAtual = sdf.format(dataAtual);
         String dataAnterior = Util.SomaData.SomarDiasDatas(dataAtual, -30);
@@ -86,7 +88,7 @@
                         <!-- Indica o Local Da Página -->
                         <div class="row">
                             <div class="col-md-12">                       
-                                <h4 class="page-header"><b class="text-primary"><i class="fa fa-barcode"></i> Gerenciar Etiquetas</b> > <small>Etiquetas Restantes</small></h4>
+                                <h4 class="page-header"><b class="text-primary"><i class="fa fa-dashboard"></i> Dashboard</b> > <small><%= empr.getEmpresa() %></small></h4>
                             </div>
                         </div>
 

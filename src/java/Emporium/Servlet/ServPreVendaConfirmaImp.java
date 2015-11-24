@@ -107,8 +107,8 @@ public class ServPreVendaConfirmaImp extends HttpServlet {
             String cidade = request.getParameter("cidade"+id);
             String uf = request.getParameter("uf"+id);
             String aosCuidados = request.getParameter("aoscuidados"+id);
-            String email = "";
-            String celular = "";
+            String email = request.getParameter("email"+id);
+            String celular = request.getParameter("celular"+id);
             
             ContrPreVendaDest.editar(idDest, idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, email, celular, nomeBD);
             
@@ -190,7 +190,7 @@ public class ServPreVendaConfirmaImp extends HttpServlet {
             //VERIFICA A EXISTENCIA DE COMBO PARA O SERVIÇO
             //codECT = ContrServicoCombo.consultaCodCombo(codECT, ar, mp, vd);
             
-            ContrPreVenda.alterar(idCliente, numObjeto, idDest, 0, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, vid, registro, nomeUser, tipoEtiqueta, nomeBD);
+            ContrPreVenda.alterar(idCliente, numObjeto, idDest, 0, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, vid, registro, nomeUser, tipoEtiqueta, email, nomeBD);
                     
         }
         

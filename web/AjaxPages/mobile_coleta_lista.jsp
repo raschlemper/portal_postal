@@ -13,23 +13,25 @@
         int idColeta = col.getIdColeta();
         int idCli = col.getIdCliente();
         Clientes cli = contrCliente.consultaClienteById(idCli, nomeBD);
-        String nomeFantasia = col.getNomeFantasia();
-        String obs = col.getObs().replace(";", " ").replace(".", " ").replace("\n", " ").replace("\r", " ").replace("\t", " ").trim();
-        if(obs.length() > 50){
-            obs = obs.substring(0, 50);
-        }        
-        String hrDaColeta = hr1.format(col.getDataHoraColeta());
-        String hrAguardandoColeta = "00:00";
-        String hrColetaRealizada = "00:00";
-        String numero = "";
-        if (cli.getNumero() != null && !cli.getNumero().trim().equals("") && !cli.getNumero().equals("null")) {
-            numero = ", " + cli.getNumero();
+        if(cli != null){
+            String nomeFantasia = col.getNomeFantasia();
+            String obs = col.getObs().replace(";", " ").replace(".", " ").replace("\n", " ").replace("\r", " ").replace("\t", " ").trim();
+            if(obs.length() > 50){
+                obs = obs.substring(0, 50);
+            }        
+            String hrDaColeta = hr1.format(col.getDataHoraColeta());
+            String hrAguardandoColeta = "00:00";
+            String hrColetaRealizada = "00:00";
+            String numero = "";
+            if (cli.getNumero() != null && !cli.getNumero().trim().equals("") && !cli.getNumero().equals("null")) {
+                numero = ", " + cli.getNumero();
+            }
+            String endereco = cli.getEndereco() + numero + ", " + cli.getComplemento() + " - " + cli.getBairro() + " - " + cli.getCidade() + "/" + cli.getUf();
+
+            double latitude = cli.getLatitude();
+            double longitude = cli.getLongitude();
+
+            out.println(idColeta + ";" + col.getStatusEntrega() + ";" + nomeFantasia + ";" + endereco + ";" + obs + ";" + latitude + ";" + longitude + ";" + hrDaColeta + ";" + hrAguardandoColeta + ";" + hrColetaRealizada);
         }
-        String endereco = cli.getEndereco() + numero + ", " + cli.getComplemento() + " - " + cli.getBairro() + " - " + cli.getCidade() + "/" + cli.getUf();
-
-        double latitude = cli.getLatitude();
-        double longitude = cli.getLongitude();
-
-        out.println(idColeta + ";" + col.getStatusEntrega() + ";" + nomeFantasia + ";" + endereco + ";" + obs + ";" + latitude + ";" + longitude + ";" + hrDaColeta + ";" + hrAguardandoColeta + ";" + hrColetaRealizada);
     }
 %>

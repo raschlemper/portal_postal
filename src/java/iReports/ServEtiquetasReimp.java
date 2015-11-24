@@ -61,6 +61,10 @@ public class ServEtiquetasReimp extends HttpServlet {
                 posicaoInicial = 1;
             }else if(formato.equals("ENV_DL")){
                 url_jrxml = "etiquetas_envelope_DL.jrxml";
+            }else if(formato.equals("ENV_DL_ESQ")){
+                url_jrxml = "etiquetas_envelope_DL_ESQ.jrxml";
+            }else if(formato.equals("ENV_C5_ESQ")){
+                url_jrxml = "etiquetas_envelope_C5_ESQ.jrxml";
             }else if(formato.equals("ENV_C5")){
                 url_jrxml = "etiquetas_envelope_C5.jrxml";
             }else if(formato.equals("ENV_B4")){

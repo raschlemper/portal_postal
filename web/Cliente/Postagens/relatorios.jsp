@@ -13,7 +13,7 @@
                         String numCliente = String.valueOf(session.getAttribute("idCliente"));
                         String dataAtual = sdf.format(new Date());
                         String dataOntem = Util.SomaData.SomarDiasDatas(new Date(), -1);
-                        String dataInicioCalendario = Util.SomaData.SomarDiasDatas(new Date(), -60); // diminui 2 meses
+                        String dataInicioCalendario = Util.SomaData.SomarDiasDatas(new Date(), -180); // diminui 6 meses
         %>
         <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
         <title>Portal Postal | Relatórios</title>

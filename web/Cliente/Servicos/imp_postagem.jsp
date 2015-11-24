@@ -177,6 +177,7 @@
                                     <select style="width: 300px;" name="servico">
                                         <option value="ARQUIVO">DEFINIDO NO ARQUIVO</option>
                                         <option value="PAC">PAC</option>
+                                        <option value="PAX">PAC GRANDES FORMATOS</option>
                                         <option value="SEDEX">SEDEX</option>
                                         <option value="ESEDEX">E-SEDEX</option>
                                         <option value="CARTA">CARTA REGISTRADA</option>
@@ -231,20 +232,25 @@
                             <div style="margin-left: 25px;">
                                 <b>Arquivo de importação sem peso:</b><br/>
                                 <a href="ARQUIVO_EXEMPLO_PORTALPOSTAL.csv" target="_blank">- Clique aqui para baixar o 'ARQUIVO_EXEMPLO_PORTALPOSTAL.csv'</a><br/>
+                                <%--
                                 <b>Arquivo de importação com peso e dimensões:</b><br/>
                                 <a href="ARQUIVO_EXEMPLO_PORTALPOSTAL_PESO.csv" target="_blank">- Clique aqui para baixar o 'ARQUIVO_EXEMPLO_PORTALPOSTAL_PESO.csv'</a><br/><br/>
+                                --%>
                             </div>
                         <b>2) Colunas de preenchimento Obrigatórios:</b><br/><br/>
                         <b style="margin-left: 25px;">NOME, CEP, ENDEREÇO, NUMERO, BAIRRO, CIDADE, UF</b><br/><br/>
                         <b>3) A coluna SERVIÇO deve ser escrito o serviço a ser utilizado para cada objeto (caso já tenha definido).</b><br/><br/>
                         <div style="margin-left: 25px;">
-                            <b>SEDEX</b> = Para Encomenda SEDEX.<br/>
                             <b>ESEDEX</b> = Para Encomenda ESEDEX<br/>
+                            <b>SEDEX</b> = Para Encomenda SEDEX.<br/>
+                            <%--<b>SEDEX10</b> = Para Encomenda SEDEX 10.<br/>
+                            <b>SEDEX12</b> = Para Encomenda SEDEX 12.<br/>--%>
                             <b>PAC</b> = Para Encomenda PAC<br/>
+                            <b>PAX</b> = Para Encomenda PAC Grandes Formatos<br/>
                             <b>CARTA</b> = Para Carta Comercial Registrada<br/>
                             <b>SIMPLES</b> = Para Carta Comercial Simples<br/>
                             <b style="color: red;">*Caso a postagem não tenha nenhum serviço pré-definido deixe o campo vazio</b><br/>
-                            <b style="color: red;">**Caso o serviço pré-definido seja E-SEDEX, e a região de destino não possuir E-SEDEX o serviço será alterado para SEDEX.</b>
+                            <b style="color: red;">**Caso o serviço pré-definido seja E-SEDEX, SEDEX 10, SEDEX 12, e a região de destino não abrangir o serviço, o mesmo será alterado automaticamente para SEDEX.</b>
                         </div><br/>
                         <b>4) A coluna SERV_ADICIONAIS deve ser preenchida somente com as siglas dos seguintes serviços adicionais (caso a postagem possua):</b><br/><br/>
                         <div style="padding-left: 25px;">

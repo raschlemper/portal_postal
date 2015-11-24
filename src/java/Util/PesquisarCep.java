@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public class PesquisarCep {
 
     public static Endereco pesquisaCEP(String cep) {
-            cep = cep.replaceAll("\\.", "").replaceAll("-", "");
+            cep = cep.replaceAll("\\.", "").replaceAll("-", "").trim();
             Endereco end = ContrCep.pesquisaCep(cep);
             if(end != null){
                 if(end.getLogradouro().equals("CEP inexistente")){

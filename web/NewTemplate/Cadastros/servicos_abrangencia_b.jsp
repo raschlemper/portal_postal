@@ -75,6 +75,7 @@
 
                             <!-- /.row -->
                             <div class="row">
+                                <form name="form1" action="../../ServServicoAbrangencia" method="post">
                                 <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
                                     <ul class="list-unstyled">                            
                                         <li class="list-group-item">
@@ -87,7 +88,6 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <form name="form1" action="../../ServServicoAbrangencia" method="post">
                                     <div style="display: none;" class="col-xs-12 col-sm-12 col-md-7 col-lg-6" id="esedex">
                                         <ul class="list-unstyled">                                                         
                                             <li class="list-group-item list-group-heading">
@@ -419,19 +419,19 @@
                 var e_contador = document.getElementById('e_contador').value;
                 //PERCORRE TODOS OS CAMPOS DA TABELA DE PESOS E PRECOS
                 for (var i = 1; i <= e_contador; i++) {
-                    if (document.getElementById('e_cepIni' + i) != null) {
+                    if (document.getElementById('e_cepIni' + i) !== null) {
                         var e_cepIni = document.getElementById('e_cepIni' + i).value;
                         var e_cepFim = document.getElementById('e_cepFim' + i).value;
-
+                        
                         //VERIFICA SE O CEP INICIAL FOI PREENCHIDO
-                        if (e_cepIni == "" || e_cepIni.length < 9) {
+                        if (e_cepIni === "" || e_cepIni.length < 9) {
                             alert("Preencha corretamente o CEP inicial!");
                             document.getElementById('e_cepIni' + i).focus();
                             return false;
                         }
 
                         //VERIFICA SE O CEP FINAL FOI PREENCHIDO
-                        if (e_cepFim == "" || e_cepFim.length < 9) {
+                        if (e_cepFim === "" || e_cepFim.length < 9) {
                             alert("Preencha corretamente o CEP final!");
                             document.getElementById('e_cepFim' + i).focus();
                             return false;
@@ -448,13 +448,13 @@
                         }
                     }
                 }
-
+                
                 for (var i = 1; i <= e_contador; i++) {
-                    if (document.getElementById('e_cepIni' + i) != null) {
+                    if (document.getElementById('e_cepIni' + i) !== null) {
                         var e_cepIni = parseInt(document.getElementById('e_cepIni' + i).value.replace("-", ""));
                         var e_cepFim = parseInt(document.getElementById('e_cepFim' + i).value.replace("-", ""));
                         for (var j = 1; j <= e_contador; j++) {
-                            if (j != i && document.getElementById('e_cepIni' + j) != null) {
+                            if (j !== i && document.getElementById('e_cepIni' + j) !== null) {
                                 var e_cepIniAux = parseInt(document.getElementById('e_cepIni' + j).value.replace("-", ""));
                                 var e_cepFimAux = parseInt(document.getElementById('e_cepFim' + j).value.replace("-", ""));
                                 if ((e_cepIni >= e_cepIniAux && e_cepIni <= e_cepFimAux) || (e_cepFim >= e_cepIniAux && e_cepFim <= e_cepFimAux) || (e_cepIni <= e_cepIniAux && e_cepFim >= e_cepFimAux)) {
@@ -467,23 +467,23 @@
                     }
                 }
 
-
                 var contador = document.getElementById('contador').value;
+                
                 //PERCORRE TODOS OS CAMPOS DA TABELA DE PESOS E PRECOS
                 for (var i = 1; i <= contador; i++) {
-                    if (document.getElementById('cepIni' + i) != null) {
+                    if (document.getElementById('cepIni' + i) !== null) {
                         var cepIni = document.getElementById('cepIni' + i).value;
                         var cepFim = document.getElementById('cepFim' + i).value;
 
                         //VERIFICA SE O CEP INICIAL FOI PREENCHIDO
-                        if (cepIni == "" || cepIni.length < 9) {
+                        if (cepIni === "" || cepIni.length < 9) {
                             alert("Preencha corretamente o CEP inicial!");
                             document.getElementById('cepIni' + i).focus();
                             return false;
                         }
 
                         //VERIFICA SE O CEP FINAL FOI PREENCHIDO
-                        if (cepFim == "" || cepFim.length < 9) {
+                        if (cepFim === "" || cepFim.length < 9) {
                             alert("Preencha corretamente o CEP final!");
                             document.getElementById('cepFim' + i).focus();
                             return false;
@@ -498,15 +498,16 @@
                             document.getElementById('cepIni' + i).focus();
                             return false;
                         }
+                        
                     }
                 }
 
                 for (var i = 1; i <= contador; i++) {
-                    if (document.getElementById('cepIni' + i) != null) {
+                    if (document.getElementById('cepIni' + i) !== null) {
                         var cepIni = parseInt(document.getElementById('cepIni' + i).value.replace("-", ""));
                         var cepFim = parseInt(document.getElementById('cepFim' + i).value.replace("-", ""));
                         for (var j = 1; j <= contador; j++) {
-                            if (j != i && document.getElementById('cepIni' + j) != null) {
+                            if (j !== i && document.getElementById('cepIni' + j) !== null) {
                                 var cepIniAux = parseInt(document.getElementById('cepIni' + j).value.replace("-", ""));
                                 var cepFimAux = parseInt(document.getElementById('cepFim' + j).value.replace("-", ""));
                                 if ((cepIni >= cepIniAux && cepIni <= cepFimAux) || (cepFim >= cepIniAux && cepFim <= cepFimAux) || (cepIni <= cepIniAux && cepFim >= cepFimAux)) {
@@ -519,7 +520,7 @@
                     }
                 }
 
-                waitMsg();
+                waitMsg();                
                 return true;
             }
 

@@ -32,6 +32,12 @@
 
         // TODO initialize WS operation arguments here
         String nCdEmpresa = request.getParameter("nCdEmpresa").trim();
+        try{
+            int codAdm = Integer.parseInt(nCdEmpresa);
+            nCdEmpresa = codAdm+"";
+        }catch(NumberFormatException e){            
+        }
+        
         String sDsSenha = request.getParameter("sDsSenha").trim();
         String sCepOrigem = request.getParameter("sCepOrigem");
         String sCepDestino = request.getParameter("sCepDestino"); 
@@ -103,22 +109,55 @@
         String nCdServico = request.getParameter("nCdServico");//"41106,40010";
         //if tem conrato
         ArrayList<Integer> listaContrato = ContrClienteContrato.consultaContratoCliente(idCliente, nomeBD);
-        if (!nCdServico.equals("41300") && !nCdServico.equals("40045") && !nCdServico.equals("40126") && agrupado.equals("0")) {
-            nCdServico = "40215,40169";
+        ArrayList<String> listaServUnicos = new ArrayList<String>();
+        //pac grande
+        listaServUnicos.add("41300");
+        //sedex cobrar
+        listaServUnicos.add("40126");
+        listaServUnicos.add("40630");
+        listaServUnicos.add("40432");
+        listaServUnicos.add("40440");
+        listaServUnicos.add("40819");
+        //pac cobrar
+        listaServUnicos.add("41238");
+        listaServUnicos.add("41262");
+        
+        if (!listaServUnicos.contains(nCdServico) && agrupado.equals("0")) {
+            //sedex 12
+            nCdServico = "40169";            
+            //sedex 10
+            if (listaContrato.contains(40789)) {
+                nCdServico += ",40789";
+            } else {
+                nCdServico += ",40215";
+            }
+            //SEDEX
             if (listaContrato.contains(40096)) {
                 nCdServico += ",40096";
             } else if (listaContrato.contains(40436)) {
                 nCdServico += ",40436";
             } else if (listaContrato.contains(40444)) {
                 nCdServico += ",40444";
+            } else if (listaContrato.contains(40568)) {
+                nCdServico += ",40568";
+            } else if (listaContrato.contains(41408)) {
+                nCdServico += ",41408";
             } else {
                 nCdServico += ",40010";
             }
+            //E-SEDEX
             if (listaContrato.contains(81019)) {
                 nCdServico += ",81019";
+            }else if (listaContrato.contains(81833)) {
+                nCdServico += ",81833";
             }
+            //PAC
             if (listaContrato.contains(41068)) {
                 nCdServico += ",41068";
+            }else if (listaContrato.contains(41211)) {
+                nCdServico += ",41211";
+            }else if (listaContrato.contains(41491)) {
+                nCdServico += ",41491";
             } else {
                 nCdServico += ",41106";
             }
@@ -226,7 +265,7 @@
                         out.println("<td align='center'><b style='color:red;'>" + msgErro + "</b></td>");
                     } else {
                         String prazo = s.getPrazoEntrega() + " Dias Úteis";
-                        if(s.getCodigo() == 40215){
+                        if(s.getCodigo() == 40215 || s.getCodigo() == 40789){
                             prazo = "Entrega até às 10:00 da manhã do dia útil seguinte ao da postagem.";
                         } else if(s.getCodigo() == 40169){
                             prazo = "Entrega até às 12:00 da manhã do dia útil seguinte ao da postagem.";

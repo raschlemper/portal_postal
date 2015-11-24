@@ -1368,7 +1368,7 @@
                         <ul class="ul_formulario" style="padding: 10px 0; margin: 0;width: 1136px;"  >
                             <li>
                                 <dd>
-                                    <label>Order impressão por:</label>
+                                    <label>Ordenar impressão por:</label>
                                     <select style="width: 220px;" name="ordem" id="ordem">
                                         <option value="id">Ordem de Geração</option> 
                                         <option value="d.nome">Nome do Destinatário</option> 
@@ -1386,9 +1386,11 @@
                                         <option value="ETQ_16x10">Etiqueta Adesiva - 16cm x 10cm</option> 
                                         <option value="ETQ_10x10">Etiqueta Adesiva - 10cm x 10cm</option> 
                                         <option disabled>----------------</option>
-                                        <option value="ENV_DL">Envelope Ofício / DL - 11,4cm x 22,9cm</option> 
-                                        <option value="ENV_C5">Envelope C5 - 16,2cm x 22,9cm</option> 
-                                        <option value="ENV_B4">Envelope B4 - 35,3cm x 25cm</option>
+                                        <option value="ENV_DL">Envelope Ofício / DL (Direita) - 11,4cm x 22,9cm</option> 
+                                        <option value="ENV_DL_ESQ">Envelope Ofício / DL (Esquerda) - 11,4cm x 22,9cm</option> 
+                                        <option value="ENV_C5">Envelope C5 (Direita) - 16,2cm x 22,9cm</option> 
+                                        <option value="ENV_C5_ESQ">Envelope C5 (Esquerda) - 16,2cm x 22,9cm</option> 
+                                        <option value="ENV_B4">Envelope B4 (Centro) - 35,3cm x 25cm</option>
                                     </select>
                                 </dd>
                             </li>

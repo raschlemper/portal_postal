@@ -20,15 +20,16 @@ public class ContrCep {
     
     public static int inserir(String cep, String uf, String cidade, String bairro, String logradouro) {
         Connection conn = Conexao.conectarCep();
-        String sql = "INSERT INTO logradouros (cep, uf, cidade, bairro, logradouro, logradouro_abreviatura) values(?,?,?,?,?,?)";
+        String sql = "INSERT INTO enderecos (id, cep, uf, cidade, bairro, logradouro, logradouro_abreviatura) values(?,?,?,?,?,?,?)";
         try {
             PreparedStatement valores = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             valores.setString(1, cep);
-            valores.setString(2, uf);
-            valores.setString(3, cidade);
-            valores.setString(4, bairro);
-            valores.setString(5, logradouro);
+            valores.setString(2, cep);
+            valores.setString(3, uf);
+            valores.setString(4, cidade);
+            valores.setString(5, bairro);
             valores.setString(6, logradouro);
+            valores.setString(7, logradouro);
             valores.executeUpdate();
             
             int autoIncrementKey = 0;
@@ -50,7 +51,7 @@ public class ContrCep {
         try {
             Endereco end = new Endereco("", "", "CEP inexistente", "", cep);
             
-            String sql = "SELECT * FROM logradouros WHERE cep = '"+cep+"'";
+            String sql = "SELECT * FROM enderecos WHERE cep = '"+cep+"'";
             PreparedStatement valores = con.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();
             if (result.next()) {
@@ -58,34 +59,14 @@ public class ContrCep {
                 String uf = result.getString("uf");
                 String cidade = result.getString("cidade");
                 String bairro = result.getString("bairro");
-                String logradouro = result.getString("logradouro");
-                
-                end= new Endereco(bairro, cidade, logradouro, uf, cep1);
-            }else {
-                sql = "SELECT * FROM bairros WHERE cep_final >= "+cep+" AND cep_inicial <= "+cep;
-                valores = con.prepareStatement(sql);
-                result = (ResultSet) valores.executeQuery();
-                if (result.next()) {
-                    String cep1 = Util.FormataString.formataCep(cep);
-                    String uf = result.getString("uf");
-                    String cidade = result.getString("cidade");
-                    String bairro = result.getString("bairro");
-
-                    end= new Endereco(bairro, cidade, "", uf, cep1);
-                    
-                }else{
-                    sql = "SELECT * FROM cidades WHERE cep_final >= "+cep+" AND cep_inicial <= "+cep;
-                    valores = con.prepareStatement(sql);
-                    result = (ResultSet) valores.executeQuery();
-                    if (result.next()) {
-                        String cep1 = Util.FormataString.formataCep(cep);
-                        String uf = result.getString("uf");
-                        String cidade = result.getString("cidade");
-
-                        end= new Endereco("", cidade, "", uf, cep1);
-
-                    }
+                if(bairro == null){
+                    bairro = "";
                 }
+                String logradouro = result.getString("logradouro");     
+                if(logradouro == null){
+                    logradouro = "";
+                }
+                end= new Endereco(bairro, cidade, logradouro, uf, cep1);
             }
             return end;
         } catch (SQLException e) {
@@ -100,14 +81,14 @@ public class ContrCep {
     public static ArrayList<Endereco> pesquisaPaises(String servico) {
         Connection con = Conexao.conectarCep();
         try {            
-            String sql = "SELECT * FROM paises WHERE servicos_disponiveis LIKE '%"+servico+"%' ORDER BY nome_pais;";
+            String sql = "SELECT * FROM ect_pais WHERE servicos_disponiveis LIKE '%"+servico+"%' ORDER BY pai_no_portugues;";
             PreparedStatement valores = con.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();
             ArrayList<Endereco> lista = new ArrayList<Endereco>();
             while (result.next()) {
-                String sigla = result.getString("sigla");
-                String siglaAlt = result.getString("sigla_alternativa");
-                String pais = result.getString("nome_pais");                
+                String sigla = result.getString("pai_sg");
+                String siglaAlt = result.getString("pai_sg_alternativa");
+                String pais = result.getString("pai_no_portugues");                
                 lista.add(new Endereco(pais, sigla, siglaAlt));
             }
             return lista;

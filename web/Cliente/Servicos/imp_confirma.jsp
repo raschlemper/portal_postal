@@ -110,6 +110,8 @@
                                     <th>VD</th>
                                     <th>OBS</th>
                                     <th>CONTEÚDO</th>
+                                    <th>CELULAR</th>
+                                    <th>E-MAIL</th>
                                 </tr>
                                 <%
                                     for (int i = 0; i < lista.size(); i++) {
@@ -160,6 +162,7 @@
                                         <select name="servico<%= pv.getId()%>">
                                             <option value="">SELECIONE UM SERVIÇO</option>
                                             <option value="PAC" <%if (pv.getNomeServico().equals("PAC")) {%> selected <%}%>>PAC</option>
+                                            <option value="PAX" <%if (pv.getNomeServico().equals("PAX")) {%> selected <%}%>>PAC GRANDES FORMATOS</option>
                                             <option value="SEDEX" <%if (pv.getNomeServico().equals("SEDEX")) {%> selected <%}%>>SEDEX</option>
                                             <option value="ESEDEX" <%if (pv.getNomeServico().equals("ESEDEX")) {%> selected <%}%>>E-SEDEX</option>
                                             <option value="CARTA" <%if (pv.getNomeServico().equals("CARTA")) {%> selected <%}%>>CARTA REGISTRADA</option>
@@ -181,6 +184,8 @@
                                     <td><input type="text" name="vd<%= pv.getId()%>" size="5" value="<%= pv.getValor_declarado()%>" maxlength="8" onkeypress="mascara(this, maskReal);" /></td>
                                     <td><input type="text" name="obs<%= pv.getId()%>" value="<%= pv.getObservacoes()%>" /></td>
                                     <td><input type="text" name="conteudo<%= pv.getId()%>" value="<%= pv.getConteudo()%>" /></td>
+                                    <td><input type="text" name="celular<%= pv.getId()%>" value="<%= pv.getCelularDes() %>" /></td>
+                                    <td><input type="text" name="email<%= pv.getId()%>" value="<%= pv.getEmail_destinatario() %>" /></td>
                                 </tr>
                                 <%}%>
                             </table>

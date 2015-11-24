@@ -63,9 +63,13 @@ public class Conexao {
         try {            
             //Conexão Banco Local
             Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://209.126.111.14:3306/cep2011?zeroDateTimeBehavior=convertToNull&autoReconnect=true";
-            Connection con = DriverManager.getConnection(url,"smart_bd","33m.SMRT");
-            //Connection con = DriverManager.getConnection(url, "root", "1s2c3c4");
+            String url = "jdbc:mysql://localhost:3306/_dne?zeroDateTimeBehavior=convertToNull&autoReconnect=true";
+            //Connection con = DriverManager.getConnection(url,"smart_bd","33m.SMRT");
+            Connection con = DriverManager.getConnection(url, "root", "1s2c3c4");
+            
+            
+            //contConn++;
+            //System.out.println("C Conexoes Ativas = " + contConn);
             
             
             //contConn++;
@@ -84,9 +88,12 @@ public class Conexao {
         try {
             //Conexão Banco Local
             Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://209.126.111.14:3306/scc4?zeroDateTimeBehavior=convertToNull&autoReconnect=true";
-            Connection con = DriverManager.getConnection(url,"smart_bd","33m.SMRT");
-            //Connection con = DriverManager.getConnection(url, "root", "1s2c3c4");
+            String url = "jdbc:mysql://localhost:3306/scc4?zeroDateTimeBehavior=convertToNull&autoReconnect=true";
+            //Connection con = DriverManager.getConnection(url,"smart_bd","33m.SMRT");
+            Connection con = DriverManager.getConnection(url, "root", "1s2c3c4");
+            
+            //contConn++;
+            //System.out.println("S Conexoes Ativas = " + contConn);
             
             //contConn++;
             //System.out.println("S Conexoes Ativas = " + contConn);

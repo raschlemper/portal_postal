@@ -118,6 +118,7 @@
             veiculoMultaCtrl.init();
             veiculoMultaCtrl.acoes.pesquisarTodos();
             Configuracao.messageModal();
+            Configuracao.loadDataTableScript('datatable-multas');
         </script>
     </body>
 </html>

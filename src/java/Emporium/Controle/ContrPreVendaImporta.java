@@ -255,39 +255,51 @@ public class ContrPreVendaImporta {
                     ai.setCidade(aux[8].trim());
                     ai.setUf(aux[9].trim());
                     ai.setEmail("");
-                    ai.setCelular("");
+                    ai.setCelular("");                    
+                    if (aux.length >= 19 && aux[18] != null) {
+                        ai.setCelular(aux[17].trim()+aux[18].trim());
+                    } else {
+                        ai.setCelular("");
+                    }
+
+                    if (aux.length >= 20 && aux[19] != null) {
+                        ai.setEmail(aux[19].trim());
+                    } else {
+                        ai.setEmail("");
+                    }
+                    
                     ai.setAosCuidados(aux[10].trim());
                     ai.setNotaFiscal(aux[11].trim());
                     ai.setServico(aux[12].trim().toUpperCase());
                     ai.setObs(aux[15].trim());
                     ai.setConteudo(aux[16].trim());
 
-                    if (aux.length >= 18 && aux[17] != null) {
-                        ai.setChave(aux[17].trim());
+                    if (aux.length >= 21 && aux[20] != null) {
+                        ai.setChave(aux[20].trim());
                     } else {
                         ai.setChave("");
                     }
 
-                    if (aux.length >= 19 && aux[18] != null) {
-                        ai.setPeso(aux[18].trim());
+                    if (aux.length >= 22 && aux[21] != null) {
+                        ai.setPeso(aux[21].trim());
                     } else {
                         ai.setPeso("0");
                     }
 
-                    if (aux.length >= 19 && aux[19] != null) {
-                        ai.setAltura(aux[19].trim());
+                    if (aux.length >= 23 && aux[22] != null) {
+                        ai.setAltura(aux[22].trim());
                     } else {
                         ai.setAltura("0");
                     }
 
-                    if (aux.length >= 19 && aux[20] != null) {
-                        ai.setLargura(aux[20].trim());
+                    if (aux.length >= 24 && aux[23] != null) {
+                        ai.setLargura(aux[23].trim());
                     } else {
                         ai.setLargura("0");
                     }
 
-                    if (aux.length >= 19 && aux[21] != null) {
-                        ai.setComprimento(aux[21].trim());
+                    if (aux.length >= 25 && aux[24] != null) {
+                        ai.setComprimento(aux[24].trim());
                     } else {
                         ai.setComprimento("0");
                     }
@@ -1442,6 +1454,8 @@ public class ContrPreVendaImporta {
                     String altura = node.valueOf("altura");
                     String largura = node.valueOf("largura");
                     String comprimento = node.valueOf("comprimento");
+                    String celular = node.valueOf("celular");
+                    String email = node.valueOf("email");
 
                     if (!serv.equals("ARQUIVO")) {
                         servico = serv;
@@ -1476,7 +1490,7 @@ public class ContrPreVendaImporta {
                     /**
                      * ******************************************************************
                      */
-                    String aux = montaSqlPedidoXML(nome, endereco, cep, numero, complemento, bairro, cidade, uf, aos_cuidados, notaFiscal, nomeBD, cartaoPostagem, contrato, cli.getCodigo(), idDepartamento, departamento, servico, servico_adicional, valor, 0, true, num_objeto, peso, altura, largura, comprimento, chave);
+                    String aux = montaSqlPedidoXML(nome, endereco, cep, numero, complemento, bairro, cidade, uf, aos_cuidados, notaFiscal, nomeBD, cartaoPostagem, contrato, cli.getCodigo(), idDepartamento, departamento, servico, servico_adicional, valor, 0, true, num_objeto, peso, altura, largura, comprimento, chave, email, celular);
                     if (!aux.startsWith("ERRO")) {
                         sql += aux;
                     }
@@ -1557,6 +1571,9 @@ public class ContrPreVendaImporta {
                     ai.setUf(node.valueOf("nacional/uf_destinatario"));
                     ai.setEmail(node.valueOf("destinatario/email_destinatario"));
                     ai.setCelular(node.valueOf("destinatario/celular_destinatario"));
+                    if(ai.getCelular() == null || ai.getCelular().trim().equals("")){
+                        ai.setCelular(node.valueOf("destinatario/telefone_destinatario"));                        
+                    }
                     ai.setNotaFiscal(node.valueOf("nacional/numero_nota_fiscal"));
                     
                     ai.setAosCuidados("");
@@ -1641,7 +1658,7 @@ public class ContrPreVendaImporta {
 
     }
 
-    public static String montaSqlPedidoXML(String nome, String endereco, String cep, String numero, String complemento, String bairro, String cidade, String uf, String aosCuidados, String notaFiscal, String nomeBD, String cartaoPostagem, String contrato, int idCli, int idDepto, String depto, String serv, String serv_ad, String valor_declarado, int idUser, boolean postagemCompleta, String numObj, String pesoxml, String alt, String larg, String comp, String chave) {
+    public static String montaSqlPedidoXML(String nome, String endereco, String cep, String numero, String complemento, String bairro, String cidade, String uf, String aosCuidados, String notaFiscal, String nomeBD, String cartaoPostagem, String contrato, int idCli, int idDepto, String depto, String serv, String serv_ad, String valor_declarado, int idUser, boolean postagemCompleta, String numObj, String pesoxml, String alt, String larg, String comp, String chave, String email, String celular) {
         String sql = "";
 
         try {
@@ -1674,8 +1691,6 @@ public class ContrPreVendaImporta {
                 int idCliente = idCli;
                 int idDepartamento = idDepto;
                 String departamento = depto;
-                String email = "";
-                String celular = "";
 
                 int idDestinatario = ContrPreVendaDest.inserir(idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, email, celular, "Brasil", nomeBD);
 
