@@ -169,7 +169,7 @@ var VeiculoCombustivelController = function(form) {
     var validarCampoQuilometragemFinal = function(form) {
         var msg = 'Preencha a quilometragem do ve\u00EDculo!';
         var msgMenor = 'A quilometragem n\u00E3o pode ser inferior ou igual a \u00FAltima quilometragem inserida ' +
-                'para este ve\u00EDculo (' + VeiculoFormatador.toNumberBr(form.quilometragemInicial.value) + ')!';
+                'para este ve\u00EDculo!'; // (' + VeiculoFormatador.toNumberBr(form.quilometragemInicial.value) + ')!';
         if(!VeiculoValidacao.campoNotNull(form.quilometragemFinal.value, msg)) { return false; };
         return VeiculoValidacao.campoMoreEqualThen(form.quilometragemFinal.value, form.quilometragemInicial.value, msgMenor);
     }; 

@@ -53,9 +53,9 @@ public class VeiculoCombustivelValidacao extends Validacao<VeiculoCombustivel> {
             setMsg("Preencha a quilometragem atual do veículo!"); 
             return false;
         }
-        if(campoMoreEqualThen(veiculo.getQuilometragemFinal(), veiculo.getQuilometragemInicial())) {
+        if(!campoMoreEqualThen(veiculo.getQuilometragemFinal(), veiculo.getQuilometragemInicial())) {
             setMsg("A quilometragem não pode ser inferior ou igual a última quilometragem inserida " +
-                "para este veículo (" + toNumberFormat(veiculo.getQuilometragemInicial()) + ")!"); 
+                "para este veículo!"); // (" + toNumberFormat(veiculo.getQuilometragemInicial()) + ")!"); 
             return false;            
         }
         return true;        

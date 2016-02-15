@@ -38,7 +38,7 @@ public class ContrVeiculoSeguro {
 
     public static VeiculoSeguro consulta(String nomeBD, VeiculoSeguro veiculoSeguro) {
         Connection con = Conexao.conectar(nomeBD);
-        String sql = "SELECT * FROM veiculo_seguro, veiculo WHERE veiculo.idVeiculo = veiculo_seguro.idVeiculo AND idVeiculoSeguro = ?"
+        String sql = "SELECT * FROM veiculo_seguro, veiculo WHERE veiculo.idVeiculo = veiculo_seguro.idVeiculo AND idVeiculoSeguro = ? "
                 + "ORDER BY veiculo_seguro.idVeiculo";
         try {
             PreparedStatement ps = con.prepareStatement(sql);

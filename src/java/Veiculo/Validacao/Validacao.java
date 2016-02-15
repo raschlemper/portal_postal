@@ -33,7 +33,7 @@ public abstract class Validacao<E> {
     }
     
     protected boolean campoBetween(Object value, Integer comparatorInitial, Integer comparatorFinal) {
-        if(value != null && value != "") return true;
+        if(value == null || value == "") return true;
         if(campoLessEqualThen(value, comparatorInitial) || campoMoreEqualThen(value, comparatorFinal)) {
             return false;                 
         }
