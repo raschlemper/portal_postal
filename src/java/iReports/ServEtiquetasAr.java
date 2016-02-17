@@ -107,7 +107,7 @@ public class ServEtiquetasAr extends HttpServlet {
                                         " d.bairro, " +
                                         " d.cidade, " +
                                         " d.uf, " +
-                                        " conteudo, " +
+                                        " CONCAT(notaFiscal, ' - ', conteudo) AS conteudo, " +
                                         " departamento " +
                                 " FROM " +
                                         " pre_venda AS p " +

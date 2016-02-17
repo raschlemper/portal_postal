@@ -187,7 +187,7 @@
                                         <option value="0">-- ESCOLHA UM SERVIÇO --</option>
                                         <%
                                             ArrayList<Integer> listaContrato = ContrClienteContrato.consultaContratoClienteGroupByServico(idClienteInc, nomeBD);
-                                            ArrayList<ServicoECT> listaServ = ContrServicoECT.consultaServicos(0, 1, emp.getTipo_agencia());
+                                            ArrayList<ServicoECT> listaServ = ContrServicoECT.consultaServicosSigepWEB();
                                             for (int i = 0; i < listaServ.size(); i++) {
                                                 ServicoECT sv = listaServ.get(i);
                                                 if (listaContrato.contains(sv.getCodECT()) && !sv.getGrupoServico().equals("SIMPLES")) {

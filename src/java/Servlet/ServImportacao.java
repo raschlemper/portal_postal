@@ -5,11 +5,15 @@
 package Servlet;
 
 import Controle.ContrErroLog;
+import Controle.ContrServicoECT;
+import static Controle.contrCliente.criaClienteBalcao;
+import Entidade.ServicoECT;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -128,6 +132,7 @@ public class ServImportacao extends HttpServlet {
                         sessao.setAttribute("msg", mensagem);
                     }
                 }
+                criaClienteBalcao(nomeBD);
 
             } catch (FileUploadException ex) {
                 int idErro = ContrErroLog.inserir("HOITO - ServImportacao", "FileUploadException", null, ex.toString());
@@ -146,8 +151,8 @@ public class ServImportacao extends HttpServlet {
     private String inserirDiretorio(FileItem item) throws IOException {
 
         String caminho = getServletContext().getRealPath("ClientesImport");
-        caminho = "/var/lib/tomcat/webapps/PortalPostal/ClientesImport";
-        //String caminho = "C:\\Users\\Fernando\\Documents\\NetBeansProjects\\PortalPostal_Web\\build\\web\\ClientesImport";
+      caminho = "/var/lib/tomcat/webapps/PortalPostal/ClientesImport";
+        //  caminho = "C:\\Users\\Fernando\\Downloads";
 
         // Cria o diretório caso ele não exista
         File diretorio = new File(caminho);
@@ -195,13 +200,18 @@ public class ServImportacao extends HttpServlet {
         ArrayList<String> listaIDS = new ArrayList<String>();
 
         String sqlBase = "INSERT INTO cliente (codigo, nome, cnpj, endereco, bairro, cep, cidade, uf, email, codSTO, telefone"
-                + ", nomeFantasia, complemento) VALUES ";
+                + ", nomeFantasia, complemento, temContrato, numContrato, codAdministrativo, cartaoPostagem, dtVigenciaFimContrato"
+                + ", login_sigep, senha_sigep, ufContrato, statusCartaoPostagem, nomeContrato, anoContrato) VALUES ";
         StringBuilder sqlValues = new StringBuilder();
         String sqlDuplicated = " ON DUPLICATE KEY UPDATE nome = VALUES(nome), endereco = VALUES(endereco)"
                 + ", telefone = VALUES(telefone), bairro = VALUES(bairro), cidade = VALUES(cidade)"
                 + ", uf = VALUES(uf), cep = VALUES(cep), email = VALUES(email), cnpj = VALUES(cnpj)"
                 + ", nomeFantasia = VALUES(nomeFantasia), complemento = VALUES(complemento), codSTO = VALUES(codSTO);";
-
+        
+        Map<Integer, ServicoECT> mapServicos = ContrServicoECT.consultaMapServicosDeContrato();
+        ArrayList<String> listaQuerysServicos = new ArrayList<String>();
+        StringBuilder sqlValuesServicos = new StringBuilder();
+        String sqlContratoServ = "REPLACE INTO cliente_contrato (idCliente, codECT, grupoServico) VALUES ";
 
         try {
             InputStreamReader is = new InputStreamReader(new FileInputStream(caminho), Charset.forName("ISO-8859-1"));
@@ -213,26 +223,99 @@ public class ServImportacao extends HttpServlet {
                 if(!buffer.trim().equals("")){                    
                     String ativo = buffer.substring(524, 525);
                     if(ativo == null || ativo.trim().equals("N") || ativo.trim().equals("")){
-                        if (linha % 500 == 0) {
+                        
+                       if (linha % 500 == 0) {
+                      
                             String sqlQuery = sqlBase + sqlValues.substring(0, sqlValues.toString().lastIndexOf(",")) + sqlDuplicated;
                             listaQuerys.add(sqlQuery);
                             sqlValues = new StringBuilder();
+                            
+                          if(!sqlValuesServicos.toString().equals("")){
+                              String sqlQueryServico = sqlContratoServ + sqlValuesServicos.substring(0, sqlValuesServicos.toString().lastIndexOf(","));
+                            listaQuerysServicos.add(sqlQueryServico);
+                            sqlValuesServicos = new StringBuilder();
+                          }
+                            
                         }
-
+                       
                         StringBuilder strBuf = new StringBuilder();
                         strBuf.append(" (\"").append(toStr(buffer.substring(0, 14), 0)).append("\", "); //codigo
-                        strBuf.append("\"").append(toStr(buffer.substring(14, 74), 0)).append("\", "); //nome
-                        strBuf.append("\"").append(toStr(buffer.substring(74, 88), 0)).append("\", "); //cnpj
-                        strBuf.append("\"").append(toStr(buffer.substring(88, 188), 0)).append("\", "); //endereco
-                        strBuf.append("\"").append(toStr(buffer.substring(188, 238), 0)).append("\", "); //bairro
-                        strBuf.append("\"").append(toStr(buffer.substring(238, 246), 1)).append("\", "); //cep
-                        strBuf.append("\"").append(toStr(buffer.substring(246, 306), 0)).append("\", "); //cidade
-                        strBuf.append("\"").append(toStr(buffer.substring(306, 326), 0)).append("\", "); //uf
-                        strBuf.append("\"").append(toStr(buffer.substring(326, 426), 0)).append("\", "); //email
-                        strBuf.append("\"").append(toStr(buffer.substring(426, 434), 0)).append("\", "); //codSTO
-                        strBuf.append("\"").append(toStr(buffer.substring(434, 459), 0)).append("\", "); //telefone
+                        strBuf.append("\"").append(toStr(buffer.substring(14, 74), 0)).append("\", "); //nome                       
+                        strBuf.append("\"").append(toStr(buffer.substring(74, 88), 0)).append("\", "); //cnpj                        
+                        strBuf.append("\"").append(toStr(buffer.substring(88, 188), 0)).append("\", "); //endereco                        
+                        strBuf.append("\"").append(toStr(buffer.substring(188, 238), 0)).append("\", "); //bairro                        
+                        strBuf.append("\"").append(toStr(buffer.substring(238, 246), 1)).append("\", "); //cep                        
+                        strBuf.append("\"").append(toStr(buffer.substring(246, 306), 0)).append("\", "); //cidade                        
+                        strBuf.append("\"").append(toStr(buffer.substring(306, 326), 0)).append("\", "); //uf                        
+                        strBuf.append("\"").append(toStr(buffer.substring(326, 426), 0)).append("\", "); //email                        
+                        strBuf.append("\"").append(toStr(buffer.substring(426, 434), 0)).append("\", "); //codSTO                        
+                        strBuf.append("\"").append(toStr(buffer.substring(434, 459), 0)).append("\", "); //telefone                        
                         strBuf.append("\"").append(toStr(buffer.substring(459, 484), 0)).append("\", "); //nomeFantasia
-                        strBuf.append("\"").append(toStr(buffer.substring(484, 524), 0)).append("\"),\n"); //complemento
+                        
+                        if(buffer.length() > 525){ 
+                            String temContrato = buffer.substring(525, 526);
+                            if(temContrato.equals("1")){
+                                strBuf.append("\"").append(toStr(buffer.substring(484, 524), 0)).append("\", "); //complemento    
+                                strBuf.append("\"").append(toStr(buffer.substring(525, 526), 0)).append("\", "); //temContrato       
+                                strBuf.append("\"").append(toStr(buffer.substring(526, 541), 0)).append("\", "); //contrato
+                               
+                                strBuf.append("\"").append(toStr(buffer.substring(541, 556), 0)).append("\", "); //cod administrativo
+                                strBuf.append("\"").append(toStr(buffer.substring(556, 571), 0)).append("\", "); //cartao postagem
+                            
+                                strBuf.append("\"").append(toStr(buffer.substring(571, 581), 0)).append("\", "); //data Vigencia
+                               
+                                strBuf.append("\"").append(toStr(buffer.substring(601, 651), 0)).append("\", "); //user sigepweb
+                                strBuf.append("\"").append(toStr(buffer.substring(651, 671), 0)).append("\", "); //senha sigepweb    
+                                strBuf.append("\"").append(toStr(buffer.substring(306, 308), 0)).append("\", "); //uf contrato                            
+                                strBuf.append("\"").append(toStr("1", 0)).append("\", "); //status cartao postagem       
+                                strBuf.append("\"").append(toStr(buffer.substring(459, 479), 0)).append("\", "); //nome chancela                     
+                                strBuf.append("\"").append(toStr("2015", 0)).append("\"),\n"); //nome chancela         
+                                
+                                String servicos = buffer.substring(671).trim();
+                                if(servicos.contains(",")){
+                                    //System.out.println(servicos);
+                                    String srv[] = servicos.split(",");                                
+                                    for (int i = 0; i < srv.length; i++) {
+                                        //System.out.println(srv[i]);
+                                        int codECT = Integer.parseInt(srv[i]);
+                                        //System.out.println(srv[i]);
+                                        if(mapServicos.containsKey(codECT)){                                        
+                                            StringBuilder strBuf2 = new StringBuilder();    
+                                            strBuf2.append(" (\"").append(toStr(buffer.substring(0, 14), 0)).append("\", "); //id cliente            
+                                            strBuf2.append("\"").append(toStr(codECT+"", 0)).append("\", "); //codECT                  
+                                            strBuf2.append("\"").append(toStr(mapServicos.get(codECT).getGrupoServico(), 0)).append("\"),\n"); //grupo servico 
+                                            sqlValuesServicos.append(strBuf2);
+                                        }
+                                    }
+                                }
+                            }else{
+                                strBuf.append("\"").append(toStr(buffer.substring(484, 524), 0)).append("\","); //complemento    
+                                strBuf.append("\"").append(toStr("0", 0)).append("\","); //temContrato       
+                                strBuf.append("\"").append(toStr("", 0)).append("\","); //contrato
+                                strBuf.append("\"").append(toStr("", 0)).append("\","); //cod administrativo
+                                strBuf.append("\"").append(toStr("", 0)).append("\","); //cartao postagem
+                                strBuf.append("\"").append(toStr("0000-00-00", 0)).append("\","); //data Vigencia
+                                strBuf.append("\"").append(toStr("", 0)).append("\","); //user sigepweb
+                                strBuf.append("\"").append(toStr("", 0)).append("\","); //senha sigepweb    
+                                strBuf.append("\"").append(toStr("", 0)).append("\", "); //uf contrato                            
+                                strBuf.append("\"").append(toStr("0", 0)).append("\", "); //status cartao postagem    
+                                strBuf.append("\"").append(toStr("", 0)).append("\", "); //nome chancela                     
+                                strBuf.append("\"").append(toStr("2015", 0)).append("\"),\n"); //nome chancela          
+                            }
+                        }else{ 
+                            strBuf.append("\"").append(toStr(buffer.substring(484, 524), 0)).append("\","); //complemento         
+                            strBuf.append("\"").append(toStr("0", 0)).append("\","); //temContrato    
+                            strBuf.append("\"").append(toStr("", 0)).append("\","); //contrato
+                            strBuf.append("\"").append(toStr("", 0)).append("\","); //cod administrativo
+                            strBuf.append("\"").append(toStr("", 0)).append("\","); //cartao postagem                            
+                            strBuf.append("\"").append(toStr("0000-00-00", 0)).append("\","); //data Vigencia
+                            strBuf.append("\"").append(toStr("", 0)).append("\","); //user sigepweb
+                            strBuf.append("\"").append(toStr("", 0)).append("\","); //senha sigepweb                                
+                            strBuf.append("\"").append(toStr("", 0)).append("\", "); //uf contrato    
+                            strBuf.append("\"").append(toStr("0", 0)).append("\", "); //status cartao postagem   
+                            strBuf.append("\"").append(toStr("", 0)).append("\", "); //nome chancela  
+                            strBuf.append("\"").append(toStr("2015", 0)).append("\"),\n"); //nome chancela                           
+                        }
 
                         sqlValues.append(strBuf);
                         listaIDS.add(toStr(buffer.substring(0, 14), 0));
@@ -245,9 +328,15 @@ public class ServImportacao extends HttpServlet {
             if (!sqlValues.toString().equals("")) {
                 String sqlQuery = sqlBase + sqlValues.substring(0, sqlValues.toString().lastIndexOf(",")) + sqlDuplicated;
                 listaQuerys.add(sqlQuery);
+                //System.out.println(sqlQuery);
+            }
+            if (!sqlValuesServicos.toString().equals("")) {
+                String sqlQueryServicos = sqlContratoServ + sqlValuesServicos.substring(0, sqlValuesServicos.toString().lastIndexOf(","));
+                listaQuerysServicos.add(sqlQueryServicos);
+               // System.out.println(sqlQueryServicos);
             }
 
-            Controle.contrCliente.importarCli(listaIDS, listaQuerys, sqlBase, sqlDuplicated, nomeBD, idUsuario);
+            Controle.contrCliente.importarCli(listaIDS, listaQuerys, listaQuerysServicos, sqlBase, sqlDuplicated, nomeBD, idUsuario);
 
             return "Atualização de Clientes Realizada Com Sucesso!";
 
@@ -255,7 +344,7 @@ public class ServImportacao extends HttpServlet {
             return "Erro na linha <b style='color:red;'>" + linha + "</b> do arquivo!<br><br>Falha: Não foi possivel ler o arquivo!<br>Detalhes:" + e;
         } catch (Exception e) {
             System.out.println(e);
-            return "Erro na linha <b style='color:red;'>" + linha + "</b> do arquivo!<br><br>Falha: Problema no tratamento do arquivo!<br>Detalhes: " + e;
+            return "Erro na linha <b style='color:red;'>" + linha + "</b> do arquivo!<br><br>Falha: Problema no tratamento do arquivo!<br>Detalhes: " + e.getLocalizedMessage();
         }
     }
 

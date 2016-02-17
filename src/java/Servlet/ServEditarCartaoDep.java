@@ -91,21 +91,24 @@ public class ServEditarCartaoDep extends HttpServlet {
                 int idCli = Integer.parseInt(request.getParameter("idCliente"));
                 int idDep = Integer.parseInt(request.getParameter("idDepartamento"));
                 
+                String nome = request.getParameter("nome").trim();
                 String cartao = request.getParameter("cartao").trim();
                 if(!cartao.equals("")){
                     try{
                         int cart = Integer.parseInt(cartao);
-                        if(cart != 0){
+                        if(cart > 0){
                             cartao = cart+"";                    
+                        }else{
+                            cartao = "";
                         }
                     } catch (NumberFormatException ex) {
                         cartao = "";
                     }
                 }
 
-                Controle.ContrClienteDeptos.alterarCartaoDepto(nomeBD, idCli, idDep, cartao);
+                Controle.ContrClienteDeptos.alterarCartaoDepto(nomeBD, idCli, idDep, nome, cartao);
 
-                sessao.setAttribute("msg", "Cartão de Postagem Alterado com sucesso!");
+                sessao.setAttribute("msg", "Departamento alterado com sucesso!");
                                 
                 response.sendRedirect(request.getHeader("referer"));
 

@@ -36,7 +36,7 @@
                 <label class="small">Celular do Coletador</label>
                 <div class="input-group">
                     <span class="input-group-addon" ><i class="fa fa-phone"></i></span>
-                    <input type="text" name="telefone" maxlength="14" onKeyPress="mascara(this, maskTelefone)"  class="form-control" placeholder="Celular" value='<%= telefone%>' />
+                    <input type="text" name="telefone" onKeyPress="mascara(this, maskTelefone)"  class="form-control" placeholder="Celular" value='<%= telefone%>' />
                 </div>
             </div>
             </div>

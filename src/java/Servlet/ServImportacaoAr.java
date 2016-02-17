@@ -127,7 +127,6 @@ public class ServImportacaoAr extends HttpServlet {
                         String mensagem = importaAR(vCaminho, data1, data2, nomeBD, idUsuario);
                         sessao.setAttribute("msg", mensagem);
                     }
-
                 }
 
             } catch (SizeLimitExceededException e) {

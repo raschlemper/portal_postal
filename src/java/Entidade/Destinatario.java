@@ -23,8 +23,10 @@ public class Destinatario {
     private String bairro;
     private String cidade;
     private String uf;
+    private String email;
+    private String celular;
 
-    public Destinatario(int idDestinatario, int idCliente, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf) {
+    public Destinatario(int idDestinatario, int idCliente, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String email, String celular) {
         this.idDestinatario = idDestinatario;
         this.idCliente = idCliente;
         this.nome = nome;
@@ -37,8 +39,26 @@ public class Destinatario {
         this.bairro = bairro;
         this.cidade = cidade;
         this.uf = uf;
+        this.email = email;
+        this.celular = celular;
     }
-    
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getCelular() {
+        return celular;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
+    }
+        
     public String getBairro() {
         return bairro;
     }

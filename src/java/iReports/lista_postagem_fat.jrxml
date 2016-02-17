@@ -90,7 +90,8 @@
    aviso_recebimento AS ar,
    mao_propria AS mp,
    valor_declarado AS vd,
-   d.nome
+   d.nome,
+   cartaoPostagem
 FROM
    pre_venda
 LEFT JOIN
@@ -128,6 +129,7 @@ ORDER BY
 		<field name="nome" class="java.lang.String">
 			<fieldDescription><![CDATA[]]></fieldDescription>
 		</field>
+		<field name="cartaoPostagem" class="java.lang.String"/>
 		<variable name="num_obj" class="java.lang.String">
 			<initialValueExpression><![CDATA["Nº OBJETO / Nº PP"]]></initialValueExpression>
 		</variable>
@@ -267,7 +269,7 @@ WHERE qtdTotal > 0;]]>
 				<text><![CDATA[MP]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="360" y="110" width="60" height="15" uuid="1c398093-5b52-46bd-af90-6b2b0b8c3140"/>
+				<reportElement x="360" y="110" width="50" height="15" uuid="1c398093-5b52-46bd-af90-6b2b0b8c3140"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[N.F.]]></text>
 			</staticText>
@@ -330,14 +332,14 @@ WHERE qtdTotal > 0;]]>
 				<textFieldExpression><![CDATA["CNPJ "+ $P{cnpjCliente}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="420" y="110" width="88" height="15" uuid="d696df13-ed59-4e34-937b-67c2da3f2be2"/>
+				<reportElement x="410" y="110" width="70" height="15" uuid="d696df13-ed59-4e34-937b-67c2da3f2be2"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Destinatário]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="508" y="110" width="67" height="15" uuid="0d921496-75a6-48b2-ac04-0f20ae033a7a"/>
+				<reportElement x="480" y="110" width="95" height="15" uuid="0d921496-75a6-48b2-ac04-0f20ae033a7a"/>
 				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Depto.]]></text>
+				<text><![CDATA[Cartão/Depto.]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -446,10 +448,10 @@ WHERE qtdTotal > 0;]]>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="60" uuid="88e0c2a6-cd69-44ba-8e6b-1aa6c5b8cf4b">
+					<jr:column width="50" uuid="88e0c2a6-cd69-44ba-8e6b-1aa6c5b8cf4b">
 						<jr:detailCell height="20" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="60" height="19" uuid="be34893b-e947-4999-9902-d2abad935940"/>
+								<reportElement x="0" y="0" width="50" height="19" uuid="be34893b-e947-4999-9902-d2abad935940"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Monospaced"/>
 								</textElement>
@@ -457,10 +459,10 @@ WHERE qtdTotal > 0;]]>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="88" uuid="4b36a944-b3a9-4638-8e49-51429efb646f">
+					<jr:column width="70" uuid="4b36a944-b3a9-4638-8e49-51429efb646f">
 						<jr:detailCell height="20" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="1" width="88" height="19" uuid="38d3c2bb-1fb9-425e-a0b5-59c21460fa89"/>
+								<reportElement x="0" y="1" width="70" height="19" uuid="38d3c2bb-1fb9-425e-a0b5-59c21460fa89"/>
 								<textElement verticalAlignment="Middle">
 									<font fontName="Monospaced" size="9"/>
 								</textElement>
@@ -468,14 +470,14 @@ WHERE qtdTotal > 0;]]>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="67" uuid="03613a0c-0243-4fd6-972c-07a4e3a91536">
+					<jr:column width="95" uuid="03613a0c-0243-4fd6-972c-07a4e3a91536">
 						<jr:detailCell height="20" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="1" width="67" height="19" uuid="86d1c725-48e9-40d4-a64a-011fefa81627"/>
+								<reportElement x="0" y="1" width="95" height="19" uuid="86d1c725-48e9-40d4-a64a-011fefa81627"/>
 								<textElement verticalAlignment="Middle">
 									<font fontName="Monospaced" size="9"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{departamento}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{cartaoPostagem}+"/"+$F{departamento}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

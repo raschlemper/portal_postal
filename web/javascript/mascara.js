@@ -233,7 +233,7 @@ function valida_data(vData) {
         }
     }
     return true;
-} // chamada da função --> return mascara_telefone(this);
+} 
 
 //valida horario do tipo 'hh:mm'
 function valida_hora(horario) {

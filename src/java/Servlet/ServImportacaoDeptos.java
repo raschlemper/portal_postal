@@ -138,7 +138,7 @@ public class ServImportacaoDeptos extends HttpServlet {
 
         String caminho = getServletContext().getRealPath("DeptosImport");
         caminho = "/var/lib/tomcat/webapps/PortalPostal/DeptosImport";
-        //String caminho = "C:\\Users\\Ricardinho\\Documents\\NetBeansProjects\\PortalPostal_Web\\build\\web\\ClientesImport";
+        //caminho = "C:\\Users\\Ricardinho\\Desktop";
 
         // Cria o diretório caso ele não exista
         File diretorio = new File(caminho);

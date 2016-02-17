@@ -100,14 +100,15 @@
                                                     <label>SERVIÇOS DA ECT</label>
                                                 </li>
                                                 <li class="list-group-item list-group-item-danger">
-                                                    <%                                                    ArrayList<ServicoECT> listaServ = ContrServicoECT.consultaServicosPorGrupo();
+                                                    <%                                                   
+                                                        ArrayList<ServicoECT> listaServ = ContrServicoECT.consultaServicosPorGrupo();
                                                     %>
                                                     <select style="min-width:250px; width: 100%;" name="servico_1" id="servico_1" size="<%=listaServ.size()%>">
                                                         <%
 
                                                             for (int i = 0; i < listaServ.size(); i++) {
                                                                 ServicoECT sv = listaServ.get(i);
-                                                                out.println("<option value='" + sv.getGrupoServico() + "'>" + sv.getNomeServico() + "</option>");
+                                                                out.println("<option value='" + sv.getGrupoServico() + "'>" + sv.getNomeSimples() + "</option>");
                                                             }
                                                         %>
                                                     </select>

@@ -80,7 +80,17 @@
                                                             ArrayList<Clientes> listaCliente = Controle.contrCliente.getNomeCodigoMetodo(nomeBD);
                                                             for (Clientes c : listaCliente) {
                                                                 out.println("<option value='" + c.getCodigo() + "'>[" + c.getCodigo() + "] " + c.getNome() + "</option>");
-                                                                jsonCliente += ",{ \"id\":\"" + c.getCodigo() + "\" , \"nome\":\"" + c.getNome() + "\" , \"logradouro\":\"" + c.getEndereco() + "\" , \"numero\":\"" + c.getNumero() + "\" , \"complemento\":\"" + c.getComplemento() + "\" , \"bairro\":\"" + c.getBairro() + "\" , \"cidade\":\"" + c.getCidade() + "\" , \"uf\":\"" + c.getUf() + "\" , \"cep\":\"" + c.getCep() + "\" , \"telefone\":\"" + c.getTelefone() + "\" , \"email\":\"" + c.getEmail() + "\" }";
+                                                                jsonCliente += ",{ \"id\":\"" + c.getCodigo() 
+                                                                        + "\" , \"nome\":\"" + c.getNome().replace("\"", "").replace("'", "")
+                                                                        + "\" , \"logradouro\":\"" + c.getEndereco().replace("\"", "").replace("'", "")
+                                                                        + "\" , \"numero\":\"" + c.getNumero()
+                                                                        + "\" , \"complemento\":\"" + c.getComplemento().replace("\"", "").replace("'", "")
+                                                                        + "\" , \"bairro\":\"" + c.getBairro().replace("\"", "").replace("'", "")
+                                                                        + "\" , \"cidade\":\"" + c.getCidade().replace("\"", "").replace("'", "")
+                                                                        + "\" , \"uf\":\"" + c.getUf()
+                                                                        + "\" , \"cep\":\"" + c.getCep()
+                                                                        + "\" , \"telefone\":\"" + c.getTelefone().replace("\"", "")  
+                                                                        + "\" , \"email\":\"" + c.getEmail().replace("\"", "")  + "\" }";
                                                             }
                                                             jsonCliente = "{ \"clientes\" : [" + jsonCliente.substring(1) + "]}";
                                                         %>
@@ -122,8 +132,12 @@
                                                             int idTipoColeta = cf.getIdTipo();
                                                             int fixo = cf.getFixo();
                                                             String horaColeta = cf.getHora();
-                                                            Entidade.Clientes cli = Controle.contrCliente.consultaClienteById(idCliente, nomeBD);
-                                                            String nomeCliente = cli.getNome();
+                                                            String nomeCliente = Controle.contrCliente.consultaNomeById(idCliente, nomeBD);
+                                                            if(nomeCliente.equals("")){
+                                                                nomeCliente = "Cliente Cód. "+idCliente+" não encontrado!";
+                                                            }
+                                                            /*Entidade.Clientes cli = Controle.contrCliente.consultaClienteById(idCliente, nomeBD);
+                                                            String nomeCliente = cli.getNome();*/
                                                             String className = "odd";
                                                             if (i % 2 == 0) {
                                                                 className = "even";
@@ -134,6 +148,7 @@
                                                         <td>
                                                             <%= nomeCliente%>
                                                             <input class="form-control" type="hidden" id="cliente<%=i%>" value="<%= idCliente%>" name="cliente<%=i%>" />
+                                                            <input class="form-control" type="hidden" id="idRota<%=i%>" value="<%= idColetaFixa%>" name="idRota<%=i%>" />
                                                         </td>
                                                         <td align="center">
                                                             <select class="form-control" id="select<%=i%>" name="select<%=i%>">

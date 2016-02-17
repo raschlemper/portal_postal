@@ -81,7 +81,7 @@ public class ContrCep {
     public static ArrayList<Endereco> pesquisaPaises(String servico) {
         Connection con = Conexao.conectarCep();
         try {            
-            String sql = "SELECT * FROM ect_pais WHERE servicos_disponiveis LIKE '%"+servico+"%' ORDER BY pai_no_portugues;";
+            String sql = "SELECT * FROM ect_pais ORDER BY pai_no_portugues;";
             PreparedStatement valores = con.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();
             ArrayList<Endereco> lista = new ArrayList<Endereco>();

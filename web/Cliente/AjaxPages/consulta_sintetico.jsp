@@ -99,7 +99,7 @@
     <a href="#" onclick="document.formEXP.action='../AjaxPages/xls_sintetico.jsp'; document.formEXP.submit();"><img class="link_img" src="../../imagensNew/excel.png" /> EXPORTAR .XLS</a>
     <b style="margin:0 12px 0 10px;">|</b>
     <a href="#" onclick="document.formEXP.action='../AjaxPages/csv_sintetico.jsp'; document.formEXP.submit();"><img class="link_img" src="../../imagensNew/csv.png" /> EXPORTAR .CSV</a>
-    <%--<b style="margin:0 12px 0 10px;">|</b>
+<%--<b style="margin:0 12px 0 10px;">|</b>
     <a href="#" onclick="document.formEXP.action='../AjaxPages/csv_servico_por_depto.jsp'; document.formEXP.submit();"><img class="link_img" src="../../imagensNew/csv.png" /> EXPORTAR .CSV</a>
     <b style="margin:0 12px 0 10px;">|</b>
     <a href="../AjaxPages/pdf_sintetico.jsp?sql=<%= sql%>"><img class="link_img" src="../../imagensNew/pdf.png" /> EXPORTAR .PDF</a>--%>

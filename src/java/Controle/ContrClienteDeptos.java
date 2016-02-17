@@ -75,14 +75,36 @@ public class ContrClienteDeptos {
         }
     }
     
-    public static boolean alterarCartaoDepto(String nomeBD, int idCliente, int idDepto, String cartao) {
+    public static boolean inserirDepto(String nomeBD, int idCliente, String nome, String cartao) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "UPDATE cliente_departamentos SET cartaoPostagem = ? WHERE idCliente = ? AND idDepartamento = ?;";
+        String sql = "INSERT INTO cliente_departamentos (idCliente,nomeDepartamento,cartaoPostagem,ativo,codReferencia) \n" +
+                    " VALUES (?,?,?,1,0) ;";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.setInt(1, idCliente);
+            valores.setString(2, nome);
+            valores.setString(3, cartao);
+            valores.executeUpdate();
+            valores.close();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e);
+            ContrErroLog.inserir("HOITO - contrMovimentacao", "SQLException", sql, e.toString());
+            return false;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+    
+    public static boolean alterarCartaoDepto(String nomeBD, int idCliente, int idDepto, String nome, String cartao) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "UPDATE cliente_departamentos SET cartaoPostagem = ?, nomeDepartamento = ? WHERE idCliente = ? AND idDepartamento = ?;";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setString(1, cartao);
-            valores.setInt(2, idCliente);
-            valores.setInt(3, idDepto);
+            valores.setString(2, nome);
+            valores.setInt(3, idCliente);
+            valores.setInt(4, idDepto);
             valores.executeUpdate();
             valores.close();
             return true;

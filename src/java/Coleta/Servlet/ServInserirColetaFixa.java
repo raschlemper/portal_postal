@@ -90,11 +90,13 @@ public class ServInserirColetaFixa extends HttpServlet {
                         int idTipo = Integer.parseInt(request.getParameter("select" + i));
                         int fixo = Integer.parseInt(request.getParameter("fixo" + i));
                         String hora = request.getParameter("hora" + i);
+                        String vidRota = request.getParameter("idRota" + i);
                         //SE nao existir nenhuma coleta fixa daquele cliente insere novo senao altera o existente
-                        if (!Coleta.Controle.contrColetaFixa.verificaExistenciaColetaFixa(idColetador, idCliente, nomeBD)) {
+                        if (vidRota == null) {
                             Coleta.Controle.contrColetaFixa.inserir(idCliente, idColetador, idTipo, fixo, hora, nomeBD);
                         } else {
-                            Coleta.Controle.contrColetaFixa.alterar(idCliente, idColetador, idTipo, fixo, hora, nomeBD);
+                            int idRota = Integer.parseInt(vidRota);
+                            Coleta.Controle.contrColetaFixa.alterar(idCliente, idColetador, idTipo, fixo, hora, idRota, nomeBD);
                         }
                     }
                 }

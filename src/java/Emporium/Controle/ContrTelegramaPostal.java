@@ -145,6 +145,26 @@ public class ContrTelegramaPostal {
         }
     }
     
+    public static int consultaQtdNaoEnviados(String nomeBD) {
+        Connection conn = (Connection) Conexao.conectar(nomeBD);
+        String sql = "SELECT COUNT(*) AS qtd FROM telegrama_postal WHERE status = 0;";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            int qtd = 0;
+            if(result.next()) {
+                qtd = result.getInt("qtd");
+            }
+            valores.close();
+            return qtd;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("PortalPostal - ContrTelegramaPostal", "SQLException", sql, e.toString());
+            return 0;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+    
     public static TelegramaPostal consultaById(int id, String nomeBD) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         String sql = "SELECT * FROM telegrama_postal WHERE id = "+id+";";

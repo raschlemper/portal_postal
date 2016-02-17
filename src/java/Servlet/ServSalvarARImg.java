@@ -123,7 +123,7 @@ public class ServSalvarARImg extends HttpServlet {
                     vCaminho = inserirDiretorio(itemImg, vObj);
 
                     if (vCaminho.equals("")) {
-                        sessao.setAttribute("msg", "Escolha um arquivo para importacao!");
+                        sessao.setAttribute("msg", "Escolha um arquivo para importacao SRO!");
                     } else {
                         String mensagem = Controle.contrBaixaAr.salvarAR(vCaminho, dataRec, vObj, vNome, nomeBD, idUsuario);
                         sessao.setAttribute("msg", mensagem);
@@ -134,10 +134,10 @@ public class ServSalvarARImg extends HttpServlet {
             } catch (SizeLimitExceededException e) {
                 sessao.setAttribute("msg", "Tamanho Máximo do Arquivo Excedido!");
             } catch (FileUploadException ex) {
-                int idErro = ContrErroLog.inserir("HOITO - ServImportacaoAr", "FileUploadException", null, ex.toString());
+                int idErro = ContrErroLog.inserir("HOITO - ServSalvarARimg", "FileUploadException", null, ex.toString());
                 sessao.setAttribute("msg", "SYSTEM ERROR Nº: " + idErro + "; Ocorreu um erro inesperado!");
             } catch (Exception ex) {
-                int idErro = ContrErroLog.inserir("HOITO - ServImportacaoAr", "Exception", null, ex.toString());
+                int idErro = ContrErroLog.inserir("HOITO - ServSalvarARimg", "Exception", null, ex.toString());
                 sessao.setAttribute("msg", "SYSTEM ERROR Nº: " + idErro + "; Ocorreu um erro inesperado!");
             }
             //response.sendRedirect("Agencia/Importacao/imp_ar.jsp");

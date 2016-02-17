@@ -5,7 +5,10 @@
 package Util;
 
 import java.text.Normalizer;
+import java.text.ParseException;
 import java.util.InputMismatchException;
+import javax.swing.JOptionPane;
+import javax.swing.text.MaskFormatter;
 
 /**
  *
@@ -267,6 +270,36 @@ public class FormataString {
             default: return "";
         }
     }
+    
+    public static String replaceNonDigits(String string) {
+        if (string == null || string.length() == 0) {
+            return "0";
+        }
+        String ret = string.replaceAll("[^0-9]+", "");
+        if (ret.equals("")) {
+            return "0";
+        } else {
+            return ret;
+        }
+    }
+
+    public static String formatarCep(String pattern, String value) {
+        MaskFormatter mask;
+        if (value != null) {
+            value = replaceNonDigits(value);
+            value = String.format("%08d", Long.parseLong(value));
+            try {
+                mask = new MaskFormatter(pattern);
+                mask.setValueContainsLiteralCharacters(false);
+                return mask.valueToString(value);
+            } catch (ParseException e) {
+                JOptionPane.showMessageDialog(null, "Falha ao formatar o CEP " + value + "\n\nFunção: Util.formatarCep()");
+                return value;
+            }
+        } else {
+            return "0";
+        }
+    }
 
     public static String removeAccentsToUpper(String str) {
         try{
@@ -430,4 +463,18 @@ public class FormataString {
             return (false);
         }
     }
+    
+    public static String MD5(String md5) {
+   try {
+        java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+        byte[] array = md.digest(md5.getBytes());
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < array.length; ++i) {
+          sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+       }
+        return sb.toString();
+    } catch (java.security.NoSuchAlgorithmException e) {
+    }
+    return null;
+}
 }

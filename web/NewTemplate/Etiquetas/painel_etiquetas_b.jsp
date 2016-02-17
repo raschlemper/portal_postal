@@ -13,7 +13,6 @@
         SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         int idUsuario = (Integer) session.getAttribute("idUsuario");
         String nomeBD = (String) session.getAttribute("empresa");
-        int num = Controle.contrCliente.numeroClientes(nomeBD);
 
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -64,14 +63,15 @@
                                             <table class="table table-bordered table-striped table-hover table-heading table-datatable" id="dataTables-example">
                                                 <thead>
                                                     <tr>
+                                                        <th>Etiquetas Restantes</th>
                                                         <th>Nome do Cliente</th>
                                                         <th>Nome do Serviço</th>
                                                         <th>Tempo de Existência</th>
-                                                        <th>Etiquetas Restantes</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <%                                                boolean flag = false;
+                                                    <%                                                
+                                                        boolean flag = false;
                                                         boolean flag2 = false;
                                                         ArrayList<ClienteLogEtiqueta> lista = Controle.ContrClienteEtiquetas.consultaQtdEtiquetasRestantes(nomeBD);
                                                         for (int j = 0; j < lista.size(); j++) {
@@ -90,10 +90,10 @@
 
                                                     %>
                                                     <tr <%= cor%> >
+                                                        <td><%= hst.getQtd()%></td>
                                                         <td><a style="color: inherit;" href="../Cadastros/cliente_etiquetas_b.jsp?idCliente=<%= hst.getIdCliente()%>"><%= hst.getNomeUsuario()%></a></td>
                                                         <td><%= hst.getNomeServico()%></td>
                                                         <td><%= dias%> Dias</td>
-                                                        <td><%= hst.getQtd()%></td>
                                                     </tr>
                                                     <%}
                                                 }%>

@@ -349,7 +349,7 @@
             
 
             function adicionarContato() {
-                $("#idCliente").prop('disabled', true);
+                //$("#idCliente").prop('disabled', true);
                 var htmlCombo = $("#divSelectContato").html();
                 $("#aux").html(htmlCombo);
                 //salva o contato

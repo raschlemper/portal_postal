@@ -169,6 +169,19 @@
 
                     <div id="titulo1">Cadastro de Destinatários</div>
 
+                    <form action="../../ServImportarDestinatario" method="post"  id="formArq" name="formArq" accept-charset="ISO-8859-1" enctype="multipart/form-data">
+                        <ul class="ul_formulario">
+                            <li class="titulo">
+                                <dd>IMPORTAR ARQUIVO DE DESTINATÁRIO</dd>
+                            </li>
+                            <li>
+                                <dd>
+                                    <label>ESCOLHA UM ARQUIVO PARA IMPORTAR:</label>
+                                    <input style="width:300px;" type="file" name="arquivo" id="arquivo" accept=".csv"/>
+                                </dd>
+                            </li>
+                        </ul>
+                    </form>
                     <form name="form1" action="../../ServInserirDestinatario" method="post">
                         <ul class="ul_formulario">
                             <li class="titulo">
@@ -190,6 +203,14 @@
                                 <dd>
                                     <label>CEP<b class="obg">*</b><a onclick="window.open('http://www.buscacep.correios.com.br', 'CORREIOS');" ><img src="../../imagensNew/question.png" /></a></label>
                                     <input type="text" name="cep" id="cep" size="8" value="" maxlength="9" onkeypress="mascara(this, maskCep);handleEnter();" onblur="verPesquisarCepDest(this.value);" />
+                                </dd>
+                                <dd>
+                                    <label>E-mail</label>
+                                    <input type="text" name="email" value="" />
+                                </dd>
+                                <dd>
+                                    <label>Celular</label>
+                                    <input type="text" name="celular" value="" onkeypress="mascara(this, maskTelefone);" />
                                 </dd>
                             </li>
                             <li>

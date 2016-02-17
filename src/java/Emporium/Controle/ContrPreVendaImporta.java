@@ -49,7 +49,7 @@ public class ContrPreVendaImporta {
 
     private static boolean temPedido = false;
     private static String falha = "";
-    private static final int MAX_ALLOWED = 500;
+    private static final int MAX_ALLOWED = 1000;
 
     public static ArrayList<ArquivoImportacao> validaDadosArquivo(ArrayList<ArquivoImportacao> listaAi, int idCliente, String servicoEscolhido, String nomeBD) {
 
@@ -123,9 +123,9 @@ public class ContrPreVendaImporta {
 
                 if (servico.equals("")) {
                     falha += "Linha n." + ai.getNrLinha() + " - Servico " + ai.getServico() + " invalido!";
-                } else if(!ai.getNrObjeto().equals("avista") && !CalculoEtiqueta.validaNumObjeto(ai.getNrObjeto())){
+                } else if (!ai.getNrObjeto().equals("avista") && !CalculoEtiqueta.validaNumObjeto(ai.getNrObjeto())) {
                     falha += "Linha n." + ai.getNrLinha() + " - Etiqueta " + ai.getNrObjeto() + " invalida!";
-                }else{
+                } else {
 
                     float peso = 0;
                     float altura = 0;
@@ -165,7 +165,7 @@ public class ContrPreVendaImporta {
 
                 }
             } catch (Exception e) {
-                System.out.println("FALHA AO MONTAR DADOS DO SQL = " + e);
+                //System.out.println("FALHA AO MONTAR DADOS DO SQL = " + e);
                 falha += "FALHA AO MONTAR DADOS DO SQL = " + e;
             }
 
@@ -193,7 +193,7 @@ public class ContrPreVendaImporta {
 
             int idRemetente = 1;
             float vlrCobrar = 0;
-            String tipo = "PAC";
+            String tipo = "SERVICO";
 
             //INSERE O DESTINATARIO
             int idDestinatario = ContrPreVendaDest.inserir(ai.getIdCliente(), ai.getNome(), ai.getCpf(), ai.getEmpresa(), ai.getCep(), ai.getEndereco(), ai.getNumero(), ai.getComplemento(), ai.getBairro(), ai.getCidade(), ai.getUf(), ai.getEmail(), ai.getCelular(), "Brasil", nomeBD);
@@ -215,7 +215,7 @@ public class ContrPreVendaImporta {
      */
     //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
     public static String importaPedido(String caminho, int idCliente, int idDepartamento, String departamento, String contrato, String cartaoPostagem, String servicoEscolhido, String nomeBD) {
-        
+
         caminho = caminho.replace("\\", "/");
         try {
             //CONTADOR DE LINHA
@@ -255,9 +255,9 @@ public class ContrPreVendaImporta {
                     ai.setCidade(aux[8].trim());
                     ai.setUf(aux[9].trim());
                     ai.setEmail("");
-                    ai.setCelular("");                    
+                    ai.setCelular("");
                     if (aux.length >= 19 && aux[18] != null) {
-                        ai.setCelular(aux[17].trim()+aux[18].trim());
+                        ai.setCelular(aux[17].trim() + aux[18].trim());
                     } else {
                         ai.setCelular("");
                     }
@@ -267,12 +267,24 @@ public class ContrPreVendaImporta {
                     } else {
                         ai.setEmail("");
                     }
-                    
+
                     ai.setAosCuidados(aux[10].trim());
                     ai.setNotaFiscal(aux[11].trim());
                     ai.setServico(aux[12].trim().toUpperCase());
-                    ai.setObs(aux[15].trim());
-                    ai.setConteudo(aux[16].trim());
+
+                    // limita o tamanho da observação e do conteudo
+                    String obs = aux[15].trim();
+                    String cont = aux[16].trim();
+
+                    if (obs.length() > 50) {
+                        obs = obs.substring(0, 49);
+                    }
+                    if (cont.length() > 50) {
+                        cont = cont.substring(0, 49);
+                    }
+
+                    ai.setObs(obs);
+                    ai.setConteudo(cont);
 
                     if (aux.length >= 21 && aux[20] != null) {
                         ai.setChave(aux[20].trim());
@@ -355,10 +367,10 @@ public class ContrPreVendaImporta {
         }
 
     }
-    
+
     //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
     public static String importaPedidoWebVendas(String caminho, int idCliente, int idDepartamento, String departamento, String contrato, String cartaoPostagem, String servicoEscolhido, String nomeBD) {
-        
+
         caminho = caminho.replace("\\", "/");
         try {
             //CONTADOR DE LINHA
@@ -385,13 +397,13 @@ public class ContrPreVendaImporta {
                     ai.setCartaoPostagem(cartaoPostagem);
                     ai.setMetodoInsercao("IMPORTACAO_WEBVENDAS");
                     ai.setCodECT(0);
-                    
+
                     ai.setNrLinha(qtdLinha + "");
                     ai.setNrObjeto("avista");
                     ai.setNome(aux[11].trim());
                     ai.setEmpresa("");
                     ai.setCpf(aux[10].trim());
-                    ai.setCep(aux[18].trim());                    
+                    ai.setCep(aux[18].trim());
                     ai.setEndereco(aux[12].trim());
                     ai.setNumero(aux[13].trim());
                     ai.setComplemento(aux[14].trim());
@@ -404,7 +416,7 @@ public class ContrPreVendaImporta {
                     ai.setNotaFiscal(aux[0].trim());
                     ai.setServico("");
                     ai.setObs(aux[26].trim());
-                    ai.setConteudo("Frete cobrado Cliente: "+aux[4].trim());//aux[26].trim()
+                    ai.setConteudo("Frete cobrado Cliente: " + aux[4].trim());//aux[26].trim()
                     ai.setChave(aux[0].trim());
 
                     ai.setPeso("0");
@@ -413,40 +425,39 @@ public class ContrPreVendaImporta {
                     ai.setComprimento("0");
                     ai.setAr("0");
                     ai.setMp("0");
-                    
+
                     float vd = FormatarDecimal.floatParser(aux[29].replace("R$ ", "").trim());
-                    if(vd > 12){
-                        ai.setVd(vd+"");                        
-                    }else{                        
+                    if (vd > 12) {
+                        ai.setVd(vd + "");
+                    } else {
                         ai.setVd("12");
                     }
-                    
+
                     listaAi.add(ai);
 
                 }
             }
             le.close();
 
-            if(listaAi.size() > 0){
+            if (listaAi.size() > 0) {
                 //valida os dados do arquivo para efetuar a importacao
                 listaAi = validaDadosArquivo(listaAi, idCliente, servicoEscolhido, nomeBD);
-                if(!falha.equals("")){
+                if (!falha.equals("")) {
                     //retorna mensagem de falha
                     return falha;
-                }else{                
+                } else {
                     //MONTA SQL
-                    String sql = montaSqlPedido(listaAi, nomeBD);     
+                    String sql = montaSqlPedido(listaAi, nomeBD);
                     boolean flag = inserir(sql, nomeBD);
                     if (flag) {
                         return "Pedidos Importados Com Sucesso!";
                     } else {
                         return "Falha ao importar Pedidos!";
                     }
-                } 
-            }else{
-                return "Nenhum pedido no arquivo para importar!";                
+                }
+            } else {
+                return "Nenhum pedido no arquivo para importar!";
             }
-            
 
         } catch (IOException e) {
             return "Não foi possivel ler o arquivo: " + e;
@@ -457,7 +468,7 @@ public class ContrPreVendaImporta {
     }
 
     //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
-    public static String importaPedidoLINX(String caminho, int idCliente, String departamento, String servico, int temVD, String nomeBD) {
+    public static String importaPedidoLINX(String caminho, int idCliente, String departamento, String servico, int temVD, int temAR, String nomeBD) {
         String sql = "INSERT INTO pre_venda (numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, registro, chave, metodo_insercao) VALUES ";
 
         String buffer = "";
@@ -512,7 +523,7 @@ public class ContrPreVendaImporta {
                  * ******************************************************************
                  */
                 if (condicao.contains("Pedidos") && aux.length >= 29) {
-                    sql += montaSqlPedidoLINX(aux, nomeBD, cartaoPostagem, contrato, idCliente, idDepartamento, departamento, servico, temVD);
+                    sql += montaSqlPedidoLINX(aux, nomeBD, cartaoPostagem, contrato, idCliente, idDepartamento, departamento, servico, temVD, temAR);
                 }
                 /**
                  * ******************************************************************
@@ -542,7 +553,7 @@ public class ContrPreVendaImporta {
     }
 
     //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
-    public static String importaPedidoTRAY(String caminho, int idCliente, String departamento, String servico, int temVD, String nomeBD) {
+    public static String importaPedidoTRAY(String caminho, int idCliente, String departamento, String servico, int temVD, int temAR, String nomeBD) {
         String sql = "INSERT INTO pre_venda (numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, registro, chave, metodo_insercao) VALUES ";
 
         String buffer = "";
@@ -606,7 +617,7 @@ public class ContrPreVendaImporta {
                  * ******************************************************************
                  */
                 if (condicao.contains("Pedidos") && aux.length == 42) {
-                    String vsql = montaSqlPedidoTRAY(aux, nomeBD, cartaoPostagem, contrato, idCliente, idDepartamento, departamento, servico, temVD);
+                    String vsql = montaSqlPedidoTRAY(aux, nomeBD, cartaoPostagem, contrato, idCliente, idDepartamento, departamento, servico, temVD, temAR);
                     sql += vsql;
                     if (!vsql.equals("")) {
                         qtdLinha++;
@@ -720,7 +731,7 @@ public class ContrPreVendaImporta {
 
     }
 
-    public static String montaSqlPedidoLINX(String[] aux, String nomeBD, String cartaoPostagem, String contrato, int idCli, int idDepto, String depto, String serv, int temVD) {
+    public static String montaSqlPedidoLINX(String[] aux, String nomeBD, String cartaoPostagem, String contrato, int idCli, int idDepto, String depto, String serv, int temVD, int temAR) {
         String sql = "";
         falha = "";
 
@@ -773,7 +784,7 @@ public class ContrPreVendaImporta {
                 int idDestinatario = ContrPreVendaDest.inserir(idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, email, celular, "Brasil", nomeBD);
 
                 String obs = "";//aux[15].trim();
-                String tipo = "PAC";
+                String tipo = "SERVICO";
                 String conteudo = "";//aux[16].trim();
 
                 String chave = "";
@@ -787,7 +798,7 @@ public class ContrPreVendaImporta {
                 int comprimento = 0;
                 float vlrCobrar = 0;
 
-                int ar = 0;
+                int ar = temAR;
                 int mp = 0;
                 float vd = 0;
                 if (temVD == 1) {
@@ -828,7 +839,7 @@ public class ContrPreVendaImporta {
                     if (servico.equals("ESEDEX")) {
                         servico = "SEDEX";
                     }
-                    ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico, tipo);
+                    ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico);
                     codECT = se.getCodECT();
                     contrato = "";
                     if (codECT == 10014 && servico.equals("CARTA")) {
@@ -843,7 +854,7 @@ public class ContrPreVendaImporta {
 
             }
         } catch (Exception e) {
-            System.out.println("FALHA AO MONTAR DADOS DO SQL = " + e);
+            //System.out.println("FALHA AO MONTAR DADOS DO SQL = " + e);
             falha = "FALHA AO MONTAR DADOS DO SQL = " + e;
         }
 
@@ -851,7 +862,7 @@ public class ContrPreVendaImporta {
 
     }
 
-    public static String montaSqlPedidoTRAY(String[] aux, String nomeBD, String cartaoPostagem, String contrato, int idCli, int idDepto, String depto, String serv, int temVD) {
+    public static String montaSqlPedidoTRAY(String[] aux, String nomeBD, String cartaoPostagem, String contrato, int idCli, int idDepto, String depto, String serv, int temVD, int temAR) {
         String sql = "";
         falha = "";
 
@@ -903,7 +914,7 @@ public class ContrPreVendaImporta {
                 int idDestinatario = ContrPreVendaDest.inserir(idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, email, celular, "Brasil", nomeBD);
 
                 String obs = aux[9].toUpperCase();
-                String tipo = "PAC";
+                String tipo = "SERVICO";
                 String conteudo = "";
 
                 int peso = 0;
@@ -912,7 +923,7 @@ public class ContrPreVendaImporta {
                 int comprimento = 0;
                 float vlrCobrar = 0;
 
-                int ar = 0;
+                int ar = temAR;
                 int mp = 0;
                 float vd = 0;
                 if (temVD == 1) {
@@ -950,7 +961,7 @@ public class ContrPreVendaImporta {
                     if (servico.equals("ESEDEX")) {
                         servico = "SEDEX";
                     }
-                    ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico, tipo);
+                    ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico);
                     codECT = se.getCodECT();
                     contrato = "";
                     if (codECT == 10014 && servico.equals("CARTA")) {
@@ -965,7 +976,7 @@ public class ContrPreVendaImporta {
 
             }
         } catch (Exception e) {
-            System.out.println("FALHA AO MONTAR DADOS DO SQL = " + e);
+            //System.out.println("FALHA AO MONTAR DADOS DO SQL = " + e);
             falha = "FALHA AO MONTAR DADOS DO SQL = " + e;
         }
 
@@ -1026,7 +1037,7 @@ public class ContrPreVendaImporta {
                 int idDestinatario = ContrPreVendaDest.inserir(idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, email, celular, "Brasil", nomeBD);
 
                 String obs = "";//aux[15].trim();
-                String tipo = "PAC";
+                String tipo = "SERVICO";
                 String conteudo = aux[23].trim();
                 int peso = 0;//Integer.parseInt(request.getParameter("peso"));
                 int altura = 0;//Integer.parseInt(request.getParameter("altura"));
@@ -1077,7 +1088,7 @@ public class ContrPreVendaImporta {
                     if (servico.equals("ESEDEX")) {
                         servico = "SEDEX";
                     }
-                    ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico, tipo);
+                    ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico);
                     codECT = se.getCodECT();
                     contrato = "";
                     if (codECT == 10014 && servico.equals("CARTA")) {
@@ -1092,7 +1103,7 @@ public class ContrPreVendaImporta {
 
             }
         } catch (Exception e) {
-            System.out.println("FALHA AO MONTAR DADOS DO SQL = " + e);
+            //System.out.println("FALHA AO MONTAR DADOS DO SQL = " + e);
             falha = "FALHA AO MONTAR DADOS DO SQL = " + e;
         }
 
@@ -1183,7 +1194,7 @@ public class ContrPreVendaImporta {
      * **************************************************************************************
      */
     //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
-    public static String importaPedidoEDI(String caminho, int idCliente, String departamento, String servico, int temVD, String nomeBD) {
+    public static String importaPedidoEDI(String caminho, int idCliente, String departamento, String servico, int temVD, int temAR, String nomeBD) {
         String sql = "INSERT INTO pre_venda (numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, registro, metodo_insercao) VALUES ";
 
         String buffer = "";
@@ -1224,11 +1235,11 @@ public class ContrPreVendaImporta {
 
                 if (cod == 312) {
                     if (rom != null) {
-                        sql += montaSqlPedidoEDI(rom, nomeBD, cartaoPostagem, contrato, idCliente, idDepartamento, departamento, servico, vvd, notaFiscal);
+                        sql += montaSqlPedidoEDI(rom, nomeBD, cartaoPostagem, contrato, idCliente, idDepartamento, departamento, servico, vvd, notaFiscal, temAR);
                     }
 
                     auxCod = 312;
-                    rom = new Destinatario(0, 0, "", "", "", "", "", "", "", "", "", "");
+                    rom = new Destinatario(0, 0, "", "", "", "", "", "", "", "", "", "", "", "");
                     rom.setCep(buffer.substring(167, 176).trim());
                     rom.setNome(buffer.substring(3, 43).trim());
 
@@ -1237,7 +1248,7 @@ public class ContrPreVendaImporta {
                     String num = e.substring(e.lastIndexOf(" "));
                     rom.setEndereco(end);
                     rom.setNumero(num);
-
+                    
                     rom.setBairro(buffer.substring(112, 132).trim());
                     rom.setCidade(buffer.substring(132, 167).trim());
                     rom.setUf(buffer.substring(185, 194).trim());
@@ -1263,7 +1274,7 @@ public class ContrPreVendaImporta {
                  */
             }
             if (rom != null) {
-                sql += montaSqlPedidoEDI(rom, nomeBD, cartaoPostagem, contrato, idCliente, idDepartamento, departamento, servico, vvd, notaFiscal);
+                sql += montaSqlPedidoEDI(rom, nomeBD, cartaoPostagem, contrato, idCliente, idDepartamento, departamento, servico, vvd, notaFiscal, temAR);
             }
             le.close();
 
@@ -1288,7 +1299,7 @@ public class ContrPreVendaImporta {
 
     }
 
-    public static String montaSqlPedidoEDI(Destinatario aux, String nomeBD, String cartaoPostagem, String contrato, int idCli, int idDepto, String depto, String serv, String vvd, String notaFiscal) {
+    public static String montaSqlPedidoEDI(Destinatario aux, String nomeBD, String cartaoPostagem, String contrato, int idCli, int idDepto, String depto, String serv, String vvd, String notaFiscal, int temAR) {
         String sql = "";
         falha = "";
 
@@ -1325,7 +1336,7 @@ public class ContrPreVendaImporta {
                     int idDestinatario = ContrPreVendaDest.inserir(idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, email, celular, "Brasil", nomeBD);
 
                     String obs = "";//aux[15].trim();
-                    String tipo = "PAC";
+                    String tipo = "SERVICO";
                     String conteudo = "";//aux[16].trim();
                     int peso = 0;//Integer.parseInt(request.getParameter("peso"));
                     int altura = 0;//Integer.parseInt(request.getParameter("altura"));
@@ -1333,7 +1344,7 @@ public class ContrPreVendaImporta {
                     int comprimento = 0;//Integer.parseInt(request.getParameter("comprimento"));
                     float vlrCobrar = 0;
 
-                    int ar = 0;
+                    int ar = temAR;
                     /*if (aux[13].trim().toUpperCase().contains("AR")) {
                      ar = 1;
                      }*/
@@ -1349,7 +1360,7 @@ public class ContrPreVendaImporta {
                     if (vd < 12) {
                         vd = 12;
                     }
-                     //}
+                    //}
 
                     //VERIFICAR SE CEP POSSUI ESEDEX CASO O SERVICO ESCOLHIDO SEJA ESEDEX.
                     //SE NAO POSSUIR O ESEDEX TROCAR PARA SEDEX.
@@ -1378,7 +1389,7 @@ public class ContrPreVendaImporta {
                         if (servico.equals("ESEDEX")) {
                             servico = "SEDEX";
                         }
-                        ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico, tipo);
+                        ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico);
                         codECT = se.getCodECT();
                         contrato = "";
                         if (codECT == 10014 && servico.equals("CARTA")) {
@@ -1547,7 +1558,7 @@ public class ContrPreVendaImporta {
                 for (Node node : eventos) {
 
                     ArquivoImportacao ai = new ArquivoImportacao();
-                    
+
                     ai.setNrLinha(node.valueOf("numero_etiqueta").trim());
                     ai.setIdCliente(idCliente);
                     ai.setIdDepartamento(idDepartamento);
@@ -1571,11 +1582,11 @@ public class ContrPreVendaImporta {
                     ai.setUf(node.valueOf("nacional/uf_destinatario"));
                     ai.setEmail(node.valueOf("destinatario/email_destinatario"));
                     ai.setCelular(node.valueOf("destinatario/celular_destinatario"));
-                    if(ai.getCelular() == null || ai.getCelular().trim().equals("")){
-                        ai.setCelular(node.valueOf("destinatario/telefone_destinatario"));                        
+                    if (ai.getCelular() == null || ai.getCelular().trim().equals("")) {
+                        ai.setCelular(node.valueOf("destinatario/telefone_destinatario"));
                     }
                     ai.setNotaFiscal(node.valueOf("nacional/numero_nota_fiscal"));
-                    
+
                     ai.setAosCuidados("");
                     ai.setObs("");
                     ai.setConteudo("");
@@ -1584,7 +1595,6 @@ public class ContrPreVendaImporta {
                     ai.setLargura("0");//node.valueOf("largura");
                     ai.setComprimento("0");//node.valueOf("comprimento");
 
-                    
                     String servico = node.valueOf("codigo_servico_postagem").trim();
                     if (!servicoEscolhido.equals("ARQUIVO")) {
                         servico = servicoEscolhido;
@@ -1604,16 +1614,17 @@ public class ContrPreVendaImporta {
                         servico = "CARTA";
                     }
                     ai.setServico(servico);
-                    
+
                     List<Node> evtAdicionais = (List<Node>) node.selectNodes("servico_adicional");
                     ai.setAr("0");
                     ai.setMp("0");
                     ai.setVd("0");
                     for (Node nda : evtAdicionais) {
                         int codAd = 0;
-                        try{
+                        try {
                             codAd = Integer.parseInt(nda.valueOf("codigo_servico_adicional").trim());
-                        }catch(NumberFormatException e){}                        
+                        } catch (NumberFormatException e) {
+                        }
                         if (codAd == 1) {
                             ai.setAr("1");
                         } else if (codAd == 2) {
@@ -1683,7 +1694,7 @@ public class ContrPreVendaImporta {
                 String empresa = "";
                 String cpf = "";
                 String obs = "";
-                String tipo = "PAC";
+                String tipo = "SERVICO";
                 String conteudo = "";
                 float vlrCobrar = 0;
 
@@ -1748,7 +1759,7 @@ public class ContrPreVendaImporta {
                     //numObjeto = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServ(idCliente, servico, nomeBD);
                     //ContrClienteEtiquetas.alteraUtilizadaEtiqueta(numObjeto, 1, nomeBD);
                 } else if (codECT == 0 || servico.equals("CARTA")) {
-                    ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico, tipo);
+                    ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico);
                     codECT = se.getCodECT();
                     contrato = "";
                     if (codECT == 10014 && servico.equals("CARTA")) {
@@ -1762,10 +1773,10 @@ public class ContrPreVendaImporta {
                 sql += "\n('" + numObjeto + "', " + idCliente + ", " + idDestinatario + ", " + idRemetente + ", '" + codECT + "', '" + contrato + "', '" + departamento + "', '" + aosCuidados + "', '" + obs + "', '" + conteudo + "', " + peso + ", " + altura + ", " + largura + ", " + comprimento + ", " + vd + ", " + ar + ", " + mp + ", '" + siglaAmarracao + "', '" + servico + "', '" + notaFiscal + "', " + vlrCobrar + ", '" + tipo + "', " + idDepartamento + ", NOW(), '" + cartaoPostagem + "', " + idUser + ", '" + chave + "', " + impresso + ", " + registro + ", 'IMPORTACAO_XML_PLP'),";
 
             } else {
-                System.out.println("FALHA AO MONTAR DADOS DO SQL = " + servico);
+                //System.out.println("FALHA AO MONTAR DADOS DO SQL = " + servico);
             }
         } catch (Exception e) {
-            System.out.println("FALHA AO MONTAR DADOS DO SQL = " + e);
+            //System.out.println("FALHA AO MONTAR DADOS DO SQL = " + e);
             return "ERRO: Objeto: " + numObj + ", nota_fiscal: " + notaFiscal + " - Falha: " + e;
         }
 
@@ -1776,7 +1787,7 @@ public class ContrPreVendaImporta {
     /**
      * ***************************************************************************
      */
-    public static String importaPedidoNFe(ArrayList<String> listaCaminhos, int idCliente, String departamento, String servico, int vd, String nomeBD) {
+    public static String importaPedidoNFe(ArrayList<String> listaCaminhos, int idCliente, String departamento, String servico, int vd, int ar, String nomeBD) {
         String sql = "INSERT INTO pre_venda (numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, registro, metodo_insercao) VALUES ";
 
         try {
@@ -1804,7 +1815,8 @@ public class ContrPreVendaImporta {
              * ******************************************************************
              */
             for (String path : listaCaminhos) {
-                sql += lerNotaFiscal(path, idCliente, idDepartamento, departamento, servico, cartaoPostagem, contrato, vd, nomeBD);
+                sql += lerNotaFiscal(path, idCliente, idDepartamento, departamento, servico, cartaoPostagem, contrato, vd, ar, nomeBD);
+
             }
             /**
              * ******************************************************************
@@ -1812,7 +1824,6 @@ public class ContrPreVendaImporta {
 
             sql = sql.substring(0, sql.lastIndexOf(","));
             boolean flag = inserir(sql, nomeBD);
-            //System.out.println(sql);
             if (flag && temPedido) {
                 return "Pedidos Importados Com Sucesso!";
             } else if (!temPedido) {
@@ -1831,10 +1842,11 @@ public class ContrPreVendaImporta {
 
     }
 
-    public static String lerNotaFiscal(String path, int idCli, int idDepto, String depto, String serv, String cartaoPostagem, String contrato, int temvd, String nomeBD) throws FileNotFoundException, UnsupportedEncodingException, IOException, DocumentException {
+    public static String lerNotaFiscal(String path, int idCli, int idDepto, String depto, String serv, String cartaoPostagem, String contrato, int temvd, int temar, String nomeBD) throws FileNotFoundException, UnsupportedEncodingException, IOException, DocumentException {
 
         SAXReader reader = new SAXReader();
         Document doc = reader.read(path);
+        //System.out.println("path - " + path);
 
         //tipo Versão 2.0
         Map uris = new HashMap();
@@ -1846,6 +1858,7 @@ public class ContrPreVendaImporta {
         XPath xPath = doc.createXPath(basePath + "nfe:ide/nfe:nNF");
         xPath.setNamespaceURIs(uris);
         String nNF = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        //System.out.println(nNF);
 
         xPath = doc.createXPath(basePath + "nfe:dest/nfe:CNPJ");
         xPath.setNamespaceURIs(uris);
@@ -1856,6 +1869,7 @@ public class ContrPreVendaImporta {
             ecnpj = (Element) xPath.selectSingleNode(doc.getRootElement());
         }
         String cnpj = elementToText(ecnpj);
+        //System.out.println(cnpj);
 
         xPath = doc.createXPath(basePath + "nfe:dest/nfe:xNome");
         xPath.setNamespaceURIs(uris);
@@ -1864,26 +1878,32 @@ public class ContrPreVendaImporta {
         xPath = doc.createXPath(basePath + "nfe:dest/nfe:email");
         xPath.setNamespaceURIs(uris);
         String email = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        //System.out.println(email);
 
         xPath = doc.createXPath(basePath + "nfe:dest/nfe:enderDest/nfe:fone");
         xPath.setNamespaceURIs(uris);
         String fone = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        //System.out.println(fone);
 
         xPath = doc.createXPath(basePath + "nfe:dest/nfe:enderDest/nfe:xLgr");
         xPath.setNamespaceURIs(uris);
         String lgr = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        //System.out.println(lgr);
 
         xPath = doc.createXPath(basePath + "nfe:dest/nfe:enderDest/nfe:nro");
         xPath.setNamespaceURIs(uris);
         String nro = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        //System.out.println(nro);
 
         xPath = doc.createXPath(basePath + "nfe:dest/nfe:enderDest/nfe:xCpl");
         xPath.setNamespaceURIs(uris);
         String cpl = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        //System.out.println(cpl);
 
         xPath = doc.createXPath(basePath + "nfe:dest/nfe:enderDest/nfe:xBairro");
         xPath.setNamespaceURIs(uris);
         String bairro = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        //System.out.println(bairro);
 
         xPath = doc.createXPath(basePath + "nfe:dest/nfe:enderDest/nfe:xMun");
         xPath.setNamespaceURIs(uris);
@@ -1900,6 +1920,13 @@ public class ContrPreVendaImporta {
         xPath = doc.createXPath(basePath + "nfe:total/nfe:ICMSTot/nfe:vNF");
         xPath.setNamespaceURIs(uris);
         String vNF = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        //System.out.println(vNF);
+        xPath = doc.createXPath(basePath + "nfe:infAdic/nfe:infCpl");
+        xPath.setNamespaceURIs(uris);
+        String obs = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        if (obs.length() > 50) {
+            obs = obs.substring(0, 49);
+        }
 
         String sql = "";
 
@@ -1918,11 +1945,10 @@ public class ContrPreVendaImporta {
         } else if (serv.trim().toUpperCase().startsWith("PAX")) {
             servico = "PAX";
         }
-
+        //System.out.println("servico _ " + servico);
         if (!servico.equals("")) {
             String aosCuidados = "";
-            String obs = "";
-            String tipo = "PAC";
+            String tipo = "SERVICO";
             String conteudo = "";
             float vlrCobrar = 0;
 
@@ -1930,9 +1956,10 @@ public class ContrPreVendaImporta {
             int idCliente = idCli;
             int idDepartamento = idDepto;
             String departamento = depto;
-            String celular = "";
+            String celular = fone;
 
             int idDestinatario = ContrPreVendaDest.inserir(idCliente, nome.getText(), cnpj, "", cep, lgr, nro, cpl, bairro, municipio, uf, email, celular, "Brasil", nomeBD);
+            //System.out.println("id Destinatario" + idDestinatario);
 
             String numObjeto = "avista";
             int peso = 0;
@@ -1940,7 +1967,7 @@ public class ContrPreVendaImporta {
             int largura = 0;
             int comprimento = 0;
 
-            int ar = 0;
+            int ar = temar;
 
             int mp = 0;
 
@@ -1975,7 +2002,7 @@ public class ContrPreVendaImporta {
                 //numObjeto = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServ(idCliente, servico, nomeBD);
                 //ContrClienteEtiquetas.alteraUtilizadaEtiqueta(numObjeto, 1, nomeBD);
             } else if (codECT == 0 || servico.equals("CARTA")) {
-                ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico, tipo);
+                ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico);
                 codECT = se.getCodECT();
                 contrato = "";
                 if (codECT == 10014 && servico.equals("CARTA")) {
@@ -1986,10 +2013,13 @@ public class ContrPreVendaImporta {
             /**
              * ************************************************************************
              */
+            if (obs.length() > 50) {
+                obs = obs.substring(0, 49);
+            }
             sql += "\n('" + numObjeto + "', " + idCliente + ", " + idDestinatario + ", " + idRemetente + ", '" + codECT + "', '" + contrato + "', '" + departamento + "', '" + aosCuidados + "', '" + obs + "', '" + conteudo + "', " + peso + ", " + altura + ", " + largura + ", " + comprimento + ", " + vd + ", " + ar + ", " + mp + ", '" + siglaAmarracao + "', '" + servico + "', '" + nNF + "', " + vlrCobrar + ", '" + tipo + "', " + idDepartamento + ", NOW(), '" + cartaoPostagem + "', " + registro + ", 'IMPORTACAO_NFE'),";
             temPedido = true;
         }
-
+        //System.out.println("sql lerNotaFiscal - " + sql);
         return sql;
 
     }

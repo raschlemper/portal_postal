@@ -1,3 +1,8 @@
+<%@page import="Controle.contrCliente"%>
+<%@page import="Entidade.Clientes"%>
+<%@page import="Emporium.Controle.ContrTelegramaPostal"%>
+<%@page import="Entidade.TelegramaPostal"%>
+<%@page import="Entidade.ClienteLogEtiqueta"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="java.util.Map"%>
 <%@page import="Entidade.Movimentacao"%>
@@ -95,16 +100,35 @@
                         <div class="row">
                             <!-- Mostra Aviso na tela -->
                             <div class="col-lg-12" id="msg" style="display: block">
-                                <%--<div class="alert alert-danger no-margin">
+                                <%                                
+                                    ArrayList<ClienteLogEtiqueta> lista = Controle.ContrClienteEtiquetas.consultaQtdEtiquetasRestantes(200, nomeBD);
+                                   int listaTele = ContrTelegramaPostal.consultaQtdNaoEnviados(nomeBD);
+                                    ArrayList<Clientes> listaContr = contrCliente.getClientesComContratoVencendo(30, nomeBD);
+                                    if(lista.size() > 0){
+                                %>
+                                <div class="alert alert-danger no-margin">
                                     <a href="#" class="close" data-dismiss="alert">&times;</a>
-                                    <strong>ATENÇÃO!</strong> Existem clientes com poucas etiquetas. Verifique na tabela abaixo.
-                                </div>--%>
-                                <div class="alert alert-info no-margin">
-                                    <a href="#" class="close" data-dismiss="alert">&times;</a>
-                                    <strong>BEM VINDO!</strong><br/>
-                                    Este é o novo layout do Portal Postal!<br/>
-                                    Caso tenha alguma sugestão entre em contato conosco.<br/>Se necessário, existe ainda uma opção para acessar o layout antigo pelo menu ao lado.
+                                    <a class="text-danger" href="../Etiquetas/painel_etiquetas_b.jsp"><strong>ATENÇÃO!</strong> Existem clientes com poucas etiquetas.</a>
                                 </div>
+                                <%}%>
+                                <%if(listaTele > 0){ %>
+                                <div class="alert alert-danger no-margin">
+                                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                                    <a class="text-danger" href="../Telegrama/telegrama_naoenviados_b.jsp"><strong>ATENÇÃO!</strong> Existem <%= listaTele %> Telegramas para enviar.</a>
+                                </div>
+                                <%}%>
+                                <%if(listaContr.size()>0){%>
+                                <div class="alert alert-danger no-margin">
+                                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                                    <strong>ATENÇÃO!</strong> Existem clientes com o contrato a vencer em menos de 30 Dias:<br/>
+                                    <%
+                                        for(int i=0; i<listaContr.size(); i++){
+                                            Clientes cli = listaContr.get(i);
+                                    %>
+                                        <a href="../Cadastros/cliente_contrato_b.jsp?idCliente=<%= cli.getCodigo() %>">- <%= cli.getNome() %> - Contrato vence no dia <%= sdf.format(cli.getDtVigenciaFimContrato()) %></a><br/>
+                                    <%}%>                                    
+                                </div>
+                                <%}%>
                             </div>
                         </div>
 

@@ -16,8 +16,18 @@
                 String vDataFinal = Util.FormatarData.DateToBD(dataFinal);
                 String agrupamento = request.getParameter("agrupamento");
                 String ordenacao = request.getParameter("ordenacao");
+                
+                int nivelUser = (Integer) session.getAttribute("nivelUsuarioEmp");
+                String deptosWhere = "";
+                if(nivelUser > 1){
+                    ArrayList<Integer> deptosUser = (ArrayList<Integer>) session.getAttribute("departamentos");
+                    for(int i=0; i<deptosUser.size(); i++){
+                        deptosWhere += ", " + deptosUser.get(i);
+                    }
+                    deptosWhere = " AND idDepartamento IN ("+ deptosWhere.substring(1)+") ";
+                }
 
-                ArrayList movimentacao = Emporium.Controle.ContrRelatorios.pesquisaRelatorio(vDataInicio, vDataFinal, ordenacao, agrupamento, idCliente, nomeBD);
+                ArrayList movimentacao = Emporium.Controle.ContrRelatorios.pesquisaRelatorio(vDataInicio, vDataFinal, ordenacao, agrupamento, idCliente, deptosWhere, nomeBD);
                 float total = 0, totalQtd = 0;
                 String sql = "";
                 if (movimentacao.size() >= 1) {

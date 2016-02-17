@@ -12,6 +12,8 @@ import Entidade.Clientes;
 import Entidade.ServicoECT;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -88,6 +90,20 @@ public class ServPreVendaConfirmaImp extends HttpServlet {
         String nomeUser = request.getParameter("nomeUser");
         int idUser = Integer.parseInt(request.getParameter("idUser"));
         String[] ids = request.getParameterValues("id");
+        
+        
+        Map<String, Integer> lista = new HashMap<String, Integer>();        
+        for (int i = 0; i < ids.length; i++) {
+            String id = ids[i];
+            String servico = request.getParameter("servico"+id);
+            if(lista.containsKey(servico)){
+                lista.put(servico, lista.get(servico)+1);
+            }else{
+                lista.put(servico, 1);
+            }
+        }        
+        
+        
         for (int i = 0; i < ids.length; i++) {
             String id = ids[i];
             int vid = Integer.parseInt(id);
@@ -139,7 +155,7 @@ public class ServPreVendaConfirmaImp extends HttpServlet {
             }
         
             String obs = request.getParameter("obs"+id);
-            String tipo = "PAC";
+            String tipo = "SERVICO";
             String conteudo = request.getParameter("conteudo"+id);
             String notaFiscal = request.getParameter("nota"+id);
 
@@ -179,13 +195,13 @@ public class ServPreVendaConfirmaImp extends HttpServlet {
                     tipoEtiqueta = aux[1];
                 }              
             } else if ( codECT == 0){
-                ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico, tipo);
+                ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico);
                 codECT = se.getCodECT();
                 if(servico.equals("CARTA") && codECT == 10014){
                     registro = 1;
                 }
                 contrato = "";
-            }            
+            }
             
             //VERIFICA A EXISTENCIA DE COMBO PARA O SERVIÇO
             //codECT = ContrServicoCombo.consultaCodCombo(codECT, ar, mp, vd);

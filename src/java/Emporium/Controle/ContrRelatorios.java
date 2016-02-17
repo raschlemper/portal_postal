@@ -1046,7 +1046,7 @@ public class ContrRelatorios {
      * ***************************** PESQUISAS DO EXTRATO
      * ******************************
      */
-    public static ArrayList pesquisaRelatorio(String dataInicio, String dataFinal, String ordenacao, String agrupamento, int idCliente, String nomeBD) {
+    public static ArrayList pesquisaRelatorio(String dataInicio, String dataFinal, String ordenacao, String agrupamento, int idCliente, String whereDeptos, String nomeBD) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
 
         String sql = "", select = "", agrup = "", ordem = "";
@@ -1112,7 +1112,8 @@ public class ContrRelatorios {
         }
         sql = "SELECT " + select + " AS tipo, SUM(quantidade) AS qtd, SUM(valorServico) AS valor"
                 + " FROM movimentacao"
-                + " WHERE codCliente = ? AND (dataPostagem BETWEEN ? AND ?)"
+                + " WHERE codCliente = ? AND (dataPostagem BETWEEN ? AND ?) "
+                + whereDeptos
                 + " GROUP BY " + agrup
                 + " ORDER BY " + ordem + " ;";
         try {

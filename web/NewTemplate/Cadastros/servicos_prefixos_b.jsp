@@ -58,14 +58,15 @@
                                         <li class="list-group-item">
                                             <select class="form-control input-lg" name="servicosel" id="servicosel" onchange="javascript:document.form2.submit();">
                                                 <option value="">-- Escolha um Serviço --</option>
-                                                <%                                                ArrayList<ServicoECT> listaServ = ContrServicoECT.consultaServicosPorGrupo();
+                                                <%                                                
+                                                    ArrayList<ServicoECT> listaServ = ContrServicoECT.consultaServicosPorGrupo();
                                                     for (int i = 0; i < listaServ.size(); i++) {
                                                         ServicoECT sv = listaServ.get(i);
                                                         if (!sv.getGrupoServico().equals("SIMPLES")) {
                                                             if (servicosel != null && servicosel.equals(sv.getGrupoServico())) {
-                                                                out.println("<option selected value='" + sv.getGrupoServico() + "'>" + sv.getNomeServico() + "</option>");
+                                                                out.println("<option selected value='" + sv.getGrupoServico() + "'>" + sv.getNomeSimples() + "</option>");
                                                             } else {
-                                                                out.println("<option value='" + sv.getGrupoServico() + "'>" + sv.getNomeServico() + "</option>");
+                                                                out.println("<option value='" + sv.getGrupoServico() + "'>" + sv.getNomeSimples() + "</option>");
                                                             }
                                                         }
                                                     }

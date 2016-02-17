@@ -434,7 +434,7 @@
                                         <select class="form-control" style="width: 200px;" name="servico_1" id="servico_1">
                                             <%
                                                 ArrayList<Integer> listaContrato = ContrClienteContrato.consultaContratoCliente(idCli, nomeBD);
-                                                ArrayList<ServicoECT> listaServ = ContrServicoECT.consultaServicos(0, 1, "AGF");
+                                                ArrayList<ServicoECT> listaServ = ContrServicoECT.consultaServicosReversa();
                                                 if (listaServ != null) {
                                                     for (int i = 0; i < listaServ.size(); i++) {
                                                         ServicoECT sv = listaServ.get(i);

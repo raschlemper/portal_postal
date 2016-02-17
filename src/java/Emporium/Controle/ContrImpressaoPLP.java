@@ -32,6 +32,7 @@ public class ContrImpressaoPLP {
                 + " VALUES (?,?,?,?,?,?,?,?,?,?,NOW(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                 + " ON DUPLICATE KEY UPDATE idPLP = VALUES(idPLP), status = 0";
         
+        //String sqlerr = "";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setString(1, sro);
@@ -64,10 +65,15 @@ public class ContrImpressaoPLP {
             valores.setString(28, endRem.getBairro());
             valores.setString(29, endRem.getCidade());
             valores.setString(30, endRem.getUf());
+            
+            //sqlerr = valores.toString();
+            
             valores.execute();
             valores.close();
         } catch (SQLException e) {
-            System.out.println(sql);
+            System.out.println(e);
+            //System.out.println(sqlerr);
+            //System.out.println(sql);
             //JOptionPane.showMessageDialog(null, "Falha ao inserir - inserePLP no BD:\n- " + e);
         } finally {
             Conexao.desconectar(conn);

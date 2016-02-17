@@ -135,7 +135,7 @@ public class ServImportaImpressaoPLP extends HttpServlet {
     public static String leXmlPLP(String xml, String idPLP, int idCliente, int idDepto, String nomeBD) throws DocumentException, HeadlessException {
         String ret = "";
         xml = xml.replaceAll("&", "E");
-        System.out.println(xml);
+        //System.out.println(xml);
         if (xml != null && !xml.isEmpty()) {
             
             SAXReader reader = new SAXReader();

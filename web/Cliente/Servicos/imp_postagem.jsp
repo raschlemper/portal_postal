@@ -61,13 +61,17 @@
                     document.getElementById("divInteracao").className = "esconder";
                 }
             }
-            
-            function validaForm(){
+                   
+            function validaForm(){       
                 abrirTelaEspera();
                 var form = document.form1;
                 if(form.arquivo.value == ""){
                     fecharTelaEspera();
                     alert("Escolha o arquivo a ser importado!");
+                    return false;
+                }else if($('#tipo_serv option:selected').text() === 'SELECOINE UM SERVICO'){;
+                    fecharTelaEspera();
+                    alert(" --- Por favor, escolha um serviço para as NF-E ! --- No caso de varios, você poderá alterar-los depois !");
                     return false;
                 }else{
                     var indexA = form.arquivo.value.lastIndexOf(".");
@@ -97,32 +101,44 @@
                     document.getElementById('arquivo').accept = '.csv';
                     document.getElementById('arquivo').multiple = false;               
                     document.getElementById('dd_vd').className = 'esconder'; 
+                    document.getElementById('dd_ar').className = 'esconder'; 
                     document.getElementById('form1').action = '../../ServPreVendaImportar'; 
-                }else if (tipo == 'NFE'){
+                    $('#tipo_serv option[value="ARQUIVO"]').text("DEFINIDO NO ARQUIVO");
+                }else if (tipo == 'NFE'){ 
                     document.getElementById('arquivo').accept = '.xml'; 
                     document.getElementById('arquivo').multiple = true;                   
                     document.getElementById('dd_vd').className = 'mostrar'; 
-                    document.getElementById('form1').action = '../../ServPreVendaImportarNFe';                   
+                    document.getElementById('dd_ar').className = 'mostrar'; 
+                    document.getElementById('form1').action = '../../ServPreVendaImportarNFe';   
+                    $('#tipo_serv option[value="ARQUIVO"]').text("SELECOINE UM SERVICO");    
                 }else if (tipo == 'TRAY' || tipo == 'LINX'){
                     document.getElementById('arquivo').accept = '.csv'; 
                     document.getElementById('arquivo').multiple = false;                   
                     document.getElementById('dd_vd').className = 'mostrar'; 
-                    document.getElementById('form1').action = '../../ServPreVendaImportar';                   
+                    document.getElementById('dd_ar').className = 'mostrar'; 
+                    document.getElementById('form1').action = '../../ServPreVendaImportar';   
+                    $('#tipo_serv option[value="ARQUIVO"]').text("DEFINIDO NO ARQUIVO");
                 }else if (tipo == 'EDI'){
                     document.getElementById('arquivo').accept = '.txt'; 
                     document.getElementById('arquivo').multiple = false;                   
                     document.getElementById('dd_vd').className = 'mostrar'; 
-                    document.getElementById('form1').action = '../../ServPreVendaImportar';                   
+                    document.getElementById('dd_ar').className = 'mostrar'; 
+                    document.getElementById('form1').action = '../../ServPreVendaImportar';  
+                    $('#tipo_serv option[value="ARQUIVO"]').text("DEFINIDO NO ARQUIVO");
                 }else if (tipo == 'XML' || tipo == 'PLP'){
                     document.getElementById('arquivo').accept = '.xml';
                     document.getElementById('arquivo').multiple = false;               
-                    document.getElementById('dd_vd').className = 'esconder';  
-                    document.getElementById('form1').action = '../../ServPreVendaImportar';               
+                    document.getElementById('dd_vd').className = 'esconder'; 
+                    document.getElementById('dd_ar').className = 'esconder';  
+                    document.getElementById('form1').action = '../../ServPreVendaImportar';     
+                    $('#tipo_serv option[value="ARQUIVO"]').text("DEFINIDO NO ARQUIVO");
                 }else if (tipo == 'LADOAVESSO'){
                     document.getElementById('arquivo').accept = '.txt'; 
                     document.getElementById('arquivo').multiple = false;               
-                    document.getElementById('dd_vd').className = 'esconder';   
-                    document.getElementById('form1').action = '../../ServPreVendaImportar';             
+                    document.getElementById('dd_vd').className = 'esconder';  
+                    document.getElementById('dd_ar').className = 'esconder';  
+                    document.getElementById('form1').action = '../../ServPreVendaImportar';  
+                    $('#tipo_serv option[value="ARQUIVO"]').text("DEFINIDO NO ARQUIVO");
                 }
             }
         </script>
@@ -149,13 +165,14 @@
                                 <dd style="font-size: 12px;">SELECIONE O ARQUIVO, SERVIÇO E DEPARTAMENTO.</dd>
                             </li>
                             <li>
+                              
                                 <dd>
                                     <label>TIPO DE IMPORTÇÃO:</label>
                                     <select style="width: 300px;" name="tipo" id="tipo" onchange="mudaFileOpts(this.value);">
-                                        <option value="CSV">ARQUIVO .CSV</option>
-                                        <option value="XML">ARQUIVO .XML</option>
-                                        <option value="NFE">ARQUIVO NF-e</option>
-                                        <option value="PLP">ARQUIVO PLP</option>
+                                        <option value="CSV">ARQUIVO .CSV PORTAL POSTAL</option>
+                                        <option value="XML">ARQUIVO .XML PORTAL POSTAL</option>
+                                        <option value="NFE">ARQUIVO .XML NF-e</option>
+                                        <option value="PLP">ARQUIVO .XML PLP</option>
                                         <option value="TRAY">ARQUIVO TRAY COMMERCE</option>
                                         <option value="EDI">ARQUIVO EDI</option>
                                         <option value="LINX">ARQUIVO LINX</option>
@@ -174,8 +191,8 @@
                             <li>
                                 <dd>
                                     <label>SERVIÇO:</label>
-                                    <select style="width: 300px;" name="servico">
-                                        <option value="ARQUIVO">DEFINIDO NO ARQUIVO</option>
+                                    <select style="width: 300px;" name="servico" id="tipo_serv">
+                                       <option value="ARQUIVO">DEFINIDO NO ARQUIVO</option>
                                         <option value="PAC">PAC</option>
                                         <option value="PAX">PAC GRANDES FORMATOS</option>
                                         <option value="SEDEX">SEDEX</option>
@@ -187,6 +204,13 @@
                                 <dd id="dd_vd" class="esconder">
                                     <label>VALOR DECLAR.?</label>
                                     <select style="width: 100px;" name="vd">
+                                        <option value="0">NÃO</option>
+                                        <option value="1">SIM</option>
+                                    </select>
+                                </dd>
+                                <dd id="dd_ar" class="esconder">
+                                    <label>A.R.?</label>
+                                    <select style="width: 100px;" name="ar">
                                         <option value="0">NÃO</option>
                                         <option value="1">SIM</option>
                                     </select>

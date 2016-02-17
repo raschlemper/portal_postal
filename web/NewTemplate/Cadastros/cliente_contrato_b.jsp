@@ -209,7 +209,7 @@
                                                             <select class="form-control" style="width: 300px;" name="servico_1" id="servico_1" size="10">
                                                                 <%
                                                                     ArrayList<Integer> listaContrato = ContrClienteContrato.consultaContratoCliente(idClienteInc, nomeBD);
-                                                                    ArrayList<ServicoECT> listaServ = ContrServicoECT.consultaServicos(0, 1, emp.getTipo_agencia());
+                                                                    ArrayList<ServicoECT> listaServ = ContrServicoECT.consultaServicos(0, 1, "CTR");
                                                                     if (listaServ != null) {
                                                                         for (int i = 0; i < listaServ.size(); i++) {
                                                                             ServicoECT sv = listaServ.get(i);

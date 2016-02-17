@@ -5,10 +5,8 @@
  */
 package Servlet;
 
-import Emporium.Controle.ContrPreVendaImporta;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -93,7 +91,7 @@ public class ServImportacaoMovVisualHTML extends HttpServlet {
                     } else if (listaArq.size() > 200) {
                         response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=Importacao maxima de 200 arquivos de cada vez!");
                     } else {
-                        String condicao = ContrPreVendaImporta.importaPedidoNFe(listaCaminhos, idCliente, departamento, servico, vd, nomeBD);
+                        String condicao = "";
                         if (condicao.startsWith("ERRO")) {
                             response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=" + condicao);
                         } else {

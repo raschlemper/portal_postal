@@ -18,13 +18,70 @@ import java.util.ArrayList;
 public class contrCliente {
 
     private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-    
-    
+
+    public static void criaClienteBalcao(String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "INSERT INTO cliente (codigo, nome) VALUES(-99,'BALCÃO');";
+
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.executeUpdate();
+            valores.close();
+        } catch (SQLException e) {
+            System.out.println(e);
+            ContrErroLog.inserir("HOITO - criaClienteBalcao", "SQLException", sql, e.toString());
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+
+    public static int inserirCliente(String nome, String nomeFantasia, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String cep, String telefone, String email, String cnpj, double latitude, double longitude, int grupo_fat, String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "INSERT INTO cliente (nome,endereco,telefone,bairro,cidade,uf,cep,email,cnpj,nomeFantasia,complemento,numero,latitude,longitude, idGrupoFaturamento) \n"
+                + " VALUES ('" + nome + "','" + endereco + "','" + telefone + "','" + bairro + "','" + cidade + "','" + uf + "','" + cep + "','" + email + "','" + cnpj + "','" + nomeFantasia + "','" + complemento + "','" + numero + "','" + latitude + "','" + longitude + "', "+grupo_fat+");";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            valores.executeUpdate();
+            int autoIncrementKey = 0;
+            ResultSet rs = valores.getGeneratedKeys();
+            if (rs.next()) {
+                autoIncrementKey = rs.getInt(1);
+            }
+            valores.close();
+            return autoIncrementKey;
+        } catch (SQLException e) {
+            System.out.println(e);
+            ContrErroLog.inserir("HOITO - criaClienteBalcao", "SQLException", sql, e.toString());
+            return 0;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+
+    public static int alterarCliente(String nome, String nomeFantasia, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String cep, String telefone, String email, String cnpj, double latitude, double longitude, int grupo_fat, int idCliente, String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "UPDATE cliente SET nome='" + nome + "',endereco='" + endereco + "',telefone='" + telefone + "',bairro='" + bairro + "',cidade='" + cidade + "',"
+                + "uf='" + uf + "',cep='" + cep + "',email='" + email + "',cnpj='" + cnpj + "',nomeFantasia='" + nomeFantasia + "',complemento='" + complemento + "',"
+                + "numero='" + numero + "',latitude='" + latitude + "',longitude='" + longitude + "', idGrupoFaturamento="+grupo_fat+" WHERE codigo = " + idCliente+" ;";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.executeUpdate();
+            valores.close();
+            return 1;
+        } catch (SQLException e) {
+            System.out.println(e);
+            ContrErroLog.inserir("HOITO - criaClienteBalcao", "SQLException", sql, e.toString());
+            return 0;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+
     //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
-    public static void importarCli(ArrayList<String> listaIDS, ArrayList<String> listaValues, String sqlBase, String sqlDuplicate, String nomeBD, int idUsuario) throws SQLException {
+    public static void importarCli(ArrayList<String> listaIDS, ArrayList<String> listaValues, ArrayList<String> listaQuerysServicos, String sqlBase, String sqlDuplicate, String nomeBD, int idUsuario) throws SQLException {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         try {
-            //DELETA OS OBJETOS QUE NAO ESTAVAM NO ARQUIVO
+            //DELETA OS CLIENTES QUE NAO ESTAVAM NO ARQUIVO
             String sql = "DELETE FROM cliente WHERE codigo NOT IN (";
             for (int i = 0; i < listaIDS.size(); i++) {
                 if (i == 0) {
@@ -45,10 +102,17 @@ public class contrCliente {
                 valores1.close();
             }
 
+            //IMPORTA OS SERVICOS DO CONTRATO
+            for (int i = 0; i < listaQuerysServicos.size(); i++) {
+                PreparedStatement valores1 = conn.prepareStatement(listaQuerysServicos.get(i));
+                valores1.executeUpdate();
+                valores1.close();
+            }
+
             //INSERE O LOG DA IMPORTACAO
             contrCliente.inserirHistoricoCli(nomeBD, idUsuario, qtdExcluida);
         } catch (SQLException e) {
-            ContrErroLog.inserir("HOITO - contrBaixaAr", "SQLException", "", e.toString());
+            ContrErroLog.inserir("HOITO - contrCliente.importarCli", "SQLException", "", e.toString());
             throw e;
         } finally {
             Conexao.desconectar(conn);
@@ -108,11 +172,16 @@ public class contrCliente {
             Conexao.desconectar(conn);
         }
     }
-    
-    /***************************************************************************/
-    /***************************************************************************/
-    /***************************************************************************/
 
+    /**
+     * ************************************************************************
+     */
+    /**
+     * ************************************************************************
+     */
+    /**
+     * ************************************************************************
+     */
     public static boolean editar(int idCliente, String nome, int cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "UPDATE cliente SET nomeFantasia = ?, cep = ?, endereco = ?, numero = ?, complemento = ?, bairro = ?, cidade = ?, uf = ? WHERE codigo = ? ";
@@ -156,7 +225,7 @@ public class contrCliente {
         }
     }
 
-    public static boolean alterarLogo( String url_logo, int idCliente, String nomeBD) {
+    public static boolean alterarLogo(String url_logo, int idCliente, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "UPDATE cliente SET url_logo = ? WHERE codigo = ? ";
         try {
@@ -173,8 +242,8 @@ public class contrCliente {
             Conexao.desconectar(conn);
         }
     }
-    
-    public static boolean alterarUsaEtiquetador( int usaEtiquetador, int idCliente, String nomeBD) {
+
+    public static boolean alterarUsaEtiquetador(int usaEtiquetador, int idCliente, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "UPDATE cliente SET usaEtiquetador = ? WHERE codigo = ? ";
         try {
@@ -191,7 +260,7 @@ public class contrCliente {
             Conexao.desconectar(conn);
         }
     }
-    
+
     public static boolean alterarLatitudeLongitude(double latitude, double longitude, int idCliente, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "UPDATE cliente SET latitude = ?, longitude = ? WHERE codigo = ? ";
@@ -210,7 +279,7 @@ public class contrCliente {
             Conexao.desconectar(conn);
         }
     }
-    
+
     public static boolean alterarLoginPrecoPrazo(String login_correio, String senha_correio, int idCliente, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "UPDATE cliente SET login_correio = ?, senha_correio = ? WHERE codigo = ? ";
@@ -250,7 +319,7 @@ public class contrCliente {
             Conexao.desconectar(conn);
         }
     }
-    
+
     public static String consultaNomeById(int idCliente, String nomeBD) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         String sql = "SELECT nome FROM cliente WHERE codigo = " + idCliente;
@@ -339,7 +408,6 @@ public class contrCliente {
             Conexao.desconectar(conn);
         }
     }*/
-
     public static Clientes consultaClienteById(int idCliente, String nomeBD) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         String sql = "SELECT * FROM cliente WHERE codigo = " + idCliente;
@@ -361,20 +429,20 @@ public class contrCliente {
     }
 
     public static Clientes consultaClienteBySRO(String sro, String nomeBD) {
-        
+
         Connection conn = (Connection) Conexao.conectar(nomeBD);
-        String sql = "SELECT cliente.* FROM movimentacao LEFT JOIN cliente ON codigo = codCliente" +
-                    " WHERE numObjeto = '"+sro+"' ;";
+        String sql = "SELECT cliente.* FROM movimentacao LEFT JOIN cliente ON codigo = codCliente"
+                + " WHERE numObjeto = '" + sro + "' ;";
         System.out.println(sql);
         try {
-            PreparedStatement valores = conn.prepareStatement(sql);            
+            PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();
 
             if (result.next()) {
-                
+
                 String nome = result.getString("nome");
                 int idCliente = result.getInt("codigo");
-                
+
                 return new Clientes(idCliente, nome);
             } else {
                 return null;
@@ -413,6 +481,29 @@ public class contrCliente {
     public static ArrayList<Clientes> getClientesComErroAtualizacao(String nomeBD) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         String sql = "SELECT * FROM cliente WHERE erro_atualizacao = 1 ORDER BY dataHoraAtualizacao DESC";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+
+            ArrayList<Clientes> listaNomes = new ArrayList<Clientes>();
+
+            for (int i = 0; result.next(); i++) {
+                listaNomes.add(new Clientes(result));
+            }
+            valores.close();
+
+            return listaNomes;
+        } catch (Exception e) {
+            ContrErroLog.inserir("Portal Postal - contrCliente", "SQLException", sql, e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+
+    public static ArrayList<Clientes> getClientesComContratoVencendo(int dias, String nomeBD) {
+        Connection conn = (Connection) Conexao.conectar(nomeBD);
+        String sql = "SELECT * FROM cliente WHERE temContrato = 1 AND DATEDIFF(dtVigenciaFimContrato, DATE(NOW())) < " + dias + " ORDER BY dataHoraAtualizacao DESC";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();
@@ -493,12 +584,15 @@ public class contrCliente {
         }
     }
 
-    /************************************************************/
-    /************** consultas do esqueceu senha *****************/
-    /************************************************************/
-
-
-
+    /**
+     * *********************************************************
+     */
+    /**
+     * ************ consultas do esqueceu senha ****************
+     */
+    /**
+     * *********************************************************
+     */
     public static String consultaEmailByCnpj(String cnpj, String nomeBD) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         String sql = "SELECT email FROM cliente WHERE cnpj LIKE '" + cnpj + "'";

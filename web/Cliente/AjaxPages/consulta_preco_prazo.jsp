@@ -52,14 +52,13 @@
         String vVlLargura = "20";
         
         String agrupado = request.getParameter("agrupado");
-        float pesoAgrupado = 1;
-        float pesoCubicoAgrupado = 0;
+        float pesoAgrupado = 0;
         
         if(agrupado.equals("0")){
             nVlPeso = request.getParameter("nVlPeso");
             if (nVlPeso.equals("")) {
                 nVlPeso = "0";
-            }
+            }    
             vVlComprimento = request.getParameter("nVlComprimento");
             if (vVlComprimento.equals("")) {
                 vVlComprimento = "0";
@@ -85,8 +84,9 @@
                     somaVd += vvd;
                 }catch(NumberFormatException e){                    
                 }                
-                
                 float cub = (a*l*c)/6000;
+                //System.out.println(i+" - A x L x C: "+ a + " x "+l+" x "+c);
+                //System.out.println(i+" - peso: "+ p + " cubagem: "+cub);
                 if(cub > 10 && cub > p){
                     p = cub;
                 }                             
@@ -122,6 +122,8 @@
         listaServUnicos.add("41238");
         listaServUnicos.add("41262");
         
+        //SE FOR UM SERVICO COM AMBITO NACIONAL, OBTIVER COM E SEM CONTRATO E NÃO FOR PAC AGRUPADO
+        //ENTÃO CAPTA OS CÓDIGOS ECT DOS SERVIÇOS SEDEX10, SEDEX12, SEDEX E PAC E E-SEDEX(CONTRATO)        
         if (!listaServUnicos.contains(nCdServico) && agrupado.equals("0")) {
             //sedex 12
             nCdServico = "40169";            
@@ -169,8 +171,12 @@
         
         float valorServicoAgrup = 0;
         DecimalFormat df = new DecimalFormat("#.##");
+        //VERIFICA SE O SERVICO ESCOLHIDO É AGRUPADO
         if(agrupado.equals("1")){
+            //VERIFICA SE O PESO AGRUPADO É MAIOR QUE 30kg
             if(pesoAgrupado > 30){
+                
+                //CONSULTA VALOR DO SERVIÇO COM 29kg
                 org.tempuri.CResultado resultTest1 = port.calcPrecoPrazo(nCdEmpresa, sDsSenha, nCdServico, sCepOrigem, sCepDestino, "29", nCdFormato, nVlComprimento, nVlAltura, nVlLargura, nVlDiametro, sCdMaoPropria, nVlValorDeclarado, sCdAvisoRecebimento);
                 ArrayOfCServico at1 = resultTest1.getServicos();
                 float p1 = 0;
@@ -178,7 +184,8 @@
                     //System.out.println("valor 29 = " + ss1.getValorSemAdicionais());
                     p1 = Float.parseFloat(ss1.getValorSemAdicionais().replace(",", "."));
                 }
-
+                
+                //CONSULTA VALOR DO SERVIÇO COM 30kg
                 org.tempuri.CResultado resultTest = port.calcPrecoPrazo(nCdEmpresa, sDsSenha, nCdServico, sCepOrigem, sCepDestino, "30", nCdFormato, nVlComprimento, nVlAltura, nVlLargura, nVlDiametro, sCdMaoPropria, nVlValorDeclarado, sCdAvisoRecebimento);
                 ArrayOfCServico at = resultTest.getServicos();
                 float p2 = 0;
@@ -186,14 +193,18 @@
                     //System.out.println("valor sem 30 = " + ss.getValorSemAdicionais());
                     p2 = Float.parseFloat(ss.getValorSemAdicionais().replace(",", "."));
                 }
+                //FAZ A DIFERENÇA DO VALOR DE 29kg MENOS O VALOR DE 30kg PARA TER O VALOR POR KILO ADICIONAL
+                valorServicoAgrup = p2 + ((int) pesoAgrupado - 30) * (p2 - p1);
+                
+                //DEIXA O VALOR PARA O CALCULO BASE DE 30kg PARA DEPOIS ADICIONAR O VALOR DOS KILOS ADICIONAIS
+                nVlPeso = "30";
                 
                 //System.out.println("valor dif = " + (p2 - p1));
                 //System.out.println("peso dif = " + ((int) pesoAgrupado - 30));
-                valorServicoAgrup = p2 + ((int) pesoAgrupado - 30) * (p2 - p1);
                 //System.out.println(df.format(valorServicoAgrup));
-                nVlPeso = "30";
             }else{
-                //System.out.println("peso menor que 30 ");
+                //SE A SOMA DAS ENCOMENDAS NÃO FOR MAIOR QUE 30kg APENAS SERÁ CALCULADA A TARIFA NORMAL DA SOMA DOS PESOS
+                //System.out.println("peso menor que 30 >>> " + pesoAgrupado);
                 nVlPeso = pesoAgrupado+"";
             }
             

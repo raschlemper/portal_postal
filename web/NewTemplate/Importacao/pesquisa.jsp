@@ -1,8 +1,7 @@
 <%@page import="Entidade.Clientes"%>
 
 <%
-    System.out.print("entrou");
-    
+      
     if (session.getAttribute("usuario") == null) {
         response.sendRedirect("../index.jsp?msgLog=3");
     } else {
@@ -20,8 +19,7 @@
         //Clientes cli = Controle.contrCliente.consultaClienteBySRO(sro, nomeBD);
         
         if(cli == null){
-            
-             out.println(1);
+            out.println("SRO inválido!. Favor digitar um SRO dos Correios Válido!");
             } else {
              out.println(cli.getNome());
             }
