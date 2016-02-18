@@ -104,6 +104,8 @@
     <a href="#" onclick="document.formEXP.action='../AjaxPages/xls_analitico.jsp'; document.formEXP.submit();"><img class="link_img" src="../../imagensNew/excel.png" /> EXPORTAR .XLS</a>
     <b style="margin:0 12px 0 10px;">|</b>
     <a href="#" onclick="document.formEXP.action='../AjaxPages/csv_analitico.jsp'; document.formEXP.submit();"><img class="link_img" src="../../imagensNew/csv.png" /> EXPORTAR .CSV</a>
+    <b style="margin:0 12px 0 10px;">|</b>
+    <a href="#" onclick="document.formEXP.action='../AjaxPages/txt_analitico.jsp'; document.formEXP.submit();"><img class="link_img" src="../../imagensNew/csv.png" /> EXPORTAR .TXT</a>
     <%--<b style="margin:0 12px 0 10px;">|</b>
     <a href="../AjaxPages/pdf_sintetico.jsp?sql=<%= sql%>"><img class="link_img" src="../../imagensNew/pdf.png" /> EXPORTAR .PDF</a>--%>
     <form name="formEXP" action="#">

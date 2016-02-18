@@ -70,14 +70,15 @@
                                                             <option value="0">ESCOLHA UM SERVIÇO</option>
                                                             <%
                                                                 ArrayList<Integer> listaContrato = ContrClienteContrato.consultaContratoClienteGroupByServico(idClienteInc, nomeBD);
-                                                                ArrayList<ServicoECT> listaServ = ContrServicoECT.consultaServicos(0, 1, emp.getTipo_agencia());
+                                                                ArrayList<Integer> listaOutros = ContrClienteContrato.consultaOutrosServicosCliente(idClienteInc, nomeBD);
+                                                                ArrayList<ServicoECT> listaServ = ContrServicoECT.consultaServicosSigepWEB();
                                                                 for (int i = 0; i < listaServ.size(); i++) {
                                                                     ServicoECT sv = listaServ.get(i);
-                                                                    if (listaContrato.contains(sv.getCodECT()) && !sv.getGrupoServico().equals("SIMPLES")) {
+                                                                    if (listaContrato.contains(sv.getCodECT()) || listaOutros.contains(sv.getCodECT())) {
                                                                         out.print("<option value='0;" + sv.getGrupoServico() + "'>" + sv.getNomeSimples() + "</option>");
                                                                     }                                                                    
                                                                 }    
-                                                                out.print("<option value='0;PPI'>PROTOCOLO POSTAL</option>");
+                                                                //out.print("<option value='0;PPI'>PROTOCOLO POSTAL</option>");
                                                             %>
                                                         </select>
                                                     </div>   
@@ -141,11 +142,10 @@
                                                             <%
                                                                 for (int i = 0; i < listaServ.size(); i++) {
                                                                     ServicoECT sv = listaServ.get(i);
-                                                                    if (listaContrato.contains(sv.getCodECT()) && sv.getIdServicoECT() > 0 && !sv.getGrupoServico().equals("SIMPLES")) {
+                                                                    if (listaContrato.contains(sv.getCodECT()) || listaOutros.contains(sv.getCodECT())) {
                                                                         out.print("<option value='" + sv.getCodECT() + ";" + sv.getGrupoServico() + ";" + sv.getIdServicoECT() + "'>" + sv.getNomeSimples() + "</option>");
                                                                     }
                                                                 }
-                                                                out.print("<option value='0;PPI;104625'>PROTOCOLO POSTAL</option>");
                                                             %>
                                                         </select>
                                                     </div>   

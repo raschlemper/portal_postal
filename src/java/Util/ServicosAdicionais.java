@@ -55,7 +55,7 @@ public class ServicosAdicionais {
                     for (int i = 0; i < arrayDeString.length; i++) {
                         PrecoServAdicional psa = Controle.contrPrecoServAdicional.consultaSigla(arrayDeString[i], dataBd, destino, nomeBD);
                         if (arrayDeString[i].equals("VD")) {
-                            double valor = (valorDeclarado-50) * 0.007;
+                            double valor = (valorDeclarado-75) * 0.010;
                             float valor2 = (float) valor;
                             psa.setValor(valor2);
                         }

@@ -40,16 +40,15 @@ public class contrColetaFixa {
         }
     }
 
-    public static void alterar(int idCliente, int idColetador, int idTipo, int fixo, String hora, String nomeBD) {
+    public static void alterar(int idCliente, int idColetador, int idTipo, int fixo, String hora, int idRota, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "update coleta_rotas set idTipo=?, fixo=?, hora=? WHERE idCliente=? and idColetador=?;";
+        String sql = "update coleta_rotas set idTipo=?, fixo=?, hora=? WHERE idColetaFixa = ?;";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setInt(1, idTipo);
             valores.setInt(2, fixo);
             valores.setString(3, hora);
-            valores.setInt(4, idCliente);
-            valores.setInt(5, idColetador);
+            valores.setInt(4, idRota);
             valores.executeUpdate();
             valores.close();
         } catch (SQLException e) {
@@ -107,13 +106,14 @@ public class contrColetaFixa {
         }
     }
 
-    public static boolean verificaExistenciaColetaFixa(int idColetador, int idCliente, String nomeBD) {
+    public static boolean verificaExistenciaColetaFixa(int idColetador, int idCliente, String hora, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "select idColetaFixa from coleta_rotas where idColetador = ? and idCliente=?;";
+        String sql = "SELECT idColetaFixa FROM coleta_rotas WHERE idColetador = ? AND idCliente = ? AND hora = ?;";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setInt(1, idColetador);
             valores.setInt(2, idCliente);
+            valores.setString(3, hora);
             ResultSet result = (ResultSet) valores.executeQuery();
             if (result.next()) {
                 return true;
@@ -168,7 +168,8 @@ public class contrColetaFixa {
 
     public static ArrayList consultaColetasFixasPeloColetador(int idColetador, String nomeBD) throws SQLException {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "SELECT * FROM coleta_rotas WHERE idColetador=? AND idCliente IN (SELECT codigo FROM cliente) ORDER BY hora;";
+        //String sql = "SELECT * FROM coleta_rotas WHERE idColetador=? AND idCliente IN (SELECT codigo FROM cliente) ORDER BY hora;";
+        String sql = "SELECT * FROM coleta_rotas WHERE idColetador=? ORDER BY hora;";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setInt(1, idColetador);

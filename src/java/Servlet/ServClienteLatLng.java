@@ -90,6 +90,24 @@ public class ServClienteLatLng extends HttpServlet {
             double longitude = Double.parseDouble(request.getParameter("lng"));
 
             contrCliente.alterarLatitudeLongitude(latitude, longitude, idCliente, nomeBD);
+            
+            int idGrupoFat = Integer.parseInt(request.getParameter("grupo_fat"));
+            String nome = request.getParameter("razao");
+            String fantasia = request.getParameter("fantasia");
+            String cnpj = request.getParameter("cnpj").replace("-", "").replace(".", "").replace("/", "").trim();
+            String email = request.getParameter("email");
+            String telefone = request.getParameter("telefone");
+            String cep = request.getParameter("cep").replace("-", "").replace(".", "").trim();
+            String endereco = request.getParameter("logradouro");
+            String numero = request.getParameter("numero");
+            String complemento = request.getParameter("complemento");
+            String bairro = request.getParameter("bairro");
+            String cidade = request.getParameter("cidade");
+            String uf = request.getParameter("uf");
+            
+            
+            contrCliente.alterarCliente(nome, fantasia, endereco, numero, complemento, bairro, cidade, uf, cep, telefone, email, cnpj, latitude, longitude, idGrupoFat, idCliente, nomeBD);
+            
 
             //response.sendRedirect("Agencia/Configuracao/cliente_lista.jsp?msg=Latitude e Longitude alterados com sucesso!");
             

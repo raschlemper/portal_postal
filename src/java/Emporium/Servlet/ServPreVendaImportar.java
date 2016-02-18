@@ -41,7 +41,7 @@ public class ServPreVendaImportar extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession sessao = request.getSession();
         String nomeBD = (String) sessao.getAttribute("nomeBD");
-        if (nomeBD != null) {            
+        if (nomeBD != null) {
             boolean isMultiPart = FileUpload.isMultipartContent(request);
             String vCaminho = "";
             String campoDepartamento = "", servico = "", tipo = "";
@@ -55,7 +55,7 @@ public class ServPreVendaImportar extends HttpServlet {
                     List items = upload.parseRequest(request);
                     Iterator iter = items.iterator();
                     FileItem itemImg = null;
-                    int vd = 0;
+                    int vd = 0, ar = 0;
 
                     while (iter.hasNext()) {
                         FileItem item = (FileItem) iter.next();
@@ -75,17 +75,21 @@ public class ServPreVendaImportar extends HttpServlet {
                             if (item.getFieldName().equals("vd")) {
                                 vd = Integer.parseInt(item.getString());
                             }
+                            if (item.getFieldName().equals("ar")) {
+                                ar = Integer.parseInt(item.getString());
+                            }
                         }
 
                         if (!item.isFormField()) {
+                            //System.out.println("5");
                             if (item.getName().length() > 0) {
+                                //System.out.println("6");
                                 itemImg = item;
                             }
                         }
                     }
 
                     vCaminho = inserirDiretorio(itemImg);
-
                     if (vCaminho.equals("")) {
                         response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=Escolha um arquivo para importacao !");
                     } else {
@@ -122,16 +126,16 @@ public class ServPreVendaImportar extends HttpServlet {
                                 String condicao = ContrPreVendaImporta.importaPedidoPLP(vCaminho, idCliente, idDepartamento, departamento, contrato, cartaoPostagem, servico, nomeBD);
                                 response.sendRedirect("Cliente/Servicos/imp_confirma.jsp?msg=" + condicao);
                             } else if (tipo.equals("TRAY")) {  //ARQUIVO TIPO .CSV -> SISTEMA TRAY
-                                String condicao = ContrPreVendaImporta.importaPedidoTRAY(vCaminho, idCliente, campoDepartamento, servico, vd, nomeBD);
+                                String condicao = ContrPreVendaImporta.importaPedidoTRAY(vCaminho, idCliente, campoDepartamento, servico, vd, ar, nomeBD);
                                 response.sendRedirect("Cliente/Servicos/imp_confirma.jsp?msg=" + condicao);
                             } else if (tipo.equals("LINX")) {  //ARQUIVO TIPO .CSV -> SISTEMA LINX
-                                String condicao = ContrPreVendaImporta.importaPedidoLINX(vCaminho, idCliente, campoDepartamento, servico, vd, nomeBD);
+                                String condicao = ContrPreVendaImporta.importaPedidoLINX(vCaminho, idCliente, campoDepartamento, servico, vd, ar, nomeBD);
                                 response.sendRedirect("Cliente/Servicos/imp_confirma.jsp?msg=" + condicao);
                             } else if (tipo.equals("LADOAVESSO")) { //ARQUIVO TIPO .TXT -> EDI DO SISTEMA TIVIT
-                                String condicao = ContrPreVendaImporta.importaPedidoEDI(vCaminho, idCliente, campoDepartamento, servico, 1, nomeBD);
+                                String condicao = ContrPreVendaImporta.importaPedidoEDI(vCaminho, idCliente, campoDepartamento, servico, 1, ar, nomeBD);
                                 response.sendRedirect("Cliente/Servicos/imp_confirma.jsp?msg=" + condicao);
                             } else if (tipo.equals("EDI")) { //ARQUIVO TIPO .TXT -> EDI DO SISTEMA TIVIT
-                                String condicao = ContrPreVendaImporta.importaPedidoEDI(vCaminho, idCliente, campoDepartamento, servico, vd, nomeBD);
+                                String condicao = ContrPreVendaImporta.importaPedidoEDI(vCaminho, idCliente, campoDepartamento, servico, vd, ar, nomeBD);
                                 response.sendRedirect("Cliente/Servicos/imp_confirma.jsp?msg=" + condicao);
                             } else if (tipo.equals("INTERLOGIC")) { //ARQUIVO TIPO .CSV -> SISTEMA PRÓPRIO
                                 String condicao = ContrPreVendaImporta.importaPedidoINTERLOGIC(vCaminho, idCliente, campoDepartamento, servico, nomeBD);
@@ -162,9 +166,10 @@ public class ServPreVendaImportar extends HttpServlet {
     private String inserirDiretorio(FileItem item) throws IOException, Exception {
 
         String caminho = getServletContext().getRealPath("ClientesImport");
+
         caminho = "/var/lib/tomcat/webapps/PortalPostal/ClientesImport";
 
-        //caminho = "C:\\Users\\Fernando\\Documents\\NetBeansProjects\\PortalPostal_Web\\build\\web\\ClientesImport";
+        //String caminho = "C:\\Users\\Fernando\\Documents\\NetBeansProjects\\PortalPostal_Web\\build\\web\\ClientesImport";
         //System.out.println(caminho);
         // Cria o diretório caso ele não exista
         File diretorio = new File(caminho);

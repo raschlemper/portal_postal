@@ -126,6 +126,7 @@
             veiculoSinistroCtrl.init();
             veiculoSinistroCtrl.acoes.pesquisarTodos();
             Configuracao.messageModal();
+            Configuracao.loadDataTableScript('datatable-sinistros');
         </script>
     </body>
 </html>

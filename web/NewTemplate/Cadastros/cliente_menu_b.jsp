@@ -38,7 +38,7 @@
 %>
 <div class="row">
     <div class="col-md-12">
-        <h4 class="page-header"><b class="text-primary"><i class="fa fa-gears"></i> Cadastros</b> > <a href="cliente_lista_b.jsp">Clientes</a> > <small><%= nomeBarra %> <i class="fa fa-long-arrow-right fa-fw"></i> <%= nomeClienteTab %></small></h4>
+        <h4 class="page-header"><b class="text-primary"><i class="fa fa-gears"></i> Cadastros</b> > <a href="cliente_lista_b.jsp">Clientes</a> > <small><%= nomeBarra %> <i class="fa fa-long-arrow-right fa-fw"></i> Cód. <%= idCliTabMenu %> - <%= nomeClienteTab %></small></h4>
     </div>
 </div>
 <div class="row">

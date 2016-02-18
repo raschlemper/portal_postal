@@ -32,6 +32,12 @@
 
         // TODO initialize WS operation arguments here
         String nCdEmpresa = request.getParameter("nCdEmpresa").trim();
+        try{
+            int codAdm = Integer.parseInt(nCdEmpresa);
+            nCdEmpresa = codAdm+"";
+        }catch(NumberFormatException e){            
+        }
+        
         String sDsSenha = request.getParameter("sDsSenha").trim();
         String sCepOrigem = request.getParameter("sCepOrigem");
         String sCepDestino = request.getParameter("sCepDestino"); 
@@ -46,14 +52,13 @@
         String vVlLargura = "20";
         
         String agrupado = request.getParameter("agrupado");
-        float pesoAgrupado = 1;
-        float pesoCubicoAgrupado = 0;
+        float pesoAgrupado = 0;
         
         if(agrupado.equals("0")){
             nVlPeso = request.getParameter("nVlPeso");
             if (nVlPeso.equals("")) {
                 nVlPeso = "0";
-            }
+            }    
             vVlComprimento = request.getParameter("nVlComprimento");
             if (vVlComprimento.equals("")) {
                 vVlComprimento = "0";
@@ -79,8 +84,9 @@
                     somaVd += vvd;
                 }catch(NumberFormatException e){                    
                 }                
-                
                 float cub = (a*l*c)/6000;
+                //System.out.println(i+" - A x L x C: "+ a + " x "+l+" x "+c);
+                //System.out.println(i+" - peso: "+ p + " cubagem: "+cub);
                 if(cub > 10 && cub > p){
                     p = cub;
                 }                             
@@ -103,22 +109,57 @@
         String nCdServico = request.getParameter("nCdServico");//"41106,40010";
         //if tem conrato
         ArrayList<Integer> listaContrato = ContrClienteContrato.consultaContratoCliente(idCliente, nomeBD);
-        if (!nCdServico.equals("41300") && !nCdServico.equals("40045") && !nCdServico.equals("40126") && agrupado.equals("0")) {
-            nCdServico = "40215,40169";
+        ArrayList<String> listaServUnicos = new ArrayList<String>();
+        //pac grande
+        listaServUnicos.add("41300");
+        //sedex cobrar
+        listaServUnicos.add("40126");
+        listaServUnicos.add("40630");
+        listaServUnicos.add("40432");
+        listaServUnicos.add("40440");
+        listaServUnicos.add("40819");
+        //pac cobrar
+        listaServUnicos.add("41238");
+        listaServUnicos.add("41262");
+        
+        //SE FOR UM SERVICO COM AMBITO NACIONAL, OBTIVER COM E SEM CONTRATO E NÃO FOR PAC AGRUPADO
+        //ENTÃO CAPTA OS CÓDIGOS ECT DOS SERVIÇOS SEDEX10, SEDEX12, SEDEX E PAC E E-SEDEX(CONTRATO)        
+        if (!listaServUnicos.contains(nCdServico) && agrupado.equals("0")) {
+            //sedex 12
+            nCdServico = "40169";            
+            //sedex 10
+            if (listaContrato.contains(40789)) {
+                nCdServico += ",40789";
+            } else {
+                nCdServico += ",40215";
+            }
+            //SEDEX
             if (listaContrato.contains(40096)) {
                 nCdServico += ",40096";
             } else if (listaContrato.contains(40436)) {
                 nCdServico += ",40436";
             } else if (listaContrato.contains(40444)) {
                 nCdServico += ",40444";
+            } else if (listaContrato.contains(40568)) {
+                nCdServico += ",40568";
+            } else if (listaContrato.contains(41408)) {
+                nCdServico += ",41408";
             } else {
                 nCdServico += ",40010";
             }
+            //E-SEDEX
             if (listaContrato.contains(81019)) {
                 nCdServico += ",81019";
+            }else if (listaContrato.contains(81833)) {
+                nCdServico += ",81833";
             }
+            //PAC
             if (listaContrato.contains(41068)) {
                 nCdServico += ",41068";
+            }else if (listaContrato.contains(41211)) {
+                nCdServico += ",41211";
+            }else if (listaContrato.contains(41491)) {
+                nCdServico += ",41491";
             } else {
                 nCdServico += ",41106";
             }
@@ -130,8 +171,12 @@
         
         float valorServicoAgrup = 0;
         DecimalFormat df = new DecimalFormat("#.##");
+        //VERIFICA SE O SERVICO ESCOLHIDO É AGRUPADO
         if(agrupado.equals("1")){
+            //VERIFICA SE O PESO AGRUPADO É MAIOR QUE 30kg
             if(pesoAgrupado > 30){
+                
+                //CONSULTA VALOR DO SERVIÇO COM 29kg
                 org.tempuri.CResultado resultTest1 = port.calcPrecoPrazo(nCdEmpresa, sDsSenha, nCdServico, sCepOrigem, sCepDestino, "29", nCdFormato, nVlComprimento, nVlAltura, nVlLargura, nVlDiametro, sCdMaoPropria, nVlValorDeclarado, sCdAvisoRecebimento);
                 ArrayOfCServico at1 = resultTest1.getServicos();
                 float p1 = 0;
@@ -139,7 +184,8 @@
                     //System.out.println("valor 29 = " + ss1.getValorSemAdicionais());
                     p1 = Float.parseFloat(ss1.getValorSemAdicionais().replace(",", "."));
                 }
-
+                
+                //CONSULTA VALOR DO SERVIÇO COM 30kg
                 org.tempuri.CResultado resultTest = port.calcPrecoPrazo(nCdEmpresa, sDsSenha, nCdServico, sCepOrigem, sCepDestino, "30", nCdFormato, nVlComprimento, nVlAltura, nVlLargura, nVlDiametro, sCdMaoPropria, nVlValorDeclarado, sCdAvisoRecebimento);
                 ArrayOfCServico at = resultTest.getServicos();
                 float p2 = 0;
@@ -147,14 +193,18 @@
                     //System.out.println("valor sem 30 = " + ss.getValorSemAdicionais());
                     p2 = Float.parseFloat(ss.getValorSemAdicionais().replace(",", "."));
                 }
+                //FAZ A DIFERENÇA DO VALOR DE 29kg MENOS O VALOR DE 30kg PARA TER O VALOR POR KILO ADICIONAL
+                valorServicoAgrup = p2 + ((int) pesoAgrupado - 30) * (p2 - p1);
+                
+                //DEIXA O VALOR PARA O CALCULO BASE DE 30kg PARA DEPOIS ADICIONAR O VALOR DOS KILOS ADICIONAIS
+                nVlPeso = "30";
                 
                 //System.out.println("valor dif = " + (p2 - p1));
                 //System.out.println("peso dif = " + ((int) pesoAgrupado - 30));
-                valorServicoAgrup = p2 + ((int) pesoAgrupado - 30) * (p2 - p1);
                 //System.out.println(df.format(valorServicoAgrup));
-                nVlPeso = "30";
             }else{
-                //System.out.println("peso menor que 30 ");
+                //SE A SOMA DAS ENCOMENDAS NÃO FOR MAIOR QUE 30kg APENAS SERÁ CALCULADA A TARIFA NORMAL DA SOMA DOS PESOS
+                //System.out.println("peso menor que 30 >>> " + pesoAgrupado);
                 nVlPeso = pesoAgrupado+"";
             }
             
@@ -226,7 +276,7 @@
                         out.println("<td align='center'><b style='color:red;'>" + msgErro + "</b></td>");
                     } else {
                         String prazo = s.getPrazoEntrega() + " Dias Úteis";
-                        if(s.getCodigo() == 40215){
+                        if(s.getCodigo() == 40215 || s.getCodigo() == 40789){
                             prazo = "Entrega até às 10:00 da manhã do dia útil seguinte ao da postagem.";
                         } else if(s.getCodigo() == 40169){
                             prazo = "Entrega até às 12:00 da manhã do dia útil seguinte ao da postagem.";

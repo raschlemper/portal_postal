@@ -133,6 +133,7 @@
             veiculoManutencaoCtrl.init();
             veiculoManutencaoCtrl.acoes.pesquisarTodos();
             Configuracao.messageModal();
+            Configuracao.loadDataTableScript('datatable-manutencoes');
         </script>
     </body>
 </html>

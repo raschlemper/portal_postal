@@ -321,4 +321,41 @@ public class ContrClienteEtiquetas {
             Conexao.desconectar(conn);
         }
     }
+
+    public static ArrayList<ClienteLogEtiqueta> consultaQtdEtiquetasRestantes(int qtde, String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "SELECT COUNT(ce.idCliente) AS qtd, ce.idCliente, grupoServico, cliente.nome, dataHora "
+                + " FROM cliente_etiquetas AS ce"
+                + " LEFT JOIN cliente ON cliente.codigo = ce.idCliente"
+                + " LEFT JOIN log_etiquetas_cli ON log_etiquetas_cli.id = ce.idImportacao"
+                + " WHERE utilizada = 0 AND nome IS NOT NULL AND qtd < " + qtde
+                + " GROUP BY ce.idCliente, grupoServico"
+                + " ORDER BY qtd;";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            ArrayList<ClienteLogEtiqueta> lista = new ArrayList<ClienteLogEtiqueta>();
+            while (result.next()) {
+                int idLog = 0;
+                int idCliente = result.getInt("ce.idCliente");
+                int idUsuario = 0;
+                String nomeUsuario = result.getString("cliente.nome");
+                String faixaIni = "";
+                String faixaFim = "";
+                String nomeServico = result.getString("grupoServico");
+                String servico = "";
+                int qtd = result.getInt("qtd");
+                Timestamp dataHora = result.getTimestamp("dataHora");
+
+                ClienteLogEtiqueta log = new ClienteLogEtiqueta(idLog, idCliente, idUsuario, nomeUsuario, faixaIni, faixaFim, dataHora, qtd, servico, nomeServico);
+                lista.add(log);
+            }
+            return lista;
+        } catch (SQLException e) {
+            System.out.println(e);
+            return null;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
 }

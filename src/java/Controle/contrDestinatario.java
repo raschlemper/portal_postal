@@ -131,7 +131,9 @@ public class contrDestinatario {
                 String numero = result.getString("numero");
                 String cnpjj = result.getString("cpf_cnpj");
                 String complemento = result.getString("complemento");
-                Destinatario des = new Destinatario(idDestinatario, idCliente, nom, cnpjj, empresa, cepp, ende, numero, complemento, bair, cid, uf);
+                String email = result.getString("email");
+                String celular = result.getString("celular");
+                Destinatario des = new Destinatario(idDestinatario, idCliente, nom, cnpjj, empresa, cepp, ende, numero, complemento, bair, cid, uf, email, celular);
                 lista.add(des);
             }
             valores.close();
@@ -232,7 +234,9 @@ public class contrDestinatario {
                 String numero = result.getString("numero");
                 String cnpjj = result.getString("cpf_cnpj");
                 String complemento = result.getString("complemento");
-                Destinatario des = new Destinatario(idDestinatario, idCliente, nom, cnpjj, empresa, cepp, end, numero, complemento, bair, cid, uf);
+                String email = result.getString("email");
+                String celular = result.getString("celular");
+                Destinatario des = new Destinatario(idDestinatario, idCliente, nom, cnpjj, empresa, cepp, end, numero, complemento, bair, cid, uf, email, celular);
 
                 return des;
             } else {

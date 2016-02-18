@@ -179,9 +179,11 @@ public class ServInserirFaixaEtiquetaWS extends HttpServlet {
                 }
 
             } catch (AutenticacaoException ex) {
-                sessao.setAttribute("msg", "Falha ao Solicitar Etiquetas:<br/>" + ex.getMessage() + "<br/><br/>Consulte este CNPJ " + cpnj + " no SARA!<br/>E verifique se o cadastro do SECT está correto!");
+                sessao.setAttribute("msg", "ERRO NO CADASTRO DO LOGIN E SENHA DO SIGEP WEB:<br/><br/>" + ex.getMessage());
             } catch (SigepClienteException ex) {
-                sessao.setAttribute("msg", "Falha ao Solicitar Etiquetas:<br/>" + ex.getMessage() + "<br/><br/>Consulte este CNPJ " + cpnj + " no SARA!<br/>E verifique se o cadastro do SECT está correto!");
+                sessao.setAttribute("msg", "ERRO COM ALGUM DADO DO CADASTRO DO CLIENTE/SIGEP WEB:<br/><br/>" + ex.getMessage());
+            }catch (Exception ex) {
+                sessao.setAttribute("msg", "!!!!!! SIGEP WEB FORA DO AR !!!!!!!<br/><br/><br/>"+ ex.getMessage());
             }
 
             //response.sendRedirect("Agencia/Configuracao/cliente_etiquetas.jsp?idCliente=" + idCliente);

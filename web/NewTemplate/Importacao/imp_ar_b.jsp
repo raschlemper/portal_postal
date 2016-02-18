@@ -172,7 +172,7 @@
                                                         <th>Clientes Importados</th>
                                                         <th>AR's Importados</th>
                                                         <th>AR's Excluidos</th>
-                                                    </tr>
+                                                        </tr>
                                                 </thead>
                                                 <tbody>
                                                     <%
@@ -205,6 +205,7 @@
                                                         <td align="rigth"><%= qtdClientes%></td>
                                                         <td align="right"><%= tamanho%></td>
                                                         <td align="right"><%= qtdExcluido%></td>
+                                                       <!-- <td align="right"><img src="" width="60px" height="60px"></td> -->
                                                     </tr>
                                                     <%}%>
                                                 </tbody>
@@ -231,7 +232,6 @@
                 $('#idCliente').select2();
             }
             function validaForm() {
-
 
                 var form = document.form1;
                 if (form.data.value === "") {
@@ -344,28 +344,27 @@
             function selectCliente() {
                 $('#idCliente').select2();
             }
+          
             function validaFormSRO() {
 
-
                 var form = document.formSro;
-                if (form.data.value === "") {
+                if (form.dataRec.value === "") {
                     alert("Preencha a Data de recebimento do AR!");
                     return false;
                 } else {
-                    if (valida_data(form.data) === false) {
+                    if (valida_data(form.dataRec) === false) {
                         return false;
                     }
                 }
-
-                if (form.arquivo.value === "") {
-                    alert("Escolha o arquivo do movimento a ser importado!\nGeralmente encontrado em 'C:/movimento.txt'.");
+                if (form.arquivoRec.value === "") {
+                    alert("Escolha o arquivo do movimento a ser importado!");
                     return false;
                 } else {
-                    var indexA = form.arquivo.value.lastIndexOf(".");
-                    var indexB = form.arquivo.value.length;
-                    var ext = form.arquivo.value.substring(indexA, indexB).toUpperCase();
-                    if (ext !== ".TXT") {
-                        alert("O arquivo a ser importado deve ser '.TXT' !");
+                    var indexA = form.arquivoRec.value.lastIndexOf(".");
+                    var indexB = form.arquivoRec.value.length;
+                    var ext = form.arquivoRec.value.substring(indexA, indexB).toUpperCase();
+                    if (ext !== ".JPG" && ext !== ".PNG" && ext !== ".GIF") {
+                        alert("O arquivo a ser importado deve ser '.JPG', ou '.PNG', ou '.GIF' !");
                         return false;
                     }
                 }
@@ -373,25 +372,7 @@
                 form.submit();
             }
 
-            function AllTables() {
-                StartDataTable('dataTables-importArq');
-                LoadSelect2Script(MakeSelectDataTable('dataTables-importArq'));
-                fechaMsg();
-            }
-            $(document).ready(function () {
-                LoadSelect2Script(selectCliente);
-                $("#dataRec").datepicker({
-                    showAnim: 'slideDown',
-                    maxDate: new Date(),
-                    numberOfMonths: 1,
-                    onClose: function (selectedDate) {
-                        $("#dataRec").datepicker("option", "minDate", selectedDate);
-                    }
-                });
-                LoadDataTablesScripts(AllTables);
-            });
-
-
+          
             function carregaSRO() {
 
                 if ($('#obj').val().length === 13) {
@@ -410,9 +391,7 @@
                             $("#dataRec").prop("readonly", false);
                             $('#nomeCli').html(data);
                         }
-
-
-                    });
+    });
 
                 }
             }

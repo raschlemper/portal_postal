@@ -92,8 +92,10 @@ public class ServEditarDestinatario extends HttpServlet {
                 String bairro = request.getParameter("bairro");
                 String cidade = request.getParameter("cidade");
                 String uf = request.getParameter("uf");
+                String email = request.getParameter("email");
+                String celular = request.getParameter("celular");
 
-                Controle.contrDestinatario.editar(idDestinatario, idCliente, nome, cpf_cnpj, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, "", "", "", nomeBD);
+                Controle.contrDestinatario.editar(idDestinatario, idCliente, nome, cpf_cnpj, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, "BR", email, celular, nomeBD);
                 sessao.setAttribute("msg", "Destinatário Alterado com Sucesso!");
                 response.sendRedirect("Cliente/Cadastros/destinatario_lista.jsp");
 

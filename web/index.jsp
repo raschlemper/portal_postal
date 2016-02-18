@@ -40,11 +40,11 @@
         <script src="plugins/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
         <script src="NewTemplate/dist/js/bootbox.min.js" type="text/javascript"></script>
         <style>
+            /*asdjauisdasudjsui*/
             body {
                 border: none;
                 margin: 0;
                 padding: 30px;
-                //background: #1f1f1f;
                 font: normal 16px/20px Lekton, sans-serif;
             }
 

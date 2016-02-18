@@ -15,7 +15,6 @@
                 border: none;
                 margin: 0;
                 padding: 30px;
-                //background: #1f1f1f;
                 font: normal 16px/20px Lekton, sans-serif;
             }
 
@@ -143,9 +142,6 @@
             }
 
             .btn-signin {
-                /*background-color: #4d90fe; */
-                //background-color: rgb(104, 145, 162);
-                //background-color: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
                 padding: 0px;
                 font-weight: 700;
                 font-size: 14px;

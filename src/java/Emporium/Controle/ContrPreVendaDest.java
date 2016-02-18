@@ -22,6 +22,8 @@ public class ContrPreVendaDest {
     public static int inserir(int idCliente, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String email, String celular, String pais, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "INSERT INTO pre_venda_destinatario (idCliente, nome, nome_sa, cpf_cnpj, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, email, celular, pais) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        System.out.println("inserir Destinatario -----------------\n"+sql+"\n---------------");
+        
         try {
             PreparedStatement valores = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             valores.setInt(1, idCliente);
@@ -49,7 +51,7 @@ public class ContrPreVendaDest {
             return autoIncrementKey;
         } catch (SQLException e) {
             System.out.println(e);
-            ContrErroLog.inserir("HOITO - contrContato", "SQLException", sql, e.toString());
+            ContrErroLog.inserir("HOITO - ContrPreVendaDest.inserir", "SQLException", sql, e.toString());
             return 0;
         } finally {
             Conexao.desconectar(conn);

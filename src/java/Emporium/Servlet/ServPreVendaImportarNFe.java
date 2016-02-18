@@ -9,7 +9,6 @@ package Emporium.Servlet;
 import Emporium.Controle.ContrPreVendaImporta;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -50,7 +49,7 @@ public class ServPreVendaImportarNFe extends HttpServlet {
         boolean isMultiPart = FileUpload.isMultipartContent(request);
                 
         String departamento = "", servico = "", tipo = "";
-        int idCliente = 0, vd = 0;
+        int idCliente = 0, vd = 0, ar = 0;
         
         if (nomeBD != null) {
         if (isMultiPart) {
@@ -81,6 +80,9 @@ public class ServPreVendaImportarNFe extends HttpServlet {
                         if (item.getFieldName().equals("vd")) {
                              vd = Integer.parseInt(item.getString());
                         }
+                        if (item.getFieldName().equals("ar")) {
+                             ar = Integer.parseInt(item.getString());
+                        }
                     }
                     
                     if (!item.isFormField()) {
@@ -97,7 +99,7 @@ public class ServPreVendaImportarNFe extends HttpServlet {
                         response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=Importacao maxima de 200 arquivos de cada vez!");
                 } else {
                     ContrPreVendaImporta.excluirNaoConfirmados(idCliente, nomeBD);
-                    String condicao = ContrPreVendaImporta.importaPedidoNFe(listaCaminhos, idCliente, departamento, servico, vd, nomeBD);
+                    String condicao = ContrPreVendaImporta.importaPedidoNFe(listaCaminhos, idCliente, departamento, servico, vd, ar, nomeBD);
                     if(condicao.startsWith("ERRO")){
                         response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=" + condicao);
                     }else{
@@ -127,6 +129,8 @@ public class ServPreVendaImportarNFe extends HttpServlet {
         // Cria o diretório caso ele não exista
         String caminho = getServletContext().getRealPath("ClientesImport");
         caminho = "/var/lib/tomcat/webapps/PortalPostal/ClientesImport";
+        //caminho = "C:\\Users\\Fernando\\Downloads";
+        //System.out.println(caminho);
         File diretorio = new File(caminho);
         if (!diretorio.exists()) {
             diretorio.mkdir();

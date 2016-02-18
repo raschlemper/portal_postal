@@ -164,6 +164,7 @@
             veiculoCtrl.init();
             veiculoCtrl.acoes.pesquisarTodos();
             Configuracao.messageModal();
+            Configuracao.loadDataTableScript('datatable-veiculos');
         </script>
     </body>
 </html>

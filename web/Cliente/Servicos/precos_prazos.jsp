@@ -154,36 +154,75 @@
                                 %>
                                 <select name="servico" id="servico" onchange="verificaServicoSelecionado(this);">
                                         <%if(listaContrato.contains(40126)){%>
-                                        <option value="40126">SEDEX A COBRAR</option>
+                                        <option value="40126">SEDEX A COBRAR | 40.126</option>
+                                        <%} else if(listaContrato.contains(40630)){%>
+                                        <option value="40630">SEDEX PAG. NA ENTREGA | 40.630</option>
+                                        <%} else if(listaContrato.contains(40432)){%>
+                                        <option value="40432">SEDEX PAG. NA ENTREGA | 40.432</option>
+                                        <%} else if(listaContrato.contains(40440)){%>
+                                        <option value="40440">SEDEX PAG. NA ENTREGA | 40.440</option>
                                         <%}else{%>
-                                        <option value="40045">SEDEX A COBRAR</option>
+                                        <option value="40819">SEDEX PAG. NA ENTREGA</option>
                                         <%}%>
+                                        
+                                        <%if(listaContrato.contains(41238)){%>
+                                        <option value="41238">PAC PAG. NA ENTREGA | 41.238</option>
+                                        <%}else{%>
+                                        <option value="41262">PAC PAG. NA ENTREGA</option>
+                                        <%}%>
+                                        
+                                        <%if(listaContrato.contains(40215)){%>
+                                        <option value="40215">SEDEX 10 | 40.215</option>
+                                        <%} else if(listaContrato.contains(40789)){%>
+                                        <option value="40789">SEDEX 10 | 40.789</option>
+                                        <%}else{%>
                                         <option value="40215">SEDEX 10</option>
-                                        <option value="40169">SEDEX 12</option>     
+                                        <%}%>
+                                        
+                                        <option value="40169">SEDEX 12</option>  
+                                        
                                         <%if(listaContrato.contains(41300)){%>
                                         <option value="41300">PAC GRANDES FORMATOS | 41.300</option> 
-                                        <%}%>                                        
+                                        <%}%>        
+                                        
                                         <%if(listaContrato.contains(41068)){%>
                                         <option value="41068">PAC AGRUPADO | 41.068</option>
+                                        <%} else if(listaContrato.contains(41211)){%>
+                                        <option value="41211">PAC AGRUPADO | 41.211</option>
+                                        <%} else if(listaContrato.contains(41491)){%>
+                                        <option value="41491">PAC AGRUPADO | 41.491</option>
                                         <%}else{%>
                                         <option value="41106">PAC AGRUPADO</option>  
                                         <%}%>
+                                        
                                         <%if(listaContrato.contains(41068)){%>
                                         <option value="41068">PAC | 41.068</option>
+                                        <%} else if(listaContrato.contains(41211)){%>
+                                        <option value="41211">PAC | 41.211</option>
+                                        <%} else if(listaContrato.contains(41491)){%>
+                                        <option value="41491">PAC | 41.491</option>
                                         <%}else{%>
                                         <option selected value="41106">PAC</option>  
                                         <%}%>
+                                        
                                         <%if(listaContrato.contains(40096)){%>
                                         <option value="40096">SEDEX | 40.096</option>
                                         <%} else if(listaContrato.contains(40436)){%>
                                         <option value="40436">SEDEX | 40.436</option>
                                         <%} else if(listaContrato.contains(40444)){%>
                                         <option value="40444">SEDEX | 40.444</option>
+                                        <%} else if(listaContrato.contains(40568)){%>
+                                        <option value="40568">SEDEX | 40.568</option>
+                                        <%} else if(listaContrato.contains(41408)){%>
+                                        <option value="41408">SEDEX | 41.408</option>
                                         <%} else {%>
                                         <option value="40010">SEDEX</option>
                                         <%}%>
+                                        
                                         <%if(listaContrato.contains(81019)){%>
                                         <option value="81019">e-SEDEX | 81.019</option>
+                                        <%} else if(listaContrato.contains(81833)){%>
+                                        <option value="81833">e-SEDEX | 81.833</option>
                                         <%}%>
                                 </select>
                             </dd>

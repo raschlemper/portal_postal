@@ -93,7 +93,7 @@ public class ServPreVendaMulti extends HttpServlet {
         String nomeUser = request.getParameter("nomeUser");
         
         String obs = "";
-        String tipo = "";
+        String tipo = "SERVICO";
         String conteudo = "";
         int peso = 0;//Integer.parseInt(request.getParameter("peso"));
         int altura = 0;//Integer.parseInt(request.getParameter("altura"));
@@ -196,7 +196,7 @@ public class ServPreVendaMulti extends HttpServlet {
                         tipoEtiqueta = aux[1];
                     }
                 } else if (codECT == 0) {
-                    ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico, tipo);
+                    ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico);
                     codECT = se.getCodECT();
                     contrato = "";
                 }

@@ -22,9 +22,10 @@ import javax.servlet.http.HttpSession;
  */
 public class ServLogin extends HttpServlet {
 
-
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -51,8 +52,9 @@ public class ServLogin extends HttpServlet {
     }
 
     // <editor-fold defaultstate="collapsed" desc="Métodos HttpServlet. Clique no sinal de + à esquerda para editar o código.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -64,8 +66,9 @@ public class ServLogin extends HttpServlet {
         processRequest(request, response);
     }
 
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -75,7 +78,7 @@ public class ServLogin extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-
+        String caminho = request.getParameter("caminho");
         String login = request.getParameter("login");
         String senha = request.getParameter("senha");
         Usuario user = contrLogin.login(login, senha);
@@ -93,33 +96,38 @@ public class ServLogin extends HttpServlet {
                 sessao.setAttribute("idUsuario", user.getIdUsuario());
                 sessao.setAttribute("idEmpresa", user.getIdEmpresa());
                 sessao.setAttribute("acessosAgencia", user.getListaAcessosPortalPostal());
-                
+
                 empresas emp = contrEmpresa.consultaEmpresa(user.getIdEmpresa());
-                
+
                 sessao.setAttribute("emp", emp);
                 sessao.setAttribute("nomeBD", emp.getCnpj());
                 sessao.setAttribute("empresa", emp.getCnpj());
-                
-                if(emp.getChamada() == 1){
+
+                if (emp.getChamada() == 1) {
                     //response.sendRedirect("./Agencia/Relatorio/painel_etiquetas.jsp");
                     response.sendRedirect("NewTemplate/Dashboard");
-                }else{
+                } else {
                     //response.sendRedirect("./Agencia/Importacao/imp_movimento.jsp");
                     response.sendRedirect("NewTemplate/Importacao/imp_movimento_b.jsp");
                 }
-                
+
+            } else if (caminho != null) {
+                response.sendRedirect(caminho + "?msg=Login ou Senha incorreta ou inexistente!");
             } else {
                 response.sendRedirect("index.jsp?msg=Login ou Senha incorreta ou inexistente!");
             }
 
+        } else if (caminho != null) {
+            response.sendRedirect(caminho + "?msg=Login ou Senha incorreta ou inexistente!");
         } else {
             response.sendRedirect("index.jsp?msg=Login ou Senha incorreta ou inexistente!");
         }
 
-    }
+        }
 
     /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

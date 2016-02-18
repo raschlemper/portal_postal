@@ -5,7 +5,10 @@
 package Util;
 
 import java.text.Normalizer;
+import java.text.ParseException;
 import java.util.InputMismatchException;
+import javax.swing.JOptionPane;
+import javax.swing.text.MaskFormatter;
 
 /**
  *
@@ -85,10 +88,25 @@ public class FormataString {
                 ret[1] = "CARTA REG.";
                 ret[2] = "imagensNew/carta.png";
                 return ret;
+            case 81833: 
+                ret[0] = "81.833";
+                ret[1] = "E-SEDEX";
+                ret[2] = "imagensNew/esedex.png";
+                return ret;
             case 81019: 
                 ret[0] = "81.019";
                 ret[1] = "E-SEDEX";
                 ret[2] = "imagensNew/esedex.png";
+                return ret;
+            case 41238: 
+                ret[0] = "41.238";
+                ret[1] = "PAC PAG. NA ENTREGA";
+                ret[2] = "imagensNew/pac.png";
+                return ret;
+            case 41262: 
+                ret[0] = "41.262";
+                ret[1] = "PAC PAG. NA ENTREGA";
+                ret[2] = "imagensNew/pac.png";
                 return ret;
             case 41068: 
                 ret[0] = "41.068";
@@ -97,6 +115,16 @@ public class FormataString {
                 return ret;
             case 41106: 
                 ret[0] = "41.106";
+                ret[1] = "PAC";
+                ret[2] = "imagensNew/pac.png";
+                return ret;
+            case 41211: 
+                ret[0] = "41.211";
+                ret[1] = "PAC";
+                ret[2] = "imagensNew/pac.png";
+                return ret;
+            case 41491: 
+                ret[0] = "41.491";
                 ret[1] = "PAC";
                 ret[2] = "imagensNew/pac.png";
                 return ret;
@@ -125,6 +153,16 @@ public class FormataString {
                 ret[1] = "SEDEX";
                 ret[2] = "imagensNew/sedex.png";
                 return ret;
+            case 40568: 
+                ret[0] = "40.568";
+                ret[1] = "SEDEX";
+                ret[2] = "imagensNew/sedex.png";
+                return ret;
+            case 41408: 
+                ret[0] = "41.408";
+                ret[1] = "SEDEX";
+                ret[2] = "imagensNew/sedex.png";
+                return ret;
             case 40843: 
                 ret[0] = "40.843";
                 ret[1] = "SEDEX";
@@ -132,6 +170,11 @@ public class FormataString {
                 return ret;
             case 40215: 
                 ret[0] = "40.215";
+                ret[1] = "SEDEX 10";
+                ret[2] = "imagensNew/sedex10.png";
+                return ret;
+            case 40789: 
+                ret[0] = "40.789";
                 ret[1] = "SEDEX 10";
                 ret[2] = "imagensNew/sedex10.png";
                 return ret;
@@ -155,6 +198,26 @@ public class FormataString {
                 ret[1] = "SEDEX A COBRAR";
                 ret[2] = "imagensNew/sedex_cobrar.png";
                 return ret;
+            case 40630: 
+                ret[0] = "40.630";
+                ret[1] = "SEDEX PAG. NA ENTREGA";
+                ret[2] = "imagensNew/sedex_cobrar.png";
+                return ret;
+            case 40432: 
+                ret[0] = "40.432";
+                ret[1] = "SEDEX PAG. NA ENTREGA";
+                ret[2] = "imagensNew/sedex_cobrar.png";
+                return ret;
+            case 40440: 
+                ret[0] = "40.440";
+                ret[1] = "SEDEX PAG. NA ENTREGA";
+                ret[2] = "imagensNew/sedex_cobrar.png";
+                return ret;
+            case 40819: 
+                ret[0] = "40.819";
+                ret[1] = "SEDEX PAG. NA ENTREGA";
+                ret[2] = "imagensNew/sedex_cobrar.png";
+                return ret;
             case 10065:
                 ret[0] = "10.065";
                 ret[1] = "CARTA SIMPLES";
@@ -165,7 +228,11 @@ public class FormataString {
                 ret[1] = "CARTA SIMPLES";
                 ret[2] = "imagensNew/carta.png";
                 return ret;
-            default: return ret;
+            default: 
+                ret[0] = codEct+"";
+                ret[1] = "";
+                ret[2] = "imagensNew/carta.png";
+                return ret;
         }
     }
     
@@ -201,6 +268,36 @@ public class FormataString {
             case 72: return "SP";
             case 75: return "TO";
             default: return "";
+        }
+    }
+    
+    public static String replaceNonDigits(String string) {
+        if (string == null || string.length() == 0) {
+            return "0";
+        }
+        String ret = string.replaceAll("[^0-9]+", "");
+        if (ret.equals("")) {
+            return "0";
+        } else {
+            return ret;
+        }
+    }
+
+    public static String formatarCep(String pattern, String value) {
+        MaskFormatter mask;
+        if (value != null) {
+            value = replaceNonDigits(value);
+            value = String.format("%08d", Long.parseLong(value));
+            try {
+                mask = new MaskFormatter(pattern);
+                mask.setValueContainsLiteralCharacters(false);
+                return mask.valueToString(value);
+            } catch (ParseException e) {
+                JOptionPane.showMessageDialog(null, "Falha ao formatar o CEP " + value + "\n\nFunção: Util.formatarCep()");
+                return value;
+            }
+        } else {
+            return "0";
         }
     }
 
@@ -366,4 +463,18 @@ public class FormataString {
             return (false);
         }
     }
+    
+    public static String MD5(String md5) {
+   try {
+        java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+        byte[] array = md.digest(md5.getBytes());
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < array.length; ++i) {
+          sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+       }
+        return sb.toString();
+    } catch (java.security.NoSuchAlgorithmException e) {
+    }
+    return null;
+}
 }

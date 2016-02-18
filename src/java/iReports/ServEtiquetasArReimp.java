@@ -5,12 +5,10 @@
 package iReports;
 
 import Controle.contrCliente;
-import Emporium.Controle.ContrPreVenda;
 import Entidade.Clientes;
 import Util.Conexao;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
@@ -110,7 +108,7 @@ public class ServEtiquetasArReimp extends HttpServlet {
                                         " d.bairro, " +
                                         " d.cidade, " +
                                         " d.uf, " +
-                                        " conteudo, " +
+                                        " CONCAT(notaFiscal, ' - ', conteudo) AS conteudo, " +
                                         " departamento " +
                                 " FROM " +
                                         " pre_venda AS p " +

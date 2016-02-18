@@ -144,6 +144,7 @@
             veiculoCombustivelCtrl.init();
             veiculoCombustivelCtrl.acoes.pesquisarTodos();
             Configuracao.messageModal();
+            Configuracao.loadDataTableScript('datatable-combustiveis');
         </script>
     </body>
 </html>

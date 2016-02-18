@@ -114,6 +114,7 @@
             veiculoSeguroCtrl.init();
             veiculoSeguroCtrl.acoes.pesquisarTodos();
             Configuracao.messageModal();
+            Configuracao.loadDataTableScript('datatable-seguros');
         </script>
     </body>
 </html>

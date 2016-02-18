@@ -113,7 +113,7 @@ public class ServListaPostagem extends HttpServlet {
                         bytes = JasperExportManager.exportReportToPdf(impressao);
 
                     } catch (Exception e) {
-                    Conexao.desconectar(conn);
+                        Conexao.desconectar(conn);
                         System.out.println(e);
                         e.printStackTrace();
                         return;

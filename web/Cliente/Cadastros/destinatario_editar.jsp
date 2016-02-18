@@ -45,6 +45,14 @@
                     <label>CEP<b class="obg">*</b><a onclick="window.open('http://www.buscacep.correios.com.br', 'CORREIOS');" ><img src="../../imagensNew/question.png" /></a></label>
                     <input type="text" name="cep" id="cep2" size="8" value="<%= FormataString.formataCep(des.getCep())%>" maxlength="9" onkeypress="mascara(this, maskCep);funcEnter(event);" onblur="verPesquisarCepDestEdit(this.value);" />
                 </dd>
+                <dd>
+                    <label>E-mail</label>
+                    <input type="text" name="email" value="<%= des.getEmail() %>" />
+                </dd>
+                <dd>
+                    <label>Celular</label>
+                    <input type="text" name="celular" value="<%= des.getCelular() %>" onkeypress="mascara(this, maskTelefone);" />
+                </dd>
             </li>
             <li>
                 <dd>

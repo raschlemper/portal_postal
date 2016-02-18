@@ -85,7 +85,7 @@ public class ServPreVenda extends HttpServlet {
         String nomeBD = request.getParameter("nomeBD");
         String servico = request.getParameter("servico");
         String obs = request.getParameter("obs");
-        String tipo = request.getParameter("tipo");
+        String tipo = "SERVICO";
         String conteudo = request.getParameter("conteudo");
         String notaFiscal = request.getParameter("notaFiscal");
         int peso = 0;//Integer.parseInt(request.getParameter("peso"));
@@ -128,7 +128,7 @@ public class ServPreVenda extends HttpServlet {
             if (reg == 0) {
                 servico = "SIMPLES";
             }
-        }        
+        }
 
         int mp = Integer.parseInt(request.getParameter("mp"));
         int ar = Integer.parseInt(request.getParameter("ar"));
@@ -137,7 +137,7 @@ public class ServPreVenda extends HttpServlet {
             vd = 12;
         }
         float vlrCobrar = Float.parseFloat(request.getParameter("valor_cobrar"));
-        
+
         int codECTsolicitado = ContrClienteContrato.consultaContratoClienteGrupoServ(idCliente, servico, nomeBD);
         String tipoPost = "NAC";
         if (servico.equals("OUTROS")) {
@@ -173,7 +173,9 @@ public class ServPreVenda extends HttpServlet {
             pais = auxPais[1];
             uf = request.getParameter("estado");
         }
-
+        if (obs.length() > 50) {
+            obs = obs.substring(0, 49);
+        }
         if (idDest == 0) {
             contrDestinatario.inserir(idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, pais, email_destinatario, celular, nomeBD);
         } else {
@@ -188,18 +190,19 @@ public class ServPreVenda extends HttpServlet {
         } else if (tipoPost.equals("INT")) {
             siglaAmarracao = "INT";
         }
-        
-        for (int i = 0; i < qtdPostagem; i++) {            
-            
+
+        String falha = "";
+        for (int i = 0; i < qtdPostagem; i++) {
+
             int idDestinatario = ContrPreVendaDest.inserir(idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, email_destinatario, celular, pais, nomeBD);
-            if(idDestinatario > 0){
+            if (idDestinatario > 0) {
 
                 //VERIFICA OS DADOS E PEGA O NUM DO OBJETO
                 String numObjeto = "avista";
                 String tipoEtiqueta = "SEM_REGISTRO";
 
                 //VERIFICA SE O CLIENTE TEM CONTRATO
-                int codECT = codECTsolicitado;            
+                int codECT = codECTsolicitado;
                 //VERIFICA A QTD DE ETIQUETA
                 int qtdEtq = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ(servico, 0, idCliente, nomeBD);
                 if (codECT != 0 && qtdEtq != 0) {
@@ -210,7 +213,7 @@ public class ServPreVenda extends HttpServlet {
                         tipoEtiqueta = aux[1];
                     }
                 } else if (codECT == 0) {
-                    ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico, tipo);
+                    ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico);
                     codECT = se.getCodECT();
                     if (codECT == 10014 && servico.equals("CARTA")) {
                         registro = Integer.parseInt(request.getParameter("tipoCarta"));
@@ -222,13 +225,14 @@ public class ServPreVenda extends HttpServlet {
 
                 //INSERE PRE VENDA      
                 ContrPreVenda.inserir(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD);
-            
-            }else{
-                response.sendRedirect("Cliente/Servicos/pre_postagem.jsp?Falha ao inserir o destinatario!");                
+
+            } else {
+                //response.sendRedirect("Cliente/Servicos/pre_postagem.jsp?Falha ao inserir o destinatario!");                
+                falha = "Falha ao inserir o destinatario! Nao use caracteres especiais!";
             }
         }
 
-        response.sendRedirect("Cliente/Servicos/pre_postagem.jsp");
+        response.sendRedirect("Cliente/Servicos/pre_postagem.jsp?msg=" + falha);
 
     }
 

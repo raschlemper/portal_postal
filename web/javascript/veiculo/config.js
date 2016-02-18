@@ -12,6 +12,17 @@ var Configuracao = function() {
         });
     };  
     
+    var loadDataTableScript = function(table) {
+        LoadDataTablesScripts(sortAndSearchTable(table));
+    }
+    
+    var sortAndSearchTable = function(table) {
+        return function() {
+            StartDataTable(table);            
+            LoadSelect2Script(MakeSelectDataTable(table));    
+        }    
+    }
+    
     var getContextPath = function() {
         var location = window.location;
         var paths = location.pathname.split("/");
@@ -29,6 +40,7 @@ var Configuracao = function() {
     return {
         messageModal: messageModal,
         loadingModal: loadingModal,
+        loadDataTableScript: loadDataTableScript,
         contextPath: getContextPath(),
         getContextPathActual: getContextPathActual()
     }

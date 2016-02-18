@@ -1,4 +1,9 @@
 
+<%@page import="Entidade.ClienteSMTP"%>
+<%@page import="Entidade.ClientesDeptos"%>
+<%@page import="Controle.ContrClienteDeptos"%>
+<%@page import="Entidade.GrupoFaturamento"%>
+<%@page import="Controle.ContrGrupoFaturamento"%>
 <%@page import="Controle.ContrClienteContrato"%>
 <%@page import="Controle.ContrServicoECT"%>
 <%@page import="Entidade.ServicoECT"%>
@@ -19,6 +24,7 @@
         }
 
         String nomeBD = (String) session.getAttribute("empresa");
+        int idEmpresa = (Integer) session.getAttribute("idEmpresa");
         int idClienteInc = Integer.parseInt(request.getParameter("idCliente"));
 
         Entidade.Clientes cliInc = Controle.contrCliente.consultaClienteById(idClienteInc, nomeBD);
@@ -33,8 +39,8 @@
         String bairro = cliInc.getBairro();
         String cidade = cliInc.getCidade();
         String uf = cliInc.getUf();
-        String cep = cliInc.getCep()+"";
-        
+        String cep = cliInc.getCep() + "";
+
         //dados para gerar o mapa
         double lat = cliInc.getLatitude();
         double lng = cliInc.getLongitude();
@@ -70,7 +76,7 @@
                 document.getElementById("lat").value = center.lat().toFixed(6);
                 document.getElementById("lng").value = center.lng().toFixed(6);
 
-                google.maps.event.addListener(marker, "dragend", function() {
+                google.maps.event.addListener(marker, "dragend", function () {
                     var point = marker.getPosition();
                     map.panTo(point);
                     document.getElementById("lat").value = point.lat().toFixed(6);
@@ -91,7 +97,7 @@
             }
 
             function showAddress(address) {
-                geocoder.geocode({'address': address}, function(results, status) {
+                geocoder.geocode({'address': address}, function (results, status) {
                     if (status == google.maps.GeocoderStatus.OK) {
                         map.setCenter(results[0].geometry.location);
                         marker.setPosition(results[0].geometry.location);
@@ -105,11 +111,90 @@
                 });
             }
 
+            function mostraCampos() {
+                $('#campos').toggleClass("hidden");
 
-            $(document).ready(function() {
+            }
+            function mostraCampos2() {
+                $('#camposSMTP').toggleClass("hidden")
+
+            }
+
+            function mostraTipoServer() {
+                $('#is_cadastro').prop('checked', true);                
+                $('#is_cadastro').attr("disabled", true);
+                
+                $('#mostra_smtp').toggleClass("hidden");
+                $('#cad_email').toggleClass("hidden");
+            }
+            function meTireDaqui() {
+                $('#is_cadastro').prop('checked', false);
+
+            }
+            $(document).ready(function () {
                 load();
                 fechaMsg();
             });
+
+            function confirmExcluir(button) {
+                bootbox.confirm({
+                    title: 'Excluir Usuário do Cliente?',
+                    message: 'Deseja realmente excluir este cadastro?',
+                    buttons: {
+                        'cancel': {
+                            label: '<i class="fa fa-lg fa-times fa-spc"></i> CANCELAR',
+                            className: 'btn btn-default pull-left'
+                        },
+                        'confirm': {
+                            label: '<i class="fa fa-lg fa-trash fa-spc"></i> EXCLUIR',
+                            className: 'btn btn-danger pull-right'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            button.form.submit();
+                        }
+                    }
+                });
+
+            }
+
+
+            function confirmaCadastro() {
+
+                bootbox.dialog({
+                    message: "Ao efetuar este o cadastro você estará autorizando a SCC4 efetuar  a cobrança dos valores <br>relativos aos custos desse serviço em suas proximas faturas.",
+                    title: "CADASTRAR ENVIO DE EMAIL COM ATUALIZAÇÃO DO SRO?",
+                    onEscape: function () {
+                    },
+                    show: true,
+                    backdrop: true,
+                    closeButton: true,
+                    animate: true,
+                    className: "my-modal",
+                    buttons: {
+                        success: {
+                            label: "<i class='fa fa-lg fa-check fa-spc'></i> CONCORDO",
+                            className: "btn-success",
+                            callback: function () {
+                                mostraTipoServer();
+                            }
+                        },
+                        "ME TIRE DAQUI!": {
+                            className: "btn-danger",
+                            callback: function () {
+                                meTireDaqui();
+                            }
+                        },
+                    }
+                });
+            }
+
+
+
+
+
+
         </script>
     </head>        
     <body>   
@@ -141,83 +226,103 @@
                                         </li>
                                         <li class="list-group-item" >
                                             <div class="row form-horizontal">
-                                                <div class="col-sm-6 col-md-3 col-lg-2">
+                                                <div class="col-sm-6 col-md-3 col-lg-3">
                                                     <label class="small">CNPJ</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-key fa-fw"></i></span>                                                                                                             
-                                                        <input class="form-control" type="text" name="cnpj" id="cnpj" value="<%= cnpj %>" />
+                                                        <input class="form-control" type="text" name="cnpj" id="cnpj" value="<%= cnpj%>" maxlength="18" onKeyPress="mascara(this, maskCpfCnpj)"  />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-5 col-lg-5">
                                                     <label class="small">Razão Social</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-user fa-fw"></i></span>                                                                                                             
-                                                        <input class="form-control" type="text" name="razao" id="razao" value="<%= nome %>" maxlength="60" />
+                                                        <input class="form-control" type="text" name="razao" id="razao" value="<%= nome%>" maxlength="60" />
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-6 col-md-4 col-lg-5">
+                                                <div class="col-sm-6 col-md-4 col-lg-4">
                                                     <label class="small">Fantasia</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-user fa-fw"></i></span>                                                                                                             
-                                                        <input class="form-control" type="text" name="razao" id="razao" value="<%= fantasia %>" maxlength="60" />
+                                                        <input class="form-control" type="text" name="fantasia" id="fantasia" value="<%= fantasia%>" maxlength="25" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-4 col-lg-4">
                                                     <label class="small">E-mail</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-at fa-fw"></i></span>                                                                                                             
-                                                        <input class="form-control" type="text" name="email" id="email" value="<%= email %>" />
+                                                        <input class="form-control" type="text" name="email" id="email" value="<%= email%>" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-3 col-lg-3">
                                                     <label class="small">Telefone</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-phone fa-fw"></i></span>                                                                                                             
-                                                        <input class="form-control" type="text" name="telefone" id="telefone" value="<%= telefone %>" />
+                                                        <input class="form-control" type="text" name="telefone" id="telefone" value="<%= telefone%>" onKeyPress="mascara(this, maskTelefone)"  />
                                                     </div>
                                                 </div>
+                                                <div class="col-sm-6 col-md-4 col-lg-5">
+                                                    <label class="small">Grupo de Faturamento</label>
+                                                    <div class="input-group">                                                        
+                                                        <span class="input-group-addon" ><i class="fa fa-group fa-fw"></i></span>                                                             
+                                                        <select class="form-control" name="grupo_fat" id="grupo_fat">
+                                                            <option value="0">-- SELECIONE --</option>
+                                                            <%
+                                                                ArrayList<GrupoFaturamento> listaGrupo = ContrGrupoFaturamento.consultaTodosTipoColeta(nomeBD);
+                                                                for (int i = 0; i < listaGrupo.size(); i++) {
+                                                                    GrupoFaturamento gf = listaGrupo.get(i);
+                                                                    String sel = "";
+                                                                    if (cliInc.getIdGrupoFaturamento() == gf.getId()) {
+                                                                        sel = " selected='true' ";
+                                                                    }
+                                                                    out.println("<option " + sel + " value='" + gf.getId() + "'>" + gf.getSigla() + " - " + gf.getNome() + "</option>");
+                                                                }
+                                                            %>
+                                                        </select>
+                                                    </div>
                                                 </div>
+                                            </div>
                                             <div class="row form-horizontal">
                                                 <div class="col-sm-6 col-md-3 col-lg-2">
                                                     <label class="small">CEP</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-search fa-fw"></i></span>                                                                                                             
-                                                        <input class="form-control" type="text" name="cep" id="cep" value="<%= cep %>" maxlength="25" />
+                                                        <input class="form-control" type="text" name="cep" id="cep" value="<%= cep%>" maxlength="25" onKeyPress="mascara(this, maskCep)"  />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-5 col-lg-5">
                                                     <label class="small">Logradouro</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-home fa-fw"></i></span>                                                                                                             
-                                                        <input class="form-control" type="text" name="logradouro" id="logradouro" value="<%= logradouro %>" />
+                                                        <input class="form-control" type="text" name="logradouro" id="logradouro" value="<%= logradouro%>" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-3 col-lg-2">
                                                     <label class="small">Número</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-home fa-fw"></i></span>                                                                                                             
-                                                        <input class="form-control" type="text" name="numero" id="numero" value="<%= numero %>" />
+                                                        <input class="form-control" type="text" name="numero" id="numero" value="<%= numero%>" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-3 col-lg-3">
                                                     <label class="small">Complemento</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-home fa-fw"></i></span>                                                                                                             
-                                                        <input class="form-control" type="text" name="complemento" id="complemento" value="<%= complemento %>" />
+                                                        <input class="form-control" type="text" name="complemento" id="complemento" value="<%= complemento%>" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-5 col-lg-3">
                                                     <label class="small">Bairro</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-home fa-fw"></i></span>                                                                                                             
-                                                        <input class="form-control" type="text" name="bairro" id="bairro" value="<%= bairro %>" />
+                                                        <input class="form-control" type="text" name="bairro" id="bairro" value="<%= bairro%>" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-4 col-lg-4">
                                                     <label class="small">Cidade</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-home fa-fw"></i></span>                                                                                                             
-                                                        <input class="form-control" type="text" name="cidade" id="cidade" value="<%= cidade %>" />
+                                                        <input class="form-control" type="text" name="cidade" id="cidade" value="<%= cidade%>" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-3 col-lg-2">
@@ -256,7 +361,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                        
+
                                                 <div class="col-sm-6 col-md-4 col-lg-3">
                                                     <label class="small">&nbsp;</label>
                                                     <div>                                                        
@@ -316,7 +421,217 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="row spacer-xlg"></div>
+                        <div class="row spacer-sm"></div>
+                        <div class="row">
+                            <div class="col-md-12"> 
+                                <ul class="list-group">
+                                    <li class="list-group-item list-group-item-danger">
+                                        <div class="form-inline">
+                                            <label>&nbsp;</label>
+                                            <label><input type="checkbox" name="is_cadastro" value="1" id="is_cadastro" readonly onclick="confirmaCadastro()"/> CADASTRAR SERVIDOR PARA E-MAILS COM ATUALIZAÇÕES DO SRO </label>
+                                            <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ATENÇÃO AO EFETUAR ESSE CADASTRO SERÃO GERADOS ENCARGOS)</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <form name="form2" action="../../ServCriaSMTP" method="post">
+                            <div class="row hidden" id="mostra_smtp">
+                                <div class="col-md-12"> 
+                                    <ul class="list-group">
+                                        <li class="list-group-item list-group-item-warning">
+                                            <div class="form-inline">
+                                                <label>&nbsp;</label>
+                                                <label><input type="radio" name="is_smtp_client" value="1" id="is_smtp_client" onclick="mostraCampos2()"/> CADASTRAR SERVIDOR SMTP (CUSTO R$ 0,10/objeto)</label>
+                                            </div>
+                                            <div class="form-inline">
+                                                <label>&nbsp;</label>
+                                                <label><input type="radio" name="is_smtp_client" value="0" id="is_smtp_client" checked="checked" onclick="mostraCampos2()"/>UTILIZAR SERVIDOR DO PORTALPOSTAL (R$40,00/mil e-mails)</label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row" >
+                                <div class="col-md-12">   
+
+                                    <ul class="list-group hidden" id="camposSMTP">
+                                        <li class="list-group-item list-group-heading">
+                                            <label>CADASTRE O SERVIDOR SMTP DO CLIENTE OU DA AGF</label>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <div class="row form-horizontal">
+                                                <div class="col-sm-6 col-md-3 col-lg-3">
+                                                    <label class="small">SMTP</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon" ><i class="fa fa-envelope"></i></span>
+                                                        <input class="form-control" type="text" autocomplete="off" placeholder="smtp.provedor.com.br" name="smtp" />
+                                                    </div>   
+                                                    <div id="foo"></div>
+                                                </div>
+                                                <div class="col-sm-6 col-md-3 col-lg-2">
+                                                    <label class="small">PORTA</label>                                            
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon" ><i class="fa fa-globe"></i></span>
+                                                        <input class="form-control" placeholder="porta smtp" type="text" name="porta_smtp" onkeypress="mascara(this, maskNumero)" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li> 
+                                        <li class="list-group-item list-group-item-warning">
+                                            <div class="form-inline">
+                                                <label>&nbsp;</label>
+                                                <label><input type="checkbox" name="is_autenticacao"  id="is_autenticacao" value="1" onclick="mostraCampos()"/> UTILIZA AUTENTICAÇÃO</label>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item hidden" id="campos">
+                                            <div class="row form-horizontal">   
+                                                <div class="col-sm-6 col-md-3 col-lg-3">
+                                                    <label class="small">USUARIO</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon" ><i class="fa fa-user"></i></span>
+                                                        <input class="form-control" type="text" autocomplete="off" placeholder="usuario" name="usuario" />
+                                                    </div>   
+                                                    <div id="foo"></div>
+                                                </div>
+                                                <div class="col-sm-6 col-md-3 col-lg-2">
+                                                    <label class="small">SENHA</label>                                            
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon" ><i class="fa fa-globe"></i></span>
+                                                        <input class="form-control" placeholder="senha" type="password" name="senha" />
+                                                    </div>
+                                                </div> 
+                                                <div class="col-sm-6 col-md-3 col-lg-2">
+                                                    <label class="small">TIPO SEGURANÇA</label>                                                   
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon" ><i class="fa fa-lock"></i></span>
+                                                        <select class="form-control" name="tipo_seg" >
+                                                            <option value="NENHUMA">NENHUMA</option>
+                                                            <option value="SSL">SSL</option>
+                                                            <option value="TLS">TLS</option>
+                                                            <option value="STARTTLS">STARTTLS</option>
+                                                        </select>
+                                                    </div> 
+                                                </div>
+                                                <div class="col-sm-6 col-md-3 col-lg-2">
+                                                    <label class="small">PORTA SSL*</label>                                            
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon" ><i class="fa fa-globe"></i></span>
+                                                        <input class="form-control" placeholder="porta ssl/tsl" type="text" name="porta_ssl" onkeypress="mascara(this, maskNumero)" />
+                                                    </div>
+                                                </div>
+                                            </div>                                        
+                                        </li>
+                                    </ul>
+
+                                    <ul class="list-group hidden" id="cad_email">
+                                        <li class="list-group-item">
+                                            <div class="form-inline">
+                                                <label>&nbsp;</label>
+                                                <label><input type="checkbox" name="is_destinatario" value="1" id="is_destinatario" checked="checked"/> ENVIAR PARA O E-MAIL DO DESTINATARIO (deve estar cadastrado)</label>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item" id="campos">
+                                            <div class="row form-horizontal">                                             
+                                                <div class="col-sm-6 col-md-4 col-lg-4">
+                                                    <label class="small"> ADICIONAR OUTROS E-MAILS (separados por ;)</label>                                            
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon" ><i class="fa fa-inbox"></i></span>
+                                                        <input class="form-control" placeholder="digite os e-mails (separe por ;)" type="text" name="add_mail"  />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <div class="row form-horizontal">
+
+                                                <div class="col-sm-12 col-md-4 col-lg-4">
+                                                    <label class="small">
+                                                        DEPARTAMENTOS:<br/>
+                                                        <a style="color:blue;font-size: 9px;" onclick="selectAllCombo(document.getElementById('departamentos'), true);">MARCAR TUDO</a><br/>
+                                                        <a style="color:red;font-size: 9px;" onclick="selectAllCombo(document.getElementById('departamentos'), false);">DESMARCAR TUDO</a>
+                                                    </label>
+                                                    <select class="form-control" name='departamentos' id='departamentos' multiple='true' onclick="controleCombobox1(this)" size=10 >
+                                                        <%
+                                                            ArrayList<ClientesDeptos> listaDep = ContrClienteDeptos.consultaDeptos(idClienteInc, nomeBD);
+                                                            for (int i = 0; i < listaDep.size(); i++) {
+                                                                ClientesDeptos cd = listaDep.get(i);
+                                                        %>
+                                                        <option value="<%=cd.getIdDepartamento()%>"><%= cd.getNomeDepartamento()%></option>
+                                                        <%}%>
+                                                    </select>
+                                                    <script language="javascript">
+                                                        function selectAllCombo(combo, flag) {
+                                                            for (i = 0; i < combo.length; i++) {
+                                                                combo.options[i].selected = flag;
+                                                            }
+                                                        }
+                                                        function controleCombobox1(combo) {
+                                                            combo_aux1[combo.selectedIndex] = !combo_aux1[combo.selectedIndex];
+                                                            for (i = 0; i < combo.length; i++) {
+                                                                combo.options[i].selected = combo_aux1[i];
+                                                            }
+                                                        }
+                                                        var combo_aux1 = new Array(document.getElementById("departamentos").options.length);
+                                                        for (i = 0; i < document.getElementById("departamentos").options.length; i++) {
+                                                            combo_aux1[i] = document.getElementById("departamentos").options[i].selected;
+                                                        }
+                                                    </script>
+                                                </div>
+
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <input type="hidden" name="local" value="1" />
+                                            <input type="hidden" name="idCliente" value="<%= idClienteInc%>" />
+                                            <button type="button" class="btn btn-success" onclick="document.form2.submit();" ><i class="fa fa-lg fa-spc fa-save"></i> SALVAR DADOS</button>                                        
+                                        </li>
+                                    </ul>
+                                    </form>
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><label>Lista dos SMTP/Departamentos Cadastrados</label></div>
+                                        <div class="panel-body">
+                                            <div class="dataTable_wrapper no-padding">
+                                                <table class="table table-striped table-bordered table-hover table-condensed" style="table-layout: fixed;word-wrap: break-word;" id="dataTables-example">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>SMTP SERVER</th>
+                                                            <th style="width: 125px;">AUTENTICAÇÃO </th>
+                                                            <th>DEPARTAMENTOS</th>
+                                                            <th class="no-sort" style="width: 65px;">Excluir</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <%
+                                                            ArrayList<ClienteSMTP> lista = Controle.ContrClienteSMTP.consultaCadastroSMTP(idClienteInc, nomeBD);
+                                                            for (int i = 0; i < lista.size(); i++) {
+                                                                ClienteSMTP smtp = lista.get(i);
+
+                                                        %>
+                                                        <tr>
+                                                            <td><%= smtp.getSmtp()%></td>
+                                                            <td><%= smtp.getTipo_seguranca()%></td>
+                                                            <td style="max-width: 200px;"><%= smtp.getIdDepartamento()%></td>                                
+
+
+                                                            <td align="center">
+                                                                <form action="../../ServExcluirSMTP" method="post" name="formDel">
+                                                                    <input type="hidden" name="local" value="1" />
+                                                                    <input type="hidden" name="id_smtp" value="<%= smtp.getId()%>" />  
+                                                                    <button type="button" class="btn btn-sm btn-danger" onClick="confirmExcluir(this);" ><i class="fa fa-trash fa-lg"></i></button>
+                                                                </form>
+                                                            </td>
+                                                        </tr>
+                                                        <%}%>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row spacer-xlg"></div>
                     </div>
                 </div>
             </div>

@@ -6,6 +6,8 @@
 
 package Entidade;
 
+import Util.FormataString;
+
 /**
  *
  * @author Fernando
@@ -135,15 +137,15 @@ public class ArquivoImportacao {
     }
 
     public void setCep(String cep) {
-        this.cep = cep;
+        this.cep = FormataString.formatarCep("#####-###", cep);
     }
 
-    public String getNome() {
+    public String getNome() {        
         return nome;
     }
 
     public void setNome(String nome) {
-        this.nome = nome;
+        this.nome = Util.FormataString.removeAccentsToUpper(nome);
     }
 
     public String getEmpresa() {
@@ -151,7 +153,7 @@ public class ArquivoImportacao {
     }
 
     public void setEmpresa(String empresa) {
-        this.empresa = empresa;
+        this.empresa = Util.FormataString.removeAccentsToUpper(empresa);
     }
 
     public String getCpf() {
@@ -159,7 +161,7 @@ public class ArquivoImportacao {
     }
 
     public void setCpf(String cpf) {
-        this.cpf = cpf;
+        this.cpf = Util.FormataString.removeAccentsToUpper(cpf);
     }
 
     public String getEndereco() {
@@ -167,7 +169,7 @@ public class ArquivoImportacao {
     }
 
     public void setEndereco(String endereco) {
-        this.endereco = endereco;
+        this.endereco = Util.FormataString.removeAccentsToUpper(endereco);
     }
 
     public String getNumero() {
@@ -175,7 +177,7 @@ public class ArquivoImportacao {
     }
 
     public void setNumero(String numero) {
-        this.numero = numero;
+        this.numero = Util.FormataString.removeAccentsToUpper(numero);
     }
 
     public String getComplemento() {
@@ -183,7 +185,7 @@ public class ArquivoImportacao {
     }
 
     public void setComplemento(String complemento) {
-        this.complemento = complemento;
+        this.complemento = Util.FormataString.removeAccentsToUpper(complemento);
     }
 
     public String getBairro() {
@@ -191,7 +193,7 @@ public class ArquivoImportacao {
     }
 
     public void setBairro(String bairro) {
-        this.bairro = bairro;
+        this.bairro = Util.FormataString.removeAccentsToUpper(bairro);
     }
 
     public String getCidade() {
@@ -199,7 +201,7 @@ public class ArquivoImportacao {
     }
 
     public void setCidade(String cidade) {
-        this.cidade = cidade;
+        this.cidade = Util.FormataString.removeAccentsToUpper(cidade);
     }
 
     public String getUf() {
@@ -207,7 +209,7 @@ public class ArquivoImportacao {
     }
 
     public void setUf(String uf) {
-        this.uf = uf;
+        this.uf = Util.FormataString.removeAccentsToUpper(uf);
     }
 
     public String getEmail() {
@@ -215,7 +217,7 @@ public class ArquivoImportacao {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = Util.FormataString.removeAccentsToUpper(email);
     }
 
     public String getCelular() {
@@ -223,7 +225,7 @@ public class ArquivoImportacao {
     }
 
     public void setCelular(String celular) {
-        this.celular = celular;
+        this.celular = Util.FormataString.removeAccentsToUpper(celular);
     }
 
     public String getAosCuidados() {
@@ -231,7 +233,7 @@ public class ArquivoImportacao {
     }
 
     public void setAosCuidados(String aosCuidados) {
-        this.aosCuidados = aosCuidados;
+        this.aosCuidados = Util.FormataString.removeAccentsToUpper(aosCuidados);
     }
 
     public String getNotaFiscal() {
@@ -239,7 +241,7 @@ public class ArquivoImportacao {
     }
 
     public void setNotaFiscal(String notaFiscal) {
-        this.notaFiscal = notaFiscal;
+        this.notaFiscal = Util.FormataString.removeAccentsToUpper(notaFiscal);
     }
 
     public String getObs() {
@@ -247,7 +249,7 @@ public class ArquivoImportacao {
     }
 
     public void setObs(String obs) {
-        this.obs = obs;
+        this.obs = Util.FormataString.removeAccentsToUpper(obs);
     }
 
     public String getConteudo() {
@@ -255,7 +257,7 @@ public class ArquivoImportacao {
     }
 
     public void setConteudo(String conteudo) {
-        this.conteudo = conteudo;
+        this.conteudo = Util.FormataString.removeAccentsToUpper(conteudo);
     }
 
     public String getChave() {

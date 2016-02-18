@@ -408,10 +408,11 @@ function handleHttpResponsePesquisaRelatorios() {
                 fecharTelaEspera();
                 document.getElementById("tableObjeto").innerHTML = resultado;
             }
-        } else {
+        } else {            
+            fecharTelaEspera();
             alert(http.status + " - Not able to retrieve name");
         }
-    }
+    }    
 }
 
 function pesquisaObjetosRelatorios(idCliente, nomeBD) {
