@@ -5,16 +5,16 @@
         response.sendRedirect( request.getContextPath() + "/index.jsp?msgLog=3");
     }
 %>
-<html lang="en" ng-app="Financeiro">
+<html lang="en" ng-app="Veiculo">
     <head>
         <title> Portal Postal</title>
-        <base href="${pageContext.request.contextPath}/financeiro/"/>
-        <%@ include file="../NewTemplate/includes/Css_js.jsp" %>
+        <base href="${pageContext.request.contextPath}/NewTemplate/veiculo/"/>
+        <%@ include file="../includes/Css_js.jsp" %>
     </head> 
     <body>       
-        <%@ include file="../NewTemplate/includes/navBarTop.jsp" %>
+        <%@ include file="../includes/navBarTop.jsp" %>
         <div id="wrapper">
-            <%@ include file="../NewTemplate/includes/menu_agencia_bootstrap.jsp" %>
+            <%@ include file="../includes/menu_agencia_bootstrap.jsp" %>
             <div ui-view></div>
         </div>    
 
@@ -24,7 +24,10 @@
         <script src="${pageContext.request.contextPath}/plugins/angularjs/angular-sanitize/angular-sanitize.min.js"></script>
         <script src="${pageContext.request.contextPath}/plugins/angularjs/angular-ui-router/angular-ui-router.min.js"></script>
        
-        <script type="text/javascript" charset="UTF-8" src="js/app.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/controller/financeiroController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/app.js"></script>        
+        <script type="text/javascript" charset="UTF-8" src="js/app.constants.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/controller/veiculoController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/service/veiculoService.js"></script>
+
     </body>
 </html>
