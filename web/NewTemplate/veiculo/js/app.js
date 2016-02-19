@@ -4,13 +4,14 @@ var veiculo = angular.module('Veiculo', [
   'ngSanitize',
   'ngCookies',
   'ngResource',
-  'ui.router'    
+  'ui.router',
+  'ui.mask',
+  'ui.utils.masks'
 ]);
 
-veiculo.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', 
-    function ($stateProvider, $urlRouterProvider, $locationProvider) {
+veiculo.config(['$stateProvider', '$urlRouterProvider',  
+    function ($stateProvider, $urlRouterProvider) {
 
-//    $locationProvider.html5Mode(true);
     $urlRouterProvider.otherwise('/404');
 
     $stateProvider
@@ -21,4 +22,4 @@ veiculo.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
         resolve: {}
       });
 
-  }])
+}]);

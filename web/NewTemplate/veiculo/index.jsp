@@ -18,16 +18,20 @@
             <div ui-view></div>
         </div>    
 
-        <script src="${pageContext.request.contextPath}/plugins/angularjs/angular.min.js"></script>
-        <script src="${pageContext.request.contextPath}/plugins/angularjs/angular-cookies/angular-cookies.min.js"></script>
-        <script src="${pageContext.request.contextPath}/plugins/angularjs/angular-resource/angular-resource.min.js"></script>
-        <script src="${pageContext.request.contextPath}/plugins/angularjs/angular-sanitize/angular-sanitize.min.js"></script>
-        <script src="${pageContext.request.contextPath}/plugins/angularjs/angular-ui-router/angular-ui-router.min.js"></script>
+        <script src="${pageContext.request.contextPath}/plugins/angular/angular.min.js"></script>
+        <script src="${pageContext.request.contextPath}/plugins/angular/angular-cookies/angular-cookies.min.js"></script>
+        <script src="${pageContext.request.contextPath}/plugins/angular/angular-resource/angular-resource.min.js"></script>
+        <script src="${pageContext.request.contextPath}/plugins/angular/angular-sanitize/angular-sanitize.min.js"></script>
+        <script src="${pageContext.request.contextPath}/plugins/angular/angular-ui-router/angular-ui-router.min.js"></script>
+        <script src="${pageContext.request.contextPath}/plugins/angular/angular-locale-pt-br/angular-locale_pt-br.js"></script>
+        <script src="${pageContext.request.contextPath}/plugins/angular/angular-ui-mask/mask.min.js"></script>
+        <script src="${pageContext.request.contextPath}/plugins/angular/angular-ui-input-mask/angular-input-masks-standalone.min.js"></script>
        
         <script type="text/javascript" charset="UTF-8" src="js/app.js"></script>        
         <script type="text/javascript" charset="UTF-8" src="js/app.constants.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/controller/veiculoController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/service/veiculoService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/directive/ngMinDirective.js"></script>
 
     </body>
 </html>
