@@ -2,29 +2,33 @@ package Veiculo.builder;
 
 import Veiculo.Entidade.Veiculo;
 import Veiculo.Entidade.VeiculoDTO;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
+import org.json.JSONObject;
 
 public class VeiculoBuilder extends Builder<Veiculo, VeiculoDTO>{
 
     public Veiculo toEntidade(HttpServletRequest request) {
         try {
+            JSONObject jObj = getJsonObject(request);
             Veiculo veiculo = new Veiculo();
-            veiculo.setId(getIntegerParameter(request.getParameter("idVeiculo")));
-            veiculo.setTipo(request.getParameter("tipo"));
-            veiculo.setMarca(getJsonParameter(request.getParameter("marca"), "name"));
-            veiculo.setModelo(getJsonParameter(request.getParameter("modelo"), "name"));
-            veiculo.setPlaca(request.getParameter("placa"));
-            veiculo.setAnoFabricacao(getIntegerParameter(request.getParameter("anoFabricacao")));
-            veiculo.setAnoModelo(getIntegerParameter(request.getParameter("anoModelo")));
-            veiculo.setChassis(request.getParameter("chassis"));
-            veiculo.setRenavam(request.getParameter("renavam"));
-            veiculo.setQuilometragem(getNumericParameter(request.getParameter("quilometragem")));
-            veiculo.setCombustivel(request.getParameter("combustivel"));
-            veiculo.setStatus(request.getParameter("status"));
-            veiculo.setSituacao(request.getParameter("situacao"));
+            if(jObj.has("idVeiculo") && !jObj.isNull("idVeiculo")) { veiculo.setId(getIntegerParameter(jObj.getString("idVeiculo"))); }
+            if(jObj.has("tipo") && !jObj.isNull("tipo")) { veiculo.setTipo(jObj.getJSONObject("tipo").getString("value")); }
+            if(jObj.has("marca") && !jObj.isNull("marca")) { veiculo.setMarca(jObj.getJSONObject("marca").getString("name")); }
+            if(jObj.has("modelo") && !jObj.isNull("modelo")) { veiculo.setModelo(jObj.getJSONObject("modelo").getString("name")); }
+            if(jObj.has("placa") && !jObj.isNull("placa")) { veiculo.setPlaca(jObj.getString("placa")); }
+            if(jObj.has("anoFabricacao") && !jObj.isNull("anoFabricacao")) { veiculo.setAnoFabricacao(jObj.getInt("anoFabricacao")); }
+            if(jObj.has("anoModelo") && !jObj.isNull("anoModelo")) { veiculo.setAnoModelo(jObj.getInt("anoModelo")); }
+            if(jObj.has("chassis") && !jObj.isNull("chassis")) { veiculo.setChassis(jObj.getString("chassis")); }
+            if(jObj.has("renavam") && !jObj.isNull("renavam")) { veiculo.setRenavam(jObj.getString("renavam")); }
+            if(jObj.has("quilometragem") && !jObj.isNull("quilometragem")) { veiculo.setQuilometragem(jObj.getInt("quilometragem")); }
+            if(jObj.has("combustivel") && !jObj.isNull("combustivel")) { veiculo.setCombustivel(jObj.getJSONObject("combustivel").getString("value")); }
+            if(jObj.has("status") && !jObj.isNull("status")) { veiculo.setStatus(jObj.getJSONObject("status").getString("value")); }
+            if(jObj.has("situacao") && !jObj.isNull("situacao")) { veiculo.setSituacao(jObj.getJSONObject("situacao").getString("value")); }
             return veiculo;     
         } catch (Exception ex) {
             Logger.getLogger(VeiculoBuilder.class.getName()).log(Level.SEVERE, null, ex);
@@ -76,6 +80,16 @@ public class VeiculoBuilder extends Builder<Veiculo, VeiculoDTO>{
             Logger.getLogger(VeiculoBuilder.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    private JSONObject getJsonObject(HttpServletRequest request) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        BufferedReader br = request.getReader();
+        String str = null;
+        while ((str = br.readLine()) != null) {
+            sb.append(str);
+        }
+        return new JSONObject(sb.toString());
     }
     
 }

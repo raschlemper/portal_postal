@@ -1,14 +1,14 @@
 'use strict';
 
-veiculo.factory('VeiculoService', function($http, $q) {
+veiculo.factory('FipeService', function($http, $q) {
 
     return {
 
-        getAll: function(callback) {
+        marcaVeiculo: function(tipo, callback) {
             var cb = callback || angular.noop;
             var deferred = $q.defer();
 
-            $http.get(_contextPath + "/api/veiculo?action=all").
+            $http.jsonp("http://fipeapi.appspot.com/api/1/" + tipo + "/marcas.json?callback=JSON_CALLBACK").
                 success(function(data) {
                     deferred.resolve(data);
                     return cb();
@@ -22,11 +22,11 @@ veiculo.factory('VeiculoService', function($http, $q) {
             return deferred.promise;
         },
 
-        save: function(data, callback) {
+        modeloVeiculo: function(tipo, marca, callback) {
             var cb = callback || angular.noop;
             var deferred = $q.defer();
 
-            $http.post(_contextPath + "/api/veiculo?action=save", data).
+            $http.jsonp("http://fipeapi.appspot.com/api/1/" + tipo + "/veiculos/" + marca + ".json?callback=JSON_CALLBACK").
                 success(function(data) {
                     deferred.resolve(data);
                     return cb();

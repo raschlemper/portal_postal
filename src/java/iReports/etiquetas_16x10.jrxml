@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" printOrder="Horizontal" pageWidth="283" pageHeight="453" columnWidth="243" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a6600087-3a8d-456c-bdc8-19dcbb299119">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="3"/>
+	<property name="ireport.y" value="2"/>
 	<parameter name="idCliente" class="java.lang.String"/>
 	<parameter name="enderecoCli" class="java.lang.String"/>
 	<parameter name="bairroCli" class="java.lang.String"/>
@@ -66,25 +66,25 @@
 				<reportElement x="0" y="260" width="242" height="1" uuid="eef0b8e0-dfed-4583-adc3-39d2c06e3690"/>
 			</line>
 			<staticText>
-				<reportElement x="1" y="334" width="97" height="11" uuid="991b41d4-3c31-4a48-9b93-2fd6ad1a544d"/>
+				<reportElement x="1" y="329" width="97" height="11" uuid="991b41d4-3c31-4a48-9b93-2fd6ad1a544d"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[REMETENTE:]]></text>
 			</staticText>
 			<image hAlign="Center" vAlign="Middle" isUsingCache="false" onErrorType="Blank">
-				<reportElement x="1" y="343" width="97" height="55" uuid="0f1961ef-983d-49f8-8917-11f45d0c123d"/>
+				<reportElement x="1" y="340" width="97" height="60" uuid="0f1961ef-983d-49f8-8917-11f45d0c123d"/>
 				<imageExpression><![CDATA[$P{urlLogoCli}]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="101" y="334" width="142" height="10" uuid="f9c6ab33-f2b7-460c-8f08-8880a0f6203d"/>
+				<reportElement x="101" y="329" width="142" height="10" uuid="f9c6ab33-f2b7-460c-8f08-8880a0f6203d"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{nomeCli}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="101" y="352" width="142" height="10" uuid="c648c419-1415-4bef-be84-ddf99a7f9982">
+				<reportElement x="101" y="347" width="142" height="10" uuid="c648c419-1415-4bef-be84-ddf99a7f9982">
 					<printWhenExpression><![CDATA[$F{temContrato}.equals("1")]]></printWhenExpression>
 				</reportElement>
 				<textElement>
@@ -92,29 +92,29 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{contratoCli} +" / "+ $F{cartaoPostagem}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="101" y="361" width="142" height="10" uuid="c430d0dc-e665-4a46-b26d-8af560d8cf11"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="101" y="356" width="142" height="16" uuid="c430d0dc-e665-4a46-b26d-8af560d8cf11"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{enderecoCli}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="101" y="370" width="142" height="10" uuid="2fa4827e-f76a-43d5-b10d-ce811d549514"/>
+				<reportElement x="101" y="372" width="142" height="10" uuid="2fa4827e-f76a-43d5-b10d-ce811d549514"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{bairroCli}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="101" y="379" width="142" height="10" uuid="d5a9b397-f5e0-4e5a-b3f2-fe600430a750"/>
+				<reportElement x="101" y="381" width="142" height="10" uuid="d5a9b397-f5e0-4e5a-b3f2-fe600430a750"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{cidadeCli}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="101" y="388" width="142" height="10" uuid="930d3b73-cd2c-4d91-9ecd-d75c5fc9f858"/>
+				<reportElement x="101" y="390" width="142" height="10" uuid="930d3b73-cd2c-4d91-9ecd-d75c5fc9f858"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
@@ -210,7 +210,7 @@
 				<textFieldExpression><![CDATA[$F{mp}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="101" y="343" width="142" height="10" uuid="57359e53-b644-4a3d-a6f3-39d97fdc5fe0"/>
+				<reportElement x="101" y="338" width="142" height="10" uuid="57359e53-b644-4a3d-a6f3-39d97fdc5fe0"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
@@ -234,10 +234,10 @@
 				</jr:Code128>
 			</componentElement>
 			<line>
-				<reportElement x="0" y="331" width="242" height="2" uuid="669b17ab-ba04-45af-8bdb-1f82146ba29e"/>
+				<reportElement x="0" y="328" width="242" height="2" uuid="669b17ab-ba04-45af-8bdb-1f82146ba29e"/>
 			</line>
 			<componentElement>
-				<reportElement x="0" y="274" width="128" height="55" uuid="0e0479d4-3963-476f-a98d-33dd4169e71b"/>
+				<reportElement x="1" y="274" width="128" height="54" uuid="0e0479d4-3963-476f-a98d-33dd4169e71b"/>
 				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128C" drawText="false" checksumRequired="false" barWidth="2" barHeight="95">
 					<jr:codeExpression><![CDATA[$F{cep}.replace("-", "")]]></jr:codeExpression>
 				</jr:barbecue>

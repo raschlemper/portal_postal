@@ -52,7 +52,7 @@
                 <li><a href="${pageContext.request.contextPath}/NewTemplate/Importacao/imp_movimento_b.jsp" >Arquivo de Movimentação</a></li>
                 <li><a href="${pageContext.request.contextPath}/NewTemplate/Importacao/imp_ar_b.jsp">Arquivo de Retorno de AR</a></li>
                 <li><a href="${pageContext.request.contextPath}/NewTemplate/Importacao/imp_cliente_b.jsp">Arquivo de Clientes</a></li>
-                <li><a href="${pageContext.request.contextPath}/NewTemplate/Importacao/imp_deptos_b.jsp">Arquivo de Departamentos</a></li>            
+                <li><a href="${pageContext.request.contextPath}/NewTemplate/Importacao/imp_deptos_b.jsp">Arquivo de Departamentos</a></li> 
             </ul>
         </li>
 
@@ -71,8 +71,6 @@
                 <%if (empMenu.getChamada() == 1) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Cadastros/cliente_log_contrato_b.jsp">Verificação de Contratos</a></li><%}%>
             </ul>
         </li>
-       <!--    -->
-
         <%}%>
         <%--
         <li><a href="#">
@@ -86,13 +84,10 @@
                 <li><a href="${pageContext.request.contextPath}/veiculo/seguro">Seguro</a></li>
                 <li><a href="${pageContext.request.contextPath}/veiculo/sinistro">Sinistro</a></li>
             </ul>
-        </li>
-        <li>
+        </li> -->
+        <%--<li>
             <a href="${pageContext.request.contextPath}/Agencia/Relatorio/painel_etiquetas.jsp"><span class="fa-stack fa-lg pull-left"><i class="fa fa-info-circle fa-stack-1x "></i></span> Acessar Layout Antigo</a>
         </li>--%>
-        <li>
-            <a href="${pageContext.request.contextPath}/financeiro/#/lancamentos"><span class="fa-stack fa-lg pull-left"><i class="fa fa-dashboard  fa-stack-1x "></i></span> Financeiro</a>
-        </li>
         <li>
             <a class="danger" href="${pageContext.request.contextPath}/ServLogout"><span class="fa-stack fa-lg pull-left"><i class="fa fa-power-off fa-stack-1x "></i></span> Sair</a>
         </li>

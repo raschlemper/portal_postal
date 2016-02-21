@@ -123,7 +123,7 @@ public class ServLogin extends HttpServlet {
             response.sendRedirect("index.jsp?msg=Login ou Senha incorreta ou inexistente!");
         }
 
-        }
+    }
 
     /**
      * Returns a short description of the servlet.

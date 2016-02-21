@@ -16,7 +16,11 @@
         <div id="wrapper">
             <%@ include file="../includes/menu_agencia_bootstrap.jsp" %>
             <div ui-view></div>
-        </div>    
+        </div> 
+            
+        <script type="text/javascript">
+            var _contextPath = "${pageContext.request.contextPath}";
+        </script>
 
         <script src="${pageContext.request.contextPath}/plugins/angular/angular.min.js"></script>
         <script src="${pageContext.request.contextPath}/plugins/angular/angular-cookies/angular-cookies.min.js"></script>
@@ -29,7 +33,9 @@
        
         <script type="text/javascript" charset="UTF-8" src="js/app.js"></script>        
         <script type="text/javascript" charset="UTF-8" src="js/app.constants.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/interceptor/loadingInterceptor.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/controller/veiculoController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/service/fipeService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/service/veiculoService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/directive/ngMinDirective.js"></script>
 

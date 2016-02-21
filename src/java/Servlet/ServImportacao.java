@@ -6,6 +6,7 @@ package Servlet;
 
 import Controle.ContrErroLog;
 import Controle.ContrServicoECT;
+import Controle.contrCliente;
 import static Controle.contrCliente.criaClienteBalcao;
 import Entidade.ServicoECT;
 import java.io.*;
@@ -208,6 +209,7 @@ public class ServImportacao extends HttpServlet {
                 + ", uf = VALUES(uf), cep = VALUES(cep), email = VALUES(email), cnpj = VALUES(cnpj)"
                 + ", nomeFantasia = VALUES(nomeFantasia), complemento = VALUES(complemento), codSTO = VALUES(codSTO);";
         
+        ArrayList<Integer> listaCliComContrato = contrCliente.consultaClienteComContrato(nomeBD);
         Map<Integer, ServicoECT> mapServicos = ContrServicoECT.consultaMapServicosDeContrato();
         ArrayList<String> listaQuerysServicos = new ArrayList<String>();
         StringBuilder sqlValuesServicos = new StringBuilder();
@@ -238,6 +240,7 @@ public class ServImportacao extends HttpServlet {
                             
                         }
                        
+                       
                         StringBuilder strBuf = new StringBuilder();
                         strBuf.append(" (\"").append(toStr(buffer.substring(0, 14), 0)).append("\", "); //codigo
                         strBuf.append("\"").append(toStr(buffer.substring(14, 74), 0)).append("\", "); //nome                       
@@ -253,8 +256,9 @@ public class ServImportacao extends HttpServlet {
                         strBuf.append("\"").append(toStr(buffer.substring(459, 484), 0)).append("\", "); //nomeFantasia
                         
                         if(buffer.length() > 525){ 
+                            int idCliente = Integer.parseInt(toStr(buffer.substring(0, 14), 0));
                             String temContrato = buffer.substring(525, 526);
-                            if(temContrato.equals("1")){
+                            if(temContrato.equals("1") && !listaCliComContrato.contains(idCliente)){
                                 strBuf.append("\"").append(toStr(buffer.substring(484, 524), 0)).append("\", "); //complemento    
                                 strBuf.append("\"").append(toStr(buffer.substring(525, 526), 0)).append("\", "); //temContrato       
                                 strBuf.append("\"").append(toStr(buffer.substring(526, 541), 0)).append("\", "); //contrato
@@ -262,7 +266,11 @@ public class ServImportacao extends HttpServlet {
                                 strBuf.append("\"").append(toStr(buffer.substring(541, 556), 0)).append("\", "); //cod administrativo
                                 strBuf.append("\"").append(toStr(buffer.substring(556, 571), 0)).append("\", "); //cartao postagem
                             
-                                strBuf.append("\"").append(toStr(buffer.substring(571, 581), 0)).append("\", "); //data Vigencia
+                                String dataVigencia = toStr(buffer.substring(571, 581), 0);
+                                if(dataVigencia.trim().equals("null")){
+                                    dataVigencia = "2025-10-10";
+                                }
+                                strBuf.append("\"").append(dataVigencia).append("\", "); //data Vigencia
                                
                                 strBuf.append("\"").append(toStr(buffer.substring(601, 651), 0)).append("\", "); //user sigepweb
                                 strBuf.append("\"").append(toStr(buffer.substring(651, 671), 0)).append("\", "); //senha sigepweb    
@@ -288,7 +296,7 @@ public class ServImportacao extends HttpServlet {
                                         }
                                     }
                                 }
-                            }else{
+                            } else {
                                 strBuf.append("\"").append(toStr(buffer.substring(484, 524), 0)).append("\","); //complemento    
                                 strBuf.append("\"").append(toStr("0", 0)).append("\","); //temContrato       
                                 strBuf.append("\"").append(toStr("", 0)).append("\","); //contrato

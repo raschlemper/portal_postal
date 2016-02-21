@@ -17,9 +17,9 @@ public abstract class Builder<E,T> {
         return veiculo;
     }
           
-    protected String getJsonParameter(String parameter, String campo) {
+    protected String getJsonParameter(JSONObject parameter, String campo) {
         if(parameter == null) return null;
-        return new JSONObject(parameter).getString(campo);
+        return parameter.getString(campo);
     }
           
     protected Integer getIntegerParameter(String parameter) {

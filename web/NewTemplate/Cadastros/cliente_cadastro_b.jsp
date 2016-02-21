@@ -442,11 +442,11 @@
                                         <li class="list-group-item list-group-item-warning">
                                             <div class="form-inline">
                                                 <label>&nbsp;</label>
-                                                <label><input type="radio" name="is_smtp_client" value="1" id="is_smtp_client" onclick="mostraCampos2()"/> CADASTRAR SERVIDOR SMTP (CUSTO R$ 0,10/objeto)</label>
+                                                <label><input type="radio" name="is_smtp_client" value="1" id="is_smtp_client" onclick="mostraCampos2()"/> CADASTRAR SERVIDOR SMTP (CUSTO DE R$ 0,10/Objeto)</label>
                                             </div>
                                             <div class="form-inline">
                                                 <label>&nbsp;</label>
-                                                <label><input type="radio" name="is_smtp_client" value="0" id="is_smtp_client" checked="checked" onclick="mostraCampos2()"/>UTILIZAR SERVIDOR DO PORTALPOSTAL (R$40,00/mil e-mails)</label>
+                                                <label><input type="radio" name="is_smtp_client" value="0" id="is_smtp_client" checked="checked" onclick="mostraCampos2()"/> UTILIZAR SERVIDOR DO PORTALPOSTAL (CUSTO DE R$ 0,15/Objeto)</label>
                                             </div>
                                         </li>
                                     </ul>

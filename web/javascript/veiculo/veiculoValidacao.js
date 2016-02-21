@@ -22,6 +22,7 @@ var VeiculoValidacao = function() {
     app.campoBetween = function(value, comparatorInitial, comparatorFinal, msg) {
         if(value) {
             if(app.campoLessEqualThen(value, comparatorInitial, msg) || app.campoMoreEqualThen(value, comparatorFinal, msg)) {
+                alert(msg);
                 return false;                 
             }
         }
@@ -32,7 +33,6 @@ var VeiculoValidacao = function() {
         var valueInt = parseInt(value.toString().replace("\.", ""));
         var comparatorInt = parseInt(comparator.toString().replace("\.", ""));
         if(valueInt >= comparatorInt) {
-            alert(msg);
             return false;
         }
         return true;
@@ -42,7 +42,6 @@ var VeiculoValidacao = function() {
         var valueInt = parseInt(value.toString().replace("\.", ""));
         var comparatorInt = parseInt(comparator.toString().replace("\.", ""));
         if(valueInt <= comparatorInt) {
-            alert(msg);
             return false;
         }
         return true;

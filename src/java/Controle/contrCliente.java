@@ -549,6 +549,31 @@ public class contrCliente {
         }
     }
 
+    public static ArrayList<Integer> consultaClienteComContrato(String nomeBD) {
+        Connection conn = (Connection) Conexao.conectar(nomeBD);
+        String sql = "SELECT codigo FROM cliente WHERE temContrato = 1";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+
+            ArrayList<Integer> listaClientes = new ArrayList<Integer>();
+
+            while (result.next()) {
+                listaClientes.add(result.getInt("codigo"));
+            }
+
+            valores.close();
+
+            return listaClientes;
+        } catch (SQLException e) {
+            System.out.println(e);
+            ContrErroLog.inserir("Portal Postal - contrCliente", "SQLException", sql, e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+
     public static ArrayList<Clientes> consultaClienteUltColeta(String nomeBD, int limit) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         String sql = "SELECT DISTINCT t.codigo, t.nome, c.dataHoraColeta"

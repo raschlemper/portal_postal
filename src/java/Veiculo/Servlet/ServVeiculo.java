@@ -121,22 +121,20 @@ public class ServVeiculo extends HttpServlet {
         response.getWriter().write(object.toString());
     }   
     
-    private void save(HttpServletRequest request, HttpServletResponse response) throws Exception {        
-        if(!validation(request, response)) return;
-        Veiculo veiculo = getVeiculoFromRequest(request);
-        if(veiculo.getId() != null) { update(request, response); }
-        else { create(request, response); }
+    private void save(HttpServletRequest request, HttpServletResponse response) throws Exception { 
+        Veiculo veiculo = getVeiculoFromRequest(request);       
+        if(!validation(veiculo, request, response)) return;
+        if(veiculo.getId() != null) { update(veiculo, request, response); }
+        else { create(veiculo, request, response); }
     }
     
-    private void create(HttpServletRequest request, HttpServletResponse response) throws Exception {               
-        Veiculo veiculo = getVeiculoFromRequest(request);
+    private void create(Veiculo veiculo, HttpServletRequest request, HttpServletResponse response) throws Exception {      
         veiculo = ContrVeiculo.inserir(this.nomeBD, veiculo);
         this.sessao.setAttribute("msg", "Veículo Inserido " + getMsgToClient(veiculo) +  " com sucesso!");
         response.sendRedirect(request.getHeader("referer"));        
     }
     
-    private void update(HttpServletRequest request, HttpServletResponse response) throws Exception {               
-        Veiculo veiculo = getVeiculoFromRequest(request);
+    private void update(Veiculo veiculo, HttpServletRequest request, HttpServletResponse response) throws Exception {    
         veiculo = ContrVeiculo.alterar(this.nomeBD, veiculo);
         this.sessao.setAttribute("msg", "Veículo " + getMsgToClient(veiculo) + " Alterado com sucesso!");
         response.sendRedirect(request.getHeader("referer"));
@@ -169,8 +167,7 @@ public class ServVeiculo extends HttpServlet {
         return veiculo.getModelo() + " (" + veiculo.getPlaca() + ")";        
     }
     
-    private boolean validation(HttpServletRequest request, HttpServletResponse response) throws Exception {       
-        Veiculo veiculo = getVeiculoFromRequest(request);
+    private boolean validation(Veiculo veiculo, HttpServletRequest request, HttpServletResponse response) throws Exception {  
         Validacao validacao = new VeiculoValidacao();
         if(!validacao.validar(veiculo)) {
             this.sessao.setAttribute("msg", validacao.getMsg());
