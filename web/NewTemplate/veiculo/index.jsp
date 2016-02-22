@@ -36,12 +36,15 @@
         <script type="text/javascript" charset="UTF-8" src="js/app.js"></script>        
         <script type="text/javascript" charset="UTF-8" src="js/app.constants.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/interceptor/loadingInterceptor.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/controller/modalController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/controller/modalMessageController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/controller/modalExcluirController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/controller/veiculoController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/controller/modalVeiculoController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/service/fipeService.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/service/modalMessageService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/service/modalService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/service/veiculoService.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/directive/ngMinDirective.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/filter/placaFilter.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/filter/renavamFilter.js"></script>
 
     </body>
 </html>

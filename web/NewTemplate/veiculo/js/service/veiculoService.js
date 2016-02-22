@@ -38,6 +38,24 @@ veiculo.factory('VeiculoService', function($http, $q) {
                 .bind(this));
 
             return deferred.promise;
+        },
+
+        delete: function(idVeiculo, callback) {
+            var cb = callback || angular.noop;
+            var deferred = $q.defer();
+
+            $http.post(_contextPath + '/api/veiculo?action=delete&idVeiculo=' + idVeiculo).
+                success(function(data) {
+                    deferred.resolve(data);
+                    return cb();
+                })
+                .error(function(err) {
+                    deferred.reject(err);
+                    return cb(err);
+                }
+                .bind(this));
+
+            return deferred.promise;
         }
 
     }

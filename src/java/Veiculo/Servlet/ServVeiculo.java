@@ -60,7 +60,8 @@ public class ServVeiculo extends HttpServlet {
             response.setContentType("application/json");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             int idErro = ContrErroLog.inserir("Portal Postal - ServVeiculo", "Exception", null, ex.toString());
-            JSONObject object = new JSONObject("SYSTEM ERROR Nº: " + idErro + "<br> Ocorreu um erro inesperado!");
+            JSONObject object = new JSONObject();
+            object.put("error", "SYSTEM ERROR Nº: " + idErro + "</br> Ocorreu um erro inesperado!");
             response.getWriter().write(object.toString());
         }
     }
@@ -68,7 +69,7 @@ public class ServVeiculo extends HttpServlet {
     private void servicePage(HttpServletRequest request) {
         String context = request.getContextPath();
         this.login = context.concat("/index.jsp?msgLog=3");        
-        this.page = context.concat("/NewTemplate/veiculo/veiculo_lista_b.jsp");        
+        this.page = context.concat("/NewTemplate/veiculo/#/cadastro");        
     }
     
     private String getAction(HttpServletRequest request) {
@@ -88,7 +89,7 @@ public class ServVeiculo extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             int idErro = ContrErroLog.inserir("Portal Postal - ServVeiculo", "Exception", null, ex.toString());
             JSONObject object = new JSONObject();
-            object.put("error", "SYSTEM ERROR Nº: " + idErro + "<br> Ocorreu um erro inesperado!");
+            object.put("error", "SYSTEM ERROR Nº: " + idErro + "</br> Ocorreu um erro inesperado!");
             response.getWriter().write(object.toString());
         }
     }
@@ -119,8 +120,8 @@ public class ServVeiculo extends HttpServlet {
     }
     
     private void get(HttpServletRequest request, HttpServletResponse response) throws Exception {       
-        Veiculo veiculo = getVeiculoFromRequest(request);
-        veiculo = ContrVeiculo.consulta(this.nomeBD, veiculo);
+        Integer idVeiculo = Integer.parseInt(request.getParameter("idVeiculo"));
+        Veiculo veiculo = ContrVeiculo.consulta(this.nomeBD, idVeiculo);
         JSONObject object = new JSONObject(getVeiculoDTO(veiculo));
         response.setContentType("application/json");
         response.getWriter().write(object.toString());
@@ -151,8 +152,8 @@ public class ServVeiculo extends HttpServlet {
     }
     
     private void delete(HttpServletRequest request, HttpServletResponse response) throws Exception {      
-        Veiculo veiculo = getVeiculoFromRequest(request);
-        veiculo = ContrVeiculo.limpar(this.nomeBD, veiculo);
+        Integer idVeiculo = Integer.parseInt(request.getParameter("idVeiculo"));
+        Veiculo veiculo = ContrVeiculo.limpar(this.nomeBD, idVeiculo);
         JSONObject object = new JSONObject(getVeiculoDTO(veiculo));
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_ACCEPTED);
@@ -174,10 +175,6 @@ public class ServVeiculo extends HttpServlet {
     private VeiculoDTO getVeiculoDTO(Veiculo veiculo) throws Exception {
         VeiculoBuilder builder = new VeiculoBuilder();
         return builder.toDTO(veiculo);
-    }
-    
-    private String getMsgToClient(Veiculo veiculo) {
-        return veiculo.getModelo() + " (" + veiculo.getPlaca() + ")";        
     }
     
     private boolean validation(Veiculo veiculo, HttpServletRequest request, HttpServletResponse response) throws Exception {  

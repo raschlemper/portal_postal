@@ -33,12 +33,12 @@ public class ContrVeiculo {
         return listaVeiculos;
     }
 
-    public static Veiculo consulta(String nomeBD, Veiculo veiculo) {
+    public static Veiculo consulta(String nomeBD, Integer idVeiculo) {
         Connection con = Conexao.conectar(nomeBD);
         String sql = "SELECT * FROM veiculo WHERE idVeiculo = ?";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, veiculo.getId());
+            ps.setInt(1, idVeiculo);
             ResultSet result = (ResultSet) ps.executeQuery();
             while(result.next()) { return criarVeiculo(result); }
         } catch (SQLException e) {
@@ -78,7 +78,7 @@ public class ContrVeiculo {
         } finally {
             Conexao.desconectar(conn);
         }
-        return consulta(nomeBD, veiculo);
+        return consulta(nomeBD, veiculo.getId());
     }
     
     public static Veiculo alterar(String nomeBD, Veiculo veiculo) {
@@ -112,14 +112,15 @@ public class ContrVeiculo {
         } finally {
             Conexao.desconectar(conn);
         }
-        return consulta(nomeBD, veiculo);
+        return consulta(nomeBD, veiculo.getId());
     }
     
-    public static Veiculo limpar(String nomeBD, Veiculo veiculo) {
+    public static Veiculo limpar(String nomeBD, Integer idVeiculo) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "DELETE FROM veiculo WHERE idVeiculo = ? ";
+        Veiculo veiculo = null;
         try {
-            veiculo = consulta(nomeBD, veiculo);
+            veiculo = consulta(nomeBD, idVeiculo);
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, veiculo.getId());
             ps.executeUpdate();

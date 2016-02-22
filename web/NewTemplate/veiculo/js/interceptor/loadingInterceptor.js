@@ -5,7 +5,13 @@ veiculo.factory('loadingInterceptor', ['$rootScope', '$q', '$timeout',
         return {
             request: function (config) {
                 $rootScope.requestInProgress = $rootScope.requestInProgress || 0;
-                if($rootScope.requestInProgress <= 0) { waitMsg(); }
+                if($rootScope.requestInProgress <= 0) {                     
+                    if(config.url.indexOf("/modal") >= 0) { 
+                        $rootScope.requestInProgress++;
+                        return config; 
+                    }
+                    waitMsg(); 
+                }
                 $rootScope.requestInProgress++;
                 return config;
             },

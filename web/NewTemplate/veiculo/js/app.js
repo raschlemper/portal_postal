@@ -19,7 +19,7 @@ veiculo.config(['$stateProvider', '$urlRouterProvider',
     $stateProvider
       .state('cadastro', {
         url: '/cadastro',
-        templateUrl: 'partials/cadastro.html',
+        templateUrl: 'partials/veiculo.html',
         controller: 'VeiculoController',
         resolve: {}
       });

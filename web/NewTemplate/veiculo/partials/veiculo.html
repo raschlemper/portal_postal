@@ -1,0 +1,184 @@
+<div id="page-content-wrapper">
+    <div class="container-fluid">
+        <div id="page-wrapper">
+<!--            <div class="row">
+                <div class="col-md-12">
+                    <h4 class="page-header">
+                        <b class="text-primary"><i class="fa fa-gears"></i> Cadastro</b> > <small>Veículos</small>
+                    </h4>
+                </div>
+            </div>-->
+            <div class="row">
+                <div class="col-lg-12">
+<!--                    <form name="veiculoForm" novalidate>
+                        <ul class="list-unstyled">
+                            <li class="list-group-item list-group-heading">
+                                <label>Inserir novo veículo</label>
+                            </li>
+                            <li class="list-group-item" id="campos">
+                                <div class="row form-horizontal">
+                                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                        <label class="small">Tipo</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon" ><i class="fa fa-car"></i></span>
+                                            <select class="form-control" name="tipo" ng-change="changeTipo(veiculo.tipo)"
+                                                    ng-options="tipo.value for tipo in tipos track by tipo.key" ng-model="veiculo.tipo"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                        <label class="small">Marca</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon" ><i class="fa fa-car"></i></span>
+                                            <select class="form-control" name="marca" ng-change="changeMarca(veiculo.tipo, veiculo.marca)"
+                                                    ng-options="marca.name for marca in marcas track by marca.key" ng-model="veiculo.marca"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                        <label class="small">Modelo</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon" ><i class="fa fa-car"></i></span>
+                                            <select class="form-control" name="modelo"
+                                                    ng-options="modelo.name for modelo in modelos track by modelo.key" ng-model="veiculo.modelo"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                        <label class="small">Placa</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                            <input type="text" autocomplete="off" name="placa" class="form-control" ng-model="veiculo.placa" ng-required="true"
+                                                   ui-mask="AAA-9999" ui-mask-placeholder-char="_" ui-mask-placeholder placeholder="Placa do veículo"/>                                    
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                        <label class="small">Ano Fabricação</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                            <input type="number" autocomplete="off" name="anoFabricacao" class="form-control" ng-model="veiculo.anoFabricacao"
+                                                   min="{{minVal}}" max="{{maxVal}}" placeholder="Ano de fabricação do veículo"/>                                    
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                        <label class="small">Ano Modelo</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                            <input type="number" autocomplete="off" name="anoModelo" class="form-control" ng-model="veiculo.anoModelo" 
+                                                   min="{{minVal}}" max="{{maxVal}}" placeholder="Ano do modelo do veículo"/>                                    
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                        <label class="small">Chassis</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                            <input type="text" autocomplete="off" name="chassis" class="form-control" ng-model="veiculo.chassis"
+                                                   ui-mask="**.**.**.*.*.******" ui-mask-placeholder-char="_" ui-mask-placeholder placeholder="Chassis do veículo"/>                                    
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                        <label class="small">Renavam</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                            <input type="text" autocomplete="off" name="renavam" class="form-control" ng-model="veiculo.renavam" ng-required="true"
+                                                   ui-mask="9999999999-9" ui-mask-placeholder-char="_" ui-mask-placeholder placeholder="Renavam do veículo"/>                                    
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                        <label class="small">Quilometragem</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                            <input type="text" autocomplete="off" name="quilometragem" class="form-control" ng-model="veiculo.quilometragem" ng-required="true"
+                                                   ui-number-mask="0" placeholder="Quilometragem do veículo"/>                                    
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                        <label class="small">Tipo Combustível</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                            <select class="form-control" name="combustivel"
+                                                    ng-options="combustivel.value for combustivel in combustiveis track by combustivel.key" ng-model="veiculo.combustivel"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                        <label class="small">Estado Veículo</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                            <select class="form-control" name="status"
+                                                    ng-options="stat.value for stat in status track by stat.key" ng-model="veiculo.status"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                        <label class="small">Situação</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                            <select class="form-control" name="situacao"
+                                                    ng-options="situacao.value for situacao in situacoes track by situacao.key" ng-model="veiculo.situacao"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <dd style="width: 100%;">
+                                    <div class="buttons">
+                                        <button type="button" class="btn btn-success" name="salvar" ng-click="salvar(this.veiculoForm)">
+                                            <i class="fa fa-lg fa-spc fa-save"></i> SALVAR DADOS
+                                        </button>
+                                    </div>
+                                </dd>
+                            </li>
+                        </ul>
+                    </form>     -->
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading" >
+                            <div class="row">
+                                <div class="col-md-8">Lista com todos os veículos</div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-sm btn-warning text-right" ng-click="editar(veiculo.id)">
+                                        <i class="fa fa-lg fa-pencil"></i>
+                                    </button>
+                                </div>
+                            </div>                              
+                        </div>
+                        <div class="panel-body no-padding">
+                            <div class="dataTable_wrapper no-padding">
+                                <table class="table table-striped table-bordered table-hover table-condensed" id="datatable-veiculos">
+                                    <thead>
+                                        <tr>
+                                            <th>Marca / Modelo</th>
+                                            <th>Placa</th>
+                                            <th>Fab. / Mod.</th>
+                                            <th>Renavam</th>
+                                            <th>Km</th>
+                                            <th>Situação</th>
+                                            <th class="no-sort" width="100">Alterar</th>
+                                            <th class="no-sort" width="100">Excluir</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="veiculo in veiculos track by $index">
+                                            <td>{{veiculo.marca}} / {{veiculo.modelo}}</td>
+                                            <td>{{veiculo.placa | Placa}}</td>
+                                            <td>{{veiculo.anoFabricacao}} / {{veiculo.anoModelo}}</td>
+                                            <td>{{veiculo.renavam | Renavam}}</td>
+                                            <td>{{veiculo.quilometragem | number}}</td>
+                                            <td>{{veiculo.situacao}}</td>
+                                            <td align="center">
+                                                <button class="btn btn-sm btn-warning" ng-click="editar(veiculo.id)">
+                                                    <i class="fa fa-lg fa-pencil"></i>
+                                                </button>
+                                            </td>
+                                            <td align="center">
+                                                <a class="btn btn-sm btn-danger" ng-click="excluir(veiculo.id)">
+                                                    <i class="fa fa-lg fa-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
