@@ -4,7 +4,9 @@ var veiculo = angular.module('Veiculo', [
   'ngSanitize',
   'ngCookies',
   'ngResource',
+  'ngAnimate',
   'ui.router',
+  'ui.bootstrap',
   'ui.mask',
   'ui.utils.masks'
 ]);

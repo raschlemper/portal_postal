@@ -1,7 +1,7 @@
 'use strict';
 
-veiculo.controller('VeiculoController', ['$scope', 'VeiculoService', 'FipeService', 'LISTAS',
-    function ($scope, VeiculoService, FipeService, LISTAS) {
+veiculo.controller('VeiculoController', ['$scope', '$uibModal', 'VeiculoService', 'FipeService', 'ModalMessageService', 'LISTAS',
+    function ($scope, $uibModal, VeiculoService, FipeService, ModalMessageService, LISTAS) {
 
         var init = function () {
             $scope.tipos = LISTAS.tipo;
@@ -60,7 +60,7 @@ veiculo.controller('VeiculoController', ['$scope', 'VeiculoService', 'FipeServic
                     $scope.veiculos = data;
                 })
                 .catch(function (e) {
-                    console.log(e);
+                    alertMsg(e.error);
                 });
         };
 
@@ -69,31 +69,14 @@ veiculo.controller('VeiculoController', ['$scope', 'VeiculoService', 'FipeServic
                 VeiculoService.save($scope.veiculo)
                     .then(function (data) {                        
                         $scope.todos();
+                        alertMsg("Veículo Inserido " + getMsgToClient(data) +  " com sucesso!");
                         init();
-                        telaMsg();
                     })
-                    .catch(function (e) {
-                        console.log(e);
+                    .catch(function(e) {
+                        alertMsg(e.error);
                     });
             }
         };
-        
-        var setValueDefault = function(form) {
-            return {
-                tipo: form.tipo.value,
-                marca: form.marca.value,
-                modelo: form.modelo.value,
-                placa: form.placa.value,
-                anoFabricacao: form.anoFabricacao.value,
-                anoModelo: form.anoModelo.value,
-                chassis: form.chassis.value,
-                renavam: form.renavam.value,
-                quilometragem: form.quilometragem.value,
-                combustivel: form.combustivel.value,
-                status: form.status.value,
-                situacao: form.situacao.value
-            }
-        }
 
         var validarForm = function (form) {
             if (form.placa.$error.required) {
@@ -117,7 +100,15 @@ veiculo.controller('VeiculoController', ['$scope', 'VeiculoService', 'FipeServic
                 return false;
             }
             return true;
+        }           
+    
+        var getMsgToClient = function(veiculo) {
+            return veiculo.modelo + " (" + veiculo.placa + ")";        
         }
+        
+        var alertMsg = function (message) {
+            bootbox.dialog(ModalMessageService.alertMessage(message));
+        };
 
         init();
 
