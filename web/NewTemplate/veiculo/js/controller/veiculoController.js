@@ -1,39 +1,50 @@
 'use strict';
 
-veiculo.controller('VeiculoController', ['$scope', '$uibModal', 'VeiculoService', 'ModalService',
-    function ($scope, $uibModal, VeiculoService, ModalService) {
+veiculo.controller('VeiculoController', ['$scope', '$modal', 'VeiculoService', 'ModalService', 'DTOptionsBuilder', 'LISTAS',
+    function ($scope, $modal, VeiculoService, ModalService, DTOptionsBuilder, LISTAS) {
 
         var init = function () {
-            todos();     
-            LoadDataTablesScripts(sortAndSearchTable('datatable-veiculos'));
+            todos(); 
+            $scope.sizes = LISTAS.size;
+            $scope.sizeTable = LISTAS.size[0];
+            $scope.situacoes = LISTAS.situacao;
+            //$scope.veiculoFilter.situacao = LISTAS.situacao[0];
+            //LoadDataTablesScripts(sortAndSearchTable('datatable-veiculos'));
         };
         
-        $scope.columns = [
-  {
-    header: 'Id', // This string is displayed on table header name.
-
-    value: 'id',  // This string is the name of property in your list declared on your html.
-
-    show: false,  // This property, show or hide this column on your table.
-
-    size: 20      // This property is used to define column size in percentage (%)
-                  // If property 'show' is defined 'false', this size is ignored
-  },
-  { header: 'First Name', value: 'first_name', show: true, size: 40 },
-  { header: 'Last Name', value: 'last_name', show: true, size: 40 }
-];
-
-$scope.config = {
-  id: 'my-table',
-  columns: $scope.columns
-};
-    
-        var sortAndSearchTable = function(table) {
-            return function() {
-                StartDataTable(table);            
-                LoadSelect2Script(MakeSelectDataTable(table));    
-            }    
-        }
+        $scope.dtOptions = DTOptionsBuilder.newOptions()
+            //.withDOM("<'box-content'<'col-xs-3 col-sm-3' <'teste'> f><'col-xs-3 col-sm-3 pull-right' l><'clearfix'>>rt<'box-content'<'col-xs-6 col-sm-6'i><'col-xs-6 col-sm-6 pull-right'p><'clearfix'>>")
+            .withOption("searching", false)
+            .withOption("lengthChange", false)
+            .withOption("aaSorting", [[ 0, "asc" ]])
+            .withOption("lengthMenu", [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]])  
+            .withBootstrap()
+            .withBootstrapOptions({
+                pagination: {
+                    classes: {
+                        ul: 'pagination pagination-sm'
+                    }
+                }
+            })
+            .withLanguage({
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ at\u00e9 _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "Mostrar: _MENU_ registros",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sSearch": "Pesquisar: ",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "oPaginate": {
+                    "sNext": "Pr\u00f3ximo",
+                    "sPrevious": "Anterior",
+                    "sFirst": "Primeiro",
+                    "sLast": "\u00daltimo"
+                }
+            });
 
         var todos = function() {
             VeiculoService.getAll()
@@ -96,18 +107,18 @@ $scope.config = {
         }
         
         var modalMessage = function(message) {
-            $uibModal.open(ModalService.modalMessage(message));
+            $modal.open(ModalService.modalMessage(message));
         };
         
         var modalSalvar = function(veiculo) {
-            var modalInstance = $uibModal.open(
+            var modalInstance = $modal.open(
                 ModalService.modalSalvar('partials/modalVeiculo.html', 'ModalVeiculoController', veiculo)
             );    
             return modalInstance.result;
         };
         
         var modalExcluir = function() {
-            var modalInstance = $uibModal.open(
+            var modalInstance = $modal.open(
                 ModalService.modalExcluir('Excluir Ve\u00EDculo?', 'Deseja realmente excluir este ve\u00EDculo?')
             );    
             return modalInstance.result;

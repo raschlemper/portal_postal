@@ -1,7 +1,7 @@
 'use strict';
 
-veiculo.controller('ModalExcluirController', ['$scope', '$uibModalInstance', 'title', 'message',
-    function ($scope, $uibModalInstance, title, message) {
+veiculo.controller('ModalExcluirController', ['$scope', '$modalInstance', 'title', 'message',
+    function ($scope, $modalInstance, title, message) {
 
         var init = function () {
             $scope.title = title;
@@ -9,11 +9,11 @@ veiculo.controller('ModalExcluirController', ['$scope', '$uibModalInstance', 'ti
         };
         
         $scope.ok = function() {
-            $uibModalInstance.close();
+            $modalInstance.close();
         };
         
         $scope.cancel = function () {
-            $uibModalInstance.dismiss('cancel');
+            $modalInstance.dismiss('cancel');
         };
 
         init();

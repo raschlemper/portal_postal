@@ -1,14 +1,14 @@
 'use strict';
 
-veiculo.controller('ModalMessageController', ['$scope', '$uibModalInstance', 'message',
-    function ($scope, $uibModalInstance, message) {
+veiculo.controller('ModalMessageController', ['$scope', '$modalInstance', 'message',
+    function ($scope, $modalInstance, message) {
 
         var init = function () {
             $scope.message = message;
         };
         
         $scope.cancel = function () {
-            $uibModalInstance.dismiss('cancel');
+            $modalInstance.dismiss('cancel');
         };
 
         init();

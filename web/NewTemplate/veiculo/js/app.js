@@ -9,7 +9,9 @@ var veiculo = angular.module('Veiculo', [
   'ui.bootstrap',
   'ui.mask',
   'ui.utils.masks',
-  'veasyTable'
+  //'veasyTable',
+  'datatables',
+  'datatables.bootstrap'
 ]);
 
 veiculo.config(['$stateProvider', '$urlRouterProvider',  

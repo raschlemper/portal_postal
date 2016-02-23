@@ -139,9 +139,37 @@
                             </div>                              
                         </div>
                         <div class="panel-body">
-                                <veasy-table list="items" selected-items="selectedItems" config="config"></veasy-table>
-<!--                            <div class="dataTable_wrapper no-padding">
-                                <table class="table table-striped table-bordered table-hover table-condensed" id="datatable-veiculos">
+                            <div class="dataTable_wrapper no-padding">
+                                <div class="box-content-custom"> 
+                                    <div class="row">
+                                        <div class="col-md-5 col-xs-5">
+                                            <div class="form-inline">
+                                                <label for="veiculoFilter">Pesquisar: </label>
+                                                <input type="text" class="form-control" id="veiculoFilter" ng-model="veiculoFilter.$">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-xs-4">
+                                            <div class="form-inline">
+                                                <label for="veiculoSituacaoFilter">Situação: </label>
+                                                <select class="form-control" name="situacao"
+                                                    ng-options="situacao.value for situacao in situacoes track by situacao.key" ng-model="veiculoFilter.situacao">
+                                                    <option value="">Nenhum</option>
+                                                </select>                                                
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-xs-3 pull-right">
+                                            <div class="form-inline">
+                                                <label>Mostrar: 
+                                                    <select ng-model="sizeTable" class="form-control input-sm"
+                                                            ng-options="size.value for size in sizes track by size.key">
+                                                    </select> registros
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <table datatable="ng" class="table table-striped table-bordered table-hover table-condensed"
+                                       dt-options="dtOptions">
                                     <thead>
                                         <tr>
                                             <th>Marca / Modelo</th>
@@ -155,7 +183,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="veiculo in veiculos track by $index">
+                                        <tr ng-repeat="veiculo in veiculos | filter: veiculoFilter | limitTo: sizeTable.key track by $index">
                                             <td>{{veiculo.marca}} / {{veiculo.modelo}}</td>
                                             <td>{{veiculo.placa | Placa}}</td>
                                             <td>{{veiculo.anoFabricacao}} / {{veiculo.anoModelo}}</td>
@@ -175,7 +203,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                            </div>-->
+                            </div>
                         </div>
                     </div>
                 </div>

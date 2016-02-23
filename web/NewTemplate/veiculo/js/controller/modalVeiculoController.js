@@ -1,7 +1,7 @@
 'use strict';
 
-veiculo.controller('ModalVeiculoController', ['$scope', '$uibModalInstance', 'veiculo', 'FipeService', 'ListaService', 'LISTAS',
-    function ($scope, $uibModalInstance, veiculo, FipeService, ListaService, LISTAS) {
+veiculo.controller('ModalVeiculoController', ['$scope', '$modalInstance', 'veiculo', 'FipeService', 'ListaService', 'LISTAS',
+    function ($scope, $modalInstance, veiculo, FipeService, ListaService, LISTAS) {
 
         var init = function () {
             $scope.tipos = LISTAS.tipo;
@@ -62,11 +62,11 @@ veiculo.controller('ModalVeiculoController', ['$scope', '$uibModalInstance', 've
         
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
-            $uibModalInstance.close($scope.veiculo);
+            $modalInstance.close($scope.veiculo);
         };
         
         $scope.cancel = function () {
-            $uibModalInstance.dismiss('cancel');
+            $modalInstance.dismiss('cancel');
         };
 
         var validarForm = function (form) {

@@ -1,6 +1,12 @@
 'use strict';
 
 veiculo.constant('LISTAS', {
+    
+    "size": [{'key': 10, 'value': '10'},
+             {'key': 20, 'value': '20'},
+             {'key': 50, 'value': '50'},
+             {'key': 100, 'value': '100'},
+             {'key': -1, 'value': 'Todos'}],
 
     "tipo": [{'key': 'motos', 'value': 'Moto'},
              {'key': 'carros', 'value': 'Carro'},
@@ -16,8 +22,8 @@ veiculo.constant('LISTAS', {
                   {'key': 'seminovo', 'value': 'Seminovo'},  
                   {'key': 'usado', 'value': 'Usado'}],
 
-    "situacao": [{'key': 'ativo', 'value': 'Ativo'},  
-                    {'key': 'inativo', 'value': 'Inativo'},  
-                    {'key': 'manutencao', 'value': 'Manuten\u00E7\u00E3o'}]
+    "situacao": [{'key': '0', 'value': 'Ativo'},  
+                    {'key': '1', 'value': 'Inativo'},  
+                    {'key': '2', 'value': 'Manuten\u00E7\u00E3o'}]
 
 });
