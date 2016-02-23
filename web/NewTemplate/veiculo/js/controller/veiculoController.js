@@ -1,135 +1,95 @@
 'use strict';
 
-veiculo.controller('VeiculoController', ['$scope', '$uibModal', 'VeiculoService', 'FipeService', 'ModalService', 'LISTAS',
-    function ($scope, $uibModal, VeiculoService, FipeService, ModalService, LISTAS) {
+veiculo.controller('VeiculoController', ['$scope', '$uibModal', 'VeiculoService', 'ModalService',
+    function ($scope, $uibModal, VeiculoService, ModalService) {
 
         var init = function () {
-//            $scope.tipos = LISTAS.tipo;
-//            $scope.combustiveis = LISTAS.combustivel;
-//            $scope.status = LISTAS.status;
-//            $scope.situacoes = LISTAS.situacao;
-//            
-//            $scope.veiculo = {
-//                tipo: $scope.tipos[1],
-//                marca: [],
-//                modelo: [],
-//                placa: null,
-//                anoFabricacao: null,
-//                anoModelo: null,
-//                chassis: null,
-//                renavam: null,
-//                quilometragem: null,
-//                combustivel: $scope.combustiveis[0],         
-//                status: $scope.status[0],          
-//                situacao: $scope.situacoes[0]
-//            }; 
-//
-//            $scope.minVal = 1970;
-//            $scope.maxVal = (new Date).getFullYear() + 1;
-//
-//            $scope.changeTipo($scope.veiculo.tipo);
-            todos();            
+            todos();     
+            LoadDataTablesScripts(sortAndSearchTable('datatable-veiculos'));
         };
+        
+        $scope.columns = [
+  {
+    header: 'Id', // This string is displayed on table header name.
 
-//        $scope.changeTipo = function (tipo) {
-//            FipeService.marcaVeiculo(tipo.key)
-//                    .then(function (data) {
-//                        $scope.marcas = data;
-//                        $scope.veiculo.marca = data[0];
-//                        $scope.changeMarca($scope.veiculo.tipo, $scope.veiculo.marca);
-//                    })
-//                    .catch(function (e) {
-//                        console.log(e);
-//                    });
-//        };
-//
-//        $scope.changeMarca = function (tipo, marca) {
-//            FipeService.modeloVeiculo(tipo.key, marca.id)
-//                    .then(function (data) {
-//                        $scope.modelos = data;
-//                        $scope.veiculo.modelo = data[0];
-//                    })
-//                    .catch(function (e) {
-//                        console.log(e);
-//                    });
-//        };
+    value: 'id',  // This string is the name of property in your list declared on your html.
 
-        var todos = function () {
+    show: false,  // This property, show or hide this column on your table.
+
+    size: 20      // This property is used to define column size in percentage (%)
+                  // If property 'show' is defined 'false', this size is ignored
+  },
+  { header: 'First Name', value: 'first_name', show: true, size: 40 },
+  { header: 'Last Name', value: 'last_name', show: true, size: 40 }
+];
+
+$scope.config = {
+  id: 'my-table',
+  columns: $scope.columns
+};
+    
+        var sortAndSearchTable = function(table) {
+            return function() {
+                StartDataTable(table);            
+                LoadSelect2Script(MakeSelectDataTable(table));    
+            }    
+        }
+
+        var todos = function() {
             VeiculoService.getAll()
                 .then(function (data) {
                     $scope.veiculos = data;
                 })
-                .catch(function (e) {
+                .catch(function(e) {
                     modalMessage(e.error);
                 });
         };
 
-//        $scope.salvar = function (form) {
-//            if (validarForm(form)) {
-//                VeiculoService.save($scope.veiculo)
-//                    .then(function (data) {  
-//                        modalMessage("Veículo Inserido " + getMsgToClient(data) +  " com sucesso!");
-//                        init();
-//                    })
-//                    .catch(function(e) {
-//                        modalMessage(e.error);
-//                    });
-//            }
-//        };
-
-        $scope.editar = function (idVeiculo) {
-            modalEditar().then(function() {
-                VeiculoService.save(idVeiculo)
-                    .then(function (data) {  
-                        modalMessage("Veículo " + getMsgToClient(data) + " Alterado com sucesso!");
+        $scope.salvar = function() {
+            modalSalvar().then(function(result) {
+                VeiculoService.save(result)
+                    .then(function(data) {  
+                        modalMessage("Veículo Inserido " + getMsgToClient(data) +  " com sucesso!");
                         init();
                     })
                     .catch(function(e) {
                         modalMessage(e.error);
                     });
-            }, function(e) {
-                modalMessage(e);
             });
         };
 
-        $scope.excluir = function (idVeiculo) {
+        $scope.editar = function(idVeiculo) {
+            VeiculoService.get(idVeiculo)
+                .then(function(veiculo) {
+                     modalSalvar(veiculo).then(function(result) {
+                        VeiculoService.save(result)
+                            .then(function (data) {  
+                                modalMessage("Veículo " + getMsgToClient(data) + " Alterado com sucesso!");
+                                init();
+                            })
+                            .catch(function(e) {
+                                modalMessage(e.error);
+                            });
+                    });
+                })
+                .catch(function(e) {
+                    modalMessage(e.error);
+                });
+           
+        };
+
+        $scope.excluir = function(idVeiculo) {
             modalExcluir().then(function() {
                 VeiculoService.delete(idVeiculo)
-                    .then(function (data) { 
+                    .then(function(data) { 
                         modalMessage("Veículo " + getMsgToClient(data) + " Removido com sucesso!");
                         init(); 
                     })
                     .catch(function(e) {
                         modalMessage(e.error);
                     });
-            }, function(e) {
-                modalMessage(e);
             });
-        };
-
-//        var validarForm = function (form) {
-//            if (form.placa.$error.required) {
-//                alert('Preencha a placa do ve\u00EDculo!');
-//                return false;
-//            }
-//            if (form.anoFabricacao.$error.min || form.anoFabricacao.$error.max) {
-//                alert('Preencha o ano de fabrica\u00E7\u00E3o do ve\u00EDculo com valores entre ' + $scope.minVal + ' e ' + $scope.maxVal + '!');
-//                return false;
-//            }
-//            if (form.anoModelo.$error.min || form.anoModelo.$error.max) {
-//                alert('Preencha o ano do modelo do ve\u00EDculo com valores entre ' + $scope.minVal + ' e ' + $scope.maxVal + '!');
-//                return false;
-//            }
-//            if (form.renavam.$error.required) {
-//                alert('Preencha o renavam do ve\u00EDculo!');
-//                return false;
-//            }
-//            if (form.quilometragem.$error.required) {
-//                alert('Preencha a quilometragem do ve\u00EDculo!');
-//                return false;
-//            }
-//            return true;
-//        }           
+        };      
     
         var getMsgToClient = function(veiculo) {
             return veiculo.modelo + " (" + veiculo.placa + ")";        
@@ -139,18 +99,16 @@ veiculo.controller('VeiculoController', ['$scope', '$uibModal', 'VeiculoService'
             $uibModal.open(ModalService.modalMessage(message));
         };
         
-        var modalEditar = function() {
+        var modalSalvar = function(veiculo) {
             var modalInstance = $uibModal.open(
-                ModalService.modalEditar('partials/modalEditarCadastro.html', 'VeiculoCadastroController', 
-                    'Excluir Ve\u00EDculo?', 'Deseja realmente excluir este ve\u00EDculo?')
+                ModalService.modalSalvar('partials/modalVeiculo.html', 'ModalVeiculoController', veiculo)
             );    
             return modalInstance.result;
         };
         
         var modalExcluir = function() {
             var modalInstance = $uibModal.open(
-                ModalService.modalExcluir('Excluir Ve\u00EDculo?', 
-                    'Deseja realmente excluir este ve\u00EDculo?')
+                ModalService.modalExcluir('Excluir Ve\u00EDculo?', 'Deseja realmente excluir este ve\u00EDculo?')
             );    
             return modalInstance.result;
         };

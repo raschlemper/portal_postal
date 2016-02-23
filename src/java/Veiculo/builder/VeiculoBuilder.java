@@ -16,7 +16,7 @@ public class VeiculoBuilder extends Builder<Veiculo, VeiculoDTO>{
         try {
             JSONObject jObj = getJsonObject(request);
             Veiculo veiculo = new Veiculo();
-            if(jObj.has("idVeiculo") && !jObj.isNull("idVeiculo")) { veiculo.setId(getIntegerParameter(jObj.getString("idVeiculo"))); }
+            if(jObj.has("id") && !jObj.isNull("id")) { veiculo.setId(jObj.getInt("id")); }
             if(jObj.has("tipo") && !jObj.isNull("tipo")) { veiculo.setTipo(jObj.getJSONObject("tipo").getString("value")); }
             if(jObj.has("marca") && !jObj.isNull("marca")) { veiculo.setMarca(jObj.getJSONObject("marca").getString("name")); }
             if(jObj.has("modelo") && !jObj.isNull("modelo")) { veiculo.setModelo(jObj.getJSONObject("modelo").getString("name")); }

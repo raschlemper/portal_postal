@@ -17,18 +17,15 @@ veiculo.factory('ModalService', function() {
             }
         },
 
-        modalEditar: function (templateUrl, controller, title, message) {
+        modalSalvar: function (templateUrl, controller, veiculo) {
             return {
                 animation: true,
                 templateUrl: templateUrl,
                 controller: controller,
                 size: 'lg',
                 resolve: {
-                    title: function() {
-                        return title;
-                    },
-                    message: function() {
-                        return message;
+                    veiculo: function() {
+                        return veiculo;
                     }
                 }
             }

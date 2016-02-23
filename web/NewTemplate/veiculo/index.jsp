@@ -29,9 +29,12 @@
         <script src="${pageContext.request.contextPath}/plugins/angular/angular-animate/angular-animate.min.js"></script>
         <script src="${pageContext.request.contextPath}/plugins/angular/angular-locale-pt-br/angular-locale_pt-br.js"></script>
         <script src="${pageContext.request.contextPath}/plugins/angular/angular-ui-router/angular-ui-router.min.js"></script>
+        <script src="${pageContext.request.contextPath}/plugins/angular/angular-bootstrap/ui-bootstrap.min.js"></script>
         <script src="${pageContext.request.contextPath}/plugins/angular/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
         <script src="${pageContext.request.contextPath}/plugins/angular/angular-ui-mask/mask.min.js"></script>
         <script src="${pageContext.request.contextPath}/plugins/angular/angular-ui-input-mask/angular-input-masks-standalone.min.js"></script>
+        <script src="${pageContext.request.contextPath}/plugins/angular/angular-veasy-table/dist/js/veasy-table.min.js"></script>
+        <script src="${pageContext.request.contextPath}/plugins/angular/angular-veasy-table/dist/js/veasy-table-tpls.min.js"></script>
        
         <script type="text/javascript" charset="UTF-8" src="js/app.js"></script>        
         <script type="text/javascript" charset="UTF-8" src="js/app.constants.js"></script>
@@ -42,6 +45,7 @@
         <script type="text/javascript" charset="UTF-8" src="js/controller/modalVeiculoController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/service/fipeService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/service/modalService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/service/listaService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/service/veiculoService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/filter/placaFilter.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/filter/renavamFilter.js"></script>

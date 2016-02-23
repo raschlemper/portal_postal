@@ -8,7 +8,8 @@ var veiculo = angular.module('Veiculo', [
   'ui.router',
   'ui.bootstrap',
   'ui.mask',
-  'ui.utils.masks'
+  'ui.utils.masks',
+  'veasyTable'
 ]);
 
 veiculo.config(['$stateProvider', '$urlRouterProvider',  

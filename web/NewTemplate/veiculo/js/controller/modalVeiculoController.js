@@ -1,7 +1,7 @@
 'use strict';
 
-veiculo.controller('ModalVeiculoController', ['$scope', '$uibModal', 'VeiculoService', 'FipeService', 'ModalService', 'LISTAS',
-    function ($scope, $uibModal, VeiculoService, FipeService, ModalService, LISTAS) {
+veiculo.controller('ModalVeiculoController', ['$scope', '$uibModalInstance', 'veiculo', 'FipeService', 'ListaService', 'LISTAS',
+    function ($scope, $uibModalInstance, veiculo, FipeService, ListaService, LISTAS) {
 
         var init = function () {
             $scope.tipos = LISTAS.tipo;
@@ -10,101 +10,63 @@ veiculo.controller('ModalVeiculoController', ['$scope', '$uibModal', 'VeiculoSer
             $scope.situacoes = LISTAS.situacao;
             
             $scope.veiculo = {
-                tipo: $scope.tipos[1],
-                marca: [],
-                modelo: [],
-                placa: null,
-                anoFabricacao: null,
-                anoModelo: null,
-                chassis: null,
-                renavam: null,
-                quilometragem: null,
-                combustivel: $scope.combustiveis[0],         
-                status: $scope.status[0],          
-                situacao: $scope.situacoes[0]
+                id: (veiculo && veiculo.id) || null,
+                tipo: (veiculo && ListaService.getValue($scope.tipos, veiculo.tipo)) || $scope.tipos[1],
+                marca: (veiculo && veiculo.marca) || [],
+                modelo: (veiculo && veiculo.modelo) || [],
+                placa: (veiculo && veiculo.placa.toUpperCase()) || null,
+                anoFabricacao: (veiculo && veiculo.anoFabricacao) || null,
+                anoModelo: (veiculo && veiculo.anoModelo) || null,
+                chassis: (veiculo && veiculo.chassis) || null,
+                renavam: (veiculo && veiculo.renavam) || null,
+                quilometragem: (veiculo && veiculo.quilometragem) || null,
+                combustivel: (veiculo && ListaService.getValue($scope.combustiveis, veiculo.combustivel)) || $scope.combustiveis[0],         
+                status: (veiculo && ListaService.getValue($scope.status, veiculo.status)) || $scope.status[0],          
+                situacao: (veiculo && ListaService.getValue($scope.situacoes, veiculo.situacao)) || $scope.situacoes[0]
             }; 
 
             $scope.minVal = 1970;
             $scope.maxVal = (new Date).getFullYear() + 1;
 
             $scope.changeTipo($scope.veiculo.tipo);
-            todos();            
+            getTitle();
         };
+        
+        var getTitle = function() {
+            if(veiculo && veiculo.id) { $scope.title = "Editar Ve\u00EDculo"; }
+            else { $scope.title = "Inserir novo Ve\u00EDculo"; }
+        }
 
         $scope.changeTipo = function (tipo) {
             FipeService.marcaVeiculo(tipo.key)
-                    .then(function (data) {
-                        $scope.marcas = data;
-                        $scope.veiculo.marca = data[0];
-                        $scope.changeMarca($scope.veiculo.tipo, $scope.veiculo.marca);
-                    })
-                    .catch(function (e) {
-                        console.log(e);
-                    });
+                .then(function (data) {
+                    $scope.marcas = data;
+                    $scope.veiculo.marca = data[0];
+                    $scope.changeMarca($scope.veiculo.tipo, $scope.veiculo.marca);
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
         };
 
         $scope.changeMarca = function (tipo, marca) {
             FipeService.modeloVeiculo(tipo.key, marca.id)
-                    .then(function (data) {
-                        $scope.modelos = data;
-                        $scope.veiculo.modelo = data[0];
-                    })
-                    .catch(function (e) {
-                        console.log(e);
-                    });
-        };
-
-        var todos = function () {
-            VeiculoService.getAll()
                 .then(function (data) {
-                    $scope.veiculos = data;
+                    $scope.modelos = data;
+                    $scope.veiculo.modelo = data[0];
                 })
                 .catch(function (e) {
-                    modalMessage(e.error);
+                    console.log(e);
                 });
         };
-
-        $scope.salvar = function (form) {
-            if (validarForm(form)) {
-                VeiculoService.save($scope.veiculo)
-                    .then(function (data) {  
-                        modalMessage("Veículo Inserido " + getMsgToClient(data) +  " com sucesso!");
-                        init();
-                    })
-                    .catch(function(e) {
-                        modalMessage(e.error);
-                    });
-            }
+        
+        $scope.ok = function(form) {
+            if (!validarForm(form)) return;
+            $uibModalInstance.close($scope.veiculo);
         };
-
-        $scope.editar = function (idVeiculo) {
-            modalEditar().then(function() {
-                VeiculoService.save(idVeiculo)
-                    .then(function (data) {  
-                        modalMessage("Veículo " + getMsgToClient(data) + " Alterado com sucesso!");
-                        init();
-                    })
-                    .catch(function(e) {
-                        modalMessage(e.error);
-                    });
-            }, function(e) {
-                modalMessage(e);
-            });
-        };
-
-        $scope.excluir = function (idVeiculo) {
-            modalExcluir().then(function() {
-                VeiculoService.delete(idVeiculo)
-                    .then(function (data) { 
-                        modalMessage("Veículo " + getMsgToClient(data) + " Removido com sucesso!");
-                        init(); 
-                    })
-                    .catch(function(e) {
-                        modalMessage(e.error);
-                    });
-            }, function(e) {
-                modalMessage(e);
-            });
+        
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
         };
 
         var validarForm = function (form) {
@@ -129,27 +91,7 @@ veiculo.controller('ModalVeiculoController', ['$scope', '$uibModal', 'VeiculoSer
                 return false;
             }
             return true;
-        }           
-    
-        var getMsgToClient = function(veiculo) {
-            return veiculo.modelo + " (" + veiculo.placa + ")";        
-        }
-        
-        var modalExcluir = function() {
-            var modalInstance = $uibModal.open(
-                ModalService.modalExcluir('Excluir Ve\u00EDculo?', 
-                    'Deseja realmente excluir este ve\u00EDculo?')
-            );    
-            return modalInstance.result;
-        };
-        
-        $scope.ok = function() {
-            $uibModalInstance.close();
-        };
-        
-        $scope.cancel = function () {
-            $uibModalInstance.dismiss('cancel');
-        };
+        }     
 
         init();
 

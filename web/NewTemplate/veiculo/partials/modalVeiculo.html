@@ -1,14 +1,14 @@
-<div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
-    <h4 class="modal-title">{{title}}</h4>
-</div>
-<div class="modal-body">
-    <div class="bootbox-body">
-        <form name="veiculoEditForm" novalidate>
+<form name="veiculoForm" novalidate>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
+        <h4 class="modal-title">{{title}}</h4>
+    </div>
+    <div class="modal-body">
+        <div class="bootbox-body">
             <ul class="list-unstyled">
                 <li class="list-group-item">
                     <div class="row form-horizontal">
-                        <input type="hidden" name="idVeiculo" ng-model="idVeiculo"/>
+                        <input type="hidden" name="idVeiculo" ng-model="veiculo.id"/>
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                             <label class="small">Tipo</label>
                             <div class="input-group">
@@ -107,17 +107,17 @@
                         </div>
                     </div>
                 </li>
-            </ul>
-        </form>         
+            </ul>     
+        </div>
     </div>
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn btn-default pull-left" ng-click="cancel()">
-        <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR
-    </button>
-    <button type="button" class="btn btn btn-danger pull-right" ng-click="ok()">
-        <i class="fa fa-lg fa-trash fa-spc"></i> EXCLUIR
-    </button>
-</div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">
+            <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR
+        </button>
+        <button type="button" class="btn btn-success" ng-click="ok(this.veiculoForm)">
+            <i class="fa fa-lg fa-save fa-spc"></i> SALVAR
+        </button>
+    </div>
+</form>    
 
   

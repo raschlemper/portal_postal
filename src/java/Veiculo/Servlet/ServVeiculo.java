@@ -57,12 +57,8 @@ public class ServVeiculo extends HttpServlet {
             else if (usuario == null) { response.sendRedirect(this.login); }
             else { super.service(request, response); }
         } catch (Exception ex) {
-            response.setContentType("application/json");
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             int idErro = ContrErroLog.inserir("Portal Postal - ServVeiculo", "Exception", null, ex.toString());
-            JSONObject object = new JSONObject();
-            object.put("error", "SYSTEM ERROR Nº: " + idErro + "</br> Ocorreu um erro inesperado!");
-            response.getWriter().write(object.toString());
+            sendMessageError(response, "SYSTEM ERROR Nº: " + idErro + "<br/> Ocorreu um erro inesperado!");
         }
     }
     
@@ -85,12 +81,8 @@ public class ServVeiculo extends HttpServlet {
             else if(action.equalsIgnoreCase(actions.SAVE.name())) { save(request, response); }
             else if(action.equalsIgnoreCase(actions.DELETE.name())) { delete(request, response); }
         } catch (Exception ex) {
-            response.setContentType("application/json");
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             int idErro = ContrErroLog.inserir("Portal Postal - ServVeiculo", "Exception", null, ex.toString());
-            JSONObject object = new JSONObject();
-            object.put("error", "SYSTEM ERROR Nº: " + idErro + "</br> Ocorreu um erro inesperado!");
-            response.getWriter().write(object.toString());
+            sendMessageError(response, "SYSTEM ERROR Nº: " + idErro + "<br/> Ocorreu um erro inesperado!");
         }
     }
     
@@ -111,20 +103,14 @@ public class ServVeiculo extends HttpServlet {
     private void getAll(HttpServletRequest request, HttpServletResponse response) throws Exception { 
         List<Veiculo> listaVeiculos = ContrVeiculo.consultaTodos(this.nomeBD);
         List<VeiculoDTO> listaDTO = new ArrayList<VeiculoDTO>();
-        for (Veiculo veiculo : listaVeiculos) {
-            listaDTO.add(getVeiculoDTO(veiculo));
-        }
-        JSONArray lista = new JSONArray(listaDTO);
-        response.setContentType("application/json");
-        response.getWriter().write(lista.toString());
+        for (Veiculo veiculo : listaVeiculos) { listaDTO.add(getVeiculoDTO(veiculo)); }
+        sendDataObject(response, listaDTO);
     }
     
     private void get(HttpServletRequest request, HttpServletResponse response) throws Exception {       
         Integer idVeiculo = Integer.parseInt(request.getParameter("idVeiculo"));
         Veiculo veiculo = ContrVeiculo.consulta(this.nomeBD, idVeiculo);
-        JSONObject object = new JSONObject(getVeiculoDTO(veiculo));
-        response.setContentType("application/json");
-        response.getWriter().write(object.toString());
+        sendDataObject(response, getVeiculoDTO(veiculo));
     }   
     
     private void save(HttpServletRequest request, HttpServletResponse response) throws Exception { 
@@ -136,29 +122,18 @@ public class ServVeiculo extends HttpServlet {
     
     private void create(Veiculo veiculo, HttpServletRequest request, HttpServletResponse response) throws Exception {      
         veiculo = ContrVeiculo.inserir(this.nomeBD, veiculo);
-        JSONObject object = new JSONObject(getVeiculoDTO(veiculo));
-        response.setContentType("application/json");
-        response.setStatus(HttpServletResponse.SC_ACCEPTED);
-        response.getWriter().write(object.toString());
+        sendDataObject(response, getVeiculoDTO(veiculo));
     }
     
     private void update(Veiculo veiculo, HttpServletRequest request, HttpServletResponse response) throws Exception {    
         veiculo = ContrVeiculo.alterar(this.nomeBD, veiculo);
-        JSONObject object = new JSONObject(getVeiculoDTO(veiculo));
-        response.setContentType("application/json");
-        response.setStatus(HttpServletResponse.SC_ACCEPTED);
-        response.getWriter().write(object.toString());
-//        this.sessao.setAttribute("msg", "Veículo " + getMsgToClient(veiculo) + " Alterado com sucesso!");
+        sendDataObject(response, getVeiculoDTO(veiculo));
     }
     
     private void delete(HttpServletRequest request, HttpServletResponse response) throws Exception {      
         Integer idVeiculo = Integer.parseInt(request.getParameter("idVeiculo"));
         Veiculo veiculo = ContrVeiculo.limpar(this.nomeBD, idVeiculo);
-        JSONObject object = new JSONObject(getVeiculoDTO(veiculo));
-        response.setContentType("application/json");
-        response.setStatus(HttpServletResponse.SC_ACCEPTED);
-        response.getWriter().write(object.toString());        
-//        this.sessao.setAttribute("msg", "Veículo " + getMsgToClient(veiculo) + " removido com sucesso
+        sendDataObject(response, getVeiculoDTO(veiculo));
     }
     
     private boolean existeVeiculo(Veiculo veiculo) {
@@ -180,15 +155,30 @@ public class ServVeiculo extends HttpServlet {
     private boolean validation(Veiculo veiculo, HttpServletRequest request, HttpServletResponse response) throws Exception {  
         Validacao validacao = new VeiculoValidacao();
         if(!validacao.validar(veiculo)) {
-            this.sessao.setAttribute("msg", validacao.getMsg());
-            response.sendRedirect(request.getHeader("referer")); 
+            sendMessageError(response, validacao.getMsg());
             return false;
         } else if(existeVeiculo(veiculo)) {
-            this.sessao.setAttribute("msg", "Este Veículo já foi cadastrado!");
-            response.sendRedirect(request.getHeader("referer"));  
+            sendMessageError(response, "Este Veículo já foi cadastrado!");
             return false;
         } 
         return true;
+    }
+    
+    private void sendDataObject(HttpServletResponse response, Object data) throws IOException {
+        String object = null;
+        if(data instanceof ArrayList) { object = new JSONArray(ArrayList.class.cast(data)).toString(); }
+        else { object = new JSONObject(VeiculoDTO.class.cast(data)).toString(); }
+        response.setContentType("application/json");
+        response.setStatus(HttpServletResponse.SC_ACCEPTED);
+        response.getWriter().write(object);        
+    }
+    
+    private void sendMessageError(HttpServletResponse response, String message) throws IOException {
+        response.setContentType("application/json");
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        JSONObject object = new JSONObject();
+        object.put("error", message);
+        response.getWriter().write(object.toString());        
     }
 
 }

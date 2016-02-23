@@ -132,14 +132,15 @@
                             <div class="row">
                                 <div class="col-md-8">Lista com todos os veículos</div>
                                 <div class="col-md-4">
-                                    <button class="btn btn-sm btn-warning text-right" ng-click="editar(veiculo.id)">
-                                        <i class="fa fa-lg fa-pencil"></i>
+                                    <button class="btn btn-sm btn-primary pull-right" ng-click="salvar()">
+                                        <i class="fa fa-lg fa-plus fa-spc"></i> ADICIONAR 
                                     </button>
                                 </div>
                             </div>                              
                         </div>
-                        <div class="panel-body no-padding">
-                            <div class="dataTable_wrapper no-padding">
+                        <div class="panel-body">
+                                <veasy-table list="items" selected-items="selectedItems" config="config"></veasy-table>
+<!--                            <div class="dataTable_wrapper no-padding">
                                 <table class="table table-striped table-bordered table-hover table-condensed" id="datatable-veiculos">
                                     <thead>
                                         <tr>
@@ -174,7 +175,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>
