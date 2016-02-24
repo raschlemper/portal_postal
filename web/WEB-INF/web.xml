@@ -569,18 +569,8 @@
         <servlet-class>Servlet.ServCriaSMTP</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>Financeiro</servlet-name>
-        <jsp-file>/financeiro/index.jsp</jsp-file>
-    </servlet>
-    
-    <servlet>
-        <servlet-name>jersey-serlvet</servlet-name>
-        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-        <init-param>
-                <param-name>com.sun.jersey.config.property.packages</param-name>
-                <param-value>com.portalpostal.controller</param-value>
-        </init-param>
-        <load-on-startup>1</load-on-startup>
+        <servlet-name>Veiculo</servlet-name>
+        <jsp-file>/NewTemplate/veiculo/index.jsp</jsp-file>
     </servlet>
         
     <servlet-mapping>
@@ -1148,13 +1138,8 @@
         <url-pattern>/ServCriaSMTP</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>Financeiro</servlet-name>
-        <url-pattern>/financeiro</url-pattern>
-    </servlet-mapping>
-    
-    <servlet-mapping>
-        <servlet-name>jersey-serlvet</servlet-name>
-        <url-pattern>/api/*</url-pattern>
+        <servlet-name>Veiculo</servlet-name>
+        <url-pattern>/veiculo</url-pattern>
     </servlet-mapping>
         
     <session-config>
