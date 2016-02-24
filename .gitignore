@@ -10,7 +10,7 @@ dist/
 build/
 nbproject/
 *.jar
-./*.xml
+*.xml
 *.sql
 *.zip
 *.prej
