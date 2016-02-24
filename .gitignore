@@ -12,6 +12,7 @@ src/java/META-INF/AtendeClienteService.xml
 src/java/META-INF/WebServiceScol.xml
 src/java/META-INF/WebServiceScol.xml
 src/java/META-INF/WebServiceScol.xml
+web/WEB-INF/jax-ws-catalog.xml
 
 ## GERAL ##
 .svn/
