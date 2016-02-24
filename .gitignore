@@ -4,13 +4,23 @@
 ### Java ###
 *.class
 
+## XML ##
+build.xml
+catalog.xml
+src/java/META-INF/AtendeCliente.xml
+src/java/META-INF/AtendeClienteService.xml
+src/java/META-INF/WebServiceScol.xml
+src/java/META-INF/WebServiceScol.xml
+src/java/META-INF/WebServiceScol.xml
+web/WEB-INF/jax-ws-catalog.xml
+
 ## GERAL ##
 .svn/
 dist/
 build/
 nbproject/
+WEB-INF/wsdl/
 *.jar
-*.xml
 *.sql
 *.zip
 *.prej
