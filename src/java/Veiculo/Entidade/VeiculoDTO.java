@@ -159,6 +159,7 @@ public class VeiculoDTO {
     public void setSituacao(String situacao) {
         this.situacao = situacao;
     }
+
     
     
 }
