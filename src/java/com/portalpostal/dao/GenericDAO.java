@@ -1,5 +1,6 @@
 package com.portalpostal.dao;
 
+import com.portalpostal.dao.builder.RowMapper;
 import Util.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

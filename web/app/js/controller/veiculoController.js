@@ -8,6 +8,7 @@ app.controller('VeiculoController', ['$scope', '$modal', 'VeiculoService', 'Moda
             $scope.sizes = LISTAS.size;
             $scope.sizeTable = LISTAS.size[0];
             $scope.situacoes = LISTAS.situacao;
+            $scope.changeTableOptions($scope.sizeTable);
         };
         
         $scope.dtOptions = DTOptionsBuilder.newOptions()
@@ -15,7 +16,6 @@ app.controller('VeiculoController', ['$scope', '$modal', 'VeiculoService', 'Moda
             .withOption("searching", false)
             .withOption("lengthChange", false)
             .withOption("aaSorting", [[ 0, "asc" ]])
-            .withOption("lengthMenu", [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]])  
             .withBootstrap()
             .withBootstrapOptions({
                 pagination: {
@@ -43,6 +43,10 @@ app.controller('VeiculoController', ['$scope', '$modal', 'VeiculoService', 'Moda
                     "sLast": "\u00daltimo"
                 }
             });
+            
+        $scope.changeTableOptions = function(size) {
+            $scope.dtOptions.withDisplayLength(size.key);            
+        }
 
         var todos = function() {
             VeiculoService.getAll()

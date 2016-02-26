@@ -2,9 +2,9 @@
 
 app.constant('LISTAS', {
     
-    "size": [{'key': 10, 'value': '10'},
-             {'key': 20, 'value': '20'},
-             {'key': 50, 'value': '50'},
+    "size": [{'key': 1, 'value': '10'},
+             {'key': 2, 'value': '20'},
+             {'key': 4, 'value': '50'},
              {'key': 100, 'value': '100'},
              {'key': -1, 'value': 'Todos'}],
 

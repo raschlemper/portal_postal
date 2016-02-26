@@ -576,6 +576,10 @@
         <servlet-name>jersey-serlvet</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
         <init-param>
+            <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+            <param-value>com.portalpostal.filter.AppFilter</param-value>
+        </init-param>
+        <init-param>
              <param-name>com.sun.jersey.config.property.packages</param-name>
              <param-value>com.portalpostal.controller</param-value>
         </init-param>        

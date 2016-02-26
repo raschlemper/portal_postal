@@ -161,7 +161,8 @@
                                             <div class="form-inline">
                                                 <label>Mostrar: 
                                                     <select ng-model="sizeTable" class="form-control input-sm"
-                                                            ng-options="size.value for size in sizes track by size.key">
+                                                            ng-options="size.value for size in sizes track by size.key"
+                                                            ng-change="changeTableOptions(sizeTable)">
                                                     </select> registros
                                                 </label>
                                             </div>
@@ -183,7 +184,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="veiculo in veiculos | filter: veiculoFilter | limitTo: sizeTable.key track by $index">
+                                        <tr ng-repeat="veiculo in veiculos | filter: veiculoFilter">
                                             <td>{{veiculo.marca}} / {{veiculo.modelo}}</td>
                                             <td>{{veiculo.placa | Placa}}</td>
                                             <td>{{veiculo.anoFabricacao}} / {{veiculo.anoModelo}}</td>
