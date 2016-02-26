@@ -2,32 +2,41 @@ package com.portalpostal.dao;
 
 import Util.Conexao;
 import java.sql.Connection;
-import javax.sql.DataSource;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class GenericDAO {
     
-    // pesquisar jdbcTemplate without xml
-        
-    protected static NamedParameterJdbcTemplate getNametTemplate(String nomeBD) throws Exception {
-//        Connection connection = Conexao.conectar(nomeBD);
-//        DriverManagerDataSource ds = new DriverManagerDataSource(connection.getMetaData().getURL());
-        return new NamedParameterJdbcTemplate(getConnection(nomeBD));
-    }
+    private Connection connection;
 
-//    protected static JdbcTemplate getJDBCTemplate(String nomeBD) throws Exception{
-//        Connection connection = Conexao.conectar(nomeBD);
-//        DriverManagerDataSource ds = new DriverManagerDataSource(connection.getMetaData().getURL());
-//        return new JdbcTemplate(ds);
-//    }    
+    public GenericDAO(String nomeBD) {        
+        connection = Conexao.conectar(nomeBD);
+    }
+        
+    protected List execute(String sql, Map<String,Object> params, RowMapper mapper) throws Exception {
+        List lista = new ArrayList();
+        try {
+            sql = setParams(sql, params);
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet result = (ResultSet) ps.executeQuery();
+            while(result.next()) { lista.add(mapper.mapRow(result, result.getRow())); }
+        } catch (SQLException e) {
+            throw new Exception(e);
+        } finally {
+            Conexao.desconectar(connection);
+        }
+        return lista;
+    }
     
-    private static DataSource getConnection(String nomeBD) {
-        DriverManagerDataSource ds = new DriverManagerDataSource(
-                "com.mysql.jdbc.Driver", 
-                "jdbc:mysql://localhost:3306/pp_" + nomeBD +"?zeroDateTimeBehavior=convertToNull&autoReconnect=true",
-                "root", "123456");
-        return ds;
+    private String setParams(String sql, Map<String,Object> params) {        
+        for (String key : params.keySet()) {
+            String named = ":".concat(key);
+            sql = sql.replace(named, params.get(key).toString());
+        }
+        return sql;
     }
 }

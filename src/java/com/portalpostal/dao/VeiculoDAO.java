@@ -7,20 +7,19 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.jdbc.core.RowMapper;
 
-public class VeiculoDAO extends GenericDAO {    
+public class VeiculoDAO extends GenericDAO {   
 
-    public static List<Veiculo> consultaTodos(String nmCache) throws Exception {
+    public VeiculoDAO(String nomeBD) {
+        super(nomeBD);
+    } 
+
+    public List<Veiculo> consultaTodos(String nmCache) throws Exception {
         Map<String, Object> paramMap = new HashMap<>();
-        return getNametTemplate(nmCache)
-            .query("SELECT * FROM veiculo ORDER BY tipo, marca, modelo, placa", 
-                    paramMap, 
-                    veiculos);
+        return execute("SELECT * FROM veiculo ORDER BY tipo, marca, modelo, placa", paramMap, veiculos);
     }
     
     public static RowMapper<Veiculo> veiculos = new RowMapper<Veiculo>() {
-        @Override
         public Veiculo mapRow(ResultSet rs, int rowNum) throws SQLException {
             return criarVeiculo(rs);
 	}
