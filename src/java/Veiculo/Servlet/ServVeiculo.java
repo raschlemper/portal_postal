@@ -28,7 +28,7 @@ import org.json.JSONObject;
  * @author rafael
  */
 
-@WebServlet("/api/veiculo")
+@WebServlet("/veiculo")
 public class ServVeiculo extends HttpServlet {
     
     private HttpSession sessao;

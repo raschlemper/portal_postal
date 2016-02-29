@@ -6,6 +6,7 @@ public class Veiculo {
     private String tipo;
     private String marca;
     private String modelo; 
+    private String versao; 
     private String placa;
     private Integer anoFabricacao;
     private Integer anoModelo;
@@ -28,6 +29,7 @@ public class Veiculo {
         this.tipo = tipo;
         this.marca = marca;
         this.modelo = modelo;
+//        this.versao = versao;
         this.placa = placa;
         this.anoFabricacao = anoFabricacao;
         this.anoModelo = anoModelo;
@@ -69,6 +71,14 @@ public class Veiculo {
 
     public void setModelo(String modelo) {
         this.modelo = modelo;
+    }
+
+    public String getVersao() {
+        return versao;
+    }
+
+    public void setVersao(String versao) {
+        this.versao = versao;
     }
 
     public String getPlaca() {

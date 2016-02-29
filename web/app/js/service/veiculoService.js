@@ -26,7 +26,7 @@ app.factory('VeiculoService', function($http, $q) {
             var cb = callback || angular.noop;
             var deferred = $q.defer();
 
-            $http.get(_contextPath + "/api/veiculo?action=get&idVeiculo=" + idVeiculo).
+            $http.get(_contextPath + "/api/veiculo/" + idVeiculo).
                 success(function(data) {
                     deferred.resolve(data);
                     return cb();
@@ -44,7 +44,7 @@ app.factory('VeiculoService', function($http, $q) {
             var cb = callback || angular.noop;
             var deferred = $q.defer();
 
-            $http.post(_contextPath + "/api/veiculo?action=save", data).
+            $http.post(_contextPath + "/api/veiculo/", data).
                 success(function(data) {
                     deferred.resolve(data);
                     return cb();

@@ -10,8 +10,6 @@
         <title> Portal Postal</title>
         <base href="${pageContext.request.contextPath}/app/"/>
         <%@ include file="/NewTemplate/includes/Css_js.jsp" %>
-        
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/plugins/angular/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css"></link>
     </head> 
     <body>       
         <%@ include file="/NewTemplate/includes/navBarTop.jsp" %>
@@ -24,7 +22,6 @@
             var _contextPath = "${pageContext.request.contextPath}";
         </script>
 
-        <script src="${pageContext.request.contextPath}/plugins/datatables/jquery.dataTables.min.js"></script>
         <script src="${pageContext.request.contextPath}/plugins/angular/angular.min.js"></script>
         <script src="${pageContext.request.contextPath}/plugins/angular/angular-cookies/angular-cookies.min.js"></script>
         <script src="${pageContext.request.contextPath}/plugins/angular/angular-resource/angular-resource.min.js"></script>
@@ -36,11 +33,10 @@
         <script src="${pageContext.request.contextPath}/plugins/angular/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
         <script src="${pageContext.request.contextPath}/plugins/angular/angular-ui-mask/mask.min.js"></script>
         <script src="${pageContext.request.contextPath}/plugins/angular/angular-ui-input-mask/angular-input-masks-standalone.min.js"></script>
-        <script src="${pageContext.request.contextPath}/plugins/angular/angular-datatables/dist/angular-datatables.min.js"></script>
-        <script src="${pageContext.request.contextPath}/plugins/angular/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.min.js"></script>
-<!--        <script src="${pageContext.request.contextPath}/plugins/angular/angular-veasy-table/dist/js/veasy-table.min.js"></script>
-        <script src="${pageContext.request.contextPath}/plugins/angular/angular-veasy-table/dist/js/veasy-table-tpls.min.js"></script>-->
-       
+        <script src="${pageContext.request.contextPath}/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="${pageContext.request.contextPath}/plugins/angular/angular-datatables/angular-datatables.min.js"></script>
+        <script src="${pageContext.request.contextPath}/plugins/angular/angular-datatables/plugins/bootstrap/angular-datatables.bootstrap.min.js"></script>
+
         <script type="text/javascript" charset="UTF-8" src="js/app.js"></script>        
         <script type="text/javascript" charset="UTF-8" src="js/app.constants.js"></script>
         
@@ -53,6 +49,7 @@
         
         <script type="text/javascript" charset="UTF-8" src="js/service/fipeService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/service/modalService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/service/dataTableService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/service/listaService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/service/veiculoService.js"></script>
         

@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalController', ['$scope', '$uibModalInstance', 'error', 'success',
-    function ($scope, $uibModalInstance, error, success) {
+app.controller('ModalController', ['$scope', '$modalInstance', 'error', 'success',
+    function ($scope, $modalInstance, error, success) {
 
         var init = function () {
             $scope.error = error;
@@ -9,7 +9,7 @@ app.controller('ModalController', ['$scope', '$uibModalInstance', 'error', 'succ
         };
         
         $scope.cancel = function () {
-            $uibModalInstance.dismiss('cancel');
+            $modalInstance.dismiss('cancel');
         };
 
         init();

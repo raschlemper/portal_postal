@@ -5,6 +5,6 @@ app.filter('Placa', function() {
         if(!input) return input;
         input = input.replace('-', '');
         if(input.length != 7) return input;
-        return input.substring(0, 3).toUpperCase() + '-' + input.substring(3, input.length);;
+        return input.substring(0, 3).toUpperCase() + '-' + input.substring(3, input.length);
     };
 });

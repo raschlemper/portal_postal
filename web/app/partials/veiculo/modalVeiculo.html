@@ -14,7 +14,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-car"></i></span>
                                 <select class="form-control" name="tipo" ng-change="changeTipo(veiculo.tipo)"
-                                        ng-options="tipo.value for tipo in tipos track by tipo.key" ng-model="veiculo.tipo"></select>
+                                        ng-options="tipo.value for tipo in tipos track by tipo.key" ng-model="veiculo.tipo.key"></select>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -29,16 +29,16 @@
                             <label class="small">Modelo</label>
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-car"></i></span>
-                                <select class="form-control" name="modelo"
+                                <select class="form-control" name="modelo" ng-change="changeModelo(veiculo.tipo, veiculo.marca, veiculo.modelo)"
                                         ng-options="modelo.name for modelo in modelos track by modelo.key" ng-model="veiculo.modelo"></select>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                            <label class="small">Placa</label>
+                            <label class="small">Versão</label>
                             <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="text" autocomplete="off" name="placa" class="form-control" ng-model="veiculo.placa" ng-required="true"
-                                       ui-mask="AAA-9999" ui-mask-placeholder-char="_" ui-mask-placeholder placeholder="Placa do veículo"/>                                    
+                                <span class="input-group-addon" ><i class="fa fa-car"></i></span>
+                                <select class="form-control" name="versao" ng-change="changeVersao(veiculo.tipo, veiculo.marca, veiculo.modelo, veiculo.versao)"
+                                        ng-options="versao.name for versao in versoes track by versao.key" ng-model="veiculo.versao"></select>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -55,6 +55,14 @@
                                 <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
                                 <input type="number" autocomplete="off" name="anoModelo" class="form-control" ng-model="veiculo.anoModelo" 
                                        min="{{minVal}}" max="{{maxVal}}" placeholder="Ano do modelo do veículo"/>                                    
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Placa</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                <input type="text" autocomplete="off" name="placa" class="form-control" ng-model="veiculo.placa" ng-required="true"
+                                       ui-mask="AAA-9999" ui-mask-placeholder-char="_" ui-mask-placeholder placeholder="Placa do veículo"/>                                    
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">

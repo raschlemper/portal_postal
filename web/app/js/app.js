@@ -9,7 +9,6 @@ var app = angular.module('Veiculo', [
     'ui.bootstrap',
     'ui.mask',
     'ui.utils.masks',
-    //'veasyTable',
     'datatables',
     'datatables.bootstrap'
 ]);

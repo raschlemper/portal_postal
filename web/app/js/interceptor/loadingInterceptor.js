@@ -1,15 +1,16 @@
 'use strict';
 
-app.factory('loadingInterceptor', ['$rootScope', '$q', '$timeout', 
+app.factory('loadingInterceptor', ['$rootScope', '$q', '$timeout',
     function ($rootScope, $q, $timeout) {
         return {
             request: function (config) {
                 $rootScope.requestInProgress = $rootScope.requestInProgress || 0;
                 if($rootScope.requestInProgress <= 0) {                     
-//                    if(config.url.indexOf("/modal") >= 0) { 
-//                        $rootScope.requestInProgress++;
-//                        return config; 
-//                    }
+                    if(config.url.indexOf("partials/modal/modalExcluir.html") >= 0 || 
+                            config.url.indexOf("partials/modal/modalMessage.html") >= 0) { 
+                        $rootScope.requestInProgress++;
+                        return config; 
+                    }
                     waitMsg(); 
                 }
                 $rootScope.requestInProgress++;

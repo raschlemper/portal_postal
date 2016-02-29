@@ -14,6 +14,7 @@ app.controller('ModalVeiculoController', ['$scope', '$modalInstance', 'veiculo',
                 tipo: (veiculo && ListaService.getValue($scope.tipos, veiculo.tipo)) || $scope.tipos[1],
                 marca: (veiculo && veiculo.marca) || [],
                 modelo: (veiculo && veiculo.modelo) || [],
+                versao: (veiculo && veiculo.versao) || [],
                 placa: (veiculo && veiculo.placa.toUpperCase()) || null,
                 anoFabricacao: (veiculo && veiculo.anoFabricacao) || null,
                 anoModelo: (veiculo && veiculo.anoModelo) || null,
@@ -54,6 +55,30 @@ app.controller('ModalVeiculoController', ['$scope', '$modalInstance', 'veiculo',
                 .then(function (data) {
                     $scope.modelos = data;
                     $scope.veiculo.modelo = data[0];
+                    $scope.changeModelo($scope.veiculo.tipo, $scope.veiculo.marca, $scope.veiculo.modelo);
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+
+        $scope.changeModelo = function (tipo, marca, modelo) {
+            FipeService.versaoVeiculo(tipo.key, marca.id, modelo.id)
+                .then(function (data) {
+                    $scope.versoes = data;
+                    $scope.veiculo.versao = data[0];
+                    $scope.changeVersao($scope.veiculo.tipo, $scope.veiculo.marca, $scope.veiculo.modelo, $scope.veiculo.versao);
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+
+        $scope.changeVersao = function (tipo, marca, modelo, versao) {
+            FipeService.veiculo(tipo.key, marca.id, modelo.id, versao.id)
+                .then(function (data) {
+                    console.log(data);
+                    $scope.veiculoFipe = data;
                 })
                 .catch(function (e) {
                     console.log(e);

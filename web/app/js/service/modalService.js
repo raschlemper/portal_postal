@@ -1,24 +1,11 @@
 'use strict';
 
-app.factory('ModalService', function() {
+app.factory('ModalService', function($modal) {
 
     return {
 
-        modalMessage: function (message) {
-            return {
-                animation: true,
-                templateUrl: 'partials/modalMessage.html',
-                controller: 'ModalMessageController',
-                resolve: {
-                    message: function () {
-                        return message;
-                    }
-                }
-            }
-        },
-
-        modalSalvar: function (templateUrl, controller, veiculo) {
-            return {
+        modalDefault: function (templateUrl, controller, veiculo) {
+            return $modal.open({
                 animation: true,
                 templateUrl: templateUrl,
                 controller: controller,
@@ -28,13 +15,39 @@ app.factory('ModalService', function() {
                         return veiculo;
                     }
                 }
-            }
+            })
+        },
+
+        modalLoading: function () {
+            return $modal.open({
+                animation: true,
+                templateUrl: 'partials/modal/modalLoading.html',
+                controller: function($scope, $modalInstance) {
+                    $scope.cancel = function() {
+                        $modalInstance.dismiss('cancel');
+                    };
+                },
+                resolve: {}
+            });
+        },
+
+        modalMessage: function (message) {
+            return $modal.open({
+                animation: true,
+                templateUrl: 'partials/modal/modalMessage.html',
+                controller: 'ModalMessageController',
+                resolve: {
+                    message: function () {
+                        return message;
+                    }
+                }
+            })
         },
 
         modalExcluir: function (title, message) {
-            return {
+            return $modal.open({
                 animation: true,
-                templateUrl: 'partials/modalExcluir.html',
+                templateUrl: 'partials/modal/modalExcluir.html',
                 controller: 'ModalExcluirController',
                 resolve: {
                     title: function() {
@@ -44,7 +57,7 @@ app.factory('ModalService', function() {
                         return message;
                     }
                 }
-            }
+            })
         }
 
     }
