@@ -8,13 +8,13 @@
             <ul class="list-unstyled">
                 <li class="list-group-item">
                     <div class="row form-horizontal">
-                        <input type="hidden" name="idVeiculo" ng-model="veiculo.id"/>
+                        <input type="hidden" name="idVeiculo" ng-model="veiculo.idVeiculo"/>
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                             <label class="small">Tipo</label>
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-car"></i></span>
                                 <select class="form-control" name="tipo" ng-change="changeTipo(veiculo.tipo)"
-                                        ng-options="tipo.value for tipo in tipos track by tipo.key" ng-model="veiculo.tipo.key"></select>
+                                        ng-options="tipo.value for tipo in tipos track by tipo.key" ng-model="veiculo.tipo"></select>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">

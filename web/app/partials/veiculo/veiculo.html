@@ -30,7 +30,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="veiculo in veiculos track by veiculo.id">
+                                        <tr ng-repeat="veiculo in veiculos track by veiculo.idVeiculo">
                                             <td>{{veiculo.marca}} / {{veiculo.modelo}}</td>
                                             <td>{{veiculo.placa | Placa}}</td>
                                             <td>{{veiculo.anoFabricacao}} / {{veiculo.anoModelo}}</td>
@@ -38,12 +38,12 @@
                                             <td>{{veiculo.quilometragem | number}}</td>
                                             <td>{{veiculo.situacao}}</td>
                                             <td align="center">
-                                                <button class="btn btn-sm btn-warning" ng-click="editar(veiculo.id)">
+                                                <button class="btn btn-sm btn-warning" ng-click="editar(veiculo.idVeiculo)">
                                                     <i class="fa fa-lg fa-pencil"></i>
                                                 </button>
                                             </td>
                                             <td align="center">
-                                                <a class="btn btn-sm btn-danger" ng-click="excluir(veiculo.id)">
+                                                <a class="btn btn-sm btn-danger" ng-click="excluir(veiculo.idVeiculo)">
                                                     <i class="fa fa-lg fa-trash"></i>
                                                 </a>
                                             </td>

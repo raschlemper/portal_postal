@@ -2,7 +2,7 @@ package com.portalpostal.model;
 
 public class Veiculo {
     
-    private Integer id;
+    private Integer idVeiculo;
     private String tipo;
     private String marca;
     private String modelo; 
@@ -19,34 +19,12 @@ public class Veiculo {
     
     public Veiculo() {}
 
-    public Veiculo(Integer id) {
-        this.id = id;
+    public Integer getIdVeiculo() {
+        return idVeiculo;
     }
 
-    public Veiculo(Integer id, String tipo, String marca, String modelo, String placa, Integer anoFabricacao, Integer anoModelo, String chassis, 
-            String renavam, Integer quilometragem, String combustivel, String status, String situacao) {
-        this.id = id;
-        this.tipo = tipo;
-        this.marca = marca;
-        this.modelo = modelo;
-//        this.versao = versao;
-        this.placa = placa;
-        this.anoFabricacao = anoFabricacao;
-        this.anoModelo = anoModelo;
-        this.chassis = chassis;
-        this.renavam = renavam;
-        this.quilometragem = quilometragem;
-        this.combustivel = combustivel;
-        this.status = status;
-        this.situacao = situacao;
-    }   
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdVeiculo(Integer idVeiculo) {
+        this.idVeiculo = idVeiculo;
     }
 
     public String getTipo() {
@@ -92,11 +70,6 @@ public class Veiculo {
     public Integer getAnoFabricacao() {
         return anoFabricacao;
     }
-    
-    public String getAnoFabricacaoFormat() {
-        if(this.anoFabricacao == 0) { return ""; }
-        return anoFabricacao.toString();
-    }
 
     public void setAnoFabricacao(Integer anoFabricacao) {
         this.anoFabricacao = anoFabricacao;
@@ -106,20 +79,8 @@ public class Veiculo {
         return anoModelo;
     }
 
-    public String getAnoModeloFormat() {
-        if(this.anoModelo == 0) { return ""; }
-        return anoModelo.toString();
-    }
-
     public void setAnoModelo(Integer anoModelo) {
         this.anoModelo = anoModelo;
-    }   
-
-    public String getAnoFabricacaoModelo() {
-        if(this.anoModelo > 0 && this.anoFabricacao > 0) { 
-            return anoFabricacao + "/" + anoModelo;
-        }
-        return "";
     }
 
     public String getChassis() {

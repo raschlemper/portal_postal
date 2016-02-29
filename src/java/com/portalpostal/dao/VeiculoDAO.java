@@ -1,48 +1,87 @@
 package com.portalpostal.dao;
 
+import Util.Sql2oConnexao;
 import com.portalpostal.model.Veiculo;
-import com.portalpostal.dao.builder.VeiculoRowMapper;
-import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import org.sql2o.Connection;
+import org.sql2o.Query;
 
-public class VeiculoDAO extends GenericDAO {   
+public class VeiculoDAO {   
+    
+    protected Connection connection;
 
     public VeiculoDAO(String nomeBD) {
-        super(nomeBD);
+        connection = Sql2oConnexao.conect(nomeBD);
     } 
 
-    public List<Veiculo> consultaTodos(String nmCache) throws Exception {
+    public List<Veiculo> findAll() throws Exception {
         String sql = "SELECT * FROM veiculo ORDER BY tipo, marca, modelo, placa";
         return connection.createQuery(sql).executeAndFetch(Veiculo.class);
     }
 
-    public Veiculo consulta(String nmCache, Integer idVeiculo) throws Exception {
-//        Map<String, Object> paramMap = new HashMap<>();
-//        paramMap.put("idVeiculo", idVeiculo);
-//        List<Veiculo> veiculos = executeQuery("SELECT * FROM veiculo WHERE idVeiculo = :idVeiculo", paramMap, new VeiculoRowMapper());
-//        if(veiculos != null && !veiculos.isEmpty()) return (Veiculo) veiculos.get(0);
-        return null;
+    public Veiculo find(Integer idVeiculo) throws Exception {
+        String sql = "SELECT * FROM veiculo WHERE idVeiculo = :idVeiculo";
+        return connection.createQuery(sql)
+                .addParameter("idVeiculo", idVeiculo)
+                .executeAndFetchFirst(Veiculo.class);
     }
 
-    public Veiculo inserir(String nmCache, Veiculo veiculo) throws Exception {
-//        Map<String, Object> paramMap = new HashMap<>();
-//        paramMap.put("tipo", veiculo.getTipo());
-//        paramMap.put("marca", veiculo.getMarca());
-//        paramMap.put("modelo", veiculo.getModelo());
-//        paramMap.put("placa", veiculo.getPlaca());
-//        paramMap.put("anoFabricacao", veiculo.getAnoFabricacao());
-//        paramMap.put("anoModelo", veiculo.getAnoModelo());
-//        paramMap.put("chassis", veiculo.getChassis());
-//        paramMap.put("renavam", veiculo.getRenavam());
-//        paramMap.put("quilometragem", veiculo.getQuilometragem());
-//        paramMap.put("combustivel", veiculo.getCombustivel());
-//        paramMap.put("status", veiculo.getStatus());
-//        paramMap.put("situacao", veiculo.getSituacao());        
-//        Integer id = executeUpdate("INSERT INTO veiculo (tipo, marca, modelo, placa, anoFabricacao, anoModelo, chassis, renavam, quilometragem, combustivel, status, situacao) "
-//                   + "VALUES(:tipo, :marca, :modelo, :placa, :anoFabricacao, :anoModelo, :chassis, :renavam, :quilometragem, :combustivel, :status, :situacao)", paramMap);
-//        if(id != null) return consulta(nmCache, id);
-        return null;
+    public Veiculo save(Veiculo veiculo) throws Exception {        
+        String sql = "INSERT INTO veiculo (tipo, marca, modelo, placa, anoFabricacao, anoModelo, chassis, renavam, quilometragem, combustivel, status, situacao) "
+                   + "VALUES(:tipo, :marca, :modelo, :placa, :anoFabricacao, :anoModelo, :chassis, :renavam, :quilometragem, :combustivel, :status, :situacao)";
+        return connection.createQuery(sql, true)
+                .addParameter("tipo", veiculo.getTipo())
+                .addParameter("marca", veiculo.getMarca())
+                .addParameter("modelo", veiculo.getModelo())
+                .addParameter("placa", veiculo.getPlaca())
+                .addParameter("anoFabricacao", veiculo.getAnoFabricacao())
+                .addParameter("anoModelo", veiculo.getAnoModelo())
+                .addParameter("chassis", veiculo.getChassis())
+                .addParameter("renavam", veiculo.getRenavam())
+                .addParameter("quilometragem", veiculo.getQuilometragem())
+                .addParameter("combustivel", veiculo.getCombustivel())
+                .addParameter("status", veiculo.getStatus())
+                .addParameter("situacao", veiculo.getSituacao())   
+                .executeUpdate().getKey(Veiculo.class); 
+    }
+
+    public Veiculo update(Veiculo veiculo) throws Exception {        
+        String sql = "UPDATE veiculo "
+                   + "SET tipo = :tipo, marca = :marca, modelo = :modelo, placa = :placa, anoFabricacao = :anoFabricacao, anoModelo = :anoModelo, "
+                   + "chassis = :chassis, renavam = :renavam, quilometragem = :quilometragem, combustivel = :combustivel, status = :status, situacao = :situacao "
+                   + "WHERE idVeiculo = :idVeiculo ";
+            connection.createQuery(sql)
+                .addParameter("idVeiculo", veiculo.getIdVeiculo())
+                .addParameter("tipo", veiculo.getTipo())
+                .addParameter("marca", veiculo.getMarca())
+                .addParameter("modelo", veiculo.getModelo())
+                .addParameter("placa", veiculo.getPlaca())
+                .addParameter("anoFabricacao", veiculo.getAnoFabricacao())
+                .addParameter("anoModelo", veiculo.getAnoModelo())
+                .addParameter("chassis", veiculo.getChassis())
+                .addParameter("renavam", veiculo.getRenavam())
+                .addParameter("quilometragem", veiculo.getQuilometragem())
+                .addParameter("combustivel", veiculo.getCombustivel())
+                .addParameter("status", veiculo.getStatus())
+                .addParameter("situacao", veiculo.getSituacao())   
+                .executeUpdate();          
+        return veiculo;
+    }
+
+    public Veiculo remove(Integer idVeiculo) throws Exception { 
+        Veiculo veiculo = find(idVeiculo);
+        String sql = "DELETE FROM veiculo WHERE idVeiculo = ? ";
+            connection.createQuery(sql)
+                .addParameter("idVeiculo", idVeiculo)
+                .executeUpdate();  
+        return veiculo;
+    }
+
+    public Veiculo findByPlaca(Veiculo veiculo) throws Exception {        
+        String sql = "SELECT * FROM veiculo WHERE placa = :placa ";
+        if(veiculo.getIdVeiculo()!= null) { sql += " AND idVeiculo <> :idVeiculo "; }
+        Query query = connection.createQuery(sql).addParameter("placa", veiculo.getPlaca());
+        if(veiculo.getIdVeiculo()!= null) { query.addParameter("idVeiculo", veiculo.getIdVeiculo()); }
+        return query.executeAndFetchFirst(Veiculo.class);
     }
 }
