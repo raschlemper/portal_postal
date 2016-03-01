@@ -23,7 +23,7 @@ app.controller('VeiculoController', ['$scope', '$filter', 'VeiculoService', 'Mod
         
         var criarVeiculosLista = function(veiculos) {
             return _.map(veiculos, function(veiculo) {
-                return _.pick(veiculo, 'marca', 'modelo', 'placa', 'combustivel', 'situacao', 'dataCadastro');
+                return _.pick(veiculo, 'idVeiculo', 'marca', 'modelo', 'placa', 'combustivel', 'situacao', 'dataCadastro');
             })
         }
 
@@ -44,7 +44,9 @@ app.controller('VeiculoController', ['$scope', '$filter', 'VeiculoService', 'Mod
         $scope.visualizar = function(idVeiculo) {
             VeiculoService.get(idVeiculo)
                 .then(function(veiculo) {
-                     modalVisualizar(veiculo);                
+                     modalVisualizar(veiculo).then(function(result) {
+                         $scope.editar(result);
+                     })          
                 })
                 .catch(function(e) {
                     modalMessage(e);

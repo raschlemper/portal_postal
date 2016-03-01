@@ -41,7 +41,7 @@ app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'vei
         }
 
         $scope.changeTipo = function (tipo) {
-            FipeService.marcaVeiculo(tipo.key)
+            FipeService.marcaVeiculo(tipo.id)
                 .then(function (data) {
                     $scope.marcas = data;
                     $scope.veiculo.marca = data[0];
@@ -54,7 +54,7 @@ app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'vei
         };
 
         $scope.changeMarca = function (tipo, marca) {
-            FipeService.modeloVeiculo(tipo.key, marca.id)
+            FipeService.modeloVeiculo(tipo.id, marca.id)
                 .then(function (data) {
                     $scope.modelos = data;
                     $scope.veiculo.modelo = data[0];
@@ -67,7 +67,7 @@ app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'vei
         };
 
         $scope.changeModelo = function (tipo, marca, modelo) {
-            FipeService.versaoVeiculo(tipo.key, marca.id, modelo.id)
+            FipeService.versaoVeiculo(tipo.id, marca.id, modelo.id)
                 .then(function (data) {
                     $scope.versoes = data;
                     $scope.veiculo.versao = data[0];
@@ -80,7 +80,7 @@ app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'vei
         };
 
         $scope.changeVersao = function (tipo, marca, modelo, versao) {
-            FipeService.veiculo(tipo.key, marca.id, modelo.id, versao.id)
+            FipeService.veiculo(tipo.id, marca.id, modelo.id, versao.id)
                 .then(function (data) {
                     console.log(data);
                     $scope.veiculo.combustivel = ListaService.getValueCombustivelFipe($scope.combustiveis, data.combustivel);
