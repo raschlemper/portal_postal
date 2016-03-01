@@ -1,18 +1,14 @@
 package com.portalpostal.service;
 
-import Veiculo.Validacao.Validacao;
 import com.portalpostal.dao.VeiculoDAO;
 import com.portalpostal.model.Veiculo;
-import com.portalpostal.validation.VeiculoValidation;
 import java.util.List;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 
 public class VeiculoService {
     
     private final VeiculoDAO veiculoDAO;
 
-    private VeiculoService(String nomeBD) {
+    public VeiculoService(String nomeBD) {
         veiculoDAO = new VeiculoDAO(nomeBD);
     }
     
@@ -29,7 +25,7 @@ public class VeiculoService {
         return veiculoDAO.save(veiculo);
     } 
     
-    public Veiculo update(Integer idVeiculo, Veiculo veiculo) throws Exception {
+    public Veiculo update(Veiculo veiculo) throws Exception {
         validation(veiculo);
         return veiculoDAO.update(veiculo);
     } 

@@ -4,11 +4,12 @@ import Controle.ContrErroLog;
 import com.portalpostal.validation.Validation;
 import com.portalpostal.validation.VeiculoValidation;
 import com.portalpostal.model.Veiculo;
-import com.portalpostal.dao.VeiculoDAO;
+import com.portalpostal.service.VeiculoService;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -29,12 +30,12 @@ public class VeiculoController {
     private HttpSession sessao;
     private String nomeBD;
     
-    private VeiculoDAO veiculoDAO;
+    private VeiculoService veiculoService;
 
     private void init() {
         sessao = request.getSession();
         nomeBD = (String) sessao.getAttribute("nomeBD");
-        veiculoDAO = new VeiculoDAO(nomeBD);
+        veiculoService = new VeiculoService(nomeBD);
     }
     
     @GET
@@ -43,19 +44,19 @@ public class VeiculoController {
     public List<Veiculo> findAll() {
         try {
             init();    
-            return veiculoDAO.findAll();
+            return veiculoService.findAll();
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     }  
     
     @GET
-    @Path("/{id}")
+    @Path("/{idVeiculo}")
     @Produces(MediaType.APPLICATION_JSON)
     public Veiculo find(@PathParam("idVeiculo") Integer idVeiculo) {
         try {
             init();    
-            return veiculoDAO.find(idVeiculo);
+            return veiculoService.find(idVeiculo);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -69,34 +70,34 @@ public class VeiculoController {
         try {
             init();
             validation(veiculo);
-            return veiculoDAO.save(veiculo);
+            return veiculoService.save(veiculo);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     } 
     
     @PUT
-    @Path("/{id}")
+    @Path("/{idVeiculo}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Veiculo update(@PathParam("idVeiculo") Integer idVeiculo, Veiculo veiculo) {
+    public Veiculo update(Veiculo veiculo) {
         try {
             init();
             validation(veiculo);
-            return veiculoDAO.update(veiculo);
+            return veiculoService.update(veiculo);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     } 
     
-    @PUT
-    @Path("/{id}")
+    @DELETE
+    @Path("/{idVeiculo}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Veiculo delete(@PathParam("idVeiculo") Integer idVeiculo) {
         try {
             init();
-            return veiculoDAO.remove(idVeiculo);
+            return veiculoService.delete(idVeiculo);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }

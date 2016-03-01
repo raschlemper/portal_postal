@@ -1,8 +1,7 @@
 'use strict';
 
-
-app.controller('VeiculoController', ['$scope', 'VeiculoService', 'ModalService', 'DataTableService',  'LISTAS',
-    function ($scope, VeiculoService, ModalService, DataTableService, LISTAS) {
+app.controller('VeiculoController', ['$scope', '$filter', 'VeiculoService', 'ModalService', 'DataTableService',  'LISTAS',
+    function ($scope, $filter, VeiculoService, ModalService, DataTableService, LISTAS) {
 
         var init = function () {
             $scope.veiculos = [];
@@ -16,7 +15,7 @@ app.controller('VeiculoController', ['$scope', 'VeiculoService', 'ModalService',
                     $scope.veiculos = data;
                 })
                 .catch(function(e) {
-                    modalMessage(e.error);
+                    modalMessage(e);
                 });
         };
 
@@ -35,9 +34,19 @@ app.controller('VeiculoController', ['$scope', 'VeiculoService', 'ModalService',
                         todos();
                     })
                     .catch(function(e) {
-                        modalMessage(e.error);
+                        modalMessage(e);
                     });
             });
+        };
+
+        $scope.visualizar = function(idVeiculo) {
+            VeiculoService.get(idVeiculo)
+                .then(function(veiculo) {
+                     modalVisualizar(veiculo);                
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
         };
 
         $scope.editar = function(idVeiculo) {
@@ -50,7 +59,7 @@ app.controller('VeiculoController', ['$scope', 'VeiculoService', 'ModalService',
                                 todos();
                             })
                             .catch(function(e) {
-                                modalMessage(e.error);
+                                modalMessage(e);
                             });
                     });
                 })
@@ -68,13 +77,13 @@ app.controller('VeiculoController', ['$scope', 'VeiculoService', 'ModalService',
                         todos();                        
                     })
                     .catch(function(e) {
-                        modalMessage(e.error);
+                        modalMessage(e);
                     });
             });
         }; 
     
         var getMsgToClient = function(veiculo) {
-            return veiculo.modelo + " (" + veiculo.placa + ")";        
+            return veiculo.modelo + " (" + $filter('Placa')(veiculo.placa) + ")";        
         }
         
         var modalMessage = function(message) {
@@ -82,7 +91,22 @@ app.controller('VeiculoController', ['$scope', 'VeiculoService', 'ModalService',
         };
         
         var modalSalvar = function(veiculo) {
-            var modalInstance = ModalService.modalDefault('partials/veiculo/modalVeiculo.html', 'ModalVeiculoController', veiculo);
+            var modalInstance = ModalService.modalDefault('partials/veiculo/modalEditarVeiculo.html', 'ModalEditarVeiculoController', 'lg',
+                {
+                    veiculo: function() {
+                        return veiculo;
+                    }
+                });
+            return modalInstance.result;
+        };
+        
+        var modalVisualizar = function(veiculo) {
+            var modalInstance = ModalService.modalDefault('partials/veiculo/modalVisualizarVeiculo.html', 'ModalVisualizarVeiculoController', 'md',
+                {
+                    veiculo: function() {
+                        return veiculo;
+                    }
+                });
             return modalInstance.result;
         };
         

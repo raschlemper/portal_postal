@@ -45,7 +45,8 @@
         <script type="text/javascript" charset="UTF-8" src="js/controller/modalMessageController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/controller/modalExcluirController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/controller/veiculoController.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/controller/modalVeiculoController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/controller/modalEditarVeiculoController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/controller/modalVisualizarVeiculoController.js"></script>
         
         <script type="text/javascript" charset="UTF-8" src="js/service/fipeService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/service/modalService.js"></script>

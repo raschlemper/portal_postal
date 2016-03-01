@@ -1,11 +1,16 @@
 package com.portalpostal.model;
 
+import java.util.Date;
+
 public class Veiculo {
     
     private Integer idVeiculo;
-    private String tipo;
+    private TipoVeiculo tipo;
+    private Integer idMarca;
     private String marca;
+    private Integer idModelo;
     private String modelo; 
+    private Integer idVersao;
     private String versao; 
     private String placa;
     private Integer anoFabricacao;
@@ -13,9 +18,10 @@ public class Veiculo {
     private String chassis;
     private String renavam;
     private Integer quilometragem;
-    private String combustivel;
-    private String status;
-    private String situacao;
+    private TipoCombustivel combustivel;
+    private TipoStatus status;
+    private TipoSituacao situacao;
+    private Date dataCadastro;
     
     public Veiculo() {}
 
@@ -27,12 +33,20 @@ public class Veiculo {
         this.idVeiculo = idVeiculo;
     }
 
-    public String getTipo() {
+    public TipoVeiculo getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(TipoVeiculo tipo) {
         this.tipo = tipo;
+    }
+
+    public Integer getIdMarca() {
+        return idMarca;
+    }
+
+    public void setIdMarca(Integer idMarca) {
+        this.idMarca = idMarca;
     }
 
     public String getMarca() {
@@ -43,12 +57,28 @@ public class Veiculo {
         this.marca = marca;
     }
 
+    public Integer getIdModelo() {
+        return idModelo;
+    }
+
+    public void setIdModelo(Integer idModelo) {
+        this.idModelo = idModelo;
+    }
+
     public String getModelo() {
         return modelo;
     }
 
     public void setModelo(String modelo) {
         this.modelo = modelo;
+    }
+
+    public Integer getIdVersao() {
+        return idVersao;
+    }
+
+    public void setIdVersao(Integer idVersao) {
+        this.idVersao = idVersao;
     }
 
     public String getVersao() {
@@ -107,28 +137,37 @@ public class Veiculo {
         this.quilometragem = quilometragem;
     }
 
-    public String getCombustivel() {
+    public TipoCombustivel getCombustivel() {
         return combustivel;
     }
 
-    public void setCombustivel(String combustivel) {
+    public void setCombustivel(TipoCombustivel combustivel) {
         this.combustivel = combustivel;
     }
 
-    public String getStatus() {
+    public TipoStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(TipoStatus status) {
         this.status = status;
     }
 
-    public String getSituacao() {
+    public TipoSituacao getSituacao() {
         return situacao;
     }
 
-    public void setSituacao(String situacao) {
+    public void setSituacao(TipoSituacao situacao) {
         this.situacao = situacao;
     }
+
+    public Date getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(Date dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
+    
     
 }

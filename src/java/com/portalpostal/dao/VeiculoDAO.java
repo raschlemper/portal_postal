@@ -15,13 +15,15 @@ public class VeiculoDAO {
     } 
 
     public List<Veiculo> findAll() throws Exception {
-        String sql = "SELECT * FROM veiculo ORDER BY tipo, marca, modelo, placa";
-        return connection.createQuery(sql).executeAndFetch(Veiculo.class);
+        String sql = "SELECT * FROM veiculo ORDER BY marca, modelo, placa";
+        return connection.createQuery(sql).addColumnMapping("idTipo", "tipo").executeAndFetch(Veiculo.class);
     }
 
     public Veiculo find(Integer idVeiculo) throws Exception {
         String sql = "SELECT * FROM veiculo WHERE idVeiculo = :idVeiculo";
         return connection.createQuery(sql)
+                .addColumnMapping("idTipo", "tipo")
+//                .addColumnMapping("combustivel", "tipoCombustivel")
                 .addParameter("idVeiculo", idVeiculo)
                 .executeAndFetchFirst(Veiculo.class);
     }
@@ -29,7 +31,7 @@ public class VeiculoDAO {
     public Veiculo save(Veiculo veiculo) throws Exception {        
         String sql = "INSERT INTO veiculo (tipo, marca, modelo, placa, anoFabricacao, anoModelo, chassis, renavam, quilometragem, combustivel, status, situacao) "
                    + "VALUES(:tipo, :marca, :modelo, :placa, :anoFabricacao, :anoModelo, :chassis, :renavam, :quilometragem, :combustivel, :status, :situacao)";
-        return connection.createQuery(sql, true)
+        Integer idVeiculo = connection.createQuery(sql, true)
                 .addParameter("tipo", veiculo.getTipo())
                 .addParameter("marca", veiculo.getMarca())
                 .addParameter("modelo", veiculo.getModelo())
@@ -42,7 +44,8 @@ public class VeiculoDAO {
                 .addParameter("combustivel", veiculo.getCombustivel())
                 .addParameter("status", veiculo.getStatus())
                 .addParameter("situacao", veiculo.getSituacao())   
-                .executeUpdate().getKey(Veiculo.class); 
+                .executeUpdate().getKey(Integer.class); 
+        return find(idVeiculo);
     }
 
     public Veiculo update(Veiculo veiculo) throws Exception {        

@@ -21,22 +21,19 @@
                                         <tr>
                                             <th>Marca / Modelo</th>
                                             <th>Placa</th>
-                                            <th>Fab. / Mod.</th>
-                                            <th>Renavam</th>
-                                            <th>Km</th>
+                                            <th>Combustível</th>
                                             <th>Situação</th>
-                                            <th class="no-sort" width="100">Alterar</th>
-                                            <th class="no-sort" width="100">Excluir</th>
+                                            <th class="no-sort text-center" width="100">Alterar</th>
+                                            <th class="no-sort text-center" width="100">Excluir</th>
+                                            <th class="no-sort text-center" width="100">Detalhes</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr ng-repeat="veiculo in veiculos track by veiculo.idVeiculo">
                                             <td>{{veiculo.marca}} / {{veiculo.modelo}}</td>
                                             <td>{{veiculo.placa | Placa}}</td>
-                                            <td>{{veiculo.anoFabricacao}} / {{veiculo.anoModelo}}</td>
-                                            <td>{{veiculo.renavam | Renavam}}</td>
-                                            <td>{{veiculo.quilometragem | number}}</td>
-                                            <td>{{veiculo.situacao}}</td>
+                                            <td>{{veiculo.combustivel.descricao}}</td>
+                                            <td>{{veiculo.situacao.descricao}}</td>
                                             <td align="center">
                                                 <button class="btn btn-sm btn-warning" ng-click="editar(veiculo.idVeiculo)">
                                                     <i class="fa fa-lg fa-pencil"></i>
@@ -45,6 +42,11 @@
                                             <td align="center">
                                                 <a class="btn btn-sm btn-danger" ng-click="excluir(veiculo.idVeiculo)">
                                                     <i class="fa fa-lg fa-trash"></i>
+                                                </a>
+                                            </td>
+                                            <td align="center">
+                                                <a class="btn btn-sm btn-primary" ng-click="visualizar(veiculo.idVeiculo)">
+                                                    <i class="fa fa-lg fa-info"></i>
                                                 </a>
                                             </td>
                                         </tr>

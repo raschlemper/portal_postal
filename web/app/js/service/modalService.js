@@ -4,17 +4,13 @@ app.factory('ModalService', function($modal) {
 
     return {
 
-        modalDefault: function (templateUrl, controller, veiculo) {
+        modalDefault: function (templateUrl, controller, size, resolve) {
             return $modal.open({
                 animation: true,
                 templateUrl: templateUrl,
                 controller: controller,
-                size: 'lg',
-                resolve: {
-                    veiculo: function() {
-                        return veiculo;
-                    }
-                }
+                size: size,
+                resolve: resolve
             })
         },
 

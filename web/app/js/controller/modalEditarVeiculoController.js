@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('ModalVeiculoController', ['$scope', '$modalInstance', 'veiculo', 'FipeService', 'ListaService', 'LISTAS',
+app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'veiculo', 'FipeService', 'ListaService', 'LISTAS',
     function ($scope, $modalInstance, veiculo, FipeService, ListaService, LISTAS) {
 
         var init = function () {
@@ -10,7 +10,7 @@ app.controller('ModalVeiculoController', ['$scope', '$modalInstance', 'veiculo',
             $scope.situacoes = LISTAS.situacao;
             
             $scope.veiculo = {
-                id: (veiculo && veiculo.id) || null,
+                idVeiculo: (veiculo && veiculo.idVeiculo) || null,
                 tipo: (veiculo && ListaService.getValue($scope.tipos, veiculo.tipo)) || $scope.tipos[1],
                 marca: (veiculo && veiculo.marca) || [],
                 modelo: (veiculo && veiculo.modelo) || [],

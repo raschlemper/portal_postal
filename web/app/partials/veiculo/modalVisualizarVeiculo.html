@@ -1,0 +1,25 @@
+<form name="veiculoForm" novalidate>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
+        <h4 class="modal-title">Visualizar Veículo</h4>
+    </div>
+    <div class="modal-body">
+        <div class="bootbox-body">
+            <div class="row">
+                <label class="col-md-3 text-right">Tipo:</label> 
+                <div class="col-md-8">{{veiculo.tipo.descricao}}</div>
+            </div>  
+            <div class="row">  
+                <label class="col-md-3 text-right">Marca: </label>
+                <div class="col-md-8">{{veiculo.marca}}</div>
+            </div>  
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">
+            <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR
+        </button>
+    </div>
+</form>    
+
+  
