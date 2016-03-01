@@ -5,6 +5,7 @@ app.controller('VeiculoController', ['$scope', '$filter', 'VeiculoService', 'Mod
 
         var init = function () {
             $scope.veiculos = [];
+            $scope.veiculosLista = [];
             $scope.situacoes = LISTAS.situacao;
             $scope.dtOptions = DataTableService.default();
         };             
@@ -13,21 +14,22 @@ app.controller('VeiculoController', ['$scope', '$filter', 'VeiculoService', 'Mod
             VeiculoService.getAll()
                 .then(function (data) {
                     $scope.veiculos = data;
+                    $scope.veiculosLista = criarVeiculosLista($scope.veiculos);
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         };
+        
+        var criarVeiculosLista = function(veiculos) {
+            return _.map(veiculos, function(veiculo) {
+                return _.pick(veiculo, 'marca', 'modelo', 'placa', 'combustivel', 'situacao', 'dataCadastro');
+            })
+        }
 
         $scope.salvar = function() {
             modalSalvar().then(function(result) {
-                result.tipo = result.tipo.key;
-                result.marca = result.marca.id;
-                result.modelo = result.modelo.id;
-                result.combustivel = result.combustivel.key;
-                result.status = result.status.key;
-                result.situacao = result.situacao.key;
-                result.versao = result.versao.id;
+                result = ajustarDados(result);
                 VeiculoService.save(result)
                     .then(function(data) {  
                         modalMessage("Veículo Inserido " + getMsgToClient(data) +  " com sucesso!");
@@ -53,7 +55,8 @@ app.controller('VeiculoController', ['$scope', '$filter', 'VeiculoService', 'Mod
             VeiculoService.get(idVeiculo)
                 .then(function(veiculo) {
                      modalSalvar(veiculo).then(function(result) {
-                        VeiculoService.save(result)
+                        result = ajustarDados(result);
+                        VeiculoService.update(idVeiculo, result)
                             .then(function (data) {  
                                 modalMessage("Veículo " + getMsgToClient(data) + " Alterado com sucesso!");
                                 todos();
@@ -81,6 +84,20 @@ app.controller('VeiculoController', ['$scope', '$filter', 'VeiculoService', 'Mod
                     });
             });
         }; 
+        
+        var ajustarDados = function(data) {            
+            data.tipo = data.tipo.id;
+            data.idMarca = data.marca.id;
+            data.marca = data.marca.name;
+            data.idModelo = data.modelo.id;
+            data.modelo = data.modelo.name;
+            data.idVersao = data.versao.id;
+            data.versao = data.versao.name;
+            data.combustivel = data.combustivel.id;
+            data.status = data.status.id;
+            data.situacao = data.situacao.id;
+            return data;
+        }
     
         var getMsgToClient = function(veiculo) {
             return veiculo.modelo + " (" + $filter('Placa')(veiculo.placa) + ")";        

@@ -6,13 +6,83 @@
     <div class="modal-body">
         <div class="bootbox-body">
             <div class="row">
-                <label class="col-md-3 text-right">Tipo:</label> 
+                <div class="col-md-4 text-right">
+                    <label>Tipo:</label>
+                </div>
                 <div class="col-md-8">{{veiculo.tipo.descricao}}</div>
-            </div>  
-            <div class="row">  
-                <label class="col-md-3 text-right">Marca: </label>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Marca:</label>
+                </div>
                 <div class="col-md-8">{{veiculo.marca}}</div>
-            </div>  
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Modelo:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.modelo}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Versão:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.versao}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Placa:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.placa | Placa}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Ano Modelo:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.anoModelo}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Chassis:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.chassis | uppercase}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Renavam:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.renavam | Renavam}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>KM:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.quilometragem | number}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Combustível:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.combustivel.descricao}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Status:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.status.descricao}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Situação:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.situacao.descricao}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Data Cadastro:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.dataCadastro | date : 'dd/MM/yyyy'}}</div>
+            </div>
         </div>
     </div>
     <div class="modal-footer">

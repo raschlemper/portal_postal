@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'veiculo', 'FipeService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, veiculo, FipeService, ListaService, LISTAS) {
+app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'veiculo', 'FipeService', 'ListaService', 'ValorService', 'LISTAS',
+    function ($scope, $modalInstance, veiculo, FipeService, ListaService, ValorService, LISTAS) {
 
         var init = function () {
             $scope.tipos = LISTAS.tipo;
@@ -12,11 +12,13 @@ app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'vei
             $scope.veiculo = {
                 idVeiculo: (veiculo && veiculo.idVeiculo) || null,
                 tipo: (veiculo && ListaService.getValue($scope.tipos, veiculo.tipo)) || $scope.tipos[1],
+                idMarca: (veiculo && veiculo.idMarca) || null,
                 marca: (veiculo && veiculo.marca) || [],
+                idModelo: (veiculo && veiculo.idMarca) || null,
                 modelo: (veiculo && veiculo.modelo) || [],
+                idVersao: (veiculo && veiculo.idMarca) || null,
                 versao: (veiculo && veiculo.versao) || [],
                 placa: (veiculo && veiculo.placa.toUpperCase()) || null,
-                anoFabricacao: (veiculo && veiculo.anoFabricacao) || null,
                 anoModelo: (veiculo && veiculo.anoModelo) || null,
                 chassis: (veiculo && veiculo.chassis) || null,
                 renavam: (veiculo && veiculo.renavam) || null,
@@ -43,6 +45,7 @@ app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'vei
                 .then(function (data) {
                     $scope.marcas = data;
                     $scope.veiculo.marca = data[0];
+                    $scope.veiculo.idMarca = $scope.veiculo.marca.id;
                     $scope.changeMarca($scope.veiculo.tipo, $scope.veiculo.marca);
                 })
                 .catch(function (e) {
@@ -55,6 +58,7 @@ app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'vei
                 .then(function (data) {
                     $scope.modelos = data;
                     $scope.veiculo.modelo = data[0];
+                    $scope.veiculo.idModelo = $scope.veiculo.modelo.id;
                     $scope.changeModelo($scope.veiculo.tipo, $scope.veiculo.marca, $scope.veiculo.modelo);
                 })
                 .catch(function (e) {
@@ -67,6 +71,7 @@ app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'vei
                 .then(function (data) {
                     $scope.versoes = data;
                     $scope.veiculo.versao = data[0];
+                    $scope.veiculo.idVersao = $scope.veiculo.versao.id;
                     $scope.changeVersao($scope.veiculo.tipo, $scope.veiculo.marca, $scope.veiculo.modelo, $scope.veiculo.versao);
                 })
                 .catch(function (e) {
@@ -78,6 +83,8 @@ app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'vei
             FipeService.veiculo(tipo.key, marca.id, modelo.id, versao.id)
                 .then(function (data) {
                     console.log(data);
+                    $scope.veiculo.combustivel = ListaService.getValueCombustivelFipe($scope.combustiveis, data.combustivel);
+                    $scope.veiculo.anoModelo = ValorService.getValueAnoFipe(data.ano_modelo);
                     $scope.veiculoFipe = data;
                 })
                 .catch(function (e) {
@@ -97,10 +104,6 @@ app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'vei
         var validarForm = function (form) {
             if (form.placa.$error.required) {
                 alert('Preencha a placa do ve\u00EDculo!');
-                return false;
-            }
-            if (form.anoFabricacao.$error.min || form.anoFabricacao.$error.max) {
-                alert('Preencha o ano de fabrica\u00E7\u00E3o do ve\u00EDculo com valores entre ' + $scope.minVal + ' e ' + $scope.maxVal + '!');
                 return false;
             }
             if (form.anoModelo.$error.min || form.anoModelo.$error.max) {

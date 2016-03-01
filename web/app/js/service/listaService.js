@@ -5,8 +5,14 @@ app.factory('ListaService', function() {
     return {
 
         getValue: function(list, key) {
-            var value = _.find(list, function(item){ return item.value == key; });
-            if(!value) { value = {'key': 'nenhum', 'value': ''} }
+            var value = _.find(list, function(item){ return item.id == key; });
+            if(!value) { value = list[0]; }
+            return value;
+        },
+        
+        getValueCombustivelFipe: function(list, key) {
+            var value = _.find(list, function(item){ return item.descricao == key; });
+            if(!value) { value = list[0]; }
             return value;
         }
 

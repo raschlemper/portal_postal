@@ -10,10 +10,9 @@ public class Veiculo {
     private String marca;
     private Integer idModelo;
     private String modelo; 
-    private Integer idVersao;
+    private String idVersao;
     private String versao; 
     private String placa;
-    private Integer anoFabricacao;
     private Integer anoModelo;
     private String chassis;
     private String renavam;
@@ -73,11 +72,11 @@ public class Veiculo {
         this.modelo = modelo;
     }
 
-    public Integer getIdVersao() {
+    public String getIdVersao() {
         return idVersao;
     }
 
-    public void setIdVersao(Integer idVersao) {
+    public void setIdVersao(String idVersao) {
         this.idVersao = idVersao;
     }
 
@@ -95,14 +94,6 @@ public class Veiculo {
 
     public void setPlaca(String placa) {
         this.placa = placa;
-    }
-
-    public Integer getAnoFabricacao() {
-        return anoFabricacao;
-    }
-
-    public void setAnoFabricacao(Integer anoFabricacao) {
-        this.anoFabricacao = anoFabricacao;
     }
 
     public Integer getAnoModelo() {

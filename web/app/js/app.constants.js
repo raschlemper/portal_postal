@@ -1,29 +1,23 @@
 'use strict';
 
 app.constant('LISTAS', {
-    
-    "size": [{'key': 10, 'value': '10'},
-             {'key': 20, 'value': '20'},
-             {'key': 50, 'value': '50'},
-             {'key': 100, 'value': '100'},
-             {'key': -1, 'value': 'Todos'}],
 
-    "tipo": [{'key': 'motos', 'value': 'Moto'},
-             {'key': 'carros', 'value': 'Carro'},
-             {'key': 'caminhoes', 'value': 'Caminh\u00E3o'}],
+    "tipo": [{'id': 0, 'codigo': 'motos', 'descricao': 'Moto'},
+             {'id': 1, 'codigo': 'carros', 'descricao': 'Carro'},
+             {'id': 2, 'codigo': 'caminhoes', 'descricao': 'Caminh\u00E3o'}],
 
-    "combustivel": [{'key': 'gasolina', 'value': 'Gasolina'},  
-                    {'key': 'etanol', 'value': 'Etanol'},
-                    {'key': 'disel', 'value': 'Disel'},
-                    {'key': 'gas', 'value': 'G\u00E1s Natural Veicular'},
-                    {'key': 'flex', 'value': 'Gasolina/\u00C1lcool'}],
+    "combustivel": [{'id': 0, 'codigo': 'gasolina', 'descricao': 'Gasolina'},  
+                    {'id': 1, 'codigo': 'etanol', 'descricao': 'Etanol'},
+                    {'id': 2, 'codigo': 'diesel', 'descricao': 'Diesel'},
+                    {'id': 3, 'codigo': 'gas', 'descricao': 'G\u00E1s Natural Veicular'},
+                    {'id': 4, 'codigo': 'flex', 'descricao': 'Gasolina/\u00C1lcool'}],
 
-    "status": [{'key': 'novo', 'value': 'Novo'},  
-               {'key': 'seminovo', 'value': 'Seminovo'},  
-               {'key': 'usado', 'value': 'Usado'}],
+    "status": [{'id': 0, 'codigo': 'novo', 'descricao': 'Novo'},  
+               {'id': 1, 'codigo': 'seminovo', 'descricao': 'Seminovo'},  
+               {'id': 2, 'codigo': 'usado', 'descricao': 'Usado'}],
 
-    "situacao": [{'key': '0', 'value': 'Ativo'},  
-                 {'key': '1', 'value': 'Inativo'},  
-                 {'key': '2', 'value': 'Manuten\u00E7\u00E3o'}]
+    "situacao": [{'id': 0, 'codigo': 'ativo', 'descricao': 'Ativo'},  
+                 {'id': 1, 'codigo': 'inativo', 'descricao': 'Inativo'},  
+                 {'id': 2, 'codigo': 'manutencao', 'descricao': 'Manuten\u00E7\u00E3o'}]
 
 });

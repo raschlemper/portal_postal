@@ -14,7 +14,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-car"></i></span>
                                 <select class="form-control" name="tipo" ng-change="changeTipo(veiculo.tipo)"
-                                        ng-options="tipo.value for tipo in tipos track by tipo.key" ng-model="veiculo.tipo"></select>
+                                        ng-options="tipo.descricao for tipo in tipos track by tipo.id" ng-model="veiculo.tipo"></select>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -42,14 +42,6 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                            <label class="small">Ano Fabricação</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="number" autocomplete="off" name="anoFabricacao" class="form-control" ng-model="veiculo.anoFabricacao"
-                                       min="{{minVal}}" max="{{maxVal}}" placeholder="Ano de fabricação do veículo"/>                                    
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                             <label class="small">Ano Modelo</label>
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
@@ -70,7 +62,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
                                 <input type="text" autocomplete="off" name="chassis" class="form-control" ng-model="veiculo.chassis"
-                                       ui-mask="**.**.**.*.*.******" ui-mask-placeholder-char="_" ui-mask-placeholder placeholder="Chassis do veículo"/>                                    
+                                       ui-mask="*****************   " ui-mask-placeholder-char="_" ui-mask-placeholder placeholder="Chassis do veículo"/>                                    
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -94,7 +86,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-info"></i></span>
                                 <select class="form-control" name="combustivel"
-                                        ng-options="combustivel.value for combustivel in combustiveis track by combustivel.key" ng-model="veiculo.combustivel"></select>
+                                        ng-options="combustivel.descricao for combustivel in combustiveis track by combustivel.id" ng-model="veiculo.combustivel"></select>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -102,7 +94,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-info"></i></span>
                                 <select class="form-control" name="status"
-                                        ng-options="stat.value for stat in status track by stat.key" ng-model="veiculo.status"></select>
+                                        ng-options="stat.descricao for stat in status track by stat.id" ng-model="veiculo.status"></select>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -110,7 +102,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-info"></i></span>
                                 <select class="form-control" name="situacao"
-                                        ng-options="situacao.value for situacao in situacoes track by situacao.key" ng-model="veiculo.situacao"></select>
+                                        ng-options="situacao.descricao for situacao in situacoes track by situacao.id" ng-model="veiculo.situacao"></select>
                             </div>
                         </div>
                     </div>

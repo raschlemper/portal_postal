@@ -58,11 +58,29 @@ app.factory('VeiculoService', function($http, $q) {
             return deferred.promise;
         },
 
+        update: function(idVeiculo, data, callback) {
+            var cb = callback || angular.noop;
+            var deferred = $q.defer();
+
+            $http.put(_contextPath + "/api/veiculo/" + idVeiculo, data).
+                success(function(data) {
+                    deferred.resolve(data);
+                    return cb();
+                })
+                .error(function(err) {
+                    deferred.reject(err);
+                    return cb(err);
+                }
+                .bind(this));
+
+            return deferred.promise;
+        },
+
         delete: function(idVeiculo, callback) {
             var cb = callback || angular.noop;
             var deferred = $q.defer();
 
-            $http.post(_contextPath + "/api/veiculo?action=delete&idVeiculo=" + idVeiculo).
+            $http.delete(_contextPath + "/api/veiculo/" + idVeiculo).
                 success(function(data) {
                     deferred.resolve(data);
                     return cb();
