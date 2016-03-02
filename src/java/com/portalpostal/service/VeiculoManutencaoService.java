@@ -16,8 +16,8 @@ public class VeiculoManutencaoService {
         return veiculoManutencaoDAO.findAll();
     }  
     
-    public VeiculoManutencao find(Integer idVeiculo) throws Exception {
-        return veiculoManutencaoDAO.find(idVeiculo);
+    public VeiculoManutencao find(Integer idVeiculoManutencao) throws Exception {
+        return veiculoManutencaoDAO.find(idVeiculoManutencao);
     } 
     
     public VeiculoManutencao save(VeiculoManutencao veiculo) throws Exception {
@@ -28,8 +28,8 @@ public class VeiculoManutencaoService {
         return veiculoManutencaoDAO.update(veiculo);
     } 
     
-    public VeiculoManutencao delete(Integer idVeiculo) throws Exception {
-        return veiculoManutencaoDAO.remove(idVeiculo);
+    public VeiculoManutencao delete(Integer idVeiculoManutencao) throws Exception {
+        return veiculoManutencaoDAO.remove(idVeiculoManutencao);
     } 
     
 }

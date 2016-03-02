@@ -53,7 +53,12 @@
         <script type="text/javascript" charset="UTF-8" src="js/service/dataTableService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/service/listaService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/service/valorService.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/service/veiculoService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/service/veiculo/veiculoService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/service/veiculo/veiculoCombustivelService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/service/veiculo/veiculoManutencaoService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/service/veiculo/veiculoMultaService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/service/veiculo/veiculoSeguroService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/service/veiculo/veiculoSinistroService.js"></script>
         
         <script type="text/javascript" charset="UTF-8" src="js/filter/placaFilter.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/filter/renavamFilter.js"></script>

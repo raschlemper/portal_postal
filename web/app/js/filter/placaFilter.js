@@ -1,6 +1,6 @@
 'use strict';
 
-app.filter('Placa', function() {
+app.filter('placa', function() {
     return function(input) {
         if(!input) return input;
         input = input.replace('-', '');

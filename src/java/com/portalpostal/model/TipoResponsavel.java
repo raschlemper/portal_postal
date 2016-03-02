@@ -1,19 +1,18 @@
 package com.portalpostal.model;
 
-import com.portalpostal.model.serializer.TipoManutencaoSerializer;
+import com.portalpostal.model.serializer.TipoStatusSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-@JsonSerialize(using = TipoManutencaoSerializer.class)
-public enum TipoManutencao {
+@JsonSerialize(using = TipoStatusSerializer.class)
+public enum TipoResponsavel {    
     
-    PROGRAMADA("programada", "Programada"),
-    ROTINA("rotina", "Rotina"),
-    TROCA_OLEO("trocaoleo", "Troca de Óleo");
+    MOTORISTA("motorista", "Motorista"),
+    TERCEIROS("terceiros", "Terceiros");
     
     private final String codigo;
     private final String descricao;
     
-    TipoManutencao(String codigo, String descricao) {
+    TipoResponsavel(String codigo, String descricao) {
         this.codigo = codigo;
         this.descricao = descricao;
     }
@@ -24,6 +23,5 @@ public enum TipoManutencao {
     
     public String getDescricao() {
         return descricao;
-    }  
-           
+    }    
 }

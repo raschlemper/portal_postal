@@ -30,7 +30,7 @@ var VeiculoConstantes = function() {
                     {'key': 'roubo', 'value': 'Roubo'},
                     {'key': 'furto', 'value': 'Furto'},
                     {'key': 'incendio', 'value': 'Inc\u00EAndio'},
-                    {'key': 'enchentealagamento', 'value': 'Enchente Alagamento'}];
+                    {'key': 'enchentealagamento', 'value': 'Enchente/Alagamento'}];
     
     app.responsavel = [{'key': 'motorista', 'value': 'Motorista'},
                        {'key': 'terceiros', 'value': 'Terceiros'}];

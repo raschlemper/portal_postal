@@ -5,7 +5,6 @@ import java.util.Date;
 public class VeiculoManutencao {
     
     private Integer idVeiculoManutencao;
-    private Integer idVeiculo;
     private Veiculo veiculo;
     private TipoManutencao tipo;
     private Integer quilometragem;
@@ -23,14 +22,6 @@ public class VeiculoManutencao {
 
     public void setIdVeiculoManutencao(Integer idVeiculoManutencao) {
         this.idVeiculoManutencao = idVeiculoManutencao;
-    }
-
-    public Integer getIdVeiculo() {
-        return idVeiculo;
-    }
-
-    public void setIdVeiculo(Integer idVeiculo) {
-        this.idVeiculo = idVeiculo;
     }
 
     public Veiculo getVeiculo() {

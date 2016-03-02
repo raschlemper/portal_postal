@@ -1,6 +1,6 @@
 'use strict';
 
-app.filter('Renavam', function($filter) {
+app.filter('renavam', function($filter) {
     return function(input) {
         if(!input) return input;
         input = input.replace('-', '');
