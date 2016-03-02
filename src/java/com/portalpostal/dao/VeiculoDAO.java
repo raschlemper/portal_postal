@@ -8,7 +8,7 @@ import org.sql2o.Query;
 
 public class VeiculoDAO {   
     
-    protected Connection connection;
+    private Connection connection;
 
     public VeiculoDAO(String nomeBD) {
         connection = Sql2oConnexao.conect(nomeBD);
@@ -16,13 +16,12 @@ public class VeiculoDAO {
 
     public List<Veiculo> findAll() throws Exception {
         String sql = "SELECT * FROM veiculo ORDER BY marca, modelo, placa";
-        return connection.createQuery(sql).addColumnMapping("idTipo", "tipo").executeAndFetch(Veiculo.class);
+        return connection.createQuery(sql).executeAndFetch(Veiculo.class);
     }
 
     public Veiculo find(Integer idVeiculo) throws Exception {
         String sql = "SELECT * FROM veiculo WHERE idVeiculo = :idVeiculo";
         return connection.createQuery(sql)
-                .addColumnMapping("idTipo", "tipo")
                 .addParameter("idVeiculo", idVeiculo)
                 .executeAndFetchFirst(Veiculo.class);
     }

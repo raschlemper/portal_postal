@@ -18,6 +18,10 @@ app.constant('LISTAS', {
 
     "situacao": [{'id': 0, 'codigo': 'ativo', 'descricao': 'Ativo'},  
                  {'id': 1, 'codigo': 'inativo', 'descricao': 'Inativo'},  
-                 {'id': 2, 'codigo': 'manutencao', 'descricao': 'Manuten\u00E7\u00E3o'}]
+                 {'id': 2, 'codigo': 'manutencao', 'descricao': 'Manuten\u00E7\u00E3o'}],
+     
+    "manutencao": [{'id': 0, 'codigo': 'programada', 'value': 'Programada'},
+                   {'id': 1, 'codigo': 'rotina', 'value': 'Rotina'},
+                   {'id': 2, 'codigo': 'trocaoleo', 'value': 'Troca de \u00D3leo'}]
 
 });
