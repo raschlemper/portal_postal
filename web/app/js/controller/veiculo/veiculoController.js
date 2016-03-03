@@ -1,12 +1,11 @@
 'use strict';
 
-app.controller('VeiculoController', ['$scope', '$filter', 'VeiculoService', 'ModalService', 'DataTableService',  'LISTAS',
-    function ($scope, $filter, VeiculoService, ModalService, DataTableService, LISTAS) {
+app.controller('VeiculoController', ['$scope', '$filter', 'VeiculoService', 'ModalService', 'DataTableService',
+    function ($scope, $filter, VeiculoService, ModalService, DataTableService) {
 
         var init = function () {
             $scope.veiculos = [];
             $scope.veiculosLista = [];
-            $scope.situacoes = LISTAS.situacao;
             $scope.dtOptions = DataTableService.default();
         };             
 
@@ -27,6 +26,18 @@ app.controller('VeiculoController', ['$scope', '$filter', 'VeiculoService', 'Mod
             })
         }
 
+        $scope.visualizar = function(idVeiculo) {
+            VeiculoService.get(idVeiculo)
+                .then(function(veiculo) {
+                     modalVisualizar(veiculo).then(function(result) {
+                         $scope.editar(result);
+                     })          
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
         $scope.salvar = function() {
             modalSalvar().then(function(result) {
                 result = ajustarDados(result);
@@ -39,18 +50,6 @@ app.controller('VeiculoController', ['$scope', '$filter', 'VeiculoService', 'Mod
                         modalMessage(e);
                     });
             });
-        };
-
-        $scope.visualizar = function(idVeiculo) {
-            VeiculoService.get(idVeiculo)
-                .then(function(veiculo) {
-                     modalVisualizar(veiculo).then(function(result) {
-                         $scope.editar(result);
-                     })          
-                })
-                .catch(function(e) {
-                    modalMessage(e);
-                });
         };
 
         $scope.editar = function(idVeiculo) {
@@ -102,21 +101,11 @@ app.controller('VeiculoController', ['$scope', '$filter', 'VeiculoService', 'Mod
         }
     
         var getMsgToClient = function(veiculo) {
-            return veiculo.modelo + " (" + $filter('Placa')(veiculo.placa) + ")";        
+            return veiculo.modelo + " (" + $filter('placa')(veiculo.placa) + ")";        
         }
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);
-        };
-        
-        var modalSalvar = function(veiculo) {
-            var modalInstance = ModalService.modalDefault('partials/veiculo/modalEditarVeiculo.html', 'ModalEditarVeiculoController', 'lg',
-                {
-                    veiculo: function() {
-                        return veiculo;
-                    }
-                });
-            return modalInstance.result;
         };
         
         var modalVisualizar = function(veiculo) {
@@ -129,8 +118,18 @@ app.controller('VeiculoController', ['$scope', '$filter', 'VeiculoService', 'Mod
             return modalInstance.result;
         };
         
+        var modalSalvar = function(veiculo) {
+            var modalInstance = ModalService.modalDefault('partials/veiculo/modalEditarVeiculo.html', 'ModalEditarVeiculoController', 'lg',
+                {
+                    veiculo: function() {
+                        return veiculo;
+                    }
+                });
+            return modalInstance.result;
+        };
+        
         var modalExcluir = function() {
-            var modalInstance = ModalService.modalExcluir('Excluir Ve\u00EDculo?', 'Deseja realmente excluir este ve\u00EDculo?');
+            var modalInstance = ModalService.modalExcluir('Excluir Veículo?', 'Deseja realmente excluir este veículo?');
             return modalInstance.result;
         };
 

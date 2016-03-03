@@ -29,6 +29,12 @@ app.config(['$stateProvider', '$urlRouterProvider',
                 templateUrl: 'partials/veiculo/veiculo.html',
                 controller: 'VeiculoController',
                 resolve: {}
+            })
+            .state('veiculo.combustivel', {
+                url: '/combustivel',
+                templateUrl: 'partials/veiculo/veiculoCombustivel.html',
+                controller: 'VeiculoCombustivelController',
+                resolve: {}
             });
 
     }]);

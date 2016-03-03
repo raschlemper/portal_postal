@@ -48,10 +48,8 @@ public class VeiculoCombustivelDAO {
     }
 
     public VeiculoCombustivel save(VeiculoCombustivel veiculo) throws Exception {        
-        String sql = "INSERT INTO veiculo_combustivel (idVeiculo, tipo, quantidade, valorUnitario, data, valorTotal, quilometragemInicial, "
-                   + "quilometragemFinal, quilometragemPercorrida) "
-                   + "VALUES(:idVeiculo, :tipo, :quantidade, :valorUnitario, :data, :valorTotal, :quilometragemInicial, :quilometragemFinal, "
-                   + ":quilometragemPercorrida) ";
+        String sql = "INSERT INTO veiculo_combustivel (idVeiculo, tipo, quantidade, valorUnitario, data, valorTotal, quilometragem) "
+                   + "VALUES(:idVeiculo, :tipo, :quantidade, :valorUnitario, :data, :valorTotal, :quilometragem) ";
         try {
             Integer idVeiculo = connection.createQuery(sql, true)
                     .addParameter("idVeiculo", veiculo.getVeiculo().getIdVeiculo())
@@ -60,9 +58,7 @@ public class VeiculoCombustivelDAO {
                     .addParameter("valorUnitario", veiculo.getValorUnitario())
                     .addParameter("data", veiculo.getData())
                     .addParameter("valorTotal", veiculo.getValorTotal())
-                    .addParameter("quilometragemInicial", veiculo.getQuilometragemInicial())
-                    .addParameter("quilometragemFinal", veiculo.getQuilometragemFinal())
-                    .addParameter("quilometragemPercorrida", veiculo.getQuilometragemPercorrida())
+                    .addParameter("quilometragem", veiculo.getQuilometragem())
                     .executeUpdate().getKey(Integer.class); 
             return find(idVeiculo);
         } catch (Exception e) {
@@ -76,7 +72,7 @@ public class VeiculoCombustivelDAO {
     public VeiculoCombustivel update(VeiculoCombustivel veiculo) throws Exception {        
         String sql = "UPDATE veiculo_combustivel "
                    + "SET tipo = :tipo, quantidade = :quantidade, valorUnitario = :valorUnitario, data = :data, valorTotal = :valorTotal, "
-                   + "quilometragemInicial = :quilometragemInicial, quilometragemFinal = :quilometragemFinal, quilometragemPercorrida = :quilometragemPercorrida "
+                   + "quilometragem = :quilometragem "
                    + "WHERE idVeiculoCombustivel = :idVeiculoCombustivel ";
         try {
             connection.createQuery(sql)
@@ -87,9 +83,7 @@ public class VeiculoCombustivelDAO {
                 .addParameter("valorUnitario", veiculo.getValorUnitario())
                 .addParameter("data", veiculo.getData())
                 .addParameter("valorTotal", veiculo.getValorTotal())
-                .addParameter("quilometragemInicial", veiculo.getQuilometragemInicial())
-                .addParameter("quilometragemFinal", veiculo.getQuilometragemFinal())
-                .addParameter("quilometragemPercorrida", veiculo.getQuilometragemPercorrida())
+                .addParameter("quilometragem", veiculo.getQuilometragem())
                 .executeUpdate();          
             return veiculo;
         } catch (Exception e) {
@@ -116,13 +110,14 @@ public class VeiculoCombustivelDAO {
         return null;
     }
 
-    public Integer findLastCombustivelByIdVeiculo(Integer idVeiculo) throws Exception {
+    public VeiculoCombustivel findLastCombustivelByIdVeiculo(Integer idVeiculo) throws Exception {
         String sql = "SELECT MAX(idVeiculoCombustivel) as idVeiculoCombustivel "
                    + "FROM veiculo_combustivel WHERE idVeiculo = :idVeiculo";
         try {              
-            return connection.createQuery(sql)                
+            Integer IdVeiculoCombustivel = connection.createQuery(sql)                
                     .addParameter("idVeiculo", idVeiculo)
                     .executeAndFetchFirst(Integer.class);
+            return find(IdVeiculoCombustivel);
         } catch (Exception e) {
             ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());
         } finally {

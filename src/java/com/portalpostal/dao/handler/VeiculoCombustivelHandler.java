@@ -23,9 +23,7 @@ public class VeiculoCombustivelHandler implements ResultSetHandler<VeiculoCombus
         combustivel.setValorUnitario(result.getDouble("veiculo_combustivel.valorUnitario"));
         combustivel.setData(result.getDate("veiculo_combustivel.data"));
         combustivel.setValorTotal(result.getDouble("veiculo_combustivel.valorTotal"));
-        combustivel.setQuilometragemInicial(result.getInt("veiculo_combustivel.quilometragemInicial"));
-        combustivel.setQuilometragemFinal(result.getInt("veiculo_combustivel.quilometragemFinal"));
-        combustivel.setQuilometragemPercorrida(result.getInt("veiculo_combustivel.quilometragemPercorrida"));
+        combustivel.setQuilometragem(result.getInt("veiculo_combustivel.quilometragem"));
         combustivel.setVeiculo(veiculo.handle(result));
         return combustivel;
     }

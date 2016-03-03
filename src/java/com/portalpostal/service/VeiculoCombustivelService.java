@@ -33,7 +33,7 @@ public class VeiculoCombustivelService {
     } 
     
     public VeiculoCombustivel findLastCombustivelByIdVeiculo(Integer idVeiculo) throws Exception {
-        return veiculoCombustivelDAO.remove(idVeiculo);
+        return veiculoCombustivelDAO.findLastCombustivelByIdVeiculo(idVeiculo);
     } 
     
 }

@@ -36,8 +36,8 @@ app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'vei
         };
         
         var getTitle = function() {
-            if(veiculo && veiculo.id) { $scope.title = "Editar Ve\u00EDculo"; }
-            else { $scope.title = "Inserir novo Ve\u00EDculo"; }
+            if(veiculo && veiculo.id) { $scope.title = "Editar Veículo"; }
+            else { $scope.title = "Inserir novo Veículo"; }
         }
 
         $scope.changeTipo = function (tipo) {
@@ -105,19 +105,19 @@ app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'vei
 
         var validarForm = function (form) {
             if (form.placa.$error.required) {
-                alert('Preencha a placa do ve\u00EDculo!');
+                alert('Preencha a placa do veículo!');
                 return false;
             }
             if (form.anoModelo.$error.min || form.anoModelo.$error.max) {
-                alert('Preencha o ano do modelo do ve\u00EDculo com valores entre ' + $scope.minVal + ' e ' + $scope.maxVal + '!');
+                alert('Preencha o ano do modelo do veículo com valores entre ' + $scope.minVal + ' e ' + $scope.maxVal + '!');
                 return false;
             }
             if (form.renavam.$error.required) {
-                alert('Preencha o renavam do ve\u00EDculo!');
+                alert('Preencha o renavam do veículo!');
                 return false;
             }
             if (form.quilometragem.$error.required) {
-                alert('Preencha a quilometragem do ve\u00EDculo!');
+                alert('Preencha a quilometragem do veículo!');
                 return false;
             }
             return true;

@@ -9,9 +9,15 @@ app.factory('ListaService', function() {
             if(!value) { value = list[0]; }
             return value;
         },
+
+        getVeiculoValue: function(list, key) {
+            var value = _.find(list, function(item){ return item.idVeiculo == key; });
+            if(!value) { value = list[0]; }
+            return value;
+        },
         
         getValueCombustivelFipe: function(list, key) {
-            var value = _.find(list, function(item){ return item.descricao == key; });
+            var value = _.find(list, function(item){ return item.descricao.toLowerCase() == key.toLowerCase(); });
             if(!value) { value = list[0]; }
             return value;
         }

@@ -31,8 +31,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="combustivel in combistiveisLista track by combustivel.idVeiculoCombustivel">
-                                            <td>{{combustivel.veiculo.placa | Placa}}</td>
+                                        <tr ng-repeat="combustivel in veiculosCombustivelLista track by combustivel.idVeiculoCombustivel">
+                                            <td>{{combustivel.placa | placa}}</td>
                                             <td>{{combustivel.data | date : 'dd/MM/yyyy'}}</td>
                                             <td>{{combustivel.quilometragem | number}}</td>
                                             <td>{{combustivel.quantidade | number}}</td>

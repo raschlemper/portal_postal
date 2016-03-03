@@ -40,6 +40,24 @@ app.factory('VeiculoCombustivelService', function($http, $q) {
             return deferred.promise;
         },
 
+        getLast: function(idVeiculo, callback) {
+            var cb = callback || angular.noop;
+            var deferred = $q.defer();
+
+            $http.get(_contextPath + "/api/veiculo/combustivel/last/" + idVeiculo).
+                success(function(data) {
+                    deferred.resolve(data);
+                    return cb();
+                })
+                .error(function(err) {
+                    deferred.reject(err);
+                    return cb(err);
+                }
+                .bind(this));
+
+            return deferred.promise;
+        },
+
         save: function(data, callback) {
             var cb = callback || angular.noop;
             var deferred = $q.defer();

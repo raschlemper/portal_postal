@@ -11,9 +11,7 @@ public class VeiculoCombustivel {
     private Double valorUnitario;
     private Date data; 
     private Double valorTotal;
-    private Integer quilometragemInicial;
-    private Integer quilometragemFinal;
-    private Integer quilometragemPercorrida;
+    private Integer quilometragem;
     
     public VeiculoCombustivel() {}
 
@@ -73,28 +71,12 @@ public class VeiculoCombustivel {
         this.valorTotal = valorTotal;
     }
 
-    public Integer getQuilometragemInicial() {
-        return quilometragemInicial;
+    public Integer getQuilometragem() {
+        return quilometragem;
     }
 
-    public void setQuilometragemInicial(Integer quilometragemInicial) {
-        this.quilometragemInicial = quilometragemInicial;
-    }
-
-    public Integer getQuilometragemFinal() {
-        return quilometragemFinal;
-    }
-
-    public void setQuilometragemFinal(Integer quilometragemFinal) {
-        this.quilometragemFinal = quilometragemFinal;
-    }
-
-    public Integer getQuilometragemPercorrida() {
-        return quilometragemPercorrida;
-    }
-
-    public void setQuilometragemPercorrida(Integer quilometragemPercorrida) {
-        this.quilometragemPercorrida = quilometragemPercorrida;
+    public void setQuilometragem(Integer quilometragem) {
+        this.quilometragem = quilometragem;
     }
     
 }

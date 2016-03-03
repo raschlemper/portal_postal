@@ -20,7 +20,8 @@ public class VeiculoHandler implements ResultSetHandler<Veiculo> {
         veiculo.setMarca(result.getString("veiculo.marca"));
         veiculo.setIdModelo(result.getInt("veiculo.idModelo"));
         veiculo.setModelo(result.getString("veiculo.modelo")); 
-        veiculo.setIdVersao(result.getString("veiculo.idVersao")); 
+        veiculo.setIdVersao(result.getString("veiculo.idVersao"));
+        veiculo.setVersao(result.getString("veiculo.versao"));  
         veiculo.setPlaca(result.getString("veiculo.placa"));
         veiculo.setAnoModelo(result.getInt("veiculo.anoModelo"));
         veiculo.setChassis(result.getString("veiculo.chassis"));
@@ -29,6 +30,7 @@ public class VeiculoHandler implements ResultSetHandler<Veiculo> {
         veiculo.setCombustivel(TipoCombustivel.values()[result.getInt("veiculo.combustivel")]);
         veiculo.setStatus(TipoStatus.values()[result.getInt("veiculo.status")]);
         veiculo.setSituacao(TipoSituacao.values()[result.getInt("veiculo.situacao")]);
+        veiculo.setDataCadastro(result.getDate("veiculo.dataCadastro"));
         return veiculo;
     }
     

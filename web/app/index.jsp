@@ -42,15 +42,18 @@
         
         <script type="text/javascript" charset="UTF-8" src="js/interceptor/loadingInterceptor.js"></script>
         
-        <script type="text/javascript" charset="UTF-8" src="js/controller/modalMessageController.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/controller/modalExcluirController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/controller/modalController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/controller/veiculo/veiculoController.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/controller/veiculo/modalEditarVeiculoController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/controller/veiculo/modalVisualizarVeiculoController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/controller/veiculo/modalEditarVeiculoController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/controller/veiculo/veiculoCombustivelController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/controller/veiculo/modalVisualizarVeiculoCombustivelController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/controller/veiculo/modalEditarVeiculoCombustivelController.js"></script>
         
         <script type="text/javascript" charset="UTF-8" src="js/service/fipeService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/service/modalService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/service/dataTableService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="js/service/datePickerService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/service/listaService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/service/valorService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="js/service/veiculo/veiculoService.js"></script>
