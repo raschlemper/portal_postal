@@ -4,7 +4,7 @@ app.controller('AppController', ['$rootScope', '$scope',
     function ($rootScope, $scope) {
             
         var init = function () {
-            addButtonHelp();
+            //addButtonHelp();
         }; 
         
         var addButtonHelp = function() {

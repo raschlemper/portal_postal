@@ -1,9 +1,10 @@
 'use strict';
 
-app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoContaService', 'LancamentoService', 'SaldoService', 'GroupService', 'ModalService',
-    function ($scope, $q, $filter, PlanoContaService, LancamentoService, SaldoService, GroupService,  ModalService) {
+app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoContaService', 'LancamentoService', 'SaldoService', 'GroupService', 'ModalService', 'LISTAS',
+    function ($scope, $q, $filter, PlanoContaService, LancamentoService, SaldoService, GroupService,  ModalService, LISTAS) {
             
         var init = function () {
+            $scope.meses = LISTAS.meses;
             $scope.estruturasLista = [];
             anos();
         }; 
