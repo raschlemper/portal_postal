@@ -4,6 +4,10 @@
         <description>ServletContextListener</description>
         <listener-class>Util.AtualizadorSRO</listener-class>
     </listener>
+    <context-param>
+        <param-name>contextResource</param-name>
+        <param-value>/WEB-INF/app/js</param-value>
+    </context-param>
     <servlet>
         <servlet-name>ServLogin</servlet-name>
         <servlet-class>Servlet.ServLogin</servlet-class>
@@ -1156,7 +1160,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>App</servlet-name>
-        <url-pattern>/app</url-pattern>
+        <url-pattern>/app/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>jersey-serlvet</servlet-name>

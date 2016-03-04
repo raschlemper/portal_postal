@@ -22,7 +22,7 @@
             var _contextPath = "${pageContext.request.contextPath}";
         </script>
 
-        <script src="${pageContext.request.contextPath}/plugins/angular/angular.min.js"></script>
+        <script src="${pageContext.request.contextResource}/plugins/angular/angular.min.js"></script>
         <script src="${pageContext.request.contextPath}/plugins/angular/angular-cookies/angular-cookies.min.js"></script>
         <script src="${pageContext.request.contextPath}/plugins/angular/angular-resource/angular-resource.min.js"></script>
         <script src="${pageContext.request.contextPath}/plugins/angular/angular-sanitize/angular-sanitize.min.js"></script>
@@ -37,7 +37,7 @@
         <script src="${pageContext.request.contextPath}/plugins/angular/angular-datatables/angular-datatables.min.js"></script>
         <script src="${pageContext.request.contextPath}/plugins/angular/angular-datatables/plugins/bootstrap/angular-datatables.bootstrap.min.js"></script>
 
-        <script type="text/javascript" charset="UTF-8" src="js/app.js"></script>        
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/app.js"></script>        
         <script type="text/javascript" charset="UTF-8" src="js/app.constants.js"></script>
         
         <script type="text/javascript" charset="UTF-8" src="js/interceptor/loadingInterceptor.js"></script>
