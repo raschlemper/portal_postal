@@ -9,7 +9,7 @@ app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInst
             
             $scope.veiculoCombustivel = {
                 idVeiculoCombustivel: (veiculoCombustivel && veiculoCombustivel.idVeiculoCombustivel) || null,
-                idVeiculo: (veiculoCombustivel && veiculoCombustivel.veiculo.idVeiculo) || null,
+                veiculo: (veiculoCombustivel && veiculoCombustivel.veiculo) || null,
                 tipo: (veiculoCombustivel && veiculoCombustivel.tipo) || $scope.tipos[1],                
                 data: (veiculoCombustivel && veiculoCombustivel.data) || new Date(),
                 quantidade: (veiculoCombustivel && veiculoCombustivel.quantidade) || null,
@@ -30,7 +30,7 @@ app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInst
             VeiculoService.getAll()
                 .then(function (data) {
                     $scope.veiculos = ajustarVeiculos(data);
-                    $scope.veiculoCombustivel.veiculo = ListaService.getVeiculoValue($scope.veiculos, $scope.veiculoCombustivel.idVeiculo);
+                    $scope.veiculoCombustivel.veiculo = ListaService.getVeiculoValue($scope.veiculos, $scope.veiculoCombustivel.veiculo.idVeiculo);
                     $scope.veiculoCombustivel.tipo = $scope.veiculoCombustivel.veiculo.combustivel; //ListaService.getValue($scope.tipos, $scope.veiculoCombustivel.veiculo.combustivel.id)
                     $scope.getLastVeiculoCombustivel($scope.veiculoCombustivel.veiculo);
                 })

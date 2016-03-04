@@ -88,7 +88,8 @@ app.controller('VeiculoCombustivelController', ['$scope', '$filter', 'VeiculoCom
         }; 
         
         var ajustarDados = function(data) {            
-            data.tipo = data.tipo.id;
+            data.tipo = data.tipo.id;          
+//            data.idVeiculo = data.veiculo.idVeiculo;
             return data;
         }
     

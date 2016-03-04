@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('Veiculo', [
+var app = angular.module('App', [
     'ngSanitize',
     'ngCookies',
     'ngResource',
@@ -13,9 +13,10 @@ var app = angular.module('Veiculo', [
     'datatables.bootstrap'
 ]);
 
-app.config(['$stateProvider', '$urlRouterProvider',
-    function ($stateProvider, $urlRouterProvider) {
+app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
+    function ($stateProvider, $urlRouterProvider, $locationProvider) {
 
+        $locationProvider.html5Mode(true);
         $urlRouterProvider.otherwise('/404');
 
         $stateProvider

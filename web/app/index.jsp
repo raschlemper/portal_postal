@@ -5,7 +5,7 @@
         response.sendRedirect( request.getContextPath() + "/index.jsp?msgLog=3");
     }
 %>
-<html lang="en" ng-app="Veiculo">
+<html lang="en" ng-app="App">
     <head>
         <title> Portal Postal</title>
         <base href="${pageContext.request.contextPath}/app/"/>
@@ -22,49 +22,49 @@
             var _contextPath = "${pageContext.request.contextPath}";
         </script>
 
-        <script src="${pageContext.request.contextPath}/plugins/angular/angular.min.js"></script>
-        <script src="${pageContext.request.contextPath}/plugins/angular/angular-cookies/angular-cookies.min.js"></script>
-        <script src="${pageContext.request.contextPath}/plugins/angular/angular-resource/angular-resource.min.js"></script>
-        <script src="${pageContext.request.contextPath}/plugins/angular/angular-sanitize/angular-sanitize.min.js"></script>
-        <script src="${pageContext.request.contextPath}/plugins/angular/angular-animate/angular-animate.min.js"></script>
-        <script src="${pageContext.request.contextPath}/plugins/angular/angular-locale-pt-br/angular-locale_pt-br.js"></script>
-        <script src="${pageContext.request.contextPath}/plugins/angular/angular-ui-router/angular-ui-router.min.js"></script>
-        <script src="${pageContext.request.contextPath}/plugins/angular/angular-bootstrap/ui-bootstrap.min.js"></script>
-        <script src="${pageContext.request.contextPath}/plugins/angular/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-        <script src="${pageContext.request.contextPath}/plugins/angular/angular-ui-mask/mask.min.js"></script>
-        <script src="${pageContext.request.contextPath}/plugins/angular/angular-ui-input-mask/angular-input-masks-standalone.min.js"></script>
-        <script src="${pageContext.request.contextPath}/plugins/datatables/jquery.dataTables.min.js"></script>
-        <script src="${pageContext.request.contextPath}/plugins/angular/angular-datatables/angular-datatables.min.js"></script>
-        <script src="${pageContext.request.contextPath}/plugins/angular/angular-datatables/plugins/bootstrap/angular-datatables.bootstrap.min.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular.min.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-cookies/angular-cookies.min.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-resource/angular-resource.min.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-sanitize/angular-sanitize.min.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-animate/angular-animate.min.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-locale-pt-br/angular-locale_pt-br.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-ui-router/angular-ui-router.min.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-bootstrap/ui-bootstrap.min.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-ui-mask/mask.min.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-ui-input-mask/angular-input-masks-standalone.min.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-datatables/angular-datatables.min.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-datatables/plugins/bootstrap/angular-datatables.bootstrap.min.js"></script>
 
-        <script type="text/javascript" charset="UTF-8" src="js/app.js"></script>        
-        <script type="text/javascript" charset="UTF-8" src="js/app.constants.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/app.js"></script>        
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/app.constants.js"></script>
         
-        <script type="text/javascript" charset="UTF-8" src="js/interceptor/loadingInterceptor.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/interceptor/loadingInterceptor.js"></script>
         
-        <script type="text/javascript" charset="UTF-8" src="js/controller/modalController.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/controller/veiculo/veiculoController.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/controller/veiculo/modalVisualizarVeiculoController.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/controller/veiculo/modalEditarVeiculoController.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/controller/veiculo/veiculoCombustivelController.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/controller/veiculo/modalVisualizarVeiculoCombustivelController.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/controller/veiculo/modalEditarVeiculoCombustivelController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/modalController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/veiculo/veiculoController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/veiculo/modalVisualizarVeiculoController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/veiculo/modalEditarVeiculoController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/veiculo/veiculoCombustivelController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/veiculo/modalVisualizarVeiculoCombustivelController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/veiculo/modalEditarVeiculoCombustivelController.js"></script>
         
-        <script type="text/javascript" charset="UTF-8" src="js/service/fipeService.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/service/modalService.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/service/dataTableService.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/service/datePickerService.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/service/listaService.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/service/valorService.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/service/veiculo/veiculoService.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/service/veiculo/veiculoCombustivelService.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/service/veiculo/veiculoManutencaoService.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/service/veiculo/veiculoMultaService.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/service/veiculo/veiculoSeguroService.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/service/veiculo/veiculoSinistroService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/fipeService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/modalService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/dataTableService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/datePickerService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/listaService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/valorService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/veiculo/veiculoService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/veiculo/veiculoCombustivelService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/veiculo/veiculoManutencaoService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/veiculo/veiculoMultaService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/veiculo/veiculoSeguroService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/veiculo/veiculoSinistroService.js"></script>
         
-        <script type="text/javascript" charset="UTF-8" src="js/filter/placaFilter.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="js/filter/renavamFilter.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/placaFilter.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/renavamFilter.js"></script>
 
     </body>
 </html>
