@@ -1,6 +1,6 @@
 package com.portalpostal.validation;
 
-import Veiculo.Entidade.VeiculoSeguro;
+import com.portalpostal.model.VeiculoSeguro;
 
 public class VeiculoSeguroValidation extends Validation<VeiculoSeguro> {
 

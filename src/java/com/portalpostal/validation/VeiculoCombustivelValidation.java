@@ -1,6 +1,6 @@
 package com.portalpostal.validation;
 
-import Veiculo.Entidade.VeiculoCombustivel;
+import com.portalpostal.model.VeiculoCombustivel;
 
 public class VeiculoCombustivelValidation extends Validation<VeiculoCombustivel> {
 
@@ -10,8 +10,7 @@ public class VeiculoCombustivelValidation extends Validation<VeiculoCombustivel>
         if(!validarValorTotal(veiculo)) return false;   
         if(!validarValorUnitario(veiculo)) return false;   
         if(!validarData(veiculo)) return false;   
-        if(!validarQuilometragemInicial(veiculo)) return false;   
-        if(!validarQuilometragemFinal(veiculo)) return false;   
+        if(!validarQuilometragem(veiculo)) return false;  
         return true;        
     }   
 
@@ -39,23 +38,10 @@ public class VeiculoCombustivelValidation extends Validation<VeiculoCombustivel>
         return false;        
     }           
 
-    public boolean validarQuilometragemInicial(VeiculoCombustivel veiculo) {        
-        if(campoNotNull(veiculo.getQuilometragemInicial())) return true; 
+    public boolean validarQuilometragem(VeiculoCombustivel veiculo) {        
+        if(campoNotNull(veiculo.getQuilometragem())) return true; 
         setMsg("Preencha a quilometragem anterior do veículo!");  
         return false;        
-    }     
-
-    public boolean validarQuilometragemFinal(VeiculoCombustivel veiculo) {        
-        if(!campoNotNull(veiculo.getQuilometragemFinal())) { 
-            setMsg("Preencha a quilometragem atual do veículo!"); 
-            return false;
-        }
-        if(!campoMoreEqualThen(veiculo.getQuilometragemFinal(), veiculo.getQuilometragemInicial())) {
-            setMsg("A quilometragem não pode ser inferior ou igual a última quilometragem inserida " +
-                "para este veículo!"); // (" + toNumberFormat(veiculo.getQuilometragemInicial()) + ")!"); 
-            return false;            
-        }
-        return true;        
-    }  
+    } 
     
 }

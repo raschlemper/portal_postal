@@ -1,17 +1,15 @@
 'use strict';
 
-app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInstance', 'veiculoCombustivel', 'VeiculoService', 'VeiculoCombustivelService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, veiculoCombustivel, VeiculoService, VeiculoCombustivelService, DatePickerService, ListaService, LISTAS) {
+app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInstance', '$filter', 'veiculoCombustivel', 'VeiculoService', 'VeiculoCombustivelService', 'DatePickerService', 'ListaService', 'LISTAS',
+    function ($scope, $modalInstance, $filter, veiculoCombustivel, VeiculoService, VeiculoCombustivelService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {
-            $scope.tipos = LISTAS.combustivel;
-            $scope.datepicker = DatePickerService.default;
-            
+            $scope.tipos = LISTAS.combustivel;            
             $scope.veiculoCombustivel = {
                 idVeiculoCombustivel: (veiculoCombustivel && veiculoCombustivel.idVeiculoCombustivel) || null,
-                idVeiculo: (veiculoCombustivel && veiculoCombustivel.veiculo.idVeiculo) || null,
-                tipo: (veiculoCombustivel && veiculoCombustivel.tipo) || $scope.tipos[1],                
-                data: (veiculoCombustivel && veiculoCombustivel.data) || new Date(),
+                veiculo: (veiculoCombustivel && veiculoCombustivel.veiculo) || { idVeiculo: null },
+                tipo: (veiculoCombustivel && veiculoCombustivel.tipo) || $scope.tipos[0],                
+                data: (veiculoCombustivel && veiculoCombustivel.data) || $filter('date')(new Date(), 'yyyy-MM-dd'),
                 quantidade: (veiculoCombustivel && veiculoCombustivel.quantidade) || null,
                 valorUnitario: (veiculoCombustivel && veiculoCombustivel.valorUnitario) || null,
                 valorTotal: (veiculoCombustivel && veiculoCombustivel.valorTotal) || null,
@@ -19,6 +17,7 @@ app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInst
             }; 
             getTitle();
             veiculos();
+            $scope.datepicker = DatePickerService.default;
         };
         
         var getTitle = function() {
@@ -30,20 +29,23 @@ app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInst
             VeiculoService.getAll()
                 .then(function (data) {
                     $scope.veiculos = ajustarVeiculos(data);
-                    $scope.veiculoCombustivel.veiculo = ListaService.getVeiculoValue($scope.veiculos, $scope.veiculoCombustivel.idVeiculo);
+                    $scope.veiculoCombustivel.veiculo = ListaService.getVeiculoValue($scope.veiculos, $scope.veiculoCombustivel.veiculo.idVeiculo);
                     $scope.veiculoCombustivel.tipo = $scope.veiculoCombustivel.veiculo.combustivel; //ListaService.getValue($scope.tipos, $scope.veiculoCombustivel.veiculo.combustivel.id)
-                    $scope.getLastVeiculoCombustivel($scope.veiculoCombustivel.veiculo);
+                    $scope.getLastVeiculoCombustivel($scope.veiculoCombustivel);
                 })
                 .catch(function (e) {
                     console.log(e);
                 });
         };
 
-        $scope.getLastVeiculoCombustivel = function (veiculo) {
-            VeiculoCombustivelService.getLast(veiculo.idVeiculo)
+        $scope.getLastVeiculoCombustivel = function (veiculoCombustivel) {
+            VeiculoCombustivelService.getLast(veiculoCombustivel.veiculo.idVeiculo)
                 .then(function (data) {
-                    if(data) { $scope.quilometragemAnterior = data.quilometragem; }
-                    else { $scope.quilometragemAnterior = veiculo.quilometragem}
+                    if(data) { 
+                        if(!veiculoCombustivel.idVeiculoCombustivel) { $scope.quilometragemAnterior = data.quilometragem; }
+                        else if(veiculoCombustivel.idVeiculoCombustivel !== data.idVeiculoCombustivel) { $scope.quilometragemAnterior = data.quilometragem; }
+                        else { $scope.quilometragemAnterior = veiculoCombustivel.veiculo.quilometragem; }
+                    } else { $scope.quilometragemAnterior = veiculoCombustivel.veiculo.quilometragem}
                 })
                 .catch(function (e) {
                     console.log(e);

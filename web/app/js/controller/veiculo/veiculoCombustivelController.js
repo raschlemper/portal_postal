@@ -44,7 +44,7 @@ app.controller('VeiculoCombustivelController', ['$scope', '$filter', 'VeiculoCom
                 result = ajustarDados(result);
                 VeiculoCombustivelService.save(result)
                     .then(function(data) {  
-                        modalMessage("Abastecimento do Veículo Inserido " + getMsgToClient(data) +  " com sucesso!");
+                        modalMessage("Abastecimento do Veículo Inserido " + getMsgToClient(data.veiculo) +  " com sucesso!");
                         todos();
                     })
                     .catch(function(e) {
@@ -60,7 +60,7 @@ app.controller('VeiculoCombustivelController', ['$scope', '$filter', 'VeiculoCom
                         result = ajustarDados(result);
                         VeiculoCombustivelService.update(idVeiculo, result)
                             .then(function (data) {  
-                                modalMessage("Abastecimento do Veículo " + getMsgToClient(data) + " Alterado com sucesso!");
+                                modalMessage("Abastecimento do Veículo " + getMsgToClient(data.veiculo) + " Alterado com sucesso!");
                                 todos();
                             })
                             .catch(function(e) {
@@ -78,7 +78,7 @@ app.controller('VeiculoCombustivelController', ['$scope', '$filter', 'VeiculoCom
             modalExcluir().then(function() {
                 VeiculoCombustivelService.delete(idVeiculo)
                     .then(function(data) { 
-                        modalMessage("Abastecimento do Veículo " + getMsgToClient(data) + " Removido com sucesso!");
+                        modalMessage("Abastecimento do Veículo " + getMsgToClient(data.veiculo) + " Removido com sucesso!");
                         todos();                        
                     })
                     .catch(function(e) {
@@ -88,12 +88,17 @@ app.controller('VeiculoCombustivelController', ['$scope', '$filter', 'VeiculoCom
         }; 
         
         var ajustarDados = function(data) {            
-            data.tipo = data.tipo.id;
+            data.tipo = data.tipo.id; 
+            data.veiculo = { 
+                idVeiculo: data.veiculo.idVeiculo,
+                modelo: data.veiculo.modelo,
+                placa: data.veiculo.placa
+            };
             return data;
         }
     
         var getMsgToClient = function(veiculo) {
-            return veiculo.modelo + " (" + $filter('Placa')(veiculo.placa) + ")";        
+            return veiculo.modelo + " (" + $filter('placa')(veiculo.placa) + ")";        
         }
         
         var modalMessage = function(message) {

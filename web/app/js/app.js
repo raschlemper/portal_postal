@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('Veiculo', [
+var app = angular.module('App', [
     'ngSanitize',
     'ngCookies',
     'ngResource',

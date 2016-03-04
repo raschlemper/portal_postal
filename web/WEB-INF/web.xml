@@ -584,16 +584,15 @@
             <param-value>com.portalpostal.filter.AppFilter</param-value>
         </init-param>
         <init-param>
-             <param-name>com.sun.jersey.config.property.packages</param-name>
-             <param-value>com.portalpostal.controller</param-value>
-        </init-param>        
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-value>com.portalpostal.controller</param-value>
+        </init-param>  
         <init-param>
             <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
             <param-value>true</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
-        
     <servlet-mapping>
         <servlet-name>ServLogin</servlet-name>
         <url-pattern>/ServLogin</url-pattern>
@@ -1160,13 +1159,12 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>App</servlet-name>
-        <url-pattern>/app/*</url-pattern>
+        <url-pattern>/app/veiculo/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>jersey-serlvet</servlet-name>
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
-        
     <session-config>
         <session-timeout>
             5

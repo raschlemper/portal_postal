@@ -71,8 +71,8 @@ public class VeiculoCombustivelDAO {
 
     public VeiculoCombustivel update(VeiculoCombustivel veiculo) throws Exception {        
         String sql = "UPDATE veiculo_combustivel "
-                   + "SET tipo = :tipo, quantidade = :quantidade, valorUnitario = :valorUnitario, data = :data, valorTotal = :valorTotal, "
-                   + "quilometragem = :quilometragem "
+                   + "SET idVeiculo = :idVeiculo, tipo = :tipo, quantidade = :quantidade, valorUnitario = :valorUnitario, data = :data, "
+                   + "valorTotal = :valorTotal, quilometragem = :quilometragem "
                    + "WHERE idVeiculoCombustivel = :idVeiculoCombustivel ";
         try {
             connection.createQuery(sql)

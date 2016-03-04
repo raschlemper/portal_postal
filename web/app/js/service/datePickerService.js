@@ -1,7 +1,7 @@
 'use strict';
 
 app.factory('DatePickerService', function() {
-
+    
     return {
 
         default: {
