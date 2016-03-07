@@ -72,19 +72,19 @@
             </ul>
         </li>
         <%}%>
-        <%--
+        
         <li><a href="#">
                 <span class="fa-stack fa-lg pull-left"><i class="fa fa-car fa-stack-1x "></i></span> Veículos <span style="margin: 5px 10px 0 0;" class="fa-stack fa-fw pull-right"><i id="arrow" class="fa fa-chevron-down fa-stack-1x "></i></span>
             </a>
             <ul class="nav-pills nav-stacked" style="list-style-type:none;">
-                <li><a href="${pageContext.request.contextPath}/veiculo">Cadastro</a></li>
-                <li><a href="${pageContext.request.contextPath}/veiculo/manutencao">Manutenção</a></li>
-                <li><a href="${pageContext.request.contextPath}/veiculo/combustivel">Combustível</a></li>
-                <li><a href="${pageContext.request.contextPath}/veiculo/multa">Multa</a></li>
-                <li><a href="${pageContext.request.contextPath}/veiculo/seguro">Seguro</a></li>
-                <li><a href="${pageContext.request.contextPath}/veiculo/sinistro">Sinistro</a></li>
+                <li><a href="${pageContext.request.contextPath}/app/veiculo/cadastro">Cadastro</a></li>
+                <li><a href="${pageContext.request.contextPath}/app/veiculo/manutencao">Manutenção</a></li>
+                <li><a href="${pageContext.request.contextPath}/app/veiculo/combustivel">Combustível</a></li>
+                <li><a href="${pageContext.request.contextPath}/app/veiculo/multa">Multa</a></li>
+                <li><a href="${pageContext.request.contextPath}/app/veiculo/seguro">Seguro</a></li>
+                <li><a href="${pageContext.request.contextPath}/app/veiculo/sinistro">Sinistro</a></li>
             </ul>
-        </li> -->
+        </li> 
         <%--<li>
             <a href="${pageContext.request.contextPath}/Agencia/Relatorio/painel_etiquetas.jsp"><span class="fa-stack fa-lg pull-left"><i class="fa fa-info-circle fa-stack-1x "></i></span> Acessar Layout Antigo</a>
         </li>--%>

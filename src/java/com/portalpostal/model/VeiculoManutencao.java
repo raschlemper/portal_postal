@@ -11,7 +11,6 @@ public class VeiculoManutencao {
     private Double valor;
     private Date dataManutencao;
     private Date dataAgendamento;
-    private Date dataEntrega;
     private String descricao;
     
     public VeiculoManutencao() {}
@@ -70,14 +69,6 @@ public class VeiculoManutencao {
 
     public void setDataAgendamento(Date dataAgendamento) {
         this.dataAgendamento = dataAgendamento;
-    }
-
-    public Date getDataEntrega() {
-        return dataEntrega;
-    }
-
-    public void setDataEntrega(Date dataEntrega) {
-        this.dataEntrega = dataEntrega;
     }
 
     public String getDescricao() {

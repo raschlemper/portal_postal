@@ -48,8 +48,8 @@ public class VeiculoManutencaoDAO {
     }
 
     public VeiculoManutencao save(VeiculoManutencao veiculo) throws Exception {        
-        String sql = "INSERT INTO veiculo_manutencao (idVeiculo, tipo, quilometragem, valor, dataManutencao, dataAgendamento, dataEntrega, descricao) "
-                   + "VALUES(:idVeiculo, :tipo, :quilometragem, :valor, :dataManutencao, :dataAgendamento, :dataEntrega, :descricao)";
+        String sql = "INSERT INTO veiculo_manutencao (idVeiculo, tipo, quilometragem, valor, dataManutencao, dataAgendamento, descricao) "
+                   + "VALUES(:idVeiculo, :tipo, :quilometragem, :valor, :dataManutencao, :dataAgendamento, :descricao)";
         try {
             Integer idVeiculo = connection.createQuery(sql, true)
                     .addParameter("idVeiculo", veiculo.getVeiculo().getIdVeiculo())
@@ -58,7 +58,6 @@ public class VeiculoManutencaoDAO {
                     .addParameter("valor", veiculo.getValor())
                     .addParameter("dataManutencao", veiculo.getDataManutencao())
                     .addParameter("dataAgendamento", veiculo.getDataAgendamento())
-                    .addParameter("dataEntrega", veiculo.getDataEntrega())
                     .addParameter("descricao", veiculo.getDescricao())
                     .executeUpdate().getKey(Integer.class); 
             return find(idVeiculo);
@@ -72,8 +71,8 @@ public class VeiculoManutencaoDAO {
 
     public VeiculoManutencao update(VeiculoManutencao veiculo) throws Exception {        
         String sql = "UPDATE veiculo_manutencao "
-                   + "SET tipo = :tipo, quilometragem = :quilometragem, valor = :valor, data = :data, dataAgendamento = :dataAgendamento, "
-                   + "dataEntrega = :dataEntrega, descricao = :descricao "
+                   + "SET idVeiculo = :idVeiculo, tipo = :tipo, quilometragem = :quilometragem, valor = :valor, dataManutencao = :dataManutencao, "
+                   + "dataAgendamento = :dataAgendamento, descricao = :descricao "
                    + "WHERE idVeiculoManutencao = :idVeiculoManutencao ";
         try {
             connection.createQuery(sql)
@@ -84,7 +83,6 @@ public class VeiculoManutencaoDAO {
                 .addParameter("valor", veiculo.getValor())
                 .addParameter("dataManutencao", veiculo.getDataManutencao())
                 .addParameter("dataAgendamento", veiculo.getDataAgendamento())
-                .addParameter("dataEntrega", veiculo.getDataEntrega())
                 .addParameter("descricao", veiculo.getDescricao())  
                 .executeUpdate();          
             return veiculo;

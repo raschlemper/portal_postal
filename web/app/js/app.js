@@ -17,7 +17,9 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
     function ($stateProvider, $urlRouterProvider, $locationProvider) {
 
         $locationProvider.html5Mode(true);
-        $urlRouterProvider.otherwise('/404');
+        $urlRouterProvider.otherwise(function(){
+            window.location = '../NewTemplate/Dashboard/index.jsp';
+        });
 
         $stateProvider
             .state('veiculo', {
@@ -31,10 +33,34 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
                 controller: 'VeiculoController',
                 resolve: {}
             })
+            .state('veiculo.manutencao', {
+                url: '/manutencao',
+                templateUrl: 'partials/veiculo/veiculoManutencao.html',
+                controller: 'VeiculoManutencaoController',
+                resolve: {}
+            })
             .state('veiculo.combustivel', {
                 url: '/combustivel',
                 templateUrl: 'partials/veiculo/veiculoCombustivel.html',
                 controller: 'VeiculoCombustivelController',
+                resolve: {}
+            })
+            .state('veiculo.multa', {
+                url: '/multa',
+                templateUrl: 'partials/veiculo/veiculoMulta.html',
+                controller: 'VeiculoMultaController',
+                resolve: {}
+            })
+            .state('veiculo.seguro', {
+                url: '/seguro',
+                templateUrl: 'partials/veiculo/veiculoSeguro.html',
+                controller: 'VeiculoSeguroController',
+                resolve: {}
+            })
+            .state('veiculo.sinistro', {
+                url: '/sinistro',
+                templateUrl: 'partials/veiculo/veiculoSinistro.html',
+                controller: 'VeiculoSinistroController',
                 resolve: {}
             });
 

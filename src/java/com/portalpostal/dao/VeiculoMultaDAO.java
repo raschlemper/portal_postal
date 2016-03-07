@@ -48,14 +48,16 @@ public class VeiculoMultaDAO {
     }
 
     public VeiculoMulta save(VeiculoMulta veiculo) throws Exception {        
-        String sql = "INSERT INTO veiculo_multa (idVeiculo, numeroMulta, data, valor, local, descricao) "
-                   + "VALUES(:idVeiculo, :numeroMulta, :data, :valor, :local, :descricao)";
+        String sql = "INSERT INTO veiculo_multa (idVeiculo, condutor, numero, data, valor, descontada, local, descricao) "
+                   + "VALUES(:idVeiculo, :condutor, :numero, :data, :valor, :descontada, :local, :descricao)";
         try {
             Integer idVeiculo = connection.createQuery(sql, true)
                     .addParameter("idVeiculo", veiculo.getVeiculo().getIdVeiculo())
-                    .addParameter("numeroMulta", veiculo.getNumeroMulta())
+                    .addParameter("condutor", veiculo.getCondutor())
+                    .addParameter("numero", veiculo.getNumero())
                     .addParameter("data", veiculo.getData())
                     .addParameter("valor", veiculo.getValor())
+                    .addParameter("descontada", veiculo.getDescontada())
                     .addParameter("local", veiculo.getLocal())
                     .addParameter("descricao", veiculo.getDescricao())
                     .executeUpdate().getKey(Integer.class); 
@@ -70,15 +72,18 @@ public class VeiculoMultaDAO {
 
     public VeiculoMulta update(VeiculoMulta veiculo) throws Exception {        
         String sql = "UPDATE veiculo_multa "
-                   + "SET numeroMulta = :numeroMulta, data = :data, valor = :valor, local = :local, descricao = :descricao "
+                   + "SET idVeiculo = :idVeiculo, condutor = :condutor, numero = :numero, data = :data, valor = :valor, descontada = :descontada, "
+                   + "local = :local, descricao = :descricao "
                    + "WHERE idVeiculoMulta = :idVeiculoMulta ";
         try {
             connection.createQuery(sql)
                 .addParameter("idVeiculoMulta", veiculo.getIdVeiculoMulta())
                 .addParameter("idVeiculo", veiculo.getVeiculo().getIdVeiculo())
-                .addParameter("numeroMulta", veiculo.getNumeroMulta())
+                .addParameter("condutor", veiculo.getCondutor())
+                .addParameter("numero", veiculo.getNumero())
                 .addParameter("data", veiculo.getData())
                 .addParameter("valor", veiculo.getValor())
+                .addParameter("descontada", veiculo.getDescontada())
                 .addParameter("local", veiculo.getLocal())
                 .addParameter("descricao", veiculo.getDescricao()) 
                 .executeUpdate();          

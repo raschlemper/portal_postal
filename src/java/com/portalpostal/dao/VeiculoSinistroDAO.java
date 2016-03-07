@@ -71,8 +71,8 @@ public class VeiculoSinistroDAO {
 
     public VeiculoSinistro update(VeiculoSinistro veiculo) throws Exception {        
         String sql = "UPDATE veiculo_sinistro "
-                   + "SET tipo = :tipo, boletimOcorrencia = :boletimOcorrencia, data = :data, local = :local, responsavel = :responsavel, "
-                   + "descricao = :descricao "
+                   + "SET idVeiculo = :idVeiculo, tipo = :tipo, boletimOcorrencia = :boletimOcorrencia, data = :data, local = :local, "
+                   + "responsavel = :responsavel, descricao = :descricao "
                    + "WHERE idVeiculoSinistro = :idVeiculoSinistro ";
         try {
             connection.createQuery(sql)

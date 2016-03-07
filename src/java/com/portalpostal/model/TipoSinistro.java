@@ -1,9 +1,9 @@
 package com.portalpostal.model;
 
-import com.portalpostal.model.serializer.TipoCombustivelSerializer;
+import com.portalpostal.model.serializer.TipoSinistroSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-@JsonSerialize(using = TipoCombustivelSerializer.class)
+@JsonSerialize(using = TipoSinistroSerializer.class)
 public enum TipoSinistro {    
     
     COLISAO("colisao", "Colisão"),

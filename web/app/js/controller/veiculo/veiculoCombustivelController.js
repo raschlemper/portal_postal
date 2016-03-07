@@ -23,14 +23,14 @@ app.controller('VeiculoCombustivelController', ['$scope', '$filter', 'VeiculoCom
         var criarVeiculosCombustivelLista = function(combustiveis) {
             return _.map(combustiveis, function(combustivel) {
                 var obj = _.pick(combustivel, 'idVeiculoCombustivel', 'data', 'quilometragem', 'quantidade', 'valorUnitario', 'valorTotal');
-                return _.extend(obj, _.pick(combustivel.veiculo, 'placa'));
+                return _.extend(obj, _.pick(combustivel.veiculo, 'marca', 'modelo', 'placa'));
             })
         }
 
-        $scope.visualizar = function(idVeiculo) {
-            VeiculoCombustivelService.get(idVeiculo)
-                .then(function(veiculo) {
-                     modalVisualizar(veiculo).then(function(result) {
+        $scope.visualizar = function(idVeiculoCombustivel) {
+            VeiculoCombustivelService.get(idVeiculoCombustivel)
+                .then(function(veiculoCombustivel) {
+                     modalVisualizar(veiculoCombustivel).then(function(result) {
                          $scope.editar(result);
                      })          
                 })
@@ -53,12 +53,12 @@ app.controller('VeiculoCombustivelController', ['$scope', '$filter', 'VeiculoCom
             });
         };
 
-        $scope.editar = function(idVeiculo) {
-            VeiculoCombustivelService.get(idVeiculo)
-                .then(function(veiculo) {
-                     modalSalvar(veiculo).then(function(result) {
+        $scope.editar = function(idVeiculoCombustivel) {
+            VeiculoCombustivelService.get(idVeiculoCombustivel)
+                .then(function(veiculoCombustivel) {
+                     modalSalvar(veiculoCombustivel).then(function(result) {
                         result = ajustarDados(result);
-                        VeiculoCombustivelService.update(idVeiculo, result)
+                        VeiculoCombustivelService.update(idVeiculoCombustivel, result)
                             .then(function (data) {  
                                 modalMessage("Abastecimento do Veículo " + getMsgToClient(data.veiculo) + " Alterado com sucesso!");
                                 todos();
@@ -74,9 +74,9 @@ app.controller('VeiculoCombustivelController', ['$scope', '$filter', 'VeiculoCom
            
         };
 
-        $scope.excluir = function(idVeiculo) {
+        $scope.excluir = function(idVeiculoCombustivel) {
             modalExcluir().then(function() {
-                VeiculoCombustivelService.delete(idVeiculo)
+                VeiculoCombustivelService.delete(idVeiculoCombustivel)
                     .then(function(data) { 
                         modalMessage("Abastecimento do Veículo " + getMsgToClient(data.veiculo) + " Removido com sucesso!");
                         todos();                        
@@ -126,7 +126,7 @@ app.controller('VeiculoCombustivelController', ['$scope', '$filter', 'VeiculoCom
         };
         
         var modalExcluir = function() {
-            var modalInstance = ModalService.modalExcluir('Excluir Veículo?', 'Deseja realmente excluir este abastecimento?');
+            var modalInstance = ModalService.modalExcluir('Excluir Abastecimento?', 'Deseja realmente excluir este abastecimento?');
             return modalInstance.result;
         };
 

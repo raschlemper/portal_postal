@@ -20,7 +20,7 @@ public class VeiculoSeguroDAO {
 
     public List<VeiculoSeguro> findAll() {
         String sql = "SELECT * FROM veiculo_seguro, veiculo WHERE veiculo.idVeiculo = veiculo_seguro.idVeiculo "
-                   + "ORDER BY veiculo_multa.idVeiculo";
+                   + "ORDER BY veiculo_seguro.idVeiculo";
         try {              
             return connection.createQuery(sql)
                     .executeAndFetch(handler);
@@ -48,15 +48,18 @@ public class VeiculoSeguroDAO {
     }
 
     public VeiculoSeguro save(VeiculoSeguro veiculo) throws Exception {        
-        String sql = "INSERT INTO veiculo_seguro (idVeiculo, numeroSeguro, assegurado, valorFranquia, indenizacao) "
-                   + "VALUES(:idVeiculo, :numeroSeguro, :assegurado, :valorFranquia, :indenizacao)";
+        String sql = "INSERT INTO veiculo_seguro (idVeiculo, numeroApolice, corretora, assegurado, valorFranquia, indenizacao, dataInicioVigencia, dataFimVigencia) "
+                   + "VALUES(:idVeiculo, :numeroApolice, :corretora, :assegurado, :valorFranquia, :indenizacao, :dataInicioVigencia, :dataFimVigencia)";
         try {
             Integer idVeiculo = connection.createQuery(sql, true)
                     .addParameter("idVeiculo", veiculo.getVeiculo().getIdVeiculo())
-                    .addParameter("numeroSeguro", veiculo.getNumeroSeguro())
+                    .addParameter("numeroApolice", veiculo.getNumeroApolice())
+                    .addParameter("corretora", veiculo.getCorretora())
                     .addParameter("assegurado", veiculo.getAssegurado())
                     .addParameter("valorFranquia", veiculo.getValorFranquia())
                     .addParameter("indenizacao", veiculo.getIndenizacao().ordinal())
+                    .addParameter("dataInicioVigencia", veiculo.getDataInicioVigencia())
+                    .addParameter("dataFimVigencia", veiculo.getDataFimVigencia())
                     .executeUpdate().getKey(Integer.class); 
             return find(idVeiculo);
         } catch (Exception e) {
@@ -69,16 +72,20 @@ public class VeiculoSeguroDAO {
 
     public VeiculoSeguro update(VeiculoSeguro veiculo) throws Exception {        
         String sql = "UPDATE veiculo_seguro "
-                   + "SET numeroSeguro = :numeroSeguro, assegurado = :assegurado, valorFranquia = :valorFranquia, indenizacao = :indenizacao "
+                   + "SET idVeiculo = :idVeiculo, numeroApolice = :numeroApolice, corretora = :corretora, assegurado = :assegurado, valorFranquia = :valorFranquia, "
+                   + "indenizacao = :indenizacao, dataInicioVigencia = :dataInicioVigencia, dataFimVigencia = :dataFimVigencia "
                    + "WHERE idVeiculoSeguro = :idVeiculoSeguro ";
         try {
             connection.createQuery(sql)
                 .addParameter("idVeiculoSeguro", veiculo.getIdVeiculoSeguro())
                 .addParameter("idVeiculo", veiculo.getVeiculo().getIdVeiculo())
-                .addParameter("numeroSeguro", veiculo.getNumeroSeguro())
+                .addParameter("numeroApolice", veiculo.getNumeroApolice())
+                .addParameter("corretora", veiculo.getCorretora())
                 .addParameter("assegurado", veiculo.getAssegurado())
                 .addParameter("valorFranquia", veiculo.getValorFranquia())
                 .addParameter("indenizacao", veiculo.getIndenizacao().ordinal())
+                .addParameter("dataInicioVigencia", veiculo.getDataInicioVigencia())
+                .addParameter("dataFimVigencia", veiculo.getDataFimVigencia())
                 .executeUpdate();          
             return veiculo;
         } catch (Exception e) {

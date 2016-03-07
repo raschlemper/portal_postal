@@ -32,7 +32,7 @@
                                     <tbody>
                                         <tr ng-repeat="veiculo in veiculosLista track by veiculo.idVeiculo">
                                             <td>{{veiculo.marca}} / {{veiculo.modelo}}</td>
-                                            <td>{{veiculo.placa | placa}}</td>
+                                            <td class="text-nowrap">{{veiculo.placa | placa}}</td>
                                             <td>{{veiculo.combustivel.descricao}}</td>
                                             <td>{{veiculo.situacao.descricao}}</td>
                                             <td>{{veiculo.dataCadastro | date : 'dd/MM/yyyy'}}</td>

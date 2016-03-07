@@ -18,10 +18,13 @@ public class VeiculoSeguroHandler implements ResultSetHandler<VeiculoSeguro> {
     public VeiculoSeguro handle(ResultSet result) throws SQLException {
         VeiculoSeguro seguro = new VeiculoSeguro();
         seguro.setIdVeiculoSeguro(result.getInt("veiculo_seguro.idVeiculoSeguro"));
-        seguro.setNumeroSeguro(result.getInt("veiculo_seguro.numeroSeguro"));
+        seguro.setNumeroApolice(result.getInt("veiculo_seguro.numeroApolice"));
+        seguro.setCorretora(result.getString("veiculo_seguro.corretora"));
         seguro.setAssegurado(result.getString("veiculo_seguro.assegurado"));
         seguro.setValorFranquia(result.getDouble("veiculo_seguro.valorFranquia"));
         seguro.setIndenizacao(TipoSeguro.values()[result.getInt("veiculo_seguro.indenizacao")]);
+        seguro.setDataInicioVigencia(result.getDate("veiculo_seguro.dataInicioVigencia"));
+        seguro.setDataFimVigencia(result.getDate("veiculo_seguro.dataFimVigencia"));
         seguro.setVeiculo(veiculo.handle(result));
         return seguro;
     }

@@ -24,7 +24,7 @@ public class AppFilter implements ContainerRequestFilter {
             usuarioFilter();
         } catch(Exception ex) {
             throw new WebApplicationException(
-                    Response.status(Response.Status.BAD_REQUEST)
+                    Response.status(Response.Status.UNAUTHORIZED)
                             .type(MediaType.TEXT_PLAIN).entity(ex.getMessage()).build());
         }
         return containerRequest;

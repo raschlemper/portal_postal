@@ -4,7 +4,8 @@ app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInst
     function ($scope, $modalInstance, $filter, veiculoCombustivel, VeiculoService, VeiculoCombustivelService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {
-            $scope.tipos = LISTAS.combustivel;            
+            $scope.tipos = LISTAS.combustivel; 
+            $scope.datepicker = DatePickerService.default;           
             $scope.veiculoCombustivel = {
                 idVeiculoCombustivel: (veiculoCombustivel && veiculoCombustivel.idVeiculoCombustivel) || null,
                 veiculo: (veiculoCombustivel && veiculoCombustivel.veiculo) || { idVeiculo: null },
@@ -17,7 +18,6 @@ app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInst
             }; 
             getTitle();
             veiculos();
-            $scope.datepicker = DatePickerService.default;
         };
         
         var getTitle = function() {
@@ -30,7 +30,7 @@ app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInst
                 .then(function (data) {
                     $scope.veiculos = ajustarVeiculos(data);
                     $scope.veiculoCombustivel.veiculo = ListaService.getVeiculoValue($scope.veiculos, $scope.veiculoCombustivel.veiculo.idVeiculo);
-                    $scope.veiculoCombustivel.tipo = $scope.veiculoCombustivel.veiculo.combustivel; //ListaService.getValue($scope.tipos, $scope.veiculoCombustivel.veiculo.combustivel.id)
+                    $scope.veiculoCombustivel.tipo = $scope.veiculoCombustivel.veiculo.combustivel;
                     $scope.getLastVeiculoCombustivel($scope.veiculoCombustivel);
                 })
                 .catch(function (e) {
@@ -54,7 +54,7 @@ app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInst
         
         var ajustarVeiculos = function(veiculos) {
             return _.map(veiculos, function(veiculo) {
-                veiculo.descricao = veiculo.marca + ' / ' + veiculo.modelo + ' (' + veiculo.placa + ')';
+                veiculo.descricao = veiculo.marca + ' / ' + veiculo.modelo + ' (' + $filter('placa')(veiculo.placa) + ')';
                 return veiculo;
             });
         }
@@ -105,7 +105,7 @@ app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInst
                 alert('Preencha a data de abastecimento!');
                 return false;
             }          
-            if (_.isDate(form.data.$modelValue)) {
+            if (!_.isDate(form.data.$modelValue)) {
                 alert('A data do abstecimento não é válida!');
                 return false;
             }          

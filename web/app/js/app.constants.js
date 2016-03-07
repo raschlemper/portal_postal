@@ -20,8 +20,20 @@ app.constant('LISTAS', {
                  {'id': 1, 'codigo': 'inativo', 'descricao': 'Inativo'},  
                  {'id': 2, 'codigo': 'manutencao', 'descricao': 'Manutenção'}],
      
-    "manutencao": [{'id': 0, 'codigo': 'programada', 'value': 'Programada'},
-                   {'id': 1, 'codigo': 'rotina', 'value': 'Rotina'},
-                   {'id': 2, 'codigo': 'trocaoleo', 'value': 'Troca de Óleo'}]
+    "manutencao": [{'id': 0, 'codigo': 'programada', 'descricao': 'Programada'},
+                   {'id': 1, 'codigo': 'rotina', 'descricao': 'Rotina'},
+                   {'id': 2, 'codigo': 'trocaoleo', 'descricao': 'Troca de Óleo'}],
+     
+    "seguro": [{'id': 0, 'codigo': 'parcial', 'descricao': 'Parcial'},
+               {'id': 1, 'codigo': 'integral', 'descricao': 'Integral'}],
+     
+    "sinistro": [{'id': 0, 'codigo': 'colisao', 'descricao': 'Colisão'},
+                 {'id': 1, 'codigo': 'roubo', 'descricao': 'Roubo'},
+                 {'id': 2, 'codigo': 'furto', 'descricao': 'Furto'},
+                 {'id': 3, 'codigo': 'incendio', 'descricao': 'Incêndio'},
+                 {'id': 4, 'codigo': 'enchentealagamento', 'descricao': 'Enchente/Algamento'}],
+     
+    "responsavel": [{'id': 0, 'codigo': 'motorista', 'descricao': 'Motorista'},
+                    {'id': 1, 'codigo': 'terceiros', 'descricao': 'Terceiros'}]
 
 });

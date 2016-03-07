@@ -27,6 +27,7 @@ app.factory('loadingInterceptor', ['$rootScope', '$q', '$timeout',
                 $timeout(function () {
                     $rootScope.requestInProgress--;                 
                     if($rootScope.requestInProgress <= 0) { $('.my-modal').modal('hide'); }
+                    if(response.status == '401') { window.location = '../index.jsp?msgLog=3'; }
                 }, 500);
                 return response;
             },
@@ -34,6 +35,7 @@ app.factory('loadingInterceptor', ['$rootScope', '$q', '$timeout',
                 $timeout(function () {
                     $rootScope.requestInProgress--;                 
                     if($rootScope.requestInProgress <= 0) { $('.my-modal').modal('hide'); }
+                    if(rejection.status == '401') { window.location = '../index.jsp?msgLog=3'; }
                 }, 500);
                 return $q.reject(rejection);
             }

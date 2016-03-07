@@ -6,9 +6,11 @@ public class VeiculoMulta {
     
     private Integer idVeiculoMulta;
     private Veiculo veiculo;
-    private Integer numeroMulta;
+    private String condutor;
+    private Integer numero;
     private Date data; 
     private Double valor;
+    private Boolean descontada;
     private String local;
     private String descricao;
     
@@ -30,12 +32,20 @@ public class VeiculoMulta {
         this.veiculo = veiculo;
     }
 
-    public Integer getNumeroMulta() {
-        return numeroMulta;
+    public String getCondutor() {
+        return condutor;
     }
 
-    public void setNumeroMulta(Integer numeroMulta) {
-        this.numeroMulta = numeroMulta;
+    public void setCondutor(String condutor) {
+        this.condutor = condutor;
+    }
+
+    public Integer getNumero() {
+        return numero;
+    }
+
+    public void setNumero(Integer numero) {
+        this.numero = numero;
     }
 
     public Date getData() {
@@ -52,6 +62,14 @@ public class VeiculoMulta {
 
     public void setValor(Double valor) {
         this.valor = valor;
+    }
+
+    public Boolean getDescontada() {
+        return descontada;
+    }
+
+    public void setDescontada(Boolean descontada) {
+        this.descontada = descontada;
     }
 
     public String getLocal() {

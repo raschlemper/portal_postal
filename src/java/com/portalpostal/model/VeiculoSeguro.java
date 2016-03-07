@@ -1,13 +1,18 @@
 package com.portalpostal.model;
 
+import java.util.Date;
+
 public class VeiculoSeguro {
     
     private Integer idVeiculoSeguro;
     private Veiculo veiculo;
-    private Integer numeroSeguro;
+    private Integer numeroApolice;
+    private String corretora;
     private String assegurado;
     private Double valorFranquia;
     private TipoSeguro indenizacao;
+    private Date dataInicioVigencia;
+    private Date dataFimVigencia;
     
     public VeiculoSeguro() {}
 
@@ -27,12 +32,20 @@ public class VeiculoSeguro {
         this.veiculo = veiculo;
     }
 
-    public Integer getNumeroSeguro() {
-        return numeroSeguro;
+    public Integer getNumeroApolice() {
+        return numeroApolice;
     }
 
-    public void setNumeroSeguro(Integer numeroSeguro) {
-        this.numeroSeguro = numeroSeguro;
+    public void setNumeroApolice(Integer numeroApolice) {
+        this.numeroApolice = numeroApolice;
+    }
+
+    public String getCorretora() {
+        return corretora;
+    }
+
+    public void setCorretora(String corretora) {
+        this.corretora = corretora;
     }
 
     public String getAssegurado() {
@@ -58,5 +71,22 @@ public class VeiculoSeguro {
     public void setIndenizacao(TipoSeguro indenizacao) {
         this.indenizacao = indenizacao;
     }
+
+    public Date getDataInicioVigencia() {
+        return dataInicioVigencia;
+    }
+
+    public void setDataInicioVigencia(Date dataInicioVigencia) {
+        this.dataInicioVigencia = dataInicioVigencia;
+    }
+
+    public Date getDataFimVigencia() {
+        return dataFimVigencia;
+    }
+
+    public void setDataFimVigencia(Date dataFimVigencia) {
+        this.dataFimVigencia = dataFimVigencia;
+    }
+
     
 }

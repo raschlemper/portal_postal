@@ -1,14 +1,13 @@
 package com.portalpostal.validation;
 
-import Veiculo.Entidade.VeiculoManutencao;
+import com.portalpostal.model.VeiculoManutencao;
 
 public class VeiculoManutencaoValidation extends Validation<VeiculoManutencao> {
 
-    @Override
     public boolean validar(VeiculoManutencao veiculo) {          
         if(!validarQuilometragem(veiculo)) return false;   
         if(!validarValor(veiculo)) return false;   
-        if(!validarData(veiculo)) return false;  
+        if(!validarDataManutencao(veiculo)) return false;  
         return true;        
     }          
 
@@ -24,8 +23,8 @@ public class VeiculoManutencaoValidation extends Validation<VeiculoManutencao> {
         return false;        
     }         
 
-    public boolean validarData(VeiculoManutencao veiculo) {          
-        if(campoNotNull(veiculo.getData())) return true; 
+    public boolean validarDataManutencao(VeiculoManutencao veiculo) {          
+        if(campoNotNull(veiculo.getDataManutencao())) return true; 
         setMsg("Preencha a data da manutenção!");   
         return false;        
     }    

@@ -23,7 +23,6 @@ public class VeiculoManutencaoHandler implements ResultSetHandler<VeiculoManuten
         manutencao.setValor(result.getDouble("veiculo_manutencao.valor"));
         manutencao.setDataManutencao(result.getDate("veiculo_manutencao.dataManutencao"));
         manutencao.setDataAgendamento(result.getDate("veiculo_manutencao.dataAgendamento"));
-        manutencao.setDataEntrega(result.getDate("veiculo_manutencao.dataEntrega"));
         manutencao.setDescricao(result.getString("veiculo_manutencao.descricao"));
         manutencao.setVeiculo(veiculo.handle(result));
         return manutencao;

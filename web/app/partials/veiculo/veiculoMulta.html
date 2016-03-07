@@ -6,7 +6,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" >
                             <div class="row">
-                                <div class="col-md-8">Lista com todos os abastecimentos</div>
+                                <div class="col-md-8">Lista com todos as multas</div>
                                 <div class="col-md-4">
                                     <button class="btn btn-sm btn-primary pull-right" ng-click="salvar()">
                                         <i class="fa fa-lg fa-plus fa-spc"></i> ADICIONAR 
@@ -20,36 +20,34 @@
                                     <thead>
                                         <tr>
                                             <th>Placa</th>
+                                            <th>Número</th>
+                                            <th>Condutor</th>
                                             <th>Data</th>
-                                            <th>Km</th>
-                                            <th>Quantidade</th>
-                                            <th>Valor Unitário</th>
-                                            <th>Valor Total</th>
+                                            <th>Valor</th>
                                             <th class="no-sort text-center" width="100">Alterar</th>
                                             <th class="no-sort text-center" width="100">Excluir</th>
                                             <th class="no-sort text-center" width="100">Detalhes</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="combustivel in veiculosCombustivelLista track by combustivel.idVeiculoCombustivel">
-                                            <td class="text-nowrap">{{combustivel.placa | placa}}</td>
-                                            <td>{{combustivel.data | date : 'dd/MM/yyyy'}}</td>
-                                            <td>{{combustivel.quilometragem | number}}</td>
-                                            <td>{{combustivel.quantidade | number}}</td>
-                                            <td>{{combustivel.valorUnitario | currency}}</td>
-                                            <td>{{combustivel.valorTotal | currency}}</td>
+                                        <tr ng-repeat="multa in veiculosMultaLista track by multa.idVeiculoMulta">
+                                            <td class="text-nowrap">{{multa.placa | placa}}</td>
+                                            <td>{{multa.numero | number}}</td>
+                                            <td>{{multa.condutor}}</td>
+                                            <td>{{multa.data | date : 'dd/MM/yyyy'}}</td>
+                                            <td>{{multa.valor | currency}}</td>
                                             <td align="center">
-                                                <button class="btn btn-sm btn-warning" ng-click="editar(combustivel.idVeiculoCombustivel)">
+                                                <button class="btn btn-sm btn-warning" ng-click="editar(multa.idVeiculoMulta)">
                                                     <i class="fa fa-lg fa-pencil"></i>
                                                 </button>
                                             </td>
                                             <td align="center">
-                                                <a class="btn btn-sm btn-danger" ng-click="excluir(combustivel.idVeiculoCombustivel)">
+                                                <a class="btn btn-sm btn-danger" ng-click="excluir(multa.idVeiculoMulta)">
                                                     <i class="fa fa-lg fa-trash"></i>
                                                 </a>
                                             </td>
                                             <td align="center">
-                                                <a class="btn btn-sm btn-primary" ng-click="visualizar(combustivel.idVeiculoCombustivel)">
+                                                <a class="btn btn-sm btn-primary" ng-click="visualizar(multa.idVeiculoMulta)">
                                                     <i class="fa fa-lg fa-info"></i>
                                                 </a>
                                             </td>

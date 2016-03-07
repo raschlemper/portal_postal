@@ -9,8 +9,8 @@ public class VeiculoSinistro {
     private TipoSinistro tipo;
     private Integer boletimOcorrencia;
     private Date data;
-    private String local;
     private TipoResponsavel responsavel;
+    private String local;
     private String descricao;
     
     public VeiculoSinistro() {}

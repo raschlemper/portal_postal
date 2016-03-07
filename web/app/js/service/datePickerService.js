@@ -6,6 +6,9 @@ app.factory('DatePickerService', function() {
 
         default: {
             format: 'dd/MM/yyyy',
+            'close': 'Fechar',
+            'clear': 'Limpar',
+            'today': 'Hoje',
             opened: false,
             open: function ($event) {
                 $event.preventDefault();

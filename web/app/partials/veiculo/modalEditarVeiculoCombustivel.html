@@ -53,12 +53,10 @@
                             <label class="small">Data</label>
                             <div class="input-group">
                                 <input type="text" autocomplete="off" name="data" class="form-control" ng-model="veiculoCombustivel.data" 
-                                       datepicker-popup="{{datepicker.format}}" is-open="datepicker.opened" ng-required="true" placeholder="Data do abastecimento"/>
-                                <span class="input-group-addon" ng-click="datepicker.open($event)"><i class="fa fa-calendar"></i></span>
-                                
-<!--                                <input type="text" autocomplete="off" name="data" class="form-control" ng-model="veiculoCombustivel.data" 
+                                       datepicker-popup="{{datepicker.format}}" is-open="datepicker.opened" ng-required="true"
+                                       current-text="{{datepicker.today}}" clear-text="{{datepicker.clear}}" close-text="{{datepicker.close}}"
                                        placeholder="Data do abastecimento"/>
-                                <span class="input-group-addon" ><i class="fa fa-calendar"></i></span>-->
+                                <span class="input-group-addon" ng-click="datepicker.open($event)"><i class="fa fa-calendar"></i></span>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
