@@ -16,6 +16,7 @@ web/WEB-INF/jax-ws-catalog.xml
 
 ## GERAL ##
 .svn/
+dist/CRM.war
 build/
 nbproject/
 WEB-INF/wsdl/
@@ -23,4 +24,3 @@ WEB-INF/wsdl/
 *.sql
 *.zip
 *.prej
-*.war
