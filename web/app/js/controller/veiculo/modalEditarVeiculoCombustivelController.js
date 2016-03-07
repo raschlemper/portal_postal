@@ -10,7 +10,7 @@ app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInst
                 idVeiculoCombustivel: (veiculoCombustivel && veiculoCombustivel.idVeiculoCombustivel) || null,
                 veiculo: (veiculoCombustivel && veiculoCombustivel.veiculo) || { idVeiculo: null },
                 tipo: (veiculoCombustivel && veiculoCombustivel.tipo) || $scope.tipos[0],                
-                data: (veiculoCombustivel && veiculoCombustivel.data) || $filter('date')(new Date(), 'yyyy-MM-dd'),
+                data: (veiculoCombustivel && veiculoCombustivel.data) || new Date(),
                 quantidade: (veiculoCombustivel && veiculoCombustivel.quantidade) || null,
                 valorUnitario: (veiculoCombustivel && veiculoCombustivel.valorUnitario) || null,
                 valorTotal: (veiculoCombustivel && veiculoCombustivel.valorTotal) || null,

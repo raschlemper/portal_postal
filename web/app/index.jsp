@@ -29,7 +29,6 @@
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-animate/angular-animate.min.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-locale-pt-br/angular-locale_pt-br.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-ui-router/angular-ui-router.min.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-bootstrap/ui-bootstrap.min.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-ui-mask/mask.min.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-ui-input-mask/angular-input-masks-standalone.min.js"></script>
@@ -44,6 +43,8 @@
         
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/placaFilter.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/renavamFilter.js"></script>
+        
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/datepickerPopupDirective.js"></script>
         
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/modalController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/veiculo/veiculoController.js"></script>

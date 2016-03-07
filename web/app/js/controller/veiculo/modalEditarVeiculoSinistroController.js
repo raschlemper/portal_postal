@@ -12,7 +12,7 @@ app.controller('ModalEditarVeiculoSinistroController', ['$scope', '$modalInstanc
                 veiculo: (veiculoSinistro && veiculoSinistro.veiculo) || { idVeiculo: null },
                 tipo: (veiculoSinistro && veiculoSinistro.tipo) || $scope.tipos[0],    
                 boletimOcorrencia: (veiculoSinistro && veiculoSinistro.boletimOcorrencia) || null,       
-                data: (veiculoSinistro &&  $filter('date')(new Date(veiculoSinistro.data), 'yyyy-MM-dd')) || $filter('date')(new Date(), 'yyyy-MM-dd'),  
+                data: (veiculoSinistro &&  veiculoSinistro.data) || new Date(),  
                 responsavel: (veiculoSinistro && veiculoSinistro.responsavel) || $scope.responsaveis[0],    
                 local: (veiculoSinistro && veiculoSinistro.local) || null,
                 descricao: (veiculoSinistro && veiculoSinistro.descricao) || null

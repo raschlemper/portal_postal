@@ -6,15 +6,15 @@ app.controller('ModalEditarVeiculoManutencaoController', ['$scope', '$modalInsta
         var init = function () {
             $scope.tipos = LISTAS.manutencao;    
             $scope.datepickerManutencao = angular.copy(DatePickerService.default);    
-            $scope.datepickerAgendamento = angular.copy(DatePickerService.default);       
+            $scope.datepickerAgendamento = angular.copy(DatePickerService.default);   
             $scope.veiculoManutencao = {
                 idVeiculoManutencao: (veiculoManutencao && veiculoManutencao.idVeiculoManutencao) || null,
                 veiculo: (veiculoManutencao && veiculoManutencao.veiculo) || { idVeiculo: null },
                 tipo: (veiculoManutencao && veiculoManutencao.tipo) || $scope.tipos[0],    
                 quilometragem: (veiculoManutencao && veiculoManutencao.quilometragem) || null,        
                 valor: (veiculoManutencao && veiculoManutencao.valor) || null,    
-                dataManutencao: (veiculoManutencao && veiculoManutencao.dataManutencao) || $filter('date')(new Date(), 'yyyy-MM-dd'),
-                dataAgendamento: (veiculoManutencao && veiculoManutencao.dataAgendamento) || $filter('date')(new Date(), 'yyyy-MM-dd'),
+                dataManutencao: (veiculoManutencao && veiculoManutencao.dataManutencao) || new Date(),
+                dataAgendamento: (veiculoManutencao && veiculoManutencao.dataAgendamento) || new Date(),
                 descricao: (veiculoManutencao && veiculoManutencao.descricao) || null
             }; 
             getTitle();

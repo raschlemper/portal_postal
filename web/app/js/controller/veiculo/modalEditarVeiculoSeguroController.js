@@ -15,8 +15,8 @@ app.controller('ModalEditarVeiculoSeguroController', ['$scope', '$modalInstance'
                 assegurado: (veiculoSeguro && veiculoSeguro.assegurado) || null,     
                 valorFranquia: (veiculoSeguro && veiculoSeguro.valorFranquia) || null,    
                 indenizacao: (veiculoSeguro && veiculoSeguro.indenizacao) || $scope.seguros[0],   
-                dataInicioVigencia: (veiculoSeguro && veiculoSeguro.dataInicioVigencia) || $filter('date')(new Date(), 'yyyy-MM-dd'),
-                dataFimVigencia: (veiculoSeguro && veiculoSeguro.dataFimVigencia) || $filter('date')(new Date(), 'yyyy-MM-dd')
+                dataInicioVigencia: (veiculoSeguro && veiculoSeguro.dataInicioVigencia) || new Date(),
+                dataFimVigencia: (veiculoSeguro && veiculoSeguro.dataFimVigencia) || new Date()
             }; 
             getTitle();
             veiculos();

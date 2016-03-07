@@ -65,3 +65,4 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
             });
 
     }]);
+
