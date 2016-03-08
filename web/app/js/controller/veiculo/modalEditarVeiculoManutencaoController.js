@@ -22,8 +22,8 @@ app.controller('ModalEditarVeiculoManutencaoController', ['$scope', '$modalInsta
         };
         
         var getTitle = function() {
-            if(veiculoManutencao && veiculoManutencao.id) { $scope.title = "Editar Manutenção do Veículo"; }
-            else { $scope.title = "Inserir Nova Manutenção do Veículo"; }
+            if(veiculoManutencao && veiculoManutencao.idVeiculoManutencao) { $scope.title = "Editar Manutenção Veículo"; }
+            else { $scope.title = "Inserir Nova Manutenção Veículo"; }
         };
 
         var veiculos = function () {
@@ -61,11 +61,7 @@ app.controller('ModalEditarVeiculoManutencaoController', ['$scope', '$modalInsta
             if (form.valor.$error.required) {
                 alert('Preencha o valor da manutenção!');
                 return false;
-            }          
-            if (form.dataManutencao.$error.required) {
-                alert('Preencha a data de manutenção!');
-                return false;
-            }          
+            }         
             if (!_.isDate(form.dataManutencao.$modelValue)) {
                 alert('A data da manutenção não é válida!');
                 return false;

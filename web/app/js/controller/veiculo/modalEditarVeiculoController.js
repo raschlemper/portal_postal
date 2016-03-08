@@ -36,8 +36,8 @@ app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'vei
         };
         
         var getTitle = function() {
-            if(veiculo && veiculo.id) { $scope.title = "Editar Veículo"; }
-            else { $scope.title = "Inserir novo Veículo"; }
+            if(veiculo && veiculo.idVeiculo) { $scope.title = "Editar Veículo"; }
+            else { $scope.title = "Inserir Novo Veículo"; }
         }
 
         $scope.changeTipo = function (tipo) {

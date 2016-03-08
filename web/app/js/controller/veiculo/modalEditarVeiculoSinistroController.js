@@ -22,8 +22,8 @@ app.controller('ModalEditarVeiculoSinistroController', ['$scope', '$modalInstanc
         };
         
         var getTitle = function() {
-            if(veiculoSinistro && veiculoSinistro.id) { $scope.title = "Editar Sinistro do Veículo"; }
-            else { $scope.title = "Inserir Novo Sinistro do Veículo"; }
+            if(veiculoSinistro && veiculoSinistro.idVeiculoSinistro) { $scope.title = "Editar Sinistro Veículo"; }
+            else { $scope.title = "Inserir Novo Sinistro Veículo"; }
         }
 
         var veiculos = function () {

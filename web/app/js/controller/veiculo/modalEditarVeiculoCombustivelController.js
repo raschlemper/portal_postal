@@ -21,8 +21,8 @@ app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInst
         };
         
         var getTitle = function() {
-            if(veiculoCombustivel && veiculoCombustivel.id) { $scope.title = "Editar Abastecimento do Veículo"; }
-            else { $scope.title = "Inserir Novo Abastecimento do Veículo"; }
+            if(veiculoCombustivel && veiculoCombustivel.idVeiculoCombustivel) { $scope.title = "Editar Abastecimento Veículo"; }
+            else { $scope.title = "Inserir Novo Abastecimento Veículo"; }
         }
 
         var veiculos = function () {

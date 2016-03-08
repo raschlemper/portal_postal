@@ -22,8 +22,8 @@ app.controller('ModalEditarVeiculoMultaController', ['$scope', '$modalInstance',
         };
         
         var getTitle = function() {
-            if(veiculoMulta && veiculoMulta.id) { $scope.title = "Editar Multa do Veículo"; }
-            else { $scope.title = "Inserir Nova Multa do Veículo"; }
+            if(veiculoMulta && veiculoMulta.id) { $scope.title = "Editar Multa Veículo"; }
+            else { $scope.title = "Inserir Nova Multa Veículo"; }
         }
 
         var veiculos = function () {

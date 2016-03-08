@@ -23,8 +23,8 @@ app.controller('ModalEditarVeiculoSeguroController', ['$scope', '$modalInstance'
         };
         
         var getTitle = function() {
-            if(veiculoSeguro && veiculoSeguro.idVeiculoSeguro) { $scope.title = "Editar Seguro do Veículo"; }
-            else { $scope.title = "Inserir Nova Seguro do Veículo"; }
+            if(veiculoSeguro && veiculoSeguro.idVeiculoSeguro) { $scope.title = "Editar Seguro Veículo"; }
+            else { $scope.title = "Inserir Novo Seguro Veículo"; }
         }
 
         var veiculos = function () {
@@ -74,11 +74,19 @@ app.controller('ModalEditarVeiculoSeguroController', ['$scope', '$modalInstance'
             if (form.dataInicioVigencia.$error.required) {
                 alert('Preencha a data inicio da vigência do seguro!');
                 return false;
-            }    
+            }         
+            if (!_.isDate(form.dataInicioVigencia.$modelValue)) {
+                alert('A data inicio da vigência não é válida!');
+                return false;
+            }      
             if (form.dataFimVigencia.$error.required) {
                 alert('Preencha a data fim da vigência do seguro!');
                 return false;
-            } 
+            }        
+            if (!_.isDate(form.dataFimVigencia.$modelValue)) {
+                alert('A data fim da vigência não é válida!');
+                return false;
+            }    
             return true;
         }   
 
