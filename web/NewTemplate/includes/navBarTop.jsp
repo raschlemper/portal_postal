@@ -1,11 +1,11 @@
-<%@ include file="../includes/telaMsg.jsp" %>
+<jsp:include page="../includes/telaMsg.jsp"></jsp:include>
 <nav style="z-index: 2000;" class="navbar navbar-default navbar-fixed-top">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header fixed-brand">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"  id="menu-toggle" onclick="mtoggle()">
             <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
         </button>
-        <a class="" href="#"><img src="${pageContext.request.contextPath}/imagensNew/logoNovaH.png" height="40" alt=""/></a>
+        <a class="" href="#"><img src="../../imagensNew/logoNovaH.png" height="40" alt=""/></a>
 
     </div><!-- navbar-header-->
 
