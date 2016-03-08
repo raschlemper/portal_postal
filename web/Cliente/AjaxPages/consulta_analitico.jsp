@@ -223,7 +223,12 @@
             %>
             <tr align='center' style="font-size: 10px;">
                 <td><img class="link_img" src="<%= img_status %>" /></td>
-                <td><a href='http://websro.correios.com.br/sro_bin/txect01$.QueryList?P_LINGUA=001&P_TIPO=001&P_COD_UNI=<%= numeroRegistro%>' target=_blank><%= numeroRegistro%></a></td>
+                <td>
+                    <form name="frm<%= numeroRegistro%>" id="frm<%= numeroRegistro%>" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
+                        <input type="hidden" name="objetos" id="objetos" value="<%= numeroRegistro%>" />
+                    </form>                    
+                    <a href='#' onclick="document.getElementById('frm<%= numeroRegistro%>').submit();"><%= numeroRegistro%></a>
+                </td>
                 <td align='left'><a href='visulizaTicket.jsp?numVenda=<%= numVenda%>&numCaixa=<%= numCaixa%>' target='_blank'><%= servico2%></a></td>
                 <td><%= peso%>g</td>
                 <td><%= dimensoes%></td>

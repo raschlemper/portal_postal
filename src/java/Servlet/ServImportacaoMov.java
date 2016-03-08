@@ -8,12 +8,10 @@ import Controle.ContrErroLog;
 import Util.FormatarData;
 import Util.FormatarDecimal;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -37,8 +35,10 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  */
 public class ServImportacaoMov extends HttpServlet {
 
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -73,6 +73,7 @@ public class ServImportacaoMov extends HttpServlet {
 
     /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -98,16 +99,14 @@ public class ServImportacaoMov extends HttpServlet {
                     upload.setSizeMax(1024 * 1024 * 10);
 
                     String vData1 = "", vData2 = "";
-                    String vCaminho = "";
                     int idUsuario = 0;
                     Date data1 = null, data2 = null;
-
 
                     List items = upload.parseRequest(request);
 
                     Iterator iter = items.iterator();
 
-                    FileItem itemImg = (FileItem) iter.next();
+                    FileItem fileItem = (FileItem) iter.next();
 
                     while (iter.hasNext()) {
 
@@ -131,23 +130,18 @@ public class ServImportacaoMov extends HttpServlet {
                         }
                         if (!item.isFormField()) {
                             if (item.getName().length() > 0) {
-                                itemImg = item;
+                                fileItem = item;
                             }
                         }
                     }
 
-                    vCaminho = inserirDiretorio(itemImg);
-
-                    if (vCaminho.equals("")) {
-                        sessao.setAttribute("msg", "Escolha um arquivo para importacao!");
+                    if (!fileItem.getContentType().equals("text/plain")) {
+                        sessao.setAttribute("msg", "O Arquivo deve ser um arquivo texto!");
                     } else {
-                        if (data1 != null && data2 != null && (data1.before(data2) || data1.equals(data2)) && Util.SomaData.diferencaEmDias(data1, data2) <= 31) {
-                            String mensagem = importaMovimento(vCaminho, data1, data2, nomeBD, idUsuario);
-                            sessao.setAttribute("msg", mensagem);
-                        } else {
-                            sessao.setAttribute("msg", "Data incorreta, ou periodo maior que 1 mes!");
-                        }
+                        String mensagem = importaMovimento(fileItem, data1, data2, nomeBD, idUsuario);
+                        sessao.setAttribute("msg", mensagem);
                     }
+
                 }
 
             } catch (SizeLimitExceededException e) {
@@ -160,58 +154,14 @@ public class ServImportacaoMov extends HttpServlet {
                 sessao.setAttribute("msg", "SYSTEM ERROR Nº: " + idErro + "; Ocorreu um erro inesperado!");
             }
 
-            //response.sendRedirect("./Agencia/Importacao/imp_movimento.jsp?msgAlert=Escolha um arquivo para importacao !");
             response.sendRedirect(request.getHeader("referer"));
         }
     }
 
-    private String inserirDiretorio(FileItem item) throws IOException {
-
-        String caminho = getServletContext().getRealPath("MovimentacaoImport");
-        //System.out.println(caminho);
-        caminho = "/var/lib/tomcat/webapps/PortalPostal/MovimentacaoImport";
-        //System.out.println(caminho);    
-        //Cria o diretório caso ele não exista
-        File diretorio = new File(caminho);
-        if (!diretorio.exists()) {
-            diretorio.mkdir();
-        }
-
-        // Mandar o arquivo para o diretório informado
-        String aa = item.getContentType();
-        if (!aa.equals("text/plain")) {  // troquei a informação -> if(!aa.equals("application/vnd.ms-excel")){
-            return "";
-        }
-
-        String nome = "movimentacao.txt"; // troquei o nome do arquivo -> cliente.csv
-        String arq[] = nome.split("\\\\");
-        for (int i = 0; i < arq.length; i++) {
-            nome = arq[i];
-        }
-
-        File file = new File(diretorio, nome);
-        FileOutputStream output = new FileOutputStream(file);
-        InputStream is = item.getInputStream();
-        byte[] buffer = new byte[2048];
-        int nLidos;
-
-        while ((nLidos = is.read(buffer)) >= 0) {
-            output.write(buffer, 0, nLidos);
-        }
-
-        caminho = caminho.replace('\\', '/');
-        caminho += "/" + nome;
-
-        output.flush();
-        output.close();
-        return caminho;
-    }
-
-    public static String importaMovimento(String caminho, Date dataIni, Date dataFim, String nomeBD, int idUsuario) {
+    public static String importaMovimento(FileItem item, Date dataIni, Date dataFim, String nomeBD, int idUsuario) {
 
         Date dataVerIni = null, dataVerFim = null;
         int linha = 0;
-        caminho = caminho.replace("\\", "/");
 
         ArrayList<String> listaQuerys = new ArrayList<String>();
         ArrayList<String> listaIDS = new ArrayList<String>(); //para fazer query => DELETE FROM movimentacao WHERE id NOT IN (1,2,3,...) AND dataPostagem BETWEEN dataIni AND dataFim
@@ -227,23 +177,24 @@ public class ServImportacaoMov extends HttpServlet {
                 + ", valorDestino = VALUES(valorDestino), quantidade = VALUES(quantidade), valorDeclarado = VALUES(valorDeclarado), departamento = VALUES(departamento), codCliente = VALUES(codCliente)"
                 + ", codSto = VALUES(codSto), conteudoObjeto = VALUES(conteudoObjeto), contratoEct = VALUES(contratoEct), altura = VALUES(altura), largura = VALUES(largura)"
                 + ", comprimento = VALUES(comprimento), siglaServAdicionais = VALUES(siglaServAdicionais), codigoEct = VALUES(codigoEct), idDepartamento = VALUES(idDepartamento);";
-        
+
         try {
-            BufferedReader le = new BufferedReader(new FileReader(caminho));
+
+            InputStreamReader is = new InputStreamReader(item.getInputStream(), Charset.forName("ISO-8859-1"));
+            BufferedReader le = new BufferedReader(is);
             while (le.ready()) {
                 linha++;
                 String buffer = le.readLine();
                 String aux[] = buffer.split(";");
-
 
                 if (linha % 500 == 0) {
                     String sqlQuery = sqlBase + sqlValues.substring(0, sqlValues.toString().lastIndexOf(",")) + sqlDuplicated;
                     listaQuerys.add(sqlQuery);
                     sqlValues = new StringBuilder();
                 }
-                
+
                 int idDepartamento = 0;
-                if(aux.length > 36 && !toStr(aux[36]).equals("")){
+                if (aux.length > 36 && !toStr(aux[36]).equals("")) {
                     idDepartamento = FormatarDecimal.intParser(aux[36]);
                 }
 
@@ -285,7 +236,7 @@ public class ServImportacaoMov extends HttpServlet {
                 if (dataVerIni == null || dataVerIni.after(data)) {
                     dataVerIni = data;
                 }
-                if (dataVerFim == null || dataVerFim.before(data)) {                    
+                if (dataVerFim == null || dataVerFim.before(data)) {
                     //System.out.println("dt arquivo = "+aux[3]);
                     dataVerFim = data;
                 }
@@ -307,9 +258,9 @@ public class ServImportacaoMov extends HttpServlet {
             return "Movimentação Importada Com Sucesso!";
 
         } catch (IOException e) {
-            return "Erro na linha <b style='color:red;'>" + linha + "</b> do arquivo!<br><br>Falha: Não foi possivel ler o arquivo!<br>Detalhes:" + e;
+            return "Erro na linha <b style='color:red'>" + linha + "</b> do arquivo!<br><br>Falha: Não foi possivel ler o arquivo!<br>Detalhes:" + e;
         } catch (Exception e) {
-            return "Erro na linha <b style='color:red;'>" + linha + "</b> do arquivo!<br><br>Falha: Problema no tratamento do arquivo!<br>Detalhes: " + e;
+            return "Erro na linha <b style='color:red'>" + linha + "</b> do arquivo!<br><br>Falha: Problema no tratamento do arquivo!<br>Detalhes: " + e;
         }
 
     }
@@ -337,7 +288,6 @@ public class ServImportacaoMov extends HttpServlet {
     }
 
     private static boolean verificaPeriodoData(Date dataIni, Date dataFim, Date dataVerIni, Date dataVerFim) throws Exception {
-        System.out.println(dataIni + " - " + dataVerIni + " | " + dataFim + " - " + dataVerFim);
         if (!dataIni.equals(dataVerIni) || !dataFim.equals(dataVerFim)) {
             return true;
         } else {
@@ -345,15 +295,17 @@ public class ServImportacaoMov extends HttpServlet {
         }
     }
 
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

@@ -38,6 +38,7 @@
         }catch(NumberFormatException e){            
         }
         
+        String sDataPostagem = request.getParameter("dataPostagem").trim();
         String sDsSenha = request.getParameter("sDsSenha").trim();
         String sCepOrigem = request.getParameter("sCepOrigem");
         String sCepDestino = request.getParameter("sCepDestino"); 
@@ -177,7 +178,7 @@
             if(pesoAgrupado > 30){
                 
                 //CONSULTA VALOR DO SERVIÇO COM 29kg
-                org.tempuri.CResultado resultTest1 = port.calcPrecoPrazo(nCdEmpresa, sDsSenha, nCdServico, sCepOrigem, sCepDestino, "29", nCdFormato, nVlComprimento, nVlAltura, nVlLargura, nVlDiametro, sCdMaoPropria, nVlValorDeclarado, sCdAvisoRecebimento);
+                org.tempuri.CResultado resultTest1 = port.calcPrecoPrazo(nCdEmpresa, sDsSenha, nCdServico, sCepOrigem, sCepDestino, "29", nCdFormato, nVlComprimento, nVlAltura, nVlLargura, nVlDiametro, sCdMaoPropria, nVlValorDeclarado, sCdAvisoRecebimento);                
                 ArrayOfCServico at1 = resultTest1.getServicos();
                 float p1 = 0;
                 for (CServico ss1 : at1.getCServico()) {
@@ -211,7 +212,29 @@
         }
         
         
-        org.tempuri.CResultado result = port.calcPrecoPrazo(nCdEmpresa, sDsSenha, nCdServico, sCepOrigem, sCepDestino, nVlPeso, nCdFormato, nVlComprimento, nVlAltura, nVlLargura, nVlDiametro, sCdMaoPropria, nVlValorDeclarado, sCdAvisoRecebimento);
+        //org.tempuri.CResultado r1 = port.calcPrazo("41068", "89110000", "65073510");
+        //org.tempuri.CResultado r1 = port.calcPrazoData("41068", "89110000", "65073510", "02/03/2016");
+        //org.tempuri.CResultado r1 = port.calcPrazoRestricao("41068", "89110000", "65073510", "05/02/2016");  
+        /*ArrayOfCServico a1 = r1.getServicos();
+        for (CServico s1 : a1.getCServico()) {
+            System.out.println("******************");
+            System.out.println("codigo : "+s1.getCodigo());
+            System.out.println("ent dom: "+s1.getEntregaDomiciliar());
+            System.out.println("ent sab: "+s1.getEntregaSabado());
+            System.out.println("erro   : "+s1.getErro());
+            System.out.println("msg err: "+s1.getMsgErro());
+            System.out.println("obs fim: "+s1.getObsFim());
+            System.out.println("prazo e: "+s1.getPrazoEntrega() + " Dias");
+            System.out.println("valor  : "+s1.getValor());
+            System.out.println("valorAR: "+s1.getValorAvisoRecebimento());
+            System.out.println("valorMP: "+s1.getValorMaoPropria());
+            System.out.println("valorSA: "+s1.getValorSemAdicionais());
+            System.out.println("valorVD: "+s1.getValorValorDeclarado());
+            System.out.println("******************");
+        }*/
+        
+        
+        org.tempuri.CResultado result = port.calcPrecoPrazoData(nCdEmpresa, sDsSenha, nCdServico, sCepOrigem, sCepDestino, nVlPeso, nCdFormato, nVlComprimento, nVlAltura, nVlLargura, nVlDiametro, sCdMaoPropria, nVlValorDeclarado, sCdAvisoRecebimento, sDataPostagem);        
         ArrayOfCServico a = result.getServicos();
 
         contrCliente.alterarLoginPrecoPrazo(nCdEmpresa, sDsSenha, idCliente, nomeBD);
@@ -275,6 +298,7 @@
                     if (erro) {
                         out.println("<td align='center'><b style='color:red;'>" + msgErro + "</b></td>");
                     } else {
+                        //s.get
                         String prazo = s.getPrazoEntrega() + " Dias Úteis";
                         if(s.getCodigo() == 40215 || s.getCodigo() == 40789){
                             prazo = "Entrega até às 10:00 da manhã do dia útil seguinte ao da postagem.";

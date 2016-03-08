@@ -210,6 +210,8 @@
                                             <option value="ESEDEX" <%if (pv.getNomeServico().equals("ESEDEX")) {%> selected <%}%>>E-SEDEX</option>
                                             <option value="CARTA" <%if (pv.getNomeServico().equals("CARTA")) {%> selected <%}%>>CARTA REGISTRADA</option>
                                             <option value="SIMPLES" <%if (pv.getNomeServico().equals("SIMPLES")) {%> selected <%}%>>CARTA SIMPLES</option>
+                                            <option value="SEDEX10" <%if (pv.getNomeServico().equals("SEDEX10")) {%> selected <%}%>>SEDEX 10</option>
+                                            <option value="SEDEX12" <%if (pv.getNomeServico().equals("SEDEX12")) {%> selected <%}%>>SEDEX 12</option>
                                         </select>
                                     </td>
                                     <td align="center">

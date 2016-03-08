@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.dom4j.Document;
@@ -40,6 +41,7 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.XPath;
 import org.dom4j.io.SAXReader;
+import org.apache.commons.fileupload.FileItem;
 
 /**
  *
@@ -214,14 +216,13 @@ public class ContrPreVendaImporta {
      * *************************************
      */
     //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
-    public static String importaPedido(String caminho, int idCliente, int idDepartamento, String departamento, String contrato, String cartaoPostagem, String servicoEscolhido, String nomeBD) {
+    public static String importaPedido(FileItem item, int idCliente, int idDepartamento, String departamento, String contrato, String cartaoPostagem, String servicoEscolhido, String nomeBD) {
 
-        caminho = caminho.replace("\\", "/");
         try {
             //CONTADOR DE LINHA
             int qtdLinha = 1;
             ArrayList<ArquivoImportacao> listaAi = new ArrayList<ArquivoImportacao>();
-            BufferedReader le = new BufferedReader(new InputStreamReader(new FileInputStream(caminho), "ISO-8859-1"));
+            BufferedReader le = new BufferedReader(new InputStreamReader(item.getInputStream(), "ISO-8859-1"));
             // LE UMA LINHA DO ARQUIVO PARA PULAR O CABEÇALHO
             le.readLine();
             while (le.ready()) {
@@ -369,14 +370,13 @@ public class ContrPreVendaImporta {
     }
 
     //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
-    public static String importaPedidoWebVendas(String caminho, int idCliente, int idDepartamento, String departamento, String contrato, String cartaoPostagem, String servicoEscolhido, String nomeBD) {
+    public static String importaPedidoWebVendas(FileItem item, int idCliente, int idDepartamento, String departamento, String contrato, String cartaoPostagem, String servicoEscolhido, String nomeBD) {
 
-        caminho = caminho.replace("\\", "/");
         try {
             //CONTADOR DE LINHA
             int qtdLinha = 1;
             ArrayList<ArquivoImportacao> listaAi = new ArrayList<ArquivoImportacao>();
-            BufferedReader le = new BufferedReader(new InputStreamReader(new FileInputStream(caminho), "ISO-8859-1"));
+            BufferedReader le = new BufferedReader(new InputStreamReader(item.getInputStream(), "ISO-8859-1"));
             // LE 2 LINHAS DO ARQUIVO PARA PULAR O CABEÇALHO
             le.readLine();
             le.readLine();
@@ -468,23 +468,24 @@ public class ContrPreVendaImporta {
     }
 
     //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
-    public static String importaPedidoLINX(String caminho, int idCliente, String departamento, String servico, int temVD, int temAR, String nomeBD) {
+    public static String importaPedidoLINX(FileItem item, int idCliente, String departamento, String servico, int temVD, int temAR, String nomeBD) {
         String sql = "INSERT INTO pre_venda (numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, registro, chave, metodo_insercao) VALUES ";
 
         String buffer = "";
-        caminho = caminho.replace("\\", "/");
         try {
-            File arquivoLeitura = new File(caminho);
-            LineNumberReader linhaLeitura = new LineNumberReader(new FileReader(arquivoLeitura));
-            linhaLeitura.skip(arquivoLeitura.length());
-            int qtdLinha = linhaLeitura.getLineNumber();
+            Scanner in = new Scanner(item.getInputStream());
+            int qtdLinha = 0;
+            while (in.hasNextLine()) {
+                qtdLinha++;
+                in.nextLine();
+            }
             if (qtdLinha > MAX_ALLOWED) {
                 return "Quantidade maxima de importacao de 200 objetos por importacao!";
             }
 
             String condicao = "";
             //BufferedReader le = new BufferedReader(new FileReader(caminho));
-            BufferedReader le = new BufferedReader(new InputStreamReader(new FileInputStream(caminho), "ISO-8859-1"));
+            BufferedReader le = new BufferedReader(new InputStreamReader(item.getInputStream(), "ISO-8859-1"));
 
             Clientes cli = contrCliente.consultaClienteById(idCliente, nomeBD);
             String contrato = "";
@@ -553,17 +554,16 @@ public class ContrPreVendaImporta {
     }
 
     //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
-    public static String importaPedidoTRAY(String caminho, int idCliente, String departamento, String servico, int temVD, int temAR, String nomeBD) {
+    public static String importaPedidoTRAY(FileItem item, int idCliente, String departamento, String servico, int temVD, int temAR, String nomeBD) {
         String sql = "INSERT INTO pre_venda (numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, registro, chave, metodo_insercao) VALUES ";
 
         String buffer = "";
-        caminho = caminho.replace("\\", "/");
         try {
             int qtdLinha = 0;
 
             String condicao = "";
             //BufferedReader le = new BufferedReader(new FileReader(caminho));
-            BufferedReader le = new BufferedReader(new InputStreamReader(new FileInputStream(caminho), "ISO-8859-1"));
+            BufferedReader le = new BufferedReader(new InputStreamReader(item.getInputStream(), "ISO-8859-1"));
 
             Clientes cli = contrCliente.consultaClienteById(idCliente, nomeBD);
             String contrato = "";
@@ -655,15 +655,14 @@ public class ContrPreVendaImporta {
     }
 
     //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
-    public static String importaPedidoINTERLOGIC(String caminho, int idCliente, String departamento, String servico, String nomeBD) {
+    public static String importaPedidoINTERLOGIC(FileItem item, int idCliente, String departamento, String servico, String nomeBD) {
         String sql = "INSERT INTO pre_venda (numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, registro, metodo_insercao) VALUES ";
 
         String buffer = "";
-        caminho = caminho.replace("\\", "/");
         try {
 
             String condicao = "";
-            BufferedReader le = new BufferedReader(new InputStreamReader(new FileInputStream(caminho), "ISO-8859-1"));
+            BufferedReader le = new BufferedReader(new InputStreamReader(item.getInputStream(), "ISO-8859-1"));
 
             Clientes cli = contrCliente.consultaClienteById(idCliente, nomeBD);
             String contrato = "";
@@ -1194,14 +1193,13 @@ public class ContrPreVendaImporta {
      * **************************************************************************************
      */
     //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
-    public static String importaPedidoEDI(String caminho, int idCliente, String departamento, String servico, int temVD, int temAR, String nomeBD) {
+    public static String importaPedidoEDI(FileItem item, int idCliente, String departamento, String servico, int temVD, int temAR, String nomeBD) {
         String sql = "INSERT INTO pre_venda (numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, registro, metodo_insercao) VALUES ";
 
         String buffer = "";
-        caminho = caminho.replace("\\", "/");
         try {
 
-            BufferedReader le = new BufferedReader(new InputStreamReader(new FileInputStream(caminho), "ISO-8859-1"));
+            BufferedReader le = new BufferedReader(new InputStreamReader(item.getInputStream(), "ISO-8859-1"));
 
             Clientes cli = contrCliente.consultaClienteById(idCliente, nomeBD);
             String contrato = "";
@@ -1418,12 +1416,11 @@ public class ContrPreVendaImporta {
     }
 
     //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
-    public static String importaPedidoXML(String caminho, int idCliente, String departamento, String serv, String nomeBD) {
+    public static String importaPedidoXML(FileItem item, int idCliente, String departamento, String serv, String nomeBD) {
         try {
 
             String xml = "";
-            caminho = caminho.replace("\\", "/");
-            BufferedReader le = new BufferedReader(new InputStreamReader(new FileInputStream(caminho), "ISO-8859-1"));
+            BufferedReader le = new BufferedReader(new InputStreamReader(item.getInputStream(), "ISO-8859-1"));
             while (le.ready()) {
                 xml += le.readLine(); // LE A LINHA DO ARQUIVO     
             }
@@ -1530,12 +1527,11 @@ public class ContrPreVendaImporta {
     }
 
     //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
-    public static String importaPedidoPLP(String caminho, int idCliente, int idDepartamento, String departamento, String contrato, String cartaoPostagem, String servicoEscolhido, String nomeBD) {
+    public static String importaPedidoPLP(FileItem item, int idCliente, int idDepartamento, String departamento, String contrato, String cartaoPostagem, String servicoEscolhido, String nomeBD) {
         try {
 
             String xml = "";
-            caminho = caminho.replace("\\", "/");
-            BufferedReader le = new BufferedReader(new InputStreamReader(new FileInputStream(caminho), "ISO-8859-1"));
+            BufferedReader le = new BufferedReader(new InputStreamReader(item.getInputStream(), "ISO-8859-1"));
             while (le.ready()) {
                 xml += le.readLine(); // LE A LINHA DO ARQUIVO     
             }
@@ -1682,6 +1678,10 @@ public class ContrPreVendaImporta {
                 servico = "ESEDEX";
             } else if (serv.trim().toUpperCase().startsWith("SEDEX")) {
                 servico = "SEDEX";
+            } else if (serv.trim().toUpperCase().startsWith("SEDEX10")) {
+                servico = "SEDEX10";
+            } else if (serv.trim().toUpperCase().startsWith("SEDEX12")) {
+                servico = "SEDEX12";
             } else if (serv.trim().toUpperCase().startsWith("CARTA")) {
                 servico = "CARTA";
             } else if (serv.trim().toUpperCase().startsWith("SIMPLES")) {
@@ -1787,7 +1787,7 @@ public class ContrPreVendaImporta {
     /**
      * ***************************************************************************
      */
-    public static String importaPedidoNFe(ArrayList<String> listaCaminhos, int idCliente, String departamento, String servico, int vd, int ar, String nomeBD) {
+    public static String importaPedidoNFe(ArrayList<FileItem> listaFiles, int idCliente, String departamento, String servico, int vd, int ar, String nomeBD) {
         String sql = "INSERT INTO pre_venda (numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, registro, metodo_insercao) VALUES ";
 
         try {
@@ -1814,8 +1814,8 @@ public class ContrPreVendaImporta {
             /**
              * ******************************************************************
              */
-            for (String path : listaCaminhos) {
-                sql += lerNotaFiscal(path, idCliente, idDepartamento, departamento, servico, cartaoPostagem, contrato, vd, ar, nomeBD);
+            for (FileItem item : listaFiles) {
+                sql += lerNotaFiscal(item, idCliente, idDepartamento, departamento, servico, cartaoPostagem, contrato, vd, ar, nomeBD);
 
             }
             /**
@@ -1842,10 +1842,10 @@ public class ContrPreVendaImporta {
 
     }
 
-    public static String lerNotaFiscal(String path, int idCli, int idDepto, String depto, String serv, String cartaoPostagem, String contrato, int temvd, int temar, String nomeBD) throws FileNotFoundException, UnsupportedEncodingException, IOException, DocumentException {
+    public static String lerNotaFiscal(FileItem item, int idCli, int idDepto, String depto, String serv, String cartaoPostagem, String contrato, int temvd, int temar, String nomeBD) throws FileNotFoundException, UnsupportedEncodingException, IOException, DocumentException {
 
         SAXReader reader = new SAXReader();
-        Document doc = reader.read(path);
+        Document doc = reader.read(item.getInputStream());
         //System.out.println("path - " + path);
 
         //tipo Versão 2.0
@@ -1938,6 +1938,10 @@ public class ContrPreVendaImporta {
             servico = "ESEDEX";
         } else if (serv.trim().toUpperCase().startsWith("SEDEX")) {
             servico = "SEDEX";
+        } else if (serv.trim().toUpperCase().startsWith("SEDEX10")) {
+            servico = "SEDEX10";
+        } else if (serv.trim().toUpperCase().startsWith("SEDEX12")) {
+            servico = "SEDEX12";
         } else if (serv.trim().toUpperCase().startsWith("CARTA")) {
             servico = "CARTA";
         } else if (serv.trim().toUpperCase().startsWith("SIMPLES")) {

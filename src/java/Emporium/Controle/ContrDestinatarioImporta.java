@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import org.apache.commons.fileupload.FileItem;
 
 /**
  *
@@ -54,14 +55,13 @@ public class ContrDestinatarioImporta {
         }
     }
     //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
-    public static String importaPedido(String caminho, int idCliente, String nomeBD) {
+    public static String importaPedido(FileItem item, int idCliente, String nomeBD) {
 
-        caminho = caminho.replace("\\", "/");
         try {
             //CONTADOR DE LINHA
             int qtdLinha = 1;
             ArrayList<ArquivoImportacao> listaAi = new ArrayList<ArquivoImportacao>();
-            BufferedReader le = new BufferedReader(new InputStreamReader(new FileInputStream(caminho), "ISO-8859-1"));
+            BufferedReader le = new BufferedReader(new InputStreamReader(item.getInputStream(), "ISO-8859-1"));
             // LE UMA LINHA DO ARQUIVO PARA PULAR O CABEÇALHO
             le.readLine();
             while (le.ready()) {

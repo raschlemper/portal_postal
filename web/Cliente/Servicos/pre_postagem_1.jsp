@@ -107,7 +107,8 @@
                     data: {cep: $("#cep").val()},
                     dataType: 'json'
                 }).done(function (retorno) {
-                    if (retorno.logradouro.toUpperCase() === 'CEP INEXISTENTE') {
+                    var auxOutros = document.getElementById("servico_1").value.split(';');
+                    if (retorno.logradouro.toUpperCase() === 'CEP INEXISTENTE' && (document.form1.servico.value !== 'OUTROS' || auxOutros[2] !== 'INT')) {
                         //console.log(retorno.cep + " <<< " + retorno.logradouro.toUpperCase());
                         alert("Este CEP "+$("#cep").val()+" é inexistente!\n\nConsulte o CEP correto no site dos Correios.");
                     } else {

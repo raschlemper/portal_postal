@@ -47,8 +47,6 @@ public class ServImportarDestinatario extends HttpServlet {
         String nomeBD = (String) sessao.getAttribute("nomeBD");
         if (nomeBD != null) {
             boolean isMultiPart = FileUpload.isMultipartContent(request);
-            String vCaminho = "";
-            String campoDepartamento = "", servico = "", tipo = "";
             int idCliente = 0;
             if (isMultiPart) {
                 try {
@@ -75,14 +73,13 @@ public class ServImportarDestinatario extends HttpServlet {
                         }
                     }
 
-                    vCaminho = inserirDiretorio(itemImg, idCliente);
-                    if (vCaminho.equals("")) {
+                    if (!itemImg.getName().toUpperCase().endsWith(".CSV") && !itemImg.getName().toUpperCase().endsWith(".TXT")) {
                         response.sendRedirect("Cliente/Cadastros/destinatario_lista.jsp?msg=Escolha um arquivo para importacao !");
                     } else {
                         //CONSULTA DADOS DO CLIENTE/DEPARTAMENTO/CONTRATO
                         Clientes cli = contrCliente.consultaClienteById(idCliente, nomeBD);
                         if (cli != null) {
-                            String condicao = ContrDestinatarioImporta.importaPedido(vCaminho, idCliente, nomeBD);
+                            String condicao = ContrDestinatarioImporta.importaPedido(itemImg, idCliente, nomeBD);
                             response.sendRedirect("Cliente/Servicos/imp_confirma.jsp?msg=" + condicao);
                         } else {
                             response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=Cliente nao encontrado no banco de dados!");
@@ -100,43 +97,6 @@ public class ServImportarDestinatario extends HttpServlet {
         }
     }
 
-    private String inserirDiretorio(FileItem item, int idCliente) throws IOException, Exception {
-
-        String caminho = getServletContext().getRealPath("ClientesImport");
-        caminho = "/var/lib/tomcat/webapps/PortalPostal/ClientesImport";
-        //caminho = "C:\\Users\\Fernando\\Documents\\NetBeansProjects\\PortalPostal_Web\\build\\web\\ClientesImport";
-        
-        //System.out.println(caminho);
-        // Cria o diretório caso ele não exista
-        File diretorio = new File(caminho);
-        if (!diretorio.exists()) {
-            diretorio.mkdir();
-        }
-
-        // Mandar o arquivo para o diretório informado
-        //String aa = item.getContentType();
-        //System.out.println(aa);
-        if (!item.getName().toUpperCase().endsWith(".CSV") && !item.getName().toUpperCase().endsWith(".XML") && !item.getName().toUpperCase().endsWith(".TXT")) {
-            return "";
-        }
-        String nome = "imp_dest_"+idCliente+".csv";
-
-        File file = new File(diretorio, nome);
-        item.write(file);
-        /*
-         int nLidos;
-         byte[] buffer = new byte[2048];
-         InputStream is = item.getInputStream();        
-         FileOutputStream output = new FileOutputStream(file);
-         while ((nLidos = is.read(buffer)) >= 0) {
-         output.write(buffer, 0, nLidos);
-         }*/
-
-        caminho = caminho.replace('\\', '/');
-        caminho += "/" + nome;
-        return caminho;
-
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

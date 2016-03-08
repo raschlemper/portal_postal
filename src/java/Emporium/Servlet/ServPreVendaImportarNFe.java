@@ -92,14 +92,13 @@ public class ServPreVendaImportarNFe extends HttpServlet {
                     }
                 }
 
-                ArrayList<String> listaCaminhos = inserirDiretorio(listaArq);
-                if (listaCaminhos == null || listaCaminhos.isEmpty()) {
+                if (listaArq.isEmpty()) {
                         response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=Escolha um arquivo para importacao !");
                 } else if(listaArq.size() > 200){
                         response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=Importacao maxima de 200 arquivos de cada vez!");
                 } else {
                     ContrPreVendaImporta.excluirNaoConfirmados(idCliente, nomeBD);
-                    String condicao = ContrPreVendaImporta.importaPedidoNFe(listaCaminhos, idCliente, departamento, servico, vd, ar, nomeBD);
+                    String condicao = ContrPreVendaImporta.importaPedidoNFe(listaArq, idCliente, departamento, servico, vd, ar, nomeBD);
                     if(condicao.startsWith("ERRO")){
                         response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=" + condicao);
                     }else{
@@ -122,39 +121,6 @@ public class ServPreVendaImportarNFe extends HttpServlet {
         
     }
     
-    private ArrayList<String> inserirDiretorio(ArrayList<FileItem> listaArq) throws IOException, Exception {
-
-        ArrayList<String> listaCaminhos = new ArrayList<String>();
-        
-        // Cria o diretório caso ele não exista
-        String caminho = getServletContext().getRealPath("ClientesImport");
-        caminho = "/var/lib/tomcat/webapps/PortalPostal/ClientesImport";
-        //caminho = "C:\\Users\\Fernando\\Downloads";
-        //System.out.println(caminho);
-        File diretorio = new File(caminho);
-        if (!diretorio.exists()) {
-            diretorio.mkdir();
-        }
-
-        for (FileItem item : listaArq) {
-
-            //verifica se eh .TXT
-            if (!item.getName().toUpperCase().endsWith(".XML")) {
-                return null;
-            }
-
-            //Salva o arquivo na pasta
-            File file = new File(diretorio, FilenameUtils.getName(item.getName()));
-            item.write(file);
-
-            //adiciona caminho no array
-            listaCaminhos.add(file.getAbsolutePath().replace('\\', '/'));
-
-        }
-
-        return listaCaminhos;
-
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -104,11 +105,11 @@ public class ServImportacao extends HttpServlet {
                     FileItemFactory factory = new DiskFileItemFactory();
                     ServletFileUpload upload = new ServletFileUpload(factory);
                     upload.setSizeMax(1024 * 1024 * 10);
-                    String vCaminho = "";
+                    //String vCaminho = "";
 
                     List items = upload.parseRequest(request);
                     Iterator iter = items.iterator();
-                    FileItem itemImg = (FileItem) iter.next();
+                    FileItem fileItem = (FileItem) iter.next();
 
                     while (iter.hasNext()) {
                         FileItem item = (FileItem) iter.next();
@@ -119,18 +120,21 @@ public class ServImportacao extends HttpServlet {
                         }
                         if (!item.isFormField()) {
                             if (item.getName().length() > 0) {
-                                itemImg = item;
+                                fileItem = item;
                             }
                         }
                     }
 
-                    vCaminho = inserirDiretorio(itemImg);
-
+                    if (!fileItem.getContentType().equals("text/plain")) {  // troquei a informação -> if(!aa.equals("application/vnd.ms-excel")){
+                         sessao.setAttribute("msg", "O Arquivo deve ser um arquivo texto!");
+                    } else{
+                    /*vCaminho = inserirDiretorio(itemImg);
                     if (vCaminho.equals("")) {
                         sessao.setAttribute("msg", "Escolha um arquivo para importacao!");
-                    } else {
-                        String mensagem = importaCli(vCaminho, nomeBD, idUsuario);
+                    } else {*/                    
+                        String mensagem = importaCli(fileItem, nomeBD, idUsuario);
                         sessao.setAttribute("msg", mensagem);
+                    //}
                     }
                 }
                 criaClienteBalcao(nomeBD);
@@ -149,6 +153,7 @@ public class ServImportacao extends HttpServlet {
 
     }
 
+    /*
     private String inserirDiretorio(FileItem item) throws IOException {
 
         String caminho = getServletContext().getRealPath("ClientesImport");
@@ -191,11 +196,10 @@ public class ServImportacao extends HttpServlet {
         caminho = caminho.replace('\\', '/');
         caminho += "/" + nome;
         return caminho;
-    }
+    }*/
 
-    public static String importaCli(String caminho, String nomeBD, int idUsuario) {
+    public static String importaCli(FileItem item, String nomeBD, int idUsuario) {
         int linha = 0;
-        caminho = caminho.replace("\\", "/");
 
         ArrayList<String> listaQuerys = new ArrayList<String>();
         ArrayList<String> listaIDS = new ArrayList<String>();
@@ -216,7 +220,15 @@ public class ServImportacao extends HttpServlet {
         String sqlContratoServ = "REPLACE INTO cliente_contrato (idCliente, codECT, grupoServico) VALUES ";
 
         try {
-            InputStreamReader is = new InputStreamReader(new FileInputStream(caminho), Charset.forName("ISO-8859-1"));
+            Scanner in = new Scanner(item.getInputStream());
+            int qtdLinha = 0;
+            while (in.hasNextLine()) {
+                qtdLinha++;
+                in.nextLine();
+            }
+            System.out.println(qtdLinha);
+            
+            InputStreamReader is = new InputStreamReader(item.getInputStream(), Charset.forName("ISO-8859-1"));
             BufferedReader le = new BufferedReader(is);
             while (le.ready()) {
                 

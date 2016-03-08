@@ -85,8 +85,7 @@ public class ServImportacaoMovVisualHTML extends HttpServlet {
                         }
                     }
 
-                    ArrayList<String> listaCaminhos = inserirDiretorio(listaArq, nomeBD);
-                    if (listaCaminhos == null || listaCaminhos.isEmpty()) {
+                    if (listaArq == null || listaArq.isEmpty()) {
                         response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=Escolha um arquivo para importacao !");
                     } else if (listaArq.size() > 200) {
                         response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=Importacao maxima de 200 arquivos de cada vez!");
@@ -113,35 +112,7 @@ public class ServImportacaoMovVisualHTML extends HttpServlet {
 
     }
 
-    private ArrayList<String> inserirDiretorio(ArrayList<FileItem> listaArq, String nomeBD) throws IOException, Exception {
-
-        ArrayList<String> listaCaminhos = new ArrayList<String>();
-
-        // Cria o diretório caso ele não exista
-        String caminho = getServletContext().getRealPath("FileUploads\\"+nomeBD+"\\Movimento");
-        //caminho = "C:\\Users\\Fernando\\Documents\\NetBeansProjects\\PortalPostal_Web\\build\\web\\ClientesImport";
-        File diretorio = new File(caminho);
-        if (!diretorio.exists()) {
-            diretorio.mkdirs();
-        }
-
-        for (FileItem item : listaArq) {
-            //verifica se eh .HTM
-            if (!item.getName().toUpperCase().endsWith(".HTM")) {
-                return null;
-            }
-
-            //Salva o arquivo na pasta
-            File file = new File(diretorio, FilenameUtils.getName(item.getName()));
-            item.write(file);
-
-            //adiciona caminho no array
-            listaCaminhos.add(file.getAbsolutePath().replace('\\', '/'));
-        }
-        
-        return listaCaminhos;
-
-    }
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

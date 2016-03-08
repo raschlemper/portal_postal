@@ -148,10 +148,13 @@
                                                             for (String se : saux) {
                                                                 if (se.contains("-")) {
                                                                     String[] aux = se.split(" - ");
-                                                                    if (listaServ.contains(Integer.parseInt(aux[0]))) {
-                                                                        s += "<span style='color:green;'>" + se + "</span><br/>";
-                                                                    } else {
-                                                                        s += "<a style='color:red;' class='tip'>" + se + " <span>Serviço não cadastrado no contrato do cliente do Portal Postal.</span></a><br/>";
+                                                                    int codect = Integer.parseInt(aux[0]);
+                                                                    if(codect != 10138 && codect != 10065){
+                                                                        if (listaServ.contains(codect)) {
+                                                                            s += "<span style='color:green;'>" + se + "</span><br/>";
+                                                                        } else {
+                                                                            s += "<a style='color:red;' class='tip'>" + se + " <span>Serviço não cadastrado no contrato do cliente do Portal Postal.</span></a><br/>";
+                                                                        }
                                                                     }
                                                                 } else {
                                                                     se += se;
@@ -164,7 +167,7 @@
                                                             String cnpj = cli.getCnpj().trim();
                                                             String cnpjSara = c[2].trim();
 
-                                                            String codAdm = cli.getCodAdministrativo().trim();
+                                                            String codAdm = Integer.parseInt(cli.getCodAdministrativo().trim()) + "";
                                                             String codAdmSara = Integer.parseInt(c[3].trim()) + "";
 
                                                             String dtVg = sdf.format(cli.getDtVigenciaFimContrato());

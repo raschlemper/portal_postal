@@ -428,6 +428,7 @@ function pesquisaObjetosRelatorios(idCliente, nomeBD) {
 
 function pesquisaPrecoPrazo() {
     abrirTelaEspera();
+    var data = document.getElementById("data").value;
     var servico = document.getElementById("servico").value;
     var codEmpresa = document.getElementById("codEmpresa").value;
     var senha = document.getElementById("senha").value;
@@ -478,9 +479,10 @@ function pesquisaPrecoPrazo() {
         fecharTelaEspera();
         alert("Preencha todos os pesos e medidas das caixas.");
     } else {
-        http.open("GET", "../AjaxPages/consulta_preco_prazo.jsp?nCdEmpresa=" + codEmpresa + "&sDsSenha=" + senha + "&nCdServico=" + servico
+        http.open("GET", "../AjaxPages/consulta_preco_prazo.jsp?dataPostagem="+data+"&nCdEmpresa=" + codEmpresa + "&sDsSenha=" + senha + "&nCdServico=" + servico
                 + "&sCepOrigem=" + cepOrigem + "&sCepDestino=" + cepDestino + "&nVlPeso=" + peso + "&nCdFormato=" + formato + "&nVlComprimento=" + comp
-                + "&nVlAltura=" + alt + "&nVlLargura=" + larg + "&nVlDiametro=" + diam + "&sCdMaoPropria=" + mp + "&nVlValorDeclarado=" + vd + "&sCdAvisoRecebimento=" + ar + "&agrupado=" + agrupado + "&quantidade=" + qtd + params, true);
+                + "&nVlAltura=" + alt + "&nVlLargura=" + larg + "&nVlDiametro=" + diam + "&sCdMaoPropria=" + mp + "&nVlValorDeclarado=" + vd 
+                + "&sCdAvisoRecebimento=" + ar + "&agrupado=" + agrupado + "&quantidade=" + qtd + params, true);
         http.onreadystatechange = handleHttpResponsePesquisaRelatorios;
         http.send(null);
     }

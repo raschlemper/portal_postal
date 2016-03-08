@@ -40,6 +40,12 @@
                                 <h4 class="page-header"><b class="text-primary"><i class="fa fa-gears"></i> Cadastros</b> > <small>Clientes</small></h4>
                             </div>
                         </div>
+                    
+                        <div class="row">
+                            <div class="well well-md"> 
+                                <button class="btn btn-success" type="submit" onclick="javascript:window.location = 'cliente_cadastro_novo_b.jsp';" name="save" id="sub"> <i class="fa fa-lg fa-spc fa-plus"></i> ADCIONAR NOVO CLIENTE</button>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-12">   
                                 <div class="panel panel-default">

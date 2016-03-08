@@ -1,3 +1,5 @@
+/* global uploadcare */
+
 <%@page import="Util.FormataString"%>
 <%@page import="Util.FaixaCep"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -49,53 +51,49 @@
         <script type="text/javascript" src="../js/ajax_portal.js"></script>
         <script type="text/javascript" src="../../javascript/mascara.js"></script>
 
+        <%--
         <link type="text/css" href="../../javascript/jquery/css/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
         <script type="text/javascript" src="../../javascript/jquery/js/jquery-1.6.2.min.js"></script>
         <script type="text/javascript" src="../../javascript/jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
         <script type="text/javascript" src="../../javascript/jquery/js/jquery.ui.datepicker-pt-BR.js"></script>
+        --%>
+
+        <script>
+            UPLOADCARE_LOCALE = "pt";
+            UPLOADCARE_LOCALE_TRANSLATIONS = {
+                buttons: {
+                    cancel: 'CANCELAR',
+                    remove: 'REMOVER',
+                    choose: {
+                        files: {
+                            one: 'ESCOLHA UM ARQUIVO',
+                            other: 'ESCOLHA OS ARQUIVOS'
+                        },
+                        images: {
+                            one: 'ESCOLHA UMA IMAGEM',
+                            other: 'ESCOLHA AS IMAGENS'
+                        }
+                    }
+                }
+            };
+            UPLOADCARE_TABS = "file gdrive dropbox skydrive";
+            UPLOADCARE_PUBLIC_KEY = "832f5fcdff8ad2835358";
+            UPLOADCARE_CLEARABLE = true;
+            UPLOADCARE_LIVE = false;
+        </script>
+        <script charset="utf-8" src="https://ucarecdn.com/widget/2.6.0/uploadcare/uploadcare.full.min.js"></script>
 
         <link rel="stylesheet" href="../../javascript/plugins/dropdown/css/style.css" type="text/css" media="screen, projection"/>
         <!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="../../javascript/plugins/dropdown/css/ie.css" media="screen" /><![endif]-->
-        <script type="text/javascript" language="javascript" src="../../javascript/plugins/dropdown/js/jquery.dropdownPlain.js"></script>
+        <script type="text/javascript" src="../../javascript/plugins/dropdown/js/jquery.dropdownPlain.js"></script>
 
         <script type="text/javascript">
             function preencherCampos() {
                 var form = document.form1;
-
-                if (form.url_logo.value != "") {
-                    var indexA = form.url_logo.value.lastIndexOf(".");
-                    var indexB = form.url_logo.value.length;
-                    var ext = form.url_logo.value.substring(indexA, indexB).toUpperCase();
-                    if (ext != ".PNG" && ext != ".JPG" && ext != ".JPEG" && ext != ".GIF" && ext != ".BMP") {
-                        alert("A imagem da logo deve ser uma imagem !");
-                        return false;
-                    }
-                }
-                /*
-                 if(form.nome.value==""){
-                 alert('Preencha o NOME do remetente!');
-                 return false;
-                 }
-                 if(form.cep.value==""){
-                 alert('Preencha o CEP do remetente!');
-                 return false;
-                 }
-                 if(form.endereco.value==""){
-                 alert('Preencha o ENDEREÇO do remetente!');
-                 return false;
-                 }
-                 if(form.numero.value==""){
-                 alert('Preencha o NÚMERO do remetente!');
-                 return false;
-                 }
-                 if(form.cidade.value==""){
-                 alert('Preencha a CIDADE do remetente!');
-                 return false;
-                 }
-                 if(form.uf.value==""){
-                 alert('Preencha a UF do remetente!');
-                 return false;
-                 }*/
+                if (form.logo_img_url.value === "") {
+                    alert('Escolha uma imagem para o logo da etiqueta!');
+                    return false;
+                }               
                 form.submit();
             }
         </script>
@@ -114,7 +112,7 @@
 
 
                     <div id="titulo1">Dados da Empresa</div>
-                    <form name="form1" action="../../ServEditarCadastro" method="post" enctype="multipart/form-data">
+                    <form name="form1" action="../../ServEditarCadastro" method="post" >
                         <ul class="ul_formulario">
                             <li class="titulo">
                                 <dd>LOGO DA EMPRESA</dd>
@@ -122,17 +120,18 @@
                             <li>
                                 <dd>
                                     <%if (url_logo == null) {%>
-                                    <img src="../../imagensNew/sua_logo_aqui.png" height="100" />
+                                    <img id="logoPreview" src="../../imagensNew/sua_logo_aqui.png" height="100" />
                                     <%} else {%>
-                                    <img src="../../<%= url_logo%>" height="100" />
+                                    <img id="logoPreview" src="../../<%= url_logo%>" height="100" />
                                     <%}%>
                                 </dd>
                             </li>
                             <li>
                                 <dd style="padding: 15px 0px;">
-                                    <label>SELECIONE UMA IMAGEM</label>
-                                    <input type="file" name="url_logo" accept=".jpg,.jpeg,.gif,.bmp" />
-
+                                    <%--<label>SELECIONE UMA IMAGEM</label>
+                                    <input type="file" name="url_logo" accept=".jpg,.jpeg,.gif,.bmp" />--%>
+                                    <input name="logo_img_url" type="hidden" role="uploadcare-uploader" data-image-shrink="600x400" data-crop="300x200 minimum" data-clearable data-images-only="true" value/>
+                                    <%--<input name="logo_img_url" id="logo_img_url" type="hidden" value="" />--%>
                                 </dd>
                             </li>
                             <li class="titulo">
@@ -225,6 +224,33 @@
                 </div>
             </div>
         </div>
+
+        <script>
+           var $ = uploadcare.jQuery;
+            $.each(uploadcare.initialize(), function (i, widget) {
+
+                function onChange(file) {                   
+                    if (file !== null) {
+                        file.done(function (fileInfo) {
+                            $('#logoPreview').attr('src', $(widget.inputElement).val()).load(function () {
+                                this.width;
+                            });
+                        }).fail(function (error, fileInfo) {
+                            var value = $(widget.inputElement).val();
+                            widget.value(null);
+                            $(widget.inputElement).val(value);
+                        });
+                    } else {
+                        $('#logoPreview').attr('src', '').load(function () {
+                            this.width;
+                        });
+                    }
+                }
+                widget.onChange.add(onChange);
+            });
+
+
+        </script>
     </body>
 </html>
 <%}%>

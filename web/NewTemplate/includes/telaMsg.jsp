@@ -15,7 +15,7 @@
        <%if (!msg2.equals("")) {%>
            bootbox.dialog({
                 title: "Mesagem do Sistema!",
-                message: "<%= msg2 %>",
+                message: "<%= msg2.replace("\"", "'") %>",
                 animate: true,
                 onEscape: true,
                 buttons: {

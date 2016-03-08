@@ -1,3 +1,5 @@
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="Entidade.Clientes"%>
 <%@page import="Controle.ContrServicoECT"%>
 <%@page import="Entidade.ServicoECT"%>
@@ -7,6 +9,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <%
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                     String nomeBD = (String) session.getAttribute("nomeBD");
                     if (nomeBD == null) {
                         response.sendRedirect("../../index.jsp?msg=Sua sessao expirou! Para voltar ao Portal faça seu login novamente!");
@@ -42,6 +45,17 @@
         <script type="text/javascript" language="javascript" src="../../javascript/plugins/dropdown/js/jquery.dropdownPlain.js"></script>
 
         <script type="text/javascript">
+            
+            $(function() {
+                $("#data").datepicker({
+                    maxDate: '<%= sdf.format(new Date()) %>',
+                    showOn: "button",
+                    buttonImage: "../../imagensNew/calendario.png",
+                    buttonImageOnly: true,
+                    showAnim: "slideDown"
+                });
+            });
+            
             function mostrarContrato(sto){
                 if(sto == "41068" || sto == "40096" || sto == "40436" || sto == "40444" || sto == "81019"){
                     document.getElementById("contrato1").className = "mostrar";
@@ -144,6 +158,12 @@
                                 <b>Informe nos campos ao lado o seu Código Administrativo e Senha.<br/></b>
                                 - O Código Administrativo consta no seu Cartão de Postagem do Contrato dos Correios.<br/>
                                 - A senha é formada pelos 8 (oito) primeiros dígitos do CNPJ/CGC da sua empresa.
+                            </dd>
+                        </li>
+                        <li>
+                            <dd>
+                                <label>Data da Postagem:</label>
+                                <input type="text" style="width:60px;" name="data" id="data" value="<%= sdf.format(new Date()) %>" maxlength="10" onkeypress="mascara(this, maskData);" />
                             </dd>
                         </li>
                         <li>

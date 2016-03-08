@@ -15,7 +15,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -131,13 +133,13 @@ public class ServImportacaoMovVisual extends HttpServlet {
                         }
                     }
 
-                    vCaminho = inserirDiretorio(itemImg);
+                    vCaminho = "";//inserirDiretorio(itemImg);
 
                     if (vCaminho.equals("")) {
                         sessao.setAttribute("msg", "Escolha um arquivo para importacao!");
                     } else {
                         if (data1 != null && data2 != null && (data1.before(data2) || data1.equals(data2)) && Util.SomaData.diferencaEmDias(data1, data2) <= 31) {
-                            String mensagem = importaMovimento(vCaminho, data1, nomeBD, idUsuario);
+                            String mensagem = importaMovimento(itemImg, data1, nomeBD, idUsuario);
                             sessao.setAttribute("msg", mensagem);
                         } else {
                             sessao.setAttribute("msg", "Data incorreta, ou periodo maior que 1 mes!");
@@ -160,75 +162,24 @@ public class ServImportacaoMovVisual extends HttpServlet {
         }
     }
 
-    private String inserirDiretorio(FileItem item) throws IOException {
-
-        String caminho = getServletContext().getRealPath("MovimentacaoImport");
-        caminho = "/var/lib/tomcat/webapps/PortalPostal/MovimentacaoImport";
-
-        // Cria o diretório caso ele não exista
-        File diretorio = new File(caminho);
-        if (!diretorio.exists()) {
-            diretorio.mkdir();
-        }
-
-        // Mandar o arquivo para o diretório informado
-        /*String aa = item.getContentType();
-        if (!aa.equals("text/plain")) {  // troquei a informação -> if(!aa.equals("application/vnd.ms-excel")){
-            return "";
-        }*/
-
-        String nome = "movimentacao_visual.txt"; // troquei o nome do arquivo -> cliente.csv
-        String arq[] = nome.split("\\\\");
-        for (String arq1 : arq) {
-            nome = arq1;
-        }
-
-        File file = new File(diretorio, nome);
-        FileOutputStream output = new FileOutputStream(file);
-        InputStream is = item.getInputStream();
-        byte[] buffer = new byte[2048];
-        int nLidos;
-
-        while ((nLidos = is.read(buffer)) >= 0) {
-            output.write(buffer, 0, nLidos);
-        }
-
-        caminho = caminho.replace('\\', '/');
-        caminho += "/" + nome;
-
-        output.flush();
-        output.close();
-        return caminho;
-    }
-
-    public static String importaMovimento(String caminho, Date dataIni, String nomeBD, int idUsuario) {
+    public static String importaMovimento(FileItem item, Date dataIni, String nomeBD, int idUsuario) {
 
         int linha = 0;
         int qtdMov = 0;
         int qtdServ = 0;
-        caminho = caminho.replace("\\", "/");
 
         ArrayList<String> listaQuerys = new ArrayList<String>();
-        ArrayList<String> listaIDS = new ArrayList<String>(); //para fazer query => DELETE FROM movimentacao WHERE id NOT IN (1,2,3,...) AND dataPostagem BETWEEN dataIni AND dataFim
+        ArrayList<String> listaIDS = new ArrayList<String>();
 
-        /*String sqlBaseMov = "INSERT INTO movimentacao (id, numCaixa, numVenda, seqVenda, dataPostagem, descServico"
-                + ", numObjeto, destinatario, notaFiscal, peso, cep, paisDestino, valorServico, valorDestino"
-                + ", quantidade, valorDeclarado, departamento, codCliente, codSto, conteudoObjeto, contratoEct"
-                + ", altura, largura, comprimento, siglaServAdicionais, codigoEct) VALUES ";*/
         String sqlBase = "INSERT INTO visual_movimento (data, cliente, codCliente, codServico, numObjeto, nomeDestinatario, cep, campo1, campo2, campo3"
                 + ", valorAdicional, inteiro2, valor1, campo4, inteiro3, valor2, campo5, campo6, campo7, campo8) VALUES ";
         String sqlBaseServ = "REPLACE INTO visual_servicos (id, nomeServ, sto) VALUES ";
-        /*String sqlDuplicated = " ON DUPLICATE KEY UPDATE numCaixa = VALUES(numCaixa), numVenda = VALUES(numVenda), seqVenda = VALUES(seqVenda)"
-                + ", dataPostagem = VALUES(dataPostagem), descServico = VALUES(descServico), numObjeto = VALUES(numObjeto), destinatario = VALUES(destinatario)"
-                + ", notaFiscal = VALUES(notaFiscal), peso = VALUES(peso), cep = VALUES(cep), paisDestino = VALUES(paisDestino), valorServico = VALUES(valorServico)"
-                + ", valorDestino = VALUES(valorDestino), quantidade = VALUES(quantidade), valorDeclarado = VALUES(valorDeclarado), departamento = VALUES(departamento), codCliente = VALUES(codCliente)"
-                + ", codSto = VALUES(codSto), conteudoObjeto = VALUES(conteudoObjeto), contratoEct = VALUES(contratoEct), altura = VALUES(altura), largura = VALUES(largura)"
-                + ", comprimento = VALUES(comprimento), siglaServAdicionais = VALUES(siglaServAdicionais), codigoEct = VALUES(codigoEct);";*/
 
         StringBuilder sqlValues = new StringBuilder();
         StringBuilder sqlValuesServ = new StringBuilder();
         try {
-            BufferedReader le = new BufferedReader(new FileReader(caminho));
+            InputStreamReader is = new InputStreamReader(item.getInputStream(), Charset.forName("ISO-8859-1"));
+            BufferedReader le = new BufferedReader(is);
             while (le.ready()) {
                 linha++;
                 String buffer = le.readLine().trim();
@@ -274,24 +225,6 @@ public class ServImportacaoMovVisual extends HttpServlet {
             return "Erro na linha <b style='color:red;'>" + linha + "</b> do arquivo!<br><br>Falha: Problema no tratamento do arquivo!<br>Detalhes: " + e;
         }
 
-    }
-
-    private static String SeparaServicosAdicionais(String str) {
-        String result = "";
-        str = str.trim().replaceAll("\"", "");
-
-        int max = str.length();
-        for (int i = 0; i < max; i += 2) {
-            if (i % 2 == 0 && max >= i + 2) {
-                if (i == 0) {
-                    result += str.substring(i, i + 2);
-                } else {
-                    result += ";" + str.substring(i, i + 2);
-                }
-            }
-        }
-
-        return result;
     }
 
     /**

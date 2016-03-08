@@ -5,6 +5,8 @@
 package Util;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 /**
  *
@@ -18,7 +20,11 @@ public class FormatarDecimal {
 
     public static String formatarFloat(float numero) {
         String retorno = "";
-        DecimalFormat formatter = new DecimalFormat("###,###.00");
+        Locale ptBr = new Locale("pt", "BR");
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(ptBr);
+        otherSymbols.setDecimalSeparator(',');
+        otherSymbols.setGroupingSeparator('.'); 
+        DecimalFormat formatter = new DecimalFormat("###,###.00", otherSymbols);
         try {
             retorno = formatter.format(numero);
             if(retorno.indexOf(",") == 0){

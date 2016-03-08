@@ -47,14 +47,6 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">   
-                                <div class="alert alert-info no-margin">
-                                    <a href="#" class="close" data-dismiss="alert">&times;</a>
-                                    <strong>ATENÇÃO!</strong> Compátivel com a versão 19/03/2015a do SECT.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="well well-md">  
                                 <form class="form-inline" name="form1" action="../../ServImportacaoMov" method="post" enctype="multipart/form-data">
                                     <ul class="list-unstyled">
@@ -246,7 +238,7 @@
                     fechaMsg();
                 }
 
-                $(document).ready(function() {
+                $(document).ready(function() {                    
                     $("#data").datepicker({
                         showAnim: 'slideDown',
                         maxDate: new Date(),

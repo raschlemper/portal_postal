@@ -13,7 +13,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -98,7 +100,7 @@ public class ServImportacaoAr extends HttpServlet {
 
                     List items = upload.parseRequest(request);
                     Iterator iter = items.iterator();
-                    FileItem itemImg = (FileItem) iter.next();
+                    FileItem fileItem = (FileItem) iter.next();
                     while (iter.hasNext()) {
                         FileItem item = (FileItem) iter.next();
                         if (item.isFormField()) {
@@ -112,20 +114,25 @@ public class ServImportacaoAr extends HttpServlet {
                         }
                         if (!item.isFormField()) {
                             if (item.getName().length() > 0) {
-                                itemImg = item;
+                                fileItem = item;
                             }
                         }
                     }
 
-                    int tamanho = (int) itemImg.getSize();
-                    tamanho = tamanho / (1024 * 1024 * 1024);
-                    vCaminho = inserirDiretorio(itemImg);
-
+                    //int tamanho = (int) fileItem.getSize();
+                    //tamanho = tamanho / (1024 * 1024 * 1024);
+                    
+                    
+                    if (!fileItem.getContentType().equals("text/plain")) {  // troquei a informação -> if(!aa.equals("application/vnd.ms-excel")){
+                         sessao.setAttribute("msg", "O Arquivo deve ser um arquivo texto!");
+                    } else{
+                    /*vCaminho = inserirDiretorio(itemImg);
                     if (vCaminho.equals("")) {
                         sessao.setAttribute("msg", "Escolha um arquivo para importacao!");
-                    } else {
-                        String mensagem = importaAR(vCaminho, data1, data2, nomeBD, idUsuario);
+                    } else {*/                    
+                        String mensagem = importaAR(fileItem, data1, data2, nomeBD, idUsuario);
                         sessao.setAttribute("msg", mensagem);
+                    //}
                     }
                 }
 
@@ -143,6 +150,7 @@ public class ServImportacaoAr extends HttpServlet {
         }
     }
 
+    /*
     private String inserirDiretorio(FileItem item) throws IOException {
 
         String caminho = getServletContext().getRealPath("MovimentacaoImport");
@@ -181,12 +189,12 @@ public class ServImportacaoAr extends HttpServlet {
         output.flush();
         output.close();
         return caminho;
-    }
+    }*/
 
-    public static String importaAR(String caminho, Date dataIni, Date dataFim, String nomeBD, int idUsuario) {
+    public static String importaAR(FileItem item, Date dataIni, Date dataFim, String nomeBD, int idUsuario) {
         Date dataVerIni = null, dataVerFim = null;
         int linha = 0;
-        caminho = caminho.replace("\\", "/");
+        //caminho = caminho.replace("\\", "/");
 
         ArrayList<String> listaQuerys = new ArrayList<String>();
         ArrayList<String> listaIDS = new ArrayList<String>(); //para fazer query => DELETE FROM movimentacao WHERE id NOT IN (1,2,3,...) AND dataPostagem BETWEEN dataIni AND dataFim
@@ -200,7 +208,10 @@ public class ServImportacaoAr extends HttpServlet {
         
 
         try {
-            BufferedReader le = new BufferedReader(new FileReader(caminho));
+            
+            InputStreamReader is = new InputStreamReader(item.getInputStream(), Charset.forName("ISO-8859-1"));
+            BufferedReader le = new BufferedReader(is);
+            //BufferedReader le = new BufferedReader(new FileReader(caminho));
             while (le.ready()) {
                 linha++;
                 String buffer = le.readLine();

@@ -199,6 +199,8 @@
                                         <option value="ESEDEX">E-SEDEX</option>
                                         <option value="CARTA">CARTA REGISTRADA</option>
                                         <option value="SIMPLES">CARTA SIMPLES</option>
+                                        <option value="SEDEX10">SEDEX 10</option>
+                                        <option value="SEDEX12">SEDEX 12</option>
                                     </select>
                                 </dd>
                                 <dd id="dd_vd" class="esconder">

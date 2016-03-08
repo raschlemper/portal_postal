@@ -64,27 +64,6 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/Cliente/js/ajax_portal.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/javascript/ddslick.js"></script>
 
-<!-- JavaScript Pages -->
-<script type="text/javascript" language="javascript" src="${pageContext.request.contextPath}/javascript/veiculo/config.js"></script>
-<script type="text/javascript" language="javascript" src="${pageContext.request.contextPath}/javascript/veiculo/veiculoConstantes.js"></script>
-<script type="text/javascript" language="javascript" src="${pageContext.request.contextPath}/javascript/veiculo/veiculoMascara.js"></script>
-<script type="text/javascript" language="javascript" src="${pageContext.request.contextPath}/javascript/veiculo/veiculoValidacao.js"></script>
-<script type="text/javascript" language="javascript" src="${pageContext.request.contextPath}/javascript/veiculo/veiculoFormatador.js"></script>
-<script type="text/javascript" language="javascript" src="${pageContext.request.contextPath}/javascript/veiculo/veiculoDropdown.js"></script>
-<script type="text/javascript" language="javascript" src="${pageContext.request.contextPath}/javascript/veiculo/controller/veiculoController.js"></script>
-<script type="text/javascript" language="javascript" src="${pageContext.request.contextPath}/javascript/veiculo/controller/veiculoCombustivelController.js"></script>
-<script type="text/javascript" language="javascript" src="${pageContext.request.contextPath}/javascript/veiculo/controller/veiculoManutencaoController.js"></script>
-<script type="text/javascript" language="javascript" src="${pageContext.request.contextPath}/javascript/veiculo/controller/veiculoMultaController.js"></script>
-<script type="text/javascript" language="javascript" src="${pageContext.request.contextPath}/javascript/veiculo/controller/veiculoSeguroController.js"></script>
-<script type="text/javascript" language="javascript" src="${pageContext.request.contextPath}/javascript/veiculo/controller/veiculoSinistroController.js"></script>
-<script type="text/javascript" language="javascript" src="${pageContext.request.contextPath}/javascript/veiculo/service/veiculoService.js"></script>
-<script type="text/javascript" language="javascript" src="${pageContext.request.contextPath}/javascript/veiculo/service/veiculoCombustivelService.js"></script>
-<script type="text/javascript" language="javascript" src="${pageContext.request.contextPath}/javascript/veiculo/service/veiculoManutencaoService.js"></script>
-<script type="text/javascript" language="javascript" src="${pageContext.request.contextPath}/javascript/veiculo/service/veiculoMultaService.js"></script>
-<script type="text/javascript" language="javascript" src="${pageContext.request.contextPath}/javascript/veiculo/service/veiculoSeguroService.js"></script>
-<script type="text/javascript" language="javascript" src="${pageContext.request.contextPath}/javascript/veiculo/service/veiculoSinistroService.js"></script>
-
-
 <!-- Bootstrap Core JavaScript -->
 <script src="${pageContext.request.contextPath}/plugins/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
 

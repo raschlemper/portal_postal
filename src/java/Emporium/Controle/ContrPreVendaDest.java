@@ -22,7 +22,7 @@ public class ContrPreVendaDest {
     public static int inserir(int idCliente, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String email, String celular, String pais, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "INSERT INTO pre_venda_destinatario (idCliente, nome, nome_sa, cpf_cnpj, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, email, celular, pais) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        System.out.println("inserir Destinatario -----------------\n"+sql+"\n---------------");
+        //System.out.println("inserir Destinatario -----------------\n"+sql+"\n---------------");
         
         try {
             PreparedStatement valores = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
