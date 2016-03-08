@@ -2,6 +2,7 @@ package com.portalpostal.dao;
 
 import Controle.ContrErroLog;
 import Util.Sql2oConnexao;
+import com.portalpostal.dao.handler.MultaHandler;
 import com.portalpostal.dao.handler.VeiculoMultaHandler;
 import com.portalpostal.model.VeiculoMulta;
 import java.util.ArrayList;
@@ -11,11 +12,13 @@ import org.sql2o.Connection;
 public class VeiculoMultaDAO {   
     
     private Connection connection;
-    private VeiculoMultaHandler handler;
+    private MultaHandler multaHandler;
+    private VeiculoMultaHandler veiculoMultaHandler;
 
     public VeiculoMultaDAO(String nomeBD) {
         connection = Sql2oConnexao.conect(nomeBD);
-        handler = new VeiculoMultaHandler();
+        multaHandler = new MultaHandler();
+        veiculoMultaHandler = new VeiculoMultaHandler();
     } 
 
     public List<VeiculoMulta> findAll() {
@@ -23,7 +26,7 @@ public class VeiculoMultaDAO {
                    + "ORDER BY veiculo_multa.idVeiculo, veiculo_multa.data";
         try {              
             return connection.createQuery(sql)
-                    .executeAndFetch(handler);
+                    .executeAndFetch(veiculoMultaHandler);
         } catch (Exception e) {
             ContrErroLog.inserir("HOITO - contrVeiculoMulta", "SQLException", sql, e.toString());
         } finally {
@@ -38,7 +41,7 @@ public class VeiculoMultaDAO {
         try {              
             return connection.createQuery(sql)                
                     .addParameter("idVeiculoMulta", idVeiculoMulta)
-                    .executeAndFetchFirst(handler);
+                    .executeAndFetchFirst(veiculoMultaHandler);
         } catch (Exception e) {
             ContrErroLog.inserir("HOITO - contrVeiculoMulta", "SQLException", sql, e.toString());
         } finally {
@@ -110,5 +113,19 @@ public class VeiculoMultaDAO {
             connection.close();
         }
         return null;
+    }
+
+    public List<VeiculoMulta> findByIdVeiculo(Integer idVeiculo) {
+        String sql = "SELECT * FROM veiculo_multa WHERE idVeiculo = :idVeiculo";
+        try {              
+            return connection.createQuery(sql)               
+                    .addParameter("idVeiculo", idVeiculo)
+                    .executeAndFetch(multaHandler);
+        } catch (Exception e) {
+            ContrErroLog.inserir("HOITO - contrVeiculoMulta", "SQLException", sql, e.toString());
+        } finally {
+            connection.close();
+        }
+        return new ArrayList<>();
     }
 }

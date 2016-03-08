@@ -32,4 +32,8 @@ public class VeiculoSeguroService {
         return veiculoSeguroDAO.remove(idVeiculoSeguro);
     } 
     
+    public List<VeiculoSeguro> findByIdVeiculo(Integer idVeiculo) throws Exception {
+        return veiculoSeguroDAO.findByIdVeiculo(idVeiculo);
+    } 
+    
 }

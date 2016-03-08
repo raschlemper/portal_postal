@@ -32,4 +32,8 @@ public class VeiculoMultaService {
         return veiculoMultaDAO.remove(idVeiculoMulta);
     } 
     
+    public List<VeiculoMulta> findByIdVeiculo(Integer idVeiculo) throws Exception {
+        return veiculoMultaDAO.findByIdVeiculo(idVeiculo);
+    } 
+    
 }

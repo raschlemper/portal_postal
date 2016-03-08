@@ -36,4 +36,8 @@ public class VeiculoCombustivelService {
         return veiculoCombustivelDAO.findLastCombustivelByIdVeiculo(idVeiculo);
     } 
     
+    public List<VeiculoCombustivel> findByIdVeiculo(Integer idVeiculo) throws Exception {
+        return veiculoCombustivelDAO.findByIdVeiculo(idVeiculo);
+    } 
+    
 }

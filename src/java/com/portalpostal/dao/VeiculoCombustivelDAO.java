@@ -2,6 +2,7 @@ package com.portalpostal.dao;
 
 import Controle.ContrErroLog;
 import Util.Sql2oConnexao;
+import com.portalpostal.dao.handler.CombustivelHandler;
 import com.portalpostal.dao.handler.VeiculoCombustivelHandler;
 import com.portalpostal.model.VeiculoCombustivel;
 import java.util.ArrayList;
@@ -11,11 +12,13 @@ import org.sql2o.Connection;
 public class VeiculoCombustivelDAO {   
     
     private Connection connection;
-    private VeiculoCombustivelHandler handler;
+    private CombustivelHandler combustivelHandler;
+    private VeiculoCombustivelHandler veiculoCombustivelHandler;
 
     public VeiculoCombustivelDAO(String nomeBD) {
         connection = Sql2oConnexao.conect(nomeBD);
-        handler = new VeiculoCombustivelHandler();
+        combustivelHandler = new CombustivelHandler();
+        veiculoCombustivelHandler = new VeiculoCombustivelHandler();
     } 
 
     public List<VeiculoCombustivel> findAll() {
@@ -23,7 +26,7 @@ public class VeiculoCombustivelDAO {
                    + "ORDER BY veiculo_combustivel.idVeiculo, veiculo_combustivel.data";
         try {              
             return connection.createQuery(sql)
-                    .executeAndFetch(handler);
+                    .executeAndFetch(veiculoCombustivelHandler);
         } catch (Exception e) {
             ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());
         } finally {
@@ -38,7 +41,7 @@ public class VeiculoCombustivelDAO {
         try {              
             return connection.createQuery(sql)                
                     .addParameter("idVeiculoCombustivel", idVeiculoCombustivel)
-                    .executeAndFetchFirst(handler);
+                    .executeAndFetchFirst(veiculoCombustivelHandler);
         } catch (Exception e) {
             ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());
         } finally {
@@ -102,6 +105,21 @@ public class VeiculoCombustivelDAO {
                 .addParameter("idVeiculoCombustivel", idVeiculoCombustivel)
                 .executeUpdate();  
             return veiculo;
+        } catch (Exception e) {
+            ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());
+        } finally {
+            connection.close();
+        }
+        return null;
+    }
+
+    public List<VeiculoCombustivel> findByIdVeiculo(Integer idVeiculo) throws Exception {
+        String sql = "SELECT * FROM veiculo_combustivel, veiculo "
+                   + "WHERE veiculo.idVeiculo = veiculo_combustivel.idVeiculo AND veiculo.idVeiculo = :idVeiculo";
+        try {              
+            return connection.createQuery(sql)                
+                    .addParameter("idVeiculo", idVeiculo)
+                    .executeAndFetch(combustivelHandler);
         } catch (Exception e) {
             ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());
         } finally {

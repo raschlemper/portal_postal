@@ -2,6 +2,7 @@ package com.portalpostal.dao;
 
 import Controle.ContrErroLog;
 import Util.Sql2oConnexao;
+import com.portalpostal.dao.handler.ManutencaoHandler;
 import com.portalpostal.dao.handler.VeiculoManutencaoHandler;
 import com.portalpostal.model.VeiculoManutencao;
 import java.util.ArrayList;
@@ -11,11 +12,13 @@ import org.sql2o.Connection;
 public class VeiculoManutencaoDAO {   
     
     private Connection connection;
-    private VeiculoManutencaoHandler handler;
+    private ManutencaoHandler manutencaoHandler;
+    private VeiculoManutencaoHandler veiculoManutencaoHandler;
 
     public VeiculoManutencaoDAO(String nomeBD) {
         connection = Sql2oConnexao.conect(nomeBD);
-        handler = new VeiculoManutencaoHandler();
+        manutencaoHandler = new ManutencaoHandler();
+        veiculoManutencaoHandler = new VeiculoManutencaoHandler();
     } 
 
     public List<VeiculoManutencao> findAll() {
@@ -23,7 +26,7 @@ public class VeiculoManutencaoDAO {
                    + "ORDER BY veiculo_manutencao.idVeiculo, veiculo_manutencao.dataManutencao";
         try {              
             return connection.createQuery(sql)
-                    .executeAndFetch(handler);
+                    .executeAndFetch(veiculoManutencaoHandler);
         } catch (Exception e) {
             ContrErroLog.inserir("HOITO - contrVeiculoManutencao", "SQLException", sql, e.toString());
         } finally {
@@ -38,7 +41,7 @@ public class VeiculoManutencaoDAO {
         try {              
             return connection.createQuery(sql)                
                     .addParameter("idVeiculoManutencao", idVeiculoManutencao)
-                    .executeAndFetchFirst(handler);
+                    .executeAndFetchFirst(veiculoManutencaoHandler);
         } catch (Exception e) {
             ContrErroLog.inserir("HOITO - contrVeiculoManutencao", "SQLException", sql, e.toString());
         } finally {
@@ -102,6 +105,20 @@ public class VeiculoManutencaoDAO {
                 .addParameter("idVeiculoManutencao", idVeiculoManutencao)
                 .executeUpdate();  
             return veiculo;
+        } catch (Exception e) {
+            ContrErroLog.inserir("HOITO - contrVeiculoManutencao", "SQLException", sql, e.toString());
+        } finally {
+            connection.close();
+        }
+        return null;
+    }    
+
+    public List<VeiculoManutencao> findByIdVeiculo(Integer idVeiculo) throws Exception {
+        String sql = "SELECT * FROM veiculo_manutencao WHERE idVeiculo = :idVeiculo";
+        try {              
+            return connection.createQuery(sql)                
+                    .addParameter("idVeiculo", idVeiculo)
+                    .executeAndFetch(manutencaoHandler);
         } catch (Exception e) {
             ContrErroLog.inserir("HOITO - contrVeiculoManutencao", "SQLException", sql, e.toString());
         } finally {

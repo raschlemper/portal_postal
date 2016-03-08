@@ -4,7 +4,17 @@ import Controle.ContrErroLog;
 import com.portalpostal.validation.Validation;
 import com.portalpostal.validation.VeiculoValidation;
 import com.portalpostal.model.Veiculo;
+import com.portalpostal.model.VeiculoCombustivel;
+import com.portalpostal.model.VeiculoManutencao;
+import com.portalpostal.model.VeiculoMulta;
+import com.portalpostal.model.VeiculoSeguro;
+import com.portalpostal.model.VeiculoSinistro;
+import com.portalpostal.service.VeiculoCombustivelService;
+import com.portalpostal.service.VeiculoManutencaoService;
+import com.portalpostal.service.VeiculoMultaService;
+import com.portalpostal.service.VeiculoSeguroService;
 import com.portalpostal.service.VeiculoService;
+import com.portalpostal.service.VeiculoSinistroService;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -31,11 +41,21 @@ public class VeiculoController {
     private String nomeBD;
     
     private VeiculoService veiculoService;
+    private VeiculoCombustivelService veiculoCombustivelService;
+    private VeiculoManutencaoService veiculoManutencaoService;
+    private VeiculoMultaService veiculoMultaService;
+    private VeiculoSeguroService veiculoSeguroService;
+    private VeiculoSinistroService veiculoSinistroService;
 
     private void init() {
         sessao = request.getSession();
         nomeBD = (String) sessao.getAttribute("nomeBD");
         veiculoService = new VeiculoService(nomeBD);
+        veiculoCombustivelService = new VeiculoCombustivelService(nomeBD);
+        veiculoManutencaoService = new VeiculoManutencaoService(nomeBD);
+        veiculoMultaService = new VeiculoMultaService(nomeBD);
+        veiculoSeguroService = new VeiculoSeguroService(nomeBD);
+        veiculoSinistroService = new VeiculoSinistroService(nomeBD);
     }
     
     @GET
@@ -57,6 +77,66 @@ public class VeiculoController {
         try {
             init();    
             return veiculoService.find(idVeiculo);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }  
+    
+    @GET
+    @Path("/{idVeiculo}/combustivel")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<VeiculoCombustivel> findCombustivelByIdVeiculo(@PathParam("idVeiculo") Integer idVeiculo) {
+        try {
+            init();    
+            return veiculoCombustivelService.findByIdVeiculo(idVeiculo);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }   
+    
+    @GET
+    @Path("/{idVeiculo}/manutencao")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<VeiculoManutencao> findManutencaoByIdVeiculo(@PathParam("idVeiculo") Integer idVeiculo) {
+        try {
+            init();    
+            return veiculoManutencaoService.findByIdVeiculo(idVeiculo);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }    
+    
+    @GET
+    @Path("/{idVeiculo}/multa")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<VeiculoMulta> findMultaByIdVeiculo(@PathParam("idVeiculo") Integer idVeiculo) {
+        try {
+            init();    
+            return veiculoMultaService.findByIdVeiculo(idVeiculo);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }    
+    
+    @GET
+    @Path("/{idVeiculo}/seguro")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<VeiculoSeguro> findSeguroByIdVeiculo(@PathParam("idVeiculo") Integer idVeiculo) {
+        try {
+            init();    
+            return veiculoSeguroService.findByIdVeiculo(idVeiculo);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }     
+    
+    @GET
+    @Path("/{idVeiculo}/sinistro")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<VeiculoSinistro> findSinistroByIdVeiculo(@PathParam("idVeiculo") Integer idVeiculo) {
+        try {
+            init();    
+            return veiculoSinistroService.findByIdVeiculo(idVeiculo);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }

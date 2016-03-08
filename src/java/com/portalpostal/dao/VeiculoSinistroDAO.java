@@ -2,6 +2,7 @@ package com.portalpostal.dao;
 
 import Controle.ContrErroLog;
 import Util.Sql2oConnexao;
+import com.portalpostal.dao.handler.SinistroHandler;
 import com.portalpostal.dao.handler.VeiculoSinistroHandler;
 import com.portalpostal.model.VeiculoSinistro;
 import java.util.ArrayList;
@@ -11,11 +12,13 @@ import org.sql2o.Connection;
 public class VeiculoSinistroDAO {   
     
     private Connection connection;
-    private VeiculoSinistroHandler handler;
+    private SinistroHandler sinistroHandler;
+    private VeiculoSinistroHandler veiculoSinistroHandler;
 
     public VeiculoSinistroDAO(String nomeBD) {
         connection = Sql2oConnexao.conect(nomeBD);
-        handler = new VeiculoSinistroHandler();
+        sinistroHandler = new SinistroHandler();
+        veiculoSinistroHandler = new VeiculoSinistroHandler();
     } 
 
     public List<VeiculoSinistro> findAll() {
@@ -23,7 +26,7 @@ public class VeiculoSinistroDAO {
                    + "ORDER BY veiculo_sinistro.idVeiculo, veiculo_sinistro.data";
         try {              
             return connection.createQuery(sql)
-                    .executeAndFetch(handler);
+                    .executeAndFetch(veiculoSinistroHandler);
         } catch (Exception e) {
             ContrErroLog.inserir("HOITO - contrVeiculoSinistro", "SQLException", sql, e.toString());
         } finally {
@@ -38,7 +41,7 @@ public class VeiculoSinistroDAO {
         try {              
             return connection.createQuery(sql)                
                     .addParameter("idVeiculoSinistro", idVeiculoSinistro)
-                    .executeAndFetchFirst(handler);
+                    .executeAndFetchFirst(veiculoSinistroHandler);
         } catch (Exception e) {
             ContrErroLog.inserir("HOITO - contrVeiculoSinistro", "SQLException", sql, e.toString());
         } finally {
@@ -108,5 +111,19 @@ public class VeiculoSinistroDAO {
             connection.close();
         }
         return null;
+    }
+
+    public List<VeiculoSinistro> findByIdVeiculo(Integer idVeiculo) {
+        String sql = "SELECT * FROM veiculo_sinistro WHERE idVeiculo = :idVeiculo";
+        try {              
+            return connection.createQuery(sql) 
+                    .addParameter("idVeiculo", idVeiculo)
+                    .executeAndFetch(sinistroHandler);
+        } catch (Exception e) {
+            ContrErroLog.inserir("HOITO - contrVeiculoSinistro", "SQLException", sql, e.toString());
+        } finally {
+            connection.close();
+        }
+        return new ArrayList<>();
     }
 }

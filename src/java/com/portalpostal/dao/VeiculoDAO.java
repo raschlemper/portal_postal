@@ -12,18 +12,18 @@ import org.sql2o.Query;
 public class VeiculoDAO {   
     
     private Connection connection;
-    private VeiculoHandler handler;
+    private VeiculoHandler veiculoHandler;
 
     public VeiculoDAO(String nomeBD) {
         connection = Sql2oConnexao.conect(nomeBD);
-        handler = new VeiculoHandler();
+        veiculoHandler = new VeiculoHandler();
     } 
 
     public List<Veiculo> findAll() throws Exception {
         String sql = "SELECT * FROM veiculo ORDER BY marca, modelo, placa";
         try {              
             return connection.createQuery(sql)
-                    .executeAndFetch(handler);
+                    .executeAndFetch(veiculoHandler);
         } catch (Exception e) {
             ContrErroLog.inserir("HOITO - contrVeiculo", "SQLException", sql, e.toString());
         } finally {
@@ -37,7 +37,7 @@ public class VeiculoDAO {
         try {              
             return connection.createQuery(sql)
                     .addParameter("idVeiculo", idVeiculo)
-                    .executeAndFetchFirst(handler);
+                    .executeAndFetchFirst(veiculoHandler);
         } catch (Exception e) {
             ContrErroLog.inserir("HOITO - contrVeiculo", "SQLException", sql, e.toString());
         } finally {
@@ -134,7 +134,7 @@ public class VeiculoDAO {
         try {              
             Query query = connection.createQuery(sql).addParameter("placa", veiculo.getPlaca());
             if(veiculo.getIdVeiculo()!= null) { query.addParameter("idVeiculo", veiculo.getIdVeiculo()); }
-            return query.executeAndFetchFirst(handler);
+            return query.executeAndFetchFirst(veiculoHandler);
         } catch (Exception e) {
             ContrErroLog.inserir("HOITO - contrVeiculo", "SQLException", sql, e.toString());
         } finally {

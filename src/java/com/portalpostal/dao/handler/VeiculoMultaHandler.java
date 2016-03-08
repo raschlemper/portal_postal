@@ -7,25 +7,18 @@ import org.sql2o.ResultSetHandler;
 
 public class VeiculoMultaHandler implements ResultSetHandler<VeiculoMulta> {
     
-    private final VeiculoHandler veiculo;
+    private final VeiculoHandler veiculoHandler;
+    private final MultaHandler multaHandler;
     
     public VeiculoMultaHandler() {
-        veiculo = new VeiculoHandler();
+        veiculoHandler = new VeiculoHandler();
+        multaHandler = new MultaHandler();
     }
 
     @Override
     public VeiculoMulta handle(ResultSet result) throws SQLException {
-        VeiculoMulta multa = new VeiculoMulta();
-        multa.setIdVeiculoMulta(result.getInt("veiculo_multa.idVeiculoMulta"));
-        multa.setCondutor(result.getString("veiculo_multa.condutor"));
-        multa.setNumero(result.getInt("veiculo_multa.numero"));
-        multa.setValor(result.getDouble("veiculo_multa.valor"));
-        multa.setData(result.getDate("veiculo_multa.data"));
-        multa.setValor(result.getDouble("veiculo_multa.valor"));
-        multa.setDescontada(result.getBoolean("veiculo_multa.descontada"));
-        multa.setLocal(result.getString("veiculo_multa.local"));
-        multa.setDescricao(result.getString("veiculo_multa.descricao"));
-        multa.setVeiculo(veiculo.handle(result));
+        VeiculoMulta multa = multaHandler.handle(result);
+        multa.setVeiculo(veiculoHandler.handle(result));
         return multa;
     }
     

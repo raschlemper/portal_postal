@@ -30,6 +30,10 @@ public class VeiculoManutencaoService {
     
     public VeiculoManutencao delete(Integer idVeiculoManutencao) throws Exception {
         return veiculoManutencaoDAO.remove(idVeiculoManutencao);
+    }  
+    
+    public List<VeiculoManutencao> findByIdVeiculo(Integer idVeiculo) throws Exception {
+        return veiculoManutencaoDAO.findByIdVeiculo(idVeiculo);
     } 
     
 }

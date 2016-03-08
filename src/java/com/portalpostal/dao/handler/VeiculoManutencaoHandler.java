@@ -1,6 +1,5 @@
 package com.portalpostal.dao.handler;
 
-import com.portalpostal.model.TipoManutencao;
 import com.portalpostal.model.VeiculoManutencao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,23 +7,18 @@ import org.sql2o.ResultSetHandler;
 
 public class VeiculoManutencaoHandler implements ResultSetHandler<VeiculoManutencao> {
     
-    private final VeiculoHandler veiculo;
+    private final VeiculoHandler veiculoHandler;
+    private final ManutencaoHandler manutencaoHandler;
     
     public VeiculoManutencaoHandler() {
-        veiculo = new VeiculoHandler();
+        veiculoHandler = new VeiculoHandler();
+        manutencaoHandler = new ManutencaoHandler();
     }
 
     @Override
     public VeiculoManutencao handle(ResultSet result) throws SQLException {
-        VeiculoManutencao manutencao = new VeiculoManutencao();
-        manutencao.setIdVeiculoManutencao(result.getInt("veiculo_manutencao.idVeiculoManutencao"));
-        manutencao.setTipo(TipoManutencao.values()[result.getInt("veiculo_manutencao.tipo")]);
-        manutencao.setQuilometragem(result.getInt("veiculo_manutencao.quilometragem"));
-        manutencao.setValor(result.getDouble("veiculo_manutencao.valor"));
-        manutencao.setDataManutencao(result.getDate("veiculo_manutencao.dataManutencao"));
-        manutencao.setDataAgendamento(result.getDate("veiculo_manutencao.dataAgendamento"));
-        manutencao.setDescricao(result.getString("veiculo_manutencao.descricao"));
-        manutencao.setVeiculo(veiculo.handle(result));
+        VeiculoManutencao manutencao = manutencaoHandler.handle(result);
+        manutencao.setVeiculo(veiculoHandler.handle(result));
         return manutencao;
     }
     

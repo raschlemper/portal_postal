@@ -1,4 +1,4 @@
-<jsp:include page="../includes/telaMsg.jsp"></jsp:include>
+<%@ include file="../includes/telaMsg.jsp" %>
 <nav style="z-index: 2000;" class="navbar navbar-default navbar-fixed-top">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header fixed-brand">
