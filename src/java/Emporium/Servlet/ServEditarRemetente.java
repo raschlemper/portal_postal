@@ -142,7 +142,9 @@ public class ServEditarRemetente extends HttpServlet {
                         }
                     }
 
-                    inserirImagemDiretorio(itemImg, rem, nomeBD);
+                    
+                    //ALTERA URL NO BANCO
+                    contrRemetente.alterarLogo("", rem.getIdRemetente(), rem.getIdCliente(), nomeBD);
                     sessao.setAttribute("msg", "Remetente Alterado com Sucesso!");
 
                 } catch (SizeLimitExceededException e) {
@@ -161,54 +163,6 @@ public class ServEditarRemetente extends HttpServlet {
         }
     }
 
-    private String inserirImagemDiretorio(FileItem item, Remetente rem, String nomeBD) throws IOException, Exception {
-
-        contrRemetente.editar(rem.getIdRemetente(), rem.getIdCliente(), rem.getNome(), rem.getCpf_cnpj(), rem.getCep(), rem.getEndereco(), rem.getNumero(), rem.getComplemento(), rem.getBairro(), rem.getCidade(), rem.getUf(), nomeBD);
-
-        //Pega o diretório de onde a aplicação está rodando
-        String caminho = getServletContext().getRealPath("img_bd") + "/" + nomeBD + "/";
-        //Cria o diretório caso ele não exista
-        File diretorio = new File(caminho);
-        if (!diretorio.exists()) {
-            diretorio.mkdirs();
-        }
-
-        // Mandar o arquivo para o diretório informado
-        if (item != null && item.getName() != null && !item.getName().equals("") && !item.getName().equals("null") && item.getSize() > 0) {
-
-            //DELETA IMAGEM ANTIGA
-            if(rem.getUrl_logo().lastIndexOf("/") > 0){
-                try{
-                String nomeImgOld = rem.getUrl_logo().substring(rem.getUrl_logo().lastIndexOf("/"));
-                String caminho1 = getServletContext().getRealPath("img_bd") + "/" + nomeBD + "/" + nomeImgOld;
-                File file1 = new File(caminho1);
-                file1.delete();
-                }catch(Exception e){System.out.println("uuuuuuu423");}
-            }
-
-            //UPLOAD DA IMAGEM PEQUENA
-            String nome = item.getName();
-            String nome_tumb = rem.getIdCliente() + "_" + rem.getIdRemetente() + "_logo" + nome.substring(nome.lastIndexOf("."));
-            File file_1 = new File(diretorio, nome_tumb);
-            FileOutputStream output_1 = new FileOutputStream(file_1);
-            InputStream is_1 = Util.ResizeImage.resizeImage(item.getInputStream(), 300, 100);
-            byte[] buffer_1 = new byte[2048];
-            int nLidos_1;
-            while ((nLidos_1 = is_1.read(buffer_1)) >= 0) {
-                output_1.write(buffer_1, 0, nLidos_1);
-            }
-            output_1.flush();
-            output_1.close();
-
-            caminho = "/img_bd/" + nomeBD + "/" + nome_tumb;
-            caminho = caminho.replace('\\', '/');
-
-            //ALTERA URL NO BANCO
-            contrRemetente.alterarLogo(caminho, rem.getIdRemetente(), rem.getIdCliente(), nomeBD);
-
-        }
-        return caminho;
-    }
 
     /** 
      * Handles the HTTP <code>POST</code> method.

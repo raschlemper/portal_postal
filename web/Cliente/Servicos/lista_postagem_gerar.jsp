@@ -181,51 +181,70 @@
                                     <th><h3>N.F.</h3></th>
                                     <th><h3>Data Impressão</h3></th>
                                     <th width="50"><h3>AR</h3></th>
-                                    <th class="nosort" width="60"><h3>Ver</h3></th>
+                                    <th class="nosort" width="40"><h3>Ver</h3></th>
+                                    <th class="nosort" width="40"><h3>Del</h3></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <%
                                     ArrayList<PreVenda> lista = ContrPreVenda.consultaVendasReimpressao(idCli, 1, -1, nivel, idUser, true, vDataInicio, vDataFinal, nomeBD);
                                     for (int i = 0; i < lista.size(); i++) {
-                                        PreVenda des = lista.get(i);
-                                        String numObj = des.getNumObjeto();
+                                        PreVenda pv = lista.get(i);
+                                        String numObj = pv.getNumObjeto();
                                         if ("avista".equals(numObj)) {
                                             numObj = "- - -";
                                         }
                                         String ar = "SIM";
-                                        if(des.getAviso_recebimento() == 0){
+                                        if(pv.getAviso_recebimento() == 0){
                                          ar = "NÃO";
                                         }
                                         String os = "- - -";
-                                        if(des.getIdOs() > 0){
-                                            os = "<a href='lista_postagem_print.jsp?idOs="+des.getIdOs()+"'>"+des.getIdOs()+"</a>";
+                                        if(pv.getIdOs() > 0){
+                                            os = "<a href='lista_postagem_print.jsp?idOs="+pv.getIdOs()+"'>"+pv.getIdOs()+"</a>";
                                         }
                                 %>
                                 <tr style="cursor:default;">
                                     <td align="center">
-                                        <%if(des.getIdOs() == 0){%>
-                                            <input type="checkbox" name="ids" value="<%= des.getId()%>" />
-                                            <input type="hidden" name="os_<%= des.getId()%>" value="<%= des.getIdOs()%>" />
+                                        <%if(pv.getIdOs() == 0){%>
+                                            <input type="checkbox" name="ids" value="<%= pv.getId()%>" />
+                                            <input type="hidden" name="os_<%= pv.getId()%>" value="<%= pv.getIdOs()%>" />
                                         <%}%>
                                     </td>
-                                    <td><%= des.getId() %></td>
+                                    <td><%= pv.getId() %></td>
                                     <td align="center"><%= numObj%></td>
                                     <td align="center"><%= os %></td>
-                                    <td><%= des.getNomeServico()%></td>
-                                    <td><%= des.getNomeDes()%></td>
-                                    <td><%= des.getEnderecoDes() + ", " + des.getNumeroDes()%></td>
-                                    <td><%= des.getCidadeDes() + " / " + des.getUfDes()%></td>
-                                    <td><%= des.getCepDes() %></td>
-                                    <td><%= des.getNotaFiscal() %></td>
-                                    <td><%= des.getDataImpressoFormatada() %></td>
+                                    <td><%= pv.getNomeServico()%></td>
+                                    <td><%= pv.getNomeDes()%></td>
+                                    <td><%= pv.getEnderecoDes() + ", " + pv.getNumeroDes()%></td>
+                                    <td><%= pv.getCidadeDes() + " / " + pv.getUfDes()%></td>
+                                    <td><%= pv.getCepDes() %></td>
+                                    <td><%= pv.getNotaFiscal() %></td>
+                                    <td><%= pv.getDataImpressoFormatada() %></td>
                                     <td><%= ar%></td>
-                                    <td align="center"><a onclick="verVenda(<%= des.getId()%>);" style="cursor:pointer;" ><img src="../../imagensNew/lupa.png" /></a></td>
+                                    <td align="center"><a onclick="verVenda(<%= pv.getId()%>);" style="cursor:pointer;" ><img src="../../imagensNew/lupa.png" /></a></td>
+                                    <td align="center">
+                                        <%if(pv.getIdOs() > 0){%>
+                                            <img style="cursor: pointer;" src="../../imagensNew/cancel.png" border="0" onClick="removerObjeto(<%= pv.getId()%>, '<%= pv.getIdOs() %>');" />
+                                        <%}%>
+                                    </td>
                                 </tr>
                                 <%}%>
                             </tbody>
                         </table>
                         <script type="text/javascript">
+                            
+                            function removerObjeto(idVenda, idOS) {
+                                if (confirm('Tem certeza que deseja remover este objeto da lista de postagem?')) {
+                                    document.getElementById('idVendaDel').value = idVenda;
+                                    document.getElementById('idOsDel').value = idOS;                                    
+                                    document.formDelOS.submit();
+                                } else {
+                                    document.getElementById('idVendaDel').value = '';
+                                    document.getElementById('idOsDel').value = '';
+                                    return false;
+                                }
+                            }
+            
                             var sorter2 = new TINY.table.sorter('sorter2','table2',{
                                 headclass:'head',
                                 ascclass:'asc',
@@ -248,6 +267,11 @@
                         </div>
                         <%}%>
                             
+                    </form>
+                    <form action="../../ServListaPostagemRemoverObj" method="post" name="formDelOS">
+                        <input type="hidden" name="nomeBD" value="<%= nomeBD%>" />
+                        <input type="hidden" name="idVenda" id="idVendaDel" value="" />
+                        <input type="hidden" name="idOs" id="idOsDel" value="" />
                     </form>
 
                 </div>

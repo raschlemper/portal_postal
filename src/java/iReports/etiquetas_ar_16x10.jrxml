@@ -248,9 +248,9 @@ UNIDADE DE POSTAGEM]]></text>
 				<reportElement x="11" y="77" width="194" height="43" uuid="6a5854e7-b600-4a7e-9c41-4862706c86d4">
 					<printWhenExpression><![CDATA[!$F{nObj}.equals("")]]></printWhenExpression>
 				</reportElement>
-				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" moduleWidth="1.3" textPosition="top">
+                                <jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="true" checksumRequired="false" barHeight="80">
 					<jr:codeExpression><![CDATA[$F{nObj}]]></jr:codeExpression>
-				</jr:Code128>
+				</jr:barbecue>
 			</componentElement>
 			<line>
 				<reportElement x="243" y="179" width="89" height="1" uuid="e3130c20-dc7a-4d14-8b4c-cc5171b44e79"/>

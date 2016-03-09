@@ -56,17 +56,17 @@ public class ServGeraChancelaEtq extends HttpServlet {
         BufferedImage img = null;
         try {
             if ("PAC".equals(servico) || "PAX".equals(servico)) {
-                img = ImageIO.read(new File(this.getServletContext().getRealPath("") + "/imagensNew/chancelas/CHANCELA_PAC.png"));
+                img = ImageIO.read(new File("/var/lib/tomcat/webapps/PortalPostal/imagensNew/chancelas/CHANCELA_PAC.png"));
             } else if ("SEDEX".equals(servico) || "SEDEXC".equals(servico)) {
-                img = ImageIO.read(new File(this.getServletContext().getRealPath("") + "/imagensNew/chancelas/CHANCELA_SEDEX.png"));
+                img = ImageIO.read(new File("/var/lib/tomcat/webapps/PortalPostal/imagensNew/chancelas/CHANCELA_SEDEX.png"));
             } else if ("ESEDEX".equals(servico)) {
-                img = ImageIO.read(new File(this.getServletContext().getRealPath("") + "/imagensNew/chancelas/CHANCELA_ESEDEX.png"));
+                img = ImageIO.read(new File("/var/lib/tomcat/webapps/PortalPostal/imagensNew/chancelas/CHANCELA_ESEDEX.png"));
             } else if ("SEDEX10".equals(servico)) {
-                img = ImageIO.read(new File(this.getServletContext().getRealPath("") + "/imagensNew/chancelas/CHANCELA_SEDEX10.png"));
+                img = ImageIO.read(new File("/var/lib/tomcat/webapps/PortalPostal/imagensNew/chancelas/CHANCELA_SEDEX10.png"));
             } else if ("SEDEX12".equals(servico)) {
-                img = ImageIO.read(new File(this.getServletContext().getRealPath("") + "/imagensNew/chancelas/CHANCELA_SEDEX12.png"));
+                img = ImageIO.read(new File("/var/lib/tomcat/webapps/PortalPostal/imagensNew/chancelas/CHANCELA_SEDEX12.png"));
             } else if ("CARTA".equals(servico)) {
-                img = ImageIO.read(new File(this.getServletContext().getRealPath("") + "/imagensNew/chancelas/CHANCELA_CARTA.png"));
+                img = ImageIO.read(new File("/var/lib/tomcat/webapps/PortalPostal/imagensNew/chancelas/CHANCELA_CARTA.png"));
             }
         } catch (IOException e) {
             System.out.println("Falha ao carregar imagem de base da chancela: " + e);
@@ -115,8 +115,6 @@ public class ServGeraChancelaEtq extends HttpServlet {
 
         try {
             //Write the image as a jpg
-            //ImageIO.write(bufferedImage, "jpg", response.getOutputStream());
-            //ImageIO.write(bi, "png", new File(this.getServletContext().getRealPath("") + "/images/intelbras_previewa.png"));
             ImageIO.write(bi, "png", response.getOutputStream());
         } catch (IOException ioe) {
         }

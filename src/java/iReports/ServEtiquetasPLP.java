@@ -70,8 +70,8 @@ public class ServEtiquetasPLP extends HttpServlet {
 
             try {
                 Clientes cli = contrCliente.consultaClienteById(idCliente, nomeBD);
-                String url_base = getServletContext().getRealPath("");
-                String url = "http://localhost:8080/PortalPostal/" + cli.getUrl_logo();
+                String url_base = "http://www.portalpsotal.com.br";
+                String url = "http://www.portalpsotal.com.br/" + cli.getUrl_logo();
                 if (!urlExist(url)) {
                     url = "";
                 }
@@ -88,7 +88,10 @@ public class ServEtiquetasPLP extends HttpServlet {
                     JasperDesign jasperDesign = JRXmlLoader.load(in);                    
                     
                     String sqlQuery = "SELECT *,"
-                            + " IF(servico = 'CARTA' || servico = 'SIMPLES', CONCAT('"+url_base+"/imagensNew/chancelas/', servico, '.png'), CONCAT('http://localhost:8080/PortalPostal/ServGeraChancelaEtq?servico=', servico, '&contrato=' , contrato, '&nome=' , REPLACE(REPLACE(nomeRemetente, ' ', '_'), '&', 'E'), '&ano=2015&uf=', ufRemetente)) AS imgChancela"
+                            + " IF(servico = 'CARTA' || servico = 'SIMPLES', "
+                                    + "CONCAT('"+url_base+"/imagensNew/chancelas/', servico, '.png'), "
+                                    + "CONCAT('"+url_base+"/imagensNew/chancelas/CHANCELA_', servico, '.png')"
+                            + ")  AS imgChancela"
                             + " FROM me_plp"
                             + " WHERE idCliente = " + idCliente + " AND status = 0 AND sro IN (" + SROs + ");";
                     

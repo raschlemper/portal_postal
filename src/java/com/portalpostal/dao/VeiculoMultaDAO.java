@@ -11,19 +11,22 @@ import org.sql2o.Connection;
 
 public class VeiculoMultaDAO {   
     
-    private Connection connection;
+//    private Connection connection;
     private MultaHandler multaHandler;
     private VeiculoMultaHandler veiculoMultaHandler;
+    private String nomeBD;
 
-    public VeiculoMultaDAO(String nomeBD) {
-        connection = Sql2oConnexao.conect(nomeBD);
+    public VeiculoMultaDAO(String nomeBD) { 
+//        connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
         multaHandler = new MultaHandler();
         veiculoMultaHandler = new VeiculoMultaHandler();
+        this.nomeBD = nomeBD;
     } 
 
     public List<VeiculoMulta> findAll() {
         String sql = "SELECT * FROM veiculo_multa, veiculo WHERE veiculo.idVeiculo = veiculo_multa.idVeiculo "
                    + "ORDER BY veiculo_multa.idVeiculo, veiculo_multa.data";
+        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
         try {              
             return connection.createQuery(sql)
                     .executeAndFetch(veiculoMultaHandler);
@@ -31,6 +34,7 @@ public class VeiculoMultaDAO {
             ContrErroLog.inserir("HOITO - contrVeiculoMulta", "SQLException", sql, e.toString());
         } finally {
             connection.close();
+            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         }
         return new ArrayList<>();
     }
@@ -38,6 +42,7 @@ public class VeiculoMultaDAO {
     public VeiculoMulta find(Integer idVeiculoMulta) throws Exception {
         String sql = "SELECT * FROM veiculo_multa, veiculo "
                    + "WHERE veiculo.idVeiculo = veiculo_multa.idVeiculo AND idVeiculoMulta = :idVeiculoMulta";
+        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
         try {              
             return connection.createQuery(sql)                
                     .addParameter("idVeiculoMulta", idVeiculoMulta)
@@ -46,6 +51,7 @@ public class VeiculoMultaDAO {
             ContrErroLog.inserir("HOITO - contrVeiculoMulta", "SQLException", sql, e.toString());
         } finally {
             connection.close();
+            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         }
         return null;
     }
@@ -53,6 +59,7 @@ public class VeiculoMultaDAO {
     public VeiculoMulta save(VeiculoMulta veiculo) throws Exception {        
         String sql = "INSERT INTO veiculo_multa (idVeiculo, condutor, numero, data, valor, descontada, local, descricao) "
                    + "VALUES(:idVeiculo, :condutor, :numero, :data, :valor, :descontada, :local, :descricao)";
+        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
         try {
             Integer idVeiculo = connection.createQuery(sql, true)
                     .addParameter("idVeiculo", veiculo.getVeiculo().getIdVeiculo())
@@ -69,6 +76,7 @@ public class VeiculoMultaDAO {
             ContrErroLog.inserir("HOITO - contrVeiculoMulta", "SQLException", sql, e.toString());
         } finally {
             connection.close();
+            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         }
         return null;
     }
@@ -78,6 +86,7 @@ public class VeiculoMultaDAO {
                    + "SET idVeiculo = :idVeiculo, condutor = :condutor, numero = :numero, data = :data, valor = :valor, descontada = :descontada, "
                    + "local = :local, descricao = :descricao "
                    + "WHERE idVeiculoMulta = :idVeiculoMulta ";
+        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
         try {
             connection.createQuery(sql)
                 .addParameter("idVeiculoMulta", veiculo.getIdVeiculoMulta())
@@ -95,12 +104,14 @@ public class VeiculoMultaDAO {
             ContrErroLog.inserir("HOITO - contrVeiculoMulta", "SQLException", sql, e.toString());
         } finally {
             connection.close();
+            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         }
         return null;
     }
 
     public VeiculoMulta remove(Integer idVeiculoMulta) throws Exception { 
         String sql = "DELETE FROM veiculo_multa WHERE idVeiculoMulta = :idVeiculoMulta ";
+        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
         try {
             VeiculoMulta veiculo = find(idVeiculoMulta);
             connection.createQuery(sql)
@@ -111,12 +122,14 @@ public class VeiculoMultaDAO {
             ContrErroLog.inserir("HOITO - contrVeiculoMulta", "SQLException", sql, e.toString());
         } finally {
             connection.close();
+            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         }
         return null;
     }
 
     public List<VeiculoMulta> findByIdVeiculo(Integer idVeiculo) {
         String sql = "SELECT * FROM veiculo_multa WHERE idVeiculo = :idVeiculo";
+        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
         try {              
             return connection.createQuery(sql)               
                     .addParameter("idVeiculo", idVeiculo)
@@ -125,6 +138,7 @@ public class VeiculoMultaDAO {
             ContrErroLog.inserir("HOITO - contrVeiculoMulta", "SQLException", sql, e.toString());
         } finally {
             connection.close();
+            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         }
         return new ArrayList<>();
     }

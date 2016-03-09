@@ -264,7 +264,10 @@
                     </form><!-- /form -->
                 </div><!-- /card-container -->
                 <div class="text-center">
-                    Para acessar como agência entre em<br/><a href="http://agf.portalpostal.com.br">agf.portalpostal.com.br</a>
+                    Para acessar como agência entre em<br/><a href="http://agf.portalpostal.com.br">agf.portalpostal.com.br</a><br/>
+                    <a href="http://www.beyondsecurity.com/vulnerability-scanner-verification/portalpostal.com.br" >
+                        <img src="http://seal.beyondsecurity.com/verification-images/portalpostal.com.br/vulnerability-scanner-10.gif" alt="Vulnerability Scanner" border="0" />
+                    </a>
                 </div>
             </div>
         </div>

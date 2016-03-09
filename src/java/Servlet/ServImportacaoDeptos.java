@@ -138,50 +138,6 @@ public class ServImportacaoDeptos extends HttpServlet {
         }
 
     }
-    
-    /*
-    private String inserirDiretorio(FileItem item) throws IOException {
-
-        String caminho = getServletContext().getRealPath("DeptosImport");
-        caminho = "/var/lib/tomcat/webapps/PortalPostal/DeptosImport";
-        //caminho = "C:\\Users\\Ricardinho\\Desktop";
-
-        // Cria o diretório caso ele não exista
-        File diretorio = new File(caminho);
-        if (!diretorio.exists()) {
-            diretorio.mkdir();
-        }
-
-        // Mandar o arquivo para o diretório informado
-        String aa = item.getContentType();
-        if (!aa.equals("text/plain")) {  // troquei a informação -> if(!aa.equals("application/vnd.ms-excel")){
-            return "";
-        }
-        String nome = "deptos.txt"; // troquei o nome do arquivo -> cliente.csv
-
-        String arq[] = nome.split("\\\\");
-
-        for (int i = 0; i < arq.length; i++) {
-            nome = arq[i];
-        }
-
-        File file = new File(diretorio, nome);
-        FileOutputStream output = new FileOutputStream(file);
-        InputStream is = item.getInputStream();
-        byte[] buffer = new byte[2048];
-        int nLidos;
-
-        while ((nLidos = is.read(buffer)) >= 0) {
-            output.write(buffer, 0, nLidos);
-        }
-
-        caminho = caminho.replace('\\', '/');
-        caminho += "/" + nome;
-
-        output.flush();
-        output.close();
-        return caminho;
-    }*/
 
     public static String importaCli(FileItem item, String nomeBD, int idUsuario) {
         int linha = 0;

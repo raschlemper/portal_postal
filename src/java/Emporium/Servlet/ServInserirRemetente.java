@@ -32,8 +32,10 @@ import org.apache.commons.fileupload.FileUploadException;
  */
 public class ServInserirRemetente extends HttpServlet {
 
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -60,8 +62,9 @@ public class ServInserirRemetente extends HttpServlet {
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -136,7 +139,8 @@ public class ServInserirRemetente extends HttpServlet {
                         }
                     }
 
-                    inserirImagemDiretorio(itemImg, rem, nomeBD);
+                    int idRem = contrRemetente.inserir(rem.getIdCliente(), rem.getNome(), rem.getCpf_cnpj(), rem.getCep(), rem.getEndereco(), rem.getNumero(), rem.getComplemento(), rem.getBairro(), rem.getCidade(), rem.getUf(), rem.getUrl_logo(), nomeBD);
+                    contrRemetente.alterarLogo("", idRem, rem.getIdCliente(), nomeBD);
                     sessao.setAttribute("msg", "Remetente Inserido com Sucesso!");
 
                 } catch (SizeLimitExceededException e) {
@@ -155,46 +159,9 @@ public class ServInserirRemetente extends HttpServlet {
         }
     }
 
-    private String inserirImagemDiretorio(FileItem item, Remetente rem, String nomeBD) throws IOException, Exception {
-
-        int idRem = contrRemetente.inserir(rem.getIdCliente(), rem.getNome(), rem.getCpf_cnpj(), rem.getCep(), rem.getEndereco(), rem.getNumero(), rem.getComplemento(), rem.getBairro(), rem.getCidade(), rem.getUf(), rem.getUrl_logo(), nomeBD);
-
-        //Pega o diretório de onde a aplicação está rodando
-        String caminho = getServletContext().getRealPath("img_bd") + "/" + nomeBD + "/";
-        //Cria o diretório caso ele não exista
-        File diretorio = new File(caminho);
-        if (!diretorio.exists()) {
-            diretorio.mkdirs();
-        }
-
-        // Mandar o arquivo para o diretório informado
-        if (item != null && item.getName() != null && !item.getName().equals("") && !item.getName().equals("null") && item.getSize() > 0) {
-            //UPLOAD DA IMAGEM PEQUENA
-            String nome = item.getName();
-            String nome_tumb = rem.getIdCliente() + "_" + idRem + "_logo" + nome.substring(nome.lastIndexOf("."));
-            File file_1 = new File(diretorio, nome_tumb);
-            FileOutputStream output_1 = new FileOutputStream(file_1);
-            InputStream is_1 = Util.ResizeImage.resizeImage(item.getInputStream(), 300, 100);
-            byte[] buffer_1 = new byte[2048];
-            int nLidos_1;
-            while ((nLidos_1 = is_1.read(buffer_1)) >= 0) {
-                output_1.write(buffer_1, 0, nLidos_1);
-            }
-            output_1.flush();
-            output_1.close();
-
-            caminho = "/img_bd/" + nomeBD + "/" + nome_tumb;
-            caminho = caminho.replace('\\', '/');
-
-            //altera url_logo
-            contrRemetente.alterarLogo(caminho, idRem, rem.getIdCliente(), nomeBD);
-
-        }
-        return caminho;
-    }
-
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -206,8 +173,9 @@ public class ServInserirRemetente extends HttpServlet {
         doGet(request, response);
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

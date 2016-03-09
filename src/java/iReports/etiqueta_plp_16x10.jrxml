@@ -250,9 +250,9 @@
 			</line>
 			<componentElement>
 				<reportElement uuid="a58e1a3e-524a-447d-bfab-d69c4c07cf7d" x="2" y="70" width="240" height="72"/>
-				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" moduleWidth="1.5" textPosition="top">
+                                <jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barHeight="80">
 					<jr:codeExpression><![CDATA[$F{sro}]]></jr:codeExpression>
-				</jr:Code128>
+				</jr:barbecue>
 			</componentElement>
 			<staticText>
 				<reportElement uuid="e5d7481b-6daa-477e-ac2a-4477ff1813dd" x="2" y="150" width="232" height="13"/>

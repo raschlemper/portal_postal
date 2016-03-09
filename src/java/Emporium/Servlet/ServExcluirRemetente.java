@@ -85,13 +85,6 @@ public class ServExcluirRemetente extends HttpServlet {
                 int idRemetente = Integer.parseInt(request.getParameter("idRemetente"));
                 int idCliente = Integer.parseInt(request.getParameter("idCliente"));
 
-                if(url_logo.lastIndexOf("/") > 0){
-                    String nomeImg = url_logo.substring(url_logo.lastIndexOf("/"));
-                    String caminho1 = getServletContext().getRealPath("img_bd") + "/" + nomeBD + "/" + nomeImg;
-                    File file1 = new File(caminho1);
-                    file1.delete();
-                }
-
                 contrRemetente.deletar(idRemetente, idCliente, nomeBD);
                 sessao.setAttribute("msg", "Remetente Excluido com Sucesso!");
                 response.sendRedirect("Cliente/Cadastros/remetente_lista.jsp");

@@ -6,25 +6,13 @@
 package Emporium.Servlet;
 
 import Controle.contrCliente;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.Iterator;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.FileUpload;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
-import org.apache.commons.fileupload.FileUploadException;
 
 /**
  *
@@ -41,21 +29,29 @@ public class ServEditarCadastro extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        try {
-            /* TODO output your page here
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ServEditarCadastro</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ServEditarCadastro at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-            */
-        } finally { 
-            out.close();
+        
+        HttpSession sessao = request.getSession();
+        String nomeBD = (String) sessao.getAttribute("empresa");
+        System.out.println("chego");
+        //VERIFICA SE ESTA LOGADO NA SESSAO
+        if (nomeBD == null) {
+        System.out.println("chego1");
+            response.sendRedirect("index.jsp?msgLog=3");
+        } else {      
+        System.out.println("chego2");
+            //PEGA OS PARAMETROS DO FORM HTML
+            int nome_etq = Integer.parseInt(request.getParameter("nome_etq"));
+        System.out.println("chego3" +  nome_etq);
+            int idCli = Integer.parseInt(request.getParameter("idCliente"));
+        System.out.println("chego4" + idCli);
+            String url_logo = request.getParameter("logo_img_url");            
+        System.out.println("chego5" + url_logo);
+            //ALTERA URL NO BANCO
+            contrCliente.alterarLogo(url_logo, idCli, nomeBD);
+        System.out.println("chego5");
+            contrCliente.editarNomeEtq(idCli, nome_etq, nomeBD);
+        System.out.println("chego6");
+            response.sendRedirect("Cliente/Cadastros/cadastro.jsp?msg=Cadastro Atualizado!");
         }
     } 
 
@@ -70,20 +66,7 @@ public class ServEditarCadastro extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        HttpSession sessao = request.getSession();
-        String nomeBD = (String) sessao.getAttribute("empresa");
-        //VERIFICA SE ESTA LOGADO NA SESSAO
-        if (nomeBD == null) {
-            response.sendRedirect("index.jsp?msgLog=3");
-        } else {      
-            //PEGA OS PARAMETROS DO FORM HTML
-            int nome_etq = Integer.parseInt(request.getParameter("nome_etq"));
-            int idCli = Integer.parseInt(request.getParameter("idCliente"));
-            String url_logo = request.getParameter("logo_img_url");            
-            //ALTERA URL NO BANCO
-            contrCliente.alterarLogo(url_logo, idCli, nomeBD);
-            contrCliente.editarNomeEtq(idCli, nome_etq, nomeBD);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -96,7 +79,7 @@ public class ServEditarCadastro extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response);
+        processRequest(request, response);
     }
 
     /** 

@@ -320,9 +320,9 @@ UNIDADE DE POSTAGEM]]></text>
 			</line>
 			<componentElement>
 				<reportElement x="42" y="76" width="235" height="43" uuid="6a5854e7-b600-4a7e-9c41-4862706c86d4"/>
-				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" moduleWidth="1.3" textPosition="top">
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="true" checksumRequired="false" barHeight="80">
 					<jr:codeExpression><![CDATA[$F{sro}]]></jr:codeExpression>
-				</jr:Code128>
+				</jr:barbecue>
 			</componentElement>
 			<staticText>
 				<reportElement x="13" y="5" width="15" height="124" uuid="1a4bb0bd-e874-4d87-93dd-54bffbfa1e6b"/>

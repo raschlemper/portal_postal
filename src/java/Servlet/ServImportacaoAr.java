@@ -150,47 +150,6 @@ public class ServImportacaoAr extends HttpServlet {
         }
     }
 
-    /*
-    private String inserirDiretorio(FileItem item) throws IOException {
-
-        String caminho = getServletContext().getRealPath("MovimentacaoImport");
-        caminho = "/var/lib/tomcat/webapps/PortalPostal/MovimentacaoImport";
-
-        // Cria o diretório caso ele não exista
-        File diretorio = new File(caminho);
-        if (!diretorio.exists()) {
-            diretorio.mkdir();
-        }
-
-        // Mandar o arquivo para o diretório informado
-        String aa = item.getContentType();
-        if (!aa.equals("text/plain")) {  // troquei a informação -> if(!aa.equals("application/vnd.ms-excel")){
-            return "";
-        }
-
-        String nome = "movimentacaoar.txt"; // troquei o nome do arquivo -> cliente.csv
-        String arq[] = nome.split("\\\\");
-        for (int i = 0; i < arq.length; i++) {
-            nome = arq[i];
-        }
-
-        File file = new File(diretorio, nome);
-        FileOutputStream output = new FileOutputStream(file);
-        InputStream is = item.getInputStream();
-        byte[] buffer = new byte[2048];
-        int nLidos;
-        while ((nLidos = is.read(buffer)) >= 0) {
-            output.write(buffer, 0, nLidos);
-        }
-
-        caminho = caminho.replace('\\', '/');
-        caminho += "/" + nome;
-
-        output.flush();
-        output.close();
-        return caminho;
-    }*/
-
     public static String importaAR(FileItem item, Date dataIni, Date dataFim, String nomeBD, int idUsuario) {
         Date dataVerIni = null, dataVerFim = null;
         int linha = 0;

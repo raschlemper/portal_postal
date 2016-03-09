@@ -1,5 +1,3 @@
-/* global uploadcare */
-
 <%@page import="Util.FormataString"%>
 <%@page import="Util.FaixaCep"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -29,6 +27,9 @@
                 int cep = cli.getCep();
                 String numero = cli.getNumero();
                 String url_logo = cli.getUrl_logo();
+                if(url_logo != null && !url_logo.equals("") && !url_logo.startsWith("http")){
+                    url_logo = "www.portalpostal.com.br" + url_logo;
+                }
                 String email = cli.getEmail();
                 String cnpj = cli.getCnpj();
                 String complemento = cli.getComplemento();
@@ -65,10 +66,6 @@
                     cancel: 'CANCELAR',
                     remove: 'REMOVER',
                     choose: {
-                        files: {
-                            one: 'ESCOLHA UM ARQUIVO',
-                            other: 'ESCOLHA OS ARQUIVOS'
-                        },
                         images: {
                             one: 'ESCOLHA UMA IMAGEM',
                             other: 'ESCOLHA AS IMAGENS'
@@ -119,19 +116,16 @@
                             </li>
                             <li>
                                 <dd>
-                                    <%if (url_logo == null) {%>
-                                    <img id="logoPreview" src="../../imagensNew/sua_logo_aqui.png" height="100" />
+                                    <%if (url_logo == null || url_logo.equals("")) {%>
+                                        <img id="logoPreview" src="http://www.portalpostal.com.br/imagensNew/sua_logo_aqui.png" height="100" />
                                     <%} else {%>
-                                    <img id="logoPreview" src="../../<%= url_logo%>" height="100" />
+                                        <img id="logoPreview" src="<%= url_logo%>" height="100" />
                                     <%}%>
                                 </dd>
                             </li>
                             <li>
                                 <dd style="padding: 15px 0px;">
-                                    <%--<label>SELECIONE UMA IMAGEM</label>
-                                    <input type="file" name="url_logo" accept=".jpg,.jpeg,.gif,.bmp" />--%>
-                                    <input name="logo_img_url" type="hidden" role="uploadcare-uploader" data-image-shrink="600x400" data-crop="300x200 minimum" data-clearable data-images-only="true" value/>
-                                    <%--<input name="logo_img_url" id="logo_img_url" type="hidden" value="" />--%>
+                                    <input name="logo_img_url" type="hidden" role="uploadcare-uploader" data-image-shrink="600x400" data-clearable data-images-only="true" value/>
                                 </dd>
                             </li>
                             <li class="titulo">
@@ -228,7 +222,6 @@
         <script>
            var $ = uploadcare.jQuery;
             $.each(uploadcare.initialize(), function (i, widget) {
-
                 function onChange(file) {                   
                     if (file !== null) {
                         file.done(function (fileInfo) {

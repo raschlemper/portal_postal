@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" printOrder="Horizontal" pageWidth="283" pageHeight="453" columnWidth="243" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a6600087-3a8d-456c-bdc8-19dcbb299119">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="2"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="idCliente" class="java.lang.String"/>
 	<parameter name="enderecoCli" class="java.lang.String"/>
 	<parameter name="bairroCli" class="java.lang.String"/>
@@ -14,6 +14,7 @@
 	<parameter name="nomeBD" class="java.lang.String"/>
 	<parameter name="ids" class="java.lang.String"/>
 	<parameter name="responsavel" class="java.lang.String"/>
+	<parameter name="nomeChancela" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -128,7 +129,7 @@
 				<text><![CDATA[DESTINATÁRIO:]]></text>
 			</staticText>
 			<line>
-				<reportElement x="1" y="75" width="241" height="1" uuid="08313efe-5f03-426b-809e-4a050f60645d"/>
+				<reportElement x="1" y="73" width="241" height="1" uuid="08313efe-5f03-426b-809e-4a050f60645d"/>
 			</line>
 			<textField>
 				<reportElement x="142" y="13" width="100" height="59" uuid="5dc1272a-50ae-42e9-b7d7-b9a9cc1d5c02">
@@ -139,8 +140,8 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nomeServico}]]></textFieldExpression>
 			</textField>
-			<image scaleImage="RetainShape" hAlign="Right" vAlign="Middle" isUsingCache="false" onErrorType="Blank">
-				<reportElement x="142" y="13" width="100" height="59" uuid="851906a2-8751-41dc-8283-d7fc9497ddfc"/>
+			<image scaleImage="RetainShape" hAlign="Center" vAlign="Middle" isUsingCache="false" onErrorType="Blank">
+				<reportElement x="156" y="13" width="86" height="59" uuid="851906a2-8751-41dc-8283-d7fc9497ddfc"/>
 				<imageExpression><![CDATA[$F{imgChancela}]]></imageExpression>
 			</image>
 			<textField>
@@ -226,19 +227,19 @@
 				<textFieldExpression><![CDATA["NF: " + $F{notaFiscal}]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement x="0" y="77" width="242" height="73" uuid="8a4e4ea8-2dd7-4f81-856f-868e1adbc68a">
+				<reportElement x="0" y="84" width="242" height="65" uuid="8a4e4ea8-2dd7-4f81-856f-868e1adbc68a">
 					<printWhenExpression><![CDATA[$F{temContrato}.equals("1") && $F{nObj}.length() == 13]]></printWhenExpression>
 				</reportElement>
-				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" moduleWidth="1.5" textPosition="top">
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barHeight="92">
 					<jr:codeExpression><![CDATA[$F{nObj}]]></jr:codeExpression>
-				</jr:Code128>
+				</jr:barbecue>
 			</componentElement>
 			<line>
 				<reportElement x="0" y="328" width="242" height="2" uuid="669b17ab-ba04-45af-8bdb-1f82146ba29e"/>
 			</line>
 			<componentElement>
 				<reportElement x="1" y="274" width="128" height="54" uuid="0e0479d4-3963-476f-a98d-33dd4169e71b"/>
-				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128C" drawText="false" checksumRequired="false" barWidth="2" barHeight="95">
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128C" drawText="false" checksumRequired="false" barWidth="2" barHeight="80">
 					<jr:codeExpression><![CDATA[$F{cep}.replace("-", "")]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
@@ -255,9 +256,9 @@
 				<reportElement x="1" y="12" width="141" height="60" uuid="0ec0c7ad-e1e7-4417-a0ab-4c302de50e62">
 					<printWhenExpression><![CDATA[($F{temContrato}.equals("1") && $F{nObj}.length() < 13) || $F{temContrato}.equals("0")]]></printWhenExpression>
 				</reportElement>
-				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" moduleWidth="1.5" textPosition="top">
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="true" checksumRequired="false" barHeight="80">
 					<jr:codeExpression><![CDATA[$F{nObj}]]></jr:codeExpression>
-				</jr:Code128>
+				</jr:barbecue>
 			</componentElement>
 			<staticText>
 				<reportElement x="1" y="0" width="97" height="13" uuid="c3c40e2c-0cdf-478d-beec-35a45fa8ce0f">
@@ -278,7 +279,7 @@
 				<textFieldExpression><![CDATA["CPF/CNPJ: " + $F{cpf_cnpj}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="1" y="262" width="115" height="12" uuid="d52a36a1-e9f6-4ec4-b3cf-b2921011d130"/>
+				<reportElement x="1" y="262" width="128" height="12" uuid="d52a36a1-e9f6-4ec4-b3cf-b2921011d130"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -368,6 +369,33 @@
 					<font size="14" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["*"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="156" y="48" width="86" height="9" uuid="4a42f781-2fc9-4d8d-9d0c-a3db45cc2947">
+					<printWhenExpression><![CDATA[$F{temContrato}.equals("1") && $F{nObj}.length() == 13]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nomeChancela}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="156" y="41" width="86" height="9" uuid="46514353-0ee8-4c32-a31c-649fc5be1634">
+					<printWhenExpression><![CDATA[$F{temContrato}.equals("1") && $F{nObj}.length() == 13]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{contratoCli}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="73" width="243" height="11" uuid="a5a40da1-7cfc-4c73-a720-7a3fd01dc0de">
+					<printWhenExpression><![CDATA[$F{temContrato}.equals("1") && $F{nObj}.length() == 13]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nObj}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

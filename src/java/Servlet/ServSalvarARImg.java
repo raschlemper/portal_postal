@@ -120,7 +120,6 @@ public class ServSalvarARImg extends HttpServlet {
                             }
                         }
                     }
-                    vCaminho = inserirDiretorio(itemImg, vObj);
 
                     if (vCaminho.equals("")) {
                         sessao.setAttribute("msg", "Escolha um arquivo para importacao SRO!");
@@ -145,37 +144,6 @@ public class ServSalvarARImg extends HttpServlet {
         }
     }
 
-    private String inserirDiretorio(FileItem item, String obj) throws IOException {
-
-        String caminho = getServletContext().getRealPath("MovimentacaoImport");
-        //caminho = "/var/lib/tomcat/webapps/PortalPostal/MovimentacaoImport";
-        caminho = "C:/Users/Viviane/Pictures";
-
-        // Cria o diretório caso ele não exista
-        File diretorio = new File(caminho);
-        if (!diretorio.exists()) {
-            diretorio.mkdir();
-        }
-        String ext = item.getName().substring(item.getName().lastIndexOf("."));
-        String nome = obj + "." + ext;        
-
-        File file = new File(diretorio, nome);
-        // Mandar o arquivo para o diretório informado
-        FileOutputStream output = new FileOutputStream(file);
-        InputStream is = item.getInputStream();
-        byte[] buffer = new byte[2048];
-        int nLidos;
-        while ((nLidos = is.read(buffer)) >= 0) {
-            output.write(buffer, 0, nLidos);
-        }
-
-        caminho = caminho.replace('\\', '/');
-        caminho += "/" + nome;
-
-        output.flush();
-        output.close();
-        return caminho;
-    }
 
     public static String salvarAR(String caminho, Date  dataRec, String obj, String nomeRec, String nomeBD, int idUsuario) throws SQLException {
                              

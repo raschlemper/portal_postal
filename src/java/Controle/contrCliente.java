@@ -380,34 +380,6 @@ public class contrCliente {
         }
     }
 
-    /*public static ArrayList pesquisa(String codigo, String nome, String telefone, String cnpj, String bairro, String cidade, String cep, String nomeBD) {
-        Connection conn = (Connection) Conexao.conectar(nomeBD);
-        String sql = "SELECT * FROM cliente"
-                + " WHERE codigo LIKE '%" + codigo + "%'"
-                + " AND nome LIKE '%" + nome + "%'"
-                + " AND telefone LIKE '%" + telefone + "%'"
-                + " AND cnpj LIKE '%" + cnpj + "%'"
-                + " AND bairro LIKE '%" + bairro + "%'"
-                + " AND cidade LIKE '%" + cidade + "%'"
-                + " AND cep LIKE '%" + cep + "%'"
-                + " ORDER BY nome";
-        try {
-            PreparedStatement valores = conn.prepareStatement(sql);
-            ResultSet result = (ResultSet) valores.executeQuery();
-            ArrayList listaClientes = new ArrayList();
-            while (result.next()) {                
-                Clientes cli = new Clientes(result);
-                listaClientes.add(cli);
-            }
-            valores.close();
-            return listaClientes;
-        } catch (SQLException e) {
-            ContrErroLog.inserir("HOITO - contrCliente", "SQLException", sql, e.toString());
-            return null;
-        } finally {
-            Conexao.desconectar(conn);
-        }
-    }*/
     public static Clientes consultaClienteById(int idCliente, String nomeBD) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         String sql = "SELECT * FROM cliente WHERE codigo = " + idCliente;
@@ -433,7 +405,7 @@ public class contrCliente {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         String sql = "SELECT cliente.* FROM movimentacao LEFT JOIN cliente ON codigo = codCliente"
                 + " WHERE numObjeto = '" + sro + "' ;";
-        System.out.println(sql);
+        //System.out.println(sql);
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();
@@ -447,6 +419,52 @@ public class contrCliente {
             } else {
                 return null;
             }
+        } catch (Exception e) {
+            ContrErroLog.inserir("Portal Postal - contrCliente", "SQLException", sql, e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+
+    public static void main(String[] args) {
+        consultaClientesSemLoginPortalPostal("72355613000152");
+    }
+    public static ArrayList<Clientes> consultaClientesSemLoginPortalPostal(String nomeBD) {
+
+        Connection conn = (Connection) Conexao.conectar(nomeBD);
+        String sql = "SELECT codigo, nome " +
+            " FROM cliente " +
+            " WHERE nome <> '' " +
+            " AND codigo <> -99 " +
+            " AND ativo = 1 " +
+            " AND codigo NOT IN (SELECT codigo FROM cliente_usuarios WHERE nivel < 99)";
+        //System.out.println(sql);
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            ArrayList<Clientes> lista = new ArrayList<Clientes>();
+            ArrayList<String> logins = new ArrayList<String>();
+            while (result.next()) {
+
+                int idCliente = result.getInt("codigo");
+                String nome = result.getString("nome");
+                nome = Util.FormataString.removeAccentsToUpper(nome).replace(".", "").replace(" / ", " ").replace("/", " ").replace(" - ", " ").replace("-", " ");
+                String aux[] = nome.split(" ");
+                
+                String login = "";
+                for (int i = 0; i < aux.length; i++) {                    
+                    login += aux[i].trim();
+                    if(login.length() >= 4 && !logins.contains(login)){
+                        break;
+                    } else if((i+1) == aux.length){
+                        login = login + idCliente;
+                    }
+                }
+
+                lista.add(new Clientes(idCliente, login));
+            }
+            return lista;
         } catch (Exception e) {
             ContrErroLog.inserir("Portal Postal - contrCliente", "SQLException", sql, e.toString());
             return null;

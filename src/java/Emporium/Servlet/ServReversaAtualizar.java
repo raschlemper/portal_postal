@@ -49,6 +49,13 @@ public class ServReversaAtualizar extends HttpServlet {
         
         RetornoAcompanhamentoTO ret = acompanharPedido(usuario, senha, codAdm, tipoBusca, tipoSolicitacao, listaAP);
         for(ColetasSolicitadasTO c : ret.getColeta()){
+            int idRev = 0;
+            String obj = "- - -";
+            String desc = "";
+            String ultStatus = "";
+            String data = "";
+            String hora = "";
+            
             for(ObjetoPostalTO o : c.getObjeto()){
                 //System.out.println("Obj: "+o.getNumeroEtiqueta());
                 //System.out.println("ID2: "+o.getControleObjetoCliente());
@@ -56,7 +63,25 @@ public class ServReversaAtualizar extends HttpServlet {
                 //System.out.println("Hora: "+ o.getHoraUltimaAtualizacao());
                 //System.out.println("Desc: "+o.getDescricaoStatus());
                 //System.out.println("Ult Status: "+o.getUltimoStatus());
-                ContrLogisticaReversa.alterarSituacao(Integer.parseInt(o.getControleObjetoCliente().trim()), o.getUltimoStatus(), o.getDescricaoStatus(), o.getNumeroEtiqueta(), o.getDataUltimaAtualizacao(), o.getHoraUltimaAtualizacao(), nomeBD);
+                
+                if(idRev == 0){
+                    obj = o.getNumeroEtiqueta();
+                    desc = o.getDescricaoStatus();
+                    ultStatus = o.getUltimoStatus();
+                    data = o.getDataUltimaAtualizacao();
+                    hora = o.getHoraUltimaAtualizacao();
+                    String aux[] = o.getControleObjetoCliente().split("_");
+                    idRev = Integer.parseInt(aux[0].trim());
+                } else {
+                    obj += "<br/>\n"+o.getNumeroEtiqueta();
+                    desc += "<br/>\n"+o.getDescricaoStatus();
+                    ultStatus += "<br/>\n"+o.getUltimoStatus();
+                    data += "<br/>\n"+o.getDataUltimaAtualizacao();
+                    hora += "<br/>\n"+o.getHoraUltimaAtualizacao();
+                }
+            }
+            if(idRev > 0){
+                ContrLogisticaReversa.alterarSituacao(idRev, ultStatus, desc, obj, data, hora, nomeBD);            
             }
         }
         

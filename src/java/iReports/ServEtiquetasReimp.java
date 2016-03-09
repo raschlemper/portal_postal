@@ -55,9 +55,9 @@ public class ServEtiquetasReimp extends HttpServlet {
             int posicaoInicial = 1;
             String ordem = request.getParameter("ordem");
             String formato = request.getParameter("formato");
-            String url_jrxml = "etiquetas_reimp.jrxml";            
+            String url_jrxml = "etiquetas_A4_4_por_folha.jrxml";            
             if(formato.equals("A4") || formato.equals("PIMACO_6288_1")){
-                url_jrxml = "etiquetas_reimp.jrxml";
+                url_jrxml = "etiquetas_A4_4_por_folha.jrxml";
                 posicaoInicial = 1;
             }else if(formato.equals("ENV_DL")){
                 url_jrxml = "etiquetas_envelope_DL.jrxml";
@@ -95,18 +95,21 @@ public class ServEtiquetasReimp extends HttpServlet {
                     comp = ", " + cli.getComplemento();
                 }
 
-                String url_base = getServletContext().getRealPath("");
-                String url = "http://localhost:8080/PortalPostal/" + cli.getUrl_logo();
-                if (!urlExist(url)) {
+                String url_base = "http://www.portalpostal.com.br";
+                
+                String url = cli.getUrl_logo();
+                if(!url.startsWith("http")){
+                    url = url_base + cli.getUrl_logo();
+                } else if (!urlExist(url)) {
                     url = "";
                 }
                 
                 String param = request.getParameter("ids");
-
+       
                 // mapa de parâmetros do relatório (ainda vamos aprender a usar)
                 Map parametros = new HashMap();
                 parametros.put("idCliente", idCliente);
-                parametros.put("ids", param);
+                parametros.put("ids", param); 
                 parametros.put("enderecoCli", cli.getEndereco() + num + comp); //MAX DE CARACTERES '40'
                 parametros.put("bairroCli", cli.getBairro());
                 parametros.put("cidadeCli", cli.getCidade() + " / " + cli.getUf());
@@ -124,6 +127,7 @@ public class ServEtiquetasReimp extends HttpServlet {
                 parametros.put("nomeBD", nomeBD);
                 parametros.put("urlLogoCli", url);
                 parametros.put("responsavel", "");
+                parametros.put("nomeChancela", cli.getNomeContrato());
                 //parametros.put("posicaoInicial", posicaoInicial);
 
                 byte[] bytes = null;
@@ -136,8 +140,10 @@ public class ServEtiquetasReimp extends HttpServlet {
                     query.setText("SELECT" + 
                                         " IF(numObjeto = 'avista', id, numObjeto) AS nObj, " +
                                         " IF(contrato = '', '0', '1') AS temContrato," +
-                                        //" IF(contrato = '' || nomeServico = 'CARTA' || nomeServico = 'SIMPLES', CONCAT('http://localhost:8084/PortalPostal_Web/imagensNew/chancelas/', nomeServico, '.png'), CONCAT('http://localhost:8084/PortalPostal_Web/ServGeraChancela?servico=', nomeServico, '&codCliente=' , p.idCliente, '&nomeBD=', $P{nomeBD})) AS imgChancela," +
-                                        " IF(contrato = '' || nomeServico = 'PPI' || nomeServico = 'CARTA' || nomeServico = 'SIMPLES', CONCAT('"+url_base+"/imagensNew/chancelas/', nomeServico, '.png'), CONCAT('http://localhost:8080/PortalPostal/ServGeraChancela?servico=', nomeServico, '&codCliente=' , p.idCliente, '&nomeBD=', $P{nomeBD})) AS imgChancela," +
+                                        " IF(contrato = '' || nomeServico = 'PPI' || nomeServico = 'CARTA' || nomeServico = 'SIMPLES', "
+                                            + "CONCAT('"+url_base+"/imagensNew/chancelas/', nomeServico, '.png'), "
+                                            + "CONCAT('"+url_base+"/imagensNew/chancelas/CHANCELA_', nomeServico, '.png')"
+                                        + ") AS imgChancela," +
                                         " nomeServico, " +
                                         " cartaoPostagem, " +
                                         " peso, " +

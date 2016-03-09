@@ -78,9 +78,9 @@ public class ServEtiquetasAr extends HttpServlet {
                 
                 String ordem = request.getParameter("ordem");
                 String formato = request.getParameter("formato");
-                String url_jrxml = "etiquetas_ar_reimp_1.jrxml";
+                String url_jrxml = "etiquetas_ar_A4.jrxml";
                 if(formato.equals("A4")){
-                    url_jrxml = "etiquetas_ar_reimp_1.jrxml";
+                    url_jrxml = "etiquetas_ar_A4.jrxml";
                 }else if(formato.equals("ETQ_16x10")){
                     url_jrxml = "etiquetas_ar_16x10.jrxml";
                 }

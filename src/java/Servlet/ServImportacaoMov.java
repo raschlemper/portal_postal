@@ -9,6 +9,7 @@ import Util.FormatarData;
 import Util.FormatarDecimal;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
@@ -17,10 +18,12 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUpload;
@@ -33,6 +36,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  *
  * @author Rico
  */
+@MultipartConfig
 public class ServImportacaoMov extends HttpServlet {
 
     /**
@@ -65,9 +69,41 @@ public class ServImportacaoMov extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        doGet(request, response);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession sessao = request.getSession();
+        String expira = (String) sessao.getAttribute("empresa");
+        if (expira == null) {
+            response.sendRedirect("/index.jsp?msgLog=3");
+        } else {
+            try {
+
+                String nomeBD = (String) sessao.getAttribute("empresa");
+                String vData1 = request.getParameter("data");
+                String vData2 = request.getParameter("data2");
+                int idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
+                Date data1 = FormatarData.formataRetornaDate(vData1);
+                Date data2 = FormatarData.formataRetornaDate(vData2);
+                Part filePart = request.getPart("arquivo"); // Retrieves <input type="file" name="file">                
+
+                if (!filePart.getContentType().equals("text/plain")) {
+                    sessao.setAttribute("msg", "O Arquivo deve ser um arquivo texto!");
+                } else {
+                    String mensagem = importaMovimento(filePart.getInputStream(), data1, data2, nomeBD, idUsuario);
+                    sessao.setAttribute("msg", mensagem);
+                }
+
+            } catch (SizeLimitExceededException e) {
+                sessao.setAttribute("msg", "Tamanho Máximo do Arquivo Excedido!");
+            } catch (FileUploadException ex) {
+                int idErro = ContrErroLog.inserir("HOITO - ServImportacaoMov", "FileUploadException", null, ex.toString());
+                sessao.setAttribute("msg", "SYSTEM ERROR Nº: " + idErro + "; Ocorreu um erro inesperado!");
+            } catch (Exception ex) {
+                int idErro = ContrErroLog.inserir("HOITO - ServImportacaoMov", "Exception", null, ex.toString());
+                sessao.setAttribute("msg", "SYSTEM ERROR Nº: " + idErro + "; Ocorreu um erro inesperado!");
+            }
+        }
+
+        response.sendRedirect(request.getHeader("referer"));
     }
     // <editor-fold defaultstate="collapsed" desc="Métodos HttpServlet. Clique no sinal de + à esquerda para editar o código.">
 
@@ -82,6 +118,7 @@ public class ServImportacaoMov extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        /*
         HttpSession sessao = request.getSession();
         String expira = (String) sessao.getAttribute("empresa");
         if (expira == null) {
@@ -155,10 +192,10 @@ public class ServImportacaoMov extends HttpServlet {
             }
 
             response.sendRedirect(request.getHeader("referer"));
-        }
+        }*/
     }
 
-    public static String importaMovimento(FileItem item, Date dataIni, Date dataFim, String nomeBD, int idUsuario) {
+    public static String importaMovimento(InputStream inputStream, Date dataIni, Date dataFim, String nomeBD, int idUsuario) {
 
         Date dataVerIni = null, dataVerFim = null;
         int linha = 0;
@@ -180,11 +217,12 @@ public class ServImportacaoMov extends HttpServlet {
 
         try {
 
-            InputStreamReader is = new InputStreamReader(item.getInputStream(), Charset.forName("ISO-8859-1"));
+            InputStreamReader is = new InputStreamReader(inputStream, Charset.forName("ISO-8859-1"));
             BufferedReader le = new BufferedReader(is);
             while (le.ready()) {
                 linha++;
                 String buffer = le.readLine();
+                System.out.println(buffer);
                 String aux[] = buffer.split(";");
 
                 if (linha % 500 == 0) {

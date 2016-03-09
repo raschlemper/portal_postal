@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-    <listener>
-        <description>ServletContextListener</description>
-        <listener-class>Util.AtualizadorSRO</listener-class>
-    </listener>
     <context-param>
         <param-name>contextResource</param-name>
         <param-value>/WEB-INF/app/js</param-value>
@@ -593,6 +589,10 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>ServListaPostagemRemoverObj</servlet-name>
+        <servlet-class>Emporium.Servlet.ServListaPostagemRemoverObj</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ServLogin</servlet-name>
         <url-pattern>/ServLogin</url-pattern>
@@ -1164,6 +1164,10 @@
     <servlet-mapping>
         <servlet-name>jersey-serlvet</servlet-name>
         <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServListaPostagemRemoverObj</servlet-name>
+        <url-pattern>/ServListaPostagemRemoverObj</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('VeiculoController', ['$scope', '$filter', 'VeiculoService', 'ModalService', 'DataTableService',
-    function ($scope, $filter, VeiculoService, ModalService, DataTableService) {
+app.controller('VeiculoController', ['$scope', '$q', '$filter', 'VeiculoService', 'ModalService', 'DataTableService',
+    function ($scope, $q, $filter, VeiculoService, ModalService, DataTableService) {
 
         var init = function () {
             $scope.veiculos = [];
@@ -74,6 +74,7 @@ app.controller('VeiculoController', ['$scope', '$filter', 'VeiculoService', 'Mod
         };
 
         $scope.excluir = function(idVeiculo) {
+            podeExcluirVeiculo(idVeiculo);
             modalExcluir().then(function() {
                 VeiculoService.delete(idVeiculo)
                     .then(function(data) { 
@@ -85,6 +86,17 @@ app.controller('VeiculoController', ['$scope', '$filter', 'VeiculoService', 'Mod
                     });
             });
         }; 
+        
+        var podeExcluirVeiculo = function(idVeiculo) {
+            $q.all([VeiculoService.getCombustivel(idVeiculo),
+                    VeiculoService.getManutencao(idVeiculo),
+                    VeiculoService.getMulta(idVeiculo),
+                    VeiculoService.getSeguro(idVeiculo),
+                    VeiculoService.getSinistro(idVeiculo)])
+                .then(function(values) {        
+                    console.log(values);
+                });
+        }
         
         var ajustarDados = function(data) {            
             data.tipo = data.tipo.id;

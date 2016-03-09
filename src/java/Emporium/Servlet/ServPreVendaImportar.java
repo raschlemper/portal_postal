@@ -89,7 +89,7 @@ public class ServPreVendaImportar extends HttpServlet {
                     }
 
                    
-                    if (!fileItem.getName().toUpperCase().endsWith(".CSV") && !fileItem.getName().toUpperCase().endsWith(".XML") && !fileItem.getName().toUpperCase().endsWith(".TXT")) {
+                    if (fileItem == null || (!fileItem.getName().toUpperCase().endsWith(".CSV") && !fileItem.getName().toUpperCase().endsWith(".XML") && !fileItem.getName().toUpperCase().endsWith(".TXT"))) {
                         response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=Escolha um arquivo para importacao !");
                     } else {
                         //DELETA IMPORTACOES NAO CONCLUIDAS
@@ -162,41 +162,7 @@ public class ServPreVendaImportar extends HttpServlet {
             response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=Sua sessao expirou!");
         }
     }
-
-    /*
-    private String inserirDiretorio(FileItem item) throws IOException, Exception {
-
-        String caminho = getServletContext().getRealPath("ClientesImport");
-
-        caminho = "/var/lib/tomcat/webapps/PortalPostal/ClientesImport";
-
-        //String caminho = "C:\\Users\\Fernando\\Documents\\NetBeansProjects\\PortalPostal_Web\\build\\web\\ClientesImport";
-        //System.out.println(caminho);
-        // Cria o diretório caso ele não exista
-        File diretorio = new File(caminho);
-        if (!diretorio.exists()) {
-            diretorio.mkdir();
-        }
-
-        // Mandar o arquivo para o diretório informado
-        //String aa = item.getContentType();
-        //System.out.println(aa);
-        if (!item.getName().toUpperCase().endsWith(".CSV") && !item.getName().toUpperCase().endsWith(".XML") && !item.getName().toUpperCase().endsWith(".TXT")) {
-            return "";
-        }
-        String nome = "pre_venda_imp.csv";
-
-        File file = new File(diretorio, nome);
-        item.write(file);
-        
-
-        caminho = caminho.replace('\\', '/');
-        caminho += "/" + nome;
-        return caminho;
-
-    }
-*/
-    
+   
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

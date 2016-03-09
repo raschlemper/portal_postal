@@ -58,6 +58,28 @@ public class ContrOrdemServico {
         }
     }
     
+    public static int removerObjeto(int idPV, int idOS, String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "UPDATE ordem_servico SET qtdObjetos = (qtdObjetos-1) WHERE idOs = " + idOS;
+        String sql2 = "UPDATE pre_venda SET idOs = 0 WHERE id = " + idPV;
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.executeUpdate();
+            valores.close();
+            
+            PreparedStatement valores2 = conn.prepareStatement(sql2);
+            valores2.executeUpdate();
+            valores2.close();
+            
+            return 1;
+        } catch (SQLException e) {
+            Logger.getLogger(ContrAmarracao.class.getName()).log(Level.WARNING, e.getMessage(), e);
+            return 0;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+    
     public static HashMap<String, Integer> consultaQtdServicosOS(int idOS, String nomeBD){
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "SELECT nomeServico, COUNT(nomeServico) AS qtd FROM pre_venda WHERE idOS = "+idOS+" GROUP BY nomeServico;";

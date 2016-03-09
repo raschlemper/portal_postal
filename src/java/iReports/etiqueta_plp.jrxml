@@ -276,9 +276,9 @@
 			</textField>
 			<componentElement>
 				<reportElement uuid="a58e1a3e-524a-447d-bfab-d69c4c07cf7d" x="11" y="74" width="245" height="72"/>
-				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" moduleWidth="1.5" textPosition="top">
+                                <jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barHeight="80">
 					<jr:codeExpression><![CDATA[$F{sro}]]></jr:codeExpression>
-				</jr:Code128>
+				</jr:barbecue>
 			</componentElement>
 			<line>
 				<reportElement uuid="5d0dbbce-31d5-4911-884f-b5f7410f9735" x="8" y="331" width="249" height="2"/>

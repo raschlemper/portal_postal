@@ -11,19 +11,22 @@ import org.sql2o.Connection;
 
 public class VeiculoCombustivelDAO {   
     
-    private Connection connection;
+//    private Connection connection;
     private CombustivelHandler combustivelHandler;
     private VeiculoCombustivelHandler veiculoCombustivelHandler;
+    private String nomeBD;
 
-    public VeiculoCombustivelDAO(String nomeBD) {
-        connection = Sql2oConnexao.conect(nomeBD);
+    public VeiculoCombustivelDAO(String nomeBD) { 
+//        connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
         combustivelHandler = new CombustivelHandler();
         veiculoCombustivelHandler = new VeiculoCombustivelHandler();
+        this.nomeBD = nomeBD;
     } 
 
     public List<VeiculoCombustivel> findAll() {
         String sql = "SELECT * FROM veiculo_combustivel, veiculo WHERE veiculo.idVeiculo = veiculo_combustivel.idVeiculo "
                    + "ORDER BY veiculo_combustivel.idVeiculo, veiculo_combustivel.data";
+        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
         try {              
             return connection.createQuery(sql)
                     .executeAndFetch(veiculoCombustivelHandler);
@@ -31,6 +34,7 @@ public class VeiculoCombustivelDAO {
             ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());
         } finally {
             connection.close();
+            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         }
         return new ArrayList<>();
     }
@@ -38,6 +42,7 @@ public class VeiculoCombustivelDAO {
     public VeiculoCombustivel find(Integer idVeiculoCombustivel) throws Exception {
         String sql = "SELECT * FROM veiculo_combustivel, veiculo "
                    + "WHERE veiculo.idVeiculo = veiculo_combustivel.idVeiculo AND idVeiculoCombustivel = :idVeiculoCombustivel";
+        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
         try {              
             return connection.createQuery(sql)                
                     .addParameter("idVeiculoCombustivel", idVeiculoCombustivel)
@@ -46,6 +51,7 @@ public class VeiculoCombustivelDAO {
             ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());
         } finally {
             connection.close();
+            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         }
         return null;
     }
@@ -53,6 +59,7 @@ public class VeiculoCombustivelDAO {
     public VeiculoCombustivel save(VeiculoCombustivel veiculo) throws Exception {        
         String sql = "INSERT INTO veiculo_combustivel (idVeiculo, tipo, quantidade, valorUnitario, data, valorTotal, quilometragem) "
                    + "VALUES(:idVeiculo, :tipo, :quantidade, :valorUnitario, :data, :valorTotal, :quilometragem) ";
+        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
         try {
             Integer idVeiculo = connection.createQuery(sql, true)
                     .addParameter("idVeiculo", veiculo.getVeiculo().getIdVeiculo())
@@ -68,6 +75,7 @@ public class VeiculoCombustivelDAO {
             ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());
         } finally {
             connection.close();
+            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         }
         return null;
     }
@@ -77,6 +85,7 @@ public class VeiculoCombustivelDAO {
                    + "SET idVeiculo = :idVeiculo, tipo = :tipo, quantidade = :quantidade, valorUnitario = :valorUnitario, data = :data, "
                    + "valorTotal = :valorTotal, quilometragem = :quilometragem "
                    + "WHERE idVeiculoCombustivel = :idVeiculoCombustivel ";
+        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
         try {
             connection.createQuery(sql)
                 .addParameter("idVeiculoCombustivel", veiculo.getIdVeiculoCombustivel())
@@ -93,12 +102,14 @@ public class VeiculoCombustivelDAO {
             ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());
         } finally {
             connection.close();
+            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         }
         return null;
     }
 
     public VeiculoCombustivel remove(Integer idVeiculoCombustivel) throws Exception { 
         String sql = "DELETE FROM veiculo_combustivel WHERE idVeiculoCombustivel = :idVeiculoCombustivel ";
+        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
         try {
             VeiculoCombustivel veiculo = find(idVeiculoCombustivel);
             connection.createQuery(sql)
@@ -109,13 +120,14 @@ public class VeiculoCombustivelDAO {
             ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());
         } finally {
             connection.close();
+            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         }
         return null;
     }
 
     public List<VeiculoCombustivel> findByIdVeiculo(Integer idVeiculo) throws Exception {
-        String sql = "SELECT * FROM veiculo_combustivel, veiculo "
-                   + "WHERE veiculo.idVeiculo = veiculo_combustivel.idVeiculo AND veiculo.idVeiculo = :idVeiculo";
+        String sql = "SELECT * FROM veiculo_combustivel WHERE idVeiculo = :idVeiculo";
+        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
         try {              
             return connection.createQuery(sql)                
                     .addParameter("idVeiculo", idVeiculo)
@@ -124,6 +136,7 @@ public class VeiculoCombustivelDAO {
             ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());
         } finally {
             connection.close();
+            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         }
         return null;
     }
@@ -131,6 +144,7 @@ public class VeiculoCombustivelDAO {
     public VeiculoCombustivel findLastCombustivelByIdVeiculo(Integer idVeiculo) throws Exception {
         String sql = "SELECT MAX(idVeiculoCombustivel) as idVeiculoCombustivel "
                    + "FROM veiculo_combustivel WHERE idVeiculo = :idVeiculo";
+        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
         try {              
             Integer IdVeiculoCombustivel = connection.createQuery(sql)                
                     .addParameter("idVeiculo", idVeiculo)
@@ -140,6 +154,7 @@ public class VeiculoCombustivelDAO {
             ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());
         } finally {
             connection.close();
+            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         }
         return null;
     }

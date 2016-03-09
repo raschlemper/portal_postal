@@ -8,6 +8,7 @@ import Controle.contrCliente;
 import Emporium.Controle.ContrPreVenda;
 import Entidade.Clientes;
 import Util.Conexao;
+import static iReports.ServEtiquetasReimp.urlExist;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -60,9 +61,9 @@ public class ServEtiquetas extends HttpServlet {
             
             String formato = request.getParameter("formato");
             String ordem = request.getParameter("ordem");
-            String url_jrxml = "etiquetas_reimp.jrxml";
+            String url_jrxml = "etiquetas_A4_4_por_folha.jrxml";
             if(formato.equals("A4")){
-                url_jrxml = "etiquetas_reimp.jrxml";
+                url_jrxml = "etiquetas_A4_4_por_folha.jrxml";
             }else if(formato.equals("ENV_DL")){
                 url_jrxml = "etiquetas_envelope_DL.jrxml";
             }else if(formato.equals("ENV_DL_ESQ")){
@@ -90,10 +91,12 @@ public class ServEtiquetas extends HttpServlet {
                     comp = ", " + cli.getComplemento();
                 }
 
-                String url_base = getServletContext().getRealPath("");
-                //String url = "http://localhost:8084/portalpostal/" + cli.getUrl_logo();
-                String url = "http://localhost:8080/PortalPostal/" + cli.getUrl_logo();
-                if (!urlExist(url)) {
+                String url_base = "http://www.portalpostal.com.br";
+                
+                String url = cli.getUrl_logo();
+                if(!url.startsWith("http")){
+                    url = url_base + cli.getUrl_logo();
+                } else if (!urlExist(url)) {
                     url = "";
                 }
 
@@ -118,6 +121,7 @@ public class ServEtiquetas extends HttpServlet {
                 parametros.put("nomeBD", nomeBD);
                 parametros.put("urlLogoCli", url);    
                 parametros.put("responsavel", ""); 
+                parametros.put("nomeChancela", cli.getNomeContrato());
                 
 
                 byte[] bytes = null;
@@ -130,8 +134,10 @@ public class ServEtiquetas extends HttpServlet {
                     query.setText("SELECT" + 
                                         " IF(numObjeto = 'avista', id, numObjeto) AS nObj, " +
                                         " IF(contrato = '', '0', '1') AS temContrato," +
-                                        //" IF(contrato = '' || nomeServico = 'CARTA' || nomeServico = 'SIMPLES', CONCAT('http://localhost:8084/PortalPostal_Web/imagensNew/chancelas/', nomeServico, '.png'), CONCAT('http://localhost:8084/PortalPostal_Web/ServGeraChancela?servico=', nomeServico, '&codCliente=' , p.idCliente, '&nomeBD=', $P{nomeBD})) AS imgChancela," +
-                                        " IF(contrato = '' || nomeServico = 'PPI' || nomeServico = 'CARTA' || nomeServico = 'SIMPLES', CONCAT('"+url_base+"/imagensNew/chancelas/', nomeServico, '.png'), CONCAT('http://localhost:8080/PortalPostal/ServGeraChancela?servico=', nomeServico, '&codCliente=' , p.idCliente, '&nomeBD=', $P{nomeBD})) AS imgChancela," +
+                                        " IF(contrato = '' || nomeServico = 'PPI' || nomeServico = 'CARTA' || nomeServico = 'SIMPLES', "
+                                            + "CONCAT('"+url_base+"/imagensNew/chancelas/', nomeServico, '.png'), "
+                                            + "CONCAT('"+url_base+"/imagensNew/chancelas/CHANCELA_', nomeServico, '.png')"
+                                        + ") AS imgChancela," +
                                         " nomeServico, " +
                                         " siglaAmarracao, " +
                                         " cartaoPostagem, " +
