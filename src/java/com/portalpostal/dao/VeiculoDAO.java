@@ -1,160 +1,97 @@
 package com.portalpostal.dao;
 
-import Controle.ContrErroLog;
-import Util.Sql2oConnexao;
-import static Util.Sql2oConnexao.contConn;
 import com.portalpostal.dao.handler.VeiculoHandler;
 import com.portalpostal.model.Veiculo;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import org.sql2o.Connection;
-import org.sql2o.Query;
+import java.util.Map;
 
-public class VeiculoDAO {   
+public class VeiculoDAO extends GenericDAO {  
     
-//    private Connection connection;
     private VeiculoHandler veiculoHandler;
-    private String nomeBD;
 
-    public VeiculoDAO(String nomeBD) { 
-//        connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
+    public VeiculoDAO(String nameDB) {
+        super(nameDB, VeiculoDAO.class);
         veiculoHandler = new VeiculoHandler();
-        this.nomeBD = nomeBD;
-    } 
+    }
 
     public List<Veiculo> findAll() throws Exception {
         String sql = "SELECT * FROM veiculo ORDER BY marca, modelo, placa";
-        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
-        try {              
-            return connection.createQuery(sql)
-                    .executeAndFetch(veiculoHandler);
-        } catch (Exception e) {
-            ContrErroLog.inserir("HOITO - contrVeiculo", "SQLException", sql, e.toString());
-        } finally {
-            connection.close();            
-            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        }
-        return new ArrayList<>();
+        return findAll(sql, null, veiculoHandler);
     }
 
     public Veiculo find(Integer idVeiculo) throws Exception {
         String sql = "SELECT * FROM veiculo WHERE idVeiculo = :idVeiculo";
-        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
-        try {              
-            return connection.createQuery(sql)
-                    .addParameter("idVeiculo", idVeiculo)
-                    .executeAndFetchFirst(veiculoHandler);
-        } catch (Exception e) {
-            ContrErroLog.inserir("HOITO - contrVeiculo", "SQLException", sql, e.toString());
-        } finally {
-            connection.close();
-            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        }
-        return null;
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idVeiculo", idVeiculo);
+        return (Veiculo) find(sql, params, veiculoHandler);
     }
 
-    public Veiculo save(Veiculo veiculo) throws Exception {        
+    public Veiculo save(Veiculo veiculo) throws Exception { 
         String sql = "INSERT INTO veiculo (tipo, idMarca, marca, idModelo, modelo, idVersao, versao, placa, anoModelo, chassis, renavam, "
                    + "quilometragem, combustivel, status, situacao, dataCadastro) "
                    + "VALUES(:tipo, :idMarca, :marca, :idModelo, :modelo, :idVersao, :versao, :placa, :anoModelo, :chassis, :renavam, "
-                   + ":quilometragem, :combustivel, :status, :situacao, now())";
-        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
-        try {              
-            Integer idVeiculo = connection.createQuery(sql, true)
-                    .addParameter("tipo", veiculo.getTipo().ordinal())
-                    .addParameter("idMarca", veiculo.getIdMarca())
-                    .addParameter("marca", veiculo.getMarca())
-                    .addParameter("idModelo", veiculo.getIdModelo())
-                    .addParameter("modelo", veiculo.getModelo())
-                    .addParameter("idVersao", veiculo.getIdVersao())
-                    .addParameter("versao", veiculo.getVersao())
-                    .addParameter("placa", veiculo.getPlaca())
-                    .addParameter("anoModelo", veiculo.getAnoModelo())
-                    .addParameter("chassis", veiculo.getChassis())
-                    .addParameter("renavam", veiculo.getRenavam())
-                    .addParameter("quilometragem", veiculo.getQuilometragem())
-                    .addParameter("combustivel", veiculo.getCombustivel().ordinal())
-                    .addParameter("status", veiculo.getStatus().ordinal())
-                    .addParameter("situacao", veiculo.getSituacao().ordinal())   
-                    .executeUpdate().getKey(Integer.class); 
-            return find(idVeiculo);
-        } catch (Exception e) {
-            ContrErroLog.inserir("HOITO - contrVeiculo", "SQLException", sql, e.toString());
-        } finally {
-            connection.close();
-            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        }
-        return null;
+                   + ":quilometragem, :combustivel, :status, :situacao, now())";        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("tipo", veiculo.getTipo().ordinal());
+        params.put("idMarca", veiculo.getIdMarca());
+        params.put("marca", veiculo.getMarca());
+        params.put("idModelo", veiculo.getIdModelo());
+        params.put("modelo", veiculo.getModelo());
+        params.put("idVersao", veiculo.getIdVersao());
+        params.put("versao", veiculo.getVersao());
+        params.put("placa", veiculo.getPlaca());
+        params.put("anoModelo", veiculo.getAnoModelo());
+        params.put("chassis", veiculo.getChassis());
+        params.put("renavam", veiculo.getRenavam());
+        params.put("quilometragem", veiculo.getQuilometragem());
+        params.put("combustivel", veiculo.getCombustivel().ordinal());
+        params.put("status", veiculo.getStatus().ordinal());
+        params.put("situacao", veiculo.getSituacao().ordinal());        
+        Integer idVeiculo = save(sql, params, veiculoHandler);
+        return find(idVeiculo);
     }
 
-    public Veiculo update(Veiculo veiculo) throws Exception {        
+    public Veiculo update(Veiculo veiculo) throws Exception {  
         String sql = "UPDATE veiculo "
                    + "SET tipo = :tipo, idMarca = :idMarca, marca = :marca, idModelo = :idModelo, modelo = :modelo, idVersao = :idVersao, "
                    + "versao = :versao, placa = :placa, anoModelo = :anoModelo, chassis = :chassis, renavam = :renavam, "
                    + "quilometragem = :quilometragem, combustivel = :combustivel, status = :status, situacao = :situacao "
-                   + "WHERE idVeiculo = :idVeiculo ";
-        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
-        try {              
-            connection.createQuery(sql)
-                .addParameter("idVeiculo", veiculo.getIdVeiculo())
-                .addParameter("tipo", veiculo.getTipo().ordinal())
-                .addParameter("idMarca", veiculo.getIdMarca())
-                .addParameter("marca", veiculo.getMarca())
-                .addParameter("idModelo", veiculo.getIdModelo())
-                .addParameter("modelo", veiculo.getModelo())
-                .addParameter("idVersao", veiculo.getIdVersao())
-                .addParameter("versao", veiculo.getVersao())
-                .addParameter("placa", veiculo.getPlaca())
-                .addParameter("anoModelo", veiculo.getAnoModelo())
-                .addParameter("chassis", veiculo.getChassis())
-                .addParameter("renavam", veiculo.getRenavam())
-                .addParameter("quilometragem", veiculo.getQuilometragem())
-                .addParameter("combustivel", veiculo.getCombustivel().ordinal())
-                .addParameter("status", veiculo.getStatus().ordinal())
-                .addParameter("situacao", veiculo.getSituacao().ordinal())   
-                .executeUpdate();          
-            return veiculo;
-        } catch (Exception e) {
-            ContrErroLog.inserir("HOITO - contrVeiculo", "SQLException", sql, e.toString());
-        } finally {
-            connection.close();
-            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        }
-        return null;
+                   + "WHERE idVeiculo = :idVeiculo ";        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("tipo", veiculo.getTipo().ordinal());
+        params.put("idMarca", veiculo.getIdMarca());
+        params.put("marca", veiculo.getMarca());
+        params.put("idModelo", veiculo.getIdModelo());
+        params.put("modelo", veiculo.getModelo());
+        params.put("idVersao", veiculo.getIdVersao());
+        params.put("versao", veiculo.getVersao());
+        params.put("placa", veiculo.getPlaca());
+        params.put("anoModelo", veiculo.getAnoModelo());
+        params.put("chassis", veiculo.getChassis());
+        params.put("renavam", veiculo.getRenavam());
+        params.put("quilometragem", veiculo.getQuilometragem());
+        params.put("combustivel", veiculo.getCombustivel().ordinal());
+        params.put("status", veiculo.getStatus().ordinal());
+        params.put("situacao", veiculo.getSituacao().ordinal());        
+        update(sql, params, veiculoHandler);
+        return veiculo;  
     }
 
     public Veiculo remove(Integer idVeiculo) throws Exception { 
         String sql = "DELETE FROM veiculo WHERE idVeiculo = :idVeiculo ";
-        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
-        try {              
-            Veiculo veiculo = find(idVeiculo);
-            connection.createQuery(sql)
-                .addParameter("idVeiculo", idVeiculo)
-                .executeUpdate();  
-            return veiculo;
-        } catch (Exception e) {
-            ContrErroLog.inserir("HOITO - contrVeiculo", "SQLException", sql, e.toString());
-        } finally {
-            connection.close();
-            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        }
-        return null;
+        Veiculo veiculo = find(idVeiculo);
+        Map<String, Object> params = new HashMap<String, Object>();        
+        params.put("idVeiculo", idVeiculo);
+        remove(sql, params, veiculoHandler);
+        return veiculo;
     }
 
-    public Veiculo findByPlaca(Veiculo veiculo) throws Exception {        
-        String sql = "SELECT * FROM veiculo WHERE placa = :placa ";
-        if(veiculo.getIdVeiculo()!= null) { sql += " AND idVeiculo <> :idVeiculo "; }
-        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
-        try {              
-            Query query = connection.createQuery(sql).addParameter("placa", veiculo.getPlaca());
-            if(veiculo.getIdVeiculo()!= null) { query.addParameter("idVeiculo", veiculo.getIdVeiculo()); }
-            return query.executeAndFetchFirst(veiculoHandler);
-        } catch (Exception e) {
-            ContrErroLog.inserir("HOITO - contrVeiculo", "SQLException", sql, e.toString());
-        } finally {
-            connection.close();
-            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        }
-        return null;
+    public Veiculo findByPlaca(Veiculo veiculo) throws Exception {     
+        String sql = "SELECT * FROM veiculo WHERE idVeiculo = :idVeiculo";
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("placa", veiculo.getPlaca());
+        if(veiculo.getIdVeiculo()!= null) { params.put("idVeiculo", veiculo.getIdVeiculo()); }
+        return (Veiculo) find(sql, params, veiculoHandler);
     }
 }

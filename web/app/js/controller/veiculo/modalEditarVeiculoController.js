@@ -82,11 +82,15 @@ app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'vei
         $scope.changeVersao = function (tipo, marca, modelo, versao) {
             FipeService.veiculo(tipo.codigo, marca.id, modelo.id, versao.id)
                 .then(function (data) {
-                    console.log(data);
-                    $scope.veiculo.combustivel = veiculo.combustivel || ListaService.getValueCombustivelFipe($scope.combustiveis, data.combustivel);
-                    veiculo.combustivel = null;
-                    $scope.veiculo.anoModelo = veiculo.anoModelo || ValorService.getValueAnoFipe(data.ano_modelo);
-                    veiculo.anoModelo = null;
+                    if(veiculo) {
+                        $scope.veiculo.combustivel = veiculo.combustivel || ListaService.getValueCombustivelFipe($scope.combustiveis, data.combustivel);
+                        $scope.veiculo.anoModelo = veiculo.anoModelo || ValorService.getValueAnoFipe(data.ano_modelo);
+                        veiculo.combustivel = null;
+                        veiculo.anoModelo = null;
+                    } else {                        
+                        $scope.veiculo.combustivel = ListaService.getValueCombustivelFipe($scope.combustiveis, data.combustivel);
+                        $scope.veiculo.anoModelo = ValorService.getValueAnoFipe(data.ano_modelo);
+                    }
                     $scope.veiculoFipe = data;
                 })
                 .catch(function (e) {

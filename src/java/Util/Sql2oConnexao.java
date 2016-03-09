@@ -5,29 +5,17 @@ import org.sql2o.Sql2o;
 
 public class Sql2oConnexao {
     
-    public static int contConn = 0;
-    private static Connection instance;
-    
-    public static Connection getInstance(String nome, Class<?> clazz) {
-        if(instance != null) { return instance; }
-        return connect(nome, clazz);
-    }
-    
-    private static Connection connect(String nome, Class<?> clazz) {   
-        Connection connection = null;
+    public static Connection getConnection(String nameDB) { 
         try {     
             Class.forName("com.mysql.jdbc.Driver"); 
-            Sql2o sql2o = new Sql2o(TipoConexao.CLIENTE.url(nome), 
+            Sql2o sql2o = new Sql2o(TipoConexao.CLIENTE.url(nameDB), 
                                     TipoConexao.CLIENTE.username(), 
                                     TipoConexao.CLIENTE.password());
-            connection = sql2o.open();
-            contConn++;
-            System.out.println("nova concetion " + contConn + " >>>>> " + clazz.getSimpleName());
+            return sql2o.beginTransaction();
         } catch(Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            return connection;              
+            ex.printStackTrace();         
         }
-    }    
+        return null;
+    }  
     
 }

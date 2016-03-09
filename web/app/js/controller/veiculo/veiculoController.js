@@ -74,7 +74,28 @@ app.controller('VeiculoController', ['$scope', '$q', '$filter', 'VeiculoService'
         };
 
         $scope.excluir = function(idVeiculo) {
-            podeExcluirVeiculo(idVeiculo);
+            $q.all([VeiculoService.getCombustivel(idVeiculo),
+                    VeiculoService.getManutencao(idVeiculo),
+                    VeiculoService.getMulta(idVeiculo),
+                    VeiculoService.getSeguro(idVeiculo),
+                    VeiculoService.getSinistro(idVeiculo)])
+                .then(function(values) {  
+                    var podeExcluir = true;
+                    angular.forEach(values, function(value, key) {
+                        if(value.length > 0) podeExcluir = false;
+                    });
+                    return podeExcluir;
+                }).then(function(pode) {
+                    if(!pode) {
+                        modalMessage("Este veículo não pode ser excluído!");
+                        return;
+                    }
+                    excluir(idVeiculo);
+                });
+            
+        }; 
+        
+        var excluir = function(idVeiculo) {
             modalExcluir().then(function() {
                 VeiculoService.delete(idVeiculo)
                     .then(function(data) { 
@@ -84,18 +105,7 @@ app.controller('VeiculoController', ['$scope', '$q', '$filter', 'VeiculoService'
                     .catch(function(e) {
                         modalMessage(e);
                     });
-            });
-        }; 
-        
-        var podeExcluirVeiculo = function(idVeiculo) {
-            $q.all([VeiculoService.getCombustivel(idVeiculo),
-                    VeiculoService.getManutencao(idVeiculo),
-                    VeiculoService.getMulta(idVeiculo),
-                    VeiculoService.getSeguro(idVeiculo),
-                    VeiculoService.getSinistro(idVeiculo)])
-                .then(function(values) {        
-                    console.log(values);
-                });
+            });            
         }
         
         var ajustarDados = function(data) {            

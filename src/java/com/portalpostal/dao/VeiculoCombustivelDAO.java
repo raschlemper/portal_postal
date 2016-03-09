@@ -1,161 +1,92 @@
 package com.portalpostal.dao;
 
-import Controle.ContrErroLog;
-import Util.Sql2oConnexao;
 import com.portalpostal.dao.handler.CombustivelHandler;
 import com.portalpostal.dao.handler.VeiculoCombustivelHandler;
 import com.portalpostal.model.VeiculoCombustivel;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import org.sql2o.Connection;
+import java.util.Map;
 
-public class VeiculoCombustivelDAO {   
+public class VeiculoCombustivelDAO extends GenericDAO { 
     
-//    private Connection connection;
     private CombustivelHandler combustivelHandler;
     private VeiculoCombustivelHandler veiculoCombustivelHandler;
-    private String nomeBD;
 
-    public VeiculoCombustivelDAO(String nomeBD) { 
-//        connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
+    public VeiculoCombustivelDAO(String nameDB) { 
+        super(nameDB, VeiculoCombustivelDAO.class);
         combustivelHandler = new CombustivelHandler();
         veiculoCombustivelHandler = new VeiculoCombustivelHandler();
-        this.nomeBD = nomeBD;
     } 
 
-    public List<VeiculoCombustivel> findAll() {
+    public List<VeiculoCombustivel> findAll() throws Exception {
         String sql = "SELECT * FROM veiculo_combustivel, veiculo WHERE veiculo.idVeiculo = veiculo_combustivel.idVeiculo "
-                   + "ORDER BY veiculo_combustivel.idVeiculo, veiculo_combustivel.data";
-        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
-        try {              
-            return connection.createQuery(sql)
-                    .executeAndFetch(veiculoCombustivelHandler);
-        } catch (Exception e) {
-            ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());
-        } finally {
-            connection.close();
-            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        }
-        return new ArrayList<>();
+                   + "ORDER BY veiculo_combustivel.idVeiculo, veiculo_combustivel.data";        
+        return findAll(sql, null, veiculoCombustivelHandler);
     }
 
     public VeiculoCombustivel find(Integer idVeiculoCombustivel) throws Exception {
         String sql = "SELECT * FROM veiculo_combustivel, veiculo "
                    + "WHERE veiculo.idVeiculo = veiculo_combustivel.idVeiculo AND idVeiculoCombustivel = :idVeiculoCombustivel";
-        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
-        try {              
-            return connection.createQuery(sql)                
-                    .addParameter("idVeiculoCombustivel", idVeiculoCombustivel)
-                    .executeAndFetchFirst(veiculoCombustivelHandler);
-        } catch (Exception e) {
-            ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());
-        } finally {
-            connection.close();
-            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        }
-        return null;
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idVeiculoCombustivel", idVeiculoCombustivel);
+        return (VeiculoCombustivel) find(sql, params, veiculoCombustivelHandler);
     }
 
-    public VeiculoCombustivel save(VeiculoCombustivel veiculo) throws Exception {        
+    public VeiculoCombustivel save(VeiculoCombustivel veiculo) throws Exception {  
         String sql = "INSERT INTO veiculo_combustivel (idVeiculo, tipo, quantidade, valorUnitario, data, valorTotal, quilometragem) "
-                   + "VALUES(:idVeiculo, :tipo, :quantidade, :valorUnitario, :data, :valorTotal, :quilometragem) ";
-        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
-        try {
-            Integer idVeiculo = connection.createQuery(sql, true)
-                    .addParameter("idVeiculo", veiculo.getVeiculo().getIdVeiculo())
-                    .addParameter("tipo", veiculo.getTipo().ordinal())
-                    .addParameter("quantidade", veiculo.getQuantidade())
-                    .addParameter("valorUnitario", veiculo.getValorUnitario())
-                    .addParameter("data", veiculo.getData())
-                    .addParameter("valorTotal", veiculo.getValorTotal())
-                    .addParameter("quilometragem", veiculo.getQuilometragem())
-                    .executeUpdate().getKey(Integer.class); 
-            return find(idVeiculo);
-        } catch (Exception e) {
-            ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());
-        } finally {
-            connection.close();
-            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        }
-        return null;
+                   + "VALUES(:idVeiculo, :tipo, :quantidade, :valorUnitario, :data, :valorTotal, :quilometragem) ";        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idVeiculo", veiculo.getVeiculo().getIdVeiculo());
+        params.put("tipo", veiculo.getTipo().ordinal());
+        params.put("quantidade", veiculo.getQuantidade());
+        params.put("valorUnitario", veiculo.getValorUnitario());
+        params.put("data", veiculo.getData());
+        params.put("valorTotal", veiculo.getValorTotal());
+        params.put("quilometragem", veiculo.getQuilometragem());        
+        Integer idVeiculoCombustivel = save(sql, params, veiculoCombustivelHandler);
+        return find(idVeiculoCombustivel);
     }
 
-    public VeiculoCombustivel update(VeiculoCombustivel veiculo) throws Exception {        
+    public VeiculoCombustivel update(VeiculoCombustivel veiculo) throws Exception {
         String sql = "UPDATE veiculo_combustivel "
                    + "SET idVeiculo = :idVeiculo, tipo = :tipo, quantidade = :quantidade, valorUnitario = :valorUnitario, data = :data, "
                    + "valorTotal = :valorTotal, quilometragem = :quilometragem "
-                   + "WHERE idVeiculoCombustivel = :idVeiculoCombustivel ";
-        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
-        try {
-            connection.createQuery(sql)
-                .addParameter("idVeiculoCombustivel", veiculo.getIdVeiculoCombustivel())
-                .addParameter("idVeiculo", veiculo.getVeiculo().getIdVeiculo())
-                .addParameter("tipo", veiculo.getTipo().ordinal())
-                .addParameter("quantidade", veiculo.getQuantidade())
-                .addParameter("valorUnitario", veiculo.getValorUnitario())
-                .addParameter("data", veiculo.getData())
-                .addParameter("valorTotal", veiculo.getValorTotal())
-                .addParameter("quilometragem", veiculo.getQuilometragem())
-                .executeUpdate();          
-            return veiculo;
-        } catch (Exception e) {
-            ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());
-        } finally {
-            connection.close();
-            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        }
-        return null;
+                   + "WHERE idVeiculoCombustivel = :idVeiculoCombustivel ";        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idVeiculoCombustivel", veiculo.getIdVeiculoCombustivel());
+        params.put("idVeiculo", veiculo.getVeiculo().getIdVeiculo());
+        params.put("tipo", veiculo.getTipo().ordinal());
+        params.put("quantidade", veiculo.getQuantidade());
+        params.put("valorUnitario", veiculo.getValorUnitario());
+        params.put("data", veiculo.getData());
+        params.put("valorTotal", veiculo.getValorTotal());
+        params.put("quilometragem", veiculo.getQuilometragem());        
+        update(sql, params, veiculoCombustivelHandler);
+        return veiculo;  
     }
 
     public VeiculoCombustivel remove(Integer idVeiculoCombustivel) throws Exception { 
         String sql = "DELETE FROM veiculo_combustivel WHERE idVeiculoCombustivel = :idVeiculoCombustivel ";
-        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
-        try {
-            VeiculoCombustivel veiculo = find(idVeiculoCombustivel);
-            connection.createQuery(sql)
-                .addParameter("idVeiculoCombustivel", idVeiculoCombustivel)
-                .executeUpdate();  
-            return veiculo;
-        } catch (Exception e) {
-            ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());
-        } finally {
-            connection.close();
-            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        }
-        return null;
+        VeiculoCombustivel veiculo = find(idVeiculoCombustivel);
+        Map<String, Object> params = new HashMap<String, Object>();        
+        params.put("idVeiculoCombustivel", idVeiculoCombustivel);
+        remove(sql, params, veiculoCombustivelHandler);
+        return veiculo;
     }
 
     public List<VeiculoCombustivel> findByIdVeiculo(Integer idVeiculo) throws Exception {
         String sql = "SELECT * FROM veiculo_combustivel WHERE idVeiculo = :idVeiculo";
-        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
-        try {              
-            return connection.createQuery(sql)                
-                    .addParameter("idVeiculo", idVeiculo)
-                    .executeAndFetch(combustivelHandler);
-        } catch (Exception e) {
-            ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());
-        } finally {
-            connection.close();
-            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        }
-        return null;
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idVeiculo", idVeiculo);
+        return findAll(sql, params, combustivelHandler);
     }
 
     public VeiculoCombustivel findLastCombustivelByIdVeiculo(Integer idVeiculo) throws Exception {
-        String sql = "SELECT MAX(idVeiculoCombustivel) as idVeiculoCombustivel "
-                   + "FROM veiculo_combustivel WHERE idVeiculo = :idVeiculo";
-        Connection connection = Sql2oConnexao.getInstance(nomeBD, this.getClass());
-        try {              
-            Integer IdVeiculoCombustivel = connection.createQuery(sql)                
-                    .addParameter("idVeiculo", idVeiculo)
-                    .executeAndFetchFirst(Integer.class);
-            return find(IdVeiculoCombustivel);
-        } catch (Exception e) {
-            ContrErroLog.inserir("HOITO - contrVeiculoCombustivel", "SQLException", sql, e.toString());
-        } finally {
-            connection.close();
-            System.out.println("close concetion " + Sql2oConnexao.contConn + " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        }
-        return null;
+        String sql = "SELECT * FROM veiculo_combustivel, veiculo "
+                   + "WHERE idVeiculoCombustivel = (SELECT MAX(idVeiculoCombustivel) as idVeiculoCombustivel "
+                                                   + "FROM veiculo_combustivel vc WHERE vc.idVeiculo = :idVeiculo";
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idVeiculo", idVeiculo);
+        return (VeiculoCombustivel) find(sql, params, veiculoCombustivelHandler);
     }
 }
