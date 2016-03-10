@@ -1,14 +1,12 @@
 package com.portalpostal.dao;
 
-import Controle.ContrErroLog;
-import Util.Sql2oConnexao;
 import com.portalpostal.dao.handler.ManutencaoHandler;
 import com.portalpostal.dao.handler.VeiculoManutencaoHandler;
 import com.portalpostal.model.VeiculoManutencao;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.sql2o.Connection;
 
 public class VeiculoManutencaoDAO extends GenericDAO {   
     
@@ -82,5 +80,17 @@ public class VeiculoManutencaoDAO extends GenericDAO {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idVeiculo", idVeiculo);
         return findAll(sql, params, manutencaoHandler);
+    }   
+
+    public List<VeiculoManutencao> findNotDoneByRangeDate(Date dataInicio, Date dataFim) throws Exception {
+        String sql = "SELECT * FROM veiculo_manutencao, veiculo "
+                   + "WHERE veiculo.idVeiculo = veiculo_manutencao.idVeiculo "
+                   + "AND dataAgendamento between :dataInicio and :dataFim AND dataManutencao IS NULL";
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("dataInicio", dataInicio);
+        params.put("dataFim", dataFim);
+        return findAll(sql, params, veiculoManutencaoHandler);
     }
+    
+
 }

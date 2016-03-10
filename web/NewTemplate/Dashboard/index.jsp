@@ -1,3 +1,7 @@
+<%@page import="com.portalpostal.model.TipoManutencao"%>
+<%@page import="java.util.List"%>
+<%@page import="com.portalpostal.model.VeiculoManutencao"%>
+<%@page import="com.portalpostal.service.VeiculoManutencaoService"%>
 <%@page import="Controle.contrCliente"%>
 <%@page import="Entidade.Clientes"%>
 <%@page import="Emporium.Controle.ContrTelegramaPostal"%>
@@ -68,6 +72,16 @@
                 
             }  
         }
+        
+        VeiculoManutencaoService manutencaoService = new VeiculoManutencaoService(nomeBD);
+        Calendar dataInicio = Calendar.getInstance();
+        dataInicio.setTime(Util.FormatarData.formataStringToDate(vDataInicio, "yyyy-MM-dd"));        
+        Calendar dataFinal = Calendar.getInstance();
+        dataFinal.setTime(Util.FormatarData.formataStringToDate(vDataFinal, "yyyy-MM-dd"));        
+        dataFinal.set(Calendar.HOUR_OF_DAY, 23);
+        dataFinal.set(Calendar.MINUTE, 59);
+        dataFinal.set(Calendar.SECOND, 59);
+        List<VeiculoManutencao> listaVeiculoManutencao = manutencaoService.findNotDoneByRangeDate(dataInicio.getTime(), dataFinal.getTime());
 
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -127,6 +141,47 @@
                                     %>
                                         <a href="../Cadastros/cliente_contrato_b.jsp?idCliente=<%= cli.getCodigo() %>">- <%= cli.getNome() %> - Contrato vence no dia <%= sdf.format(cli.getDtVigenciaFimContrato()) %></a><br/>
                                     <%}%>                                    
+                                </div>
+                                <%}%>
+                                <%if(!listaVeiculoManutencao.isEmpty()){ %>
+                                <div class="alert alert-danger no-margin">
+                                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                                    <a class="text-danger" href="${pageContext.request.contextPath}/app/veiculo/manutencao"><strong>ATENÇÃO!</strong> Existem manutenções agendadas.</a>
+                                    <%
+                                        Integer quantidadeTrocaOleo = 0;
+                                        Integer quantidadeProgramada = 0;
+                                        Integer quantidadeRotina = 0;
+                                        for(int i = 0; i < listaVeiculoManutencao.size(); i++){
+                                            VeiculoManutencao veiculoManutencao = listaVeiculoManutencao.get(i);
+                                            if(veiculoManutencao.getTipo() == TipoManutencao.TROCA_OLEO) { quantidadeTrocaOleo++; }
+                                            if(veiculoManutencao.getTipo() == TipoManutencao.PROGRAMADA) { quantidadeProgramada++; }
+                                            if(veiculoManutencao.getTipo() == TipoManutencao.ROTINA) { quantidadeRotina++; }
+                                        }
+                                    %>
+                                    <%if(quantidadeTrocaOleo > 0){ %>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <%= quantidadeTrocaOleo.toString() %>
+                                            <%if(quantidadeTrocaOleo > 1) { %> Trocas de óleo agendadas <% } else { %> troca de óleo agendada <% } %>
+                                        </div>
+                                    </div>
+                                    <%}%>
+                                    <%if(quantidadeProgramada > 0){ %>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <%= quantidadeProgramada.toString() %>
+                                            <%if(quantidadeProgramada > 1) { %> Manuteções programada agendadas <% } else { %> Manuteção programada agendada <% } %>
+                                        </div>
+                                    </div>
+                                    <%}%>
+                                    <%if(quantidadeRotina > 0){ %>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <%= quantidadeRotina.toString() %>
+                                            <%if(quantidadeRotina > 1) { %> Manuteções de rotina agendadas <% } else { %> Manuteção de rotina agendada <% } %>
+                                        </div>
+                                    </div>
+                                    <%}%>
                                 </div>
                                 <%}%>
                             </div>

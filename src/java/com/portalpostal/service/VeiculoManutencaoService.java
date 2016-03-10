@@ -2,6 +2,7 @@ package com.portalpostal.service;
 
 import com.portalpostal.dao.VeiculoManutencaoDAO;
 import com.portalpostal.model.VeiculoManutencao;
+import java.util.Date;
 import java.util.List;
 
 public class VeiculoManutencaoService {
@@ -36,4 +37,8 @@ public class VeiculoManutencaoService {
         return veiculoManutencaoDAO.findByIdVeiculo(idVeiculo);
     } 
     
+    public List<VeiculoManutencao> findNotDoneByRangeDate(Date dataInicio, Date dataFim) throws Exception {
+        return veiculoManutencaoDAO.findNotDoneByRangeDate(dataInicio, dataFim);
+    } 
+        
 }
