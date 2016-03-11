@@ -1,7 +1,9 @@
 package com.portalpostal.service;
 
 import com.portalpostal.dao.VeiculoSeguroDAO;
+import com.portalpostal.model.VeiculoManutencao;
 import com.portalpostal.model.VeiculoSeguro;
+import java.util.Date;
 import java.util.List;
 
 public class VeiculoSeguroService {
@@ -34,6 +36,10 @@ public class VeiculoSeguroService {
     
     public List<VeiculoSeguro> findByIdVeiculo(Integer idVeiculo) throws Exception {
         return veiculoSeguroDAO.findByIdVeiculo(idVeiculo);
+    } 
+    
+    public List<VeiculoSeguro> findNotRenewByRangeDate(Date dataInicio, Date dataFim) throws Exception {
+        return veiculoSeguroDAO.findNotRenewByRangeDate(dataInicio, dataFim);
     } 
     
 }

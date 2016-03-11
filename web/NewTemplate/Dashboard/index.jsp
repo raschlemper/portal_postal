@@ -1,3 +1,5 @@
+<%@page import="com.portalpostal.model.VeiculoSeguro"%>
+<%@page import="com.portalpostal.service.VeiculoSeguroService"%>
 <%@page import="com.portalpostal.model.TipoManutencao"%>
 <%@page import="java.util.List"%>
 <%@page import="com.portalpostal.model.VeiculoManutencao"%>
@@ -74,14 +76,18 @@
         }
         
         VeiculoManutencaoService manutencaoService = new VeiculoManutencaoService(nomeBD);
-        Calendar dataInicio = Calendar.getInstance();
-        dataInicio.setTime(Util.FormatarData.formataStringToDate(vDataInicio, "yyyy-MM-dd"));        
+        VeiculoSeguroService seguroService = new VeiculoSeguroService(nomeBD);
+        Calendar dataInicio = Calendar.getInstance();       
+        dataInicio.set(Calendar.HOUR_OF_DAY, 00);
+        dataInicio.set(Calendar.MINUTE, 00);
+        dataInicio.set(Calendar.SECOND, 00);    
         Calendar dataFinal = Calendar.getInstance();
-        dataFinal.setTime(Util.FormatarData.formataStringToDate(vDataFinal, "yyyy-MM-dd"));        
+        dataFinal.add(Calendar.DAY_OF_MONTH, 30);      
         dataFinal.set(Calendar.HOUR_OF_DAY, 23);
         dataFinal.set(Calendar.MINUTE, 59);
         dataFinal.set(Calendar.SECOND, 59);
         List<VeiculoManutencao> listaVeiculoManutencao = manutencaoService.findNotDoneByRangeDate(dataInicio.getTime(), dataFinal.getTime());
+        List<VeiculoSeguro> listaVeiculoSeguro = seguroService.findNotRenewByRangeDate(dataInicio.getTime(), dataFinal.getTime());
 
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -146,7 +152,9 @@
                                 <%if(!listaVeiculoManutencao.isEmpty()){ %>
                                 <div class="alert alert-danger no-margin">
                                     <a href="#" class="close" data-dismiss="alert">&times;</a>
-                                    <a class="text-danger" href="${pageContext.request.contextPath}/app/veiculo/manutencao"><strong>ATENÇÃO!</strong> Existem manutenções agendadas.</a>
+                                    <a class="text-danger" href="${pageContext.request.contextPath}/app/veiculo/manutencao">
+                                        <strong>ATENÇÃO!</strong> Existem manutenções agendadas para os próximos 30 dias.
+                                    </a>
                                     <%
                                         Integer quantidadeTrocaOleo = 0;
                                         Integer quantidadeProgramada = 0;
@@ -182,6 +190,14 @@
                                         </div>
                                     </div>
                                     <%}%>
+                                </div>
+                                <%}%>
+                                <%if(!listaVeiculoSeguro.isEmpty()){ %>
+                                <div class="alert alert-danger no-margin">
+                                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                                    <a class="text-danger" href="${pageContext.request.contextPath}/app/veiculo/seguro">
+                                        <strong>ATENÇÃO!</strong> Existem seguros com vencimento para os próximos 30 dias.
+                                    </a>
                                 </div>
                                 <%}%>
                             </div>

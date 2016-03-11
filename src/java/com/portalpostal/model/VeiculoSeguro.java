@@ -1,6 +1,8 @@
 package com.portalpostal.model;
 
+import com.portalpostal.model.serializer.JsonDateSerializer;
 import java.util.Date;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class VeiculoSeguro {
     
@@ -11,7 +13,9 @@ public class VeiculoSeguro {
     private String assegurado;
     private Double valorFranquia;
     private TipoSeguro indenizacao;
+    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataInicioVigencia;
+    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataFimVigencia;
     
     public VeiculoSeguro() {}

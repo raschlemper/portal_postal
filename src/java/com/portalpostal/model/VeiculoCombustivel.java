@@ -1,6 +1,8 @@
 package com.portalpostal.model;
 
+import com.portalpostal.model.serializer.JsonDateSerializer;
 import java.util.Date;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class VeiculoCombustivel {
     
@@ -9,6 +11,7 @@ public class VeiculoCombustivel {
     private TipoCombustivel tipo;
     private Integer quantidade;
     private Double valorUnitario;
+    @JsonSerialize(using = JsonDateSerializer.class)
     private Date data; 
     private Double valorTotal;
     private Integer quilometragem;

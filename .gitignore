@@ -20,7 +20,6 @@ build/
 nbproject/
 WEB-INF/wsdl/
 *.jar
-*.sql
 *.zip
 *.prej
 *.war

@@ -2,7 +2,9 @@ package com.portalpostal.dao;
 
 import com.portalpostal.dao.handler.SeguroHandler;
 import com.portalpostal.dao.handler.VeiculoSeguroHandler;
+import com.portalpostal.model.VeiculoManutencao;
 import com.portalpostal.model.VeiculoSeguro;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,5 +86,15 @@ public class VeiculoSeguroDAO extends GenericDAO {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idVeiculo", idVeiculo);
         return findAll(sql, params, seguroHandler);
+    } 
+
+    public List<VeiculoSeguro> findNotRenewByRangeDate(Date dataInicio, Date dataFim) throws Exception {
+        String sql = "SELECT * FROM veiculo_seguro, veiculo "
+                   + "WHERE veiculo.idVeiculo = veiculo_seguro.idVeiculo "
+                   + "AND veiculo_seguro.dataFimVigencia between :dataInicio and :dataFim";
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("dataInicio", dataInicio);
+        params.put("dataFim", dataFim);
+        return findAll(sql, params, veiculoSeguroHandler);
     }
 }

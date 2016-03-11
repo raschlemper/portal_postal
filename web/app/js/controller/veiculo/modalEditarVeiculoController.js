@@ -25,7 +25,8 @@ app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'vei
                 quilometragem: (veiculo && veiculo.quilometragem) || null,
                 combustivel: (veiculo && veiculo.combustivel) || $scope.combustiveis[0],         
                 status: (veiculo && veiculo.status) || $scope.status[0],          
-                situacao: (veiculo && veiculo.situacao) || $scope.situacoes[0]
+                situacao: (veiculo && veiculo.situacao) || $scope.situacoes[0],
+                dataCadastro: (veiculo && veiculo.dataCadastro) || new Date()
             }; 
 
             $scope.minVal = 1970;
