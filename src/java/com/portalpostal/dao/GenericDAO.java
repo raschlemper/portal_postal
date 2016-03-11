@@ -1,7 +1,7 @@
 package com.portalpostal.dao;
 
 import Controle.ContrErroLog;
-import Util.Sql2oConnexao;
+import Util.Sql2oConexao;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +26,7 @@ public class GenericDAO {
     }
 
     public List findAll(String sql, Map<String, Object> params, ResultSetHandler handler) throws Exception {
-        Connection connection = Sql2oConnexao.getConnection(nameDB);
+        Connection connection = Sql2oConexao.getConnection(nameDB);
         List list = new ArrayList();
         try {  
             Query query = connection.createQuery(sql);
@@ -41,7 +41,7 @@ public class GenericDAO {
     }  
 
     public Object find(String sql, Map<String, Object> params, ResultSetHandler handler) throws Exception {
-        Connection connection = Sql2oConnexao.getConnection(nameDB);
+        Connection connection = Sql2oConexao.getConnection(nameDB);
         Object object = null;
         try {      
             Query query = connection.createQuery(sql);
@@ -56,7 +56,7 @@ public class GenericDAO {
     }
 
     public Integer save(String sql, Map<String, Object> params, ResultSetHandler handler) throws Exception { 
-        Connection connection = Sql2oConnexao.getConnection(nameDB);
+        Connection connection = Sql2oConexao.getConnection(nameDB);
         Integer id = null;
         try {              
             Query query = connection.createQuery(sql, true);
@@ -73,7 +73,7 @@ public class GenericDAO {
     }
 
     public void update(String sql, Map<String, Object> params, ResultSetHandler handler) throws Exception { 
-        Connection connection = Sql2oConnexao.getConnection(nameDB);
+        Connection connection = Sql2oConexao.getConnection(nameDB);
         try {              
             Query query = connection.createQuery(sql, true);
             if(params != null) { addParameter(query, params); }
@@ -88,7 +88,7 @@ public class GenericDAO {
     }
 
     public void remove(String sql, Map<String, Object> params, ResultSetHandler handler) throws Exception { 
-        Connection connection = Sql2oConnexao.getConnection(nameDB);
+        Connection connection = Sql2oConexao.getConnection(nameDB);
         try {              
             Query query = connection.createQuery(sql, true);
             if(params != null) { addParameter(query, params); }

@@ -13,13 +13,18 @@ app.controller('ModalEditarVeiculoManutencaoController', ['$scope', '$modalInsta
                 tipo: (veiculoManutencao && veiculoManutencao.tipo) || $scope.tipos[0],    
                 quilometragem: (veiculoManutencao && veiculoManutencao.quilometragem) || null,        
                 valor: (veiculoManutencao && veiculoManutencao.valor) || null,    
-                dataManutencao: (veiculoManutencao && veiculoManutencao.dataManutencao) || new Date(),
-                dataAgendamento: (veiculoManutencao && veiculoManutencao.dataAgendamento) || new Date(),
+                dataManutencao: (veiculoManutencao && getDate(veiculoManutencao.dataManutencao)),
+                dataAgendamento: (veiculoManutencao && getDate(veiculoManutencao.dataAgendamento)),
                 descricao: (veiculoManutencao && veiculoManutencao.descricao) || null
             }; 
             getTitle();
             veiculos();
         };
+        
+        var getDate = function(data) {
+            if(data) return new Date(data);
+            return new Date();
+        }
         
         var getTitle = function() {
             if(veiculoManutencao && veiculoManutencao.idVeiculoManutencao) { $scope.title = "Editar Manutenção Veículo"; }

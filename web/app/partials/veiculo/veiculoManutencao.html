@@ -36,8 +36,8 @@
                                             <td>{{manutencao.tipo.descricao}}</td>
                                             <td>{{manutencao.quilometragem | number}}</td>
                                             <td>{{manutencao.valor | currency}}</td>
-                                            <td>{{manutencao.dataManutencao | date : 'dd/MM/yyyy'}}</td>
                                             <td>{{manutencao.dataAgendamento | date : 'dd/MM/yyyy'}}</td>
+                                            <td>{{manutencao.dataManutencao | date : 'dd/MM/yyyy'}}</td>
                                             <td align="center">
                                                 <button class="btn btn-sm btn-warning" ng-click="editar(manutencao.idVeiculoManutencao)">
                                                     <i class="fa fa-lg fa-pencil"></i>

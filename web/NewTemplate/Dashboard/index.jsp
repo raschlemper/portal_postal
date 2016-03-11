@@ -162,7 +162,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <%= quantidadeTrocaOleo.toString() %>
-                                            <%if(quantidadeTrocaOleo > 1) { %> Trocas de óleo agendadas <% } else { %> troca de óleo agendada <% } %>
+                                            <%if(quantidadeTrocaOleo > 1) { %> Trocas de óleo agendadas <% } else { %> Troca de óleo agendada <% } %>
                                         </div>
                                     </div>
                                     <%}%>

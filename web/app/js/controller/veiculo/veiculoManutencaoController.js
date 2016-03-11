@@ -22,6 +22,8 @@ app.controller('VeiculoManutencaoController', ['$scope', '$filter', 'VeiculoManu
         
         var criarVeiculosManutencaoLista = function(manutencoes) {
             return _.map(manutencoes, function(manutencao) {
+//                if(manutencao.dataAgendamento) { manutencao.dataAgendamento = new Date(manutencao.dataAgendamento); }
+//                if(manutencao.dataManutencao) { manutencao.dataManutencao = new Date(manutencao.dataManutencao); }
                 var obj = _.pick(manutencao, 'idVeiculoManutencao', 'tipo', 'quilometragem', 'valor', 'dataManutencao', 'dataAgendamento');
                 return _.extend(obj, _.pick(manutencao.veiculo, 'marca', 'modelo', 'placa'));
             })
