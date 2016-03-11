@@ -72,7 +72,8 @@ app.controller('ModalEditarVeiculoSinistroController', ['$scope', '$modalInstanc
                 alert('Preencha a data do sinistro!');
                 return false;
             }          
-            if (!_.isDate(form.data.$modelValue)) {
+            if (form.data.$modelValue && 
+                    !moment(form.data.$modelValue, moment.ISO_8601, true).isValid()) {
                 alert('A data do sinistro não é válida!');
                 return false;
             }    

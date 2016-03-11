@@ -35,6 +35,7 @@
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/datatables/jquery.dataTables.min.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-datatables/angular-datatables.min.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-datatables/plugins/bootstrap/angular-datatables.bootstrap.min.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/moment/moment-with-locales.min.js"></script>
 
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/app.js"></script>        
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/app.constants.js"></script>

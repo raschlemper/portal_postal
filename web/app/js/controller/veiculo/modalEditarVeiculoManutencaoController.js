@@ -62,11 +62,13 @@ app.controller('ModalEditarVeiculoManutencaoController', ['$scope', '$modalInsta
                 alert('Preencha o valor da manutenção!');
                 return false;
             }         
-            if (!_.isDate(form.dataManutencao.$modelValue)) {
+            if (form.dataManutencao.$modelValue && 
+                    !moment(form.dataManutencao.$modelValue, moment.ISO_8601, true).isValid()) {
                 alert('A data da manutenção não é válida!');
                 return false;
             }           
-            if (!_.isDate(form.dataAgendamento.$modelValue)) {
+            if (form.dataAgendamento.$modelValue && 
+                    !moment(form.dataAgendamento.$modelValue, moment.ISO_8601, true).isValid()) {
                 alert('A data de agendamento não é válida!');
                 return false;
             }    

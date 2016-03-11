@@ -80,7 +80,8 @@ app.controller('ModalEditarVeiculoMultaController', ['$scope', '$modalInstance',
                 alert('Preencha a data de multa!');
                 return false;
             }          
-            if (!_.isDate(form.data.$modelValue)) {
+            if (form.data.$modelValue && 
+                    !moment(form.data.$modelValue, moment.ISO_8601, true).isValid()) {
                 alert('A data da multa não é válida!');
                 return false;
             }    

@@ -105,7 +105,8 @@ app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInst
                 alert('Preencha a data de abastecimento!');
                 return false;
             }          
-            if (!_.isDate(form.data.$modelValue)) {
+            if (form.data.$modelValue && 
+                    !moment(form.data.$modelValue, moment.ISO_8601, true).isValid()) {
                 alert('A data do abstecimento não é válida!');
                 return false;
             }          
