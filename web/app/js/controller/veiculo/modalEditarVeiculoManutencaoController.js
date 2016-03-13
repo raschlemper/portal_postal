@@ -13,8 +13,8 @@ app.controller('ModalEditarVeiculoManutencaoController', ['$scope', '$modalInsta
                 tipo: (veiculoManutencao && veiculoManutencao.tipo) || $scope.tipos[0],    
                 quilometragem: (veiculoManutencao && veiculoManutencao.quilometragem) || null,        
                 valor: (veiculoManutencao && veiculoManutencao.valor) || null,    
-                dataManutencao: (veiculoManutencao && veiculoManutencao.dataManutencao) || new Date(),
-                dataAgendamento: (veiculoManutencao && veiculoManutencao.dataAgendamento) || new Date(),
+                dataManutencao: (veiculoManutencao && veiculoManutencao.dataManutencao) || null,
+                dataAgendamento: (veiculoManutencao && veiculoManutencao.dataAgendamento) || null,
                 descricao: (veiculoManutencao && veiculoManutencao.descricao) || null
             }; 
             getTitle();
@@ -53,22 +53,12 @@ app.controller('ModalEditarVeiculoManutencaoController', ['$scope', '$modalInsta
             $modalInstance.dismiss('cancel');
         };
 
-        var validarForm = function (form) {      
-            if (form.quilometragem.$error.required) {
-                alert('Preencha a quilometragem do veículo!');
-                return false;
-            }    
-            if (form.valor.$error.required) {
-                alert('Preencha o valor da manutenção!');
-                return false;
-            }         
-            if (form.dataManutencao.$modelValue && 
-                    !moment(form.dataManutencao.$modelValue, moment.ISO_8601, true).isValid()) {
+        var validarForm = function (form) {  
+            if (form.dataManutencao.$modelValue && !moment(form.dataManutencao.$modelValue).isValid()) {
                 alert('A data da manutenção não é válida!');
                 return false;
             }           
-            if (form.dataAgendamento.$modelValue && 
-                    !moment(form.dataAgendamento.$modelValue, moment.ISO_8601, true).isValid()) {
+            if (form.dataAgendamento.$modelValue && !moment(form.dataAgendamento.$modelValue).isValid()) {
                 alert('A data de agendamento não é válida!');
                 return false;
             }    

@@ -75,8 +75,7 @@ app.controller('ModalEditarVeiculoSeguroController', ['$scope', '$modalInstance'
                 alert('Preencha a data inicio da vigência do seguro!');
                 return false;
             }         
-            if (form.dataInicioVigencia.$modelValue && 
-                    !moment(form.dataInicioVigencia.$modelValue, moment.ISO_8601, true).isValid()) {
+            if (form.dataInicioVigencia.$modelValue && !moment(form.dataInicioVigencia.$modelValue).isValid()) {
                 alert('A data inicio da vigência não é válida!');
                 return false;
             }      
@@ -84,8 +83,7 @@ app.controller('ModalEditarVeiculoSeguroController', ['$scope', '$modalInstance'
                 alert('Preencha a data fim da vigência do seguro!');
                 return false;
             }        
-            if (form.dataFimVigencia.$modelValue && 
-                    !moment(form.dataFimVigencia.$modelValue, moment.ISO_8601, true).isValid()) {
+            if (form.dataFimVigencia.$modelValue && !moment(form.dataFimVigencia.$modelValue).isValid()) {
                 alert('A data fim da vigência não é válida!');
                 return false;
             }    

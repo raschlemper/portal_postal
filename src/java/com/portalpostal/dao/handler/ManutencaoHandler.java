@@ -2,6 +2,7 @@ package com.portalpostal.dao.handler;
 
 import com.portalpostal.model.TipoManutencao;
 import com.portalpostal.model.VeiculoManutencao;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.sql2o.ResultSetHandler;
@@ -15,8 +16,13 @@ public class ManutencaoHandler implements ResultSetHandler<VeiculoManutencao> {
         VeiculoManutencao manutencao = new VeiculoManutencao();
         manutencao.setIdVeiculoManutencao(result.getInt("veiculo_manutencao.idVeiculoManutencao"));
         manutencao.setTipo(TipoManutencao.values()[result.getInt("veiculo_manutencao.tipo")]);
-        manutencao.setQuilometragem(result.getInt("veiculo_manutencao.quilometragem"));
-        manutencao.setValor(result.getDouble("veiculo_manutencao.valor"));
+        manutencao.setQuilometragem((Integer) result.getObject("veiculo_manutencao.quilometragem"));
+        Double valor = result.getDouble("veiculo_manutencao.valor");
+        if (result.wasNull()) {
+            valor = null;
+        }
+        manutencao.setValor(valor);
+//        manutencao.setValor(result.getBigDecimal("veiculo_manutencao.valor").doubleValue());
         manutencao.setDataManutencao(result.getDate("veiculo_manutencao.dataManutencao"));
         manutencao.setDataAgendamento(result.getDate("veiculo_manutencao.dataAgendamento"));
         manutencao.setDescricao(result.getString("veiculo_manutencao.descricao"));

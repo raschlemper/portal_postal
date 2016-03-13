@@ -38,14 +38,14 @@
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
                                 <input type="text" autocomplete="off" name="valor" class="form-control" ng-model="veiculoManutencao.valor"
-                                       ui-number-mask="2" ng-required="true" placeholder="Valor da manutenção"/>
+                                       ui-number-mask="2" placeholder="Valor da manutenção"/>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                             <label class="small">Data Agendamento</label>
                             <div class="input-group">
                                 <input type="text" autocomplete="off" name="dataAgendamento" class="form-control" ng-model="veiculoManutencao.dataAgendamento" 
-                                       datepicker-popup="{{datepickerAgendamento.format}}" is-open="datepickerAgendamento.opened" ng-required="true" 
+                                       datepicker-popup="{{datepickerAgendamento.format}}" is-open="datepickerAgendamento.opened" 
                                        current-text="{{datepickerAgendamento.today}}" clear-text="{{datepickerAgendamento.clear}}" close-text="{{datepickerAgendamento.close}}" 
                                        placeholder="Data do agendamento"/>
                                 <span class="input-group-addon" ng-click="datepickerAgendamento.open($event)"><i class="fa fa-calendar"></i></span>
@@ -55,7 +55,7 @@
                             <label class="small">Data Manutenção</label>
                             <div class="input-group">
                                 <input type="text" autocomplete="off" name="dataManutencao" class="form-control" ng-model="veiculoManutencao.dataManutencao" 
-                                       datepicker-popup="{{datepickerManutencao.format}}" is-open="datepickerManutencao.opened" ng-required="true"
+                                       datepicker-popup="{{datepickerManutencao.format}}" is-open="datepickerManutencao.opened"
                                        current-text="{{datepickerManutencao.today}}" clear-text="{{datepickerManutencao.clear}}" close-text="{{datepickerManutencao.close}}"
                                        placeholder="Data da manutenção"/>
                                 <span class="input-group-addon" ng-click="datepickerManutencao.open($event)"><i class="fa fa-calendar"></i></span>

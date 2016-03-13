@@ -22,7 +22,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
                                 <input type="text" autocomplete="off" name="numeroApolice" class="form-control" ng-model="veiculoSeguro.numeroApolice" 
-                                       ui-number-mask="0" placeholder="Número da apólice"/>
+                                       ui-number-mask="0" ng-required="true" placeholder="Número da apólice"/>
                             </div>
                         </div>  
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -30,7 +30,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
                                 <input class="form-control text-capitalize" type="text" name="corretora"  ng-model="veiculoSeguro.corretora" 
-                                       placeholder="Corretora do seguro" />
+                                       ng-required="true" placeholder="Corretora do seguro" />
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -38,7 +38,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
                                 <input class="form-control text-capitalize" type="text" name="assegurado"  ng-model="veiculoSeguro.assegurado" 
-                                       placeholder="Assegurado do seguro" />
+                                       ng-required="true" placeholder="Assegurado do seguro" />
                             </div>
                         </div>     
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
