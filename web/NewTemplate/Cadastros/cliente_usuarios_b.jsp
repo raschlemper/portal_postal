@@ -170,6 +170,7 @@
                                                         <option value="5" >E-SEDEX</option>
                                                         <option value="6" >CARTA REGISTRADA</option>
                                                         <option value="7" >SEDEX 12</option>
+                                                        <option value="8" >SEDEX HOJE</option>
                                                     </select>
                                                     <script language="">
                                                         function controleCombobox2(combo) {
@@ -212,24 +213,23 @@
                                                 </thead>
                                                 <tbody>
                                                     <%
-                                                        ArrayList<Entidade.SenhaCliente> listaLogins = Controle.contrSenhaCliente.consultaTodasSenhaCliente(idClienteInc, nomeBD);
-                                                        for (int i = 0; i < listaLogins.size(); i++) {
-                                                            Entidade.SenhaCliente sc3 = listaLogins.get(i);
-                                                            String loginSc = sc3.getLogin();
-                                                            String senhaSc = sc3.getSenha();
-                                                            int nivel = sc3.getNivel();
-                                                            int id = sc3.getId();
-                                                            String nomeNivel = Controle.contrNivel.consultaNomeByIdNivel(nivel, nomeBD);
-                                                            if (nivel == 99) {
-                                                                nomeNivel = "WEB SERVICE";
-                                                            }
+                                                    ArrayList<Entidade.SenhaCliente> listaLogins = Controle.contrSenhaCliente.consultaTodasSenhaCliente(idClienteInc, nomeBD);
+                                                    for (int i = 0; i < listaLogins.size(); i++) {
+                                                        Entidade.SenhaCliente sc3 = listaLogins.get(i);
+                                                        String loginSc = sc3.getLogin();
+                                                        String senhaSc = sc3.getSenha();
+                                                        int nivel = sc3.getNivel();
+                                                        int id = sc3.getId();
+                                                        String nomeNivel = Controle.contrNivel.consultaNomeByIdNivel(nivel, nomeBD);
+                                                        if (nivel == 99) {
+                                                            nomeNivel = "WEB SERVICE";
+                                                        }
                                                     %>
                                                     <tr>
                                                         <td><%= loginSc%></td>
                                                         <td><%= senhaSc%></td>
                                                         <td><%= nomeNivel%></td>                                
                                                         <td align="center">    
-
                                                             <form action="../../ServLoginEmporium" method="post">
 
                                                                 <input type="hidden" name="agenciaHoito" id="inputCodigo" value="<%= idEmpresa%>" />
@@ -238,7 +238,7 @@
                                                                 <button type="submit" class="btn btn-primary" formtarget="_blank"><i class="fa fa-sign-in fa-lg"></i></button>
 
                                                             </form>
-                                                            <%--     <a class="btn btn-sm btn-info" href="../../ServLoginCliente?agenciaHoito=<%= idEmpresa%>&loginHoito=<%= loginSc%>&senhaHoito=<%= senhaSc%>" target="_blank" style="cursor:pointer;" ><i class="fa fa-sign-in fa-lg"></i></a>      --%>                              
+                                                            <%--<a class="btn btn-sm btn-info" href="../../ServLoginCliente?agenciaHoito=<%= idEmpresa%>&loginHoito=<%= loginSc%>&senhaHoito=<%= senhaSc%>" target="_blank" style="cursor:pointer;" ><i class="fa fa-sign-in fa-lg"></i></a>--%>                              
                                                         </td>
                                                         <td align="center">
                                                             <%if (nivel < 99) {%>

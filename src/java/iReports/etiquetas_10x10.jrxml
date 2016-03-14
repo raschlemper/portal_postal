@@ -336,7 +336,7 @@
 					<printWhenExpression><![CDATA[$F{temContrato}.equals("1") && $F{nObj}.length() == 13]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center">
-					<font fontName="Arial" size="5"/>
+					<font fontName="SansSerif" size="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{contratoCli}]]></textFieldExpression>
 			</textField>
@@ -345,7 +345,7 @@
 					<printWhenExpression><![CDATA[$F{temContrato}.equals("1") && $F{nObj}.length() == 13]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="5" isBold="true"/>
+					<font fontName="SansSerif" size="5" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{nomeChancela}]]></textFieldExpression>
 			</textField>

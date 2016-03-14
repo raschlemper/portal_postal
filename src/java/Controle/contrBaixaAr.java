@@ -6,6 +6,8 @@ package Controle;
 
 import Entidade.HistoricoImport;
 import Util.Conexao;
+import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -117,44 +119,61 @@ public class contrBaixaAr {
             Conexao.desconectar(conn);
         }
     }
-    
-      //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
-    public static String salvarAR(String caminho, Date  dataRec, String obj, String nomeRec, String nomeBD, int idUsuario) throws SQLException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Connection conn = (Connection) Conexao.conectar(nomeBD);
-        caminho = caminho.replace("\\", "/");
 
-        String sqlBase = "INSERT INTO movimentacao_ar (numObjeto, dataBaixaAr, nomeRecebAr, daraRecebRem, tipoRetorno, codCliente"
-                + ", codigoSTO, valorReceber, destinatarioDoDoc, loteDevolucao, camImg) VALUES (?,?,?,?,?,?) ";
-        
-        String sqlDuplicated = " ON DUPLICATE KEY UPDATE dataBaixaAr = VALUES(dataBaixaAr), nomeRecebAr = VALUES(nomeRecebAr)"
-                + ", daraRecebRem = VALUES(daraRecebRem), tipoRetorno = VALUES(tipoRetorno), codCliente = VALUES(codCliente), codigoSTO = VALUES(codigoSTO)"
-                + ", valorReceber = VALUES(valorReceber), destinatarioDoDoc = VALUES(destinatarioDoDoc), loteDevolucao = VALUES(loteDevolucao), camImg = VALUES(camImg);";
-        
+    //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
+    public static String salvarAR(InputStream inputStream, Date dataRec, String numObjeto, String nomeRec, int idUsuario, String nomeBD) throws SQLException {
+        Connection conn = (Connection) Conexao.conectar(nomeBD);
+
+        String sqlBase = "REPLACE INTO movimentacao_ar (numObjeto, dataBaixaAr, nomeRecebAr, daraRecebRem, tipoRetorno, codCliente"
+                + ", codigoSTO, valorReceber, destinatarioDoDoc, loteDevolucao, imagemAr) VALUES (?,?,?,NOW(),1,0,0,0,0,0,?) ";
+
         try {
             //IMPORTA OS OBJETOS DO ARQUIVO
-                PreparedStatement valores1 = conn.prepareStatement(sqlBase);
-                valores1.setString(1, obj);
-                valores1.setDate(2, (java.sql.Date) dataRec );
-                valores1.setString(3, obj);
-                valores1.setString(4, nomeRec);
-                valores1.setString(5, nomeBD);
-                valores1.setInt(6, idUsuario);
-                
-                valores1.executeUpdate();
-                valores1.close();
+            PreparedStatement valores1 = conn.prepareStatement(sqlBase);
+            valores1.setString(1, numObjeto);
+            valores1.setDate(2, (java.sql.Date) dataRec);
+            valores1.setString(3, nomeRec);
+            valores1.setBlob(4, inputStream);
+
+            valores1.executeUpdate();
+            valores1.close();
 
             //INSERE O LOG DA IMPORTACAO
-            contrBaixaAr.inserirHistoricoAR(dataRec,dataRec, nomeBD, idUsuario, 0);
+            contrBaixaAr.inserirHistoricoAR(dataRec, dataRec, nomeBD, idUsuario, 0);
             return "";
-        } catch (SQLException e) {            
+        } catch (SQLException e) {
             ContrErroLog.inserir("contrBaixaAr", "SQLException", "", e.toString());
             throw e;
         } finally {
             Conexao.desconectar(conn);
         }
     }
-    
-    
-    
+
+    //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
+    public static byte[] consultaImgAR(String numObjeto, String nomeBD) throws SQLException {
+        Connection conn = (Connection) Conexao.conectar(nomeBD);
+        String sqlBase = "SELECT imagemAr FROM movimentacao_ar WHERE numObjeto = ? ;";
+        try {
+            //IMPORTA OS OBJETOS DO ARQUIVO
+            PreparedStatement valores1 = conn.prepareStatement(sqlBase);
+            valores1.setString(1, numObjeto);
+            ResultSet rs = valores1.executeQuery();
+            byte[] imageBytes = null;
+            if(rs.next()){
+                Blob imageBlob = rs.getBlob("imagemAr");
+                if(imageBlob != null){
+                    imageBytes = imageBlob.getBytes(1, (int) imageBlob.length());
+                }
+            }
+            valores1.close();
+
+            return imageBytes;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("contrBaixaAr", "SQLException", "", e.toString());
+            throw e;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+
 }

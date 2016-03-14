@@ -28,7 +28,7 @@
                 String numero = cli.getNumero();
                 String url_logo = cli.getUrl_logo();
                 if(url_logo != null && !url_logo.equals("") && !url_logo.startsWith("http")){
-                    url_logo = "www.portalpostal.com.br" + url_logo;
+                    url_logo = "http://www.portalpostal.com.br" + url_logo;
                 }
                 String email = cli.getEmail();
                 String cnpj = cli.getCnpj();

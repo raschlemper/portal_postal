@@ -173,6 +173,7 @@
                                 <option value="5" <%if (listSer.contains("5")) {%> selected <%}%> >E-SEDEX</option>
                                 <option value="6" <%if (listSer.contains("6")) {%> selected <%}%> >CARTA REGISTRADA</option>
                                 <option value="7" <%if (listSer.contains("7")) {%> selected <%}%> >SEDEX 12</option>
+                                <option value="8" <%if (listSer.contains("8")) {%> selected <%}%> >SEDEX HOJE</option>
                             </select>
                             <script language="">
                                 function controleCombobox2(combo) {

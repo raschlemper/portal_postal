@@ -104,6 +104,17 @@ public class ServServicoAbrangencia extends HttpServlet {
             }
         }   
         
+        ContrServicoAbrangencia.excluirByServico("SEDEXHJ", nomeBD);
+        int sedexhj_contador = Integer.parseInt(request.getParameter("sedexhj_contador"));
+        for(int i=1; i<=sedexhj_contador;i++){
+            if(request.getParameter("sedexhj_cepIni"+i) != null && request.getParameter("sedexhj_cepFim"+i) != null){
+                int cepInicial = Integer.parseInt(request.getParameter("sedexhj_cepIni"+i).replaceAll("-", ""));
+                int cepFinal = Integer.parseInt(request.getParameter("sedexhj_cepFim"+i).replaceAll("-", ""));
+                int suspenso = Integer.parseInt(request.getParameter("sedexhj_suspenso_"+i));
+                ContrServicoAbrangencia.inserir("SEDEXHJ", cepInicial, cepFinal, suspenso, nomeBD);
+            }
+        }   
+        
         ContrServicoAbrangencia.excluirByServico("PAX", nomeBD);
         int pax_contador = Integer.parseInt(request.getParameter("pax_contador"));
         for(int i=1; i<=pax_contador;i++){

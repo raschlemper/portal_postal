@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" printOrder="Horizontal" pageWidth="649" pageHeight="323" orientation="Landscape" columnWidth="633" leftMargin="8" rightMargin="8" topMargin="8" bottomMargin="8" uuid="a6600087-3a8d-456c-bdc8-19dcbb299119">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="261"/>
+	<property name="ireport.x" value="121"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="idCliente" class="java.lang.String"/>
 	<parameter name="enderecoCli" class="java.lang.String"/>
@@ -354,7 +354,7 @@
 					<printWhenExpression><![CDATA[$F{temContrato}.equals("1") && $F{nObj}.length() == 13]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center">
-					<font fontName="Arial" size="5"/>
+					<font fontName="SansSerif" size="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{contratoCli}]]></textFieldExpression>
 			</textField>
@@ -363,7 +363,7 @@
 					<printWhenExpression><![CDATA[$F{temContrato}.equals("1") && $F{nObj}.length() == 13]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="5" isBold="true"/>
+					<font fontName="SansSerif" size="5" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{nomeChancela}]]></textFieldExpression>
 			</textField>

@@ -25,6 +25,7 @@
         ArrayList<ServicoAbrangencia> listaEsedex = Controle.ContrServicoAbrangencia.consultaTodosByServico("ESEDEX", nomeBD);
         ArrayList<ServicoAbrangencia> listaSedex10 = Controle.ContrServicoAbrangencia.consultaTodosByServico("SEDEX10", nomeBD);
         ArrayList<ServicoAbrangencia> listaSedex12 = Controle.ContrServicoAbrangencia.consultaTodosByServico("SEDEX12", nomeBD);
+        ArrayList<ServicoAbrangencia> listaSedexHJ = Controle.ContrServicoAbrangencia.consultaTodosByServico("SEDEXHJ", nomeBD);
         ArrayList<ServicoAbrangencia> listaPax = Controle.ContrServicoAbrangencia.consultaTodosByServico("PAX", nomeBD);
 
         int sus_esedex = 0;
@@ -38,6 +39,10 @@
         int sus_sedex12 = 0;
         if (listaSedex12 != null && listaSedex12.size() > 0) {
             sus_sedex12 = listaSedex12.get(0).getServico_suspenso();
+        }
+        int sus_sedexHJ = 0;
+        if (listaSedexHJ != null && listaSedexHJ.size() > 0) {
+            sus_sedexHJ = listaSedexHJ.get(0).getServico_suspenso();
         }
         int sus_pax = 0;
         if (listaPax != null && listaPax.size() > 0) {
@@ -350,6 +355,72 @@
                                             </li>        
                                         </ul>
                                     </div>  
+                                    <div style="display: none;" class="col-xs-12 col-sm-12 col-md-7 col-lg-6" id="sedexhj">
+                                        <ul class="list-unstyled">                                                        
+                                            <li class="list-group-item list-group-heading">
+                                                <label>SEDEX HOJE:</label>
+                                                <%if (sus_sedexHJ == 1) {%>
+                                                <span style="font-size: 16px;" class="text-danger"><strong>ESTE SERVIÇO ESTÁ SUSPENSO !!!</strong></span>
+                                                <%}%>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <img src="../../imagensNew/sedexhj.png" height="" />
+                                                <%if (sus_sedexHJ == 0) {%>
+                                                <button type="button" class="btn btn-danger pull-right" onclick="suspender_serv('SEDEXHJ');"><i class="fa fa-lg fa-spc fa-pause"></i> SUSPENDER SERVIÇO</button>
+                                                <%} else {%>
+                                                <button type="button" class="btn btn-success pull-right" onclick="suspender_serv('SEDEXHJ');"><i class="fa fa-lg fa-spc fa-refresh"></i> REATIVAR SERVIÇO</button>
+                                                <%}%>
+                                            </li>
+                                            <li class="list-group-item">
+
+                                                <div class="buttons">
+                                                    <input type="hidden" name="sedexhj_contador" id="sedexhj_contador" value="<%= listaSedexHJ.size()%>" />
+                                                    <button type="button" class="btn btn-primary center-block" onclick="addRow('SEDEXHJ', 'sedexhj_')"><i class="fa fa-lg fa-spc fa-plus"></i> ADICIONAR FAIXA DE CEP</button>
+                                                </div>
+
+                                            </li>
+                                            <li class="list-group-item">
+
+                                                <table class="table table-striped table-bordered table-hover table-condensed" id="sedexhj_table" name="sedexhj_table">
+                                                    <tr>
+                                                        <th align="center" colspan="2"><b>CEP Inicial</b></th>
+                                                        <th align="center" colspan="2"><b>CEP Final</b></th>
+                                                        <th align="center" ><b>REM.</b></th>
+                                                        <th align="center" ><b>SUS.</b></th>
+                                                    </tr>
+                                                    <%
+                                                        for (int i = 0; i < listaSedexHJ.size(); i++) {
+                                                            ServicoAbrangencia cob = listaSedexHJ.get(i);
+                                                            String cepInicial = Util.FormataString.formataCep(cob.getCep_inicial() + "");
+                                                            String cepFinal = Util.FormataString.formataCep(cob.getCep_final() + "");
+                                                            int fs = cob.getFaixa_suspensa();
+                                                            String img = "fa fa-lg fa-pause";
+                                                            if (fs == 1) {
+                                                                img = "fa fa-lg fa-refresh";
+                                                            }
+                                                            sus_pax = cob.getServico_suspenso();
+                                                    %>
+                                                    <tr <%if (fs == 1) {%>style="background: khaki;"<%}%> class="faixas">
+                                                        <td>De</td>
+                                                        <td><input class="form-control" type="input" id="sedexhj_cepIni<%= i + 1%>" name="sedexhj_cepIni<%= i + 1%>" value="<%= cepInicial%>" size="7" maxlength="9" onkeypress="mascara(this, maskCep)" /></td>
+                                                        <td>Até</td>
+                                                        <td>                                                            
+                                                            <input class="form-control" type="input" id="sedexhj_cepFim<%= i + 1%>" name="sedexhj_cepFim<%= i + 1%>" value="<%= cepFinal%>" size="7" maxlength="9" onkeypress="mascara(this, maskCep)" />
+                                                            <input type="hidden" name="sedexhj_suspenso_<%= i + 1%>" id="sedexhj_suspenso_<%= i + 1%>" value="<%= fs%>" />
+                                                        </td>                                                
+                                                        <td align="center">
+                                                            <button type="button" class="btn btn-sm btn-danger" onclick="delRow(this, 'sedexhj_');"><i class="fa fa-lg fa-trash"></i></button>
+                                                        </td>
+                                                        <td align="center">
+                                                            <button type="button" class="btn btn-sm btn-info" onclick='suspender("sedexhj_", <%= i + 1%>);'><i id="sedexhj_img_sus_<%= i + 1%>" class="<%= img%>"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                    <%}%>
+                                                </table>
+
+                                            </li>        
+                                        </ul>
+                                    </div>  
                                 </form>
                                 <form action="../../ServSuspenderServico" method="post" name="formSusServico" id="formSusServico">
                                     <input type="hidden" name="nomeBD" id="nomeBD" value="<%= nomeBD%>" />
@@ -357,6 +428,7 @@
                                     <input type="hidden" name="sus_esedex" id="sus_esedex" value="<%= sus_esedex%>" />
                                     <input type="hidden" name="sus_sedex10" id="sus_sedex10" value="<%= sus_sedex10%>" />
                                     <input type="hidden" name="sus_sedex12" id="sus_sedex12" value="<%= sus_sedex12%>" />
+                                    <input type="hidden" name="sus_sedexhj" id="sus_sedexhj" value="<%= sus_sedexHJ%>" />
                                     <input type="hidden" name="sus_pax" id="sus_pax" value="<%= sus_pax%>" />
                                 </form>
 
@@ -392,6 +464,11 @@
                     value: "pax",
                     selected: false,
                     imageSrc: "../../imagensNew/pax.png"
+                },
+                {
+                    value: "sedexhj",
+                    selected: false,
+                    imageSrc: "../../imagensNew/sedexhj.png"
                 }
             ];
 
@@ -410,6 +487,7 @@
                 $('#esedex').hide();
                 $('#sedex10').hide();
                 $('#sedex12').hide();
+                $('#sedexhj').hide();
                 $('#pax').hide();
                 $('#salvar_abragencia').hide();
             }

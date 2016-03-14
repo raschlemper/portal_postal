@@ -112,6 +112,15 @@ public class ServSuspenderServico extends HttpServlet {
                     ContrServicoAbrangencia.suspenderServico(servico, 0, nomeBD);
                     sessao.setAttribute("msg", ""+servico+" reativado!");                
                 }
+            }else if(servico.equals("SEDEXHJ")){
+                int status = Integer.parseInt(request.getParameter("sus_sedexhj"));
+                if(status == 0){
+                    ContrServicoAbrangencia.suspenderServico(servico, 1, nomeBD);
+                    sessao.setAttribute("msg", ""+servico+" suspenso!");
+                }else{
+                    ContrServicoAbrangencia.suspenderServico(servico, 0, nomeBD);
+                    sessao.setAttribute("msg", ""+servico+" reativado!");                
+                }
             }else if(servico.equals("PAX")){
                 int status = Integer.parseInt(request.getParameter("sus_pax"));
                 if(status == 0){

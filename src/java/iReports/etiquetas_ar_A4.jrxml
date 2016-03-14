@@ -228,7 +228,7 @@
 			</image>
 			<image onErrorType="Blank">
 				<reportElement x="283" y="115" width="143" height="77" uuid="ed1a3b8f-1628-447c-ad66-89eec0137075"/>
-				<imageExpression><![CDATA["http://www.portalpostal.com.br/imagensNew/etq_ar2.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["http://localhost:8080/imagensNew/etq_ar2.jpg"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="13" y="126" width="15" height="124" uuid="1a4bb0bd-e874-4d87-93dd-54bffbfa1e6b"/>
@@ -266,14 +266,6 @@
 				</textElement>
 				<text><![CDATA[Nº DE REGISTRO DO OBJETO]]></text>
 			</staticText>
-			<componentElement>
-				<reportElement x="48" y="73" width="224" height="43" uuid="6a5854e7-b600-4a7e-9c41-4862706c86d4">
-					<printWhenExpression><![CDATA[!$F{nObj}.equals("")]]></printWhenExpression>
-				</reportElement>
-                                <jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="true" checksumRequired="false" barHeight="80">
-					<jr:codeExpression><![CDATA[$F{nObj}]]></jr:codeExpression>
-				</jr:barbecue>
-			</componentElement>
 			<staticText>
 				<reportElement x="13" y="2" width="15" height="124" uuid="1a4bb0bd-e874-4d87-93dd-54bffbfa1e6b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
@@ -294,6 +286,23 @@
 				</textElement>
 				<text><![CDATA[REMETENTE:]]></text>
 			</staticText>
+			<componentElement>
+				<reportElement x="48" y="79" width="224" height="40" uuid="6a5854e7-b600-4a7e-9c41-4862706c86d4">
+					<printWhenExpression><![CDATA[!$F{nObj}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barHeight="60">
+					<jr:codeExpression><![CDATA[$F{nObj}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField>
+				<reportElement x="60" y="68" width="201" height="12" uuid="a8ebc098-ee38-464e-a9a7-c5fe0010cc29">
+					<printWhenExpression><![CDATA[!$F{nObj}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nObj}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

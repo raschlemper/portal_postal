@@ -70,8 +70,8 @@ public class ServEtiquetasPLP extends HttpServlet {
 
             try {
                 Clientes cli = contrCliente.consultaClienteById(idCliente, nomeBD);
-                String url_base = "http://www.portalpsotal.com.br";
-                String url = "http://www.portalpsotal.com.br/" + cli.getUrl_logo();
+                String url_base = "http://localhost:8080/PortalPostal";
+                String url = url_base + cli.getUrl_logo();
                 if (!urlExist(url)) {
                     url = "";
                 }

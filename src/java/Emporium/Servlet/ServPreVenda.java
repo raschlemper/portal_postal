@@ -176,10 +176,12 @@ public class ServPreVenda extends HttpServlet {
         if (obs.length() > 50) {
             obs = obs.substring(0, 49);
         }
-        if (idDest == 0) {
-            contrDestinatario.inserir(idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, pais, email_destinatario, celular, nomeBD);
-        } else {
-            contrDestinatario.editar(idDest, idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, pais, email_destinatario, celular, nomeBD);
+        if(request.getParameter("salvarDestinatario") != null){
+            if (idDest == 0) {
+                contrDestinatario.inserir(idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, pais, email_destinatario, celular, nomeBD);
+            } else {
+                contrDestinatario.editar(idDest, idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, pais, email_destinatario, celular, nomeBD);
+            }
         }
 
         //PESQUISA QUAL AMARRACAO UTILIZADA

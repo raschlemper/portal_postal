@@ -32,16 +32,15 @@ public class ContrErroLog {
 //            ResultSet rs = valores.getGeneratedKeys();
 //            if (rs.next()) {
 //                autoIncrementKey = rs.getInt(1);
-//            }   
+//            }
 //            valores.close();
 //            return autoIncrementKey;
 //        } catch (SQLException e) {
 //            Logger.getLogger(ContrErroLog.class.getName()).log(Level.WARNING, e.getMessage(), e);
-//            return 0;
+            return 0;
 //        } finally {
 //            Conexao.desconectar(conn);
 //        }
-        return 0;
     }
 
 }

@@ -6,38 +6,23 @@ package Servlet;
 
 import Controle.ContrErroLog;
 import Util.FormatarData;
-import Util.FormatarDecimal;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUpload;
-import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import javax.servlet.http.Part;
 
 /**
  *
  * @author SCC4
  */
+@MultipartConfig(maxFileSize = 505000)    // upload file's size up to 505kb // 505000 bytes
 public class ServSalvarARImg extends HttpServlet {
 
     /** 
@@ -49,22 +34,53 @@ public class ServSalvarARImg extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        try {
-            /* TODO output your page here
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ServImportacaoAr</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ServImportacaoAr at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-             */
-        } finally {
-            out.close();
+        HttpSession sessao = request.getSession();
+        String expira = (String) sessao.getAttribute("empresa");
+        if (expira == null) {
+            response.sendRedirect("/index.jsp?msgLog=3");
+        } else {
+            try {
+
+                String nomeBD = (String) sessao.getAttribute("empresa");
+                int idUsuario = (Integer) sessao.getAttribute("idUsuario");                
+                
+                String nomeRec = request.getParameter("nomeRec");
+                String sroRec = request.getParameter("sroRec");
+                Date data1 = FormatarData.formataRetornaDate(request.getParameter("dataRec"));
+                
+                Part filePart = request.getPart("arquivoRec"); // Retrieves <input type="file" name="file"> 
+                if (filePart != null) {
+                    //prints out some information for debugging
+                    System.out.println(filePart.getName());
+                    System.out.println(filePart.getSize());
+                    System.out.println(filePart.getContentType());
+                    if (!filePart.getContentType().equals("image/jpeg") && !filePart.getContentType().equals("image/gif") && !filePart.getContentType().equals("image/png")) {
+                        sessao.setAttribute("msg", "O Arquivo deve ser um arquivo de imagem .JPG ou .PNG!");
+                    } else {
+                        // obtains input stream of the upload file
+                        InputStream inputStream = filePart.getInputStream();
+                        String mensagem = salvarAR(inputStream, data1, sroRec, nomeRec, nomeBD, idUsuario);
+                        sessao.setAttribute("msg", mensagem);
+                    }
+                }else{
+                    sessao.setAttribute("msg", "Selecione um arquivo para importar o AR!");
+                }
+
+            } catch (SQLException ex) {
+                int idErro = ContrErroLog.inserir("HOITO - ServImportacaoMov", "Exception", null, ex.toString());
+                sessao.setAttribute("msg", "SYSTEM ERROR Nº: " + idErro + ";Ocorreu um erro inesperado!;"+ex.toString());
+            } catch (Exception ex) {
+                if(ex.getMessage().contains("FileSizeLimitExceededException")){
+                    sessao.setAttribute("msg", "Tamanho máximo de imagem (500 KB) excedido!");
+                }else{
+                    int idErro = ContrErroLog.inserir("HOITO - ServImportacaoMov", "Exception", null, ex.toString());
+                    sessao.setAttribute("msg", "SYSTEM ERROR Nº: " + idErro + ";Ocorreu um erro inesperado!;"+ex.toString());
+                }
+            }
         }
+
+        response.sendRedirect(request.getHeader("referer"));
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="Métodos HttpServlet. Clique no sinal de + à esquerda para editar o código.">
@@ -78,76 +94,14 @@ public class ServSalvarARImg extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        processRequest(request, response);
 
-        HttpSession sessao = request.getSession();
-        String expira = (String) sessao.getAttribute("empresa");
-        if (expira == null) {
-            response.sendRedirect("index.jsp");
-        } else {
-            try {
-
-                String nomeBD = (String) sessao.getAttribute("empresa");
-                int idUsuario = (Integer) sessao.getAttribute("idUsuario");
-                boolean isMultiPart = FileUpload.isMultipartContent(request);
-
-                if (isMultiPart) {
-
-                    FileItemFactory factory = new DiskFileItemFactory();
-                    ServletFileUpload upload = new ServletFileUpload(factory);
-                    upload.setSizeMax(1024 * 1024 * 10);
-
-                    String vDataRec = "", vCaminho = "", vObj = "", vNome = "";
-                    Date dataRec = null;
-
-                    List items = upload.parseRequest(request);
-                    Iterator iter = items.iterator();
-                    FileItem itemImg = (FileItem) iter.next();
-                    while (iter.hasNext()) {
-                        FileItem item = (FileItem) iter.next();
-                        if (item.isFormField()) {
-                            if (item.getFieldName().equals("dataRec")) {
-                                vDataRec = item.getString();
-                                dataRec = FormatarData.formataRetornaDate(vDataRec);
-                            } else if (item.getFieldName().equals("nomeRec")) {
-                                vNome = item.getString();
-                             } else if(item.getFieldName().equals("sroRec")){
-                                vObj = item.getString();
-                             }
-                        }
-                        if (!item.isFormField()) {
-                            if (item.getName().length() > 0) {
-                                itemImg = item;
-                            }
-                        }
-                    }
-
-                    if (vCaminho.equals("")) {
-                        sessao.setAttribute("msg", "Escolha um arquivo para importacao SRO!");
-                    } else {
-                        String mensagem = Controle.contrBaixaAr.salvarAR(vCaminho, dataRec, vObj, vNome, nomeBD, idUsuario);
-                        sessao.setAttribute("msg", mensagem);
-                    }
-
-                }
-
-            } catch (SizeLimitExceededException e) {
-                sessao.setAttribute("msg", "Tamanho Máximo do Arquivo Excedido!");
-            } catch (FileUploadException ex) {
-                int idErro = ContrErroLog.inserir("HOITO - ServSalvarARimg", "FileUploadException", null, ex.toString());
-                sessao.setAttribute("msg", "SYSTEM ERROR Nº: " + idErro + "; Ocorreu um erro inesperado!");
-            } catch (Exception ex) {
-                int idErro = ContrErroLog.inserir("HOITO - ServSalvarARimg", "Exception", null, ex.toString());
-                sessao.setAttribute("msg", "SYSTEM ERROR Nº: " + idErro + "; Ocorreu um erro inesperado!");
-            }
-            //response.sendRedirect("Agencia/Importacao/imp_ar.jsp");
-            response.sendRedirect(request.getHeader("referer"));
-        }
     }
 
 
-    public static String salvarAR(String caminho, Date  dataRec, String obj, String nomeRec, String nomeBD, int idUsuario) throws SQLException {
+    public static String salvarAR(InputStream inputStream, Date  dataRec, String obj, String nomeRec, String nomeBD, int idUsuario) throws SQLException {
                              
-            Controle.contrBaixaAr.salvarAR(caminho,dataRec, obj, nomeRec,nomeBD, idUsuario);
+            Controle.contrBaixaAr.salvarAR(inputStream,dataRec, obj, nomeRec, idUsuario,nomeBD);
        
             return "Atualização de AR's Realizada Com Sucesso!";
       }
@@ -162,7 +116,7 @@ public class ServSalvarARImg extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response);
+        processRequest(request, response);
     }
 
     /** 

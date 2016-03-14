@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" printOrder="Horizontal" pageWidth="708" pageHeight="1000" orientation="Landscape" columnWidth="692" leftMargin="8" rightMargin="8" topMargin="8" bottomMargin="8" uuid="a6600087-3a8d-456c-bdc8-19dcbb299119">
-	<property name="ireport.zoom" value="3.0"/>
-	<property name="ireport.x" value="763"/>
-	<property name="ireport.y" value="960"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="idCliente" class="java.lang.String"/>
 	<parameter name="enderecoCli" class="java.lang.String"/>
 	<parameter name="bairroCli" class="java.lang.String"/>
@@ -128,7 +128,7 @@
 				<textElement verticalAlignment="Bottom">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[DESTINATÁRIO:]]></text>
+				<text><![CDATA[DESTINAT�RIO:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="362" y="320" width="98" height="49" uuid="5dc1272a-50ae-42e9-b7d7-b9a9cc1d5c02">
@@ -354,7 +354,7 @@
 					<printWhenExpression><![CDATA[$F{temContrato}.equals("1") && $F{nObj}.length() == 13]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center">
-					<font fontName="Arial" size="5"/>
+					<font fontName="SansSerif" size="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{contratoCli}]]></textFieldExpression>
 			</textField>
@@ -363,7 +363,7 @@
 					<printWhenExpression><![CDATA[$F{temContrato}.equals("1") && $F{nObj}.length() == 13]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="5" isBold="true"/>
+					<font fontName="SansSerif" size="5" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{nomeChancela}]]></textFieldExpression>
 			</textField>

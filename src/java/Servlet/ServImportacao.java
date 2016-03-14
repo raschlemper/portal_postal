@@ -152,6 +152,8 @@ public class ServImportacao extends HttpServlet {
         }
 
     }
+    
+    
 
     public static String importaCli(FileItem item, String nomeBD, int idUsuario) {
         int linha = 0;
@@ -189,6 +191,7 @@ public class ServImportacao extends HttpServlet {
                 
                 linha++;
                 String buffer = le.readLine();
+                System.out.println(buffer);
                 if(!buffer.trim().equals("")){                    
                     String ativo = buffer.substring(524, 525);
                     if(ativo == null || ativo.trim().equals("N") || ativo.trim().equals("")){

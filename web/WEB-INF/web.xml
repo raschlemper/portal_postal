@@ -533,7 +533,7 @@
         <servlet-class>Emporium.Servlet.ServPreVendaMulti</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ServSalvarARImg</servlet-name>
+        <servlet-name>ServSalvarArImg</servlet-name>
         <servlet-class>Servlet.ServSalvarARImg</servlet-class>
     </servlet>
     <servlet>
@@ -582,7 +582,7 @@
         <init-param>
             <param-name>com.sun.jersey.config.property.packages</param-name>
             <param-value>com.portalpostal.controller</param-value>
-        </init-param>  
+        </init-param>
         <init-param>
             <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
             <param-value>true</param-value>
@@ -592,6 +592,18 @@
     <servlet>
         <servlet-name>ServListaPostagemRemoverObj</servlet-name>
         <servlet-class>Emporium.Servlet.ServListaPostagemRemoverObj</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServClienteLoginMassa</servlet-name>
+        <servlet-class>Servlet.ServClienteLoginMassa</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServImportacaoArImg</servlet-name>
+        <servlet-class>Servlet.ServImportacaoArImg</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ImagemAR</servlet-name>
+        <servlet-class>Servlet.ImagemAR</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ServLogin</servlet-name>
@@ -1122,8 +1134,8 @@
         <url-pattern>/ServPreVendaMulti</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ServSalvarARImg</servlet-name>
-        <url-pattern>/ServSalvarARImg</url-pattern>
+        <servlet-name>ServSalvarArImg</servlet-name>
+        <url-pattern>/ServSalvarArImg</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ServImportarDestinatario</servlet-name>
@@ -1168,6 +1180,18 @@
     <servlet-mapping>
         <servlet-name>ServListaPostagemRemoverObj</servlet-name>
         <url-pattern>/ServListaPostagemRemoverObj</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServClienteLoginMassa</servlet-name>
+        <url-pattern>/ServClienteLoginMassa</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServImportacaoArImg</servlet-name>
+        <url-pattern>/ServImportacaoArImg</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImagemAR</servlet-name>
+        <url-pattern>/ImagemAR</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

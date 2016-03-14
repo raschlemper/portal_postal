@@ -403,7 +403,8 @@ public class contrCliente {
     public static Clientes consultaClienteBySRO(String sro, String nomeBD) {
 
         Connection conn = (Connection) Conexao.conectar(nomeBD);
-        String sql = "SELECT cliente.* FROM movimentacao LEFT JOIN cliente ON codigo = codCliente"
+        String sql = "SELECT cliente.nome, cliente.codigo, m.siglaServAdicionais FROM movimentacao AS m"
+                + " LEFT JOIN cliente ON codigo = codCliente"
                 + " WHERE numObjeto = '" + sro + "' ;";
         //System.out.println(sql);
         try {
@@ -411,11 +412,12 @@ public class contrCliente {
             ResultSet result = (ResultSet) valores.executeQuery();
 
             if (result.next()) {
+                
+                String nome = result.getString("cliente.nome");
+                int idCliente = result.getInt("cliente.codigo");
+                String adicionais = result.getString("m.siglaServAdicionais");
 
-                String nome = result.getString("nome");
-                int idCliente = result.getInt("codigo");
-
-                return new Clientes(idCliente, nome);
+                return new Clientes(nome, adicionais, idCliente);
             } else {
                 return null;
             }
@@ -426,32 +428,36 @@ public class contrCliente {
             Conexao.desconectar(conn);
         }
     }
-
-    public static void main(String[] args) {
-        consultaClientesSemLoginPortalPostal("72355613000152");
-    }
+    
     public static ArrayList<Clientes> consultaClientesSemLoginPortalPostal(String nomeBD) {
 
         Connection conn = (Connection) Conexao.conectar(nomeBD);
-        String sql = "SELECT codigo, nome " +
+        String sql = "SELECT * " +
             " FROM cliente " +
             " WHERE nome <> '' " +
             " AND codigo <> -99 " +
             " AND ativo = 1 " +
             " AND codigo NOT IN (SELECT codigo FROM cliente_usuarios WHERE nivel < 99)";
+        String sql2 = "SELECT login FROM cliente_usuarios";
         //System.out.println(sql);
         try {
+            PreparedStatement valores1 = conn.prepareStatement(sql2);
+            ResultSet r = (ResultSet) valores1.executeQuery();
+            ArrayList<String> logins = new ArrayList<String>();
+            while (r.next()) {                
+                logins.add(r.getString("login"));
+            }
+            
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();
             ArrayList<Clientes> lista = new ArrayList<Clientes>();
-            ArrayList<String> logins = new ArrayList<String>();
             while (result.next()) {
 
                 int idCliente = result.getInt("codigo");
                 String nome = result.getString("nome");
                 nome = Util.FormataString.removeAccentsToUpper(nome).replace(".", "").replace(" / ", " ").replace("/", " ").replace(" - ", " ").replace("-", " ");
                 String aux[] = nome.split(" ");
-                
+                //System.out.println("> "+nome);
                 String login = "";
                 for (int i = 0; i < aux.length; i++) {                    
                     login += aux[i].trim();
@@ -461,8 +467,11 @@ public class contrCliente {
                         login = login + idCliente;
                     }
                 }
+                Clientes cli = new Clientes(result);
+                cli.setLogin_correio(login);
+                //System.out.println(">>> "+login+"\n");
 
-                lista.add(new Clientes(idCliente, login));
+                lista.add(cli);
             }
             return lista;
         } catch (Exception e) {

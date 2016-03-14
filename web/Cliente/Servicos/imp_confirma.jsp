@@ -191,7 +191,7 @@
                                                 for (int j = 0; j < listaDep.size(); j++) {
                                                     ClientesDeptos cd = listaDep.get(j);
                                                     String cartao = "0";
-                                                    if (cd.getCartaoPostagem() != null) {
+                                                    if (cd.getCartaoPostagem() != null && !cd.getCartaoPostagem().trim().equals("") ) {
                                                         cartao = cd.getCartaoPostagem();
                                                     }
                                                     if (dps.contains(cd.getIdDepartamento())) {

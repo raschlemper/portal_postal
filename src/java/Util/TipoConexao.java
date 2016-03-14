@@ -26,7 +26,7 @@ public enum TipoConexao {
         }
     },
     
-    PRODUTION() {
+    PRODUCTION() {
         protected String url(String nome) {
             return String.format(URL, "localhost", 3306, nome);
         }

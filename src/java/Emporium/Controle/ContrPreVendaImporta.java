@@ -82,8 +82,6 @@ public class ContrPreVendaImporta {
                     servico = servicoEscolhido;
                 } else if (ai.getServico().startsWith("PAC")) {
                     servico = "PAC";
-                } else if (ai.getServico().startsWith("SEDEX")) {
-                    servico = "SEDEX";
                 } else if (ai.getServico().startsWith("CARTA")) {
                     servico = "CARTA";
                 } else if (ai.getServico().startsWith("SIMPLES")) {
@@ -111,6 +109,8 @@ public class ContrPreVendaImporta {
                     } else {
                         servico = "SEDEX";
                     }
+                } else if (ai.getServico().startsWith("SEDEX")) {
+                    servico = "SEDEX";
                 }
 
                 float vd = 0;
@@ -1676,8 +1676,6 @@ public class ContrPreVendaImporta {
                 servico = "PAC";
             } else if (serv.trim().toUpperCase().replace("-", "").replace(" ", "").startsWith("ESEDEX")) {
                 servico = "ESEDEX";
-            } else if (serv.trim().toUpperCase().startsWith("SEDEX")) {
-                servico = "SEDEX";
             } else if (serv.trim().toUpperCase().startsWith("SEDEX10")) {
                 servico = "SEDEX10";
             } else if (serv.trim().toUpperCase().startsWith("SEDEX12")) {
@@ -1688,6 +1686,8 @@ public class ContrPreVendaImporta {
                 servico = "SIMPLES";
             } else if (serv.trim().toUpperCase().startsWith("PAX")) {
                 servico = "PAX";
+            } else if (serv.trim().toUpperCase().startsWith("SEDEX")) {
+                servico = "SEDEX";
             }
 
             if (!servico.equals("")) {
@@ -1936,13 +1936,13 @@ public class ContrPreVendaImporta {
             servico = "PAC";
         } else if (serv.trim().toUpperCase().replace("-", "").replace(" ", "").startsWith("ESEDEX")) {
             servico = "ESEDEX";
-        } else if (serv.trim().toUpperCase().startsWith("SEDEX")) {
-            servico = "SEDEX";
-        } else if (serv.trim().toUpperCase().startsWith("SEDEX10")) {
+        }else if (serv.trim().toUpperCase().startsWith("SEDEX10")) {
             servico = "SEDEX10";
         } else if (serv.trim().toUpperCase().startsWith("SEDEX12")) {
             servico = "SEDEX12";
-        } else if (serv.trim().toUpperCase().startsWith("CARTA")) {
+        } else if (serv.trim().toUpperCase().startsWith("SEDEX")) {
+            servico = "SEDEX";
+        }  else if (serv.trim().toUpperCase().startsWith("CARTA")) {
             servico = "CARTA";
         } else if (serv.trim().toUpperCase().startsWith("SIMPLES")) {
             servico = "SIMPLES";

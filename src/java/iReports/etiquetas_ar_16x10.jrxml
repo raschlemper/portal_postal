@@ -245,10 +245,10 @@ UNIDADE DE POSTAGEM]]></text>
 				<text><![CDATA[Nº DE REGISTRO DO OBJETO]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement x="11" y="77" width="194" height="43" uuid="6a5854e7-b600-4a7e-9c41-4862706c86d4">
+				<reportElement x="11" y="86" width="194" height="36" uuid="6a5854e7-b600-4a7e-9c41-4862706c86d4">
 					<printWhenExpression><![CDATA[!$F{nObj}.equals("")]]></printWhenExpression>
 				</reportElement>
-                                <jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="true" checksumRequired="false" barHeight="80">
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barHeight="60">
 					<jr:codeExpression><![CDATA[$F{nObj}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
@@ -271,6 +271,15 @@ UNIDADE DE POSTAGEM]]></text>
 					<font size="6" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{complemento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="25" y="75" width="162" height="11" uuid="542645f5-d8bf-4042-851c-969644a7d2e1">
+					<printWhenExpression><![CDATA[!$F{nObj}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nObj}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

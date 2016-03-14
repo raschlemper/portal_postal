@@ -23,7 +23,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <br/><br/>
 <%
-    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     String msgErro = "";
     try {
 
@@ -247,7 +246,7 @@
             if (i == 0) {
                 out.println("<td style='width:150px;background:white;'></td>");
             } else if (i == 1) {
-                out.println("<th>Prazo de Entrega<br/><span style='font-size:11px;font-weight:normal;'>Para postagem em " + sdf.format(new Date()) + "</span></th>");                
+                out.println("<th>Prazo de Entrega<br/><span style='font-size:11px;font-weight:normal;'>Para postagem em " + sDataPostagem + "</span></th>");                
             } else if (i == 2) {
                 out.println("<th>Dias com Entrega</th>");
             } else if (i == 3) {

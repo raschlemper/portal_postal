@@ -65,7 +65,7 @@
                                             </div>                       
                                             <div class="form-group" >           
                                                 <div class="input-group">
-                                                    <input class="form-control"  id="obj" type="text" name="sroRec"  maxlength="13" onkeyup="carregaSRO();" onblur="carregaSRO();" onkeypress="mascara(this, maskObjetoSRO);" placeholder="Digite a etiqueta aqui..." />
+                                                    <input class="form-control"  id="obj" type="text" name="sroRec" value=""  maxlength="13"  onkeyup="carregaSRO();"  onkeypress="mascara(this, maskObjetoSRO);" placeholder="Digite a etiqueta aqui..." />
                                                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                                                 </div>
                                             </div>
@@ -73,7 +73,7 @@
                                                 <div>
                                                     <h4 class="subtitle">Cliente</h4>
                                                 </div>
-                                                <h4 id="nomeCli">  </h4>
+                                                <h4 id="nomeCli"></h4>
                                             </div> 
                                             <div>
                                                 <h4 class="subtitle">Digite o nome do recebedor</h4>
@@ -97,7 +97,9 @@
                                         <li class="list-group-item">
                                             <label>Escolha a imagem do AR para importar</label><br/>
                                             <span class="btn btn-default btn-file"><i class="fa fa-folder-open"></i> Selecionar imagem <input type="file" name="arquivoRec" /></span>
-                                            <input type="hidden" id="tipoForm" name="tipoFormRec" value="imagem" />
+                                            <input type="hidden" id="tipoForm" name="tipoFormRec" value="imagem" /></br>
+                                            <label class="small" style="color: red;">*O arquivo a ser importado deve ser JPG, JPEG, PNG ou GIF !</label><br/>
+                                            <label class="small" style="color: red;">*O tamanho máximo deve ser de 500 BK !</label>
                                         </li>
 
                                         <li class="list-group-item">
@@ -108,7 +110,7 @@
 
                             </div>    
                         </div>   
-
+<%--
                         <div class="row">
                             <div class="well well-md">  
                                 <form class="form-inline" name="form1" action="../../ServImportacaoAr" method="post" enctype="multipart/form-data">
@@ -155,7 +157,7 @@
                                 </form>
                             </div>   
                         </div>                          
-
+--%>
                         <!-- /.row -->
                         <div class="row">
                             <div class="col-lg-12">
@@ -363,8 +365,8 @@
                     var indexA = form.arquivoRec.value.lastIndexOf(".");
                     var indexB = form.arquivoRec.value.length;
                     var ext = form.arquivoRec.value.substring(indexA, indexB).toUpperCase();
-                    if (ext !== ".JPG" && ext !== ".PNG" && ext !== ".GIF") {
-                        alert("O arquivo a ser importado deve ser '.JPG', ou '.PNG', ou '.GIF' !");
+                    if (ext !== ".JPG" && ext !== ".JPEG" && ext !== ".PNG" && ext !== ".GIF") {
+                        alert("O arquivo a ser importado deve ser .JPG, .JPEG, .PNG ou .GIF !");
                         return false;
                     }
                 }
@@ -374,25 +376,29 @@
 
           
             function carregaSRO() {
-
                 if ($('#obj').val().length === 13) {
                     $.ajax({
                         method: "POST",
                          data: { sro: $('#obj').val()}, 
                         url: "pesquisa.jsp",
                         dataType: 'html'
-
                     }).done(function (data) {
-                        if (data === 1) {
+                        if (data.trim().startsWith('ERRO')) {
+                            bootbox.hideAll();
                             bootbox.alert(data);
+                            $('#cliRec').prop("class", "hidden");
+                            $("#nomeRec").prop("readonly", true);
+                            $("#dataRec").prop("readonly", true);
+                            $('#nomeCli').html("");
+                            $('#obj').focus();
                         } else {
-                            $('#cliRec').toggleClass('hidden');
+                            $('#cliRec').prop("class", "block");
                             $("#nomeRec").prop("readonly", false);
                             $("#dataRec").prop("readonly", false);
                             $('#nomeCli').html(data);
+                            $('#nomeRec').focus();
                         }
-    });
-
+                    });
                 }
             }
 

@@ -364,9 +364,16 @@
                         document.getElementById('vigenciaFim').value = aux[7];
                         fechaMsg();
                         
+                        var msg_dialog = "<label>Verificação concluida com sucesso!</label><br/>"
+                                +"Cód. Administrativo: " + aux[6]+"<br/>"
+                                +"CNPJ do Contrato: " + aux[8]+"<br/>"
+                                +"Vigente até: " + aux[7]+"<br/><br/>"
+                                + aux[9].split('@').join('<br/>') ;
+                        
+                        
                         bootbox.dialog({                        
                         title: "<b class='text-success'>SUCESSO!</b>",
-                        message: "<label>Verificação concluida com sucesso!</label>",
+                        message: msg_dialog,
                         onEscape: true
                         });
                     } else {

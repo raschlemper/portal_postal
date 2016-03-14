@@ -95,13 +95,17 @@ public class ServEtiquetasReimp extends HttpServlet {
                     comp = ", " + cli.getComplemento();
                 }
 
-                String url_base = "http://www.portalpostal.com.br";
+                String url_base = "http://localhost:8080/PortalPostal";
                 
                 String url = cli.getUrl_logo();
-                if(!url.startsWith("http")){
-                    url = url_base + cli.getUrl_logo();
-                } else if (!urlExist(url)) {
+                if(cli.getUrl_logo() == null || cli.getUrl_logo().trim().equals("") || cli.getUrl_logo().equals("null")){
                     url = "";
+                }else{
+                    if(!url.startsWith("http")){
+                        url = url_base + cli.getUrl_logo();
+                    }else if (!urlExist(url)) {
+                        url = "";
+                    }
                 }
                 
                 String param = request.getParameter("ids");

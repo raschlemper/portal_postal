@@ -94,7 +94,7 @@
                 <input type='hidden' name='<%=numeroRegistro%>' id='<%=numeroRegistro%>' value='0' />
             </td>
             <%}%>
-            <td><div id='nome<%= numeroRegistro%>'><%=nomeRecebAr%></div></td>
+            <td><div id='nome<%= numeroRegistro%>'><a href="../../ImagemAR?sro=<%=numeroRegistro%>" target="_blank"><%=nomeRecebAr%></a></div></td>
             <td><div id='data<%= numeroRegistro%>'><%=dataRecebAr%></div></td>
             <td><a href='http://websro.correios.com.br/sro_bin/txect01$.inexistente?p_itemcode=&amp;p_lingua=001&amp;p_teste=&amp;p_tipo=003&amp;z_action=&amp;p_cod_lis=<%= numeroRegistro%>' target=_blank><%= numeroRegistro%></a></td>
             <td><%= vData%></td>

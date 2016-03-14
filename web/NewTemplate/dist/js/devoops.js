@@ -106,8 +106,12 @@ function LoadDataTablesScripts(callback){
 	function LoadDatatables(){
 		$.getScript('../../plugins/datatables/jquery.dataTables.js', function(){
 			$.getScript('../../plugins/datatables/ZeroClipboard.js', function(){
-				$.getScript('../../plugins/datatables/TableTools.js', function(){
-					$.getScript('../../plugins/datatables/dataTables.bootstrap.js', callback);
+				$.getScript('../../plugins/datatables/dataTables.tableTools.js', function(){
+                                        $.getScript('../../plugins/moment/moment.min.js', function(){
+                                            $.getScript('../../plugins/moment/datetime-moment.js', function(){
+                                                $.getScript('../../plugins/datatables/dataTables.bootstrap.js', callback);
+                                            });
+                                        });
 				});
 			});
 		});
@@ -2456,6 +2460,11 @@ function DrawCoinDeskGoogleCharts(){
 // Function for table, located in element with id = datatable-1
 //
     function StartDataTableSemFiltro(idTable, sortIdx, sortDir){
+        $.fn.dataTable.moment( 'DD/MM/YYYY HH:mm:ss' );
+        $.fn.dataTable.moment( 'DD/MM/YYYY' );
+        $.fn.dataTable.moment( 'DD/MM/YYYY - DD/MM/YYYY' );
+        $.fn.dataTable.moment( 'HH:mm' );
+        $.fn.dataTable.moment( 'HH:mm:ss' );
 	$('#'+idTable).dataTable( {
             "aaSorting": [[ sortIdx, sortDir ]],
             "sDom": "rt<'box-content'<'col-sm-6'i><'col-sm-6 text-right'p><'clearfix'>>",
@@ -2481,29 +2490,14 @@ function DrawCoinDeskGoogleCharts(){
             }
 	});
     }
-    function StartDataTable(idTable){
-        /*"autoWidth": false,
-        "oLanguage": {
-            "sEmptyTable": "Nenhum registro encontrado",
-            "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-            "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-            "sInfoFiltered": "(Filtrados de _MAX_ registros)",
-            "sInfoPostFix": "",
-            "sInfoThousands": ".",
-            "sLengthMenu": "_MENU_ resultados por página",
-            "sLoadingRecords": "Carregando...",
-            "sProcessing": "Processando...",
-            "sZeroRecords": "Nenhum registro encontrado",
-            "sSearch": "Pesquisar",
-            "oPaginate": {
-                "sNext": "Próximo",
-                "sPrevious": "Anterior",
-                "sFirst": "Primeiro",
-                "sLast": "Último"
-            },
-        },
-        responsive: true*/
-        
+    
+    function StartDataTable(idTable){ 
+        $.fn.dataTable.moment( 'DD/MM/YYYY HH:mm:ss' );
+        $.fn.dataTable.moment( 'DD/MM/YYYY' );
+        $.fn.dataTable.moment( 'DD/MM/YYYY - DD/MM/YYYY' );
+        $.fn.dataTable.moment( 'HH:mm' );
+        $.fn.dataTable.moment( 'HH:mm:ss' );
+        //$.fn.dataTable.moment( format, locale )
 	$('#'+idTable).dataTable( {
             "aaSorting": [[ 0, "asc" ]],
             "sDom": "<'box-content'<'col-xs-6 col-sm-6' f><'col-xs-6 col-sm-6 text-right'l><'clearfix'>>rt<'box-content'<'col-xs-6 col-sm-6'i><'col-xs-6 col-sm-6 text-right'p><'clearfix'>>",
@@ -2530,6 +2524,65 @@ function DrawCoinDeskGoogleCharts(){
             }
 	});
     }
+    
+    /*
+     * @param {String} idTable
+     *      'table-id-name' - The ID name of the table
+     * @param {Integer} pageLength
+     *      -1 - show all entries of the table
+     *      n - show the number of entries per page      
+     * @param {Integer} sortIdx
+     *      0...n - Index of start odering column
+     * @param {String} sortDir
+     *      asc - Ascendent order
+     *      desc - Decrecent order
+     * @param {Boolean} isMultiOrder
+     *      true - Order more than 1 column with Shift key
+     *      false - Order only one column
+     * @param {String} pagingType
+     *      numbers - Page number buttons only (1.10.8)
+     *      simple - 'Previous' and 'Next' buttons only
+     *      simple_numbers - 'Previous' and 'Next' buttons, plus page numbers
+     *      full - 'First', 'Previous', 'Next' and 'Last' buttons
+     *      full_numbers - 'First', 'Previous', 'Next' and 'Last' buttons, plus page numbers
+     * @returns {undefined}
+     */
+    function StartDataTableOptions(idTable, pageLength, sortIdx, sortDir, isMultiOrder, pagingType){   
+        $.fn.dataTable.moment( 'DD/MM/YYYY HH:mm:ss' );
+        $.fn.dataTable.moment( 'DD/MM/YYYY' );
+        $.fn.dataTable.moment( 'DD/MM/YYYY - DD/MM/YYYY' );
+        $.fn.dataTable.moment( 'HH:mm' );
+        $.fn.dataTable.moment( 'HH:mm:ss' );
+	var table = $('#'+idTable).dataTable( {
+            "aaSorting": [[ sortIdx, sortDir ]],
+            "sDom": "<'box-content'<'col-xs-6 col-sm-6' f><'col-xs-6 col-sm-6 text-right'l><'clearfix'>>rt<'box-content'<'col-xs-6 col-sm-6'i><'col-xs-6 col-sm-6 text-right'p><'clearfix'>>",
+            "sPaginationType": "bootstrap",
+            "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],            
+            "pageLength": pageLength,
+            "orderMulti": isMultiOrder, 
+            //"pagingType": pagingType,
+            "oLanguage": {
+                "sSearch": "",
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ at\u00e9 _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "oPaginate": {
+                    "sNext": "Pr\u00f3ximo",
+                    "sPrevious": "Anterior",
+                    "sFirst": "Primeiro",
+                    "sLast": "\u00daltimo"
+                }
+            }
+	});
+    }
+    
     function MakeSelectDataTable(tableName) {
         $("select[name='"+tableName+"_length']").attr("class", "form-control");
         //$("select[name='dataTables-example_length']").select2();

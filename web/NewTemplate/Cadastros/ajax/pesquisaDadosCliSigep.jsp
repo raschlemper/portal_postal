@@ -1,3 +1,5 @@
+<%@page import="br.com.correios.bsb.sigep.master.bean.cliente.ServicoAdicionalERP"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="javax.net.ssl.SSLSession"%>
 <%@page import="javax.net.ssl.HostnameVerifier"%>
@@ -94,6 +96,7 @@
 
                 nomeSara = cli.getNome().trim();
                 cnpjSenha = cli.getCnpj().replaceAll("[./-]", "").substring(0, 8);
+                String servicos = "<b>Servicos do Contrato no SigepWEB:</b> @ ";
                 for (ContratoERP c : cli.getContratos()) {
                     anoContrato = c.getDataVigenciaInicio().getYear();
                     dtVgFim = c.getDataVigenciaFim().toGregorianCalendar().getTime();
@@ -102,14 +105,40 @@
                     for (CartaoPostagemERP cp : c.getCartoesPostagem()) {
                         codAdm = cp.getCodigoAdministrativo();
                         statusC = Integer.parseInt(cp.getStatusCartaoPostagem().trim());
-                        /*List<ServicoERP> listaServico = cp.getServicos();
-                        for(ServicoERP s: listaServico){
-                            System.out.println(s.getId()+" - "+s.getDescricao());
-                        }*/
+                        if( cp.getServicos() != null){
+                            List<ServicoERP> listaServico = cp.getServicos();
+                            for(ServicoERP s: listaServico){
+                                servicos += "@"+s.getCodigo().trim()+" | "+s.getDescricao();                                
+                                /*
+                                System.out.println("vvvvvvvvvvvv");
+                                System.out.println(s.getCodigo()+" - "+s.getId()+" | "+s.getDescricao());
+                                System.out.println(s.getTipo1Codigo()+" - "+s.getTipo1Descricao());
+                                System.out.println(s.getTipo2Codigo()+" - "+s.getTipo2Descricao());
+                                System.out.println("*** Vigencia Servico ***");                                
+                                System.out.println(s.getVigencia().getDataFinal().getMonth()+"/"+s.getVigencia().getDataFinal().getYear());
+                                
+                                List<ServicoAdicionalERP> list = s.getServicosAdicionais();
+                                for(ServicoAdicionalERP ad: list){                                
+                                    System.out.println("*** ADICIONAIS ***");
+                                    System.out.println(ad.getCodigo()+" - "+ad.getId()+" | "+ad.getSigla()+" - "+ad.getDescricao());
+                                }
+                                
+                                System.out.println("*** Servico Sigep ***");
+                                System.out.println(s.getServicoSigep().getServico());
+                                System.out.println(s.getServicoSigep().getCategoriaServico());
+                                System.out.println(s.getServicoSigep().getSsiCoCodigoPostal());
+                                System.out.println(s.getServicoSigep().getImitm());
+                                System.out.println(s.getServicoSigep().getChancela().getDescricao());
+                                System.out.println(s.getServicoSigep().isExigeDimensoes());
+                                System.out.println(s.getServicoSigep().isExigeValorCobrar());                                  
+                                System.out.println("^^^^^^^^^^^^");
+                                */
+                            }
+                        }
                     }
                 }
 
-                resultado = statusC + ";" + codDir + ";" + anoContrato + ";" + ufContrato + ";" + nomeSara + ";" + cnpjSenha + ";" + codAdm + ";" + sdf.format(dtVgFim);
+                resultado = statusC + ";" + codDir + ";" + anoContrato + ";" + ufContrato + ";" + nomeSara + ";" + cnpjSenha + ";" + codAdm + ";" + sdf.format(dtVgFim)+";"+cli.getCnpj()+";"+servicos;
             } catch (SigepClienteException ex) {
                 resultado = "erro;Mensagem do SigepWEB:<br/><br/>" + ex.getMessage();
             } catch (AutenticacaoException ex) {
