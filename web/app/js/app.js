@@ -22,6 +22,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
         });
 
         $stateProvider
+        
             .state('veiculo', {
                 abstract: true,
                 url: '/veiculo',
@@ -61,6 +62,19 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
                 url: '/sinistro',
                 templateUrl: 'partials/veiculo/veiculoSinistro.html',
                 controller: 'VeiculoSinistroController',
+                resolve: {}
+            })
+            
+            
+            .state('financeiro', {
+                abstract: true,
+                url: '/financeiro',
+                template: '<div ui-view></div>'
+            })
+            .state('financeiro.banco', {
+                url: '/banco',
+                templateUrl: 'partials/financeiro/banco.html',
+                controller: 'BancoController',
                 resolve: {}
             });
 

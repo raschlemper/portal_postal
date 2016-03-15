@@ -1,0 +1,24 @@
+USE pp_06895434000183;
+
+DROP TABLE banco;
+
+CREATE TABLE `banco` (
+  `idbanco` INT NOT NULL AUTO_INCREMENT COMMENT '',
+  `nome` VARCHAR(254) NOT NULL COMMENT '',
+  `numero` INT NOT NULL COMMENT '',
+  `website` VARCHAR(254) NULL DEFAULT NULL COMMENT '',
+  PRIMARY KEY (`idbanco`)  COMMENT '',
+  UNIQUE INDEX `numero_UNIQUE` (`numero` ASC)  COMMENT '');
+
+ 
+
+
+
+
+
+
+
+
+
+
+

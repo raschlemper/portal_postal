@@ -1172,6 +1172,7 @@
     <servlet-mapping>
         <servlet-name>App</servlet-name>
         <url-pattern>/app/veiculo/*</url-pattern>
+        <url-pattern>/app/financeiro/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>jersey-serlvet</servlet-name>
