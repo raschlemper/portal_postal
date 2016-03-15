@@ -59,5 +59,12 @@ public class BancoDAO extends GenericDAO {
         remove(sql, params, bancoHandler);
         return banco;
     }
+
+    public Banco findByNumero(Integer numero) throws Exception {     
+        String sql = "SELECT * FROM banco WHERE numero = :numero ";
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("numero", numero);
+        return (Banco) find(sql, params, bancoHandler);
+    }
     
 }

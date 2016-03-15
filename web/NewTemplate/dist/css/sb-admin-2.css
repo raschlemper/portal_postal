@@ -2783,3 +2783,20 @@ border-radius: 50%;}
 .icon-search {
     cursor: pointer;
 }
+
+.sortorder:after {
+    content: "\f0dc";
+    float: right;
+    font-family: fontawesome;
+    color: rgba(50,50,50,.5);
+}
+.sortorder_asc:after {
+    content: "\f0de";
+    float: right;
+    font-family: fontawesome;
+}
+.sortorder_desc:after {
+    content: "\f0dd";
+    float: right;
+    font-family: fontawesome;
+}

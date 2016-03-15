@@ -1,19 +1,7 @@
 package com.portalpostal.service;
 
 import com.portalpostal.dao.BancoDAO;
-import com.portalpostal.dao.VeiculoCombustivelDAO;
-import com.portalpostal.dao.VeiculoDAO;
-import com.portalpostal.dao.VeiculoManutencaoDAO;
-import com.portalpostal.dao.VeiculoMultaDAO;
-import com.portalpostal.dao.VeiculoSeguroDAO;
-import com.portalpostal.dao.VeiculoSinistroDAO;
 import com.portalpostal.model.Banco;
-import com.portalpostal.model.Veiculo;
-import com.portalpostal.model.VeiculoCombustivel;
-import com.portalpostal.model.VeiculoManutencao;
-import com.portalpostal.model.VeiculoMulta;
-import com.portalpostal.model.VeiculoSeguro;
-import com.portalpostal.model.VeiculoSinistro;
 import java.util.List;
 
 public class BancoService {
@@ -32,16 +20,35 @@ public class BancoService {
         return bancoDAO.find(idBanco);
     } 
     
+    public Banco findByNumero(Integer numero) throws Exception {
+        return bancoDAO.findByNumero(numero);
+    } 
+    
     public Banco save(Banco banco) throws Exception {
+        validation(banco);
         return bancoDAO.save(banco);
     } 
     
     public Banco update(Banco banco) throws Exception {
+        validation(banco);
         return bancoDAO.update(banco);
     } 
     
     public Banco delete(Integer idBanco) throws Exception {
         return bancoDAO.remove(idBanco);
-    } 
+    }   
+    
+    private void validation(Banco banco) throws Exception {  
+        if(existeBanco(banco)) {
+            throw new Exception("Este Banco já foi cadastrado!");
+        } 
+    }  
+    
+    private boolean existeBanco(Banco banco) throws Exception {
+        Banco bancoNumero = bancoDAO.findByNumero(banco.getNumero());
+        if(bancoNumero == null) return false;
+        if(bancoNumero.getIdBanco().equals(banco.getIdBanco())) return false;
+        return true;
+    }
     
 }

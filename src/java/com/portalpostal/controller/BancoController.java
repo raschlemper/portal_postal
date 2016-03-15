@@ -62,6 +62,18 @@ public class BancoController {
         }
     }  
     
+    @GET
+    @Path("/numero/{numero}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Banco findByNumero(@PathParam("numero") Integer numero) {
+        try {
+            init();    
+            return bancoService.findByNumero(numero);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }  
+    
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
