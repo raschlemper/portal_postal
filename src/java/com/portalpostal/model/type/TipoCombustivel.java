@@ -1,4 +1,4 @@
-package com.portalpostal.model;
+package com.portalpostal.model.type;
 
 import com.portalpostal.model.serializer.TipoCombustivelSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;

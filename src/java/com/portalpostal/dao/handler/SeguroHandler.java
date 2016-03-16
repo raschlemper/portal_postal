@@ -1,6 +1,6 @@
 package com.portalpostal.dao.handler;
 
-import com.portalpostal.model.TipoSeguro;
+import com.portalpostal.model.type.TipoSeguro;
 import com.portalpostal.model.VeiculoSeguro;
 import java.sql.ResultSet;
 import java.sql.SQLException;

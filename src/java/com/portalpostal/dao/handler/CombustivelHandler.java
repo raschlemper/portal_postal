@@ -1,6 +1,6 @@
 package com.portalpostal.dao.handler;
 
-import com.portalpostal.model.TipoCombustivel;
+import com.portalpostal.model.type.TipoCombustivel;
 import com.portalpostal.model.VeiculoCombustivel;
 import java.sql.ResultSet;
 import java.sql.SQLException;

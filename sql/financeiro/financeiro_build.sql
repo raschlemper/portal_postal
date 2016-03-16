@@ -1,14 +1,25 @@
 USE pp_06895434000183;
 
 DROP TABLE banco;
+DROP TABLE plano_conta;
 
 CREATE TABLE `banco` (
-  `idbanco` INT NOT NULL AUTO_INCREMENT COMMENT '',
-  `nome` VARCHAR(254) NOT NULL COMMENT '',
-  `numero` INT NOT NULL COMMENT '',
-  `website` VARCHAR(254) NULL DEFAULT NULL COMMENT '',
-  PRIMARY KEY (`idbanco`)  COMMENT '',
-  UNIQUE INDEX `numero_UNIQUE` (`numero` ASC)  COMMENT '');
+  `idBanco` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(254) NOT NULL,
+  `numero` INT NOT NULL,
+  `website` VARCHAR(254) DEFAULT NULL,
+  PRIMARY KEY (`idbanco`) ,
+  UNIQUE INDEX `numero_UNIQUE` (`numero` ASC)
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `plano_conta` (
+  `idPlanoConta` INT NOT NULL AUTO_INCREMENT,
+  `tipo` INT NOT NULL,
+  `codigo` INT NOT NULL,
+  `nome` VARCHAR(254) NOT NULL,
+  `grupo` INT DEFAULT NULL,
+  PRIMARY KEY (`idPlanoConta`)
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
  
 

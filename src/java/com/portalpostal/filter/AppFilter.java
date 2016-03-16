@@ -20,7 +20,7 @@ public class AppFilter implements ContainerRequestFilter {
     public ContainerRequest filter(ContainerRequest containerRequest) {         
         this.sessao = request.getSession(); 
         try {
-            sessao.setAttribute("usuario", "06895434000183");
+            sessao.setAttribute("nomeBD", "06895434000183");
 //            empresaFilter();
 //            usuarioFilter();
         } catch(Exception ex) {

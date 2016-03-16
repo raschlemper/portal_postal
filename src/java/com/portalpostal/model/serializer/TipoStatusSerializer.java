@@ -1,6 +1,6 @@
 package com.portalpostal.model.serializer;
 
-import com.portalpostal.model.TipoStatus;
+import com.portalpostal.model.type.TipoStatus;
 import java.io.IOException;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonProcessingException;

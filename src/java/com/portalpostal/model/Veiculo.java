@@ -1,5 +1,9 @@
 package com.portalpostal.model;
 
+import com.portalpostal.model.type.TipoSituacao;
+import com.portalpostal.model.type.TipoStatus;
+import com.portalpostal.model.type.TipoVeiculo;
+import com.portalpostal.model.type.TipoCombustivel;
 import com.portalpostal.model.serializer.JsonDateSerializer;
 import java.util.Date;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
