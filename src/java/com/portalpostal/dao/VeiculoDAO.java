@@ -87,12 +87,10 @@ public class VeiculoDAO extends GenericDAO {
         return veiculo;
     }
 
-    public Veiculo findByPlaca(Veiculo veiculo) throws Exception {     
+    public Veiculo findByPlaca(String placa) throws Exception {     
         String sql = "SELECT * FROM veiculo WHERE placa = :placa ";
-        if(veiculo.getIdVeiculo()!= null) { sql += "AND idVeiculo <> :idVeiculo"; }
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("placa", veiculo.getPlaca());
-        if(veiculo.getIdVeiculo()!= null) { params.put("idVeiculo", veiculo.getIdVeiculo()); }
+        params.put("placa", placa);
         return (Veiculo) find(sql, params, veiculoHandler);
     }
 }

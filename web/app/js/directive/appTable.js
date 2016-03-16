@@ -44,6 +44,16 @@ app.directive('appTable', function($filter) {
             var getSizeTotal = function() {
                 scope.total = scope.listaFiltrada.length || scope.lista.length;
             };
+            
+            scope.column = function(item, coluna) {
+                var value = item[coluna.column];
+                if(coluna.filter){ value = $filter(coluna.filter.name)(value, coluna.filter.args); }
+                return value;
+            }
+            
+            scope.class = function(coluna) {
+                return coluna.class;
+            }
 
             scope.order = function(predicate) {
                 scope.reverse = (scope.predicate === predicate) ? !scope.reverse : false;

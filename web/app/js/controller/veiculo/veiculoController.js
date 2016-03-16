@@ -43,7 +43,7 @@ app.controller('VeiculoController', ['$scope', '$q', '$filter', 'VeiculoService'
                 result = ajustarDados(result);
                 VeiculoService.save(result)
                     .then(function(data) {  
-                        modalMessage("Veículo Inserido " + getMsgToClient(data) +  " com sucesso!");
+                        modalMessage("Veículo " + getMsgToClient(data) +  " Inserido com sucesso!");
                         todos();
                     })
                     .catch(function(e) {

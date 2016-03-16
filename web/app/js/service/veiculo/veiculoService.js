@@ -40,6 +40,24 @@ app.factory('VeiculoService', function($http, $q) {
             return deferred.promise;
         },
 
+        getByPlaca: function(placa, callback) {
+            var cb = callback || angular.noop;
+            var deferred = $q.defer();
+
+            $http.get(_contextPath + "/api/veiculo/placa/" + placa).
+                success(function(data) {
+                    deferred.resolve(data);
+                    return cb();
+                })
+                .error(function(err) {
+                    deferred.reject(err);
+                    return cb(err);
+                }
+                .bind(this));
+
+            return deferred.promise;
+        },
+
         getCombustivel: function(idVeiculo, callback) {
             var cb = callback || angular.noop;
             var deferred = $q.defer();

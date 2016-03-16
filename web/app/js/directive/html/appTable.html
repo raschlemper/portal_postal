@@ -15,7 +15,8 @@
             <th ng-repeat="coluna in colunas track by $index" ng-click="order(coluna.column)"
                 ng-class="{sortorder_asc:!reverse && predicate === coluna.column, 
                            sortorder_desc:reverse  && predicate === coluna.column, 
-                           sortorder: predicate !== coluna.column}">
+                           sortorder: predicate !== coluna.column}"
+                class="{{coluna.class}}">
                 {{coluna.label}}
             </th>
             <th class="no-sort text-center" width="100" ng-if="events.edit">Alterar</th>
@@ -25,7 +26,7 @@
     </thead>
     <tbody>
         <tr ng-repeat="item in listaFiltrada = (lista | filter : filters) | orderBy : predicate : reverse | limitTo : limitTo.value : start track by $index">
-            <td ng-repeat="coluna in colunas track by $index">{{item[coluna.column]}}</td>
+            <td ng-repeat="coluna in colunas track by $index">{{column(item, coluna)}}</td>
             <td align="center" ng-if="events.edit">
                 <button class="btn btn-sm btn-warning" ng-click="events.edit(item)">
                     <i class="fa fa-lg fa-pencil"></i>

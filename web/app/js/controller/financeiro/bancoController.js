@@ -9,8 +9,8 @@ app.controller('BancoController', ['$scope', 'BancoService', 'ModalService',
             
             $scope.colunas = [
                 {label: 'Número', column: 'numero'},
-                {label: 'Nome', column: 'nome', filter: 'uppercase'},                
-                {label: 'Website', column: 'website'}
+                {label: 'Nome', column: 'nome', class: 'col-md-4', filter: {name: 'uppercase', args: null}},                
+                {label: 'Website', column: 'website', class: 'col-md-4'}
             ]
             
             $scope.events = { 

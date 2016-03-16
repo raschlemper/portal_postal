@@ -38,6 +38,10 @@ public class VeiculoService {
     
     public Veiculo find(Integer idVeiculo) throws Exception {
         return veiculoDAO.find(idVeiculo);
+    }  
+    
+    public Veiculo findByPlaca(String placa) throws Exception {
+        return veiculoDAO.findByPlaca(placa);
     } 
     
     public Veiculo save(Veiculo veiculo) throws Exception {
@@ -76,7 +80,7 @@ public class VeiculoService {
     }   
     
     private boolean existeVeiculo(Veiculo veiculo) throws Exception {
-        Veiculo veiculoPlaca = veiculoDAO.findByPlaca(veiculo);
+        Veiculo veiculoPlaca = veiculoDAO.findByPlaca(veiculo.getPlaca());
         if(veiculoPlaca == null) return false;
         return true;
     }
