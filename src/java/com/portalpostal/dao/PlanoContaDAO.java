@@ -20,13 +20,16 @@ public class PlanoContaDAO extends GenericDAO {
         return findAll(sql, null, planoContaHandler);
     }
 
-    public List<PlanoConta> findAllFull() throws Exception {
-        String sql = "SELECT * FROM plano_conta ORDER BY plano_conta.idPlanoConta";        
-        List<PlanoConta> lista = findAll(sql, null, planoContaHandler);
-        for (PlanoConta plano : lista) {
-            plano.setGrupo(find(plano.getGrupo().getIdPlanoConta()));
-        }
-        return lista;
+    public List<PlanoConta> findWithoutGrupo() throws Exception {
+        String sql = "SELECT * FROM plano_conta WHERE grupo IS NULL ";        
+        return findAll(sql, null, planoContaHandler);
+    }
+
+    public List<PlanoConta> findByGrupo(PlanoConta grupo) throws Exception {
+        String sql = "SELECT * FROM plano_conta WHERE grupo = :grupo ";    
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("grupo", grupo.getIdPlanoConta());    
+        return findAll(sql, params, planoContaHandler);
     }
 
     public PlanoConta find(Integer idPlanoConta) throws Exception {
@@ -43,7 +46,8 @@ public class PlanoContaDAO extends GenericDAO {
         params.put("tipo", planoConta.getTipo().ordinal());
         params.put("codigo", planoConta.getCodigo());  
         params.put("nome", planoConta.getNome());  
-        params.put("grupo", planoConta.getGrupo().getIdPlanoConta());  
+        if(planoConta.getGrupo() == null) { params.put("grupo", null); }
+        else { params.put("grupo", planoConta.getGrupo().getIdPlanoConta()); }
         Integer idPlanoConta = save(sql, params, planoContaHandler);
         return find(idPlanoConta);
     }
@@ -57,7 +61,8 @@ public class PlanoContaDAO extends GenericDAO {
         params.put("tipo", planoConta.getTipo().ordinal());
         params.put("codigo", planoConta.getCodigo());  
         params.put("nome", planoConta.getNome());  
-        params.put("grupo", planoConta.getGrupo().getIdPlanoConta());
+        if(planoConta.getGrupo() == null) { params.put("grupo", null); }
+        else { params.put("grupo", planoConta.getGrupo().getIdPlanoConta()); }
         update(sql, params, planoContaHandler);
         return planoConta;  
     }

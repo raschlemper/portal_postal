@@ -1,18 +1,19 @@
-package com.portalpostal.model.type;
+package com.portalpostal.model.dd;
 
-import com.portalpostal.model.serializer.TipoResponsavelSerializer;
+import com.portalpostal.model.serializer.TipoStatusSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-@JsonSerialize(using = TipoResponsavelSerializer.class)
-public enum TipoResponsavel {    
+@JsonSerialize(using = TipoStatusSerializer.class)
+public enum TipoStatus {    
     
-    MOTORISTA("motorista", "Motorista"),
-    TERCEIROS("terceiros", "Terceiros");
+    NOVO("novo", "Novo"),
+    SEMINOVO("seminovo", "Seminovo"),
+    USADO("usado", "Usado");
     
     private final String codigo;
     private final String descricao;
     
-    TipoResponsavel(String codigo, String descricao) {
+    TipoStatus(String codigo, String descricao) {
         this.codigo = codigo;
         this.descricao = descricao;
     }

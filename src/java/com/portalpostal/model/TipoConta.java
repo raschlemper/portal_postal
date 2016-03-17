@@ -1,6 +1,6 @@
 package com.portalpostal.model;
 
-import com.portalpostal.model.type.TipoContaCategoria;
+import com.portalpostal.model.dd.TipoContaCategoria;
 
 public class TipoConta {
     

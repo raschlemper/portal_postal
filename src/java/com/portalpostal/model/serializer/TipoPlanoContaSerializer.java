@@ -1,6 +1,6 @@
 package com.portalpostal.model.serializer;
 
-import com.portalpostal.model.type.TipoPlanoConta;
+import com.portalpostal.model.dd.TipoPlanoConta;
 import java.io.IOException;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonProcessingException;

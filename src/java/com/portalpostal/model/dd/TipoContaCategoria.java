@@ -1,4 +1,4 @@
-package com.portalpostal.model.type;
+package com.portalpostal.model.dd;
 
 import com.portalpostal.model.serializer.TipoContaCategoriaSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;

@@ -1,7 +1,7 @@
 package com.portalpostal.model;
 
-import com.portalpostal.model.type.TipoSinistro;
-import com.portalpostal.model.type.TipoResponsavel;
+import com.portalpostal.model.dd.TipoSinistro;
+import com.portalpostal.model.dd.TipoResponsavel;
 import com.portalpostal.model.serializer.JsonDateSerializer;
 import java.util.Date;
 import org.codehaus.jackson.map.annotate.JsonSerialize;

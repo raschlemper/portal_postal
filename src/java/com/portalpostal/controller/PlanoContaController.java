@@ -51,6 +51,18 @@ public class PlanoContaController {
     }  
     
     @GET
+    @Path("/structure")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<PlanoConta> findStructure() {
+        try {
+            init();    
+            return planoContaService.findStructure();
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }  
+    
+    @GET
     @Path("/{idPlanoConta}")
     @Produces(MediaType.APPLICATION_JSON)
     public PlanoConta find(@PathParam("idPlanoConta") Integer idPlanoConta) {

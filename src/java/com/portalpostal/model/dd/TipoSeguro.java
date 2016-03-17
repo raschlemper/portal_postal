@@ -1,18 +1,18 @@
-package com.portalpostal.model.type;
+package com.portalpostal.model.dd;
 
-import com.portalpostal.model.serializer.TipoPlanoContaSerializer;
+import com.portalpostal.model.serializer.TipoSeguroSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-@JsonSerialize(using = TipoPlanoContaSerializer.class)
-public enum TipoPlanoConta {    
+@JsonSerialize(using = TipoSeguroSerializer.class)
+public enum TipoSeguro {    
     
-    RECEITA("receita", "Receita"),
-    DESPESA("despesa", "Despesa");
+    PARCIAL("parcial", "Parcial"),
+    INTEGRAL("integral", "Integral");
     
     private final String codigo;
     private final String descricao;
     
-    TipoPlanoConta(String codigo, String descricao) {
+    TipoSeguro(String codigo, String descricao) {
         this.codigo = codigo;
         this.descricao = descricao;
     }

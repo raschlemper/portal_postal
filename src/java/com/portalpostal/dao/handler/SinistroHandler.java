@@ -1,7 +1,7 @@
 package com.portalpostal.dao.handler;
 
-import com.portalpostal.model.type.TipoResponsavel;
-import com.portalpostal.model.type.TipoSinistro;
+import com.portalpostal.model.dd.TipoResponsavel;
+import com.portalpostal.model.dd.TipoSinistro;
 import com.portalpostal.model.VeiculoSinistro;
 import java.sql.ResultSet;
 import java.sql.SQLException;

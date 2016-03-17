@@ -1,7 +1,7 @@
 package com.portalpostal.dao.handler;
 
 import com.portalpostal.model.PlanoConta;
-import com.portalpostal.model.type.TipoPlanoConta;
+import com.portalpostal.model.dd.TipoPlanoConta;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.sql2o.ResultSetHandler;

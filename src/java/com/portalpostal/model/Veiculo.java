@@ -1,10 +1,10 @@
 package com.portalpostal.model;
 
-import com.portalpostal.model.type.TipoSituacao;
-import com.portalpostal.model.type.TipoStatus;
-import com.portalpostal.model.type.TipoVeiculo;
-import com.portalpostal.model.type.TipoCombustivel;
 import com.portalpostal.model.serializer.JsonDateSerializer;
+import com.portalpostal.model.dd.TipoCombustivel;
+import com.portalpostal.model.dd.TipoSituacao;
+import com.portalpostal.model.dd.TipoStatus;
+import com.portalpostal.model.dd.TipoVeiculo;
 import java.util.Date;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -166,6 +166,6 @@ public class Veiculo {
     public void setDataCadastro(Date dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
-    
+ 
     
 }

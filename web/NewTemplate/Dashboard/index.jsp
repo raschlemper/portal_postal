@@ -1,6 +1,6 @@
+<%@page import="com.portalpostal.model.dd.TipoManutencao"%>
 <%@page import="com.portalpostal.model.VeiculoSeguro"%>
 <%@page import="com.portalpostal.service.VeiculoSeguroService"%>
-<%@page import="com.portalpostal.model.TipoManutencao"%>
 <%@page import="java.util.List"%>
 <%@page import="com.portalpostal.model.VeiculoManutencao"%>
 <%@page import="com.portalpostal.service.VeiculoManutencaoService"%>

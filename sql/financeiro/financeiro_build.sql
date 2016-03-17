@@ -1,6 +1,7 @@
 USE pp_06895434000183;
 
 DROP TABLE banco;
+DROP TABLE tipo_conta;
 DROP TABLE plano_conta;
 
 CREATE TABLE `banco` (
@@ -10,6 +11,13 @@ CREATE TABLE `banco` (
   `website` VARCHAR(254) DEFAULT NULL,
   PRIMARY KEY (`idbanco`) ,
   UNIQUE INDEX `numero_UNIQUE` (`numero` ASC)
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `tipo_conta` (
+  `idTipoConta` INT NOT NULL AUTO_INCREMENT,
+  `categoria` INT NOT NULL,
+  `descricao` VARCHAR(254) NOT NULL,
+  PRIMARY KEY (`idTipoConta`)
 ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `plano_conta` (

@@ -1,6 +1,6 @@
 package com.portalpostal.dao.handler;
 
-import com.portalpostal.model.type.TipoManutencao;
+import com.portalpostal.model.dd.TipoManutencao;
 import com.portalpostal.model.VeiculoManutencao;
 import java.math.BigDecimal;
 import java.sql.ResultSet;

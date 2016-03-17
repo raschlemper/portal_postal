@@ -1,6 +1,6 @@
 package com.portalpostal.model;
 
-import com.portalpostal.model.type.TipoPlanoConta;
+import com.portalpostal.model.dd.TipoPlanoConta;
 import java.util.List;
 
 public class PlanoConta {

@@ -1,6 +1,6 @@
 package com.portalpostal.model;
 
-import com.portalpostal.model.type.TipoManutencao;
+import com.portalpostal.model.dd.TipoManutencao;
 import com.portalpostal.model.serializer.JsonDateSerializer;
 import java.util.Date;
 import org.codehaus.jackson.map.annotate.JsonSerialize;

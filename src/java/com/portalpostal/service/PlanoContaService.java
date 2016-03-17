@@ -2,6 +2,7 @@ package com.portalpostal.service;
 
 import com.portalpostal.dao.PlanoContaDAO;
 import com.portalpostal.model.PlanoConta;
+import com.portalpostal.model.dd.TipoContaCategoria;
 import java.util.List;
 
 public class PlanoContaService {
@@ -15,6 +16,21 @@ public class PlanoContaService {
     public List<PlanoConta> findAll() throws Exception {
         return planoContaDAO.findAll();
     }  
+    
+    public List<PlanoConta> findStructure() throws Exception {
+        List<PlanoConta> grupos = planoContaDAO.findWithoutGrupo(); 
+        findContas(grupos);
+        return grupos;
+    }  
+    
+    private void findContas(List<PlanoConta> contas) throws Exception {            
+        for (PlanoConta conta : contas) {
+            List<PlanoConta> grupos = planoContaDAO.findByGrupo(conta);
+            if(grupos.isEmpty()) return;
+            conta.setContas(grupos);
+            findContas(grupos);
+        }
+    }
     
     public PlanoConta find(Integer idPlanoConta) throws Exception {
         return planoContaDAO.find(idPlanoConta);

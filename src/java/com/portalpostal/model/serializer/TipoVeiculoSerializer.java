@@ -1,6 +1,6 @@
 package com.portalpostal.model.serializer;
 
-import com.portalpostal.model.type.TipoVeiculo;
+import com.portalpostal.model.dd.TipoVeiculo;
 import java.io.IOException;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonProcessingException;
