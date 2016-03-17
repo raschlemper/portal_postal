@@ -1,9 +1,9 @@
 package com.portalpostal.model;
 
 import com.portalpostal.model.serializer.JsonDateSerializer;
-import com.portalpostal.model.dd.TipoCombustivel;
-import com.portalpostal.model.dd.TipoSituacao;
-import com.portalpostal.model.dd.TipoStatus;
+import com.portalpostal.model.dd.TipoCombustivelVeiculo;
+import com.portalpostal.model.dd.TipoSituacaoVeiculo;
+import com.portalpostal.model.dd.TipoStatusVeiculo;
 import com.portalpostal.model.dd.TipoVeiculo;
 import java.util.Date;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -23,9 +23,9 @@ public class Veiculo {
     private String chassis;
     private String renavam;
     private Integer quilometragem;
-    private TipoCombustivel combustivel;
-    private TipoStatus status;
-    private TipoSituacao situacao;
+    private TipoCombustivelVeiculo combustivel;
+    private TipoStatusVeiculo status;
+    private TipoSituacaoVeiculo situacao;
     @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataCadastro;
     
@@ -135,27 +135,27 @@ public class Veiculo {
         this.quilometragem = quilometragem;
     }
 
-    public TipoCombustivel getCombustivel() {
+    public TipoCombustivelVeiculo getCombustivel() {
         return combustivel;
     }
 
-    public void setCombustivel(TipoCombustivel combustivel) {
+    public void setCombustivel(TipoCombustivelVeiculo combustivel) {
         this.combustivel = combustivel;
     }
 
-    public TipoStatus getStatus() {
+    public TipoStatusVeiculo getStatus() {
         return status;
     }
 
-    public void setStatus(TipoStatus status) {
+    public void setStatus(TipoStatusVeiculo status) {
         this.status = status;
     }
 
-    public TipoSituacao getSituacao() {
+    public TipoSituacaoVeiculo getSituacao() {
         return situacao;
     }
 
-    public void setSituacao(TipoSituacao situacao) {
+    public void setSituacao(TipoSituacaoVeiculo situacao) {
         this.situacao = situacao;
     }
 

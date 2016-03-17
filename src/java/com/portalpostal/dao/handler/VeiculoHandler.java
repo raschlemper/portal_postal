@@ -1,8 +1,8 @@
 package com.portalpostal.dao.handler;
 
-import com.portalpostal.model.dd.TipoCombustivel;
-import com.portalpostal.model.dd.TipoSituacao;
-import com.portalpostal.model.dd.TipoStatus;
+import com.portalpostal.model.dd.TipoCombustivelVeiculo;
+import com.portalpostal.model.dd.TipoSituacaoVeiculo;
+import com.portalpostal.model.dd.TipoStatusVeiculo;
 import com.portalpostal.model.dd.TipoVeiculo;
 import com.portalpostal.model.Veiculo;
 import java.sql.ResultSet;
@@ -27,9 +27,9 @@ public class VeiculoHandler implements ResultSetHandler<Veiculo> {
         veiculo.setChassis(result.getString("veiculo.chassis"));
         veiculo.setRenavam(result.getString("veiculo.renavam"));
         veiculo.setQuilometragem(result.getInt("veiculo.quilometragem"));
-        veiculo.setCombustivel(TipoCombustivel.values()[result.getInt("veiculo.combustivel")]);
-        veiculo.setStatus(TipoStatus.values()[result.getInt("veiculo.status")]);
-        veiculo.setSituacao(TipoSituacao.values()[result.getInt("veiculo.situacao")]);
+        veiculo.setCombustivel(TipoCombustivelVeiculo.values()[result.getInt("veiculo.combustivel")]);
+        veiculo.setStatus(TipoStatusVeiculo.values()[result.getInt("veiculo.status")]);
+        veiculo.setSituacao(TipoSituacaoVeiculo.values()[result.getInt("veiculo.situacao")]);
         veiculo.setDataCadastro(result.getDate("veiculo.dataCadastro"));
         return veiculo;
     }

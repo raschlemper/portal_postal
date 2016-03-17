@@ -1,10 +1,10 @@
 package com.portalpostal.model.dd;
 
-import com.portalpostal.model.serializer.TipoSinistroSerializer;
+import com.portalpostal.model.serializer.TipoSinistroVeiculoSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-@JsonSerialize(using = TipoSinistroSerializer.class)
-public enum TipoSinistro {    
+@JsonSerialize(using = TipoSinistroVeiculoSerializer.class)
+public enum TipoSinistroVeiculo {    
     
     COLISAO("colisao", "Colisão"),
     ROUBO("roubo", "Roubo"),
@@ -15,7 +15,7 @@ public enum TipoSinistro {
     private final String codigo;
     private final String descricao;
     
-    TipoSinistro(String codigo, String descricao) {
+    TipoSinistroVeiculo(String codigo, String descricao) {
         this.codigo = codigo;
         this.descricao = descricao;
     }

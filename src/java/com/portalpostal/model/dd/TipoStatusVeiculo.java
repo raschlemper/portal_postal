@@ -1,10 +1,10 @@
 package com.portalpostal.model.dd;
 
-import com.portalpostal.model.serializer.TipoStatusSerializer;
+import com.portalpostal.model.serializer.TipoStatusVeiculoSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-@JsonSerialize(using = TipoStatusSerializer.class)
-public enum TipoStatus {    
+@JsonSerialize(using = TipoStatusVeiculoSerializer.class)
+public enum TipoStatusVeiculo {    
     
     NOVO("novo", "Novo"),
     SEMINOVO("seminovo", "Seminovo"),
@@ -13,7 +13,7 @@ public enum TipoStatus {
     private final String codigo;
     private final String descricao;
     
-    TipoStatus(String codigo, String descricao) {
+    TipoStatusVeiculo(String codigo, String descricao) {
         this.codigo = codigo;
         this.descricao = descricao;
     }

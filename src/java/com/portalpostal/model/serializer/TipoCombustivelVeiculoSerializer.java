@@ -1,17 +1,16 @@
 package com.portalpostal.model.serializer;
 
-import com.portalpostal.model.dd.TipoSituacao;
-import com.portalpostal.model.dd.TipoStatus;
+import com.portalpostal.model.dd.TipoCombustivelVeiculo;
 import java.io.IOException;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.JsonSerializer;
 import org.codehaus.jackson.map.SerializerProvider;
 
-public class TipoSituacaoSerializer extends JsonSerializer<TipoSituacao> {
+public class TipoCombustivelVeiculoSerializer extends JsonSerializer<TipoCombustivelVeiculo> {
 
     @Override
-    public void serialize(TipoSituacao value, JsonGenerator jg, SerializerProvider sp) 
+    public void serialize(TipoCombustivelVeiculo value, JsonGenerator jg, SerializerProvider sp) 
             throws IOException, JsonProcessingException {        
         jg.writeStartObject();
         jg.writeFieldName("id");

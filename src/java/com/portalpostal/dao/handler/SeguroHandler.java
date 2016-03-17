@@ -1,6 +1,6 @@
 package com.portalpostal.dao.handler;
 
-import com.portalpostal.model.dd.TipoSeguro;
+import com.portalpostal.model.dd.TipoSeguroVeiculo;
 import com.portalpostal.model.VeiculoSeguro;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,7 +18,7 @@ public class SeguroHandler implements ResultSetHandler<VeiculoSeguro> {
         seguro.setCorretora(result.getString("veiculo_seguro.corretora"));
         seguro.setAssegurado(result.getString("veiculo_seguro.assegurado"));
         seguro.setValorFranquia(result.getDouble("veiculo_seguro.valorFranquia"));
-        seguro.setIndenizacao(TipoSeguro.values()[result.getInt("veiculo_seguro.indenizacao")]);
+        seguro.setIndenizacao(TipoSeguroVeiculo.values()[result.getInt("veiculo_seguro.indenizacao")]);
         seguro.setDataInicioVigencia(result.getDate("veiculo_seguro.dataInicioVigencia"));
         seguro.setDataFimVigencia(result.getDate("veiculo_seguro.dataFimVigencia"));
         return seguro;

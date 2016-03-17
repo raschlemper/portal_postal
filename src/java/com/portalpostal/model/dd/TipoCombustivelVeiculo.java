@@ -1,10 +1,10 @@
 package com.portalpostal.model.dd;
 
-import com.portalpostal.model.serializer.TipoCombustivelSerializer;
+import com.portalpostal.model.serializer.TipoCombustivelVeiculoSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-@JsonSerialize(using = TipoCombustivelSerializer.class)
-public enum TipoCombustivel {    
+@JsonSerialize(using = TipoCombustivelVeiculoSerializer.class)
+public enum TipoCombustivelVeiculo {    
     
     GASOLINA("gasolina", "Gasolina"),
     ETANOL_ALCOOL("etanol", "Etanol/Álcool"),
@@ -15,7 +15,7 @@ public enum TipoCombustivel {
     private final String codigo;
     private final String descricao;
     
-    TipoCombustivel(String codigo, String descricao) {
+    TipoCombustivelVeiculo(String codigo, String descricao) {
         this.codigo = codigo;
         this.descricao = descricao;
     }
