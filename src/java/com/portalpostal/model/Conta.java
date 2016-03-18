@@ -11,7 +11,7 @@ public class Conta {
     private Integer agencia;
     private Integer contaCorrente;
     private Integer carteira;
-    private Double limiteCredito;
+    private Double valorLimiteCredito;
     private Date dataVencimentoCredito;
     private TipoStatusConta status;
     private Date dataAbertura;
@@ -65,14 +65,14 @@ public class Conta {
         this.carteira = carteira;
     }
 
-    public Double getLimiteCredito() {
-        return limiteCredito;
+    public Double getValorLimiteCredito() {
+        return valorLimiteCredito;
     }
 
-    public void setLimiteCredito(Double limiteCredito) {
-        this.limiteCredito = limiteCredito;
+    public void setValorLimiteCredito(Double valorLimiteCredito) {
+        this.valorLimiteCredito = valorLimiteCredito;
     }
-
+    
     public Date getDataVencimentoCredito() {
         return dataVencimentoCredito;
     }

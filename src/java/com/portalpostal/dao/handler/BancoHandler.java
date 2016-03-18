@@ -6,13 +6,21 @@ import java.sql.SQLException;
 import org.sql2o.ResultSetHandler;
 
 public class BancoHandler implements ResultSetHandler<Banco> {
+    
+    private String table = "banco";
+    
+    public BancoHandler() {}
+    
+    public BancoHandler(String table) {
+        this.table = table;      
+    }
 
     public Banco handle(ResultSet result) throws SQLException {
         Banco banco = new Banco();
-        banco.setIdBanco(result.getInt("banco.idBanco"));
-        banco.setNome(result.getString("banco.nome"));
-        banco.setNumero(result.getInt("banco.numero"));
-        banco.setWebsite(result.getString("banco.website"));
+        banco.setIdBanco(result.getInt(table + ".idBanco"));
+        banco.setNome(result.getString(table + ".nome"));
+        banco.setNumero(result.getInt(table + ".numero"));
+        banco.setWebsite(result.getString(table + ".website"));
         return banco;
     }
     

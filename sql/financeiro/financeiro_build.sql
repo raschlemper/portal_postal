@@ -40,7 +40,7 @@ CREATE TABLE `conta` (
   `agencia`               INT NOT NULL,
   `contaCorrente`         INT NOT NULL,
   `carteira`              INT NULL,
-  `limiteCredito`         DECIMAL(13,2) NULL,
+  `valorLimiteCredito`    DECIMAL(13,2) NULL,
   `dataVencimentoCredito` DATETIME NULL,
   `status`                INT NOT NULL,
   `dataAbertura`          DATETIME NOT NULL,

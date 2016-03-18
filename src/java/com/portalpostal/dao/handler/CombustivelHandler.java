@@ -7,19 +7,26 @@ import java.sql.SQLException;
 import org.sql2o.ResultSetHandler;
 
 public class CombustivelHandler implements ResultSetHandler<VeiculoCombustivel> {
-        
+    
+    private String table = "veiculo_combustivel";
+    
     public CombustivelHandler() {}
+    
+    public CombustivelHandler(String table) {
+        this.table = table;      
+    }
+
     
     @Override
     public VeiculoCombustivel handle(ResultSet result) throws SQLException {
         VeiculoCombustivel combustivel = new VeiculoCombustivel();
-        combustivel.setIdVeiculoCombustivel(result.getInt("veiculo_combustivel.idVeiculoCombustivel"));
-        combustivel.setTipo(TipoCombustivelVeiculo.values()[result.getInt("veiculo_combustivel.tipo")]);
-        combustivel.setQuantidade(result.getInt("veiculo_combustivel.quantidade"));
-        combustivel.setValorUnitario(result.getDouble("veiculo_combustivel.valorUnitario"));
-        combustivel.setData(result.getDate("veiculo_combustivel.data"));
-        combustivel.setValorTotal(result.getDouble("veiculo_combustivel.valorTotal"));
-        combustivel.setQuilometragem(result.getInt("veiculo_combustivel.quilometragem"));
+        combustivel.setIdVeiculoCombustivel(result.getInt(table  + ".idVeiculoCombustivel"));
+        combustivel.setTipo(TipoCombustivelVeiculo.values()[result.getInt(table  + ".tipo")]);
+        combustivel.setQuantidade(result.getInt(table  + ".quantidade"));
+        combustivel.setValorUnitario(result.getDouble(table  + ".valorUnitario"));
+        combustivel.setData(result.getDate(table  + ".data"));
+        combustivel.setValorTotal(result.getDouble(table  + ".valorTotal"));
+        combustivel.setQuilometragem(result.getInt(table  + ".quilometragem"));
         return combustivel;
     }
     
