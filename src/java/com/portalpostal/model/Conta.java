@@ -16,6 +16,7 @@ public class Conta {
     private TipoStatusConta status;
     private Date dataAbertura;
     private Double valorSaldoAbertura;
+    private CartaoCredito cartaoCredito;
 
     public Integer getIdConta() {
         return idConta;
@@ -104,5 +105,13 @@ public class Conta {
     public void setValorSaldoAbertura(Double valorSaldoAbertura) {
         this.valorSaldoAbertura = valorSaldoAbertura;
     }
-    
+
+    public CartaoCredito getCartaoCredito() {
+        return cartaoCredito;
+    }
+
+    public void setCartaoCredito(CartaoCredito cartaoCredito) {
+        this.cartaoCredito = cartaoCredito;
+    }
+        
 }

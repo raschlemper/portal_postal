@@ -1,19 +1,19 @@
 package com.portalpostal.model;
 
-public class ContaCartaoCredito {
+public class CartaoCredito {
     
-    private Integer idContaCartaoCredito;
+    private Integer idCartaoCredito;
     private Conta conta;
     private Integer diaFechamento;
     private Integer diaVencimento;
     private Conta contaPagamento;
 
-    public Integer getIdContaCartaoCredito() {
-        return idContaCartaoCredito;
+    public Integer getIdCartaoCredito() {
+        return idCartaoCredito;
     }
 
-    public void setIdContaCartaoCredito(Integer idContaCartaoCredito) {
-        this.idContaCartaoCredito = idContaCartaoCredito;
+    public void setIdCartaoCredito(Integer idCartaoCredito) {
+        this.idCartaoCredito = idCartaoCredito;
     }
 
     public Conta getConta() {
@@ -47,5 +47,5 @@ public class ContaCartaoCredito {
     public void setContaPagamento(Conta contaPagamento) {
         this.contaPagamento = contaPagamento;
     }
-    
+      
 }

@@ -17,6 +17,9 @@ CREATE TABLE `banco` (
   UNIQUE INDEX `numero_UNIQUE` (`numero` ASC)
 ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
+ALTER TABLE `banco` 
+ADD UNIQUE INDEX `u_numero` (`numero`);
+
 CREATE TABLE `tipo_conta` (
   `idTipoConta` INT NOT NULL AUTO_INCREMENT,
   `categoria`   INT NOT NULL,
@@ -35,7 +38,7 @@ CREATE TABLE `plano_conta` (
 
 CREATE TABLE `conta` (
   `idConta`               INT NOT NULL AUTO_INCREMENT,
-  `tipo`                  INT NOT NULL,
+  `idTipoConta`           INT NOT NULL,
   `banco`                 INT NOT NULL,
   `agencia`               INT NOT NULL,
   `contaCorrente`         INT NOT NULL,
@@ -46,32 +49,46 @@ CREATE TABLE `conta` (
   `dataAbertura`          DATETIME NOT NULL,
   `valorSaldoAbertura`    DECIMAL(13,2) DEFAULT 0,
   PRIMARY KEY (`idConta`)
+  UNIQUE INDEX `contacorrente_UNIQUE` (`numero` ASC)
 ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `conta_cartao_credito` (
-  `idContaCartaoCredito`  INT NOT NULL AUTO_INCREMENT,
+ALTER TABLE `conta` 
+ADD UNIQUE INDEX `u_contacorrente` (`banco`, `agencia`, `contaCorrente`);
+
+ALTER TABLE `conta` 
+ADD INDEX `i_conta_tipoconta` (`idTipoConta` ASC);
+
+ALTER TABLE `conta` 
+ADD CONSTRAINT `fk_conta_tipoconta`
+  FOREIGN KEY (`idTipoConta`)
+  REFERENCES `tipo_conta` (`idTipoConta`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+CREATE TABLE `cartao_credito` (
+  `idCartaoCredito`  INT NOT NULL AUTO_INCREMENT,
   `idConta`               INT NOT NULL,
   `diaFechamento`         INT NOT NULL,
   `diaVencimento`         INT NOT NULL,
   `idContaPagamento`      INT NOT NULL,
-  PRIMARY KEY (`idContaCartaoCredito`)
+  PRIMARY KEY (`idCartaoCredito`)
 ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
-ALTER TABLE `conta_cartao_credito` 
-ADD INDEX `i_contacartaocredito_conta` (`idConta` ASC);
+ALTER TABLE `cartao_credito` 
+ADD INDEX `i_cartaocredito_conta` (`idConta` ASC);
 
-ALTER TABLE `conta_cartao_credito` 
-ADD INDEX `i_contacartaocredito_contapagamento` (`idContaPagamento` ASC);
+ALTER TABLE `cartao_credito` 
+ADD INDEX `i_cartaocredito_contapagamento` (`idContaPagamento` ASC);
 
-ALTER TABLE `conta_cartao_credito` 
-ADD CONSTRAINT `fk_contacartaocredito_conta`
+ALTER TABLE `cartao_credito` 
+ADD CONSTRAINT `fk_cartaocredito_conta`
   FOREIGN KEY (`idConta`)
   REFERENCES `conta` (`idConta`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
-ALTER TABLE `conta_cartao_credito` 
-ADD CONSTRAINT `fk_contacartaocredito_contapagamento`
+ALTER TABLE `cartao_credito` 
+ADD CONSTRAINT `fk_cartaocredito_contapagamento`
   FOREIGN KEY (`idContaPagamento`)
   REFERENCES `conta` (`idConta`)
   ON DELETE NO ACTION
