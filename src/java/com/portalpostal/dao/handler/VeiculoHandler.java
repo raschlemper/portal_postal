@@ -11,19 +11,12 @@ import org.sql2o.ResultSetHandler;
 
 public class VeiculoHandler implements ResultSetHandler<Veiculo> {
     
-    private final TipoContaHandler tipoContaHandler;
-    private final BancoHandler bancoHandler;
     private String table = "veiculo";
     
-    public VeiculoHandler() {
-        tipoContaHandler = new TipoContaHandler();
-        bancoHandler = new BancoHandler();
-    }
+    public VeiculoHandler() { }
     
     public VeiculoHandler(String table) {
-        tipoContaHandler = new TipoContaHandler();
-        bancoHandler = new BancoHandler();
-        if(table != null) { this.table = table; }
+        this.table = table;
     }
 
     @Override

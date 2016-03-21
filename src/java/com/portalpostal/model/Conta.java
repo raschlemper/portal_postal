@@ -6,17 +6,10 @@ import java.util.Date;
 public class Conta {
     
     private Integer idConta;
-    private TipoConta tipo;
-    private Banco banco;
-    private Integer agencia;
-    private Integer contaCorrente;
-    private Integer carteira;
-    private Double valorLimiteCredito;
-    private Date dataVencimentoCredito;
+    private ContaCorrente contaCorrente;
     private TipoStatusConta status;
     private Date dataAbertura;
     private Double valorSaldoAbertura;
-    private CartaoCredito cartaoCredito;
 
     public Integer getIdConta() {
         return idConta;
@@ -26,60 +19,12 @@ public class Conta {
         this.idConta = idConta;
     }
 
-    public TipoConta getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(TipoConta tipo) {
-        this.tipo = tipo;
-    }
-
-    public Banco getBanco() {
-        return banco;
-    }
-
-    public void setBanco(Banco banco) {
-        this.banco = banco;
-    }
-
-    public Integer getAgencia() {
-        return agencia;
-    }
-
-    public void setAgencia(Integer agencia) {
-        this.agencia = agencia;
-    }
-
-    public Integer getContaCorrente() {
+    public ContaCorrente getContaCorrente() {
         return contaCorrente;
     }
 
-    public void setContaCorrente(Integer contaCorrente) {
+    public void setContaCorrente(ContaCorrente contaCorrente) {
         this.contaCorrente = contaCorrente;
-    }
-
-    public Integer getCarteira() {
-        return carteira;
-    }
-
-    public void setCarteira(Integer carteira) {
-        this.carteira = carteira;
-    }
-
-    public Double getValorLimiteCredito() {
-        return valorLimiteCredito;
-    }
-
-    public void setValorLimiteCredito(Double valorLimiteCredito) {
-        this.valorLimiteCredito = valorLimiteCredito;
-    }
-    
-    public Date getDataVencimentoCredito() {
-        return dataVencimentoCredito;
-    }
-
-    public void setDataVencimentoCredito(Date dataVencimentoCredito) {
-        this.dataVencimentoCredito = dataVencimentoCredito;
     }
 
     public TipoStatusConta getStatus() {
@@ -106,12 +51,5 @@ public class Conta {
         this.valorSaldoAbertura = valorSaldoAbertura;
     }
 
-    public CartaoCredito getCartaoCredito() {
-        return cartaoCredito;
-    }
-
-    public void setCartaoCredito(CartaoCredito cartaoCredito) {
-        this.cartaoCredito = cartaoCredito;
-    }
-        
+    
 }

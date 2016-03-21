@@ -8,31 +8,22 @@ import org.sql2o.ResultSetHandler;
 
 public class ContaHandler implements ResultSetHandler<Conta> {
     
-    private final TipoContaHandler tipoContaHandler;
-    private final BancoHandler bancoHandler;
+    private final ContaCorrenteHandler contaCorrenteHandler;
     private String table = "conta";
     
     public ContaHandler() {
-        tipoContaHandler = new TipoContaHandler();
-        bancoHandler = new BancoHandler();
+        contaCorrenteHandler = new ContaCorrenteHandler();
     }
     
     public ContaHandler(String table) {
-        tipoContaHandler = new TipoContaHandler();
-        bancoHandler = new BancoHandler();
-        if(table != null) { this.table = table; }
+        contaCorrenteHandler = new ContaCorrenteHandler();
+        this.table = table;
     }
 
     public Conta handle(ResultSet result) throws SQLException {
         Conta conta = new Conta();
         conta.setIdConta(result.getInt(table + ".idConta"));
-        conta.setTipo(tipoContaHandler.handle(result));
-        conta.setBanco(bancoHandler.handle(result));
-        conta.setAgencia(result.getInt(table + ".agencia"));
-        conta.setContaCorrente(result.getInt(table + ".contaCorrente"));
-        conta.setCarteira(result.getInt(table + ".carteira"));
-        conta.setValorLimiteCredito(result.getDouble(table + ".valorLimiteCredito"));
-        conta.setDataVencimentoCredito(result.getDate(table + ".dataVencimentoCredito"));
+        conta.setContaCorrente(contaCorrenteHandler.handle(result));
         conta.setStatus(TipoStatusConta.values()[result.getInt(table + ".status")]);
         conta.setDataAbertura(result.getDate(table + ".dataAbertura"));
         conta.setValorSaldoAbertura(result.getDouble(table + ".valorSaldoAbertura"));

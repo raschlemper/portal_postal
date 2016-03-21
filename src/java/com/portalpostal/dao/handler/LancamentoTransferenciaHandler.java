@@ -9,20 +9,17 @@ public class LancamentoTransferenciaHandler implements ResultSetHandler<Lancamen
     
     private final ContaHandler contaOrigemHandler;
     private final ContaHandler contaDestinoHandler;
-    private final PlanoContaHandler planoContaHandler;
     private String table = "lancamento";
     
     public LancamentoTransferenciaHandler() {
         contaOrigemHandler = new ContaHandler();        
         contaDestinoHandler = new ContaHandler();
-        planoContaHandler = new PlanoContaHandler();
     }
     
     public LancamentoTransferenciaHandler(String table) {
         contaOrigemHandler = new ContaHandler("contaOrigem");
         contaDestinoHandler = new ContaHandler("contaDestino");
-        planoContaHandler = new PlanoContaHandler();
-        if(table != null) { this.table = table; }
+        this.table = table;
     }
 
     public LancamentoTransferencia handle(ResultSet result) throws SQLException {

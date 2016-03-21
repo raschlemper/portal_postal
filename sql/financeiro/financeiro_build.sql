@@ -1,10 +1,12 @@
+
 USE pp_06895434000183;
 
 DROP TABLE banco;
-DROP TABLE tipo_conta;
+-- DROP TABLE tipo_conta;
 DROP TABLE plano_conta;
+DROP TABLE conta_corrente;
+DROP TABLE cartao_credito;
 DROP TABLE conta;
-DROP TABLE conta_cartao_credito;
 DROP TABLE lancamento;
 DROP TABLE lancamento_transferencia;
 
@@ -13,19 +15,18 @@ CREATE TABLE `banco` (
   `nome`    VARCHAR(254) NOT NULL,
   `numero`  INT NOT NULL,
   `website` VARCHAR(254) DEFAULT NULL,
-  PRIMARY KEY (`idbanco`) ,
-  UNIQUE INDEX `numero_UNIQUE` (`numero` ASC)
+  PRIMARY KEY (`idbanco`),
 ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
 ALTER TABLE `banco` 
 ADD UNIQUE INDEX `u_numero` (`numero`);
 
-CREATE TABLE `tipo_conta` (
-  `idTipoConta` INT NOT NULL AUTO_INCREMENT,
-  `categoria`   INT NOT NULL,
-  `descricao`   VARCHAR(254) NOT NULL,
-  PRIMARY KEY (`idTipoConta`)
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
+-- CREATE TABLE `tipo_conta` (
+--   `idTipoConta` INT NOT NULL AUTO_INCREMENT,
+--   `categoria`   INT NOT NULL,
+--   `descricao`   VARCHAR(254) NOT NULL,
+--   PRIMARY KEY (`idTipoConta`)
+-- ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `plano_conta` (
   `idPlanoConta` INT NOT NULL AUTO_INCREMENT,
@@ -36,63 +37,57 @@ CREATE TABLE `plano_conta` (
   PRIMARY KEY (`idPlanoConta`)
 ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `conta` (
-  `idConta`               INT NOT NULL AUTO_INCREMENT,
-  `idTipoConta`           INT NOT NULL,
-  `banco`                 INT NOT NULL,
-  `agencia`               INT NOT NULL,
-  `contaCorrente`         INT NOT NULL,
-  `carteira`              INT NULL,
-  `valorLimiteCredito`    DECIMAL(13,2) NULL,
-  `dataVencimentoCredito` DATETIME NULL,
-  `status`                INT NOT NULL,
-  `dataAbertura`          DATETIME NOT NULL,
-  `valorSaldoAbertura`    DECIMAL(13,2) DEFAULT 0,
-  PRIMARY KEY (`idConta`)
-  UNIQUE INDEX `contacorrente_UNIQUE` (`numero` ASC)
+CREATE TABLE `conta_corrente` (
+  `idContaCorrente` INT NOT NULL AUTO_INCREMENT,
+  `banco`           INT NOT NULL,
+  `agencia`         INT NOT NULL,
+  `contaCorrente`   INT NOT NULL,
+  `carteira`        INT NULL,
+  PRIMARY KEY (`idContaCorrente`)
 ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
-ALTER TABLE `conta` 
+ALTER TABLE `conta_corrente` 
 ADD UNIQUE INDEX `u_contacorrente` (`banco`, `agencia`, `contaCorrente`);
 
-ALTER TABLE `conta` 
-ADD INDEX `i_conta_tipoconta` (`idTipoConta` ASC);
-
-ALTER TABLE `conta` 
-ADD CONSTRAINT `fk_conta_tipoconta`
-  FOREIGN KEY (`idTipoConta`)
-  REFERENCES `tipo_conta` (`idTipoConta`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
-
 CREATE TABLE `cartao_credito` (
-  `idCartaoCredito`  INT NOT NULL AUTO_INCREMENT,
-  `idConta`               INT NOT NULL,
-  `diaFechamento`         INT NOT NULL,
-  `diaVencimento`         INT NOT NULL,
-  `idContaPagamento`      INT NOT NULL,
+  `idCartaoCredito`    INT NOT NULL AUTO_INCREMENT,
+  `idContaCorrente`    INT DEFAULT NULL,
+  `bandeira`           VARCHAR(254) NOT NULL,
+  `diaFechamento`      INT NOT NULL,
+  `diaVencimento`      INT NOT NULL,
+  `valorLimiteCredito` DECIMAL(13,2) NULL,
   PRIMARY KEY (`idCartaoCredito`)
 ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
 ALTER TABLE `cartao_credito` 
-ADD INDEX `i_cartaocredito_conta` (`idConta` ASC);
+ADD INDEX `i_cartaocredito_contacorrente` (`idContaCorrente` ASC);
 
 ALTER TABLE `cartao_credito` 
-ADD INDEX `i_cartaocredito_contapagamento` (`idContaPagamento` ASC);
-
-ALTER TABLE `cartao_credito` 
-ADD CONSTRAINT `fk_cartaocredito_conta`
-  FOREIGN KEY (`idConta`)
-  REFERENCES `conta` (`idConta`)
+ADD CONSTRAINT `fk_cartaocredito_contacorrente`
+  FOREIGN KEY (`idContaCorrente`)
+  REFERENCES `conta_corrente` (`idContaCorrente`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
-ALTER TABLE `cartao_credito` 
-ADD CONSTRAINT `fk_cartaocredito_contapagamento`
-  FOREIGN KEY (`idContaPagamento`)
-  REFERENCES `conta` (`idConta`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
+CREATE TABLE `conta` (
+  `idConta`            INT NOT NULL AUTO_INCREMENT,
+--   `idTipoConta`       INT NOT NULL,
+  `idContaCorrente`    INT DEFAULT NULL,
+  `status`             INT NOT NULL,
+  `dataAbertura`       DATETIME NOT NULL,
+  `valorSaldoAbertura` DECIMAL(13,2) DEFAULT 0,
+  PRIMARY KEY (`idConta`)
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
+
+-- ALTER TABLE `conta` 
+-- ADD INDEX `i_conta_tipoconta` (`idTipoConta` ASC);
+
+-- ALTER TABLE `conta` 
+-- ADD CONSTRAINT `fk_conta_tipoconta`
+--   FOREIGN KEY (`idTipoConta`)
+--   REFERENCES `tipo_conta` (`idTipoConta`)
+--   ON DELETE NO ACTION
+--   ON UPDATE NO ACTION;
 
 CREATE TABLE `lancamento` (
   `idLancamento` INT NOT NULL AUTO_INCREMENT,
