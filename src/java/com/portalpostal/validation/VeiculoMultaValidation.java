@@ -5,13 +5,21 @@ import com.portalpostal.model.VeiculoMulta;
 public class VeiculoMultaValidation extends Validation<VeiculoMulta> {
 
     @Override
-    public boolean validar(VeiculoMulta veiculo) {            
+    public boolean validar(VeiculoMulta veiculo) {           
+        if(!validarVeiculo(veiculo)) return false;              
         if(!validarCondutor(veiculo)) return false;       
         if(!validarNumeroMulta(veiculo)) return false;   
         if(!validarValor(veiculo)) return false;   
-        if(!validarData(veiculo)) return false;  
+        if(!validarData(veiculo)) return false;   
+        if(!validarDescontada(veiculo)) return false;  
         return true;        
-    }            
+    }    
+
+    public boolean validarVeiculo(VeiculoMulta veiculo) {          
+        if(campoNotNull(veiculo.getVeiculo())) return true; 
+        setMsg("Preencha o veículo da multa!");
+        return false;        
+    }             
 
     public boolean validarCondutor(VeiculoMulta veiculo) {        
         if(campoNotNull(veiculo.getCondutor())) return true; 
@@ -35,6 +43,12 @@ public class VeiculoMultaValidation extends Validation<VeiculoMulta> {
         if(campoNotNull(veiculo.getData())) return true; 
         setMsg("Preencha a data da multa!");   
         return false;        
-    }    
+    }            
+
+    public boolean validarDescontada(VeiculoMulta veiculo) {          
+        if(campoNotNull(veiculo.getData())) return true; 
+        setMsg("Informe se o valor multa será descontado!");   
+        return false;        
+    }  
     
 }

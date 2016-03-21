@@ -2,7 +2,6 @@ package com.portalpostal.service;
 
 import com.portalpostal.dao.PlanoContaDAO;
 import com.portalpostal.model.PlanoConta;
-import com.portalpostal.model.dd.TipoContaCategoria;
 import java.util.List;
 
 public class PlanoContaService {

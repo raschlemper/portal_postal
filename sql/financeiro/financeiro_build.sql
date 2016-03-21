@@ -42,7 +42,7 @@ CREATE TABLE `conta_corrente` (
   `banco`           INT NOT NULL,
   `agencia`         INT NOT NULL,
   `contaCorrente`   INT NOT NULL,
-  `carteira`        INT NULL,
+  `carteira`        INT DEFAULT NULL,
   PRIMARY KEY (`idContaCorrente`)
 ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
@@ -55,7 +55,7 @@ CREATE TABLE `cartao_credito` (
   `bandeira`           VARCHAR(254) NOT NULL,
   `diaFechamento`      INT NOT NULL,
   `diaVencimento`      INT NOT NULL,
-  `valorLimiteCredito` DECIMAL(13,2) NULL,
+  `valorLimiteCredito` DECIMAL(13,2) NOT NULL,
   PRIMARY KEY (`idCartaoCredito`)
 ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
@@ -95,7 +95,7 @@ CREATE TABLE `lancamento` (
   `idPlanoConta` INT NOT NULL,
   `tipo`         INT NOT NULL,
   `data`         DATETIME NOT NULL,
-  `valor`        DECIMAL(13,2) DEFAULT 0,
+  `valor`        DECIMAL(13,2) NOT NULL,
   `historico`    VARCHAR(254) NOT NULL,
   PRIMARY KEY (`idLancamento`)
 ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;

@@ -6,12 +6,26 @@ public class VeiculoCombustivelValidation extends Validation<VeiculoCombustivel>
 
     @Override
     public boolean validar(VeiculoCombustivel veiculo) {          
+        if(!validarVeiculo(veiculo)) return false;            
+        if(!validarTipo(veiculo)) return false;            
         if(!validarQuantidade(veiculo)) return false;   
         if(!validarValorTotal(veiculo)) return false;   
         if(!validarValorUnitario(veiculo)) return false;   
         if(!validarData(veiculo)) return false;   
         if(!validarQuilometragem(veiculo)) return false;  
         return true;        
+    }   
+
+    public boolean validarVeiculo(VeiculoCombustivel veiculo) {          
+        if(campoNotNull(veiculo.getVeiculo())) return true; 
+        setMsg("Preencha o veículo do abastecidos!");
+        return false;        
+    }     
+
+    public boolean validarTipo(VeiculoCombustivel veiculo) {          
+        if(campoNotNull(veiculo.getTipo())) return true; 
+        setMsg("Preencha o tipo de combustível!");
+        return false;        
     }   
 
     public boolean validarQuantidade(VeiculoCombustivel veiculo) {          

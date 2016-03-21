@@ -2,7 +2,6 @@ package com.portalpostal.dao;
 
 import com.portalpostal.dao.handler.CartaoCreditoHandler;
 import com.portalpostal.model.CartaoCredito;
-import com.portalpostal.model.Conta;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

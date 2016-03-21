@@ -71,8 +71,20 @@ public class ContaCorrenteDAO extends GenericDAO {
                    + "WHERE idBanco = :idBanco AND agencia = :agencia AND contaCorrente = :contaCorrente ";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idBanco", idBanco);
-        params.put("idBanco", agencia);
-        params.put("idBanco", contaCorrente);
+        params.put("agencia", agencia);
+        params.put("contaCorrente", contaCorrente);
+        return (ContaCorrente) find(sql, params, contaCorrenteHandler);
+    }
+
+    public ContaCorrente findByCarteira(Integer idBanco, Integer agencia, Integer contaCorrente, Integer carteira) throws Exception {     
+        String sql = "SELECT * FROM conta_corrente "
+                   + "WHERE idBanco = :idBanco AND agencia = :agencia "
+                   + "AND contaCorrente = :contaCorrente AND carteira = :carteira";
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idBanco", idBanco);
+        params.put("agencia", agencia);
+        params.put("contaCorrente", contaCorrente);
+        params.put("carteira", carteira);
         return (ContaCorrente) find(sql, params, contaCorrenteHandler);
     }
     
