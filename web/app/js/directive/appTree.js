@@ -23,10 +23,18 @@ app.directive('appTree', function($filter) {
             var createStructure = function(code, items) {
                 var html = '<ul>';
                 angular.forEach(items, function(item) {
+                    html += '<li>';
+                    
                     var codigo = item.codigo;
                     if(code) { codigo = code + '.' + codigo; }
-                    html += '<li>' + codigo + ' - ' + item.nome;
-                    if(item.contas) { html += createStructure(codigo, item.contas); }                    
+                    
+                    if(item.contas) { 
+                        html +=  '<a href="#">' + codigo + ' - ' + item.nome + '</a>';
+                        html += createStructure(codigo, item.contas); 
+                    } else {                        
+                        html +=  codigo + ' - ' + item.nome;
+                    } 
+                    
                     html += '</li>';
                 });
                 html += '</ul>';
