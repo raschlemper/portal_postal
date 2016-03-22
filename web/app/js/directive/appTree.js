@@ -1,4 +1,4 @@
-app.directive('appTree', function($filter) {
+app.directive('appTree', function($compile) {
     
     return {
         restrict: 'E',
@@ -14,28 +14,42 @@ app.directive('appTree', function($filter) {
             
             var init = function () {
                 tree = element.find('.tree');
+                scope.open = [];
+            };
+
+            scope.openFolder = function(predicate) {
+                angular.element('.group_' + predicate).children('ul').toggle();
+                scope.open['group_' + predicate] = !scope.open['group_' + predicate];
             };
         
             scope.$watchCollection('lista', function(newValue) {
-                tree.append(createStructure(null, newValue));
+                tree.html($compile(createStructure(null, newValue))(scope));
             });
             
             var createStructure = function(code, items) {
+                if(!items.length) return;
                 var html = '<ul>';
-                angular.forEach(items, function(item) {
-                    html += '<li>';
-                    
+                angular.forEach(items, function(item) {                    
                     var codigo = item.codigo;
                     if(code) { codigo = code + '.' + codigo; }
                     
                     if(item.contas) { 
-                        html +=  '<a href="#">' + codigo + ' - ' + item.nome + '</a>';
+                        scope.open['group_' + item.idPlanoConta] = true;
+                        html += '<li class="group_' + item.idPlanoConta + '">';
+                        html += '<i class="fa" ' +
+                                   'ng-class="{\'fa-folder-open\': open.group_' + item.idPlanoConta + ',' + 
+                                              '\'fa-folder\': !open.group_' + item.idPlanoConta + '}"></i>';
+                        html += '<span ng-click="openFolder(' + item.idPlanoConta + ')">' + 
+                                    codigo + ' - ' + item.nome + 
+                                '</span>';
                         html += createStructure(codigo, item.contas); 
-                    } else {                        
+                        html += '<span class="pull-right"><i class="fa fa-file"></i></span></li>';
+                    } else {          
+                        html += '<li>';              
                         html +=  codigo + ' - ' + item.nome;
+                        html += '</li>';
                     } 
                     
-                    html += '</li>';
                 });
                 html += '</ul>';
                 return html;

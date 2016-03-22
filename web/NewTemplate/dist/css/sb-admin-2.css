@@ -2826,6 +2826,9 @@ border-radius: 50%;}
     left:0;
     border-left:1px dotted
 }
+.tree ul:first-child:before {
+    border:none;    
+}
 .tree li {
     margin:0;
     padding:0 1em;
@@ -2851,7 +2854,7 @@ border-radius: 50%;}
     top:1em;
     bottom:0
 }
-.indicator {
+.indicator, li i {
     margin-right:5px;
 }
 .tree li a {
@@ -2867,3 +2870,4 @@ border-radius: 50%;}
     padding:0px 0px 0px 0px;
     outline: 0;
 }
+
