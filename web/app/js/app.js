@@ -76,6 +76,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
                 templateUrl: 'partials/financeiro/banco.html',
                 controller: 'BancoController',
                 resolve: {}
+            })
+            .state('financeiro.planoconta', {
+                url: '/planoconta',
+                templateUrl: 'partials/financeiro/planoconta.html',
+                controller: 'PlanoContaController',
+                resolve: {}
             });
 
     }]);

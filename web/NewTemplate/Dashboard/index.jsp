@@ -1,4 +1,4 @@
-<%@page import="com.portalpostal.model.dd.TipoManutencao"%>
+<%@page import="com.portalpostal.model.dd.TipoManutencaoVeiculo"%>
 <%@page import="com.portalpostal.model.VeiculoSeguro"%>
 <%@page import="com.portalpostal.service.VeiculoSeguroService"%>
 <%@page import="java.util.List"%>
@@ -161,9 +161,9 @@
                                         Integer quantidadeRotina = 0;
                                         for(int i = 0; i < listaVeiculoManutencao.size(); i++){
                                             VeiculoManutencao veiculoManutencao = listaVeiculoManutencao.get(i);
-                                            if(veiculoManutencao.getTipo() == TipoManutencao.TROCA_OLEO) { quantidadeTrocaOleo++; }
-                                            if(veiculoManutencao.getTipo() == TipoManutencao.PROGRAMADA) { quantidadeProgramada++; }
-                                            if(veiculoManutencao.getTipo() == TipoManutencao.ROTINA) { quantidadeRotina++; }
+                                            if(veiculoManutencao.getTipo() == TipoManutencaoVeiculo.TROCA_OLEO) { quantidadeTrocaOleo++; }
+                                            if(veiculoManutencao.getTipo() == TipoManutencaoVeiculo.PROGRAMADA) { quantidadeProgramada++; }
+                                            if(veiculoManutencao.getTipo() == TipoManutencaoVeiculo.ROTINA) { quantidadeRotina++; }
                                         }
                                     %>
                                     <%if(quantidadeTrocaOleo > 0){ %>
