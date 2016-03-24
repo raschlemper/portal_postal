@@ -2831,11 +2831,25 @@ border-radius: 50%;}
 }
 .tree li {
     margin:0;
-    padding:0 1em;
+    padding:0 0 0 1em;
     line-height:2em;
     color:#369;
 /*    font-weight:700;*/
     position:relative
+}
+.action {
+    display: none;
+}
+.name {
+    display: inline-block;
+    width: 90%
+}
+.name:hover {
+    background-color: #e7e7e7;
+}
+.name:hover .action {
+    padding: 6px;
+    display: block;
 }
 .tree ul li:before {
     content:"";
@@ -2854,8 +2868,11 @@ border-radius: 50%;}
     top:1em;
     bottom:0
 }
-.indicator, li i {
+.indicator, .tree ul li i {
     margin-right:5px;
+}
+.tree .action i {
+    font-size: 16pt;
 }
 .tree li a {
     text-decoration: none;

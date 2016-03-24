@@ -14,8 +14,13 @@
                                 </div>
                             </div>                              
                         </div>
-                        <div class="panel-body">
-                            <app-tree lista="planoContasLista"></app-tree>
+                        <div class="panel-body" style="padding: 10px;">
+                                <div class="row">
+                                    <div class="col-md-6" ng-repeat="tipo in tipos track by tipo.id">
+                                        <app-tree lista="planoContasLista[tipo.id]" events="events"></app-tree>
+                                    </div>
+                                </div>
+                            
 <!--                            <ul>
                                 <li ng-repeat="planoConta in planoContasLista track by $index">{{planoConta.nome}}                                
                                     <ul>

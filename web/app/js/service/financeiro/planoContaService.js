@@ -1,31 +1,41 @@
 'use strict';
 
-app.factory('PlanoContaService', function($http, $q) {
-
+app.factory('PlanoContaService', function($http, PromiseService) {
     return {
 
         getAll: function() {
-            return $http.get(_contextPath + "/api/financeiro/planoconta/");
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/planoconta/"));
         },
 
         getStructure: function() {
-            return $http.get(_contextPath + "/api/financeiro/planoconta/structure");
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/planoconta/structure"));
+        },
+
+        getStructureByTipo: function(tipo) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/planoconta/tipo/" + tipo + "/structure"));
         },
 
         get: function(idPlanoConta) {
-            return $http.get(_contextPath + "/api/financeiro/planoconta/" + idPlanoConta);
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/planoconta/" + idPlanoConta));
         },
 
         save: function(data) {
-            return $http.post(_contextPath + "/api/financeiro/planoconta/", data);
+            return PromiseService.execute(
+                    $http.post(_contextPath + "/api/financeiro/planoconta/", data));
         },
 
         update: function(idPlanoConta, data) {
-            return $http.put(_contextPath + "/api/financeiro/planoconta/" + idPlanoConta, data);
+            return PromiseService.execute(
+                    $http.put(_contextPath + "/api/financeiro/planoconta/" + idPlanoConta, data));
         },
 
         delete: function(idPlanoConta) {
-            return $http.delete(_contextPath + "/api/financeiro/planoconta/" + idPlanoConta);
+            return PromiseService.execute(
+                    $http.delete(_contextPath + "/api/financeiro/planoconta/" + idPlanoConta));
         }
 
     }

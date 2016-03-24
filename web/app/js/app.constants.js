@@ -34,6 +34,9 @@ app.constant('LISTAS', {
                  {'id': 4, 'codigo': 'enchentealagamento', 'descricao': 'Enchente/Algamento'}],
      
     "responsavel": [{'id': 0, 'codigo': 'motorista', 'descricao': 'Motorista'},
-                    {'id': 1, 'codigo': 'terceiros', 'descricao': 'Terceiros'}]
+                    {'id': 1, 'codigo': 'terceiros', 'descricao': 'Terceiros'}],
+     
+    "planoConta": [{'id': 0, 'codigo': 'receita', 'descricao': 'Receita'},
+                    {'id': 1, 'codigo': 'despesa', 'descricao': 'Despesa'}]
 
 });

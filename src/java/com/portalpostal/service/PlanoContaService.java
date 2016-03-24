@@ -21,18 +21,18 @@ public class PlanoContaService {
         findContas(grupos);
         return grupos;
     }  
-    
-    private void findContas(List<PlanoConta> contas) throws Exception {            
-        for (PlanoConta conta : contas) {
-            List<PlanoConta> grupos = planoContaDAO.findByGrupo(conta);
-            if(grupos.isEmpty()) return;
-            conta.setContas(grupos);
-            findContas(grupos);
-        }
+
+    public List<PlanoConta> findStructureByTipo(Integer tipo) throws Exception {
+        List<PlanoConta> grupos = planoContaDAO.findWithoutGrupoByTipo(tipo); 
+        findContas(grupos);
+        return grupos;
     }
     
     public PlanoConta find(Integer idPlanoConta) throws Exception {
-        return planoContaDAO.find(idPlanoConta);
+        PlanoConta planoConta =  planoContaDAO.find(idPlanoConta);
+        List<PlanoConta> grupos = planoContaDAO.findByGrupo(planoConta);        
+        if(!grupos.isEmpty()) { planoConta.setContas(grupos); }
+        return planoConta;
     } 
     
     public PlanoConta save(PlanoConta planoConta) throws Exception {
@@ -46,5 +46,14 @@ public class PlanoContaService {
     public PlanoConta delete(Integer idPlanoConta) throws Exception {
         return planoContaDAO.remove(idPlanoConta);
     } 
+    
+    private void findContas(List<PlanoConta> contas) throws Exception {            
+        for (PlanoConta conta : contas) {
+            List<PlanoConta> grupos = planoContaDAO.findByGrupo(conta);
+            if(grupos.isEmpty()) return;
+            conta.setContas(grupos);
+            findContas(grupos);
+        }
+    }
     
 }

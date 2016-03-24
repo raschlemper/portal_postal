@@ -1,35 +1,39 @@
 'use strict';
 
-app.controller('PlanoContaController', ['$scope', 'PlanoContaService', 'ModalService',
-    function ($scope, PlanoContaService, ModalService) {
+app.controller('PlanoContaController', ['$scope', '$q', 'PlanoContaService', 'ModalService', 'LISTAS',
+    function ($scope, $q, PlanoContaService, ModalService, LISTAS) {
 
         var init = function () {
             $scope.planoContas = [];
             $scope.planoContasLista = [];
-            
-            $scope.colunas = [
-                {label: 'Número', column: 'numero'},
-                {label: 'Nome', column: 'nome', class: 'col-md-4', filter: {name: 'uppercase', args: null}},                
-                {label: 'Website', column: 'website', class: 'col-md-4'}
-            ]
+            $scope.tipos = LISTAS.planoConta;
             
             $scope.events = { 
-                edit: function(planoConta) {
-                    $scope.editar(planoConta.idPlanoConta);
+                add: function(idPlanoConta) {
+                    $scope.salvar(idPlanoConta);
                 },
-                remove: function(planoConta) {
-                    $scope.excluir(planoConta.idPlanoConta);
+                edit: function(idPlanoConta) {
+                    $scope.editar(idPlanoConta);
+                },
+                remove: function(idPlanoConta) {
+                    $scope.excluir(idPlanoConta);
                 }
             }         
         };  
 
         var todos = function() {
-            PlanoContaService.getStructure()
-                .success(function(data) {
-                    $scope.planoContas = data;
-                    $scope.planoContasLista = criarPlanoContasLista($scope.planoContas);
+            var planos = [];
+            angular.forEach(LISTAS.planoConta, function(plano) {
+                planos.push(PlanoContaService.getStructureByTipo(plano.id));
+            })
+            $q.all(planos)
+                .then(function(values) {  
+                    angular.forEach(values, function(value, key) {
+                        $scope.planoContas[key] = value;
+                        $scope.planoContasLista[key] = criarPlanoContasLista($scope.planoContas[key]);                        
+                    });
                 })
-                .error(function(e) {
+                .catch(function(e) {
                     modalMessage(e);
                 });
         };
@@ -40,26 +44,14 @@ app.controller('PlanoContaController', ['$scope', 'PlanoContaService', 'ModalSer
             })
         }
 
-        $scope.salvar = function() {
-            modalSalvar().then(function(result) {
-                PlanoContaService.save(result)
-                    .then(function(data) {  
-                        modalMessage("PlanoConta " + data.nome +  " Inserido com sucesso!");
-                        todos();
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            });
-        };
-
-        $scope.editar = function(idPlanoConta) {
+        $scope.salvar = function(idPlanoConta) {
             PlanoContaService.get(idPlanoConta)
                 .then(function(planoConta) {
-                     modalSalvar(planoConta).then(function(result) {
-                        PlanoContaService.update(idPlanoConta, result)
-                            .then(function (data) {  
-                                modalMessage("PlanoConta " + data.nome + " Alterado com sucesso!");
+                    modalSalvar(planoConta, 'save').then(function(result) {
+                        result = ajustarDados(result, planoConta);
+                        PlanoContaService.save(result)
+                            .then(function(data) {  
+                                modalMessage("Plano de Conta " + data.nome +  " Inserido com sucesso!");
                                 todos();
                             })
                             .catch(function(e) {
@@ -68,16 +60,35 @@ app.controller('PlanoContaController', ['$scope', 'PlanoContaService', 'ModalSer
                     });
                 })
                 .catch(function(e) {
-                    modalMessage(e.error);
+                    modalMessage(e);
                 });
-           
+        };
+
+        $scope.editar = function(idPlanoConta) {
+            PlanoContaService.get(idPlanoConta)
+                .then(function(planoConta) {
+                     modalSalvar(planoConta, 'edit').then(function(result) {
+                        result = ajustarDados(result, result.grupo);
+                        PlanoContaService.update(idPlanoConta, result)
+                            .then(function (data) {  
+                                modalMessage("Plano de Conta " + data.nome + " Alterado com sucesso!");
+                                todos();
+                            })
+                            .catch(function(e) {
+                                modalMessage(e);
+                            });
+                    });
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });           
         };
 
         $scope.excluir = function(idPlanoConta) {
             modalExcluir().then(function() {
                 PlanoContaService.delete(idPlanoConta)
                     .then(function(data) { 
-                        modalMessage("PlanoConta " + data.nome + " Removido com sucesso!");
+                        modalMessage("Plano de Conta " + data.nome + " Removido com sucesso!");
                         todos();                        
                     })
                     .catch(function(e) {
@@ -86,15 +97,26 @@ app.controller('PlanoContaController', ['$scope', 'PlanoContaService', 'ModalSer
             });
         }; 
         
+        var ajustarDados = function(data, planoConta) {            
+            data.tipo = data.tipo.id; 
+            data.grupo = {
+                idPlanoConta: planoConta.idPlanoConta
+            }
+            return data;
+        }
+        
         var modalMessage = function(message) {
             ModalService.modalMessage(message);
         };
         
-        var modalSalvar = function(planoConta) {
+        var modalSalvar = function(planoConta, action) {
             var modalInstance = ModalService.modalDefault('partials/financeiro/modalEditarPlanoConta.html', 'ModalEditarPlanoContaController', 'lg',
                 {
                     planoConta: function() {
                         return planoConta;
+                    },
+                    action: function() {
+                        return action;
                     }
                 });
             return modalInstance.result;

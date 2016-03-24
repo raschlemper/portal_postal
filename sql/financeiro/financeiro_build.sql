@@ -37,6 +37,9 @@ CREATE TABLE `plano_conta` (
   PRIMARY KEY (`idPlanoConta`)
 ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
+ALTER TABLE `plano_conta` 
+ADD UNIQUE INDEX `u_planoconta` (`tipo`, `codigo`, `grupo`);
+
 CREATE TABLE `conta_corrente` (
   `idContaCorrente` INT NOT NULL AUTO_INCREMENT,
   `banco`           INT NOT NULL,
