@@ -1,28 +1,53 @@
 'use strict';
 
-app.controller('ModalEditarPlanoContaController', ['$scope', '$modalInstance', 'planoConta', 'action', 'PlanoContaService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, planoConta, action, PlanoContaService, ListaService, LISTAS) {
+app.controller('ModalEditarPlanoContaController', ['$scope', '$modalInstance', '$filter', 'planoConta', 'action', 'PlanoContaService', 'ListaService', 'LISTAS',
+    function ($scope, $modalInstance, $filter, planoConta, action, PlanoContaService, ListaService, LISTAS) {
 
         var init = function () {  
             $scope.tipos = LISTAS.planoConta; 
             $scope.action = action;
+            $scope.grupos = [];
+            $scope.gruposList = [];
+            $scope.isGroup = isGroup();
             if(action === 'save') { create(); }
             else { todos(); }
             getTitle();
             
         }; 
+        
+        var isGroup = function() {
+           if(planoConta.contas) return true;
+           return false;            
+        }
 
         var todos = function() {
-            PlanoContaService.getAll()
+            PlanoContaService.getStructureByTipo(planoConta.tipo.id)
                 .then(function(data) {
                     $scope.grupos = data;
-                    planoConta.grupo = ListaService.getPlanoContaValue($scope.grupos, planoConta.grupo.idPlanoConta);
+                    createGruposList(null, $scope.grupos);
+                    $scope.gruposList = $filter('orderBy')($scope.gruposList, 'codigo', false);
+                    planoConta.grupo = ListaService.getPlanoContaValue($scope.gruposList, planoConta.grupo.idPlanoConta);
                     edit(data);
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         };
+        
+        var createGruposList = function(code, items) {            
+            angular.forEach(items, function(item) {                    
+                var grupo = {};
+                var codigo = item.codigo;
+                if(code) { codigo = code + '.' + codigo; }
+                grupo.idPlanoConta = item.idPlanoConta;
+                grupo.codigo = codigo;
+                grupo.nome = codigo + ' - ' + item.nome;
+                if(item.contas) { 
+                    createGruposList(codigo, item.contas);
+                }
+                $scope.gruposList.push(grupo);
+            });    
+        }
         
         var create = function() {
             $scope.planoConta = {
@@ -42,6 +67,9 @@ app.controller('ModalEditarPlanoContaController', ['$scope', '$modalInstance', '
                 nome: (planoConta && planoConta.nome) || null,                
                 grupo: (planoConta && planoConta.grupo) || null
             }; 
+            if($scope.isGroup) {
+                $scope.planoConta.grupo = $scope.planoConta.grupo.nome;
+            }
         }
         
         var getTitle = function() {

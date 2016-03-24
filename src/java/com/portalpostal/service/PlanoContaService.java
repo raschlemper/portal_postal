@@ -1,6 +1,7 @@
 package com.portalpostal.service;
 
 import com.portalpostal.dao.PlanoContaDAO;
+import com.portalpostal.model.Banco;
 import com.portalpostal.model.PlanoConta;
 import java.util.List;
 
@@ -27,6 +28,10 @@ public class PlanoContaService {
         findContas(grupos);
         return grupos;
     }
+
+    public PlanoConta findByTipoGrupoCodigo(Integer tipo, Integer grupo, Integer codigo) throws Exception {
+        return planoContaDAO.findByTipoGrupoCodigo(tipo, grupo, codigo); 
+    }
     
     public PlanoConta find(Integer idPlanoConta) throws Exception {
         PlanoConta planoConta =  planoContaDAO.find(idPlanoConta);
@@ -36,10 +41,12 @@ public class PlanoContaService {
     } 
     
     public PlanoConta save(PlanoConta planoConta) throws Exception {
+        validation(planoConta);
         return planoContaDAO.save(planoConta);
     } 
     
     public PlanoConta update(PlanoConta planoConta) throws Exception {
+        validation(planoConta);
         return planoContaDAO.update(planoConta);
     } 
     
@@ -54,6 +61,20 @@ public class PlanoContaService {
             conta.setContas(grupos);
             findContas(grupos);
         }
+    } 
+    
+    private void validation(PlanoConta planoConta) throws Exception {  
+        if(existePlanoConta(planoConta)) {
+            throw new Exception("Este Banco já foi cadastrado!");
+        } 
+    }  
+    
+    private boolean existePlanoConta(PlanoConta planoConta) throws Exception {
+        PlanoConta planoContaExist = planoContaDAO.findByTipoGrupoCodigo(
+                planoConta.getTipo().ordinal(), planoConta.getGrupo().getIdPlanoConta(), planoConta.getCodigo());
+        if(planoContaExist == null) return false;
+        if(planoContaExist.getIdPlanoConta().equals(planoConta.getIdPlanoConta())) return false;
+        return true;
     }
     
 }

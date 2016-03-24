@@ -55,11 +55,15 @@ app.directive('appTree', function($compile) {
                     } else {          
                         html += '<li>';              
                         html += '<i class="fa fa-folder-o"></i>';
-                        html += '<div class="name">' + codigo + ' - ' + item.nome;        
+                        if(item.grupo) { 
+                            html += '<div class="name">' + codigo + ' - ' + item.nome;
+                        } else {
+                            html += '<div class="name text-uppercase" style="font-size: 13pt;"><strong>' + codigo + ' - ' + item.nome + '</strong>';
+                        }        
                         html += '<span class="pull-right action">';
                         if(item.grupo) {   
-                            html += '<i class="fa fa-lg fa-trash" ng-click="events.remove(' + item.idPlanoConta + ')"></i>' +
-                                    '<i class="fa fa-lg fa-pencil-square" ng-click="events.edit(' + item.idPlanoConta + ')"></i>';                                  
+                            html += '<i class="fa fa-lg fa-trash" ng-click="events.remove(' + item.idPlanoConta + ')"></i>';
+                            html += '<i class="fa fa-lg fa-pencil-square" ng-click="events.edit(' + item.idPlanoConta + ')"></i>';                                  
                         }
                         html += '<i class="fa fa-lg fa-plus-square" ng-click="events.add(' + item.idPlanoConta + ')"></i>';
                         html += '</span>';

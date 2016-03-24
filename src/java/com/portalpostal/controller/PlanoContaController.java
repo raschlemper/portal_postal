@@ -75,6 +75,19 @@ public class PlanoContaController {
     }    
     
     @GET
+    @Path("/tipo/{tipo}/grupo/{grupo}/codigo/{codigo}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public PlanoConta findByTipoGrupoCodigo(@PathParam("tipo") Integer tipo, 
+            @PathParam("grupo") Integer grupo, @PathParam("codigo") Integer codigo) {
+        try {
+            init();    
+            return planoContaService.findByTipoGrupoCodigo(tipo, grupo, codigo);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }    
+    
+    @GET
     @Path("/{idPlanoConta}")
     @Produces(MediaType.APPLICATION_JSON)
     public PlanoConta find(@PathParam("idPlanoConta") Integer idPlanoConta) {
