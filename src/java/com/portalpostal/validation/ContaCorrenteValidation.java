@@ -1,17 +1,23 @@
 package com.portalpostal.validation;
 
-import com.portalpostal.model.CartaoCredito;
 import com.portalpostal.model.ContaCorrente;
 
 public class ContaCorrenteValidation extends Validation<ContaCorrente>{
 
     @Override
     public boolean validar(ContaCorrente contaCorrente) {
+        if(!validarNome(contaCorrente)) return false;   
         if(!validarBanco(contaCorrente)) return false;   
         if(!validarAgencia(contaCorrente)) return false;   
         if(!validarContaCorrente(contaCorrente)) return false;   
         return true;
     }
+
+    public boolean validarNome(ContaCorrente contaCorrente) {          
+        if(campoNotNull(contaCorrente.getNome())) return true; 
+        setMsg("Preencha o nome da conta corrente!");
+        return false;        
+    }  
 
     public boolean validarBanco(ContaCorrente contaCorrente) {          
         if(campoNotNull(contaCorrente.getBanco())) return true; 

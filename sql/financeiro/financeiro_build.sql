@@ -42,7 +42,8 @@ ADD UNIQUE INDEX `u_planoconta` (`tipo`, `codigo`, `grupo`);
 
 CREATE TABLE `conta_corrente` (
   `idContaCorrente` INT NOT NULL AUTO_INCREMENT,
-  `banco`           INT NOT NULL,
+  `nome`            VARCHAR(254) NOT NULL,
+  `idBanco`         INT NOT NULL,
   `agencia`         INT NOT NULL,
   `contaCorrente`   INT NOT NULL,
   `carteira`        INT DEFAULT NULL,
@@ -55,6 +56,7 @@ ADD UNIQUE INDEX `u_contacorrente` (`banco`, `agencia`, `contaCorrente`);
 CREATE TABLE `cartao_credito` (
   `idCartaoCredito`    INT NOT NULL AUTO_INCREMENT,
   `idContaCorrente`    INT DEFAULT NULL,
+  `nome`               VARCHAR(254) NOT NULL,
   `bandeira`           VARCHAR(254) NOT NULL,
   `diaFechamento`      INT NOT NULL,
   `diaVencimento`      INT NOT NULL,
@@ -76,6 +78,8 @@ CREATE TABLE `conta` (
   `idConta`            INT NOT NULL AUTO_INCREMENT,
 --   `idTipoConta`       INT NOT NULL,
   `idContaCorrente`    INT DEFAULT NULL,
+  `nome`               VARCHAR(254) NOT NULL,
+  `tipo`               INT NOT NULL,
   `status`             INT NOT NULL,
   `dataAbertura`       DATETIME NOT NULL,
   `valorSaldoAbertura` DECIMAL(13,2) DEFAULT 0,
@@ -91,6 +95,26 @@ CREATE TABLE `conta` (
 --   REFERENCES `tipo_conta` (`idTipoConta`)
 --   ON DELETE NO ACTION
 --   ON UPDATE NO ACTION;
+
+ALTER TABLE `conta` 
+ADD INDEX `i_conta_contacorrente` (`idContaCorrente` ASC);
+
+ALTER TABLE `conta` 
+ADD CONSTRAINT `fk_conta_contacorrente`
+  FOREIGN KEY (`idContaCorrente`)
+  REFERENCES `conta_corrente` (`idContaCorrente`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `conta` 
+ADD INDEX `i_conta_cartaocredito` (`idCartaoCredito` ASC);
+
+ALTER TABLE `conta` 
+ADD CONSTRAINT `fk_conta_cartaocredito`
+  FOREIGN KEY (`idCartaoCredito`)
+  REFERENCES `cartao_credito` (`idCartaoCredito`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
 
 CREATE TABLE `lancamento` (
   `idLancamento` INT NOT NULL AUTO_INCREMENT,

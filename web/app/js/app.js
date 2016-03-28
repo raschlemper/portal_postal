@@ -23,6 +23,8 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
 
         $stateProvider
         
+            /* ***** VEÍCULO ***** */
+            
             .state('veiculo', {
                 abstract: true,
                 url: '/veiculo',
@@ -66,6 +68,8 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
             })
             
             
+            /* ***** FINANCEIRO ***** */
+            
             .state('financeiro', {
                 abstract: true,
                 url: '/financeiro',
@@ -81,6 +85,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
                 url: '/planoconta',
                 templateUrl: 'partials/financeiro/planoconta.html',
                 controller: 'PlanoContaController',
+                resolve: {}
+            })
+            .state('financeiro.conta', {
+                url: '/conta',
+                templateUrl: 'partials/financeiro/conta.html',
+                controller: 'ContaController',
                 resolve: {}
             });
 

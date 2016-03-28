@@ -4,7 +4,7 @@ app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'vei
     function ($scope, $modalInstance, veiculo, VeiculoService, ModalService, FipeService, ListaService, ValorService, LISTAS) {
 
         var init = function () {
-            $scope.tipos = LISTAS.tipo;
+            $scope.tipos = LISTAS.tipoVeiculo;
             $scope.combustiveis = LISTAS.combustivel;
             $scope.status = LISTAS.status;
             $scope.situacoes = LISTAS.situacao;

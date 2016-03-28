@@ -2,9 +2,9 @@
 
 app.constant('LISTAS', {
 
-    "tipo": [{'id': 0, 'codigo': 'motos', 'descricao': 'Moto'},
-             {'id': 1, 'codigo': 'carros', 'descricao': 'Carro'},
-             {'id': 2, 'codigo': 'caminhoes', 'descricao': 'Caminhão'}],
+    "tipoVeiculo": [{'id': 0, 'codigo': 'motos', 'descricao': 'Moto'},
+                    {'id': 1, 'codigo': 'carros', 'descricao': 'Carro'},
+                    {'id': 2, 'codigo': 'caminhoes', 'descricao': 'Caminhão'}],
 
     "combustivel": [{'id': 0, 'codigo': 'gasolina', 'descricao': 'Gasolina'},  
                     {'id': 1, 'codigo': 'etanol', 'descricao': 'Etanol/Álcool'},
@@ -37,6 +37,12 @@ app.constant('LISTAS', {
                     {'id': 1, 'codigo': 'terceiros', 'descricao': 'Terceiros'}],
      
     "planoConta": [{'id': 0, 'codigo': 'receita', 'descricao': 'Receita'},
-                    {'id': 1, 'codigo': 'despesa', 'descricao': 'Despesa'}]
+                    {'id': 1, 'codigo': 'despesa', 'descricao': 'Despesa'}],
+     
+    "tipoConta": [{'id': 0, 'codigo': 'dinheiro', 'descricao': 'Dinheiro'},
+                  {'id': 1, 'codigo': 'contacorrente', 'descricao': 'Conta Corrente'},
+                  {'id': 2, 'codigo': 'poupanca', 'descricao': 'Poupança'},
+                  {'id': 3, 'codigo': 'cobranca', 'descricao': 'Cobrança'},
+                  {'id': 4, 'codigo': 'cartaocredito', 'descricao': 'Cartão Crédito'}]
 
 });

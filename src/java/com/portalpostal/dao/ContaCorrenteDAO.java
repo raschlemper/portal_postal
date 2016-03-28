@@ -32,9 +32,10 @@ public class ContaCorrenteDAO extends GenericDAO {
     }
 
     public ContaCorrente save(ContaCorrente contaCorrente) throws Exception {  
-        String sql = "INSERT INTO conta_corrente (idBanco, agencia, contaCorrente, carteira) "
-                   + "VALUES(:idBanco, :agencia, :contaCorrente, :carteira)";        
+        String sql = "INSERT INTO conta_corrente (nome, idBanco, agencia, contaCorrente, carteira) "
+                   + "VALUES(:nome, :idBanco, :agencia, :contaCorrente, :carteira)";        
         Map<String, Object> params = new HashMap<String, Object>();
+        params.put("nome", contaCorrente.getNome());
         params.put("idBanco", contaCorrente.getBanco().getIdBanco());
         params.put("agencia", contaCorrente.getAgencia());
         params.put("contaCorrente", contaCorrente.getContaCorrente());
@@ -45,10 +46,11 @@ public class ContaCorrenteDAO extends GenericDAO {
 
     public ContaCorrente update(ContaCorrente contaCorrente) throws Exception {
         String sql = "UPDATE conta_corrente "
-                   + "SET idBanco = :idBanco, agencia = :agencia, contaCorrente = :contaCorrente, carteira = :carteira "
+                   + "SET nome = :nome, idBanco = :idBanco, agencia = :agencia, contaCorrente = :contaCorrente, carteira = :carteira "
                    + "WHERE idContaCorrente = :idContaCorrente ";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idContaCorrente", contaCorrente.getIdContaCorrente());
+        params.put("nome", contaCorrente.getNome());
         params.put("idBanco", contaCorrente.getBanco().getIdBanco());
         params.put("agencia", contaCorrente.getAgencia());
         params.put("contaCorrente", contaCorrente.getContaCorrente());

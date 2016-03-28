@@ -75,6 +75,7 @@
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/modalEditarBancoController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/planoContaController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/modalEditarPlanoContaController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/contaController.js"></script>
         
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/promiseService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/fipeService.js"></script>
@@ -93,6 +94,7 @@
         
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/financeiro/bancoService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/financeiro/planoContaService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/financeiro/contaService.js"></script>
 
     </body>
 </html>

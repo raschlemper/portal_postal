@@ -32,10 +32,11 @@ public class CartaoCreditoDAO extends GenericDAO {
     }
 
     public CartaoCredito save(CartaoCredito cartaoCredito) throws Exception {  
-        String sql = "INSERT INTO conta (idContaCorrente, bandeira, diaFechamento, diaVencimento, valorLimiteCredito) "
-                   + "VALUES(:idContaCorrente, :bandeira, :diaFechamento, :diaVencimento, :valorLimiteCredito)";        
+        String sql = "INSERT INTO conta (idContaCorrente, nome, bandeira, diaFechamento, diaVencimento, valorLimiteCredito) "
+                   + "VALUES(:idContaCorrente, :nome, :bandeira, :diaFechamento, :diaVencimento, :valorLimiteCredito)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idContaCorrente", cartaoCredito.getContaCorrente().getIdContaCorrente());
+        params.put("nome", cartaoCredito.getNome());
         params.put("bandeira", cartaoCredito.getBandeira());
         params.put("diaFechamento", cartaoCredito.getDiaFechamento());      
         params.put("diaVencimento", cartaoCredito.getDiaVencimento());
@@ -46,12 +47,13 @@ public class CartaoCreditoDAO extends GenericDAO {
 
     public CartaoCredito update(CartaoCredito cartaoCredito) throws Exception {
         String sql = "UPDATE conta "
-                   + "SET idContaCorrente = :idContaCorrente, bandeira = :bandeira, diaFechamento = :diaFechamento, "
+                   + "SET idContaCorrente = :idContaCorrente, nome = :nome, bandeira = :bandeira, diaFechamento = :diaFechamento, "
                    + "diaVencimento = :diaVencimento, valorLimiteCredito = :valorLimiteCredito "
                    + "WHERE idCartaoCredito = :idCartaoCredito ";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idCartaoCredito", cartaoCredito.getIdCartaoCredito());
         params.put("idContaCorrente", cartaoCredito.getContaCorrente().getIdContaCorrente());
+        params.put("nome", cartaoCredito.getNome());
         params.put("bandeira", cartaoCredito.getBandeira());
         params.put("diaFechamento", cartaoCredito.getDiaFechamento());      
         params.put("diaVencimento", cartaoCredito.getDiaVencimento());

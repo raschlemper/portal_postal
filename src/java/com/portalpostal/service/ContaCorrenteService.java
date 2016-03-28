@@ -1,15 +1,18 @@
 package com.portalpostal.service;
 
+import com.portalpostal.dao.CartaoCreditoDAO;
 import com.portalpostal.dao.ContaCorrenteDAO;
 import com.portalpostal.model.ContaCorrente;
 import java.util.List;
 
 public class ContaCorrenteService {
     
-    private final ContaCorrenteDAO contaCorrenteDAO;
+    private final ContaCorrenteDAO contaCorrenteDAO;    
+    private final CartaoCreditoDAO cartaoCreditoDAO;
 
     public ContaCorrenteService(String nomeBD) {
         contaCorrenteDAO = new ContaCorrenteDAO(nomeBD);
+        cartaoCreditoDAO = new CartaoCreditoDAO(nomeBD);
     }
     
     public List<ContaCorrente> findAll() throws Exception {
@@ -22,11 +25,17 @@ public class ContaCorrenteService {
     
     public ContaCorrente save(ContaCorrente contaCorrente) throws Exception {
         validation(contaCorrente);
+        if(contaCorrente.getCartaoCredito() != null) {
+            cartaoCreditoDAO.save(contaCorrente.getCartaoCredito());
+        }
         return contaCorrenteDAO.save(contaCorrente);
     } 
     
     public ContaCorrente update(ContaCorrente contaCorrente) throws Exception {
         validation(contaCorrente);
+        if(contaCorrente.getCartaoCredito() != null) {
+            cartaoCreditoDAO.save(contaCorrente.getCartaoCredito());
+        }
         return contaCorrenteDAO.update(contaCorrente);
     } 
     

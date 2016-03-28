@@ -2744,7 +2744,6 @@ border-radius: 50%;}
 .spacer-xlg {
     margin-top: 200px; /* define margin as you see fit */
 }
-
 .text-8px{
     font-size: 8px;
 }
@@ -2776,14 +2775,16 @@ border-radius: 50%;}
   min-height: 70px;
 }
 
+
+/* ***** APP CSS ***** */
+
 .angular-with-newlines {
     white-space: pre-wrap;
 }
-
 .icon-search {
     cursor: pointer;
 }
-
+/* Table */
 .sortorder:after {
     content: "\f0dc";
     float: right;
@@ -2800,10 +2801,7 @@ border-radius: 50%;}
     float: right;
     font-family: fontawesome;
 }
-
-
-
-
+/* Tree */
 .tree, .tree ul {
     margin:0;
     padding:0;
@@ -2887,4 +2885,48 @@ border-radius: 50%;}
     padding:0px 0px 0px 0px;
     outline: 0;
 }
-
+/* List */
+.list-category {
+    padding-bottom: 8px;
+}
+div.list-category h4.title {
+    display: block;
+    padding: 5px 0 10px 0;
+    font-size: 20px;
+    font-weight: 100;
+    margin-bottom: 0px;
+    border-bottom: 1px solid;
+}
+div.list-category h4.title i {
+    margin-right:5px;
+}
+div.list-category span.list-footer {
+    display: block;
+    padding: 14px 0 15px 0;
+    font-size: 20px;
+    font-weight: 100;
+    margin-bottom: 0px;
+    border-bottom: 1px solid;
+}
+div.list-category a.list-group-item:first-child {
+    border-top: 0;
+}
+div.list-category .list-footer {
+    margin-top:-15px;
+}
+div.list-category div.list-group-item {
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+    border-bottom: 1px solid #E0E4E9;
+    padding: 5px 0;
+    color: #4c4c4c; 
+    text-decoration: none;
+    overflow: hidden;
+}
+.truncate {
+    width: 5em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

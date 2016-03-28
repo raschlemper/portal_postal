@@ -3,11 +3,12 @@ package com.portalpostal.model;
 public class CartaoCredito {
     
     private Integer idCartaoCredito;
-    private ContaCorrente contaCorrente;
+    private String nome;
     private String bandeira;
     private Integer diaFechamento;
     private Integer diaVencimento;
     private Double valorLimiteCredito;
+    private ContaCorrente contaCorrente;
 
     public Integer getIdCartaoCredito() {
         return idCartaoCredito;
@@ -17,12 +18,12 @@ public class CartaoCredito {
         this.idCartaoCredito = idCartaoCredito;
     }
 
-    public ContaCorrente getContaCorrente() {
-        return contaCorrente;
+    public String getNome() {
+        return nome;
     }
 
-    public void setContaCorrente(ContaCorrente contaCorrente) {
-        this.contaCorrente = contaCorrente;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getBandeira() {
@@ -56,6 +57,13 @@ public class CartaoCredito {
     public void setValorLimiteCredito(Double valorLimiteCredito) {
         this.valorLimiteCredito = valorLimiteCredito;
     }
-    
+
+    public ContaCorrente getContaCorrente() {
+        return contaCorrente;
+    }
+
+    public void setContaCorrente(ContaCorrente contaCorrente) {
+        this.contaCorrente = contaCorrente;
+    }    
     
 }

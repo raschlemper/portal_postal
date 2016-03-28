@@ -3,6 +3,7 @@ package com.portalpostal.model;
 public class ContaCorrente {
     
     private Integer idContaCorrente;
+    private String nome;
     private Banco banco;
     private Integer agencia;
     private Integer contaCorrente;
@@ -14,6 +15,14 @@ public class ContaCorrente {
 
     public void setIdContaCorrente(Integer idContaCorrente) {
         this.idContaCorrente = idContaCorrente;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public Banco getBanco() {
@@ -48,6 +57,4 @@ public class ContaCorrente {
         this.carteira = carteira;
     }
     
-    
-        
 }
