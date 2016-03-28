@@ -81,9 +81,15 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
                 controller: 'BancoController',
                 resolve: {}
             })
+            .state('financeiro.cartaocredito', {
+                url: '/cartaocredito',
+                templateUrl: 'partials/financeiro/cartaoCredito.html',
+                controller: 'CartaoCreditoController',
+                resolve: {}
+            })
             .state('financeiro.planoconta', {
                 url: '/planoconta',
-                templateUrl: 'partials/financeiro/planoconta.html',
+                templateUrl: 'partials/financeiro/planoConta.html',
                 controller: 'PlanoContaController',
                 resolve: {}
             })

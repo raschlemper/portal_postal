@@ -17,25 +17,25 @@ public class CartaoCreditoDAO extends GenericDAO {
 
     public List<CartaoCredito> findAll() throws Exception {
         String sql = "SELECT * FROM cartao_credito "
-                   + "LEFT OUTER JOIN conta_corrente ON(conta_corente.idContaCorrente = cartao_credito.idContaCorrente) "
+                   + "LEFT OUTER JOIN conta_corrente ON(conta_corrente.idContaCorrente = cartao_credito.idContaCorrente) "
                    + "ORDER BY cartao_credito.idCartaoCredito";        
         return findAll(sql, null, cartaoCreditoHandler);
     }
 
-    public CartaoCredito find(Integer idCartaCredito) throws Exception {
+    public CartaoCredito find(Integer idCartaoCredito) throws Exception {
         String sql = "SELECT * FROM cartao_credito "
-                   + "LEFT OUTER JOIN conta_corrente ON(conta_corente.idContaCorrente = cartao_credito.idContaCorrente) "
-                   + "WHERE cartao_credito.idCartaoCredito = :idCartaCredito";
+                   + "LEFT OUTER JOIN conta_corrente ON(conta_corrente.idContaCorrente = cartao_credito.idContaCorrente) "
+                   + "WHERE cartao_credito.idCartaoCredito = :idCartaoCredito";
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("idCartaCredito", idCartaCredito);
+        params.put("idCartaoCredito", idCartaoCredito);
         return (CartaoCredito) find(sql, params, cartaoCreditoHandler);
     }
 
     public CartaoCredito save(CartaoCredito cartaoCredito) throws Exception {  
-        String sql = "INSERT INTO conta (idContaCorrente, nome, bandeira, diaFechamento, diaVencimento, valorLimiteCredito) "
+        String sql = "INSERT INTO cartao_credito (idContaCorrente, nome, bandeira, diaFechamento, diaVencimento, valorLimiteCredito) "
                    + "VALUES(:idContaCorrente, :nome, :bandeira, :diaFechamento, :diaVencimento, :valorLimiteCredito)";        
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("idContaCorrente", cartaoCredito.getContaCorrente().getIdContaCorrente());
+        params.put("idContaCorrente", (cartaoCredito.getContaCorrente() == null ? null : cartaoCredito.getContaCorrente().getIdContaCorrente()));
         params.put("nome", cartaoCredito.getNome());
         params.put("bandeira", cartaoCredito.getBandeira());
         params.put("diaFechamento", cartaoCredito.getDiaFechamento());      
@@ -46,13 +46,13 @@ public class CartaoCreditoDAO extends GenericDAO {
     }
 
     public CartaoCredito update(CartaoCredito cartaoCredito) throws Exception {
-        String sql = "UPDATE conta "
+        String sql = "UPDATE cartao_credito "
                    + "SET idContaCorrente = :idContaCorrente, nome = :nome, bandeira = :bandeira, diaFechamento = :diaFechamento, "
                    + "diaVencimento = :diaVencimento, valorLimiteCredito = :valorLimiteCredito "
                    + "WHERE idCartaoCredito = :idCartaoCredito ";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idCartaoCredito", cartaoCredito.getIdCartaoCredito());
-        params.put("idContaCorrente", cartaoCredito.getContaCorrente().getIdContaCorrente());
+        params.put("idContaCorrente", (cartaoCredito.getContaCorrente() == null ? null : cartaoCredito.getContaCorrente().getIdContaCorrente()));
         params.put("nome", cartaoCredito.getNome());
         params.put("bandeira", cartaoCredito.getBandeira());
         params.put("diaFechamento", cartaoCredito.getDiaFechamento());      
@@ -62,11 +62,11 @@ public class CartaoCreditoDAO extends GenericDAO {
         return cartaoCredito;  
     }
 
-    public CartaoCredito remove(Integer idContaCorrente) throws Exception { 
-        String sql = "DELETE FROM cartao_credito WHERE idContaCorrente = :idContaCorrente ";
-        CartaoCredito cartaoCredito = find(idContaCorrente);
+    public CartaoCredito remove(Integer idCartaoCredito) throws Exception { 
+        String sql = "DELETE FROM cartao_credito WHERE idCartaoCredito = :idCartaoCredito ";
+        CartaoCredito cartaoCredito = find(idCartaoCredito);
         Map<String, Object> params = new HashMap<String, Object>();        
-        params.put("idContaCorrente", idContaCorrente);
+        params.put("idCartaoCredito", idCartaoCredito);
         remove(sql, params, cartaoCreditoHandler);
         return cartaoCredito;
     }

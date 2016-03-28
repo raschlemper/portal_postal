@@ -25,17 +25,11 @@ public class ContaCorrenteService {
     
     public ContaCorrente save(ContaCorrente contaCorrente) throws Exception {
         validation(contaCorrente);
-        if(contaCorrente.getCartaoCredito() != null) {
-            cartaoCreditoDAO.save(contaCorrente.getCartaoCredito());
-        }
         return contaCorrenteDAO.save(contaCorrente);
     } 
     
     public ContaCorrente update(ContaCorrente contaCorrente) throws Exception {
         validation(contaCorrente);
-        if(contaCorrente.getCartaoCredito() != null) {
-            cartaoCreditoDAO.save(contaCorrente.getCartaoCredito());
-        }
         return contaCorrenteDAO.update(contaCorrente);
     } 
     

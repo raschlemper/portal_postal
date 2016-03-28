@@ -33,7 +33,8 @@ app.directive('appTable', function($filter) {
         
             var getStart = function() {
                 scope.start = ((scope.currentPage - 1) * scope.limitTo.value);
-                scope.from = scope.start + 1;
+                scope.from = 0;
+                if(scope.total) { scope.from = scope.start + 1; }
             } ; 
 
             var getFinish = function() {

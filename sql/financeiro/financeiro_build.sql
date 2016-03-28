@@ -51,7 +51,7 @@ CREATE TABLE `conta_corrente` (
 ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
 ALTER TABLE `conta_corrente` 
-ADD UNIQUE INDEX `u_contacorrente` (`banco`, `agencia`, `contaCorrente`);
+ADD UNIQUE INDEX `u_contacorrente` (`idBanco`, `agencia`, `contaCorrente`);
 
 CREATE TABLE `cartao_credito` (
   `idCartaoCredito`    INT NOT NULL AUTO_INCREMENT,

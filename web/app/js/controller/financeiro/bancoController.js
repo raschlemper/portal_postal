@@ -6,13 +6,15 @@ app.controller('BancoController', ['$scope', 'BancoService', 'ModalService',
         var init = function () {
             $scope.bancos = [];
             $scope.bancosLista = [];
-            
+            initTable();      
+        };  
+        
+        var initTable = function() {            
             $scope.colunas = [
                 {label: 'Número', column: 'numero'},
                 {label: 'Nome', column: 'nome', class: 'col-md-4', filter: {name: 'uppercase', args: null}},                
                 {label: 'Website', column: 'website', class: 'col-md-4'}
-            ]
-            
+            ]            
             $scope.events = { 
                 edit: function(banco) {
                     $scope.editar(banco.idBanco);
@@ -20,8 +22,8 @@ app.controller('BancoController', ['$scope', 'BancoService', 'ModalService',
                 remove: function(banco) {
                     $scope.excluir(banco.idBanco);
                 }
-            }         
-        };  
+            }             
+        }
 
         var todos = function() {
             BancoService.getAll()

@@ -8,35 +8,40 @@ app.controller('ContaController', ['$scope', 'ContaService', 'ModalService', 'LI
             $scope.contasLista = [];
             $scope.tipos = LISTAS.tipoConta;
             $scope.collapsed = [];
-            criarTipoContaLista($scope.tipos);
+            initTable();
         };  
+        
+        var initTable = function() {            
+            $scope.colunas = [
+                {label: 'Nome', column: 'nome'},
+                {label: 'Tipo', column: 'tipo', class: 'col-md-4'},                
+                {label: 'Status', column: 'status', class: 'col-md-4'}
+            ]            
+            $scope.events = { 
+                edit: function(conta) {
+                    $scope.editar(conta.idBanco);
+                },
+                remove: function(conta) {
+                    $scope.excluir(conta.idBanco);
+                }
+            }             
+        };
 
         var todos = function() {
             ContaService.getAll()
                 .then(function (data) {
                     $scope.contas = data;
-                    $scope.contasLista = $scope.contas;
+                    $scope.contasLista = criarContasLista($scope.contas);
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         };
         
-        var criarTipoContaLista = function(tipos) {
-            return _.map($scope.tipos, function(tipo) {
-                $scope.collapsed[tipo.codigo] = true;
+        var criarContasLista = function(contas) {
+            return _.map(contas, function(conta) {
+                return _.pick(conta, 'idConta', 'nome', 'tipo', 'status');
             })
-        };
-        
-        $scope.existContas = function(contasLista, tipo) {
-            var contas = $scope.getContas(contasLista, tipo);
-            return (contas.length)
-        }
-        
-        $scope.getContas = function(contasLista, tipo) {
-            return _.filter(contasLista, function(conta) { 
-                return conta.tipo.id === tipo.id; 
-            });
         }
         
         $scope.salvar = function() {
