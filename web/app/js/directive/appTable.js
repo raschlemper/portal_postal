@@ -47,9 +47,17 @@ app.directive('appTable', function($filter) {
             };
             
             scope.column = function(item, coluna) {
-                var value = item[coluna.column];
+                var colunas = coluna.column.split('.');
+                var value = getColumn(item, colunas);
                 if(coluna.filter){ value = $filter(coluna.filter.name)(value, coluna.filter.args); }
                 return value;
+            }
+            
+            var getColumn = function(item, colunas) {
+                var value = item[colunas[0]];
+                colunas.splice(0, 1);
+                if(!colunas.length) return value;
+                return getColumn(value, colunas);
             }
             
             scope.class = function(coluna) {

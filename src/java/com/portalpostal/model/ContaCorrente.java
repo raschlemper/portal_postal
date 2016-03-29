@@ -8,6 +8,7 @@ public class ContaCorrente {
     private Integer agencia;
     private Integer contaCorrente;
     private Integer carteira;
+    private Boolean poupanca;
 
     public Integer getIdContaCorrente() {
         return idContaCorrente;
@@ -55,6 +56,14 @@ public class ContaCorrente {
 
     public void setCarteira(Integer carteira) {
         this.carteira = carteira;
+    }
+
+    public Boolean getPoupanca() {
+        return poupanca;
+    }
+
+    public void setPoupanca(Boolean poupanca) {
+        this.poupanca = poupanca;
     }
     
 }

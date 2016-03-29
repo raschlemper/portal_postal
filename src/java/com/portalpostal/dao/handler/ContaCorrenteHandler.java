@@ -28,6 +28,7 @@ public class ContaCorrenteHandler implements ResultSetHandler<ContaCorrente> {
         contaCorrente.setAgencia(result.getInt(table + ".agencia"));
         contaCorrente.setContaCorrente(result.getInt(table + ".contaCorrente"));
         contaCorrente.setCarteira((Integer)result.getObject(table + ".carteira"));
+        contaCorrente.setPoupanca(result.getBoolean(table + ".poupanca"));
         return contaCorrente;
     }
     

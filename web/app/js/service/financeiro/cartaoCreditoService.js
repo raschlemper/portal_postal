@@ -1,97 +1,32 @@
 'use strict';
 
-app.factory('CartaoCreditoService', function($http, $q) {
+app.factory('CartaoCreditoService', function($http, PromiseService) {
 
     return {
 
         getAll: function(callback) {
-            var cb = callback || angular.noop;
-            var deferred = $q.defer();
-
-            $http.get(_contextPath + "/api/financeiro/cartaocredito/").
-                success(function(data) {
-                    deferred.resolve(data);
-                    return cb();
-                })
-                .error(function(err) {
-                    deferred.reject(err);
-                    return cb(err);
-                }
-                .bind(this));
-
-            return deferred.promise;
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/cartaocredito/"));
         },
 
         get: function(idCartaoCredito, callback) {
-            var cb = callback || angular.noop;
-            var deferred = $q.defer();
-
-            $http.get(_contextPath + "/api/financeiro/cartaocredito/" + idCartaoCredito).
-                success(function(data) {
-                    deferred.resolve(data);
-                    return cb();
-                })
-                .error(function(err) {
-                    deferred.reject(err);
-                    return cb(err);
-                }
-                .bind(this));
-
-            return deferred.promise;
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/cartaocredito/" + idCartaoCredito));
         },
 
         save: function(data, callback) {
-            var cb = callback || angular.noop;
-            var deferred = $q.defer();
-
-            $http.post(_contextPath + "/api/financeiro/cartaocredito/", data).
-                success(function(data) {
-                    deferred.resolve(data);
-                    return cb();
-                })
-                .error(function(err) {
-                    deferred.reject(err);
-                    return cb(err);
-                }
-                .bind(this));
-
-            return deferred.promise;
+            return PromiseService.execute(
+                    $http.post(_contextPath + "/api/financeiro/cartaocredito/", data));
         },
 
         update: function(idCartaoCredito, data, callback) {
-            var cb = callback || angular.noop;
-            var deferred = $q.defer();
-
-            $http.put(_contextPath + "/api/financeiro/cartaocredito/" + idCartaoCredito, data).
-                success(function(data) {
-                    deferred.resolve(data);
-                    return cb();
-                })
-                .error(function(err) {
-                    deferred.reject(err);
-                    return cb(err);
-                }
-                .bind(this));
-
-            return deferred.promise;
+            return PromiseService.execute(
+                    $http.put(_contextPath + "/api/financeiro/cartaocredito/" + idCartaoCredito, data));
         },
 
         delete: function(idCartaoCredito, callback) {
-            var cb = callback || angular.noop;
-            var deferred = $q.defer();
-
-            $http.delete(_contextPath + "/api/financeiro/cartaocredito/" + idCartaoCredito).
-                success(function(data) {
-                    deferred.resolve(data);
-                    return cb();
-                })
-                .error(function(err) {
-                    deferred.reject(err);
-                    return cb(err);
-                }
-                .bind(this));
-
-            return deferred.promise;
+            return PromiseService.execute(
+                    $http.delete(_contextPath + "/api/financeiro/cartaocredito/" + idCartaoCredito));
         }
 
     }

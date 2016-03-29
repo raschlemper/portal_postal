@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalEditarCartaoCreditoController', ['$scope', '$modalInstance', 'cartaoCredito', 'CartaoCreditoService', 'ModalService',
-    function ($scope, $modalInstance, cartaoCredito, CartaoCreditoService, ModalService) {
+app.controller('ModalEditarCartaoCreditoController', ['$scope', '$modalInstance', 'cartaoCredito',
+    function ($scope, $modalInstance, cartaoCredito) {
 
         var init = function () {  
             $scope.maxValue = 31;

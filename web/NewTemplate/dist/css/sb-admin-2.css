@@ -2930,3 +2930,7 @@ div.list-category div.list-group-item {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.checkbox-form {
+    margin: 20px 0 10px 0;
+}

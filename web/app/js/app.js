@@ -73,29 +73,35 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
             .state('financeiro', {
                 abstract: true,
                 url: '/financeiro',
-                template: '<div ui-view></div>'
+                templateUrl: 'partials/financeiro/financeiro.html'
             })
             .state('financeiro.banco', {
                 url: '/banco',
-                templateUrl: 'partials/financeiro/banco.html',
+                templateUrl: 'partials/financeiro/banco/banco.html',
                 controller: 'BancoController',
+                resolve: {}
+            })
+            .state('financeiro.contacorrente', {
+                url: '/contacorrente',
+                templateUrl: 'partials/financeiro/contaCorrente/contaCorrente.html',
+                controller: 'ContaCorrenteController',
                 resolve: {}
             })
             .state('financeiro.cartaocredito', {
                 url: '/cartaocredito',
-                templateUrl: 'partials/financeiro/cartaoCredito.html',
+                templateUrl: 'partials/financeiro/cartaoCredito/cartaoCredito.html',
                 controller: 'CartaoCreditoController',
                 resolve: {}
             })
             .state('financeiro.planoconta', {
                 url: '/planoconta',
-                templateUrl: 'partials/financeiro/planoConta.html',
+                templateUrl: 'partials/financeiro/planoConta/planoConta.html',
                 controller: 'PlanoContaController',
                 resolve: {}
             })
             .state('financeiro.conta', {
                 url: '/conta',
-                templateUrl: 'partials/financeiro/conta.html',
+                templateUrl: 'partials/financeiro/conta/conta.html',
                 controller: 'ContaController',
                 resolve: {}
             });

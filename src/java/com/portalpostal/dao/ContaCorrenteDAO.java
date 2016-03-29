@@ -32,21 +32,23 @@ public class ContaCorrenteDAO extends GenericDAO {
     }
 
     public ContaCorrente save(ContaCorrente contaCorrente) throws Exception {  
-        String sql = "INSERT INTO conta_corrente (nome, idBanco, agencia, contaCorrente, carteira) "
-                   + "VALUES(:nome, :idBanco, :agencia, :contaCorrente, :carteira)";        
+        String sql = "INSERT INTO conta_corrente (nome, idBanco, agencia, contaCorrente, carteira, poupanca) "
+                   + "VALUES(:nome, :idBanco, :agencia, :contaCorrente, :carteira, :poupanca)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("nome", contaCorrente.getNome());
         params.put("idBanco", contaCorrente.getBanco().getIdBanco());
         params.put("agencia", contaCorrente.getAgencia());
         params.put("contaCorrente", contaCorrente.getContaCorrente());
         params.put("carteira", contaCorrente.getCarteira());      
+        params.put("poupanca", contaCorrente.getPoupanca());      
         Integer idContaCorrente = save(sql, params, contaCorrenteHandler);
         return find(idContaCorrente);
     }
 
     public ContaCorrente update(ContaCorrente contaCorrente) throws Exception {
         String sql = "UPDATE conta_corrente "
-                   + "SET nome = :nome, idBanco = :idBanco, agencia = :agencia, contaCorrente = :contaCorrente, carteira = :carteira "
+                   + "SET nome = :nome, idBanco = :idBanco, agencia = :agencia, contaCorrente = :contaCorrente, "
+                   + "carteira = :carteira, poupanca = :poupanca "
                    + "WHERE idContaCorrente = :idContaCorrente ";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idContaCorrente", contaCorrente.getIdContaCorrente());
@@ -55,6 +57,7 @@ public class ContaCorrenteDAO extends GenericDAO {
         params.put("agencia", contaCorrente.getAgencia());
         params.put("contaCorrente", contaCorrente.getContaCorrente());
         params.put("carteira", contaCorrente.getCarteira());      
+        params.put("poupanca", contaCorrente.getPoupanca());       
         update(sql, params, contaCorrenteHandler);
         return contaCorrente;  
     }

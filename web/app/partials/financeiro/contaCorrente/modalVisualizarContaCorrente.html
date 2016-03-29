@@ -1,7 +1,7 @@
-<form name="cartaoCreditoForm" novalidate>
+<form name="conteCorrenteForm" novalidate>
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
-        <h4 class="modal-title">Visualizar Cartão de Crédito</h4>
+        <h4 class="modal-title">Visualizar Conta Corrente</h4>
     </div>
     <div class="modal-body">
         <div class="bootbox-body">
@@ -9,31 +9,37 @@
                 <div class="col-md-4 text-right">
                     <label>Nome:</label>
                 </div>
-                <div class="col-md-8">{{cartaoCredito.nome}}</div>
+                <div class="col-md-8">{{conteCorrente.nome}}</div>
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">
-                    <label>Bandeira:</label>
+                    <label>Banco:</label>
                 </div>
-                <div class="col-md-8">{{cartaoCredito.bandeira | uppercase}}</div>
+                <div class="col-md-8">{{conteCorrente.banco}}</div>
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">
-                    <label>Dia Fechamento:</label>
+                    <label>Agência:</label>
                 </div>
-                <div class="col-md-8">{{cartaoCredito.diaFechamento}}</div>
+                <div class="col-md-8">{{conteCorrente.agencia}}</div>
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">
-                    <label>Dia Vencimento:</label>
+                    <label>Conta Corrente:</label>
                 </div>
-                <div class="col-md-8">{{cartaoCredito.diaVencimento}}</div>
+                <div class="col-md-8">{{conteCorrente.contaCorrente}}</div>
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">
-                    <label>Valor Limite de Crédito</label>
+                    <label>Carteira:</label>
                 </div>
-                <div class="col-md-8">{{cartaoCredito.valorLimiteCredito | currency: 'R$ '}}</div>
+                <div class="col-md-8">{{conteCorrente.carteira}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Poupança:</label>
+                </div>
+                <div class="col-md-8">{{(conteCorrente.poupanca ? 'Sim' : 'Não')}}</div>
             </div>
         </div>
     </div>

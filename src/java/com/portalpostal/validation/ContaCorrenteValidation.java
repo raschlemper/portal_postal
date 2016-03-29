@@ -9,7 +9,7 @@ public class ContaCorrenteValidation extends Validation<ContaCorrente>{
         if(!validarNome(contaCorrente)) return false;   
         if(!validarBanco(contaCorrente)) return false;   
         if(!validarAgencia(contaCorrente)) return false;   
-        if(!validarContaCorrente(contaCorrente)) return false;   
+        if(!validarContaCorrente(contaCorrente)) return false;  
         return true;
     }
 
@@ -35,6 +35,6 @@ public class ContaCorrenteValidation extends Validation<ContaCorrente>{
         if(campoNotNull(contaCorrente.getContaCorrente())) return true; 
         setMsg("Preencha o número da conta corrente!");
         return false;        
-    }  
+    } 
     
 }

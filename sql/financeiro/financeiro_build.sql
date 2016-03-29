@@ -47,6 +47,7 @@ CREATE TABLE `conta_corrente` (
   `agencia`         INT NOT NULL,
   `contaCorrente`   INT NOT NULL,
   `carteira`        INT DEFAULT NULL,
+  `poupanca`        TINYINT NOT NULL DEFAULT 0,
   PRIMARY KEY (`idContaCorrente`)
 ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
