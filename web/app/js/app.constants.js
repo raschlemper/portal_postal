@@ -12,9 +12,9 @@ app.constant('LISTAS', {
                     {'id': 3, 'codigo': 'gas', 'descricao': 'Gás Natural Veicular'},
                     {'id': 4, 'codigo': 'flex', 'descricao': 'Gasolina/Álcool'}],
 
-    "status": [{'id': 0, 'codigo': 'novo', 'descricao': 'Novo'},  
-               {'id': 1, 'codigo': 'seminovo', 'descricao': 'Seminovo'},  
-               {'id': 2, 'codigo': 'usado', 'descricao': 'Usado'}],
+    "statusVeiculo": [{'id': 0, 'codigo': 'novo', 'descricao': 'Novo'},  
+                      {'id': 1, 'codigo': 'seminovo', 'descricao': 'Seminovo'},  
+                      {'id': 2, 'codigo': 'usado', 'descricao': 'Usado'}],
 
     "situacao": [{'id': 0, 'codigo': 'ativo', 'descricao': 'Ativo'},  
                  {'id': 1, 'codigo': 'inativo', 'descricao': 'Inativo'},  
@@ -43,6 +43,9 @@ app.constant('LISTAS', {
                   {'id': 1, 'codigo': 'contacorrente', 'descricao': 'Conta Corrente'},
                   {'id': 2, 'codigo': 'poupanca', 'descricao': 'Poupança'},
                   {'id': 3, 'codigo': 'cobranca', 'descricao': 'Cobrança'},
-                  {'id': 4, 'codigo': 'cartaocredito', 'descricao': 'Cartão Crédito'}]
+                  {'id': 4, 'codigo': 'cartaocredito', 'descricao': 'Cartão Crédito'}],
+
+    "statusConta": [{'id': 0, 'codigo': 'aberto', 'descricao': 'Aberto'},  
+                    {'id': 1, 'codigo': 'encerrado', 'descricao': 'Encerrado'}],
 
 });

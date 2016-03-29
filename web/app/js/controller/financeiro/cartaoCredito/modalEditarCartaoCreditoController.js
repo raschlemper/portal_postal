@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalEditarCartaoCreditoController', ['$scope', '$modalInstance', 'cartaoCredito',
-    function ($scope, $modalInstance, cartaoCredito) {
+app.controller('ModalEditarCartaoCreditoController', ['$scope', '$modalInstance', 'cartaoCredito', 'CartaoCreditoService',
+    function ($scope, $modalInstance, cartaoCredito, CartaoCreditoService) {
 
         var init = function () {  
             $scope.maxValue = 31;
@@ -14,12 +14,24 @@ app.controller('ModalEditarCartaoCreditoController', ['$scope', '$modalInstance'
                 valorLimiteCredito: (cartaoCredito && cartaoCredito.valorLimiteCredito) || null
             }; 
             getTitle();
+            contaCorrente();
         };
         
         var getTitle = function() {
             if(cartaoCredito && cartaoCredito.idCartaoCredito) { $scope.title = "Editar Cartão de Crédito"; }
             else { $scope.title = "Inserir Novo Cartão de Crédito"; }
-        }
+        };
+        
+        var contaCorrente = function() {
+            ContaCorrenteService.getAll()
+                .then(function (data) {
+                    $scope.contasCorrentes = data;
+                    $scope.changeTipo();
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
         
         $scope.ok = function(form) {
             if (!validarForm(form)) return;

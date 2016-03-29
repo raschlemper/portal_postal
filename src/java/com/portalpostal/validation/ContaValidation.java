@@ -8,7 +8,7 @@ public class ContaValidation extends Validation<Conta>{
     public boolean validar(Conta conta) {
         if(!validarNome(conta)) return false;
         if(!validarTipo(conta)) return false;
-        if(!validarStatus(conta)) return false;   
+        if(!validarStatus(conta)) return false;    
         if(!validarDataAbertura(conta)) return false;   
         return true;
     }    
@@ -29,7 +29,7 @@ public class ContaValidation extends Validation<Conta>{
         if(campoNotNull(conta.getStatus())) return true; 
         setMsg("Preencha o status da conta!");
         return false;        
-    }    
+    }  
 
     public boolean validarDataAbertura(Conta conta) {          
         if(campoNotNull(conta.getDataAbertura())) return true; 

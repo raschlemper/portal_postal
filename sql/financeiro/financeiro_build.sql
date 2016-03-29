@@ -82,6 +82,7 @@ CREATE TABLE `conta` (
   `nome`               VARCHAR(254) NOT NULL,
   `tipo`               INT NOT NULL,
   `status`             INT NOT NULL,
+  `valorLimiteCredito` DECIMAL(13,2) NOT NULL,
   `dataAbertura`       DATETIME NOT NULL,
   `valorSaldoAbertura` DECIMAL(13,2) DEFAULT 0,
   PRIMARY KEY (`idConta`)

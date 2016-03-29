@@ -1,12 +1,11 @@
 'use strict';
 
-app.controller('ContaController', ['$scope', 'ContaService', 'ModalService', 'LISTAS',
-    function ($scope, ContaService, ModalService, LISTAS) {
+app.controller('ContaController', ['$scope', 'ContaService', 'ModalService',
+    function ($scope, ContaService, ModalService) {
 
         var init = function () {
             $scope.contas = [];
             $scope.contasLista = [];
-            $scope.tipos = LISTAS.tipoConta;
             $scope.collapsed = [];
             initTable();
         };  
@@ -18,6 +17,9 @@ app.controller('ContaController', ['$scope', 'ContaService', 'ModalService', 'LI
                 {label: 'Status', column: 'status', class: 'col-md-4'}
             ]            
             $scope.events = { 
+                view: function() {
+                    
+                },
                 edit: function(conta) {
                     $scope.editar(conta.idBanco);
                 },
@@ -42,13 +44,25 @@ app.controller('ContaController', ['$scope', 'ContaService', 'ModalService', 'LI
             return _.map(contas, function(conta) {
                 return _.pick(conta, 'idConta', 'nome', 'tipo', 'status');
             })
-        }
+        };
+
+        $scope.visualizar = function(idConta) {
+            ContaService.get(idConta)
+                .then(function(conta) {
+                     modalVisualizar(conta).then(function(result) {
+                         $scope.editar(result);
+                     })          
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
         
         $scope.salvar = function() {
             modalSalvar().then(function(result) {
                 ContaService.save(result)
                     .then(function(data) {  
-                        modalMessage("Conta " + data.nome +  " Inserido com sucesso!");
+                        modalMessage("Conta " + data.nome +  " Inserida com sucesso!");
                         todos();
                     })
                     .catch(function(e) {
@@ -63,7 +77,7 @@ app.controller('ContaController', ['$scope', 'ContaService', 'ModalService', 'LI
                      modalSalvar(conta).then(function(result) {
                         ContaService.update(idConta, result)
                             .then(function (data) {  
-                                modalMessage("Conta " + data.nome + " Alterado com sucesso!");
+                                modalMessage("Conta " + data.nome + " Alterada com sucesso!");
                                 todos();
                             })
                             .catch(function(e) {
@@ -81,7 +95,7 @@ app.controller('ContaController', ['$scope', 'ContaService', 'ModalService', 'LI
             modalExcluir().then(function() {
                 ContaService.delete(idConta)
                     .then(function(data) { 
-                        modalMessage("Conta " + data.nome + " Removido com sucesso!");
+                        modalMessage("Conta " + data.nome + " Removida com sucesso!");
                         todos();                        
                     })
                     .catch(function(e) {
@@ -94,8 +108,18 @@ app.controller('ContaController', ['$scope', 'ContaService', 'ModalService', 'LI
             ModalService.modalMessage(message);
         };
         
+        var modalVisualizar = function(conta) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/conta/modalVisualizarConta.html', 'ModalVisualizarContaController', 'md',
+                {
+                    conta: function() {
+                        return conta;
+                    }
+                });
+            return modalInstance.result;
+        };
+        
         var modalSalvar = function(conta) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/modalEditarConta.html', 'ModalEditarContaController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/conta/modalEditarConta.html', 'ModalEditarContaController', 'lg',
                 {
                     conta: function() {
                         return conta;
