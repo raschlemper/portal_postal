@@ -17,12 +17,12 @@
                                        ng-required="true" placeholder="Nome do cartão de crédito"/>                                    
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" ng-show="conta.tipo.codigo !== 'dinheiro' && conta.tipo.codigo !== 'cartaocredito'">
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                             <label class="small">Conta Corrente</label>
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-car"></i></span>
-                                <select class="form-control" name="contaCorrente" ng-model="conta.contaCorrente"
-                                        ng-options="contaCorrente.nome for contaCorrente in contaCorrenteLista track by contaCorrente.idContaCorrente"></select>
+                                <select class="form-control" name="contaCorrente" ng-model="cartaoCredito.contaCorrente"
+                                        ng-options="contaCorrente.nome for contaCorrente in contasCorrentes track by contaCorrente.idContaCorrente"></select>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">

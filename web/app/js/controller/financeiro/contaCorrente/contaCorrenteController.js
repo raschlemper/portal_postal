@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ContaCorrenteController', ['$scope', 'ContaCorrenteService', 'ModalService',
-    function ($scope, ContaCorrenteService, ModalService) {
+app.controller('ContaCorrenteController', ['$scope', '$filter', 'ContaCorrenteService', 'ModalService',
+    function ($scope, $filter, ContaCorrenteService, ModalService) {
 
         var init = function () {
             $scope.contaCorrentes = [];
@@ -14,7 +14,7 @@ app.controller('ContaCorrenteController', ['$scope', 'ContaCorrenteService', 'Mo
                 {label: 'Nome', column: 'nome'},
                 {label: 'Banco', column: 'banco.nome', class: 'col-md-3'},                         
                 {label: 'Agência', column: 'agencia', class: 'col-md-2'},                         
-                {label: 'Conta Corrente', column: 'agencia', class: 'col-md-2'}
+                {label: 'Conta Corrente', column: 'contaCorrente', class: 'col-md-2'}
             ]            
             $scope.events = { 
                 edit: function(contaCorrente) {
@@ -42,6 +42,8 @@ app.controller('ContaCorrenteController', ['$scope', 'ContaCorrenteService', 'Mo
         
         var criarContaCorrentesLista = function(contaCorrentes) {
             return _.map(contaCorrentes, function(contaCorrente) {
+                contaCorrente.agencia = $filter('number')(contaCorrente.agencia) + '-' + contaCorrente.agenciaDv;
+                contaCorrente.contaCorrente = $filter('number')(contaCorrente.contaCorrente) + '-' + contaCorrente.contaCorrenteDv;
                 return _.pick(contaCorrente, 'idContaCorrente', 'nome', 'banco', 'agencia', 'contaCorrente');
             })
         };

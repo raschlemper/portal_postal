@@ -1,6 +1,5 @@
 package com.portalpostal.dao.handler;
 
-import com.portalpostal.model.CartaoCredito;
 import com.portalpostal.model.ContaCorrente;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,8 +25,9 @@ public class ContaCorrenteHandler implements ResultSetHandler<ContaCorrente> {
         contaCorrente.setNome(result.getString(table + ".nome"));
         contaCorrente.setBanco(bancoHandler.handle(result));
         contaCorrente.setAgencia(result.getInt(table + ".agencia"));
+        contaCorrente.setAgenciaDv(result.getInt(table + ".agencia_dv"));
         contaCorrente.setContaCorrente(result.getInt(table + ".contaCorrente"));
-        contaCorrente.setCarteira((Integer)result.getObject(table + ".carteira"));
+        contaCorrente.setContaCorrenteDv(result.getInt(table + ".contaCorrente_dv"));
         contaCorrente.setPoupanca(result.getBoolean(table + ".poupanca"));
         return contaCorrente;
     }

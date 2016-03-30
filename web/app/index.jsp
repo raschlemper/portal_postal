@@ -83,6 +83,8 @@
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/planoConta/planoContaController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/planoConta/modalEditarPlanoContaController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/conta/contaController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/conta/modalEditarContaController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/conta/modalVisualizarContaController.js"></script>
         
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/promiseService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/fipeService.js"></script>

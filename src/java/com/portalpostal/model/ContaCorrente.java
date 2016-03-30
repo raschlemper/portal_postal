@@ -6,8 +6,10 @@ public class ContaCorrente {
     private String nome;
     private Banco banco;
     private Integer agencia;
+    private Integer agenciaDv;
     private Integer contaCorrente;
-    private Integer carteira;
+    private Integer contaCorrenteDv;
+//    private Carteira carteira;
     private Boolean poupanca;
 
     public Integer getIdContaCorrente() {
@@ -42,6 +44,14 @@ public class ContaCorrente {
         this.agencia = agencia;
     }
 
+    public Integer getAgenciaDv() {
+        return agenciaDv;
+    }
+
+    public void setAgenciaDv(Integer agenciaDv) {
+        this.agenciaDv = agenciaDv;
+    }
+
     public Integer getContaCorrente() {
         return contaCorrente;
     }
@@ -50,14 +60,14 @@ public class ContaCorrente {
         this.contaCorrente = contaCorrente;
     }
 
-    public Integer getCarteira() {
-        return carteira;
+    public Integer getContaCorrenteDv() {
+        return contaCorrenteDv;
     }
 
-    public void setCarteira(Integer carteira) {
-        this.carteira = carteira;
+    public void setContaCorrenteDv(Integer contaCorrenteDv) {
+        this.contaCorrenteDv = contaCorrenteDv;
     }
-
+    
     public Boolean getPoupanca() {
         return poupanca;
     }

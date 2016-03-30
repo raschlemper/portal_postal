@@ -13,6 +13,13 @@ app.factory('ContaCorrenteService', function($http, PromiseService) {
             return PromiseService.execute(
                 $http.get(_contextPath + "/api/financeiro/contacorrente/" + idContaCorrente));
         },
+        
+        getByContaCorrente: function(banco, agencia, agenciaDv, contacorrente, contacorrenteDv) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/contacorrente/" +
+                        "banco/" + banco + "/agencia/" + agencia + "/" + agenciaDv + 
+                        "/contacorrente/" + contacorrente + "/" + contacorrenteDv));
+        },
 
         save: function(data) {
             return PromiseService.execute(

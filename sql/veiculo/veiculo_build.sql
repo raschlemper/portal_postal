@@ -26,7 +26,7 @@ CREATE TABLE `veiculo` (
   `situacao`        INT(11) NOT NULL,
   `dataCadastro`    DATETIME NOT NULL,
   PRIMARY KEY (`idVeiculo`)
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `veiculo_combustivel` (
   `idVeiculoCombustivel` INT(11) NOT NULL AUTO_INCREMENT,

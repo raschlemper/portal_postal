@@ -1,12 +1,13 @@
 'use strict';
 
-app.controller('ModalEditarCartaoCreditoController', ['$scope', '$modalInstance', 'cartaoCredito', 'CartaoCreditoService',
-    function ($scope, $modalInstance, cartaoCredito, CartaoCreditoService) {
+app.controller('ModalEditarCartaoCreditoController', ['$scope', '$modalInstance', 'cartaoCredito', 'ContaCorrenteService',
+    function ($scope, $modalInstance, cartaoCredito, ContaCorrenteService) {
 
         var init = function () {  
             $scope.maxValue = 31;
             $scope.cartaoCredito = {
                 idCartaoCredito: (cartaoCredito && cartaoCredito.idCartaoCredito) || null,
+                contaCorrente: (cartaoCredito && cartaoCredito.contaCorrente) || null,
                 nome: (cartaoCredito && cartaoCredito.nome) || null,
                 bandeira: (cartaoCredito && cartaoCredito.bandeira) || null,
                 diaFechamento: (cartaoCredito && cartaoCredito.diaFechamento) || null,
@@ -26,7 +27,7 @@ app.controller('ModalEditarCartaoCreditoController', ['$scope', '$modalInstance'
             ContaCorrenteService.getAll()
                 .then(function (data) {
                     $scope.contasCorrentes = data;
-                    $scope.changeTipo();
+                    $scope.cartaoCredito.contaCorrente = $scope.cartaoCredito.contaCorrente || $scope.contasCorrentes[0];
                 })
                 .catch(function (e) {
                     console.log(e);

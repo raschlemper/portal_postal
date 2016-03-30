@@ -9,12 +9,12 @@
                 <li class="list-group-item">
                     <div class="row form-horizontal">
                         <input type="hidden" name="idContaCorrente" ng-model="contaCorrente.idContaCorrente"/>
-                        <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                             <label class="small">Nome</label>
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
                                 <input type="text" autocomplete="off" name="nome" class="form-control" ng-model="contaCorrente.nome" 
-                                       ng-required="true" placeholder="Nome do cartão de crédito"/>                                    
+                                       ng-required="true" placeholder="Nome da conta corrente"/>                                    
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -25,33 +25,29 @@
                                         ng-options="banco.nome for banco in bancos track by banco.idBanco" ng-model="contaCorrente.banco"></select>
                             </div>
                         </div> 
-                        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                             <label class="small">Agência</label>
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
                                 <input type="text" autocomplete="off" name="agencia" class="form-control" ng-model="contaCorrente.agencia" 
-                                       ng-required="true" placeholder="Numero agência"/>                                    
+                                       ng-required="true" placeholder="Numero agência"/>     
+                                <span class="input-group-addon">-</span>
+                                <input type="text" autocomplete="off" name="agenciaDv" size="2" class="form-control" ng-model="contaCorrente.agenciaDv" 
+                                       ng-required="true"/>                                               
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                        <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5">
                             <label class="small">Conta Corrente</label>
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
                                 <input type="text" autocomplete="off" name="contaCorrente" class="form-control" ng-model="contaCorrente.contaCorrente" 
-                                       ng-required="true" placeholder="Numero conta corrente"/>                                    
+                                       ng-required="true" placeholder="Numero conta corrente"/>     
+                                <span class="input-group-addon">-</span>
+                                <input type="text" autocomplete="off" name="contaCorrenteDv" size="2" class="form-control" ng-model="contaCorrente.contaCorrenteDv" 
+                                       ng-required="true" />                                       
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                            <div class="checkbox-form">
-                                <input type="checkbox" name="carteira" class="checkbox-inline" ng-model="possuiCarteira"> Possui Carteira (Cobrança)?                                   
-                            </div>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="text" autocomplete="off" name="carteira" class="form-control" ng-model="contaCorrente.carteira" ng-disabled="!possuiCarteira"
-                                       placeholder="Numero carteira"/>                                    
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
                             <div class="checkbox-form">
                                 <input type="checkbox" name="poupanca" class="checkbox-inline" ng-model="contaCorrente.poupanca"> Possui Poupança?
                             </div>

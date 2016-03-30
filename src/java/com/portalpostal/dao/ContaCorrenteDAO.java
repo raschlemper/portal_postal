@@ -32,14 +32,15 @@ public class ContaCorrenteDAO extends GenericDAO {
     }
 
     public ContaCorrente save(ContaCorrente contaCorrente) throws Exception {  
-        String sql = "INSERT INTO conta_corrente (nome, idBanco, agencia, contaCorrente, carteira, poupanca) "
-                   + "VALUES(:nome, :idBanco, :agencia, :contaCorrente, :carteira, :poupanca)";        
+        String sql = "INSERT INTO conta_corrente (nome, idBanco, agencia, agencia_dv, contaCorrente, contaCorrente_dv, poupanca) "
+                   + "VALUES(:nome, :idBanco, :agencia, :agenciaDv, :contaCorrente, :contaCorrenteDv, :poupanca)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("nome", contaCorrente.getNome());
         params.put("idBanco", contaCorrente.getBanco().getIdBanco());
         params.put("agencia", contaCorrente.getAgencia());
+        params.put("agenciaDv", contaCorrente.getAgenciaDv());
         params.put("contaCorrente", contaCorrente.getContaCorrente());
-        params.put("carteira", contaCorrente.getCarteira());      
+        params.put("contaCorrenteDv", contaCorrente.getContaCorrenteDv());
         params.put("poupanca", contaCorrente.getPoupanca());      
         Integer idContaCorrente = save(sql, params, contaCorrenteHandler);
         return find(idContaCorrente);
@@ -47,16 +48,17 @@ public class ContaCorrenteDAO extends GenericDAO {
 
     public ContaCorrente update(ContaCorrente contaCorrente) throws Exception {
         String sql = "UPDATE conta_corrente "
-                   + "SET nome = :nome, idBanco = :idBanco, agencia = :agencia, contaCorrente = :contaCorrente, "
-                   + "carteira = :carteira, poupanca = :poupanca "
+                   + "SET nome = :nome, idBanco = :idBanco, agencia = :agencia, agencia_dv = :agenciaDv, "
+                   + "contaCorrente = :contaCorrente, contaCorrente_dv = :contaCorrenteDv, poupanca = :poupanca "
                    + "WHERE idContaCorrente = :idContaCorrente ";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idContaCorrente", contaCorrente.getIdContaCorrente());
         params.put("nome", contaCorrente.getNome());
         params.put("idBanco", contaCorrente.getBanco().getIdBanco());
         params.put("agencia", contaCorrente.getAgencia());
+        params.put("agenciaDv", contaCorrente.getAgenciaDv());
         params.put("contaCorrente", contaCorrente.getContaCorrente());
-        params.put("carteira", contaCorrente.getCarteira());      
+        params.put("contaCorrenteDv", contaCorrente.getContaCorrenteDv());
         params.put("poupanca", contaCorrente.getPoupanca());       
         update(sql, params, contaCorrenteHandler);
         return contaCorrente;  
@@ -71,25 +73,18 @@ public class ContaCorrenteDAO extends GenericDAO {
         return contaCorrente;
     }
 
-    public ContaCorrente findByContaCorrente(Integer idBanco, Integer agencia, Integer contaCorrente) throws Exception {     
-        String sql = "SELECT * FROM conta_corrente "
-                   + "WHERE idBanco = :idBanco AND agencia = :agencia AND contaCorrente = :contaCorrente ";
+    public ContaCorrente findByContaCorrente(Integer idBanco, Integer agencia, Integer agenciaDv, 
+            Integer contaCorrente, Integer contaCorrenteDv) throws Exception {     
+        String sql = "SELECT * FROM conta_corrente, banco "
+                   + "WHERE conta_corrente.idBanco = banco.idBanco AND banco.idBanco = :idBanco "
+                   + "AND conta_corrente.agencia = :agencia AND conta_corrente.agencia_dv = :agenciaDv "
+                   + "AND conta_corrente.contaCorrente = :contaCorrente AND conta_corrente.contaCorrente_dv = :contaCorrenteDv ";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idBanco", idBanco);
         params.put("agencia", agencia);
+        params.put("agenciaDv", agenciaDv);
         params.put("contaCorrente", contaCorrente);
-        return (ContaCorrente) find(sql, params, contaCorrenteHandler);
-    }
-
-    public ContaCorrente findByCarteira(Integer idBanco, Integer agencia, Integer contaCorrente, Integer carteira) throws Exception {     
-        String sql = "SELECT * FROM conta_corrente "
-                   + "WHERE idBanco = :idBanco AND agencia = :agencia "
-                   + "AND contaCorrente = :contaCorrente AND carteira = :carteira";
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("idBanco", idBanco);
-        params.put("agencia", agencia);
-        params.put("contaCorrente", contaCorrente);
-        params.put("carteira", carteira);
+        params.put("contaCorrenteDv", contaCorrenteDv);
         return (ContaCorrente) find(sql, params, contaCorrenteHandler);
     }
     

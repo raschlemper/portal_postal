@@ -93,7 +93,7 @@ app.controller('BancoController', ['$scope', 'BancoService', 'ModalService',
         };
         
         var modalSalvar = function(banco) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/modalEditarBanco.html', 'ModalEditarBancoController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/banco/modalEditarBanco.html', 'ModalEditarBancoController', 'lg',
                 {
                     banco: function() {
                         return banco;

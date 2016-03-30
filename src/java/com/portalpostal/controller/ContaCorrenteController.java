@@ -30,12 +30,12 @@ public class ContaCorrenteController {
     private HttpSession sessao;
     private String nomeBD;
     
-    private ContaCorrenteService cartaoCreditoService;
+    private ContaCorrenteService conteCorrenteService;
 
     private void init() {
         sessao = request.getSession();
         nomeBD = (String) sessao.getAttribute("nomeBD");
-        cartaoCreditoService = new ContaCorrenteService(nomeBD);
+        conteCorrenteService = new ContaCorrenteService(nomeBD);
     }
     
     @GET
@@ -44,7 +44,7 @@ public class ContaCorrenteController {
     public List<ContaCorrente> findAll() {
         try {
             init();    
-            return cartaoCreditoService.findAll();
+            return conteCorrenteService.findAll();
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -56,47 +56,35 @@ public class ContaCorrenteController {
     public ContaCorrente find(@PathParam("idContaCorrente") Integer idContaCorrente) {
         try {
             init();    
-            return cartaoCreditoService.find(idContaCorrente);
+            return conteCorrenteService.find(idContaCorrente);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     }  
     
     @GET
-    @Path("/banco/{banco}/agencia/{agencia}/contacorrente/{contacorrente}")
+    @Path("/banco/{banco}/agencia/{agencia}/{agenciaDv}/contacorrente/{contacorrente}/{contacorrenteDv}")
     @Produces(MediaType.APPLICATION_JSON)
-    public ContaCorrente findByContaCorrente(@PathParam("banco") Integer banco, 
-            @PathParam("agencia") Integer agencia, @PathParam("contacorrente") Integer contaCorrente) {
+    public ContaCorrente findByContaCorrente(@PathParam("banco") Integer banco, @PathParam("agencia") Integer agencia,
+            @PathParam("agenciaDv") Integer agenciaDv, @PathParam("contacorrente") Integer contaCorrente, 
+            @PathParam("contacorrenteDv") Integer contaCorrenteDv) {
         try {
-            init();    
-            return cartaoCreditoService.findByContaCorrente(banco, agencia, contaCorrente);
+            init();  
+            return conteCorrenteService.findByContaCorrente(banco, agencia, agenciaDv, contaCorrente, contaCorrenteDv);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     }   
     
-    @GET
-    @Path("/banco/{banco}/agencia/{agencia}/contacorrente/{contacorrente}/carteira/{carteira}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public ContaCorrente findByCarteira(@PathParam("banco") Integer banco, @PathParam("agencia") Integer agencia, 
-            @PathParam("contacorrente") Integer contaCorrente, @PathParam("carteira") Integer carteira) {
-        try {
-            init();    
-            return cartaoCreditoService.findByCarteira(banco, agencia, contaCorrente, carteira);
-        } catch (Exception ex) {
-            throw new WebApplicationException(getMessageError(ex.getMessage()));
-        }
-    }  
-    
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public ContaCorrente save(ContaCorrente cartaoCredito) {
+    public ContaCorrente save(ContaCorrente conteCorrente) {
         try {
             init();
-            validation(cartaoCredito);
-            return cartaoCreditoService.save(cartaoCredito);
+            validation(conteCorrente);
+            return conteCorrenteService.save(conteCorrente);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -106,11 +94,11 @@ public class ContaCorrenteController {
     @Path("/{idContaCorrente}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public ContaCorrente update(ContaCorrente cartaoCredito) {
+    public ContaCorrente update(ContaCorrente conteCorrente) {
         try {
             init();
-            validation(cartaoCredito);
-            return cartaoCreditoService.update(cartaoCredito);
+            validation(conteCorrente);
+            return conteCorrenteService.update(conteCorrente);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -123,15 +111,15 @@ public class ContaCorrenteController {
     public ContaCorrente delete(@PathParam("idContaCorrente") Integer idContaCorrente) {
         try {
             init();
-            return cartaoCreditoService.delete(idContaCorrente);
+            return conteCorrenteService.delete(idContaCorrente);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     } 
     
-    private void validation(ContaCorrente cartaoCredito) throws Exception {  
+    private void validation(ContaCorrente conteCorrente) throws Exception {  
         Validation validacao = new ContaCorrenteValidation();
-        if(!validacao.validar(cartaoCredito)) {
+        if(!validacao.validar(conteCorrente)) {
             throw new WebApplicationException(getMessageError(validacao.getMsg()));
         } 
     }  

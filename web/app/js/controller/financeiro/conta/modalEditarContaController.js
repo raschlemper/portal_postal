@@ -32,7 +32,7 @@ app.controller('ModalEditarContaController', ['$scope', '$modalInstance', 'conta
             ContaCorrenteService.getAll()
                 .then(function (data) {
                     $scope.contasCorrentes = data;
-                    $scope.changeTipo();
+                    $scope.changeTipo($scope.conta.tipo);
                 })
                 .catch(function (e) {
                     console.log(e);
@@ -43,7 +43,7 @@ app.controller('ModalEditarContaController', ['$scope', '$modalInstance', 'conta
             CartaoCreditoService.getAll()
                 .then(function (data) {
                     $scope.cartoesCredito = data;
-                    $scope.changeTipo();
+                    $scope.changeTipo($scope.conta.tipo);
                 })
                 .catch(function (e) {
                     console.log(e);
@@ -53,11 +53,15 @@ app.controller('ModalEditarContaController', ['$scope', '$modalInstance', 'conta
         $scope.changeTipo = function(tipo) {
             if(tipo.codigo === 'dinheiro') return;
             else if(tipo.codigo === 'cartaocredito') { $scope.cartaoCreditoLista = $scope.cartoesCredito; }
-            else if(tipo.codigo === 'poupanca') { contaCorrenteListaPoupanca(); }
-            else if(tipo.codigo === 'cobranca') { contaCorrenteListaCobranca(); }
+            else if(tipo.codigo === 'poupanca') { $scope.cartaoCreditoLista = contaCorrenteListaPoupanca(); }
+            else if(tipo.codigo === 'cobranca') { $scope.cartaoCreditoLista = contaCorrenteListaCobranca(); }
             else { $scope.contaCorrenteLista = $scope.contasCorrentes; }
-            $scope.contaCorrente = ListaService.getContaCorrenteValue($scope.contaCorrenteLista, $scope.contaCorrente.idContaCorrente);
-            $scope.contaCorrente = ListaService.getContaCorrenteValue($scope.cartaoCreditoLista, $scope.cartaoCredito.idCartaoCredito);
+            if($scope.conta.contaCorrente) { 
+                $scope.conta.contaCorrente = ListaService.getContaCorrenteValue($scope.contaCorrenteLista, $scope.conta.contaCorrente.idContaCorrente); 
+            }
+            if($scope.conta.cartaoCredito) { 
+                $scope.conta.cartaoCredito = ListaService.getContaCorrenteValue($scope.cartaoCreditoLista, $scope.conta.cartaoCredito.idCartaoCredito);
+            }
         };
         
         var contaCorrenteListaPoupanca = function() {

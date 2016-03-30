@@ -37,41 +37,24 @@ public class ContaCorrenteService {
         return contaCorrenteDAO.remove(idContaCorrente);
     }   
     
-    public ContaCorrente findByContaCorrente(Integer idBanco, Integer agencia, Integer contaCorrente) throws Exception {
-        return contaCorrenteDAO.findByContaCorrente(idBanco, agencia, contaCorrente);
+    public ContaCorrente findByContaCorrente(Integer idBanco, Integer agencia, Integer agenciaDv, 
+            Integer contaCorrente, Integer contaCorrenteDv) throws Exception {
+        return contaCorrenteDAO.findByContaCorrente(idBanco, agencia, agenciaDv, contaCorrente, contaCorrenteDv);
     }    
-    
-    public ContaCorrente findByCarteira(Integer idBanco, Integer agencia, Integer contaCorrente, Integer carteira) throws Exception {
-        return contaCorrenteDAO.findByCarteira(idBanco, agencia, contaCorrente, carteira);
-    }     
     
     private void validation(ContaCorrente contaCorrente) throws Exception {  
         if(existeContaCorrente(contaCorrente)) {
             throw new Exception("Esta Conta Corrente já foi cadastrada!");
-        } 
-        if(existeCarteira(contaCorrente)) {
-            throw new Exception("Esta Carteira já foi cadastrada!");
         }
     }  
     
     private boolean existeContaCorrente(ContaCorrente contaCorrente) throws Exception {
-        ContaCorrente conta = contaCorrenteDAO.findByContaCorrente(contaCorrente.getBanco().getIdBanco(),
-                contaCorrente.getAgencia(), contaCorrente.getContaCorrente());
+        ContaCorrente conta = contaCorrenteDAO.findByContaCorrente(contaCorrente.getBanco().getIdBanco(), contaCorrente.getAgencia(), 
+                contaCorrente.getAgenciaDv(), contaCorrente.getContaCorrente(), contaCorrente.getContaCorrenteDv());
         if(conta == null) return false;
         if(conta.getBanco().getIdBanco().equals(contaCorrente.getBanco().getIdBanco()) &&
            conta.getAgencia().equals(contaCorrente.getAgencia()) && 
            conta.getContaCorrente().equals(contaCorrente.getContaCorrente())) return false;
-        return true;
-    }
-    
-    private boolean existeCarteira(ContaCorrente contaCorrente) throws Exception {
-        ContaCorrente conta = contaCorrenteDAO.findByCarteira(contaCorrente.getBanco().getIdBanco(),
-                contaCorrente.getAgencia(), contaCorrente.getContaCorrente(), contaCorrente.getCarteira());
-        if(conta == null) return false;
-        if(conta.getBanco().getIdBanco().equals(contaCorrente.getBanco().getIdBanco()) &&
-           conta.getAgencia().equals(contaCorrente.getAgencia()) && 
-           conta.getContaCorrente().equals(contaCorrente.getContaCorrente()) && 
-           conta.getCarteira().equals(contaCorrente.getCarteira())) return false;
         return true;
     }
     

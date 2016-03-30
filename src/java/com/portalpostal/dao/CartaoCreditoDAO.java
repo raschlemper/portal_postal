@@ -18,6 +18,7 @@ public class CartaoCreditoDAO extends GenericDAO {
     public List<CartaoCredito> findAll() throws Exception {
         String sql = "SELECT * FROM cartao_credito "
                    + "LEFT OUTER JOIN conta_corrente ON(conta_corrente.idContaCorrente = cartao_credito.idContaCorrente) "
+                   + "LEFT OUTER JOIN banco ON(banco.idBanco = conta_corrente.idBanco) "
                    + "ORDER BY cartao_credito.idCartaoCredito";        
         return findAll(sql, null, cartaoCreditoHandler);
     }
@@ -25,6 +26,7 @@ public class CartaoCreditoDAO extends GenericDAO {
     public CartaoCredito find(Integer idCartaoCredito) throws Exception {
         String sql = "SELECT * FROM cartao_credito "
                    + "LEFT OUTER JOIN conta_corrente ON(conta_corrente.idContaCorrente = cartao_credito.idContaCorrente) "
+                   + "LEFT OUTER JOIN banco ON(banco.idBanco = conta_corrente.idBanco) "
                    + "WHERE cartao_credito.idCartaoCredito = :idCartaoCredito";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idCartaoCredito", idCartaoCredito);

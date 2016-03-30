@@ -13,18 +13,18 @@ app.controller('ContaController', ['$scope', 'ContaService', 'ModalService',
         var initTable = function() {            
             $scope.colunas = [
                 {label: 'Nome', column: 'nome'},
-                {label: 'Tipo', column: 'tipo', class: 'col-md-4'},                
-                {label: 'Status', column: 'status', class: 'col-md-4'}
+                {label: 'Tipo', column: 'tipo.descricao', class: 'col-md-2'},                
+                {label: 'Status', column: 'status.descricao', class: 'col-md-2'}
             ]            
             $scope.events = { 
-                view: function() {
-                    
+                view: function(conta) {
+                    $scope.visualizar(conta.idConta);                    
                 },
                 edit: function(conta) {
-                    $scope.editar(conta.idBanco);
+                    $scope.editar(conta.idConta);
                 },
                 remove: function(conta) {
-                    $scope.excluir(conta.idBanco);
+                    $scope.excluir(conta.idConta);
                 }
             }             
         };
