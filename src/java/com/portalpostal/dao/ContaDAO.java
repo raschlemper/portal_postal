@@ -36,13 +36,14 @@ public class ContaDAO extends GenericDAO {
     }
 
     public Conta save(Conta conta) throws Exception {  
-        String sql = "INSERT INTO conta (idContaCorrente, nome, tipo, status, dataAbertura, valorSaldoAbertura) "
-                   + "VALUES(:idContaCorrente, :nome, :tipo, :status, :dataAbertura, :valorSaldoAbertura)";        
+        String sql = "INSERT INTO conta (idContaCorrente, idCartaoCredito, nome, tipo, status, dataAbertura, valorSaldoAbertura) "
+                   + "VALUES(:idContaCorrente, :idCartaoCredito, :nome, :tipo, :status, :dataAbertura, :valorSaldoAbertura)";        
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("contaCorrente", conta.getContaCorrente().getIdContaCorrente());
+        params.put("idContaCorrente", (conta.getContaCorrente() == null ? null :conta.getContaCorrente().getIdContaCorrente()));
+        params.put("idCartaoCredito", (conta.getCartaoCredito()== null ? null :conta.getCartaoCredito().getIdCartaoCredito()));
         params.put("nome", conta.getNome());
         params.put("tipo", conta.getTipo().ordinal());
-        params.put("status", conta.getStatus());
+        params.put("status", conta.getStatus().ordinal());
         params.put("dataAbertura", conta.getDataAbertura());
         params.put("valorSaldoAbertura", conta.getValorSaldoAbertura());
         Integer idConta = save(sql, params, contaHandler);
@@ -51,15 +52,16 @@ public class ContaDAO extends GenericDAO {
 
     public Conta update(Conta conta) throws Exception {
         String sql = "UPDATE conta "
-                   + "SET idContaCorrente = :idContaCorrente, nome = :nome, tipo = :tipo, status = :status, "
-                   + "dataAbertura = :dataAbertura, valorSaldoAbertura = :valorSaldoAbertura "
+                   + "SET idContaCorrente = :idContaCorrente, idCartaoCredito = :idCartaoCredito, nome = :nome, tipo = :tipo, "
+                   + "status = :status, dataAbertura = :dataAbertura, valorSaldoAbertura = :valorSaldoAbertura "
                    + "WHERE idConta = :idConta ";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idConta", conta.getIdConta());
+        params.put("idContaCorrente", (conta.getContaCorrente() == null ? null :conta.getContaCorrente().getIdContaCorrente()));
+        params.put("idCartaoCredito", (conta.getCartaoCredito()== null ? null :conta.getCartaoCredito().getIdCartaoCredito()));
         params.put("nome", conta.getNome());
         params.put("tipo", conta.getTipo().ordinal());
-        params.put("contaCorrente", conta.getContaCorrente().getIdContaCorrente());
-        params.put("status", conta.getStatus());
+        params.put("status", conta.getStatus().ordinal());
         params.put("dataAbertura", conta.getDataAbertura());
         params.put("valorSaldoAbertura", conta.getValorSaldoAbertura());
         update(sql, params, contaHandler);

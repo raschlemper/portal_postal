@@ -46,12 +46,21 @@
                                 <input type="text" autocomplete="off" name="contaCorrenteDv" size="2" class="form-control" ng-model="contaCorrente.contaCorrenteDv" 
                                        ng-required="true" />                                       
                             </div>
-                        </div>
+                        </div>                         
                         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                            <label class="small">Poupança</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                <select class="form-control" name="poupanca" ng-model="contaCorrente.poupanca"
+                                        ng-options="item.value as item.label for item in [{ label: 'Não', value: false }, { label: 'Sim', value: true }]">
+                                </select>
+                            </div>
+                        </div>     
+<!--                        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
                             <div class="checkbox-form">
                                 <input type="checkbox" name="poupanca" class="checkbox-inline" ng-model="contaCorrente.poupanca"> Possui Poupança?
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </li>
             </ul>     

@@ -60,6 +60,7 @@ app.controller('ContaController', ['$scope', 'ContaService', 'ModalService',
         
         $scope.salvar = function() {
             modalSalvar().then(function(result) {
+                result = ajustarDados(result);
                 ContaService.save(result)
                     .then(function(data) {  
                         modalMessage("Conta " + data.nome +  " Inserida com sucesso!");
@@ -75,6 +76,7 @@ app.controller('ContaController', ['$scope', 'ContaService', 'ModalService',
             ContaService.get(idConta)
                 .then(function(conta) {
                      modalSalvar(conta).then(function(result) {
+                        result = ajustarDados(result);
                         ContaService.update(idConta, result)
                             .then(function (data) {  
                                 modalMessage("Conta " + data.nome + " Alterada com sucesso!");
@@ -103,6 +105,12 @@ app.controller('ContaController', ['$scope', 'ContaService', 'ModalService',
                     });
             });
         }; 
+        
+        var ajustarDados = function(data) {            
+            data.tipo = data.tipo.id;
+            data.status = data.status.id;
+            return data;
+        }
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);

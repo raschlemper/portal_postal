@@ -14,7 +14,6 @@ app.controller('ModalEditarContaController', ['$scope', '$modalInstance', 'conta
                 nome: (conta && conta.nome) || null,
                 tipo: (conta && conta.tipo) || $scope.tipos[0],
                 status: (conta && conta.status) || $scope.status[0],
-                valorLimiteCredito: (conta && conta.valorLimiteCredito) || null,
                 dataAbertura: (conta && conta.dataAbertura) || null,
                 valorSaldoAbertura: (conta && conta.valorSaldoAbertura) || null
             }; 
@@ -53,16 +52,30 @@ app.controller('ModalEditarContaController', ['$scope', '$modalInstance', 'conta
         $scope.changeTipo = function(tipo) {
             if(tipo.codigo === 'dinheiro') return;
             else if(tipo.codigo === 'cartaocredito') { $scope.cartaoCreditoLista = $scope.cartoesCredito; }
-            else if(tipo.codigo === 'poupanca') { $scope.cartaoCreditoLista = contaCorrenteListaPoupanca(); }
-            else if(tipo.codigo === 'cobranca') { $scope.cartaoCreditoLista = contaCorrenteListaCobranca(); }
+            else if(tipo.codigo === 'poupanca') { $scope.contaCorrenteLista = contaCorrenteListaPoupanca(); }
+            else if(tipo.codigo === 'cobranca') { $scope.contaCorrenteLista = contaCorrenteListaCobranca(); }
             else { $scope.contaCorrenteLista = $scope.contasCorrentes; }
+            setContaCorrente(); 
+            setCartaoCredito();
+        };
+        
+        var setContaCorrente = function() {
+            if(!$scope.contaCorrenteLista) return;
             if($scope.conta.contaCorrente) { 
                 $scope.conta.contaCorrente = ListaService.getContaCorrenteValue($scope.contaCorrenteLista, $scope.conta.contaCorrente.idContaCorrente); 
+            } else {
+                $scope.conta.contaCorrente = $scope.contaCorrenteLista[0];
             }
+        }
+        
+        var setCartaoCredito = function() {
+            if(!$scope.cartaoCreditoLista) return;
             if($scope.conta.cartaoCredito) { 
                 $scope.conta.cartaoCredito = ListaService.getContaCorrenteValue($scope.cartaoCreditoLista, $scope.conta.cartaoCredito.idCartaoCredito);
+            } else {
+                $scope.conta.cartaoCredito = $scope.cartaoCreditoLista[0];
             }
-        };
+        }
         
         var contaCorrenteListaPoupanca = function() {
             _.filter($scope.contasCorrentes, function(contaCorrente) {
@@ -101,7 +114,16 @@ app.controller('ModalEditarContaController', ['$scope', '$modalInstance', 'conta
             if (form.valorSaldoAbertura.$error.required) {
                 alert('Preencha o saldo de abertura da conta!');
                 return false;
-            }         
+            }    
+            if (form.tipo.$viewValue.codigo !== 'dinheiro' 
+                    && form.tipo.$viewValue.codigo !== 'cartaocredito' && !form.contaCorrente.$viewValue) {
+                alert('Preencha a conta corrente da conta!');
+                return false;
+            }       
+            if (form.tipo.$viewValue.codigo === 'cartaocredito' && !form.cartaoCredito.$viewValue) {
+                alert('Preencha o cartão de crédito da conta!');
+                return false;
+            }       
             return true;
         }     
 
