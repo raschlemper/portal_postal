@@ -104,6 +104,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
                 templateUrl: 'partials/financeiro/conta/conta_lista.html',
                 controller: 'ContaController',
                 resolve: {}
+            })
+            .state('financeiro.lancamento', {
+                url: '/lancamento',
+                templateUrl: 'partials/financeiro/lancamento/lancamento.html',
+                controller: 'LancamentoController',
+                resolve: {}
             });
 
     }]);

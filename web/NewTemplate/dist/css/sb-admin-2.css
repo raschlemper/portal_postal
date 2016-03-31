@@ -785,6 +785,11 @@ a.show-sidebar:hover {
     background: #FBFBF0;
     margin-bottom: -20px;
 }
+.box-content-filters {
+    position: relative;
+    padding: 10px;
+    background: #FBFBF0;
+}
 .box-content.dropbox, .box-content.sortablebox {
   overflow: hidden;
 }

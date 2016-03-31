@@ -151,7 +151,7 @@ CREATE TABLE `lancamento` (
   `idLancamento` INT NOT NULL AUTO_INCREMENT,
   `idConta`      INT NOT NULL,
   `idPlanoConta` INT NOT NULL,
-  `tipo`         INT NOT NULL,
+--   `tipo`         INT NOT NULL,
   `data`         DATETIME NOT NULL,
   `valor`        DECIMAL(13,2) NOT NULL,
   `historico`    VARCHAR(254) NOT NULL,

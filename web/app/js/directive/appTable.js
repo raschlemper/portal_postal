@@ -6,7 +6,8 @@ app.directive('appTable', function($filter) {
         scope: {
             lista: '=',
             colunas: '=',
-            events: '='
+            events: '=',
+            filters: '=?filters'
         },
         link: function(scope, element, attr, controller) { 
             
@@ -17,12 +18,21 @@ app.directive('appTable', function($filter) {
                 {name: '100', value: 100}];
             
             var init = function () {
+                scope.search = {};
                 scope.listaFiltrada = [];
                 scope.currentPage = 1; 
                 scope.maxSize = 5; 
                 scope.limitTo = scope.limits[0];
                 scope.predicate = scope.colunas[0].column;
                 scope.reverse = false;     
+                scope.filters = scope.filters || filterDefault();
+            };
+            
+            var filterDefault = function() {
+                return [{    
+                    'numberColumn': 10,
+                    'label': 'Pesquisar'
+                }]
             };
             
             var reset = function() {
@@ -48,7 +58,8 @@ app.directive('appTable', function($filter) {
             
             scope.column = function(item, coluna) {
                 var colunas = coluna.column.split('.');
-                var value = getColumn(item, colunas);
+                var value = getColumn(item, angular.copy(colunas), 0);
+                console.log(getSearchColumn(scope.search, angular.copy(colunas), 0));
                 if(coluna.filter){ value = $filter(coluna.filter.name)(value, coluna.filter.args); }
                 return value;
             }
@@ -58,6 +69,14 @@ app.directive('appTable', function($filter) {
                 colunas.splice(0, 1);
                 if(!colunas.length) return value;
                 return getColumn(value, colunas);
+            }
+            
+            var getSearchColumn = function(item, colunas) {
+                var item = {};
+                item[colunas[0]] = '';
+//                colunas.splice(0, 1);
+                if(!colunas.length) return;
+                return getSearchColumn(item[colunas[0]], colunas);
             }
             
             scope.class = function(coluna) {
@@ -83,7 +102,7 @@ app.directive('appTable', function($filter) {
                 reset();
             });
             
-            scope.$watch('filters', function(newValue, oldValue) {
+            scope.$watch('search', function(newValue, oldValue) {
                 if(newValue === oldValue) return;
                 reset();
             });

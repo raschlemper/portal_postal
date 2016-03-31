@@ -9,21 +9,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.sql2o.ResultSetHandler;
 
-public class ContaHandler implements ResultSetHandler<Conta> {
+public class ContaHandler extends GenericHandler implements ResultSetHandler<Conta> {
     
     private final ContaCorrenteHandler contaCorrenteHandler;
     private final CartaoCreditoHandler cartaoCreditoHandler;
-    private String table = "conta";
     
     public ContaHandler() {
+        super("conta");
         contaCorrenteHandler = new ContaCorrenteHandler();
         cartaoCreditoHandler = new CartaoCreditoHandler();
     }
     
     public ContaHandler(String table) {
+        super(table);
         contaCorrenteHandler = new ContaCorrenteHandler();
         cartaoCreditoHandler = new CartaoCreditoHandler();
-        this.table = table;
     }
 
     public Conta handle(ResultSet result) throws SQLException {
@@ -40,12 +40,14 @@ public class ContaHandler implements ResultSetHandler<Conta> {
     }
     
     private ContaCorrente getContaCorrente(ResultSet result) throws SQLException {
+        if(!existColumn(result, "conta_corrente.idContaCorrente")) return null;
         Integer idContaCorrente = (Integer) result.getObject("conta_corrente.idContaCorrente");        
         if(idContaCorrente != null) { return contaCorrenteHandler.handle(result); };    
         return null;
     }
     
     private CartaoCredito getCartaoCredito(ResultSet result) throws SQLException {
+        if(!existColumn(result, "cartao_credito.idCartaoCredito")) return null;
         Integer idCartaoCredito = (Integer) result.getObject("cartao_credito.idCartaoCredito");        
         if(idCartaoCredito != null) { return cartaoCreditoHandler.handle(result); };    
         return null;

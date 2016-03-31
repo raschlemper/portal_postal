@@ -1,7 +1,12 @@
-<div class="box-content">
-    <div class="col-xs-10 col-sm-10">
-        <label style="padding-right:5px;">Pesquisar:</label><input type="text" class="form-control" placeholder="" ng-model="filters" style="display: inline-block; width: auto;">
+<div class="box-content-filters">
+    <div class="col-md-10">
+        <label>Pesquisar</label>
+        <input type="text" class="form-control" placeholder="" ng-model="planoConta">
     </div>
+<!--    <div class="col-md-10" ng-repeat="filter in filters track by $index">
+        <label>Pesquisar</label>
+        <input type="text" class="form-control" placeholder="" ng-model="search.$">
+    </div>-->
     <div class="col-xs-2 col-sm-2 text-right">
         <label>
             <select class="form-control input-sm" ng-options="limit.name for limit in limits track by limit.value" ng-model="limitTo"></select>
@@ -25,7 +30,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="item in listaFiltrada = (lista | filter : filters) | orderBy : predicate : reverse | limitTo : limitTo.value : start track by $index">
+        <tr ng-repeat="item in listaFiltrada = (lista | filter : search || {'planoConta': {'nome': planoConta}}) | orderBy : predicate : reverse | limitTo : limitTo.value : start track by $index">
             <td ng-repeat="coluna in colunas track by $index">{{column(item, coluna)}}</td>
             <td align="center" ng-if="events.edit">
                 <button class="btn btn-sm btn-warning" ng-click="events.edit(item)">

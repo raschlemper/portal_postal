@@ -34,12 +34,11 @@ public class LancamentoDAO extends GenericDAO {
     }
 
     public Lancamento save(Lancamento lancamento) throws Exception {  
-        String sql = "INSERT INTO lancamento (idConta, idPlanoConta, tipo, data, valor, historico) "
-                   + "VALUES(:idConta, :idPlanoConta, :tipo, :data, :valor, :historico)";        
+        String sql = "INSERT INTO lancamento (idConta, idPlanoConta, data, valor, historico) "
+                   + "VALUES(:idConta, :idPlanoConta, :data, :valor, :historico)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idConta", lancamento.getConta().getIdConta());
         params.put("idPlanoConta", lancamento.getPlanoConta().getIdPlanoConta());
-        params.put("tipo", lancamento.getTipo());      
         params.put("data", lancamento.getData());      
         params.put("valor", lancamento.getValor());    
         params.put("historico", lancamento.getHistorico());       
@@ -49,14 +48,13 @@ public class LancamentoDAO extends GenericDAO {
 
     public Lancamento update(Lancamento lancamento) throws Exception {
         String sql = "UPDATE lancamento "
-                   + "SET idConta = :idConta, idPlanoConta = :idPlanoConta, tipo = :tipo, "
+                   + "SET idConta = :idConta, idPlanoConta = :idPlanoConta, "
                    + "data = :data, valor = :valor, historico = :historico "
                    + "WHERE idLancamento = :idLancamento ";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamento", lancamento.getIdLancamento());
         params.put("idConta", lancamento.getConta().getIdConta());
         params.put("idPlanoConta", lancamento.getPlanoConta().getIdPlanoConta());
-        params.put("tipo", lancamento.getTipo());      
         params.put("data", lancamento.getData());      
         params.put("valor", lancamento.getValor());    
         params.put("historico", lancamento.getHistorico());       
