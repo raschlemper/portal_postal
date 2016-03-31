@@ -101,7 +101,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
             })
             .state('financeiro.conta', {
                 url: '/conta',
-                templateUrl: 'partials/financeiro/conta/conta.html',
+                templateUrl: 'partials/financeiro/conta/conta_lista.html',
                 controller: 'ContaController',
                 resolve: {}
             });

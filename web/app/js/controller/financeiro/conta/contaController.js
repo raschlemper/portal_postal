@@ -1,9 +1,10 @@
 'use strict';
 
-app.controller('ContaController', ['$scope', 'ContaService', 'ModalService',
-    function ($scope, ContaService, ModalService) {
+app.controller('ContaController', ['$scope', 'ContaService', 'ModalService', 'LISTAS',
+    function ($scope, ContaService, ModalService, LISTAS) {
 
         var init = function () {
+            $scope.tipos = LISTAS.tipoConta;
             $scope.contas = [];
             $scope.contasLista = [];
             $scope.collapsed = [];
