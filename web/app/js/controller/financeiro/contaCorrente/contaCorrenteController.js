@@ -12,7 +12,7 @@ app.controller('ContaCorrenteController', ['$scope', '$filter', 'ContaCorrenteSe
         var initTable = function() {            
             $scope.colunas = [
                 {label: 'Nome', column: 'nome'},
-                {label: 'Banco', column: 'banco.nome', class: 'col-md-3'},                         
+                {label: 'Banco', column: 'banco', class: 'col-md-3'},                         
                 {label: 'Agência', column: 'agencia', class: 'col-md-2'},                         
                 {label: 'Conta Corrente', column: 'contaCorrente', class: 'col-md-2'}
             ]            
@@ -42,6 +42,7 @@ app.controller('ContaCorrenteController', ['$scope', '$filter', 'ContaCorrenteSe
         
         var criarContaCorrentesLista = function(contaCorrentes) {
             return _.map(contaCorrentes, function(contaCorrente) {
+                contaCorrente.banco = contaCorrente.banco.nome;
                 contaCorrente.agencia = $filter('number')(contaCorrente.agencia) + '-' + contaCorrente.agenciaDv;
                 contaCorrente.contaCorrente = $filter('number')(contaCorrente.contaCorrente) + '-' + contaCorrente.contaCorrenteDv;
                 return _.pick(contaCorrente, 'idContaCorrente', 'nome', 'banco', 'agencia', 'contaCorrente');

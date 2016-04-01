@@ -17,21 +17,22 @@ app.directive('appTable', function($filter) {
                 {name: '50', value: 50},
                 {name: '100', value: 100}];
             
-            var init = function () {
-                scope.search = {};
-                scope.listaFiltrada = [];
+            var init = function () {   
+                scope.filters = filterDefault();
+                if(scope.filters) { scope.search = {}; }
                 scope.currentPage = 1; 
                 scope.maxSize = 5; 
                 scope.limitTo = scope.limits[0];
                 scope.predicate = scope.colunas[0].column;
-                scope.reverse = false;     
-                scope.filters = scope.filters || filterDefault();
+                scope.reverse = false; 
             };
             
             var filterDefault = function() {
                 return [{    
                     'numberColumn': 10,
-                    'label': 'Pesquisar'
+                    'label': 'Pesquisar',
+                    'columnName': 'nome',
+                    'type': 'text'
                 }]
             };
             
@@ -53,13 +54,13 @@ app.directive('appTable', function($filter) {
             };
             
             var getSizeTotal = function() {
-                scope.total = scope.listaFiltrada.length || scope.lista.length;
+                scope.total = scope.listaFiltrada.length;
             };
             
             scope.column = function(item, coluna) {
                 var colunas = coluna.column.split('.');
                 var value = getColumn(item, angular.copy(colunas));
-                getSearchColumn(scope.search, angular.copy(colunas));
+                if(scope.filters) { getSearchColumn(scope.search, angular.copy(colunas)); }
                 if(coluna.filter){ value = $filter(coluna.filter.name)(value, coluna.filter.args); }
                 return value;
             }
@@ -69,14 +70,18 @@ app.directive('appTable', function($filter) {
                 colunas.splice(0, 1);
                 if(!colunas.length) return value;
                 return getColumn(value, colunas);
-            }
+            };
             
             var getSearchColumn = function(item, colunas) {
                 var coluna = colunas[0]; 
-                item[coluna] = {};              
+                item[coluna] = '';              
                 colunas.splice(0, 1);
                 if(!colunas.length) return;
                 getSearchColumn(item[coluna], colunas);
+            };
+            
+            scope.filterList = function(lista) {
+                return $filter('filter')(lista, scope.search);
             }
             
             scope.class = function(coluna) {
