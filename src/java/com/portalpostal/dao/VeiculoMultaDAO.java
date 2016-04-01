@@ -1,7 +1,6 @@
 package com.portalpostal.dao;
 
 import com.portalpostal.dao.handler.MultaHandler;
-import com.portalpostal.dao.handler.VeiculoMultaHandler;
 import com.portalpostal.model.VeiculoMulta;
 import java.util.HashMap;
 import java.util.List;
@@ -10,18 +9,16 @@ import java.util.Map;
 public class VeiculoMultaDAO extends GenericDAO {   
     
     private MultaHandler multaHandler;
-    private VeiculoMultaHandler veiculoMultaHandler;
 
     public VeiculoMultaDAO(String nameDB) { 
         super(nameDB, VeiculoMultaDAO.class);
         multaHandler = new MultaHandler();
-        veiculoMultaHandler = new VeiculoMultaHandler();
     } 
 
     public List<VeiculoMulta> findAll() throws Exception {
         String sql = "SELECT * FROM veiculo_multa, veiculo WHERE veiculo.idVeiculo = veiculo_multa.idVeiculo "
                    + "ORDER BY veiculo_multa.idVeiculo, veiculo_multa.data";
-        return findAll(sql, null, veiculoMultaHandler);
+        return findAll(sql, null, multaHandler);
     }
 
     public VeiculoMulta find(Integer idVeiculoMulta) throws Exception {
@@ -29,7 +26,7 @@ public class VeiculoMultaDAO extends GenericDAO {
                    + "WHERE veiculo.idVeiculo = veiculo_multa.idVeiculo AND idVeiculoMulta = :idVeiculoMulta";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idVeiculoMulta", idVeiculoMulta);
-        return (VeiculoMulta) find(sql, params, veiculoMultaHandler);
+        return (VeiculoMulta) find(sql, params, multaHandler);
     }
 
     public VeiculoMulta save(VeiculoMulta veiculo) throws Exception { 
@@ -44,7 +41,7 @@ public class VeiculoMultaDAO extends GenericDAO {
         params.put("descontada", veiculo.getDescontada());
         params.put("local", veiculo.getLocal());
         params.put("descricao", veiculo.getDescricao());
-        Integer idVeiculoMulta = save(sql, params, veiculoMultaHandler);
+        Integer idVeiculoMulta = save(sql, params, multaHandler);
         return find(idVeiculoMulta);
     }
 
@@ -63,7 +60,7 @@ public class VeiculoMultaDAO extends GenericDAO {
         params.put("descontada", veiculo.getDescontada());
         params.put("local", veiculo.getLocal());
         params.put("descricao", veiculo.getDescricao());
-        update(sql, params, veiculoMultaHandler);
+        update(sql, params, multaHandler);
         return veiculo;  
     }
 
@@ -72,7 +69,7 @@ public class VeiculoMultaDAO extends GenericDAO {
         VeiculoMulta veiculo = find(idVeiculoMulta);
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idVeiculoMulta", idVeiculoMulta);
-        remove(sql, params, veiculoMultaHandler);
+        remove(sql, params, multaHandler);
         return veiculo;
     }
 

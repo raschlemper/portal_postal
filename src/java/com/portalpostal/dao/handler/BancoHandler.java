@@ -5,22 +5,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.sql2o.ResultSetHandler;
 
-public class BancoHandler implements ResultSetHandler<Banco> {
-    
-    private String table = "banco";
-    
-    public BancoHandler() {}
+public class BancoHandler extends GenericHandler implements ResultSetHandler<Banco> {
+        
+    public BancoHandler() {
+        super("banco");
+    }
     
     public BancoHandler(String table) {
-        this.table = table;      
+        super(table);
     }
 
     public Banco handle(ResultSet result) throws SQLException {
         Banco banco = new Banco();
-        banco.setIdBanco(result.getInt(table + ".idBanco"));
-        banco.setNome(result.getString(table + ".nome"));
-        banco.setNumero(result.getInt(table + ".numero"));
-        banco.setWebsite(result.getString(table + ".website"));
+        banco.setIdBanco(getInt(result, "idBanco"));
+        banco.setNome(getString(result, "nome"));
+        banco.setNumero(getInt(result, "numero"));
+        banco.setWebsite(getString(result, "website"));
         return banco;
     }
     

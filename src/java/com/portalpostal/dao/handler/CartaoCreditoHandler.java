@@ -6,36 +6,31 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.sql2o.ResultSetHandler;
 
-public class CartaoCreditoHandler implements ResultSetHandler<CartaoCredito> {    
-    
-    private final ContaCorrenteHandler contaCorrenteHandler;
-    private String table = "cartao_credito";
-    
+public class CartaoCreditoHandler extends GenericHandler implements ResultSetHandler<CartaoCredito> {    
+        
     public CartaoCreditoHandler() {
-        contaCorrenteHandler = new ContaCorrenteHandler();
+        super("cartao_credito");
     }
         
     public CartaoCreditoHandler(String table) {
-        contaCorrenteHandler = new ContaCorrenteHandler();
-        this.table = table;      
+        super(table);
     }
 
     public CartaoCredito handle(ResultSet result) throws SQLException {
         CartaoCredito cartaoCredito = new CartaoCredito();
-        cartaoCredito.setIdCartaoCredito(result.getInt(table  + ".idCartaoCredito"));
-        cartaoCredito.setNome(result.getString(table + ".nome"));
-        cartaoCredito.setBandeira(result.getString(table + ".bandeira"));
-        cartaoCredito.setDiaFechamento(result.getInt(table  + ".diaFechamento"));
-        cartaoCredito.setDiaVencimento(result.getInt(table  + ".diaVencimento"));
-        cartaoCredito.setValorLimiteCredito(result.getDouble(table  + ".valorLimiteCredito"));
+        cartaoCredito.setIdCartaoCredito(getInt(result, "idCartaoCredito"));
+        cartaoCredito.setNome(getString(result, "nome"));
+        cartaoCredito.setBandeira(getString(result, "bandeira"));
+        cartaoCredito.setDiaFechamento(getInt(result, "diaFechamento"));
+        cartaoCredito.setDiaVencimento(getInt(result, "diaVencimento"));
+        cartaoCredito.setValorLimiteCredito(getDouble(result, "valorLimiteCredito"));
         cartaoCredito.setContaCorrente(getContaCorrente(result));
         return cartaoCredito;
     }
     
     private ContaCorrente getContaCorrente(ResultSet result) throws SQLException {
-        Integer idContaCorrente = (Integer) result.getObject("conta_corrente.idContaCorrente");        
-        if(idContaCorrente != null) { return contaCorrenteHandler.handle(result); };    
-        return null;
+        if(!existColumn(result, "conta_corrente.idContaCorrente")) return null;  
+        return new ContaCorrenteHandler().handle(result);
     }
     
 }

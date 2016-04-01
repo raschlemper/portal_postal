@@ -58,8 +58,8 @@ app.directive('appTable', function($filter) {
             
             scope.column = function(item, coluna) {
                 var colunas = coluna.column.split('.');
-                var value = getColumn(item, angular.copy(colunas), 0);
-                console.log(getSearchColumn(scope.search, angular.copy(colunas), 0));
+                var value = getColumn(item, angular.copy(colunas));
+                getSearchColumn(scope.search, angular.copy(colunas));
                 if(coluna.filter){ value = $filter(coluna.filter.name)(value, coluna.filter.args); }
                 return value;
             }
@@ -72,11 +72,11 @@ app.directive('appTable', function($filter) {
             }
             
             var getSearchColumn = function(item, colunas) {
-                var item = {};
-                item[colunas[0]] = '';
-//                colunas.splice(0, 1);
+                var coluna = colunas[0]; 
+                item[coluna] = {};              
+                colunas.splice(0, 1);
                 if(!colunas.length) return;
-                return getSearchColumn(item[colunas[0]], colunas);
+                getSearchColumn(item[coluna], colunas);
             }
             
             scope.class = function(coluna) {

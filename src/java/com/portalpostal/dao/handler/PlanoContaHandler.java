@@ -6,33 +6,30 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.sql2o.ResultSetHandler;
 
-public class PlanoContaHandler implements ResultSetHandler<PlanoConta> {
-    
-    private String table = "plano_conta";
-        
-    public PlanoContaHandler() { }
+public class PlanoContaHandler extends GenericHandler implements ResultSetHandler<PlanoConta> {
+            
+    public PlanoContaHandler() { 
+        super("plano_conta");
+    }
     
     public PlanoContaHandler(String table) {
-        this.table = table;      
+        super(table);
     }
 
     @Override
     public PlanoConta handle(ResultSet result) throws SQLException {
         PlanoConta planoConta = new PlanoConta();
-        planoConta.setIdPlanoConta(result.getInt(table  + ".idPlanoConta"));
-        planoConta.setTipo(TipoPlanoConta.values()[result.getInt(table  + ".tipo")]);
-        planoConta.setNome(result.getString(table  + ".nome"));
-        planoConta.setCodigo(result.getInt(table  + ".codigo"));
+        planoConta.setIdPlanoConta(getInt(result, "idPlanoConta"));
+        planoConta.setTipo(TipoPlanoConta.values()[getInt(result, "tipo")]);
+        planoConta.setNome(getString(result, "nome"));
+        planoConta.setCodigo(getInt(result, "codigo"));
         planoConta.setGrupo(getGrupo(result));
         return planoConta;    
     }
     
     private PlanoConta getGrupo(ResultSet result) throws SQLException {
-        Integer grupo = (Integer) result.getObject(table  + ".grupo");
-        if(grupo == null) return null;
-        PlanoConta planoConta = new PlanoConta();
-        planoConta.setIdPlanoConta(grupo);
-        return planoConta;
+        if(!existColumn(result, "grupo.grupo")) return null;
+        return new PlanoContaHandler().handle(result); 
     }
     
 }

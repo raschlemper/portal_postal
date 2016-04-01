@@ -1,7 +1,6 @@
 package com.portalpostal.dao;
 
 import com.portalpostal.dao.handler.SinistroHandler;
-import com.portalpostal.dao.handler.VeiculoSinistroHandler;
 import com.portalpostal.model.VeiculoSinistro;
 import java.util.HashMap;
 import java.util.List;
@@ -9,20 +8,17 @@ import java.util.Map;
 
 public class VeiculoSinistroDAO extends GenericDAO {   
     
-    private SinistroHandler sinistroHandler;
-    private VeiculoSinistroHandler veiculoSinistroHandler;
-    
+    private SinistroHandler sinistroHandler;    
 
     public VeiculoSinistroDAO(String nameDB) {   
         super(nameDB, VeiculoSinistroDAO.class);        
-        sinistroHandler = new SinistroHandler();
-        veiculoSinistroHandler = new VeiculoSinistroHandler();        
+        sinistroHandler = new SinistroHandler();      
     } 
 
     public List<VeiculoSinistro> findAll() throws Exception {
         String sql = "SELECT * FROM veiculo_sinistro, veiculo WHERE veiculo.idVeiculo = veiculo_sinistro.idVeiculo "
                    + "ORDER BY veiculo_sinistro.idVeiculo, veiculo_sinistro.data";
-        return findAll(sql, null, veiculoSinistroHandler);
+        return findAll(sql, null, sinistroHandler);
     }
 
     public VeiculoSinistro find(Integer idVeiculoSinistro) throws Exception {
@@ -30,7 +26,7 @@ public class VeiculoSinistroDAO extends GenericDAO {
                    + "WHERE veiculo.idVeiculo = veiculo_sinistro.idVeiculo AND idVeiculoSinistro = :idVeiculoSinistro";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idVeiculoSinistro", idVeiculoSinistro);
-        return (VeiculoSinistro) find(sql, params, veiculoSinistroHandler);
+        return (VeiculoSinistro) find(sql, params, sinistroHandler);
     }
 
     public VeiculoSinistro save(VeiculoSinistro veiculo) throws Exception { 
@@ -44,7 +40,7 @@ public class VeiculoSinistroDAO extends GenericDAO {
         params.put("local", veiculo.getLocal());
         params.put("responsavel", veiculo.getResponsavel().ordinal());
         params.put("descricao", veiculo.getDescricao());
-        Integer idVeiculoSinistro = save(sql, params, veiculoSinistroHandler);
+        Integer idVeiculoSinistro = save(sql, params, sinistroHandler);
         return find(idVeiculoSinistro);
     }
 
@@ -62,7 +58,7 @@ public class VeiculoSinistroDAO extends GenericDAO {
         params.put("local", veiculo.getLocal());
         params.put("responsavel", veiculo.getResponsavel().ordinal());
         params.put("descricao", veiculo.getDescricao());
-        update(sql, params, veiculoSinistroHandler);
+        update(sql, params, sinistroHandler);
         return veiculo;  
     }
 
@@ -71,7 +67,7 @@ public class VeiculoSinistroDAO extends GenericDAO {
         VeiculoSinistro veiculo = find(idVeiculoSinistro);
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idVeiculoSinistro", idVeiculoSinistro);
-        remove(sql, params, veiculoSinistroHandler);
+        remove(sql, params, sinistroHandler);
         return veiculo;
     }
 

@@ -9,36 +9,36 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.sql2o.ResultSetHandler;
 
-public class VeiculoHandler implements ResultSetHandler<Veiculo> {
+public class VeiculoHandler extends GenericHandler implements ResultSetHandler<Veiculo> {
     
-    private String table = "veiculo";
-    
-    public VeiculoHandler() { }
+    public VeiculoHandler() { 
+        super("veiculo");
+    }
     
     public VeiculoHandler(String table) {
-        this.table = table;
+        super(table);
     }
 
     @Override
     public Veiculo handle(ResultSet result) throws SQLException {        
         Veiculo veiculo = new Veiculo();
-        veiculo.setIdVeiculo(result.getInt(table + ".idVeiculo"));
-        veiculo.setTipo(TipoVeiculo.values()[result.getInt(table + ".tipo")]);  
-        veiculo.setIdMarca(result.getInt(table + ".idMarca"));
-        veiculo.setMarca(result.getString(table + ".marca"));
-        veiculo.setIdModelo(result.getInt(table + ".idModelo"));
-        veiculo.setModelo(result.getString(table + ".modelo")); 
-        veiculo.setIdVersao(result.getString(table + ".idVersao"));
-        veiculo.setVersao(result.getString(table + ".versao"));  
-        veiculo.setPlaca(result.getString(table + ".placa"));
-        veiculo.setAnoModelo(result.getInt(table + ".anoModelo"));
-        veiculo.setChassis(result.getString(table + ".chassis"));
-        veiculo.setRenavam(result.getString(table + ".renavam"));
-        veiculo.setQuilometragem(result.getInt(table + ".quilometragem"));
-        veiculo.setCombustivel(TipoCombustivelVeiculo.values()[result.getInt(table + ".combustivel")]);
-        veiculo.setStatus(TipoStatusVeiculo.values()[result.getInt(table + ".status")]);
-        veiculo.setSituacao(TipoSituacaoVeiculo.values()[result.getInt(table + ".situacao")]);
-        veiculo.setDataCadastro(result.getDate(table + ".dataCadastro"));
+        veiculo.setIdVeiculo(getInt(result, "idVeiculo"));
+        veiculo.setTipo(TipoVeiculo.values()[getInt(result, "tipo")]);  
+        veiculo.setIdMarca(getInt(result, "idMarca"));
+        veiculo.setMarca(getString(result, "marca"));
+        veiculo.setIdModelo(getInt(result, "idModelo"));
+        veiculo.setModelo(getString(result, "modelo")); 
+        veiculo.setIdVersao(getString(result, "idVersao"));
+        veiculo.setVersao(getString(result, "versao"));  
+        veiculo.setPlaca(getString(result, "placa"));
+        veiculo.setAnoModelo(getInt(result, "anoModelo"));
+        veiculo.setChassis(getString(result, "chassis"));
+        veiculo.setRenavam(getString(result, "renavam"));
+        veiculo.setQuilometragem(getInt(result, "quilometragem"));
+        veiculo.setCombustivel(TipoCombustivelVeiculo.values()[getInt(result, "combustivel")]);
+        veiculo.setStatus(TipoStatusVeiculo.values()[getInt(result, "status")]);
+        veiculo.setSituacao(TipoSituacaoVeiculo.values()[getInt(result, "situacao")]);
+        veiculo.setDataCadastro(getDate(result, "dataCadastro"));
         return veiculo;
     }
     

@@ -1,7 +1,7 @@
 <div class="box-content-filters">
     <div class="col-md-10">
         <label>Pesquisar</label>
-        <input type="text" class="form-control" placeholder="" ng-model="planoConta">
+        <input type="text" class="form-control" placeholder="" ng-model="planoConta" ng-model="search.banco.nome">
     </div>
 <!--    <div class="col-md-10" ng-repeat="filter in filters track by $index">
         <label>Pesquisar</label>
@@ -30,7 +30,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="item in listaFiltrada = (lista | filter : search || {'planoConta': {'nome': planoConta}}) | orderBy : predicate : reverse | limitTo : limitTo.value : start track by $index">
+        <tr ng-repeat="item in listaFiltrada = (lista | filter : search) | orderBy : predicate : reverse | limitTo : limitTo.value : start track by $index">
             <td ng-repeat="coluna in colunas track by $index">{{column(item, coluna)}}</td>
             <td align="center" ng-if="events.edit">
                 <button class="btn btn-sm btn-warning" ng-click="events.edit(item)">
