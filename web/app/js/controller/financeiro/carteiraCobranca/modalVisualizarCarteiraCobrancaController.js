@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalVisualizarCarteiraCobrancaController', ['$scope', '$modalInstance', 'carteiraCobranca', 
-    function ($scope, $modalInstance, carteiraCobranca) {
+app.controller('ModalVisualizarCarteiraCobrancaController', ['$scope', '$modalInstance', '$filter', 'carteiraCobranca', 
+    function ($scope, $modalInstance, $filter, carteiraCobranca) {
 
         var init = function () { 
             $scope.carteiraCobranca = criarCarteiraCobranca(carteiraCobranca);
@@ -9,6 +9,7 @@ app.controller('ModalVisualizarCarteiraCobrancaController', ['$scope', '$modalIn
         
         var criarCarteiraCobranca = function(carteiraCobranca) {
             carteiraCobranca.codigoBeneficiario = $filter('number')(carteiraCobranca.codigoBeneficiario) + '-' + carteiraCobranca.codigoBeneficiarioDv;            
+            return carteiraCobranca;
         };
         
         $scope.editar = function() {

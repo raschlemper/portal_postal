@@ -87,6 +87,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
                 controller: 'ContaCorrenteController',
                 resolve: {}
             })
+            .state('financeiro.carteiracobranca', {
+                url: '/carteiracobranca',
+                templateUrl: 'partials/financeiro/carteiraCobranca/carteiraCobranca.html',
+                controller: 'CarteiraCobrancaController',
+                resolve: {}
+            })
             .state('financeiro.cartaocredito', {
                 url: '/cartaocredito',
                 templateUrl: 'partials/financeiro/cartaoCredito/cartaoCredito.html',

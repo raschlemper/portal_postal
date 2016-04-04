@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalEditarCarteiraCobrancaController', ['$scope', '$modalInstance', 'carteiraCobranca', 'ContaCorrenteService', 'CepService',
-    function ($scope, $modalInstance, carteiraCobranca, ContaCorrenteService, CepService) {
+app.controller('ModalEditarCarteiraCobrancaController', ['$scope', '$modalInstance', 'carteiraCobranca', 'CarteiraCobrancaService', 'ContaCorrenteService', 'CepService',
+    function ($scope, $modalInstance, carteiraCobranca, CarteiraCobrancaService, ContaCorrenteService, CepService) {
 
         var init = function () {  
             $scope.carteiraCobranca = {
@@ -51,7 +51,7 @@ app.controller('ModalEditarCarteiraCobrancaController', ['$scope', '$modalInstan
         
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
-            ContaCorrenteService.getByCarteiraCobranca($scope.carteiraCobranca.contaCorrente.idContaCorrente,
+            CarteiraCobrancaService.getByCarteiraCobranca($scope.carteiraCobranca.contaCorrente.idContaCorrente,
                 $scope.carteiraCobranca.codigoBeneficiario, $scope.carteiraCobranca.codigoBeneficiarioDv, $scope.carteiraCobranca.codigoCarteira)
                 .then(function(carteiraCobranca) {
                     if(!carteiraCobranca) { $modalInstance.close($scope.carteiraCobranca); }

@@ -10,7 +10,8 @@ app.factory('ModalService', function($modal) {
                 templateUrl: templateUrl,
                 controller: controller,
                 size: size,
-                resolve: resolve
+                resolve: resolve,
+                windowClass: 'modal-window'
             })
         },
 

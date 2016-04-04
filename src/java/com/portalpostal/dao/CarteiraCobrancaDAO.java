@@ -18,14 +18,14 @@ public class CarteiraCobrancaDAO extends GenericDAO {
     public List<CarteiraCobranca> findAll() throws Exception {
         String sql = "SELECT * FROM carteira_cobranca, conta_corrente "
                    + "WHERE carteira_cobranca.idContaCorrente = conta_corrente.idContaCorrente "
-                   + "ORDER BY carteira_cobranca.idCarteiraCobranca";        
+                   + "ORDER BY carteira_cobranca.idCarteira";        
         return findAll(sql, null, carteiraCobrancaHandler);
     }
 
     public CarteiraCobranca find(Integer idCarteiraCobranca) throws Exception {
         String sql = "SELECT * FROM carteira_cobranca, conta_corrente "
                    + "WHERE carteira_cobranca.idContaCorrente = conta_corrente.idContaCorrente "
-                   + "AND carteira_cobranca.idCarteiraCobranca = :idCarteiraCobranca";
+                   + "AND carteira_cobranca.idCarteira = :idCarteiraCobranca";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idCarteiraCobranca", idCarteiraCobranca);
         return (CarteiraCobranca) find(sql, params, carteiraCobrancaHandler);
@@ -116,8 +116,9 @@ public class CarteiraCobrancaDAO extends GenericDAO {
 
     public CarteiraCobranca findByCarteiraCobranca(Integer idContaCorrente, Integer codigoBeneficiario, 
             Integer codigoBeneficiarioDv, Integer codigoCarteira) throws Exception {     
-        String sql = "SELECT * FROM carteira_cobranca "
-                   + "WHERE carteira_cobranca.idContaCorrente = :idContaCorrente AND carteira_cobranca.cod_beneficiario = :codigoBeneficiario "
+        String sql = "SELECT * FROM carteira_cobranca, conta_corrente "
+                   + "WHERE carteira_cobranca.idContaCorrente = conta_corrente.idContaCorrente "
+                   + "AND carteira_cobranca.idContaCorrente = :idContaCorrente AND carteira_cobranca.cod_beneficiario = :codigoBeneficiario "
                    + "AND carteira_cobranca.cod_beneficiario_dv = :codigoBeneficiarioDv AND carteira_cobranca.cod_carteira = :codigoCarteira ";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idContaCorrente", idContaCorrente);

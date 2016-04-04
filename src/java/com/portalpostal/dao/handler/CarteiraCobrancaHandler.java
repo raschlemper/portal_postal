@@ -18,7 +18,7 @@ public class CarteiraCobrancaHandler extends GenericHandler implements ResultSet
 
     public CarteiraCobranca handle(ResultSet result) throws SQLException {
         CarteiraCobranca carteiraCobranca = new CarteiraCobranca();
-        carteiraCobranca.setIdCarteiraCobranca(getInt(result, "idCarteiraCobranca"));
+        carteiraCobranca.setIdCarteiraCobranca(getInt(result, "idCarteira"));
         carteiraCobranca.setNome(getString(result, "nome"));
         carteiraCobranca.setContaCorrente(getContaCorrente(result));
         carteiraCobranca.setCodigoBeneficiario(getInt(result, "cod_beneficiario"));
@@ -39,8 +39,8 @@ public class CarteiraCobrancaHandler extends GenericHandler implements ResultSet
         carteiraCobranca.setBeneficiarioLogradouro(getString(result, "beneficiario_logradouro"));
         carteiraCobranca.setBeneficiarioBairro(getString(result, "beneficiario_bairro"));
         carteiraCobranca.setBeneficiarioCidade(getString(result, "beneficiario_cidade"));
-        carteiraCobranca.setBeneficiarioUf(getString(result, "beneficiario_cep"));
-        carteiraCobranca.setBeneficiarioCep(getString(result, "nome"));
+        carteiraCobranca.setBeneficiarioUf(getString(result, "beneficiario_uf"));
+        carteiraCobranca.setBeneficiarioCep(getString(result, "beneficiario_cep"));
         
         return carteiraCobranca;
     }

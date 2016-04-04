@@ -1,7 +1,6 @@
 package com.portalpostal.controller;
 
 import Controle.ContrErroLog;
-import com.portalpostal.model.CarteiraCobranca;
 import com.portalpostal.validation.Validation;
 import com.portalpostal.model.ContaCorrente;
 import com.portalpostal.service.CarteiraCobrancaService;

@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('CarteiraCobrancaCobrancaController', ['$scope', 'CarteiraCobrancaService', 'ModalService',
-    function ($scope, CarteiraCobrancaService, ModalService) {
+app.controller('CarteiraCobrancaController', ['$scope', '$filter', 'CarteiraCobrancaService', 'ModalService',
+    function ($scope, $filter, CarteiraCobrancaService, ModalService) {
 
         var init = function () {
             $scope.carteiraCobrancas = [];
@@ -13,9 +13,9 @@ app.controller('CarteiraCobrancaCobrancaController', ['$scope', 'CarteiraCobranc
             $scope.colunas = [
                 {label: 'Nome', column: 'nome'},
                 {label: 'Beneficiário', column: 'beneficiarioNome'},                         
-                {label: 'Código', column: 'codBeneficiario'},                         
-                {label: 'Convênio', column: 'codConvenio'},                         
-                {label: 'Carteira', column: 'codCarteira'}
+                {label: 'Código', column: 'codigoBeneficiario'},                         
+                {label: 'Convênio', column: 'codigoConvenio'},                         
+                {label: 'Carteira', column: 'codigoCarteira'}
             ]            
             $scope.events = { 
                 edit: function(carteiraCobranca) {
