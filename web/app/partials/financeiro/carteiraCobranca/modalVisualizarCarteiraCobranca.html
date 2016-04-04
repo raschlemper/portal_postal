@@ -1,0 +1,140 @@
+<form name="carteiraCobrancaForm" novalidate>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
+        <h4 class="modal-title">Visualizar Carteira de Cobrança</h4>
+    </div>
+    <div class="modal-body">
+        <div class="bootbox-body">
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Nome:</label>
+                </div>
+                <div class="col-md-8">{{carteiraCobranca.nome}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Bebeficiário:</label>
+                </div>
+                <div class="col-md-8">{{carteiraCobranca.codigoBeneficiario}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Convênio:</label>
+                </div>
+                <div class="col-md-8">{{carteiraCobranca.codigoConvenio}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Carteira:</label>
+                </div>
+                <div class="col-md-8">{{carteiraCobranca.codigoCarteira}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Aceite:</label>
+                </div>
+                <div class="col-md-8">{{(carteiraCobranca.aceite ? 'Sim' : 'Não')}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Baixa:</label>
+                </div>
+                <div class="col-md-8">{{(carteiraCobranca.baixa ? 'Sim' : 'Não')}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Espécie Documento:</label>
+                </div>
+                <div class="col-md-8">{{carteiraCobranca.especieDocumento}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Local Pagto:</label>
+                </div>
+                <div class="col-md-8">{{carteiraCobranca.localPagamento}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Nome Beneficiário:</label>
+                </div>
+                <div class="col-md-8">{{carteiraCobranca.beneficiarioNome}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Doc. Beneficiário:</label>
+                </div>
+                <div class="col-md-8">{{carteiraCobranca.beneficiarioDocumento}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Lograd. Beneficiário:</label>
+                </div>
+                <div class="col-md-8">{{carteiraCobranca.beneficiarioLogradouro}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Bairro Beneficiário:</label>
+                </div>
+                <div class="col-md-8">{{carteiraCobranca.beneficiarioBairro}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Cidade Beneficiário:</label>
+                </div>
+                <div class="col-md-8">{{carteiraCobranca.beneficiarioCidade}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Uf Beneficiário:</label>
+                </div>
+                <div class="col-md-8">{{carteiraCobranca.beneficiarioUf}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Cep Beneficiário:</label>
+                </div>
+                <div class="col-md-8">{{carteiraCobranca.beneficiarioCep}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Instrução 01:</label>
+                </div>
+                <div class="col-md-8">{{carteiraCobranca.instrucao01}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Instrução 02:</label>
+                </div>
+                <div class="col-md-8">{{carteiraCobranca.instrucao02}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Instrução 03:</label>
+                </div>
+                <div class="col-md-8">{{carteiraCobranca.instrucao03}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Instrução 04:</label>
+                </div>
+                <div class="col-md-8">{{carteiraCobranca.instrucao04}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Instrução 05:</label>
+                </div>
+                <div class="col-md-8">{{carteiraCobranca.instrucao05}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-warning" ng-click="editar()">
+            <i class="fa fa-lg fa-pencil fa-spc"></i> EDITAR
+        </button>
+        <button type="button" class="btn btn-default" ng-click="cancel()">
+            <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR
+        </button>
+    </div>
+</form>    
+
+  

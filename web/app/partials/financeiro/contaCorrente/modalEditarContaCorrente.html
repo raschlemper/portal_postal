@@ -30,9 +30,9 @@
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
                                 <input type="text" autocomplete="off" name="agencia" class="form-control" ng-model="contaCorrente.agencia" 
-                                       ng-required="true" placeholder="Numero agência"/>     
+                                       ng-required="true" placeholder="Número agência"/>     
                                 <span class="input-group-addon">-</span>
-                                <input type="text" autocomplete="off" name="agenciaDv" size="2" class="form-control" ng-model="contaCorrente.agenciaDv" 
+                                <input type="text" autocomplete="off" name="agenciaDv" size="2" ng-maxlength="2" class="form-control" ng-model="contaCorrente.agenciaDv" 
                                        ng-required="true"/>                                               
                             </div>
                         </div>
@@ -41,9 +41,9 @@
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
                                 <input type="text" autocomplete="off" name="contaCorrente" class="form-control" ng-model="contaCorrente.contaCorrente" 
-                                       ng-required="true" placeholder="Numero conta corrente"/>     
+                                       ng-required="true" placeholder="Número conta corrente"/>     
                                 <span class="input-group-addon">-</span>
-                                <input type="text" autocomplete="off" name="contaCorrenteDv" size="2" class="form-control" ng-model="contaCorrente.contaCorrenteDv" 
+                                <input type="text" autocomplete="off" name="contaCorrenteDv" size="2" ng-maxlength="2" class="form-control" ng-model="contaCorrente.contaCorrenteDv" 
                                        ng-required="true" />                                       
                             </div>
                         </div>                         

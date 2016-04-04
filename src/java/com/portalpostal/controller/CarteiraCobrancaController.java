@@ -1,19 +1,16 @@
 package com.portalpostal.controller;
 
 import Controle.ContrErroLog;
-import com.portalpostal.model.CarteiraCobranca;
 import com.portalpostal.validation.Validation;
-import com.portalpostal.model.ContaCorrente;
+import com.portalpostal.model.CarteiraCobranca;
 import com.portalpostal.service.CarteiraCobrancaService;
-import com.portalpostal.service.ContaCorrenteService;
-import com.portalpostal.validation.ContaCorrenteValidation;
+import com.portalpostal.validation.CarteiraCobrancaValidation;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -23,8 +20,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/financeiro/contacorrente")
-public class ContaCorrenteController {
+@Path("/financeiro/carteiracobranca")
+public class CarteiraCobrancaController {
     
     @Context
     private HttpServletRequest request;
@@ -32,103 +29,101 @@ public class ContaCorrenteController {
     private HttpSession sessao;
     private String nomeBD;
     
-    private ContaCorrenteService contaCorrenteService;
     private CarteiraCobrancaService carteiraCobrancaService;
 
     private void init() {
         sessao = request.getSession();
         nomeBD = (String) sessao.getAttribute("nomeBD");
-        contaCorrenteService = new ContaCorrenteService(nomeBD);
+        carteiraCobrancaService = new CarteiraCobrancaService(nomeBD);
     }
     
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ContaCorrente> findAll() {
+    public List<CarteiraCobranca> findAll() {
         try {
             init();    
-            return contaCorrenteService.findAll();
+            return carteiraCobrancaService.findAll();
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     }  
     
     @GET
-    @Path("/{idContaCorrente}")
+    @Path("/{idCarteiraCobranca}")
     @Produces(MediaType.APPLICATION_JSON)
-    public ContaCorrente find(@PathParam("idContaCorrente") Integer idContaCorrente) {
+    public CarteiraCobranca find(@PathParam("idCarteiraCobranca") Integer idCarteiraCobranca) {
         try {
             init();    
-            return contaCorrenteService.find(idContaCorrente);
+            return carteiraCobrancaService.find(idCarteiraCobranca);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
-    }  
+    }   
     
     @GET
-    @Path("/banco/{banco}/agencia/{agencia}/{agenciaDv}/contacorrente/{contacorrente}/{contacorrenteDv}")
+    @Path("/{idContaCorrente}/beneficiario/{beneficiario}/{beneficiarioDv}/carteira/{carteira}")
     @Produces(MediaType.APPLICATION_JSON)
-    public ContaCorrente findByContaCorrente(@PathParam("banco") Integer banco, @PathParam("agencia") Integer agencia,
-            @PathParam("agenciaDv") Integer agenciaDv, @PathParam("contacorrente") Integer contaCorrente, 
-            @PathParam("contacorrenteDv") Integer contaCorrenteDv) {
+    public CarteiraCobranca findByCarteiraCobranca(@PathParam("idContaCorrente") Integer idContaCorrente, 
+            @PathParam("beneficiario") Integer beneficiario, @PathParam("beneficiarioDv") Integer beneficiarioDv, 
+            @PathParam("carteira") Integer carteira) {
         try {
             init();  
-            return contaCorrenteService.findByContaCorrente(banco, agencia, agenciaDv, contaCorrente, contaCorrenteDv);
+            return carteiraCobrancaService.findByCarteiraCobranca(idContaCorrente, beneficiario, beneficiarioDv, carteira);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     }  
     
-    @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public ContaCorrente save(ContaCorrente contaCorrente) {
+    public CarteiraCobranca save(CarteiraCobranca carteiraCobranca) {
         try {
             init();
-            validation(contaCorrente);
-            return contaCorrenteService.save(contaCorrente);
+            validation(carteiraCobranca);
+            return carteiraCobrancaService.save(carteiraCobranca);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     } 
     
     @PUT
-    @Path("/{idContaCorrente}")
+    @Path("/{idCarteiraCobranca}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public ContaCorrente update(ContaCorrente contaCorrente) {
+    public CarteiraCobranca update(CarteiraCobranca carteiraCobranca) {
         try {
             init();
-            validation(contaCorrente);
-            return contaCorrenteService.update(contaCorrente);
+            validation(carteiraCobranca);
+            return carteiraCobrancaService.update(carteiraCobranca);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     } 
     
     @DELETE
-    @Path("/{idContaCorrente}")
+    @Path("/{idCarteiraCobranca}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public ContaCorrente delete(@PathParam("idContaCorrente") Integer idContaCorrente) {
+    public CarteiraCobranca delete(@PathParam("idCarteiraCobranca") Integer idCarteiraCobranca) {
         try {
             init();
-            return contaCorrenteService.delete(idContaCorrente);
+            return carteiraCobrancaService.delete(idCarteiraCobranca);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     } 
     
-    private void validation(ContaCorrente contaCorrente) throws Exception {  
-        Validation validacao = new ContaCorrenteValidation();
-        if(!validacao.validar(contaCorrente)) {
+    private void validation(CarteiraCobranca carteiraCobranca) throws Exception {  
+        Validation validacao = new CarteiraCobrancaValidation();
+        if(!validacao.validar(carteiraCobranca)) {
             throw new WebApplicationException(getMessageError(validacao.getMsg()));
         } 
     }  
     
     private Response getMessageError(String msg) {  
-        int idErro = ContrErroLog.inserir("Portal Postal - ServContaCorrente", "Exception", null, msg);
+        int idErro = ContrErroLog.inserir("Portal Postal - ServCarteiraCobranca", "Exception", null, msg);
         return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN)
                 .entity("SYSTEM ERROR Nº: " + idErro + "<br/> Ocorreu um erro inesperado!").build();
     }

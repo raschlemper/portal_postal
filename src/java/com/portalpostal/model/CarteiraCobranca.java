@@ -1,8 +1,8 @@
 package com.portalpostal.model;
 
-public class Carteira {
+public class CarteiraCobranca {
 
-    private Integer idCarteira;
+    private Integer idCarteiraCobranca;
     private ContaCorrente contaCorrente;
     private String nome;
     private Integer codigoBeneficiario;
@@ -26,12 +26,12 @@ public class Carteira {
     private String beneficiarioUf;
     private String beneficiarioCep;
 
-    public Integer getIdCarteira() {
-        return idCarteira;
+    public Integer getIdCarteiraCobranca() {
+        return idCarteiraCobranca;
     }
 
-    public void setIdCarteira(Integer idCarteira) {
-        this.idCarteira = idCarteira;
+    public void setIdCarteiraCobranca(Integer idCarteiraCobranca) {
+        this.idCarteiraCobranca = idCarteiraCobranca;
     }
 
     public ContaCorrente getContaCorrente() {

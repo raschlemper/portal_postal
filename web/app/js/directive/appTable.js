@@ -18,7 +18,7 @@ app.directive('appTable', function($filter) {
                 {name: '100', value: 100}];
             
             var init = function () {   
-                scope.filters = filterDefault();
+//                scope.filters = filterDefault();
                 if(scope.filters) { scope.search = {}; }
                 scope.currentPage = 1; 
                 scope.maxSize = 5; 
