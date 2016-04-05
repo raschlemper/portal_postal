@@ -15,6 +15,14 @@
         Clientes cli = contrCliente.consultaClienteById(idCli, nomeBD);
         if(cli != null){
             String nomeFantasia = col.getNomeFantasia();
+            String nome = col.getNomeCliente();
+            if(nomeFantasia == null && nome == null){
+                nomeFantasia = "Cliente Cod. " +idCli+" inexistente!";
+            }else if(nomeFantasia.trim().equals("") && !nome.trim().equals("")){
+                nomeFantasia = nome;
+            }else if(nomeFantasia.trim().equals("") && nome.trim().equals("")){
+                nomeFantasia = "Nome do Cliente Cód. " + idCli +" está em branco!";
+            }
             String obs = col.getObs().replace(";", " ").replace(".", " ").replace("\n", " ").replace("\r", " ").replace("\t", " ").trim();
             if(obs.length() > 50){
                 obs = obs.substring(0, 50);

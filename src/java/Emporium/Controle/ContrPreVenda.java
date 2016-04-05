@@ -149,7 +149,7 @@ public class ContrPreVenda {
     public static int setarImpresso(String nomeBD, String param, int idUser, String nomeUser) {
         Connection conn = Conexao.conectar(nomeBD);
         try {
-            String sql = "UPDATE pre_venda SET impresso = 1, dataImpressao = NOW(), userImpressao = " + idUser + ", nomeImpressao = '" + nomeUser + "' WHERE impresso = 0 AND id IN (" + param + ");";
+            String sql = "UPDATE pre_venda SET impresso = 1, isSync = 0, dataImpressao = NOW(), userImpressao = " + idUser + ", nomeImpressao = '" + nomeUser + "' WHERE impresso = 0 AND id IN (" + param + ");";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             int i = pstmt.executeUpdate();
             return i;

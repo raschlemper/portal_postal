@@ -57,7 +57,7 @@ public class CarteiraCobrancaDAO extends GenericDAO {
         params.put("instrucao04", carteiraCobranca.getInstrucao04()); 
         params.put("instrucao05", carteiraCobranca.getInstrucao05()); 
         params.put("beneficiarioNome", carteiraCobranca.getBeneficiarioNome()); 
-        params.put("beneficiario", carteiraCobranca.getBeneficiarioDocumento()); 
+        params.put("beneficiarioDocumento", carteiraCobranca.getBeneficiarioDocumento()); 
         params.put("beneficiarioLogradouro", carteiraCobranca.getBeneficiarioLogradouro()); 
         params.put("beneficiarioBairro", carteiraCobranca.getBeneficiarioBairro()); 
         params.put("beneficiarioCidade", carteiraCobranca.getBeneficiarioCidade()); 
@@ -69,14 +69,14 @@ public class CarteiraCobrancaDAO extends GenericDAO {
 
     public CarteiraCobranca update(CarteiraCobranca carteiraCobranca) throws Exception {
         String sql = "UPDATE carteira_cobranca "
-                   + "SET idContaCorrente = :idContaCorrente, nome = :nome, codigoBeneficiario = :codigoBeneficiario, "
-                   + "codigoBeneficiarioDv = :codigoBeneficiarioDv, codigoConvenio = :codigoConvenio, codigoCarteira = :codigoCarteira, "
-                   + "aceite = :aceite, baixa = :baixa, especieDocumento = :especieDocumento, localPagamento = :localPagamento, "
+                   + "SET idContaCorrente = :idContaCorrente, nome = :nome, cod_beneficiario = :codigoBeneficiario, "
+                   + "cod_beneficiario_dv = :codigoBeneficiarioDv, cod_convenio = :codigoConvenio, cod_carteira = :codigoCarteira, "
+                   + "aceite = :aceite, baixa = :baixa, especie_doc = :especieDocumento, local_pagamento = :localPagamento, "
                    + "instrucao01 = :instrucao01, instrucao02 = :instrucao02, instrucao03 = :instrucao03, instrucao04 = :instrucao04, "
-                   + "instrucao05 = :instrucao05, beneficiarioNome = :beneficiarioNome, beneficiarioDocumento = :beneficiarioDocumento, "
-                   + "beneficiarioLogradouro = :beneficiarioLogradouro, beneficiarioBairro = :beneficiarioBairro, "
-                   + "beneficiarioCidade = :beneficiarioCidade, beneficiarioUf = :beneficiarioUf, beneficiarioCep = :beneficiarioCep "
-                   + "WHERE idCarteiraCobranca = :idCarteiraCobranca ";        
+                   + "instrucao05 = :instrucao05, beneficiario_nome = :beneficiarioNome, beneficiario_doc = :beneficiarioDocumento, "
+                   + "beneficiario_logradouro = :beneficiarioLogradouro, beneficiario_bairro = :beneficiarioBairro, "
+                   + "beneficiario_cidade = :beneficiarioCidade, beneficiario_uf = :beneficiarioUf, beneficiario_cep = :beneficiarioCep "
+                   + "WHERE idCarteira = :idCarteiraCobranca ";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idCarteiraCobranca", carteiraCobranca.getIdCarteiraCobranca());
         params.put("idContaCorrente", carteiraCobranca.getContaCorrente().getIdContaCorrente());
@@ -95,7 +95,7 @@ public class CarteiraCobrancaDAO extends GenericDAO {
         params.put("instrucao04", carteiraCobranca.getInstrucao04()); 
         params.put("instrucao05", carteiraCobranca.getInstrucao05()); 
         params.put("beneficiarioNome", carteiraCobranca.getBeneficiarioNome()); 
-        params.put("beneficiario", carteiraCobranca.getBeneficiarioDocumento()); 
+        params.put("beneficiarioDocumento", carteiraCobranca.getBeneficiarioDocumento()); 
         params.put("beneficiarioLogradouro", carteiraCobranca.getBeneficiarioLogradouro()); 
         params.put("beneficiarioBairro", carteiraCobranca.getBeneficiarioBairro()); 
         params.put("beneficiarioCidade", carteiraCobranca.getBeneficiarioCidade()); 
@@ -106,7 +106,7 @@ public class CarteiraCobrancaDAO extends GenericDAO {
     }
 
     public CarteiraCobranca remove(Integer idCarteiraCobranca) throws Exception { 
-        String sql = "DELETE FROM carteira_cobranca WHERE idCarteiraCobranca = :idCarteiraCobranca ";
+        String sql = "DELETE FROM carteira_cobranca WHERE idCarteira = :idCarteiraCobranca ";
         CarteiraCobranca carteiraCobranca = find(idCarteiraCobranca);
         Map<String, Object> params = new HashMap<String, Object>();        
         params.put("idCarteiraCobranca", idCarteiraCobranca);

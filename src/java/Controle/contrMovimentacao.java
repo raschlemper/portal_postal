@@ -322,8 +322,10 @@ public class contrMovimentacao {
                 float altura = result.getFloat("altura");
                 float largura = result.getFloat("largura");
                 float comprimento = result.getFloat("comprimento");
+                int idPre_venda = result.getInt("idPre_venda");
+                int idOS = result.getInt("idOS");
 
-                Movimentacao mov = new Movimentacao(dataPostagem, descServico, numObjeto, destinatario1, peso, cep1, valorServico, quantidade, departamentos, status, dataEntrega, notaFiscal, numVenda, numCaixa, valorDeclarado, valorDestino, paisDestino, contratoEct, conteudoObjeto, siglaServAdicionais, codStatus, altura, largura, comprimento);
+                Movimentacao mov = new Movimentacao(dataPostagem, descServico, numObjeto, destinatario1, peso, cep1, valorServico, quantidade, departamentos, status, dataEntrega, notaFiscal, numVenda, numCaixa, valorDeclarado, valorDestino, paisDestino, contratoEct, conteudoObjeto, siglaServAdicionais, codStatus, altura, largura, comprimento, idPre_venda, idOS);
                 movimentacao.add(mov);
             }
             valores.close();

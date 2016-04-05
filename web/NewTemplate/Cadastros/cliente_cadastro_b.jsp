@@ -121,9 +121,9 @@
             }
 
             function mostraTipoServer() {
-                $('#is_cadastro').prop('checked', true);                
+                $('#is_cadastro').prop('checked', true);
                 $('#is_cadastro').attr("disabled", true);
-                
+
                 $('#mostra_smtp').toggleClass("hidden");
                 $('#cad_email').toggleClass("hidden");
             }
@@ -190,12 +190,29 @@
                 });
             }
 
-
-
-
-
-
+            function desativaCli() {
+                var desat = $("#ck_destivar").val();
+                var desat2 = $("#nomeBD").val();
+                alert(desat);
+                $.ajax({
+                    url: '../../ServDesativaCliente',
+                    data: {nome: desat, nomeBD: desat2},
+                    type: 'get',
+                    cache: false,
+                    success: function (data) {
+                        alert(data);                             
+                        window.location= "cliente_lista_b.jsp";
+                    },
+                    error: function () {
+                        alert('Erro na requisição');
+                    }
+                }
+                );
+            }
         </script>
+
+
+
     </head>        
     <body>   
         <script type="text/javascript">
@@ -215,7 +232,17 @@
                             <jsp:param name="idClienteTab" value="<%= idClienteInc%>" />
                             <jsp:param name="temContratoTab" value="<%= cliInc.getTemContrato()%>" />
                             <jsp:param name="nomeClienteTab" value="<%= cliInc.getNomeFantasia()%>" />
-                        </jsp:include>    
+                        </jsp:include>   
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                            <div id="destiva"> </div>
+                            <div class="form-inline">
+                                <label><input id="ck_destivar" name="ck_desativar" type="checkbox" value="<%= idClienteInc%>" onclick="desativaCli();" >&nbsp;&nbsp;DESATIVAR ESTE CLIENTE</label>
+                                <input type="hidden" name="nomeBD" value="<%=nomeBD%>" id="nomeBD" />
+                            </div>
+                            </div>
+                        </div>
 
                         <div class="row">
                             <div class="col-xs-12">

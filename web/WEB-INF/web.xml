@@ -605,6 +605,14 @@
         <servlet-name>ImagemAR</servlet-name>
         <servlet-class>Servlet.ImagemAR</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ServDesativaCliente</servlet-name>
+        <servlet-class>Servlet.ServDesativaCliente</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SerAtivaCliente</servlet-name>
+        <servlet-class>Servlet.SerAtivaCliente</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ServLogin</servlet-name>
         <url-pattern>/ServLogin</url-pattern>
@@ -1193,6 +1201,14 @@
     <servlet-mapping>
         <servlet-name>ImagemAR</servlet-name>
         <url-pattern>/ImagemAR</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServDesativaCliente</servlet-name>
+        <url-pattern>/ServDesativaCliente</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SerAtivaCliente</servlet-name>
+        <url-pattern>/SerAtivaCliente</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

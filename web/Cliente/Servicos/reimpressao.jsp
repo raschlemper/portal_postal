@@ -298,6 +298,7 @@
                                         <option value="nomeServico">Serviço</option> 
                                         <option value="nObj">N° de Objeto</option> 
                                         <option value="d.cpf_cnpj">CPF/CNPJ</option> 
+                                        <option value="observacoes">Observação</option> 
                                     </select>
                                 </dd>
                                 <dd>

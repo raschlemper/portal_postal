@@ -295,6 +295,10 @@
                                     <option value="cep >= 77000000 AND cep <= 77999999">TO</option>
                                 </select>
                             </dd>
+                            <dd>
+                                <label>L. de Postagem</label>
+                                <input style="width: 100px;" type="text" name="lp" id="lp" value="" maxlength="13" onkeypress="mascara(this, maskNumero)" />
+                            </dd>
                         </li>
                         <li>
                             <dd style="width: 500px;">

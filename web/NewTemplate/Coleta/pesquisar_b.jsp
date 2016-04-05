@@ -357,10 +357,13 @@
                                                                 int idColeta = col.getIdColeta();
                                                                 int idCli = col.getIdCliente();
                                                                 String nomeFantasia = col.getNomeFantasia();
-                                                                if(nomeFantasia == null){
+                                                                String nome = col.getNomeCliente();
+                                                                if(nomeFantasia == null && nome == null){
                                                                     nomeFantasia = "Cliente Cód. " +idCli+" não encontrado!";
-                                                                }else if(nomeFantasia.equals("")){
-                                                                    nomeFantasia = "Cliente Cód. " + idCli;
+                                                                }else if(nomeFantasia.trim().equals("") && !nome.trim().equals("")){
+                                                                    nomeFantasia = nome;
+                                                                }else if(nomeFantasia.trim().equals("") && nome.trim().equals("")){
+                                                                    nomeFantasia = "Nome do Cliente Cód. " + idCli +" está em branco!";
                                                                 }
                                                                 String tipo = col.getTipoColeta();
                                                                 String obs = col.getObs();

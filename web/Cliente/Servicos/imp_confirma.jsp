@@ -65,25 +65,25 @@
             }
 
             function verificaCeps() {
-                abrirTelaEspera(); 
+                abrirTelaEspera();
                 var flag = true;
-                
+
                 $(".cep_input").each(function () {
                     if ($(this).css("background-color") !== "rgb(153, 255, 102)") {
                         flag = false;
                     }
                 });
-                
-                if(flag){
+
+                if (flag) {
                     //console.log("ok");
                     document.form1.submit();
-                }else{
+                } else {
                     //console.log("fail");
                     fecharTelaEspera();
                     alert("Corrija todos os CEPs (em vermelho) para finalizar.")
                 }
             }
-            
+
             function consultaCeps() {
                 $(".cep_input").each(function () {
                     var id = $(this).attr('id');
@@ -114,7 +114,7 @@
         </style>
         <title>Portal Postal | Importação de Postagens</title>
     </head>
-        <body onload="consultaCeps();">
+    <body onload="consultaCeps();">
         <div id="divInteracao" class="esconder" style="top:10%; left:10%; right:10%; bottom:10%;" align="center"><input id="textointeracao" /></div>
         <div id="divProtecao" class="esconder"></div>
 
@@ -127,13 +127,19 @@
 
                     <div id="titulo1">CONFIRME OS DADOS DA IMPORTAÇÃO!</div><br/>
                     <div style="font-size: 16px;font-weight: bold;">Total de postagens importadas: <%= lista.size()%></div>
+                    <%
+                                if (!lista.isEmpty()) {
+
+                                    PreVenda pv0 = lista.get(0);
+                            %>
                     <form method="post" action="../../ServPreVendaConfirmaImp" id="form1" name="form1">
                         <%--<div style="background: url('../../imagensNew/ajax_arrow.png') right repeat-y; right: 20px; height: 100%; width: 10px; z-index: 50; position: absolute;"></div>--%>
                         <div style="overflow: auto; position: relative; z-index: 1;">
+                            
                             <table cellpadding="0" cellspacing="0" class="tb1">
                                 <tr>
                                     <th>N.</th>
-                                    <th></th>
+                                    <%if (!pv0.getNumObjeto().equals("avista")) {%><th>SRO</th><%}%>
                                     <th>NOME</th>
                                     <th>EMPRESA</th>
                                     <th>CPF</th>
@@ -155,6 +161,12 @@
                                     <th>CONTEÚDO</th>
                                     <th>CELULAR</th>
                                     <th>E-MAIL</th>
+                                        <%if (pv0.getPeso() > 0) {%>                                    
+                                    <th>PESO</th>
+                                    <th>ALT.</th>
+                                    <th>LAR.</th>
+                                    <th>COM.</th>
+                                        <%}%>
                                 </tr>
                                 <%
                                     for (int i = 0; i < lista.size(); i++) {
@@ -166,7 +178,9 @@
                                 %>
                                 <tr class="<%=cor%>">
                                     <td><input size="1" type="text" name="n" value="<%= i + 1%>" /></td>
-                                    <td><%if (!pv.getNumObjeto().equals("avista")) {%><input size="12" type="text" name="nObj<%= pv.getId()%>" value="<%= pv.getNumObjeto()%>" /><%}%></td>
+                                    <%if (!pv.getNumObjeto().equals("avista")) {%>
+                                    <td><input size="12" type="text" name="nObj<%= pv.getId()%>" value="<%= pv.getNumObjeto()%>" /></td>
+                                    <%}%>
                                     <td><input size="50" type="text" name="nome<%= pv.getId()%>" value="<%= pv.getNomeDes()%>" /></td>
                                     <td><input type="text" name="empresa<%= pv.getId()%>" value="<%= pv.getEmpresaDes()%>" /></td>
                                     <td><input type="text" name="cpf<%= pv.getId()%>" size="16" value="<%= pv.getCpfDes()%>" maxlength="18" onkeypress="mascara(this, maskCpfCnpj);" /></td>
@@ -191,7 +205,7 @@
                                                 for (int j = 0; j < listaDep.size(); j++) {
                                                     ClientesDeptos cd = listaDep.get(j);
                                                     String cartao = "0";
-                                                    if (cd.getCartaoPostagem() != null && !cd.getCartaoPostagem().trim().equals("") ) {
+                                                    if (cd.getCartaoPostagem() != null && !cd.getCartaoPostagem().trim().equals("")) {
                                                         cartao = cd.getCartaoPostagem();
                                                     }
                                                     if (dps.contains(cd.getIdDepartamento())) {
@@ -230,7 +244,18 @@
                                     <td><input type="text" name="obs<%= pv.getId()%>" value="<%= pv.getObservacoes()%>" /></td>
                                     <td><input type="text" name="conteudo<%= pv.getId()%>" value="<%= pv.getConteudo()%>" /></td>
                                     <td><input type="text" name="celular<%= pv.getId()%>" value="<%= pv.getCelularDes()%>" /></td>
-                                    <td><input type="text" name="email<%= pv.getId()%>" value="<%= pv.getEmail_destinatario()%>" /></td>
+                                    <td><input type="text" name="email<%= pv.getId()%>" value="<%= pv.getEmail_destinatario()%>" /></td>                                    
+                                    <%if (pv.getPeso() > 0) {%>
+                                    <td><input type="text" size="4" name="peso<%= pv.getId()%>" value="<%= pv.getPeso()%>" /></td>
+                                    <td><input type="text" size="3" name="altura<%= pv.getId()%>" value="<%= pv.getAltura()%>" /></td>
+                                    <td><input type="text" size="3" name="largura<%= pv.getId()%>" value="<%= pv.getLargura()%>" /></td>
+                                    <td><input type="text" size="3" name="comprimento<%= pv.getId()%>" value="<%= pv.getComprimento()%>" /></td>
+                                    <%} else {%>
+                                    <input type="hidden" name="peso<%= pv.getId()%>" value="0" />
+                                    <input type="hidden" name="altura<%= pv.getId()%>" value="0" />
+                                    <input type="hidden" name="largura<%= pv.getId()%>" value="0" />
+                                    <input type="hidden" name="comprimento<%= pv.getId()%>" value="0" />
+                                    <%}%>
                                 </tr>
                                 <%}%>
                             </table>
@@ -257,6 +282,10 @@
                             </li>
                         </ul>
                     </form>
+                                        
+                            <%} else {%>
+                            Nenhum Pedido
+                            <%}%>
                     <img width="100%" src="../../imagensNew/linha.jpg"/>
 
                 </div>

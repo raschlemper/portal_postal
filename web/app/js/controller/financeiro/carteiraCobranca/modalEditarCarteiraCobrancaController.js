@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalEditarCarteiraCobrancaController', ['$scope', '$modalInstance', 'carteiraCobranca', 'CarteiraCobrancaService', 'ContaCorrenteService', 'CepService',
-    function ($scope, $modalInstance, carteiraCobranca, CarteiraCobrancaService, ContaCorrenteService, CepService) {
+app.controller('ModalEditarCarteiraCobrancaController', ['$scope', '$modalInstance', 'carteiraCobranca', 'CarteiraCobrancaService', 'ContaCorrenteService', 'CepService', 'ModalService',
+    function ($scope, $modalInstance, carteiraCobranca, CarteiraCobrancaService, ContaCorrenteService, CepService, ModalService) {
 
         var init = function () {  
             $scope.carteiraCobranca = {
@@ -12,8 +12,8 @@ app.controller('ModalEditarCarteiraCobrancaController', ['$scope', '$modalInstan
                 codigoBeneficiarioDv: (carteiraCobranca && carteiraCobranca.codigoBeneficiarioDv) || null,
                 codigoConvenio: (carteiraCobranca && carteiraCobranca.codigoConvenio) || null,
                 codigoCarteira: (carteiraCobranca && carteiraCobranca.codigoCarteira) || null,
-                aceite: (carteiraCobranca && carteiraCobranca.aceite) || null,
-                baixa: (carteiraCobranca && carteiraCobranca.baixa) || null,
+                aceite: (carteiraCobranca && carteiraCobranca.aceite),
+                baixa: (carteiraCobranca && carteiraCobranca.baixa),
                 especieDocumento: (carteiraCobranca && carteiraCobranca.especieDocumento) || null,
                 localPagamento: (carteiraCobranca && carteiraCobranca.localPagamento) || null,
                 instrucao01: (carteiraCobranca && carteiraCobranca.instrucao01) || null,
@@ -29,6 +29,8 @@ app.controller('ModalEditarCarteiraCobrancaController', ['$scope', '$modalInstan
                 beneficiarioUf: (carteiraCobranca && carteiraCobranca.beneficiarioUf) || null,
                 beneficiarioCep: (carteiraCobranca && carteiraCobranca.beneficiarioCep) || null
             }; 
+            if($scope.carteiraCobranca.aceite == null) { $scope.carteiraCobranca.aceite = false; }
+            if($scope.carteiraCobranca.baixa == null) { $scope.carteiraCobranca.baixa = false; }
             getTitle();
             contaCorrente();
         };
@@ -81,7 +83,11 @@ app.controller('ModalEditarCarteiraCobrancaController', ['$scope', '$modalInstan
                     $scope.carteiraCobranca.beneficiarioCidade = '';
                     $scope.carteiraCobranca.beneficiarioUf = '';
                 });
-        }
+        };
+        
+        var modalMessage = function(message) {
+            ModalService.modalMessage(message);
+        };
 
         var validarForm = function (form) {
             if (form.nome.$error.required) {

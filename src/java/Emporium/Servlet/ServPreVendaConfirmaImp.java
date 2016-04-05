@@ -168,10 +168,18 @@ public class ServPreVendaConfirmaImp extends HttpServlet {
                 }
             }        
 
-            int peso = 0;//Integer.parseInt(request.getParameter("peso"));
-            int altura = 0;//Integer.parseInt(request.getParameter("altura"));
-            int largura = 0;//Integer.parseInt(request.getParameter("largura"));
-            int comprimento = 0;//Integer.parseInt(request.getParameter("comprimento"));
+            int peso = 0;
+            int altura = 0;
+            int largura = 0;
+            int comprimento = 0;
+            try{
+                peso = Integer.parseInt(request.getParameter("peso"+id));
+                altura = Integer.parseInt(request.getParameter("altura"+id));
+                largura = Integer.parseInt(request.getParameter("largura"+id));
+                comprimento = Integer.parseInt(request.getParameter("comprimento"+id));
+            }catch(NumberFormatException e){
+                
+            }
 
             int mp = Integer.parseInt(request.getParameter("mp"+id));
             int ar = Integer.parseInt(request.getParameter("ar"+id));

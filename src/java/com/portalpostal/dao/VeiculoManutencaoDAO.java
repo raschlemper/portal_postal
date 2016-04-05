@@ -82,7 +82,7 @@ public class VeiculoManutencaoDAO extends GenericDAO {
     public List<VeiculoManutencao> findNotDoneByRangeDate(Date dataInicio, Date dataFim) throws Exception {
         String sql = "SELECT * FROM veiculo_manutencao, veiculo "
                    + "WHERE veiculo.idVeiculo = veiculo_manutencao.idVeiculo "
-                   + "AND dataAgendamento between :dataInicio and :dataFim AND dataManutencao IS NULL";
+                   + "AND DATE(dataAgendamento) between DATE(:dataInicio) and DATE(:dataFim) AND dataManutencao IS NULL";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("dataInicio", dataInicio);
         params.put("dataFim", dataFim);

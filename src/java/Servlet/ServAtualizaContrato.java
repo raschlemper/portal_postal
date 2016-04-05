@@ -112,7 +112,7 @@ public class ServAtualizaContrato extends HttpServlet {
             if (comErro == 1) {
                 listaCliente = Controle.contrCliente.getClientesComErroAtualizacao(nomeBD);
             } else {
-                listaCliente = Controle.contrCliente.getNomeCodigoMetodo(nomeBD);
+                listaCliente = Controle.contrCliente.getNomeCodigoMetodo(nomeBD, false);
             }
 
             for (Clientes clie : listaCliente) {

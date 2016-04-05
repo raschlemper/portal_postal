@@ -319,8 +319,8 @@ UNIDADE DE POSTAGEM]]></text>
 				</graphicElement>
 			</line>
 			<componentElement>
-				<reportElement x="42" y="76" width="235" height="43" uuid="6a5854e7-b600-4a7e-9c41-4862706c86d4"/>
-				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="true" checksumRequired="false" barHeight="80">
+				<reportElement x="42" y="82" width="235" height="39" uuid="6a5854e7-b600-4a7e-9c41-4862706c86d4"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barHeight="55">
 					<jr:codeExpression><![CDATA[$F{sro}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
@@ -344,6 +344,13 @@ UNIDADE DE POSTAGEM]]></text>
 				</textElement>
 				<text><![CDATA[REMETENTE:]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="42" y="71" width="230" height="11" uuid="ac81a009-59c6-4f30-9443-1b5c85156979"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sro}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

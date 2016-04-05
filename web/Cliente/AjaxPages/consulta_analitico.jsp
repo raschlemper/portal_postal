@@ -12,6 +12,7 @@
 
             String nomeBD = (String) session.getAttribute("nomeBD");
             if (nomeBD != null) {
+                ArrayList<Integer> acessosUs = (ArrayList<Integer>) session.getAttribute("acessos");
 
                 int nivel = (Integer) session.getAttribute("nivelUsuarioEmp");
                 int idCliente = Integer.parseInt(request.getParameter("idCliente"));
@@ -30,10 +31,11 @@
                 String ar = request.getParameter("ar");
                 String vd = request.getParameter("vd");
                 String uf = request.getParameter("uf");
+                String lp = request.getParameter("lp");
 
                 String sql = "SELECT descServico, peso, quantidade, valorServico, dataPostagem, codStatus,"
                         + " numObjeto, destinatario, cep, departamento, status, dataEntrega, notaFiscal, numVenda, numCaixa,"
-                        + " siglaServAdicionais, contratoEct, valorDestino, valorDeclarado, paisDestino, conteudoObjeto, altura, largura, comprimento"
+                        + " siglaServAdicionais, contratoEct, valorDestino, valorDeclarado, paisDestino, conteudoObjeto, altura, largura, comprimento, idPre_venda ,idOS"
                         + " FROM movimentacao"
                         + " WHERE codCliente = " + idCliente;
                 if (dataInicio.length() == 10 && dataFinal.length() == 10) {
@@ -86,10 +88,13 @@
                 if (vd.equals("true")) {
                     sql += " AND siglaServAdicionais LIKE '%VD%'";
                 }
+                if (!lp.equals("")) {
+                    sql += " AND idOS = "+lp+"";
+                }
                 sql += " ORDER BY dataPostagem DESC";
 
-
-
+                System.out.println(sql);
+                
                 ArrayList movimentacao = Controle.contrMovimentacao.getConsultaAnalitica(sql, nomeBD);
                 BigDecimal vlrTotal = new BigDecimal(0);
                 BigDecimal vlrDecTotal = new BigDecimal(0);
@@ -141,7 +146,7 @@
                 <th width='120'><h3>DIMENSÕES</h3></th>
                 <th width='30'><h3>QTD</h3></th>
                 <th width='50'><h3>POSTAGEM</h3></th>
-                <%if (nivel != 3) {%>
+                <%if (acessosUs.contains(3)) {%>
                 <th width='50'><h3>VALOR</h3></th>
                 <th width='50'><h3>DECLARADO</h3></th>
                 <th width='90'><h3>A COBRAR</h3></th>
@@ -156,6 +161,8 @@
                 <th width='80'><h3>CONTEÚDO</h3></th>
                 <th width='120'><h3>CONTRATO ECT</h3></th>
                 <th width='50'><h3>DESTINO</h3></th>
+                <th width='50'><h3>PV</h3></th>
+                <th width='50'><h3>L. POST</h3></th>
             </tr>
         </thead>
         <tbody>
@@ -234,11 +241,11 @@
                 <td><%= dimensoes%></td>
                 <td><%= qtd%></td>
                 <td><%= vData%></td>
-                <% if (nivel != 3) {%>
+                <% if (acessosUs.contains(3)) { %>
                 <td nowrap align='left'>R$ <%= vValor%></td>
                 <td nowrap align='left'>R$ <%= vValorDec%></td>
                 <td nowrap align='left'>R$ <%= vValorCob%></td>
-                <% }%>
+                <%}%>
                 <td style="font-size: 10px;"><%= destinatario%></td>
                 <td><%= cepDestino%></td>
                 <td><%= status%></td>
@@ -249,6 +256,8 @@
                 <td><%= mov.getConteudoObjeto() %></td>
                 <td><%= mov.getContratoEct() %></td>
                 <td><%= mov.getPaisDestino() %></td>
+                <td><%= mov.getIdPre_venda() %></td>
+                <td><%= mov.getIdOS() %></td>
             </tr>
             <%}%>
         </tbody>
@@ -257,7 +266,7 @@
                 <td colspan="4"></td>
                 <td nowrap="true" align="center"><%= qtdTotal%></td>
                 <td></td>
-                <%if (nivel != 3) {%>
+                <%if (acessosUs.contains(3)) {%>
                 <td nowrap="true">R$ <%= Util.FormatarDecimal.formatarFloat(vlrTotal.floatValue())%></td>
                 <td nowrap="true">R$ <%= Util.FormatarDecimal.formatarFloat(vlrDecTotal.floatValue())%></td>
                 <td nowrap="true">R$ <%= Util.FormatarDecimal.formatarFloat(vlrCobTotal.floatValue())%></td>

@@ -43,6 +43,9 @@ public class Movimentacao {
  private String dataBaixaAr;
  private int codStatus;
  private String cliente; // so usa quando tem join para pegar onome do cliente
+ 
+ private int idPre_venda;
+ private int idOS;
 
   /*<th><h3>Cliente</h3></th>
     <th><h3>Nº do Objeto</h3></th>
@@ -110,7 +113,11 @@ public class Movimentacao {
         this.codStatus = codStatus;
     }
 
-    public Movimentacao(Date dataPostagem, String descServico, String numObjeto, String destinatario, float peso, String cep, float valorServico, float quantidade, String departamento, String status, Date dataEntrega, String notaFiscal, String numVenda, String numCaixa, float valorDeclarado, float valorDestino, String paisDestino, String contratoEct, String conteudoObjeto, String siglaServAdicionais, int codStatus, float altura, float largura, float comprimento) {
+    public Movimentacao(Date dataPostagem, String descServico, String numObjeto, String destinatario,
+            float peso, String cep, float valorServico, float quantidade, String departamento, String status, Date dataEntrega, 
+            String notaFiscal, String numVenda, String numCaixa, float valorDeclarado, float valorDestino, 
+            String paisDestino, String contratoEct, String conteudoObjeto, String siglaServAdicionais, 
+            int codStatus, float altura, float largura, float comprimento, int idPre_venda, int idOS) {
         this.dataPostagem = dataPostagem;
         this.descServico = descServico;
         this.numObjeto = numObjeto;
@@ -135,6 +142,8 @@ public class Movimentacao {
         this.altura = altura;
         this.largura = largura;
         this.comprimento = comprimento;
+        this.idPre_venda = idPre_venda;
+        this.idOS = idOS;
     }
 
     public Movimentacao(String seqVenda, Date dataPostagem, String descServico, String numObjeto, String destinatario, String notaFiscal, float peso, String cep, float valorServico, float valorDestino, float quantidade, float valorDeclarado, String contratoEct, float altura, float largura, float comprimento, String siglaServAdicionais, String paisDestino) {
@@ -158,6 +167,24 @@ public class Movimentacao {
         this.paisDestino = paisDestino;
     }
 
+    public int getIdPre_venda() {
+        return idPre_venda;
+    }
+
+    public void setIdPre_venda(int idPre_venda) {
+        this.idPre_venda = idPre_venda;
+    }
+
+    public int getIdOS() {
+        return idOS;
+    }
+
+    public void setIdOS(int idOS) {
+        this.idOS = idOS;
+    }
+
+    
+    
     public int getCodStatus() {
         return codStatus;
     }

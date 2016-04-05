@@ -78,7 +78,7 @@
                     var indexB = form.arquivo.value.length;
                     var ext = form.arquivo.value.substring(indexA, indexB).toUpperCase();
                     var tipo = document.getElementById('tipo').value;
-                    if((tipo == 'CSV' || tipo == 'INTERLOGIC' || tipo == 'TRAY' || tipo == 'LINX') && ext != ".CSV") {
+                    if((tipo == 'CSV' || tipo == 'INTERLOGIC' || tipo == 'TRAY' || tipo == 'LINX' || tipo === 'PS') && ext != ".CSV") {
                         fecharTelaEspera();
                         alert("O arquivo a ser importado deve ser '.CSV' !");
                         return false;
@@ -177,6 +177,7 @@
                                         <option value="EDI">ARQUIVO EDI</option>
                                         <option value="LINX">ARQUIVO LINX</option>
                                         <option value="WEBVENDAS">ARQUIVO WEBVENDAS</option>
+                                        <option value="PS">ARQUIVO PS SERVICE</option>
                                         <%if(idEmp == 236505){%><option value="LADOAVESSO">ARQUIVO LADOAVESSO</option><%}%>
                                         <%if(idEmp == 236505){%><option value="INTERLOGIC">ARQUIVO INTERLOGIC</option><%}%>
                                     </select>

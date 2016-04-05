@@ -13,7 +13,7 @@ app.controller('ModalEditarContaCorrenteController', ['$scope', '$modalInstance'
                 agenciaDv: (contaCorrente && contaCorrente.agenciaDv) || null,
                 contaCorrente: (contaCorrente && contaCorrente.contaCorrente) || null,
                 contaCorrenteDv: (contaCorrente && contaCorrente.contaCorrenteDv) || null,
-                poupanca: (contaCorrente && contaCorrente.poupanca) || false
+                poupanca: (contaCorrente && contaCorrente.poupanca)
             }; 
             $scope.possuiCarteira = (contaCorrente && contaCorrente.carteira ? true : false);
             getTitle();

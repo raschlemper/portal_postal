@@ -34,6 +34,36 @@ public class contrCliente {
             Conexao.desconectar(conn);
         }
     }
+     public static void destivaCliente(String nomeBD, String idCliente) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "UPDATE cliente SET ativo = 0 WHERE codigo = "+idCliente+" ;";
+
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.executeUpdate();
+            valores.close();
+        } catch (SQLException e) {
+            System.out.println(e);
+            ContrErroLog.inserir("HOITO - criaClienteBalcao", "SQLException", sql, e.toString());
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+     public static void ativaCliente(String nomeBD, String idCliente) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "UPDATE cliente SET ativo = 1 WHERE codigo = "+idCliente+" ;";
+
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.executeUpdate();
+            valores.close();
+        } catch (SQLException e) {
+            System.out.println(e);
+            ContrErroLog.inserir("HOITO - criaClienteBalcao", "SQLException", sql, e.toString());
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
 
     public static int inserirCliente(String nome, String nomeFantasia, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String cep, String telefone, String email, String cnpj, double latitude, double longitude, int grupo_fat, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
@@ -482,9 +512,13 @@ public class contrCliente {
         }
     }
 
-    public static ArrayList<Clientes> getNomeCodigoMetodo(String nomeBD) {
+    public static ArrayList<Clientes> getNomeCodigoMetodo(String nomeBD, boolean showInativo) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
-        String sql = "SELECT * FROM cliente ORDER BY nome";
+        String all = " WHERE ativo = 1 ";
+        if(showInativo){
+            all = "";
+        }
+        String sql = "SELECT * FROM cliente "+ all + " ORDER BY nome;";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();

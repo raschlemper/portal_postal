@@ -270,7 +270,7 @@
                         <thead>
                             <tr>
                                 <th><h3>Login</h3></th>
-                                <th><h3>Senha</h3></th>
+                               <!-- <th><h3>Senha</h3></th> -->
                                 <th><h3>Nivel</h3></th>
                                 <th class="nosort" width="60"><h3>Alterar</h3></th>
                                 <th class="nosort" width="60"><h3>Excluir</h3></th>
@@ -292,7 +292,7 @@
                             %>
                             <tr style="cursor:default;">
                                 <td><%= loginSc%></td>
-                                <td><%= senhaSc%></td>
+                              <%--   <td><%= senhaSc%></td> --%>
                                 <td><%= nomeNivel%></td>
                                 <td align="center">
                                     <%if(nivel < 99){%>

@@ -2,6 +2,18 @@ package Util;
 
 public enum TipoConexao {
     
+    DEVELOPMENT_SCC4() {
+        protected String url(String nome) {
+            return String.format(URL, "localhost", 3306, nome);
+        }
+        protected String username() {
+            return "root";
+        }
+        protected String password() {
+            return "1s2c3c4";
+        }
+    },
+    
     DEVELOPMENT() {
         protected String url(String nome) {
             return String.format(URL, "localhost", 3306, nome);

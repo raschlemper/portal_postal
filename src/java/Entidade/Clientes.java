@@ -56,6 +56,7 @@ public class Clientes {
     private String login_sigep;
     private String senha_sigep;
     private int idGrupoFaturamento;
+    private int ativo;
 
     /*
     public Clientes(int codigo, String nome, String endereco, String telefone, String bairro, String cidade, String uf, int cep, String email, String cnpj, String nomeFantasia, String complemento, String numero, String url_logo, int temContrato, String numContrato, int anoContrato, String ufContrato, String nomeContrato, int usaEtiquetador, double latitude, double longitude, String cartaoPostagem) {
@@ -126,9 +127,20 @@ public class Clientes {
         this.login_sigep = result.getString("login_sigep");
         this.senha_sigep = result.getString("senha_sigep");
         this.idGrupoFaturamento = result.getInt("idGrupoFaturamento");
+        this.ativo = result.getInt("ativo");
 
     }
 
+    public int getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(int ativo) {
+        this.ativo = ativo;
+    }
+
+    
+    
     public Clientes(int codigo, String nome) {
         this.codigo = codigo;
         this.nome = nome;

@@ -7,181 +7,202 @@
         <div class="bootbox-body">
             <ul class="list-unstyled">
                 <li class="list-group-item">
-                    <div class="row form-horizontal">
-                        <input type="hidden" name="idCarteiraCobranca" ng-model="carteiraCobranca.idCarteiraCobranca"/>
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                            <label class="small">Nome</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="text" autocomplete="off" name="nome" class="form-control" ng-model="carteiraCobranca.nome" 
-                                       ng-required="true" placeholder="Nome da carteira de cobrança"/>                                    
+                    <div class="row form-horizontal" style="padding: 10px;">
+                        
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="carteira" class="active">
+                                <a href="#geral" aria-controls="geral" role="tab" data-toggle="tab">Geral</a>
+                            </li>
+                            <li role="carteira">
+                                <a href="#beneficiario" aria-controls="beneficiario" role="tab" data-toggle="tab">Beneficiário</a>
+                            </li>
+                            <li role="carteira">
+                                <a href="#instrucao" aria-controls="instrucao" role="tab" data-toggle="tab">Instrução</a>
+                            </li>
+                        </ul>                        
+                        
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="geral">
+                                <input type="hidden" name="idCarteiraCobranca" ng-model="carteiraCobranca.idCarteiraCobranca"/>
+                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <label class="small">Nome</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="nome" class="form-control" ng-model="carteiraCobranca.nome" 
+                                               ng-required="true" placeholder="Nome da carteira de cobrança"/>                                    
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <label class="small">Conta Corrente</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-car"></i></span>
+                                        <select class="form-control" name="contaCorrente" ng-model="carteiraCobranca.contaCorrente"
+                                                ng-options="contaCorrente.nome for contaCorrente in contasCorrentes track by contaCorrente.idContaCorrente"></select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">Beneficiário</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="codigoBeneficiario" class="form-control" ng-model="carteiraCobranca.codigoBeneficiario" 
+                                               ng-required="true" placeholder="Número do beneficiário"/>     
+                                        <span class="input-group-addon">-</span>
+                                        <input type="text" autocomplete="off" name="codigoBeneficiarioDv" size="2" ng-maxlength="2" class="form-control" ng-model="carteiraCobranca.codigoBeneficiarioDv" 
+                                               ng-required="true"/>                                               
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">Convêncio</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="codigoConvenio" class="form-control" ng-model="carteiraCobranca.codigoConvenio" 
+                                               placeholder="Número do convênio"/>   
+                                    </div>
+                                </div>     
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">Carteira</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="codigoCarteira" class="form-control" ng-model="carteiraCobranca.codigoCarteira" 
+                                               ng-required="true" placeholder="Número da carteira"/>   
+                                    </div>
+                                </div>       
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">Espécie Documento</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="especieDocumento" class="form-control" ng-model="carteiraCobranca.especieDocumento" 
+                                               placeholder="Espécie de documento"/>   
+                                    </div>
+                                </div>                        
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">Aceite</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                        <select class="form-control" name="aceite" ng-model="carteiraCobranca.aceite"
+                                                ng-options="item.value as item.label for item in [{ label: 'Não', value: false }, { label: 'Sim', value: true }]">
+                                        </select>
+                                    </div>
+                                </div>                            
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">Baixa</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                        <select class="form-control" name="baixa" ng-model="carteiraCobranca.baixa"
+                                                ng-options="item.value as item.label for item in [{ label: 'Não', value: false }, { label: 'Sim', value: true }]">
+                                        </select>
+                                    </div>
+                                </div>         
+                                <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
+                                    <label class="small">Local Pagamento</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="localPagamento" class="form-control" ng-model="carteiraCobranca.localPagamento" 
+                                               placeholder="Local de pagamento"/>   
+                                    </div>
+                                </div>   
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="beneficiario">
+                                <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8">
+                                    <label class="small">Nome Beneficiário</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="beneficiarioNome" class="form-control" ng-model="carteiraCobranca.beneficiarioNome" 
+                                               placeholder="Nome do beneficiário"/>   
+                                    </div>
+                                </div>      
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">Documento Beneficiário</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="beneficiarioDocumento" class="form-control" ng-model="carteiraCobranca.beneficiarioDocumento" 
+                                               placeholder="Documento do beneficiário"/>   
+                                    </div>
+                                </div>  
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">Cep Beneficiário</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input class="form-control" type="text" name="beneficiarioCep" ng-model="carteiraCobranca.beneficiarioCep" ui-br-cep-mask placeholder="Pesquisar por CEP" />                                
+                                        <span class="input-group-addon icon-search" title="Pesquisar CEP" ng-click="pesquisarCep(carteiraCobranca.beneficiarioCep)"><i class="fa fa-search"></i></span>
+                                    </div>
+                                </div>     
+                                <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8">
+                                    <label class="small">Logradouro Beneficiário</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="beneficiarioLogradouro" class="form-control" ng-model="carteiraCobranca.beneficiarioLogradouro" 
+                                               placeholder="Logradouro do beneficiário"/>   
+                                    </div>
+                                </div>       
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">Bairo Beneficiário</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="beneficiarioBairro" class="form-control" ng-model="carteiraCobranca.beneficiarioBairro" 
+                                               placeholder="Bairro do beneficiário"/>   
+                                    </div>
+                                </div>       
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">Cidade Beneficiário</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="beneficiarioCidade" class="form-control" ng-model="carteiraCobranca.beneficiarioCidade" 
+                                               placeholder="Cidade do beneficiário"/>   
+                                    </div>
+                                </div>       
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">Uf Beneficiário</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="beneficiarioUf" class="form-control" ng-model="carteiraCobranca.beneficiarioUf" 
+                                               placeholder="Estado do beneficiário"/>   
+                                    </div>
+                                </div>          
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="instrucao">
+                                <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
+                                    <label class="small">Instrução 01</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="instrucao01" class="form-control" ng-model="carteiraCobranca.instrucao01" 
+                                               placeholder="Dígite a instrução 01"/>   
+                                    </div>
+                                </div>             
+                                <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
+                                    <label class="small">Instrução 02</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="instrucao02" class="form-control" ng-model="carteiraCobranca.instrucao02" 
+                                               placeholder="Dígite a instrução 02"/>   
+                                    </div>
+                                </div>           
+                                <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
+                                    <label class="small">Instrução 03</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="instrucao03" class="form-control" ng-model="carteiraCobranca.instrucao03" 
+                                               placeholder="Dígite a instrução 03"/>   
+                                    </div>
+                                </div>           
+                                <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
+                                    <label class="small">Instrução 04</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="instrucao04" class="form-control" ng-model="carteiraCobranca.instrucao04" 
+                                               placeholder="Dígite a instrução 04"/>   
+                                    </div>
+                                </div>           
+                                <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
+                                    <label class="small">Instrução 05</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="instrucao05" class="form-control" ng-model="carteiraCobranca.instrucao05" 
+                                               placeholder="Dígite a instrução 05"/>   
+                                    </div>
+                                </div> 
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                            <label class="small">Conta Corrente</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-car"></i></span>
-                                <select class="form-control" name="contaCorrente" ng-model="carteiraCobranca.contaCorrente"
-                                        ng-options="contaCorrente.nome for contaCorrente in contasCorrentes track by contaCorrente.idContaCorrente"></select>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                            <label class="small">Beneficiário</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="text" autocomplete="off" name="codigoBeneficiario" class="form-control" ng-model="carteiraCobranca.codigoBeneficiario" 
-                                       ng-required="true" placeholder="Número do beneficiário"/>     
-                                <span class="input-group-addon">-</span>
-                                <input type="text" autocomplete="off" name="codigoBeneficiarioDv" size="2" ng-maxlength="2" class="form-control" ng-model="carteiraCobranca.codigoBeneficiarioDv" 
-                                       ng-required="true"/>                                               
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                            <label class="small">Convêncio</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="text" autocomplete="off" name="codigoConvenio" class="form-control" ng-model="carteiraCobranca.codigoConvenio" 
-                                       placeholder="Número do convênio"/>   
-                            </div>
-                        </div>     
-                        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                            <label class="small">Carteira</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="text" autocomplete="off" name="codigoCarteira" class="form-control" ng-model="carteiraCobranca.codigoCarteira" 
-                                       ng-required="true" placeholder="Número da carteira"/>   
-                            </div>
-                        </div>       
-                        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                            <label class="small">Espécie Documento</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="text" autocomplete="off" name="especieDocumento" class="form-control" ng-model="carteiraCobranca.especieDocumento" 
-                                       placeholder="Espécie de documento"/>   
-                            </div>
-                        </div>                        
-                        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                            <label class="small">Aceite</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                <select class="form-control" name="aceite" ng-model="carteiraCobranca.aceite"
-                                        ng-options="item.value as item.label for item in [{ label: 'Não', value: false }, { label: 'Sim', value: true }]">
-                                </select>
-                            </div>
-                        </div>                            
-                        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                            <label class="small">Baixa</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                <select class="form-control" name="baixa" ng-model="carteiraCobranca.baixa"
-                                        ng-options="item.value as item.label for item in [{ label: 'Não', value: false }, { label: 'Sim', value: true }]">
-                                </select>
-                            </div>
-                        </div>         
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                            <label class="small">Local Pagamento</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="text" autocomplete="off" name="localPagamento" class="form-control" ng-model="carteiraCobranca.localPagamento" 
-                                       placeholder="Local de pagamento"/>   
-                            </div>
-                        </div>     
-                        <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8">
-                            <label class="small">Nome Beneficiário</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="text" autocomplete="off" name="beneficiarioNome" class="form-control" ng-model="carteiraCobranca.beneficiarioNome" 
-                                       placeholder="Nome do beneficiário"/>   
-                            </div>
-                        </div>      
-                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                            <label class="small">Documento Beneficiário</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="text" autocomplete="off" name="beneficiarioDocumento" class="form-control" ng-model="carteiraCobranca.beneficiarioDocumento" 
-                                       placeholder="Documento do beneficiário"/>   
-                            </div>
-                        </div>  
-                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                            <label class="small">Cep Beneficiário</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input class="form-control" type="text" name="beneficiarioCep" ng-model="carteiraCobranca.beneficiarioCep" ui-br-cep-mask placeholder="Pesquisar por CEP" />                                
-                                <span class="input-group-addon icon-search" title="Pesquisar CEP" ng-click="pesquisarCep(cep)"><i class="fa fa-search"></i></span>
-                            </div>
-                        </div>     
-                        <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8">
-                            <label class="small">Logradouro Beneficiário</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="text" autocomplete="off" name="beneficiarioLogradouro" class="form-control" ng-model="carteiraCobranca.beneficiarioLogradouro" 
-                                       placeholder="Logradouro do beneficiário"/>   
-                            </div>
-                        </div>       
-                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                            <label class="small">Bairo Beneficiário</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="text" autocomplete="off" name="beneficiarioBairro" class="form-control" ng-model="carteiraCobranca.beneficiarioBairro" 
-                                       placeholder="Bairro do beneficiário"/>   
-                            </div>
-                        </div>       
-                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                            <label class="small">Cidade Beneficiário</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="text" autocomplete="off" name="beneficiarioCidade" class="form-control" ng-model="carteiraCobranca.beneficiarioCidade" 
-                                       placeholder="Cidade do beneficiário"/>   
-                            </div>
-                        </div>       
-                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                            <label class="small">Uf Beneficiário</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="text" autocomplete="off" name="beneficiarioUf" class="form-control" ng-model="carteiraCobranca.beneficiarioUf" 
-                                       placeholder="Estado do beneficiário"/>   
-                            </div>
-                        </div>        
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                            <label class="small">Instrução 01</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="text" autocomplete="off" name="instrucao01" class="form-control" ng-model="carteiraCobranca.instrucao01" 
-                                       placeholder="Dígite a instrução 01"/>   
-                            </div>
-                        </div>             
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                            <label class="small">Instrução 02</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="text" autocomplete="off" name="instrucao02" class="form-control" ng-model="carteiraCobranca.instrucao02" 
-                                       placeholder="Dígite a instrução 02"/>   
-                            </div>
-                        </div>           
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                            <label class="small">Instrução 03</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="text" autocomplete="off" name="instrucao03" class="form-control" ng-model="carteiraCobranca.instrucao03" 
-                                       placeholder="Dígite a instrução 03"/>   
-                            </div>
-                        </div>           
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                            <label class="small">Instrução 04</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="text" autocomplete="off" name="instrucao04" class="form-control" ng-model="carteiraCobranca.instrucao04" 
-                                       placeholder="Dígite a instrução 04"/>   
-                            </div>
-                        </div>           
-                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                            <label class="small">Instrução 05</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="text" autocomplete="off" name="instrucao05" class="form-control" ng-model="carteiraCobranca.instrucao05" 
-                                       placeholder="Dígite a instrução 05"/>   
-                            </div>
-                        </div>    
                     </div>
                 </li>
             </ul>     

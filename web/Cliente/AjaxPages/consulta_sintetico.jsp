@@ -13,6 +13,7 @@
             String nomeBD = (String) session.getAttribute("nomeBD");
             if (nomeBD != null) {
 
+                ArrayList<Integer> acessosUs = (ArrayList<Integer>) session.getAttribute("acessos");
                 int nivel = (Integer) session.getAttribute("nivelUsuarioEmp");
                 int idCliente = Integer.parseInt(request.getParameter("idCliente"));
                 String dataInicio = request.getParameter("dataIni");
@@ -136,7 +137,7 @@
                 <th width='30'><h3>PESO</h3></th>
                 <th width='30'><h3>QTD</h3></th>
                 <th width='50'><h3>POSTAGEM</h3></th>
-                <%if (nivel != 3) {%>
+                <%if (acessosUs.contains(3)) {%>
                 <th width='50'><h3>VALOR</h3></th>
                 <%}%>
                 <th><h3>DESTINATÁRIO</h3></th>
@@ -207,7 +208,7 @@
                 <td><%= peso%>g</td>
                 <td><%= qtd%></td>
                 <td><%= vData%></td>
-                <% if (nivel != 3) {%>
+                <%if (acessosUs.contains(3)) {%>
                 <td nowrap align='left'>R$ <%= vValor%></td>
                 <% }%>
                 <td style="font-size: 10px;"><%= destinatario%></td>
@@ -223,7 +224,7 @@
                 <td colspan="4"></td>
                 <td nowrap="true" align="center"><%= qtdTotal%></td>
                 <td></td>
-                <%if (nivel != 3) {%>
+                <%if (acessosUs.contains(3)) {%>
                 <td nowrap="true">R$ <%= Util.FormatarDecimal.formatarFloat(vlrTotal.floatValue())%></td>
                 <%}%>
                 <td colspan="5"></td>

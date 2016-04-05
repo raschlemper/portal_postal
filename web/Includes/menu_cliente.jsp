@@ -53,7 +53,7 @@
                 <ul class="sub_menu">
                     <%if((acessosMn.contains(5) || nvMenu == 99) && temPV == 1 && temETQ == 1){%>
                     <%if(nvMenu != 99){%>
-                    <li><a href="../../Cliente/Servicos/pre_postagem_1.jsp">Gerar Etiqueta</a></li>
+                    <li><a href="../../Cliente/Servicos/pre_postagem.jsp">Gerar Etiqueta</a></li>
                     <li><a href="../../Cliente/Servicos/pre_postagem_medias.jsp">Gerar Etiquetas Mult.</a></li>
                     <li><a href="../../Cliente/Servicos/imp_postagem.jsp">Importar Postagens</a></li>
                     <li><a href="../../Cliente/Servicos/reimpressao.jsp">Etiquetas Impressas</a></li>

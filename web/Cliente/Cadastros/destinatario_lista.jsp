@@ -179,6 +179,18 @@
                                     <label>ESCOLHA UM ARQUIVO PARA IMPORTAR:</label>
                                     <input style="width:300px;" type="file" name="arquivo" id="arquivo" accept=".csv"/>
                                 </dd>
+                                <dd>
+                                    <h3>LAYOUT DE EXEMPLO</h3><br/>
+                                    <a style="font-weight: bold;" href="ARQUIVO_EXEMPLO_DESTINATARIO.csv" target="_blank">CLIQUE AQUI PARA FAZER DOWNLOAD DO ARQUIVO DE EXEMPLO</a>
+                                </dd>
+                            </li>
+                             <li>
+                                <dd>
+                                    <div class="buttons">
+                                        <input type="hidden" name="idCliente" value="<%= idCli%>" />
+                                        <button type="submit" class="positive"><img src="../../imagensNew/tick_circle.png" />IMPORTAR</button>
+                                    </div>
+                                </dd>
                             </li>
                         </ul>
                     </form>

@@ -392,7 +392,9 @@ function pesquisaAnalitica(idCliente, nomeBD) {
     var uf = document.getElementById("uf").value;
     var ar = document.getElementById("ar").checked;
     var vd = document.getElementById("vd").checked;
-    http.open("GET", "../AjaxPages/consulta_analitico.jsp?idCliente=" + idCliente + "&nomeBD=" + nomeBD + "&dataIni=" + dataInicio + "&dataFim=" + dataFinal + "&situacao=" + situacao + "&servico=" + servico + "&departamento=" + departamento + "&objeto=" + objeto + "&notaFiscal=" + notafiscal + "&destinatario=" + destinatario + "&cep=" + cep + "&ar=" + ar + "&vd=" + vd + "&uf=" + uf, true);
+    var lp = document.getElementById("lp").value;
+    http.open("GET", "../AjaxPages/consulta_analitico.jsp?idCliente=" + idCliente + "&nomeBD=" + nomeBD + "&dataIni=" + dataInicio + "&dataFim=" + dataFinal + "&situacao=" + situacao + "&servico=" + servico + "&departamento=" + departamento + "&objeto=" + objeto + "&notaFiscal=" 
+            + notafiscal + "&destinatario=" + destinatario + "&cep=" + cep + "&ar=" + ar + "&vd=" + vd + "&uf=" + uf+ "&lp="+lp, true );
     http.onreadystatechange = handleHttpResponsePesquisaCustomizadaObjetos;
     http.send(null);
 }

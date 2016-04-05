@@ -80,20 +80,20 @@ public class ServImportarDestinatario extends HttpServlet {
                         Clientes cli = contrCliente.consultaClienteById(idCliente, nomeBD);
                         if (cli != null) {
                             String condicao = ContrDestinatarioImporta.importaPedido(itemImg, idCliente, nomeBD);
-                            response.sendRedirect("Cliente/Servicos/imp_confirma.jsp?msg=" + condicao);
+                            response.sendRedirect("Cliente/Cadastros/destinatario_lista.jsp?msg=" + condicao);
                         } else {
-                            response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=Cliente nao encontrado no banco de dados!");
+                            response.sendRedirect("Cliente/Cadastros/destinatario_lista.jsp?msg=Cliente nao encontrado no banco de dados!");
                         }
                     }
                 } catch (FileUploadException ex) {
-                    response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=Falha no Upload do Arquivo de Importacao!\n" + ex);
+                    response.sendRedirect("Cliente/Cadastros/destinatario_lista.jsp?msg=Falha no Upload do Arquivo de Importacao!\n" + ex);
                 } catch (Exception ex) {
-                    response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=Falha na importacao!\n" + ex);
+                    response.sendRedirect("Cliente/Cadastros/destinatario_lista.jsp?msg=Falha na importacao!\n" + ex);
                 }
 
             }
         } else {
-            response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=Sua sessao expirou!");
+            response.sendRedirect("Cliente/Cadastros/destinatario_lista.jsp?msg=Sua sessao expirou!");
         }
     }
 
