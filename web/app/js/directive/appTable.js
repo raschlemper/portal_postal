@@ -10,7 +10,7 @@ app.directive('appTable', function($filter) {
             filters: '=?filters'
         },
         link: function(scope, element, attr, controller) { 
-            
+                        
             scope.limits = [
                 {name: '10', value: 10},
                 {name: '25', value: 25},
@@ -18,23 +18,30 @@ app.directive('appTable', function($filter) {
                 {name: '100', value: 100}];
             
             var init = function () {   
-//                scope.filters = filterDefault();
-                if(scope.filters) { scope.search = {}; }
+                scope.defaultFilter = true;
+                scope.columnSearchNumberPage = 2;                
                 scope.currentPage = 1; 
                 scope.maxSize = 5; 
                 scope.limitTo = scope.limits[0];
                 scope.predicate = scope.colunas[0].column;
                 scope.reverse = false; 
+                setFilterDefault();
+                calculateColumnSearchDefault();
             };
             
-            var filterDefault = function() {
-                return [{    
-                    'numberColumn': 10,
-                    'label': 'Pesquisar',
-                    'columnName': 'nome',
-                    'type': 'text'
-                }]
-            };
+            var setFilterDefault = function() {
+                if(scope.filters) { scope.search = {}; }
+                if(attr.defaultFilter) { scope.defaultFilter = (attr.defaultFilter == "true"); }
+            }
+            
+            var calculateColumnSearchDefault = function() {
+                var columnTotal = scope.columnSearchNumberPage;
+                angular.forEach(scope.filters, function(filter) {
+                    columnTotal += filter.numberColumn;
+                });
+                var rest = columnTotal % 12;
+                scope.columnSearchDefault = 12 - rest;
+            }
             
             var reset = function() {
                 getSizeTotal();
@@ -74,14 +81,16 @@ app.directive('appTable', function($filter) {
             
             var getSearchColumn = function(item, colunas) {
                 var coluna = colunas[0]; 
-                item[coluna] = '';              
+                if(!item[coluna]) { item[coluna] = ''; };              
                 colunas.splice(0, 1);
                 if(!colunas.length) return;
                 getSearchColumn(item[coluna], colunas);
             };
             
             scope.filterList = function(lista) {
-                return $filter('filter')(lista, scope.search);
+                if(scope.searchAll) { lista = $filter('filter')(lista, scope.searchAll); }
+                if(scope.search) { lista = $filter('filter')(lista, scope.search); }
+                return lista;
             }
             
             scope.class = function(coluna) {
@@ -103,11 +112,6 @@ app.directive('appTable', function($filter) {
             });
             
             scope.$watch('limitTo', function(newValue, oldValue) {
-                if(newValue === oldValue) return;
-                reset();
-            });
-            
-            scope.$watch('search', function(newValue, oldValue) {
                 if(newValue === oldValue) return;
                 reset();
             });

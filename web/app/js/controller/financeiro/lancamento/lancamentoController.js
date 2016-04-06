@@ -11,8 +11,8 @@ app.controller('LancamentoController', ['$scope', 'LancamentoService', 'ModalSer
         
         var initTable = function() {            
             $scope.colunas = [
-                {label: 'Plano Conta', column: 'planoConta.nome'},
-                {label: 'Tipo', column: 'planoConta.tipo.descricao'},                
+                {label: 'Plano Conta', column: 'planoConta'},
+                {label: 'Tipo', column: 'tipo'},                
                 {label: 'Valor', column: 'valor', filter: {name: 'currency', args: 'R$ '}},                
                 {label: 'Data', column: 'data', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
                 {label: 'Histórico', column: 'historico'}
@@ -24,8 +24,15 @@ app.controller('LancamentoController', ['$scope', 'LancamentoService', 'ModalSer
                 remove: function(lancamento) {
                     $scope.excluir(lancamento.idLancamento);
                 }
-            }             
-        }
+            };
+            $scope.filters = [{    
+                'numberColumn': 3,
+                'label': 'Tipo',
+                'columnName': 'tipo',
+                'type': 'dropdown',
+                'list': ['Receita', 'Despesa']
+            }];
+        };
 
         var todos = function() {
             LancamentoService.getAll()
@@ -41,12 +48,11 @@ app.controller('LancamentoController', ['$scope', 'LancamentoService', 'ModalSer
         var criarLancamentosLista = function(lancamentos) {
             return _.map(lancamentos, function(lancamento) {
                 lancamento.conta = lancamento.conta.idConta;
-                delete lancamento.planoConta.codigo;
-                delete lancamento.planoConta.grupo;
-                delete lancamento.planoConta.contas;                
-                return _.pick(lancamento, 'idLancamento', 'conta', 'planoConta', 'data', 'valor', 'historico');
+                lancamento.tipo = lancamento.planoConta.tipo.descricao;
+                lancamento.planoConta = lancamento.planoConta.nome;
+                return _.pick(lancamento, 'idLancamento', 'conta', 'tipo', 'planoConta', 'data', 'valor', 'historico');
             })
-        }
+        };  
 
         $scope.salvar = function() {
             modalSalvar().then(function(result) {

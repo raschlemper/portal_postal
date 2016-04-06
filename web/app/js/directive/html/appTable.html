@@ -1,13 +1,17 @@
 <div class="box-content-filters">
-    <div class="col-xs-10 col-sm-10" ng-hide="filters">
+    <div class="col-md-{{filter.numberColumn}}" ng-repeat="filter in filters track by $index" ng-show="filters" style="padding:5px;">
+        <label style="padding-right:5px;">{{filter.label}}</label>
+        <input type="text" class="form-control" ng-show="filter.type === 'text'" ng-model="search[filter.columnName]" style="display: inline-block; width: 80%;"
+               ng-model="search[filter.columnName]">
+        <select class="form-control" ng-show="filter.type === 'dropdown'" ng-model="search[filter.columnName]"style="display: inline-block; width: 80%;">
+            <option value="{{item | lowercase}}" ng-repeat="item in filter.list track by $index"> {{item}} </option>        
+        </select>
+    </div>
+    <div class="col-md-{{columnSearchDefault}}" ng-show="defaultFilter" style="padding:5px;">
         <label style="padding-right:5px;">Pesquisar:</label>
-        <input type="text" class="form-control" placeholder="" ng-model="search" style="display: inline-block; width: 80%;">
+        <input type="text" class="form-control" placeholder="" ng-model="searchAll" style="display: inline-block; width: 80%;">
     </div>
-    <div class="col-md-{{filter.numberColumn}}" ng-repeat="filter in filters track by $index" ng-show="filters">
-        <label>{{filter.label}}</label>
-        <input type="text" class="form-control" placeholder="" ng-model="search[filter.columnName]" ng-show="filter.type === 'text'">
-    </div>
-    <div class="col-xs-2 col-sm-2 text-right">
+    <div class="col-md-{{columnSearchNumberPage}} text-right">
         <label>
             <select class="form-control input-sm" ng-options="limit.name for limit in limits track by limit.value" ng-model="limitTo"></select>
         </label>
