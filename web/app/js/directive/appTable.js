@@ -7,9 +7,13 @@ app.directive('appTable', function($filter) {
             lista: '=',
             colunas: '=',
             events: '=',
-            filters: '=?filters'
+            filter: '=',
+            search: '='
         },
-        link: function(scope, element, attr, controller) { 
+        transclude: {
+            'filterContent': '?filterContent'
+        },
+        link: function(scope, element, attr, controller, transclude) { 
                         
             scope.limits = [
                 {name: '10', value: 10},
@@ -18,30 +22,18 @@ app.directive('appTable', function($filter) {
                 {name: '100', value: 100}];
             
             var init = function () {   
-                scope.defaultFilter = true;
-                scope.columnSearchNumberPage = 2;                
+                scope.defaultFilter = true;              
                 scope.currentPage = 1; 
                 scope.maxSize = 5; 
                 scope.limitTo = scope.limits[0];
                 scope.predicate = scope.colunas[0].column;
                 scope.reverse = false; 
                 setFilterDefault();
-                calculateColumnSearchDefault();
             };
             
             var setFilterDefault = function() {
-                if(scope.filters) { scope.search = {}; }
                 if(attr.defaultFilter) { scope.defaultFilter = (attr.defaultFilter == "true"); }
-            }
-            
-            var calculateColumnSearchDefault = function() {
-                var columnTotal = scope.columnSearchNumberPage;
-                angular.forEach(scope.filters, function(filter) {
-                    columnTotal += filter.numberColumn;
-                });
-                var rest = columnTotal % 12;
-                scope.columnSearchDefault = 12 - rest;
-            }
+            };
             
             var reset = function() {
                 getSizeTotal();
@@ -61,13 +53,13 @@ app.directive('appTable', function($filter) {
             };
             
             var getSizeTotal = function() {
-                scope.total = scope.listaFiltrada.length;
+                if(!scope.listaFiltrada) { scope.total = 0; }
+                else { scope.total = scope.listaFiltrada.length; }
             };
             
             scope.column = function(item, coluna) {
                 var colunas = coluna.column.split('.');
                 var value = getColumn(item, angular.copy(colunas));
-                if(scope.filters) { getSearchColumn(scope.search, angular.copy(colunas)); }
                 if(coluna.filter){ value = $filter(coluna.filter.name)(value, coluna.filter.args); }
                 return value;
             }
@@ -79,17 +71,9 @@ app.directive('appTable', function($filter) {
                 return getColumn(value, colunas);
             };
             
-            var getSearchColumn = function(item, colunas) {
-                var coluna = colunas[0]; 
-                if(!item[coluna]) { item[coluna] = ''; };              
-                colunas.splice(0, 1);
-                if(!colunas.length) return;
-                getSearchColumn(item[coluna], colunas);
-            };
-            
-            scope.filterList = function(lista) {
+            scope.filterList = function(lista, search) {
                 if(scope.searchAll) { lista = $filter('filter')(lista, scope.searchAll); }
-                if(scope.search) { lista = $filter('filter')(lista, scope.search); }
+                if(scope.filter) { lista = scope.filter(lista, search); }
                 return lista;
             }
             

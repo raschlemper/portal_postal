@@ -1,11 +1,15 @@
 'use strict';
 
-app.controller('LancamentoController', ['$scope', 'LancamentoService', 'ModalService',
-    function ($scope, LancamentoService, ModalService) {
+app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService', 'ModalService', 'DatePickerService', 'LISTAS',
+    function ($scope, $filter, LancamentoService, ModalService, DatePickerService, LISTAS) {
 
         var init = function () {
             $scope.lancamentos = [];
             $scope.lancamentosLista = [];
+            $scope.tipos = LISTAS.planoConta;
+            $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
+            $scope.datepickerDataFim = angular.copy(DatePickerService.default);    
+            $scope.lancSearch = {};
             initTable();      
         };  
         
@@ -28,22 +32,21 @@ app.controller('LancamentoController', ['$scope', 'LancamentoService', 'ModalSer
                     $scope.visualizar(lancamento.idLancamento);
                 }
             };
-            $scope.filters = [
-//                {    
-//                'numberColumn': 3,
-//                'label': 'Conta',
-//                'columnName': 'conta',
-//                'type': 'dropdown',
-//                'list': ['Receita', 'Despesa']
-//            }, 
-            {    
-                'numberColumn': 3,
-                'label': 'Tipo',
-                'columnName': 'tipo',
-                'type': 'dropdown',
-                'list': ['Receita', 'Despesa']
-            }];
         };
+        
+        $scope.filter = function(lista, search) {
+            lista = angular.forEach(lista, function(item) {
+                return filterByData(item, search);
+            });              
+            return $filter('filter')(lista, search.tipo);
+        };
+        
+        var filterByData = function(item, search) {
+            if(!search.dataInicio || !search.dataFim) return true;
+            var data = moment(item.data);
+            return (data.isBefore(search.dataFim) && data.isAfter(search.dataInicio) 
+                    || (data.isSame(search.dataInicio) || data.isSame(search.dataFim)));
+        }
 
         var todos = function() {
             LancamentoService.getAll()
