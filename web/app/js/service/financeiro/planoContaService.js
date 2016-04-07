@@ -13,6 +13,16 @@ app.factory('PlanoContaService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/planoconta/structure"));
         },
 
+        getByTipo: function(tipo) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/planoconta/tipo/" + tipo));
+        },
+        
+        findContaResultadoByTipo: function(tipo) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/planoconta/tipo/" + tipo + "/resultado"));
+        },
+
         getStructureByTipo: function(tipo) {
             return PromiseService.execute(
                     $http.get(_contextPath + "/api/financeiro/planoconta/tipo/" + tipo + "/structure"));

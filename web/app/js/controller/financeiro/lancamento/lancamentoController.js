@@ -23,9 +23,20 @@ app.controller('LancamentoController', ['$scope', 'LancamentoService', 'ModalSer
                 },
                 remove: function(lancamento) {
                     $scope.excluir(lancamento.idLancamento);
+                },
+                view: function(lancamento) {
+                    $scope.visualizar(lancamento.idLancamento);
                 }
             };
-            $scope.filters = [{    
+            $scope.filters = [
+//                {    
+//                'numberColumn': 3,
+//                'label': 'Conta',
+//                'columnName': 'conta',
+//                'type': 'dropdown',
+//                'list': ['Receita', 'Despesa']
+//            }, 
+            {    
                 'numberColumn': 3,
                 'label': 'Tipo',
                 'columnName': 'tipo',
@@ -54,8 +65,21 @@ app.controller('LancamentoController', ['$scope', 'LancamentoService', 'ModalSer
             })
         };  
 
+        $scope.visualizar = function(idLancamento) {
+            LancamentoService.get(idLancamento)
+                .then(function(lancamento) {
+                     modalVisualizar(lancamento).then(function(result) {
+                         $scope.editar(result);
+                     })          
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
         $scope.salvar = function() {
             modalSalvar().then(function(result) {
+                result = ajustarDados(result);
                 LancamentoService.save(result)
                     .then(function(data) {  
                         modalMessage("Lançamento Inserido com sucesso!");
@@ -71,6 +95,7 @@ app.controller('LancamentoController', ['$scope', 'LancamentoService', 'ModalSer
             LancamentoService.get(idLancamento)
                 .then(function(lancamento) {
                      modalSalvar(lancamento).then(function(result) {
+                        result = ajustarDados(result);
                         LancamentoService.update(idLancamento, result)
                             .then(function (data) {  
                                 modalMessage("Lançamento Alterado com sucesso!");
@@ -100,8 +125,24 @@ app.controller('LancamentoController', ['$scope', 'LancamentoService', 'ModalSer
             });
         }; 
         
+        var ajustarDados = function(data) {                 
+            data.conta = { idConta: data.conta.idConta };       
+            data.planoConta = { idPlanoConta: data.planoConta.idPlanoConta }; 
+            return data;
+        }
+        
         var modalMessage = function(message) {
             ModalService.modalMessage(message);
+        };
+        
+        var modalVisualizar = function(lancamento) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalVisualizarLancamento.html', 'ModalVisualizarLancamentoController', 'md',
+                {
+                    lancamento: function() {
+                        return lancamento;
+                    }
+                });
+            return modalInstance.result;
         };
         
         var modalSalvar = function(lancamento) {

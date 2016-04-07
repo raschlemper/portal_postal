@@ -20,9 +20,9 @@ public class AppFilter implements ContainerRequestFilter {
     public ContainerRequest filter(ContainerRequest containerRequest) {         
         this.sessao = request.getSession(); 
         try {
-            sessao.setAttribute("nomeBD", "06895434000183");
-//            empresaFilter();
-//            usuarioFilter();
+//            sessao.setAttribute("nomeBD", "06895434000183");
+            empresaFilter();
+            usuarioFilter();
         } catch(Exception ex) {
             throw new WebApplicationException(
                     Response.status(Response.Status.UNAUTHORIZED)

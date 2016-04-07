@@ -34,6 +34,25 @@ public class PlanoContaDAO extends GenericDAO {
         return findAll(sql, params, planoContaHandler);
     }
 
+    public List<PlanoConta> findByTipo(Integer tipo) throws Exception {
+        String sql = "SELECT * FROM plano_conta "
+                   + "WHERE plano_conta.tipo = :tipo "
+                   + "ORDER BY plano_conta.codigo ";    
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("tipo", tipo);        
+        return findAll(sql, params, planoContaHandler);
+    }
+
+    public List<PlanoConta> findContaResultadoByTipo(Integer tipo) throws Exception {
+        String sql = "SELECT * FROM plano_conta "
+                   + "WHERE plano_conta.tipo = :tipo "
+                   + " AND NOT EXISTS (SELECT 1 FROM plano_conta plano1 WHERE plano_conta.idPlanoConta = plano1.grupo)"
+                   + "ORDER BY plano_conta.codigo ";    
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("tipo", tipo);        
+        return findAll(sql, params, planoContaHandler);
+    }
+
     public List<PlanoConta> findByGrupo(PlanoConta grupo) throws Exception {
         String sql = "SELECT * FROM plano_conta WHERE grupo = :grupo ORDER BY plano_conta.codigo";    
         Map<String, Object> params = new HashMap<String, Object>();

@@ -23,6 +23,16 @@ public class PlanoContaService {
         return grupos;
     }  
 
+    public List<PlanoConta> findByTipo(Integer tipo) throws Exception {
+        List<PlanoConta> grupos = planoContaDAO.findByTipo(tipo); 
+        return grupos;
+    }
+
+    public List<PlanoConta> findContaResultadoByTipo(Integer tipo) throws Exception {
+        List<PlanoConta> grupos = planoContaDAO.findContaResultadoByTipo(tipo); 
+        return grupos;
+    }
+
     public List<PlanoConta> findStructureByTipo(Integer tipo) throws Exception {
         List<PlanoConta> grupos = planoContaDAO.findWithoutGrupoByTipo(tipo); 
         findContas(grupos);

@@ -14,11 +14,6 @@ app.factory('LancamentoService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/lancamento/" + idLancamento));
         },
 
-        getByNumero: function(numero) {
-            return PromiseService.execute(
-                    $http.get(_contextPath + "/api/financeiro/lancamento/numero/" + numero));
-        },
-
         save: function(data) {
             return PromiseService.execute(
                     $http.post(_contextPath + "/api/financeiro/lancamento/", data));

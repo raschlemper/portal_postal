@@ -1,16 +1,16 @@
 'use strict';
 
-app.controller('ModalVisualizarContaCorrenteController', ['$scope', '$modalInstance', 'contaCorrente', 
-    function ($scope, $modalInstance, contaCorrente) {
+app.controller('ModalVisualizarContaCorrenteController', ['$scope', '$modalInstance', '$filter', 'contaCorrente', 
+    function ($scope, $modalInstance, $filter, contaCorrente) {
 
         var init = function () { 
             $scope.contaCorrente = criarContaCorrente(contaCorrente);
         };
         
         var criarContaCorrente = function(contaCorrente) {
-            contaCorrente.banco = contaCorrente.banco.nome;
             contaCorrente.agencia = $filter('number')(contaCorrente.agencia) + '-' + contaCorrente.agenciaDv;
             contaCorrente.contaCorrente = $filter('number')(contaCorrente.contaCorrente) + '-' + contaCorrente.contaCorrenteDv;
+            return contaCorrente
         };
         
         $scope.editar = function() {

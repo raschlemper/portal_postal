@@ -63,6 +63,30 @@ public class PlanoContaController {
     }  
     
     @GET
+    @Path("/tipo/{tipo}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<PlanoConta> findByTipo(@PathParam("tipo") Integer tipo) {
+        try {
+            init();    
+            return planoContaService.findByTipo(tipo);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }   
+    
+    @GET
+    @Path("/tipo/{tipo}/resultado")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<PlanoConta> findContaResultadoByTipo(@PathParam("tipo") Integer tipo) {
+        try {
+            init();    
+            return planoContaService.findContaResultadoByTipo(tipo);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }   
+    
+    @GET
     @Path("/tipo/{tipo}/structure")
     @Produces(MediaType.APPLICATION_JSON)
     public List<PlanoConta> findStructureByTipo(@PathParam("tipo") Integer tipo) {
