@@ -21,7 +21,7 @@
                             <label class="small">Conta</label>
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                <select class="form-control" name="conta" readonly="editConta"
+                                <select class="form-control" name="conta" ng-disabled="{{editConta()}}"
                                         ng-options="conta.nome for conta in contas track by conta.idConta" ng-model="lancamento.conta"></select>
                             </div>
                         </div> 

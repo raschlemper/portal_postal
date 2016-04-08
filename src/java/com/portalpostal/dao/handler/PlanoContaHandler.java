@@ -28,8 +28,11 @@ public class PlanoContaHandler extends GenericHandler implements ResultSetHandle
     }
     
     private PlanoConta getGrupo(ResultSet result) throws SQLException {
-        if(!existColumn(result, "grupo.grupo")) return null;
-        return new PlanoContaHandler().handle(result); 
+        if(!existColumn(result, "plano_conta.grupo")) return null;
+        PlanoConta plano = new PlanoConta();
+        plano.setIdPlanoConta(getInt(result, "idPlanoConta"));
+        return plano;
+//        return new PlanoContaHandler().handle(result); 
     }
     
 }

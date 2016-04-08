@@ -20,6 +20,10 @@ public class LancamentoService {
         return lancamentoDAO.find(idLancamento);
     } 
     
+    public List<Lancamento> findByConta(Integer idConta) throws Exception {
+        return lancamentoDAO.findByConta(idConta);
+    } 
+    
     public Lancamento save(Lancamento lancamento) throws Exception {
         return lancamentoDAO.save(lancamento);
     } 

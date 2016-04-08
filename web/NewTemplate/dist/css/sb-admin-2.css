@@ -2964,3 +2964,7 @@ div.list-category div.list-group-item {
 .modal-window {
     overflow: auto;
 }
+
+.form-inline div.form-group {
+    padding-top: 10px;
+}

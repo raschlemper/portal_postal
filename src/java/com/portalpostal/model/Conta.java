@@ -3,6 +3,7 @@ package com.portalpostal.model;
 import com.portalpostal.model.dd.TipoConta;
 import com.portalpostal.model.dd.TipoStatusConta;
 import java.util.Date;
+import java.util.List;
 
 public class Conta {
     
@@ -13,7 +14,8 @@ public class Conta {
     private TipoConta tipo;
     private TipoStatusConta status;
     private Date dataAbertura;
-    private Double valorSaldoAbertura;
+    private Double valorSaldoAbertura;    
+    private List<Lancamento> lancamentos;
 
     public Integer getIdConta() {
         return idConta;
@@ -77,6 +79,14 @@ public class Conta {
 
     public void setValorSaldoAbertura(Double valorSaldoAbertura) {
         this.valorSaldoAbertura = valorSaldoAbertura;
+    }
+
+    public List<Lancamento> getLancamentos() {
+        return lancamentos;
+    }
+
+    public void setLancamentos(List<Lancamento> lancamentos) {
+        this.lancamentos = lancamentos;
     }
 
     

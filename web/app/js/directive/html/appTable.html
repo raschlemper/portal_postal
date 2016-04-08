@@ -55,16 +55,17 @@
     </tbody>
 </table>
 <div class="box-content" style="padding:10px 10px 0 10px">
-    <div class="pull-left">
-        Mostrando de {{from}} até {{to}} de {{total}} registros
-    </div>
-    <div class="pull-right">
-        <pagination class="pagination-sm" 
-                    total-items="total" 
-                    items-per-page="limitTo.value"
-                    ng-model="currentPage" 
-                    max-size="maxSize"
-                    previous-text="Anterior" next-text="Próximo" first-text="Primeiro" last-text="Último"></pagination>
+    <div class="clearfix">
+        <div class="pull-left">
+            Mostrando de {{from}} até {{to}} de {{total}} registros
+        </div>
+        <div class="pull-right">
+            <pagination class="pagination-sm" 
+                        total-items="total" 
+                        items-per-page="limitTo.value"
+                        ng-model="currentPage" 
+                        max-size="maxSize"
+                        previous-text="Anterior" next-text="Próximo" first-text="Primeiro" last-text="Último"></pagination>
+        </div>
     </div>
 </div>
-<div class="clearfix"></div>

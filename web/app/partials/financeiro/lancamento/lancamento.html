@@ -8,8 +8,12 @@
                             <div class="row">
                                 <div class="col-md-8">Lista com todos os lançamentos</div>
                                 <div class="col-md-4">
-                                    <button class="btn btn-sm btn-primary pull-right" ng-click="salvar()">
+                                    <button class="btn btn-sm btn-primary pull-right" ng-click="salvar(conta)">
                                         <i class="fa fa-lg fa-plus fa-spc"></i> ADICIONAR 
+                                    </button>
+                                    
+                                    <button class="btn btn-sm btn-primary pull-right" ng-click="transferir(conta)" style="margin-right: 10px;">
+                                        <i class="fa fa-lg fa-exchange"></i> TRANSFERIR 
                                     </button>
                                 </div>
                             </div>                              
@@ -21,16 +25,31 @@
                                     <filter-content>
                                         <div class="form-inline">
                                             
-                                            <div class="col-md-9 form-group">
+                                            <div class="col-md-4 form-group">
+                                                <label>Conta:</label>
+                                                <select class="form-control" ng-model="conta" ng-change="changeConta(conta)"
+                                                    ng-options="conta.nome for conta in contas track by conta.idConta">    
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="col-md-2 form-group">
+                                                <label>Tipo:</label>
+                                                <select class="form-control" ng-model="lancSearch.tipo">
+                                                    <option value=""> Todos </option> 
+                                                    <option value="{{tipo.codigo}}" ng-repeat="tipo in tipos track by $index"> {{tipo.descricao}} </option>        
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="col-md-6 form-group">
                                                 <label>Data:</label>
                                                 <div class="input-group">
-                                                    <input type="text" autocomplete="off" class="form-control" ng-model="lancSearch.dataInicio" 
+                                                    <input type="text" autocomplete="off" class="form-control" ng-model="lancSearch.dataInicio" style="width: 120px;"
                                                         datepicker-popup="{{datepickerDataInicio.format}}" is-open="datepickerDataInicio.opened" ng-required="true"
                                                         current-text="{{datepickerDataInicio.today}}" clear-text="{{datepickerDataInicio.clear}}" close-text="{{datepickerDataInicio.close}}"
                                                         placeholder="Data início"/>
                                                     <span class="input-group-addon" ng-click="datepickerDataInicio.open($event)"><i class="fa fa-calendar"></i></span>
                                                     <span class="input-group-addon">-</span>
-                                                    <input type="text" autocomplete="off" class="form-control" ng-model="lancSearch.dataFim" 
+                                                    <input type="text" autocomplete="off" class="form-control" ng-model="lancSearch.dataFim" style="width: 120px;"
                                                            datepicker-popup="{{datepickerDataFim.format}}" is-open="datepickerDataFim.opened" ng-required="true"
                                                            current-text="{{datepickerDataFim.today}}" clear-text="{{datepickerDataFim.clear}}" close-text="{{datepickerDataFim.close}}"
                                                            placeholder="Data final"/>
@@ -38,12 +57,7 @@
                                                 </div>
                                             </div> 
                                             
-                                            <div class="col-md-3 form-group">
-                                                <label>Tipo:</label>
-                                                <select class="form-control" ng-model="lancSearch.tipo">
-                                                    <option value="{{tipo.codigo}}" ng-repeat="tipo in tipos track by $index"> {{tipo.descricao}} </option>        
-                                                </select>
-                                            </div>
+                                            
                                         </div>
                                     </filter-content>                                    
                                     

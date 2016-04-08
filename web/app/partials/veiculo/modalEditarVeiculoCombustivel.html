@@ -46,7 +46,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
                                 <input type="text" autocomplete="off" name="valorUnitario" class="form-control" ng-blur="setValorTotal()" 
-                                       ui-number-mask="2" placeholder="Valor unitário do abastecimento" ng-model="veiculoCombustivel.valorUnitario" ng-required="true" readonly/>
+                                       ui-number-mask="2" placeholder="Valor unitário do abastecimento" ng-model="veiculoCombustivel.valorUnitario" ng-required="true" ng-readonly="true"/>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -64,7 +64,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
                                 <input type="text" autocomplete="off" name="quilometragemAnterior" class="form-control" ng-model="quilometragemAnterior" 
-                                       ui-number-mask="0" readonly/>
+                                       ui-number-mask="0" ng-readonly="true"/>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">

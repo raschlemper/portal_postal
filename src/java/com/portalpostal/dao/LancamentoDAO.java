@@ -1,6 +1,7 @@
 package com.portalpostal.dao;
 
 import com.portalpostal.dao.handler.LancamentoHandler;
+import com.portalpostal.model.Conta;
 import com.portalpostal.model.Lancamento;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,16 @@ public class LancamentoDAO extends GenericDAO {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamento", idLancamento);
         return (Lancamento) find(sql, params, lancamentoHandler);
+    }
+
+    public List<Lancamento> findByConta(Integer idConta) throws Exception {
+        String sql = "SELECT lancamento.*, plano_conta.* FROM lancamento, conta, plano_conta "
+                   + "WHERE conta.idConta = lancamento.idConta "
+                   + "AND lancamento.idPlanoConta = plano_conta.idPlanoConta "
+                   + "AND conta.idConta = :idConta";
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idConta", idConta);       
+        return findAll(sql, params, lancamentoHandler);
     }
 
     public Lancamento save(Lancamento lancamento) throws Exception {  

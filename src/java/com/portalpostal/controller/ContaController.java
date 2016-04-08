@@ -4,6 +4,7 @@ import Controle.ContrErroLog;
 import com.portalpostal.validation.Validation;
 import com.portalpostal.model.Conta;
 import com.portalpostal.service.ContaService;
+import com.portalpostal.service.LancamentoService;
 import com.portalpostal.validation.ContaValidation;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -31,11 +32,13 @@ public class ContaController {
     private String nomeBD;
     
     private ContaService contaService;
+    private LancamentoService lancamentoService; 
 
     private void init() {
         sessao = request.getSession();
         nomeBD = (String) sessao.getAttribute("nomeBD");
         contaService = new ContaService(nomeBD);
+        lancamentoService = new LancamentoService(nomeBD);
     }
     
     @GET
@@ -57,6 +60,18 @@ public class ContaController {
         try {
             init();    
             return contaService.find(idConta);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }  
+    
+    @GET
+    @Path("/{idConta}/lancamento")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Conta findLancamento(@PathParam("idConta") Integer idConta) {
+        try {
+            init();    
+            return contaService.findLancamento(idConta);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }

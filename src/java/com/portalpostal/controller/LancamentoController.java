@@ -48,7 +48,7 @@ public class LancamentoController {
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
-    }  
+    } 
     
     @GET
     @Path("/{idLancamento}")

@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService', 'ModalService', 'DatePickerService', 'LISTAS',
-    function ($scope, $filter, LancamentoService, ModalService, DatePickerService, LISTAS) {
+app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService', 'ContaService', 'ModalService', 'DatePickerService', 'LISTAS',
+    function ($scope, $filter, LancamentoService, ContaService, ModalService, DatePickerService, LISTAS) {
 
         var init = function () {
             $scope.lancamentos = [];
@@ -10,6 +10,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
             $scope.datepickerDataFim = angular.copy(DatePickerService.default);    
             $scope.lancSearch = {};
+            contas();
             initTable();      
         };  
         
@@ -23,7 +24,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             ]            
             $scope.events = { 
                 edit: function(lancamento) {
-                    $scope.editar(lancamento.idLancamento);
+                    $scope.editar($scope.conta, lancamento.idLancamento);
                 },
                 remove: function(lancamento) {
                     $scope.excluir(lancamento.idLancamento);
@@ -35,7 +36,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         };
         
         $scope.filter = function(lista, search) {
-            lista = angular.forEach(lista, function(item) {
+            lista = _.filter(lista, function(item) {
                 return filterByData(item, search);
             });              
             return $filter('filter')(lista, search.tipo);
@@ -46,27 +47,45 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             var data = moment(item.data);
             return (data.isBefore(search.dataFim) && data.isAfter(search.dataInicio) 
                     || (data.isSame(search.dataInicio) || data.isSame(search.dataFim)));
+        };  
+        
+        var contas = function() {
+            ContaService.getAll()
+                .then(function (data) {
+                    $scope.contas = data;
+                    $scope.conta = $scope.contas[0];
+                    todos($scope.conta);
+//                    $scope.lancamento.conta = $scope.lancamento.conta || $scope.contas[0];
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+        
+        $scope.changeConta = function(conta) {
+            $scope.conta = conta;
+            todos(conta);
         }
 
-        var todos = function() {
-            LancamentoService.getAll()
+        var todos = function(conta) {
+            ContaService.getLancamento(conta.idConta)
                 .then(function (data) {
-                    $scope.lancamentos = data;
-                    $scope.lancamentosLista = criarLancamentosLista($scope.lancamentos);
+                    $scope.lancamentos = data.lancamentos;
+                    $scope.lancamentosLista = criarLancamentosLista(data);
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         };
         
-        var criarLancamentosLista = function(lancamentos) {
-            return _.map(lancamentos, function(lancamento) {
-                lancamento.conta = lancamento.conta.idConta;
+        var criarLancamentosLista = function(data) {
+            return _.map(data.lancamentos, function(lancamento) {
+                lancamento.conta = data.idConta;
                 lancamento.tipo = lancamento.planoConta.tipo.descricao;
                 lancamento.planoConta = lancamento.planoConta.nome;
                 return _.pick(lancamento, 'idLancamento', 'conta', 'tipo', 'planoConta', 'data', 'valor', 'historico');
             })
-        };  
+        };
 
         $scope.visualizar = function(idLancamento) {
             LancamentoService.get(idLancamento)
@@ -80,8 +99,8 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 });
         };
 
-        $scope.salvar = function() {
-            modalSalvar().then(function(result) {
+        $scope.salvar = function(conta) {
+            modalSalvar(conta).then(function(result) {
                 result = ajustarDados(result);
                 LancamentoService.save(result)
                     .then(function(data) {  
@@ -94,10 +113,24 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             });
         };
 
-        $scope.editar = function(idLancamento) {
+        $scope.transferir = function(conta) {
+            modalTransferir(conta).then(function(result) {
+                result = ajustarDados(result);
+                LancamentoService.save(result)
+                    .then(function(data) {  
+                        modalMessage("Lançamento Inserido com sucesso!");
+                        todos();
+                    })
+                    .catch(function(e) {
+                        modalMessage(e);
+                    });
+            });
+        };
+
+        $scope.editar = function(conta, idLancamento) {
             LancamentoService.get(idLancamento)
                 .then(function(lancamento) {
-                     modalSalvar(lancamento).then(function(result) {
+                     modalSalvar(conta, lancamento).then(function(result) {
                         result = ajustarDados(result);
                         LancamentoService.update(idLancamento, result)
                             .then(function (data) {  
@@ -148,11 +181,27 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             return modalInstance.result;
         };
         
-        var modalSalvar = function(lancamento) {
+        var modalSalvar = function(conta, lancamento) {
             var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalEditarLancamento.html', 'ModalEditarLancamentoController', 'lg',
                 {
                     lancamento: function() {
                         return lancamento;
+                    },
+                    conta: function() {
+                        return conta;
+                    }
+                });
+            return modalInstance.result;
+        };
+        
+        var modalTransferir = function(conta, lancamento) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalTransferirLancamento.html', 'ModalTransferirLancamentoController', 'lg',
+                {
+                    lancamento: function() {
+                        return lancamento;
+                    },
+                    conta: function() {
+                        return conta;
                     }
                 });
             return modalInstance.result;
@@ -162,8 +211,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             var modalInstance = ModalService.modalExcluir('Excluir Lançamento?', 'Deseja realmente excluir este lançamento?');
             return modalInstance.result;
         };
-
-        todos();
+        
         init();
 
     }]);

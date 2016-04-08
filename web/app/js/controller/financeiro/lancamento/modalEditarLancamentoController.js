@@ -1,15 +1,14 @@
 'use strict';
 
-app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', 'lancamento', 'ContaService', 'PlanoContaService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, lancamento, ContaService, PlanoContaService, DatePickerService, ListaService, LISTAS) {
+app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', 'conta', 'lancamento', 'ContaService', 'PlanoContaService', 'DatePickerService', 'ListaService', 'LISTAS',
+    function ($scope, $modalInstance, conta, lancamento, ContaService, PlanoContaService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {  
-            $scope.editConta = true;
             $scope.datepicker = DatePickerService.default; 
             $scope.tipos = LISTAS.planoConta; 
             $scope.lancamento = {
                 idLancamento: (lancamento && lancamento.idLancamento) || null,
-                conta: (lancamento && lancamento.conta) || null,
+                conta: conta || (lancamento && lancamento.conta) || null,
                 planoConta: (lancamento && lancamento.planoConta) || null,
                 data: (lancamento && lancamento.data) || null,
                 valor: (lancamento && lancamento.valor) || null,
@@ -17,11 +16,15 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
             }; 
             if($scope.lancamento.planoConta == null) { $scope.tipo = $scope.tipos[0]; }
             else { $scope.tipo = lancamento.planoConta.tipo; }
-            if(lancamento && lancamento.idLancamento) { $scope.editConta = false; }
+            
             getTitle();
             contas();
             $scope.changeTipo($scope.tipo);
         };
+        
+        $scope.editConta = function() {
+            return (lancamento && lancamento.idLancamento);
+        }
         
         var getTitle = function() {
             if(lancamento && lancamento.idLancamento) { $scope.title = "Editar Lançamento"; }
@@ -32,7 +35,7 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
             ContaService.getAll()
                 .then(function (data) {
                     $scope.contas = data;
-                    $scope.lancamento.conta = $scope.lancamento.conta || $scope.contas[0];
+                    $scope.lancamento.conta = conta || $scope.lancamento.conta || $scope.contas[0];
                 })
                 .catch(function (e) {
                     console.log(e);
