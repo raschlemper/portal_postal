@@ -6,12 +6,16 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
         var init = function () {  
             $scope.datepicker = DatePickerService.default; 
             $scope.tipos = LISTAS.planoConta; 
+            $scope.situacoes = LISTAS.situacao;
             $scope.lancamento = {
                 idLancamento: (lancamento && lancamento.idLancamento) || null,
                 conta: conta || (lancamento && lancamento.conta) || null,
                 planoConta: (lancamento && lancamento.planoConta) || null,
+                favorecido: (lancamento && lancamento.favorecido) || null,
+                numero: (lancamento && lancamento.numero) || null,
                 data: (lancamento && lancamento.data) || null,
-                valor: (lancamento && lancamento.valor) || null,
+                valor: (lancamento && lancamento.valor) || null,       
+                situacao: (lancamento && lancamento.situacao) || $scope.situacoes[0],
                 historico: (lancamento && lancamento.historico) || null
             }; 
             if($scope.lancamento.planoConta == null) { $scope.tipo = $scope.tipos[0]; }

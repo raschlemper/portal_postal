@@ -3,6 +3,7 @@ package com.portalpostal.dao.handler;
 import com.portalpostal.model.Conta;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.PlanoConta;
+import com.portalpostal.model.dd.TipoSituacao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.sql2o.ResultSetHandler;
@@ -22,8 +23,11 @@ public class LancamentoHandler extends GenericHandler implements ResultSetHandle
         lancamento.setIdLancamento(getInt(result, "idLancamento"));
         lancamento.setConta(getConta(result));
         lancamento.setPlanoConta(getPlanoConta(result));
+        lancamento.setFavorecido(getString(result, "favorecido"));
+        lancamento.setNumero(getString(result, "numero"));
         lancamento.setData(getDate(result, "data"));
         lancamento.setValor(getDouble(result, "valor"));
+        lancamento.setSituacao(TipoSituacao.values()[getInt(result, "situacao")]);
         lancamento.setHistorico(getString(result, "historico"));
         return lancamento;
     }

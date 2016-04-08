@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService', 'ContaService', 'ModalService', 'DatePickerService', 'LISTAS',
-    function ($scope, $filter, LancamentoService, ContaService, ModalService, DatePickerService, LISTAS) {
+app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService', 'LancamentoTransferenciaService', 'ContaService', 'ModalService', 'DatePickerService', 'LISTAS',
+    function ($scope, $filter, LancamentoService, LancamentoTransferenciaService, ContaService, ModalService, DatePickerService, LISTAS) {
 
         var init = function () {
             $scope.lancamentos = [];
@@ -15,12 +15,15 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         };  
         
         var initTable = function() {            
-            $scope.colunas = [
-                {label: 'Plano Conta', column: 'planoConta'},
-                {label: 'Tipo', column: 'tipo'},                
-                {label: 'Valor', column: 'valor', filter: {name: 'currency', args: 'R$ '}},                
+            $scope.colunas = [              
+                {label: 'Tipo', column: 'tipo.descricao'},         
                 {label: 'Data', column: 'data', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
-                {label: 'Histórico', column: 'historico'}
+                {label: 'Número', column: 'numero'},               
+                {label: 'Favorecido', column: 'favorecido'},                
+                {label: 'Histórico', column: 'historico'},
+                {label: 'Depósito', column: 'deposito', class: 'no-sort', filter: {name: 'currency', args: ''}},  
+                {label: 'Pagamento', column: 'pagamento', class: 'no-sort', filter: {name: 'currency', args: ''}},  
+                {label: 'Saldo', column: 'saldo', class: 'no-sort', filter: {name: 'currency', args: ''}}
             ]            
             $scope.events = { 
                 edit: function(lancamento) {
@@ -31,6 +34,9 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 },
                 view: function(lancamento) {
                     $scope.visualizar(lancamento.idLancamento);
+                },
+                table: function(lancamentos) {
+                    calculateSaldo(lancamentos);
                 }
             };
         };
@@ -79,12 +85,27 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         };
         
         var criarLancamentosLista = function(data) {
-            return _.map(data.lancamentos, function(lancamento) {
-                lancamento.conta = data.idConta;
-                lancamento.tipo = lancamento.planoConta.tipo.descricao;
-                lancamento.planoConta = lancamento.planoConta.nome;
-                return _.pick(lancamento, 'idLancamento', 'conta', 'tipo', 'planoConta', 'data', 'valor', 'historico');
+            return _.map(data.lancamentos, function(lancamento) {                
+                if(lancamento.planoConta.tipo.codigo === 'despesa') { lancamento.deposito = lancamento.valor; } 
+                else if(lancamento.planoConta.tipo.codigo === 'receita') { lancamento.pagamento = lancamento.valor; }                
+                lancamento.tipo = lancamento.planoConta.tipo;
+                return _.pick(lancamento, 'idLancamento', 'tipo', 'data', 'numero', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico');
             })
+        };
+        
+        var calculateSaldo = function(lancamentos) {
+            var saldo = 0;
+            return _.map(lancamentos, function(lancamento) {
+                if((lancamento.tipo && lancamento.tipo.codigo === 'despesa') || 
+                        (lancamento.tipo.codigo === 'despesa')) { 
+                    saldo += lancamento.deposito;
+                } 
+                else if((lancamento.tipo && lancamento.tipo.codigo === 'receita') || 
+                        (lancamento.tipo.codigo === 'receita')) {
+                    saldo -= lancamento.pagamento;
+                }
+                lancamento.saldo = saldo;
+            })            
         };
 
         $scope.visualizar = function(idLancamento) {
@@ -105,7 +126,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 LancamentoService.save(result)
                     .then(function(data) {  
                         modalMessage("Lançamento Inserido com sucesso!");
-                        todos();
+                        todos(data.conta);
                     })
                     .catch(function(e) {
                         modalMessage(e);
@@ -113,12 +134,12 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             });
         };
 
-        $scope.transferir = function(conta) {
-            modalTransferir(conta).then(function(result) {
-                result = ajustarDados(result);
-                LancamentoService.save(result)
+        $scope.transferir = function() {
+            modalTransferir().then(function(result) {
+                result = ajustarDadosTransferencia(result);
+                LancamentoTransferenciaService.save(result)
                     .then(function(data) {  
-                        modalMessage("Lançamento Inserido com sucesso!");
+                        modalMessage("Lançamento Transferido com sucesso!");
                         todos();
                     })
                     .catch(function(e) {
@@ -135,7 +156,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                         LancamentoService.update(idLancamento, result)
                             .then(function (data) {  
                                 modalMessage("Lançamento Alterado com sucesso!");
-                                todos();
+                                todos(data.conta);
                             })
                             .catch(function(e) {
                                 modalMessage(e);
@@ -164,7 +185,26 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         var ajustarDados = function(data) {                 
             data.conta = { idConta: data.conta.idConta };       
             data.planoConta = { idPlanoConta: data.planoConta.idPlanoConta }; 
+            data.situacao = data.situacao.id;
             return data;
+        }
+        
+        var ajustarDadosTransferencia = function(data) {                 
+            return { idLancamentoTransferencia: null,
+                     lancamentoOrigem: { conta: getConta(data.contaOrigem, data) },
+                     lancamentoDestino: { conta: getConta(data.contaDestino, data) }
+                   }; 
+        }
+        
+        var getConta = function(conta, data) {
+            return { 
+                idConta: conta.idConta,
+                numero: data.numero,
+                data: data.data,
+                valor: data.valor,       
+                situacao: data.situacao.id,
+                historico: data.historico
+            };             
         }
         
         var modalMessage = function(message) {
@@ -195,15 +235,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         };
         
         var modalTransferir = function(conta, lancamento) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalTransferirLancamento.html', 'ModalTransferirLancamentoController', 'lg',
-                {
-                    lancamento: function() {
-                        return lancamento;
-                    },
-                    conta: function() {
-                        return conta;
-                    }
-                });
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamentoTransferencia.html', 'ModalLancamentoTransferenciaController', 'lg');
             return modalInstance.result;
         };
         

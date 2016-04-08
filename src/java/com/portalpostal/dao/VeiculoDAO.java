@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class VeiculoDAO extends GenericDAO {  
     
-    private VeiculoHandler veiculoHandler;
+    private final VeiculoHandler veiculoHandler;
 
     public VeiculoDAO(String nameDB) {
         super(nameDB, VeiculoDAO.class);

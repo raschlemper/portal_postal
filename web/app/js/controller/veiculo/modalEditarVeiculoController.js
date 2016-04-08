@@ -7,7 +7,7 @@ app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'vei
             $scope.tipos = LISTAS.tipoVeiculo;
             $scope.combustiveis = LISTAS.combustivel;
             $scope.status = LISTAS.statusVeiculo;
-            $scope.situacoes = LISTAS.situacao;
+            $scope.situacoes = LISTAS.situacaoVeiculo;
             
             $scope.veiculo = {
                 idVeiculo: (veiculo && veiculo.idVeiculo) || null,

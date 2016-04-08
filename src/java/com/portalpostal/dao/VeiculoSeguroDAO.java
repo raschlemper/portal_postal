@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class VeiculoSeguroDAO extends GenericDAO {   
     
-    private SeguroHandler seguroHandler;
+    private final SeguroHandler seguroHandler;
 
     public VeiculoSeguroDAO(String nameDB) { 
         super(nameDB, VeiculoSeguroDAO.class);

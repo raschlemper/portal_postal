@@ -96,8 +96,11 @@ CREATE TABLE `lancamento` (
   `idConta`      INT NOT NULL,
   `idPlanoConta` INT NOT NULL,
 --   `tipo`         INT NOT NULL,
+  `favorecido`   VARCHAR(254) NULL,
+  `numero`       VARCHAR(254) NULL,
   `data`         DATETIME NOT NULL,
   `valor`        DECIMAL(13,2) NOT NULL,
+  `situacao`     INT(11) NOT NULL,
   `historico`    VARCHAR(254) NOT NULL,
   PRIMARY KEY (`idLancamento`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -126,9 +129,6 @@ CREATE TABLE `lancamento_transferencia` (
   `idLancamentoTransferencia` INT NOT NULL AUTO_INCREMENT,
   `idContaOrigem`             INT NOT NULL,
   `idContaDestino`            INT NOT NULL,
-  `data`                      DATETIME NOT NULL,
-  `valor`                     DECIMAL(13,2) DEFAULT 0,
-  `historico`                 VARCHAR(254) NOT NULL,
   PRIMARY KEY (`idLancamentoTransferencia`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

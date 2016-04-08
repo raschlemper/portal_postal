@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class BancoDAO extends GenericDAO { 
     
-    private BancoHandler bancoHandler;
+    private final BancoHandler bancoHandler;
 
     public BancoDAO(String nameDB) { 
         super(nameDB, BancoDAO.class);

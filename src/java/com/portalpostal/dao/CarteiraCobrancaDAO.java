@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class CarteiraCobrancaDAO extends GenericDAO { 
     
-    private CarteiraCobrancaHandler carteiraCobrancaHandler;
+    private final CarteiraCobrancaHandler carteiraCobrancaHandler;
 
     public CarteiraCobrancaDAO(String nameDB) { 
         super(nameDB, CarteiraCobrancaDAO.class);

@@ -10,6 +10,7 @@ public class LancamentoValidation extends Validation<Lancamento>{
         if(!validarPlanoConta(lancamento)) return false; 
         if(!validarData(lancamento)) return false;   
         if(!validarValor(lancamento)) return false;   
+        if(!validarSituacao(lancamento)) return false;  
         if(!validarHistorico(lancamento)) return false;   
         return true;
     }    
@@ -36,7 +37,14 @@ public class LancamentoValidation extends Validation<Lancamento>{
         if(campoNotNull(lancamento.getValor())) return true; 
         setMsg("Preencha o valor do lançamento!");
         return false;        
-    }
+    }   
+
+    public boolean validarSituacao(Lancamento lancamento) {        
+        if(campoNotNull(lancamento.getSituacao())) return true; 
+        setMsg("Preencha a situação do lançamento!");  
+        return false;        
+    }    
+
 
     public boolean validarHistorico(Lancamento lancamento) {          
         if(campoNotNull(lancamento.getHistorico())) return true; 

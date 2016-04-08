@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class PlanoContaDAO extends GenericDAO { 
     
-    private PlanoContaHandler planoContaHandler;
+    private final PlanoContaHandler planoContaHandler;
 
     public PlanoContaDAO(String nameDB) { 
         super(nameDB, PlanoContaDAO.class);

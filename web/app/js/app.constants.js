@@ -16,9 +16,9 @@ app.constant('LISTAS', {
                       {'id': 1, 'codigo': 'seminovo', 'descricao': 'Seminovo'},  
                       {'id': 2, 'codigo': 'usado', 'descricao': 'Usado'}],
 
-    "situacao": [{'id': 0, 'codigo': 'ativo', 'descricao': 'Ativo'},  
-                 {'id': 1, 'codigo': 'inativo', 'descricao': 'Inativo'},  
-                 {'id': 2, 'codigo': 'manutencao', 'descricao': 'Manutenção'}],
+    "situacaoVeiculo": [{'id': 0, 'codigo': 'ativo', 'descricao': 'Ativo'},  
+                        {'id': 1, 'codigo': 'inativo', 'descricao': 'Inativo'},  
+                        {'id': 2, 'codigo': 'manutencao', 'descricao': 'Manutenção'}],
      
     "manutencao": [{'id': 0, 'codigo': 'programada', 'descricao': 'Programada'},
                    {'id': 1, 'codigo': 'rotina', 'descricao': 'Rotina'},
@@ -47,5 +47,8 @@ app.constant('LISTAS', {
 
     "statusConta": [{'id': 0, 'codigo': 'aberto', 'descricao': 'Aberto'},  
                     {'id': 1, 'codigo': 'encerrado', 'descricao': 'Encerrado'}],
+
+    "situacao": [{'id': 0, 'codigo': 'ativo', 'descricao': 'Ativo'},  
+                 {'id': 1, 'codigo': 'cancelado', 'descricao': 'Cancelado'}],
 
 });

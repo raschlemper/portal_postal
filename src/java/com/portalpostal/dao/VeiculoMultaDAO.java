@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class VeiculoMultaDAO extends GenericDAO {   
     
-    private MultaHandler multaHandler;
+    private final MultaHandler multaHandler;
 
     public VeiculoMultaDAO(String nameDB) { 
         super(nameDB, VeiculoMultaDAO.class);

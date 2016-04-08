@@ -19,6 +19,18 @@
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">
+                    <label>Favorecido:</label>
+                </div>
+                <div class="col-md-8">{{(lancamento.favorecido)}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Número:</label>
+                </div>
+                <div class="col-md-8">{{(lancamento.numero)}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
                     <label>Data:</label>
                 </div>
                 <div class="col-md-8">{{lancamento.data | date: 'dd/MM/yyyy'}}</div>
@@ -28,6 +40,12 @@
                     <label>Valor:</label>
                 </div>
                 <div class="col-md-8">{{lancamento.valor | currency: 'R$ '}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Situação:</label>
+                </div>
+                <div class="col-md-8">{{lancamento.situacao.descricao}}</div>
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">

@@ -6,8 +6,8 @@ app.directive('appTable', function($filter) {
         scope: {
             lista: '=',
             colunas: '=',
-            events: '=',
             filter: '=',
+            events: '=',
             search: '='
         },
         transclude: {
@@ -22,24 +22,46 @@ app.directive('appTable', function($filter) {
                 {name: '100', value: 100}];
             
             var init = function () {   
+                scope.showCheckbox = false;  
                 scope.defaultFilter = true;              
                 scope.currentPage = 1; 
                 scope.maxSize = 5; 
                 scope.limitTo = scope.limits[0];
-                scope.predicate = scope.colunas[0].column;
+                scope.predicate = getPredicate(scope.colunas);
                 scope.reverse = false; 
+                setCheckBox();
                 setFilterDefault();
             };
             
+            var getPredicate = function(colunas) {
+                if(attr.orderByColumn) { return attr.orderByColumn; }
+                var colunaSorter = null;
+                angular.forEach(colunas, function(coluna, i) {
+                    if(colunaSorter) return;
+                    if(!coluna.class) { colunaSorter = coluna; }
+                    else if(coluna.class.indexOf("no-sort") == -1) { colunaSorter = coluna; }
+                })
+                return colunaSorter.column;
+            }
+                        
+            var setCheckBox = function() {
+                if(attr.showCheckbox) { scope.showCheckbox = (attr.showCheckbox === "true"); }
+            };
+            
             var setFilterDefault = function() {
-                if(attr.defaultFilter) { scope.defaultFilter = (attr.defaultFilter == "true"); }
+                if(attr.defaultFilter) { scope.defaultFilter = (attr.defaultFilter === "true"); }
             };
             
             var reset = function() {
                 getSizeTotal();
                 getStart();
                 getFinish();
+                eventTable(scope.listaFiltrada);
             };
+            
+            var eventTable = function(items) {                
+                if(scope.events && scope.events.table) { scope.events.table(items); }
+            }
         
             var getStart = function() {
                 scope.start = ((scope.currentPage - 1) * scope.limitTo.value);
@@ -84,6 +106,7 @@ app.directive('appTable', function($filter) {
             scope.order = function(predicate) {
                 scope.reverse = (scope.predicate === predicate) ? !scope.reverse : false;
                 scope.predicate = predicate;
+                eventTable(scope.listaFiltrada);
             };
             
             scope.$watchCollection('listaFiltrada', function(newValue, oldValue) {

@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class ContaDAO extends GenericDAO { 
     
-    private ContaHandler contaHandler;
+    private final ContaHandler contaHandler;
 
     public ContaDAO(String nameDB) { 
         super(nameDB, ContaDAO.class);
