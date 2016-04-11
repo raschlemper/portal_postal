@@ -9,53 +9,45 @@ app.controller('ModalEditarPlanoContaController', ['$scope', '$modalInstance', '
             $scope.grupos = [];
             $scope.gruposList = [];
             $scope.isGroup = isGroup();
+            $scope.planoConta = {
+                idPlanoConta: (planoConta && planoConta.idPlanoConta) || null,
+                tipo: (planoConta && planoConta.tipo) || $scope.tipos[0],            
+                codigo: (planoConta && planoConta.codigo) || null,
+                nome: (planoConta && planoConta.nome) || null,
+                grupo: (planoConta && planoConta.grupo) || null
+            }; 
             if(action === 'save') { create(); }
-            else { todos(); }
+            todos();
             getTitle();
             
-        }; 
+        };         
         
         var isGroup = function() {
-           if(planoConta.contas) return true;
-           return false;            
+            if(action === 'save') return false;
+            if(planoConta.contas) return true;
+            return false;            
+        }
+        
+        var create = function() {
+            $scope.planoConta.idPlanoConta = null;
+            $scope.planoConta.codigo = null;
+            $scope.planoConta.nome = null;     
+            $scope.planoConta.grupo = planoConta;            
         }
 
         var todos = function() {
             PlanoContaService.getStructureByTipo(planoConta.tipo.id)
                 .then(function(data) {
                     $scope.grupos = data;
-                    $scope.gruposList = PlanoContaService.flatten($scope.grupos);
+                    $scope.gruposList = PlanoContaService.estrutura($scope.grupos);
+                    $scope.gruposList = PlanoContaService.flatten($scope.gruposList);
                     $scope.gruposList = $filter('orderBy')($scope.gruposList, 'descricao', false);
-                    planoConta.grupo = ListaService.getPlanoContaValue($scope.gruposList, planoConta.grupo.idPlanoConta);
-                    edit(data);
+                    $scope.planoConta.grupo = ListaService.getPlanoContaValue($scope.gruposList, $scope.planoConta.grupo.idPlanoConta);
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         };
-        
-        var create = function() {
-            $scope.planoConta = {
-                idPlanoConta: null,
-                tipo: (planoConta && planoConta.tipo) || $scope.tipos[0],            
-                codigo: null,
-                nome: null,
-                grupo: planoConta.nome 
-            }; 
-        }
-        
-        var edit = function(data) {
-            $scope.planoConta = {
-                idPlanoConta: (planoConta && planoConta.idPlanoConta) || null,
-                tipo: (planoConta && planoConta.tipo) || $scope.tipos[0],   
-                codigo: (planoConta && planoConta.codigo) || null,
-                nome: (planoConta && planoConta.nome) || null,                
-                grupo: (planoConta && planoConta.grupo) || null
-            }; 
-            if($scope.isGroup) {
-                $scope.planoConta.grupo = $scope.planoConta.grupo.nome;
-            }
-        }
         
         var getTitle = function() {
             if(action && action === 'edit') { $scope.title = "Editar Plano Conta"; }

@@ -10,10 +10,18 @@ app.factory('PlanoContaService', function($http, PromiseService) {
                 nivel: estrutura.nivel, 
                 ehGrupo: (estrutura.contas ? true : false),
                 idGrupo: (estrutura.grupo ? estrutura.grupo.idPlanoConta : null),
-                descricao: getCode(estrutura.estrutura) + ' - ' + estrutura.nome 
+                descricao: estrutura.descricao 
             });
             if(estrutura.contas) { flatten(estrutura.contas, estruturasLista); }
         });
+    };
+    
+    var getEstrutura = function(estruturas) {
+        angular.forEach(estruturas, function(estrutura) {     
+            estrutura.descricao = getCode(estrutura.estrutura) + ' - ' + estrutura.nome; 
+            if(estrutura.contas) { getEstrutura(estrutura.contas); }
+        });
+        return estruturas;
     }
             
     var getCode = function(estruturas) {
@@ -57,11 +65,6 @@ app.factory('PlanoContaService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/planoconta/tipo/" + tipo + "/grupo/" + grupo + "/codigo/" + codigo));
         },
 
-        getSaldo: function(ano) {
-            return PromiseService.execute(
-                    $http.get(_contextPath + "/api/financeiro/planoconta/saldo?ano=" + ano));
-        },
-
         get: function(idPlanoConta) {
             return PromiseService.execute(
                     $http.get(_contextPath + "/api/financeiro/planoconta/" + idPlanoConta));
@@ -83,10 +86,14 @@ app.factory('PlanoContaService', function($http, PromiseService) {
         },
         
         flatten: function(estruturas) {
-            var estruturaLista = [];
-            flatten(estruturas, estruturaLista);
-            return estruturaLista;
-        }
+            var estruturasLista = [];
+            flatten(estruturas, estruturasLista);
+            return estruturasLista;
+        }, 
+        
+        estrutura: function(estruturas) {
+            return getEstrutura(estruturas);
+        }, 
 
     }
 

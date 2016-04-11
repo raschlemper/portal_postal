@@ -1,9 +1,7 @@
 package com.portalpostal.dao;
 
 import com.portalpostal.dao.handler.PlanoContaHandler;
-import com.portalpostal.dao.handler.PlanoContaSaldoHandler;
 import com.portalpostal.model.PlanoConta;
-import com.portalpostal.model.PlanoContaSaldo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,12 +9,10 @@ import java.util.Map;
 public class PlanoContaDAO extends GenericDAO { 
     
     private final PlanoContaHandler planoContaHandler;
-    private final PlanoContaSaldoHandler planoContaSaldoHandler;
 
     public PlanoContaDAO(String nameDB) { 
         super(nameDB, PlanoContaDAO.class);
         planoContaHandler = new PlanoContaHandler();
-        planoContaSaldoHandler = new PlanoContaSaldoHandler();
     } 
 
     public List<PlanoConta> findAll() throws Exception {
@@ -72,18 +68,6 @@ public class PlanoContaDAO extends GenericDAO {
         params.put("idGrupo", idGrupo);    
         params.put("codigo", codigo);    
         return (PlanoConta) find(sql, params, planoContaHandler);
-    }
-
-    public List<PlanoContaSaldo> findSaldo(Integer ano, Integer mesInicio, Integer mesFim) throws Exception {
-        String sql = "SELECT idPlanoConta, year(data) as ano, month(data) as mes, sum(valor) as valor FROM lancamento " 
-                   + "WHERE idPlanoConta IS NOT NULL AND year(data) = :ano "
-                   + "AND month(data) BETWEEN :mesInicio AND :mesFim "
-                   + "GROUP BY idPlanoConta, ano, mes";        
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("ano", ano);       
-        params.put("mesInicio", mesInicio);       
-        params.put("mesFim", mesFim);       
-        return findAll(sql, params, planoContaSaldoHandler);
     }
 
     public PlanoConta find(Integer idPlanoConta) throws Exception {

@@ -2954,7 +2954,7 @@ div.list-category div.list-group-item {
     border-radius: 0;
     color: #666;
 }
-.list-group .list-group-item span {
+.list-group .list-group-item span.item-list {
     color: #666;
 }
 .panel-list>.list-group .list-group-header,
@@ -3034,4 +3034,12 @@ div.list-category div.list-group-item {
 
 .panel-chart {
     padding: 8px;
+}
+
+.panel-msg-info {
+    padding: 20px;
+    margin: 20px 50px;
+    border: 1px dashed #666;
+    font-size: 22px;
+    color: #666;
 }

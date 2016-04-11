@@ -19,12 +19,10 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
                 situacao: (lancamento && lancamento.situacao) || $scope.situacoes[0],
                 historico: (lancamento && lancamento.historico) || null
             }; 
-            if($scope.lancamento.tipo == null) { $scope.tipo = $scope.tipos[0]; }
-            else { $scope.tipo = $scope.lancamento.tipo; }
             
             getTitle();
             contas();
-            $scope.changeTipo($scope.tipo);
+            $scope.changeTipo($scope.lancamento.tipo);
         };
         
         $scope.editConta = function() {

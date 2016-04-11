@@ -2,6 +2,7 @@ package com.portalpostal.service;
 
 import com.portalpostal.dao.LancamentoDAO;
 import com.portalpostal.model.Lancamento;
+import com.portalpostal.model.PlanoContaSaldo;
 import java.util.List;
 
 public class LancamentoService {
@@ -23,6 +24,10 @@ public class LancamentoService {
     public List<Lancamento> findByConta(Integer idConta) throws Exception {
         return lancamentoDAO.findByConta(idConta);
     } 
+
+    public List<PlanoContaSaldo> findPlanoContaSaldo(Integer ano, Integer mesInicio, Integer mesFim) throws Exception {
+        return lancamentoDAO.findPlanoContaSaldo(ano, mesInicio, mesFim); 
+    }
     
     public List<Lancamento> findSaldoByTipo(Integer tipo, Integer ano, Integer mesInicio, Integer mesFim) throws Exception {
         return lancamentoDAO.findSaldoByTipo(tipo, ano, mesInicio, mesFim);

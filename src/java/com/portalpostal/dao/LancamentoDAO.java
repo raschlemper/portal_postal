@@ -1,8 +1,10 @@
 package com.portalpostal.dao;
 
 import com.portalpostal.dao.handler.LancamentoHandler;
+import com.portalpostal.dao.handler.PlanoContaSaldoHandler;
 import com.portalpostal.dao.handler.TipoLancamentoSaldoHandler;
 import com.portalpostal.model.Lancamento;
+import com.portalpostal.model.PlanoContaSaldo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,11 +12,13 @@ import java.util.Map;
 public class LancamentoDAO extends GenericDAO { 
     
     private final LancamentoHandler lancamentoHandler;
+    private final PlanoContaSaldoHandler planoContaSaldoHandler;
     private final TipoLancamentoSaldoHandler tipoLancamentoSaldoHandler;
 
     public LancamentoDAO(String nameDB) { 
         super(nameDB, LancamentoDAO.class);
         lancamentoHandler = new LancamentoHandler();
+        planoContaSaldoHandler = new PlanoContaSaldoHandler();
         tipoLancamentoSaldoHandler = new TipoLancamentoSaldoHandler();
     } 
 
@@ -47,10 +51,24 @@ public class LancamentoDAO extends GenericDAO {
         return findAll(sql, params, lancamentoHandler);
     }
 
+    public List<PlanoContaSaldo> findPlanoContaSaldo(Integer ano, Integer mesInicio, Integer mesFim) throws Exception {
+        String sql = "SELECT idPlanoConta, year(data) as ano, month(data) as mes, sum(valor) as valor FROM lancamento " 
+                   + "WHERE idPlanoConta IS NOT NULL AND year(data) = :ano "
+                   + "AND month(data) BETWEEN :mesInicio AND :mesFim "
+                   + "GROUP BY idPlanoConta, ano, mes "
+                   + "ORDER BY idPlanoConta, ano, mes";            
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("ano", ano);       
+        params.put("mesInicio", mesInicio);       
+        params.put("mesFim", mesFim);       
+        return findAll(sql, params, planoContaSaldoHandler);
+    }
+
     public List<Lancamento> findSaldoByTipo(Integer tipo, Integer ano, Integer mesInicio, Integer mesFim) throws Exception {
         String sql = "SELECT tipo, year(data) as ano, month(data) as mes, sum(valor) as valor FROM lancamento "
                    + "WHERE tipo = :tipo AND year(data) = :ano AND month(data) BETWEEN :mesInicio AND :mesFim "
-                   + "GROUP BY tipo, ano, mes";   
+                   + "GROUP BY tipo, ano, mes " 
+                   + "ORDER BY tipo, ano, mes";     
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("tipo", tipo);       
         params.put("ano", ano);       
@@ -60,7 +78,7 @@ public class LancamentoDAO extends GenericDAO {
     }
     
     public List<Integer> findYearFromLancamento() throws Exception {
-        String sql = "SELECT year(data) ano FROM lancamento GROUP BY ano;";  
+        String sql = "SELECT year(data) ano FROM lancamento GROUP BY ano ORDER BY ano;";  
         return findAll(sql, null, Integer.class);
     }
 

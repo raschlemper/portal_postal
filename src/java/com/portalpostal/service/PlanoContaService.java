@@ -2,7 +2,6 @@ package com.portalpostal.service;
 
 import com.portalpostal.dao.PlanoContaDAO;
 import com.portalpostal.model.PlanoConta;
-import com.portalpostal.model.PlanoContaSaldo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,10 +40,6 @@ public class PlanoContaService {
         return grupos;
     } 
 
-    public List<PlanoContaSaldo> findSaldo(Integer ano, Integer mesInicio, Integer mesFim) throws Exception {
-        return planoContaDAO.findSaldo(ano, mesInicio, mesFim); 
-    }
-
     public PlanoConta findByTipoGrupoCodigo(Integer tipo, Integer grupo, Integer codigo) throws Exception {
         return planoContaDAO.findByTipoGrupoCodigo(tipo, grupo, codigo); 
     }
@@ -76,7 +71,7 @@ public class PlanoContaService {
             conta.setNivel(nivel);
             estrutura = getEstrutura(conta, estrutura, nivel);
             List<PlanoConta> grupos = planoContaDAO.findByGrupo(conta);
-            if(grupos.isEmpty()) { return; }
+            if(grupos.isEmpty()) { continue; }
             conta.setContas(grupos);            
             findContas(grupos, estrutura, nivel);
         }
@@ -89,7 +84,7 @@ public class PlanoContaService {
     }
     
     private Map<Integer, Integer> getEstrutura(PlanoConta conta, Map<Integer, Integer> estrutura, Integer nivel) {
-        if(estrutura == null) { estrutura = new HashMap<Integer,Integer>(); }
+            if(estrutura == null) { estrutura = new HashMap<Integer,Integer>(); }
         estrutura.put(nivel, conta.getCodigo());
         Map<Integer, Integer> estruturaClone = new HashMap<Integer,Integer>();
         for (Map.Entry<Integer, Integer> entrySet : estrutura.entrySet()) {

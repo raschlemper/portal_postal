@@ -61,7 +61,6 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                     $scope.contas = data;
                     $scope.conta = $scope.contas[0];
                     todos($scope.conta);
-//                    $scope.lancamento.conta = $scope.lancamento.conta || $scope.contas[0];
                 })
                 .catch(function (e) {
                     console.log(e);
@@ -74,7 +73,6 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         }
 
         var todos = function(conta) {
-//            $scope.conta = conta;
             ContaService.getLancamento(conta.idConta)
                 .then(function (data) {
                     $scope.lancamentos = data.lancamentos;
@@ -87,8 +85,8 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         
         var criarLancamentosLista = function(data) {
             return _.map(data.lancamentos, function(lancamento) {                
-                if(lancamento.tipo.codigo === 'despesa') { lancamento.deposito = lancamento.valor; } 
-                else if(lancamento.tipo.codigo === 'receita') { lancamento.pagamento = lancamento.valor; }  
+                if(lancamento.tipo.codigo === 'despesa') { lancamento.pagamento = lancamento.valor; } 
+                else if(lancamento.tipo.codigo === 'receita') { lancamento.deposito = lancamento.valor; }  
                 return _.pick(lancamento, 'idLancamento', 'tipo', 'data', 'numero', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico');
             })
         };
@@ -98,11 +96,11 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             return _.map(lancamentos, function(lancamento) {
                 if((lancamento.tipo && lancamento.tipo.codigo === 'despesa') || 
                         (lancamento.tipo.codigo === 'despesa')) { 
-                    saldo += lancamento.deposito;
+                    saldo -= lancamento.pagamento;
                 } 
                 else if((lancamento.tipo && lancamento.tipo.codigo === 'receita') || 
                         (lancamento.tipo.codigo === 'receita')) {
-                    saldo -= lancamento.pagamento;
+                    saldo += lancamento.deposito;
                 }
                 lancamento.saldo = saldo;
             })            
@@ -242,7 +240,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             return modalInstance.result;
         };
         
-        var modalTransferir = function(conta, lancamento) {
+        var modalTransferir = function() {
             var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamentoTransferencia.html', 'ModalLancamentoTransferenciaController', 'lg');
             return modalInstance.result;
         };

@@ -1,4 +1,4 @@
-app.directive('appTree', function($compile) {
+app.directive('appTree', function($compile, PlanoContaService) {
     
     return {
         restrict: 'E',
@@ -25,20 +25,10 @@ app.directive('appTree', function($compile) {
                 tree.html($compile(createStructure(newValue))(scope));
             });
             
-            var getCode = function(estruturas) {
-                var code = '';
-                angular.forEach(estruturas, function(estrutura) {
-                    if(code) { code = code + '.' + estrutura; }
-                    else { code = estrutura; }
-                });
-                return code;
-            }
-            
             var createStructure = function(items) {
                 if(!items || !items.length) return;
                 var html = '<ul>';
-                angular.forEach(items, function(item) {       
-                    var codigo = getCode(item.estrutura);                    
+                angular.forEach(items, function(item) {                     
                     if(item.contas) { 
                         scope.open['group_' + item.idPlanoConta] = true;
                         html += '<li class="group_' + item.idPlanoConta + '">';
@@ -46,9 +36,9 @@ app.directive('appTree', function($compile) {
                                    'ng-class="{\'fa-folder-open\': open.group_' + item.idPlanoConta + ',' + 
                                               '\'fa-folder\': !open.group_' + item.idPlanoConta + '}"></i>';
                         if(item.grupo) { 
-                            html += '<div class="name">' + codigo + ' - ' + item.nome;
+                            html += '<div class="name">' + item.descricao;
                         } else {
-                            html += '<div class="name text-uppercase" style="font-size: 13pt;"><strong>' + codigo + ' - ' + item.nome + '</strong>';
+                            html += '<div class="name text-uppercase" style="font-size: 13pt;"><strong>' + item.descricao + '</strong>';
                         }          
                         html += '<span class="pull-right action">';
                         if(item.grupo) {   
@@ -63,9 +53,9 @@ app.directive('appTree', function($compile) {
                         html += '<li>';              
                         html += '<i class="fa fa-folder-o"></i>';
                         if(item.grupo) { 
-                            html += '<div class="name">' + codigo + ' - ' + item.nome;
+                            html += '<div class="name">' + item.descricao;
                         } else {
-                            html += '<div class="name text-uppercase" style="font-size: 13pt;"><strong>' + codigo + ' - ' + item.nome + '</strong>';
+                            html += '<div class="name text-uppercase" style="font-size: 13pt;"><strong>' + item.descricao + '</strong>';
                         }        
                         html += '<span class="pull-right action">';
                         if(item.grupo) {   

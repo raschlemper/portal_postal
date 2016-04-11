@@ -3,6 +3,7 @@ package com.portalpostal.controller;
 import Controle.ContrErroLog;
 import com.portalpostal.validation.Validation;
 import com.portalpostal.model.Lancamento;
+import com.portalpostal.model.PlanoContaSaldo;
 import com.portalpostal.service.LancamentoService;
 import com.portalpostal.validation.LancamentoValidation;
 import java.util.Calendar;
@@ -50,7 +51,23 @@ public class LancamentoController {
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
-    } 
+    }    
+    
+    @GET
+    @Path("/planoconta/saldo")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<PlanoContaSaldo> findPlanoContaSaldo(@QueryParam("ano") Integer ano, 
+            @QueryParam("mesInicio") Integer mesInicio, @QueryParam("mesFim") Integer mesFim) {
+        try {
+            init();    
+            if(ano == null) { ano = Calendar.getInstance().get(Calendar.YEAR); }
+            if(mesInicio == null) { mesInicio = 1; }
+            if(mesFim == null) { mesFim = 12; }
+            return lancamentoService.findPlanoContaSaldo(ano, mesInicio, mesFim);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }  
     
     @GET
     @Path("/tipo/{tipo}/saldo")
