@@ -22,16 +22,23 @@ app.directive('appTree', function($compile) {
             };
             
             scope.$watchCollection('lista', function(newValue) {
-                tree.html($compile(createStructure(null, newValue))(scope));
+                tree.html($compile(createStructure(newValue))(scope));
             });
             
-            var createStructure = function(code, items) {
+            var getCode = function(estruturas) {
+                var code = '';
+                angular.forEach(estruturas, function(estrutura) {
+                    if(code) { code = code + '.' + estrutura; }
+                    else { code = estrutura; }
+                });
+                return code;
+            }
+            
+            var createStructure = function(items) {
                 if(!items || !items.length) return;
                 var html = '<ul>';
-                angular.forEach(items, function(item) {                    
-                    var codigo = item.codigo;
-                    if(code) { codigo = code + '.' + codigo; }
-                    
+                angular.forEach(items, function(item) {       
+                    var codigo = getCode(item.estrutura);                    
                     if(item.contas) { 
                         scope.open['group_' + item.idPlanoConta] = true;
                         html += '<li class="group_' + item.idPlanoConta + '">';
@@ -50,7 +57,7 @@ app.directive('appTree', function($compile) {
                         html += '<i class="fa fa-lg fa-plus-square" ng-click="events.add(' + item.idPlanoConta + ')"></i>';
                         html += '</span>';
                         html += '</div>';
-                        html += createStructure(codigo, item.contas); 
+                        html += createStructure(item.contas); 
                         html += '</li>';
                     } else {          
                         html += '<li>';              

@@ -1,6 +1,30 @@
 'use strict';
 
-app.factory('PlanoContaService', function($http, PromiseService) {
+app.factory('PlanoContaService', function($http, PromiseService) {    
+        
+    var flatten = function(estruturas, estruturasLista) {
+        angular.forEach(estruturas, function(estrutura) {
+            estruturasLista.push({ 
+                idPlanoConta: estrutura.idPlanoConta,
+                tipo: estrutura.tipo,
+                nivel: estrutura.nivel, 
+                ehGrupo: (estrutura.contas ? true : false),
+                idGrupo: (estrutura.grupo ? estrutura.grupo.idPlanoConta : null),
+                descricao: getCode(estrutura.estrutura) + ' - ' + estrutura.nome 
+            });
+            if(estrutura.contas) { flatten(estrutura.contas, estruturasLista); }
+        });
+    }
+            
+    var getCode = function(estruturas) {
+        var code = '';
+        angular.forEach(estruturas, function(estrutura) {
+            if(code) { code = code + '.' + estrutura; }
+            else { code = estrutura; }
+        });
+        return code;
+    }
+        
     return {
 
         getAll: function() {
@@ -33,6 +57,11 @@ app.factory('PlanoContaService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/planoconta/tipo/" + tipo + "/grupo/" + grupo + "/codigo/" + codigo));
         },
 
+        getSaldo: function(ano) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/planoconta/saldo?ano=" + ano));
+        },
+
         get: function(idPlanoConta) {
             return PromiseService.execute(
                     $http.get(_contextPath + "/api/financeiro/planoconta/" + idPlanoConta));
@@ -51,6 +80,12 @@ app.factory('PlanoContaService', function($http, PromiseService) {
         delete: function(idPlanoConta) {
             return PromiseService.execute(
                     $http.delete(_contextPath + "/api/financeiro/planoconta/" + idPlanoConta));
+        },
+        
+        flatten: function(estruturas) {
+            var estruturaLista = [];
+            flatten(estruturas, estruturaLista);
+            return estruturaLista;
         }
 
     }

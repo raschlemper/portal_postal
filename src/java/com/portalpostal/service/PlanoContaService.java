@@ -1,9 +1,11 @@
 package com.portalpostal.service;
 
 import com.portalpostal.dao.PlanoContaDAO;
-import com.portalpostal.model.Banco;
 import com.portalpostal.model.PlanoConta;
+import com.portalpostal.model.PlanoContaSaldo;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PlanoContaService {
     
@@ -19,7 +21,7 @@ public class PlanoContaService {
     
     public List<PlanoConta> findStructure() throws Exception {
         List<PlanoConta> grupos = planoContaDAO.findWithoutGrupo(); 
-        findContas(grupos);
+        findContas(grupos, null, null);
         return grupos;
     }  
 
@@ -35,8 +37,12 @@ public class PlanoContaService {
 
     public List<PlanoConta> findStructureByTipo(Integer tipo) throws Exception {
         List<PlanoConta> grupos = planoContaDAO.findWithoutGrupoByTipo(tipo); 
-        findContas(grupos);
+        findContas(grupos, null, null);
         return grupos;
+    } 
+
+    public List<PlanoContaSaldo> findSaldo(Integer ano, Integer mesInicio, Integer mesFim) throws Exception {
+        return planoContaDAO.findSaldo(ano, mesInicio, mesFim); 
     }
 
     public PlanoConta findByTipoGrupoCodigo(Integer tipo, Integer grupo, Integer codigo) throws Exception {
@@ -64,14 +70,36 @@ public class PlanoContaService {
         return planoContaDAO.remove(idPlanoConta);
     } 
     
-    private void findContas(List<PlanoConta> contas) throws Exception {            
+    private void findContas(List<PlanoConta> contas, Map<Integer, Integer> estrutura, Integer nivel) throws Exception { 
+        nivel = getNivel(nivel);
         for (PlanoConta conta : contas) {
+            conta.setNivel(nivel);
+            estrutura = getEstrutura(conta, estrutura, nivel);
             List<PlanoConta> grupos = planoContaDAO.findByGrupo(conta);
-            if(grupos.isEmpty()) return;
-            conta.setContas(grupos);
-            findContas(grupos);
+            if(grupos.isEmpty()) { return; }
+            conta.setContas(grupos);            
+            findContas(grupos, estrutura, nivel);
         }
     } 
+    
+    private Integer getNivel(Integer nivel) {    
+        if(nivel == null) { nivel = 0; }
+        nivel++;    
+        return nivel;
+    }
+    
+    private Map<Integer, Integer> getEstrutura(PlanoConta conta, Map<Integer, Integer> estrutura, Integer nivel) {
+        if(estrutura == null) { estrutura = new HashMap<Integer,Integer>(); }
+        estrutura.put(nivel, conta.getCodigo());
+        Map<Integer, Integer> estruturaClone = new HashMap<Integer,Integer>();
+        for (Map.Entry<Integer, Integer> entrySet : estrutura.entrySet()) {
+            Integer key = entrySet.getKey();
+            Integer value = entrySet.getValue();
+            if(key <= nivel) { estruturaClone.put(key, value); }            
+        }
+        conta.setEstrutura(estruturaClone);
+        return estrutura;
+    }
     
     private void validation(PlanoConta planoConta) throws Exception {  
         if(existePlanoConta(planoConta)) {

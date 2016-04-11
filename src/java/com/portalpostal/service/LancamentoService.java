@@ -24,6 +24,14 @@ public class LancamentoService {
         return lancamentoDAO.findByConta(idConta);
     } 
     
+    public List<Lancamento> findSaldoByTipo(Integer tipo, Integer ano, Integer mesInicio, Integer mesFim) throws Exception {
+        return lancamentoDAO.findSaldoByTipo(tipo, ano, mesInicio, mesFim);
+    } 
+    
+    public List<Integer> findYearFromLancamento() throws Exception {
+        return lancamentoDAO.findYearFromLancamento();
+    } 
+    
     public Lancamento save(Lancamento lancamento) throws Exception {
         return lancamentoDAO.save(lancamento);
     } 

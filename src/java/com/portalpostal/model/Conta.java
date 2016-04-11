@@ -14,7 +14,8 @@ public class Conta {
     private TipoConta tipo;
     private TipoStatusConta status;
     private Date dataAbertura;
-    private Double valorSaldoAbertura;    
+    private Double valorSaldoAbertura;   
+    private Double saldo; 
     private List<Lancamento> lancamentos;
 
     public Integer getIdConta() {
@@ -79,6 +80,14 @@ public class Conta {
 
     public void setValorSaldoAbertura(Double valorSaldoAbertura) {
         this.valorSaldoAbertura = valorSaldoAbertura;
+    }
+
+    public Double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(Double saldo) {
+        this.saldo = saldo;
     }
 
     public List<Lancamento> getLancamentos() {

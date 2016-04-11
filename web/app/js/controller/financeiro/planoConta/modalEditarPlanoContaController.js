@@ -24,8 +24,8 @@ app.controller('ModalEditarPlanoContaController', ['$scope', '$modalInstance', '
             PlanoContaService.getStructureByTipo(planoConta.tipo.id)
                 .then(function(data) {
                     $scope.grupos = data;
-                    createGruposList(null, $scope.grupos);
-                    $scope.gruposList = $filter('orderBy')($scope.gruposList, 'codigo', false);
+                    $scope.gruposList = PlanoContaService.flatten($scope.grupos);
+                    $scope.gruposList = $filter('orderBy')($scope.gruposList, 'descricao', false);
                     planoConta.grupo = ListaService.getPlanoContaValue($scope.gruposList, planoConta.grupo.idPlanoConta);
                     edit(data);
                 })
@@ -33,21 +33,6 @@ app.controller('ModalEditarPlanoContaController', ['$scope', '$modalInstance', '
                     modalMessage(e);
                 });
         };
-        
-        var createGruposList = function(code, items) {            
-            angular.forEach(items, function(item) {                    
-                var grupo = {};
-                var codigo = item.codigo;
-                if(code) { codigo = code + '.' + codigo; }
-                grupo.idPlanoConta = item.idPlanoConta;
-                grupo.codigo = codigo;
-                grupo.nome = codigo + ' - ' + item.nome;
-                if(item.contas) { 
-                    createGruposList(codigo, item.contas);
-                }
-                $scope.gruposList.push(grupo);
-            });    
-        }
         
         var create = function() {
             $scope.planoConta = {

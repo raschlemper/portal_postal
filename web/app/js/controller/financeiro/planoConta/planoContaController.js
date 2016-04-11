@@ -30,19 +30,13 @@ app.controller('PlanoContaController', ['$scope', '$q', 'PlanoContaService', 'Mo
                 .then(function(values) {  
                     angular.forEach(values, function(value, key) {
                         $scope.planoContas[key] = value;
-                        $scope.planoContasLista[key] = criarPlanoContasLista($scope.planoContas[key]);                        
+                        $scope.planoContasLista[key] = $scope.planoContas[key];
                     });
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         };
-        
-        var criarPlanoContasLista = function(planoContas) {
-            return _.map(planoContas, function(planoConta) {
-                return _.pick(planoConta, 'idPlanoConta', 'tipo', 'codigo', 'nome', 'grupo', 'contas');
-            })
-        }
 
         $scope.salvar = function(idPlanoConta) {
             PlanoContaService.get(idPlanoConta)

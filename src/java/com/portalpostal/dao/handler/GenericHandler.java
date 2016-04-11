@@ -22,25 +22,30 @@ class GenericHandler {
         return false;
     }
     
+    private String getColumn(String columnName) {
+        if(table == null) return columnName;
+        return table + "." + columnName;
+    }
+    
     protected Integer getInt(ResultSet result, String columnName) throws SQLException {
-        return (Integer) result.getObject(table + "." + columnName);
+        return (Integer) result.getObject(getColumn(columnName));
     }
     
     protected String getString(ResultSet result, String columnName) throws SQLException {
-        return result.getString(table + "." + columnName);
+        return result.getString(getColumn(columnName));
     }
     
     protected Date getDate(ResultSet result, String columnName) throws SQLException {
-        return result.getDate(table + "." + columnName);
+        return result.getDate(getColumn(columnName));
     }
     
     protected Double getDouble(ResultSet result, String columnName) throws SQLException {
-        Double valor = result.getDouble(table  + "." + columnName);
+        Double valor = result.getDouble(getColumn(columnName));
         if (result.wasNull()) { valor = null; }
         return valor;
     }
     
     protected Boolean getBoolean(ResultSet result, String columnName) throws SQLException {
-        return result.getBoolean(table  + "." + columnName);
+        return result.getBoolean(getColumn(columnName));
     }
 }

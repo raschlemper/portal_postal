@@ -94,8 +94,8 @@ ADD UNIQUE INDEX `u_planoconta` (`tipo`, `codigo`, `grupo`);
 CREATE TABLE `lancamento` (
   `idLancamento` INT NOT NULL AUTO_INCREMENT,
   `idConta`      INT NOT NULL,
-  `idPlanoConta` INT NOT NULL,
---   `tipo`         INT NOT NULL,
+  `idPlanoConta` INT NULL,
+  `tipo`         INT NOT NULL,
   `favorecido`   VARCHAR(254) NULL,
   `numero`       VARCHAR(254) NULL,
   `data`         DATETIME NOT NULL,
@@ -133,15 +133,15 @@ CREATE TABLE `lancamento_transferencia` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `lancamento_transferencia` 
-ADD CONSTRAINT `fk_lancamentotransferencia_contaorigem`
-  FOREIGN KEY (`idContaOrigem`)
-  REFERENCES `conta` (`idConta`)
+ADD CONSTRAINT `fk_lancamentotransferencia_lancamentoorigem`
+  FOREIGN KEY (`idLancamentoOrigem`)
+  REFERENCES `lancamento` (`idLancamento`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
 ALTER TABLE `lancamento_transferencia` 
-ADD CONSTRAINT `fk_lancamentotransferencia_contadestino`
-  FOREIGN KEY (`idContaDestino`)
-  REFERENCES `conta` (`idConta`)
+ADD CONSTRAINT `fk_lancamentotransferencia_lancamentodestino`
+  FOREIGN KEY (`idLancamentoDestino`)
+  REFERENCES `lancamento` (`idLancamento`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;

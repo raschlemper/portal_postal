@@ -27,9 +27,16 @@ public class ContaHandler extends GenericHandler implements ResultSetHandler<Con
         conta.setStatus(TipoStatusConta.values()[getInt(result, "status")]);
         conta.setDataAbertura(getDate(result, "dataAbertura"));
         conta.setValorSaldoAbertura(getDouble(result, "valorSaldoAbertura"));
+        conta.setSaldo(getSaldo(result));
         conta.setContaCorrente(getContaCorrente(result));
         conta.setCartaoCredito(getCartaoCredito(result));
         return conta;
+    }
+    
+    private Double getSaldo(ResultSet result) throws SQLException {
+        table = null;
+        if(!existColumn(result, "saldo")) return null;
+        return getDouble(result, "saldo"); 
     }
     
     private ContaCorrente getContaCorrente(ResultSet result) throws SQLException {

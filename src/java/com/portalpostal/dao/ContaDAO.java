@@ -35,6 +35,13 @@ public class ContaDAO extends GenericDAO {
         return (Conta) find(sql, params, contaHandler);
     }
 
+    public List<Conta> findSaldo() throws Exception {
+        String sql = "SELECT *, (SELECT sum(if(lancamento.tipo = 0, lancamento.valor, lancamento.valor * -1)) " 
+                                + "FROM lancamento WHERE conta.idConta = lancamento.idConta) as saldo "
+                   + "FROM conta;";        
+        return findAll(sql, null, contaHandler);
+    }
+
     public Conta save(Conta conta) throws Exception {  
         String sql = "INSERT INTO conta (idContaCorrente, idCartaoCredito, nome, tipo, status, dataAbertura, valorSaldoAbertura) "
                    + "VALUES(:idContaCorrente, :idCartaoCredito, :nome, :tipo, :status, :dataAbertura, :valorSaldoAbertura)";        

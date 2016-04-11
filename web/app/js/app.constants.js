@@ -47,8 +47,24 @@ app.constant('LISTAS', {
 
     "statusConta": [{'id': 0, 'codigo': 'aberto', 'descricao': 'Aberto'},  
                     {'id': 1, 'codigo': 'encerrado', 'descricao': 'Encerrado'}],
+                
+    "lancamento": [{'id': 0, 'codigo': 'receita', 'descricao': 'Receita'},
+                   {'id': 1, 'codigo': 'despesa', 'descricao': 'Despesa'}],
 
     "situacao": [{'id': 0, 'codigo': 'ativo', 'descricao': 'Ativo'},  
                  {'id': 1, 'codigo': 'cancelado', 'descricao': 'Cancelado'}],
+
+    "meses": [{'id': 0, 'codigo': 'janeiro', 'descricao': 'Janeiro', abreviacao: 'Jan'},  
+              {'id': 1, 'codigo': 'fevereiro', 'descricao': 'Fevereiro', abreviacao: 'Fev'},  
+              {'id': 2, 'codigo': 'marco', 'descricao': 'Março', abreviacao: 'Mar'},  
+              {'id': 3, 'codigo': 'abril', 'descricao': 'Abril', abreviacao: 'Abr'},  
+              {'id': 4, 'codigo': 'maio', 'descricao': 'Maio', abreviacao: 'Mai'},  
+              {'id': 5, 'codigo': 'junho', 'descricao': 'Junho', abreviacao: 'Jun'},  
+              {'id': 6, 'codigo': 'julho', 'descricao': 'Julho', abreviacao: 'Jul'},  
+              {'id': 7, 'codigo': 'agosto', 'descricao': 'Agosto', abreviacao: 'Ago'},  
+              {'id': 8, 'codigo': 'setembro', 'descricao': 'Setembro', abreviacao: 'Set'},  
+              {'id': 9, 'codigo': 'outubro', 'descricao': 'Outubro', abreviacao: 'Out'},  
+              {'id': 10, 'codigo': 'novembro', 'descricao': 'Novembro', abreviacao: 'Nov'},  
+              {'id': 11, 'codigo': 'dezembro', 'descricao': 'Dezembro', abreviacao: 'Dez'}]
 
 });

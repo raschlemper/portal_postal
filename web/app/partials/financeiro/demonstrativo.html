@@ -1,0 +1,61 @@
+<div id="page-content-wrapper">
+    <div class="container-fluid">
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" >
+                            <div class="row">
+                                <div class="col-md-8">Demonstrativo Financeiro</div>
+                                <div class="col-md-4">
+                                    <div class="form-inline">
+                                        <div class="pull-right">
+                                            <label>Ano:</label>
+                                            <select class="form-control" ng-model="anoSelected" ng-change="changeAno(anoSelected)"
+                                                ng-options="ano.descricao for ano in anos track by ano.id">    
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="panel-body panel-list">
+                            
+                            <div class="list-group margin-top">
+                                <div class="list-group-item list-group-header">
+                                    <div class="row">
+                                        <div class="col-md-3">Plano de Conta</div>
+                                        <div class="col-md-9">
+                                            <div class="col-md-1" ng-repeat="mes in meses track by mes.id">{{mes.abreviacao}}</div>
+                                        </div>
+                                    </div>                
+                                </div> 
+                                <div class="list-group-container">
+                                    <div class="list-group-item list-group-content" ng-repeat="estrutura in estruturasLista track by estrutura.idPlanoConta">
+                                        <div class="row" ng-class="{'col-list-item-group': estrutura.ehGrupo}">
+                                            <div class="col-md-3">
+                                                <span class="col-ident-{{estrutura.nivel}}">{{estrutura.descricao}}</span>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="col-md-1" ng-repeat="saldo in estrutura.saldos track by $index">{{saldo | currency : ''}}</div>
+                                            </div>
+                                        </div>                
+                                    </div>
+                                </div>
+                                <div class="list-group-item list-group-footer">
+                                    <div class="row">
+                                        <div class="col-md-3" style="font-size: 14px">Total</div>
+                                        <div class="col-md-9">
+                                            <div class="col-md-1" ng-repeat="total in totais track by $index">{{total | currency : ''}}</div>
+                                        </div>
+                                    </div>                
+                                </div>                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>

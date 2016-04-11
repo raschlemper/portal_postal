@@ -5,6 +5,7 @@ import com.portalpostal.validation.Validation;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.service.LancamentoService;
 import com.portalpostal.validation.LancamentoValidation;
+import java.util.Calendar;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -16,6 +17,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -45,6 +47,34 @@ public class LancamentoController {
         try {
             init();    
             return lancamentoService.findAll();
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    } 
+    
+    @GET
+    @Path("/tipo/{tipo}/saldo")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Lancamento> findSaldoByTipo(@PathParam("tipo") Integer tipo, @QueryParam("ano") Integer ano, 
+            @QueryParam("mesInicio") Integer mesInicio, @QueryParam("mesFim") Integer mesFim) {
+        try {
+            init();    
+            if(ano == null) { ano = Calendar.getInstance().get(Calendar.YEAR); }
+            if(mesInicio == null) { mesInicio = 1; }
+            if(mesFim == null) { mesFim = 12; }
+            return lancamentoService.findSaldoByTipo(tipo, ano, mesInicio, mesFim);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    } 
+    
+    @GET
+    @Path("/anos")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Integer> findYearFromLancamento() {
+        try {
+            init();    
+            return lancamentoService.findYearFromLancamento();
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }

@@ -20,7 +20,7 @@ public class PlanoContaHandler extends GenericHandler implements ResultSetHandle
     public PlanoConta handle(ResultSet result) throws SQLException {
         PlanoConta planoConta = new PlanoConta();
         planoConta.setIdPlanoConta(getInt(result, "idPlanoConta"));
-        planoConta.setTipo(TipoPlanoConta.values()[getInt(result, "tipo")]);
+        planoConta.setTipo((getInt(result, "tipo") == null ? null : TipoPlanoConta.values()[getInt(result, "tipo")]));
         planoConta.setNome(getString(result, "nome"));
         planoConta.setCodigo(getInt(result, "codigo"));
         planoConta.setGrupo(getGrupo(result));
@@ -29,10 +29,11 @@ public class PlanoContaHandler extends GenericHandler implements ResultSetHandle
     
     private PlanoConta getGrupo(ResultSet result) throws SQLException {
         if(!existColumn(result, "plano_conta.grupo")) return null;
+        Integer idPlanoConta = getInt(result, "grupo");
+        if(idPlanoConta == null) return null;
         PlanoConta plano = new PlanoConta();
-        plano.setIdPlanoConta(getInt(result, "idPlanoConta"));
+        plano.setIdPlanoConta(idPlanoConta);
         return plano;
-//        return new PlanoContaHandler().handle(result); 
     }
     
 }

@@ -5,12 +5,13 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
 
         var init = function () {  
             $scope.datepicker = DatePickerService.default; 
-            $scope.tipos = LISTAS.planoConta; 
+            $scope.tipos = LISTAS.lancamento; 
             $scope.situacoes = LISTAS.situacao;
             $scope.lancamento = {
                 idLancamento: (lancamento && lancamento.idLancamento) || null,
                 conta: conta || (lancamento && lancamento.conta) || null,
-                planoConta: (lancamento && lancamento.planoConta) || null,
+                planoConta: (lancamento && lancamento.planoConta) || null,  
+                tipo: (lancamento && lancamento.tipo) || $scope.tipos[0],
                 favorecido: (lancamento && lancamento.favorecido) || null,
                 numero: (lancamento && lancamento.numero) || null,
                 data: (lancamento && lancamento.data) || null,
@@ -18,8 +19,8 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
                 situacao: (lancamento && lancamento.situacao) || $scope.situacoes[0],
                 historico: (lancamento && lancamento.historico) || null
             }; 
-            if($scope.lancamento.planoConta == null) { $scope.tipo = $scope.tipos[0]; }
-            else { $scope.tipo = lancamento.planoConta.tipo; }
+            if($scope.lancamento.tipo == null) { $scope.tipo = $scope.tipos[0]; }
+            else { $scope.tipo = $scope.lancamento.tipo; }
             
             getTitle();
             contas();

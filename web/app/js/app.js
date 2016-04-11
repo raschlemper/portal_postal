@@ -10,7 +10,8 @@ var app = angular.module('App', [
     'ui.mask',
     'ui.utils.masks',
     'datatables',
-    'datatables.bootstrap'
+    'datatables.bootstrap',
+    'highcharts-ng'
 ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
@@ -73,7 +74,14 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
             .state('financeiro', {
                 abstract: true,
                 url: '/financeiro',
-                templateUrl: 'partials/financeiro/financeiro.html'
+                template: '<div ui-view></div>'
+            })
+            
+            .state('financeiro.home', {
+                url: '/',
+                templateUrl: 'partials/financeiro/financeiro.html',
+                controller: 'FinanceiroController',
+                resolve: {}
             })
             .state('financeiro.banco', {
                 url: '/banco',
@@ -115,6 +123,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
                 url: '/lancamento',
                 templateUrl: 'partials/financeiro/lancamento/lancamento.html',
                 controller: 'LancamentoController',
+                resolve: {}
+            })
+            .state('financeiro.demonstrativo', {
+                url: '/demonstrativo',
+                templateUrl: 'partials/financeiro/demonstrativo.html',
+                controller: 'DemonstrativoController',
                 resolve: {}
             });
 

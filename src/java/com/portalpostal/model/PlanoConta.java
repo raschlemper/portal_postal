@@ -2,6 +2,7 @@ package com.portalpostal.model;
 
 import com.portalpostal.model.dd.TipoPlanoConta;
 import java.util.List;
+import java.util.Map;
 
 public class PlanoConta {
     
@@ -9,6 +10,8 @@ public class PlanoConta {
     private TipoPlanoConta tipo;
     private Integer codigo;
     private String nome;
+    private Integer nivel;
+    private Map<Integer,Integer> estrutura;
     private PlanoConta grupo;
     private List<PlanoConta> contas;
 
@@ -43,6 +46,22 @@ public class PlanoConta {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    public Integer getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(Integer nivel) {
+        this.nivel = nivel;
+    }
+
+    public Map<Integer, Integer> getEstrutura() {
+        return estrutura;
+    }
+
+    public void setEstrutura(Map<Integer, Integer> estrutura) {
+        this.estrutura = estrutura;
+    }  
 
     public PlanoConta getGrupo() {
         return grupo;

@@ -18,7 +18,7 @@ public class LancamentoTransferenciaHandler extends GenericHandler implements Re
 
     public LancamentoTransferencia handle(ResultSet result) throws SQLException {
         LancamentoTransferencia lancamento = new LancamentoTransferencia();
-        lancamento.setIdLancamentoTransferencia(getInt(result, "idLancamentoTranferencia"));
+        lancamento.setIdLancamentoTransferencia(getInt(result, "idLancamentoTransferencia"));
         lancamento.setLancamentoOrigem(getLancamentoOrigem(result));
         lancamento.setLancamentoDestino(getLancamentoDestino(result));
         return lancamento;

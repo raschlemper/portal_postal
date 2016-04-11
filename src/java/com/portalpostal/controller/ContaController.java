@@ -54,6 +54,18 @@ public class ContaController {
     }  
     
     @GET
+    @Path("/saldo")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Conta> findSaldo() {
+        try {
+            init();    
+            return contaService.findSaldo();
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }  
+    
+    @GET
     @Path("/{idConta}")
     @Produces(MediaType.APPLICATION_JSON)
     public Conta find(@PathParam("idConta") Integer idConta) {

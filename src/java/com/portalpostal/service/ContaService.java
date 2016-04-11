@@ -23,6 +23,10 @@ public class ContaService {
         return contaDAO.find(idConta);
     } 
     
+    public List<Conta> findSaldo() throws Exception {
+        return contaDAO.findSaldo();
+    }  
+    
     public Conta findLancamento(Integer idConta) throws Exception {
         Conta conta = find(idConta);
         conta.setLancamentos(lancamentoDAO.findByConta(idConta));

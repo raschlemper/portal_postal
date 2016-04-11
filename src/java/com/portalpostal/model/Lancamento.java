@@ -1,5 +1,6 @@
 package com.portalpostal.model;
 
+import com.portalpostal.model.dd.TipoLancamento;
 import com.portalpostal.model.dd.TipoSituacao;
 import java.util.Date;
 
@@ -8,6 +9,7 @@ public class Lancamento {
     private Integer idLancamento;
     private Conta conta;
     private PlanoConta planoConta;
+    private TipoLancamento tipo;
     private String favorecido;
     private String numero;
     private Date data;
@@ -37,6 +39,14 @@ public class Lancamento {
 
     public void setPlanoConta(PlanoConta planoConta) {
         this.planoConta = planoConta;
+    }
+
+    public TipoLancamento getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoLancamento tipo) {
+        this.tipo = tipo;
     }
 
     public String getFavorecido() {
