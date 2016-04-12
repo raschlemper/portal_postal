@@ -2,44 +2,44 @@
 
 app.factory('SaldoService', function($filter, LISTAS) {   
         
-    // CONTAS /////
+    // SALDOS /////
     
-    var setSaldo = function(estruturas, saldos) {
-        angular.forEach(estruturas, function(estrutura) {
-            estrutura.saldos = {};
-            getMesSaldo(estrutura, saldos);
+    var setSaldo = function(datas, saldos, id) {
+        angular.forEach(datas, function(data) {
+            data.saldos = {};
+            getMesSaldo(data, saldos, id);
         });
     };
     
-    var setSaldoByMes = function(estruturas, saldos, mes) {
-        angular.forEach(estruturas, function(estrutura) {
-            estrutura.saldos = {};
-            estrutura.saldos[mes.id] = 0;
-            getSaldo(estrutura, mes, saldos);
+    var setSaldoByMes = function(datas, saldos, mes, id) {
+        angular.forEach(datas, function(data) {
+            data.saldos = {};
+            data.saldos[mes.id] = 0;
+            getSaldo(data, mes, saldos, id);
         });
     };
 
-    var getMesSaldo = function(estrutura, saldos) {
+    var getMesSaldo = function(data, saldos, id) {
         angular.forEach(LISTAS.meses, function(mes) {
-            estrutura.saldos[mes.id] = 0;
-            getSaldo(estrutura, mes, saldos);
+            data.saldos[mes.id] = 0;
+            getSaldo(data, mes, saldos, id);
         });
     };
 
-    var getSaldo = function(estrutura, mes, saldos) {
+    var getSaldo = function(data, mes, saldos, id) {
         angular.forEach(saldos, function(saldo) {
-            if(estrutura.idPlanoConta === saldo.planoConta && mes.id === saldo.mes - 1) {
-                estrutura.saldos[mes.id] = saldo.valor;
+            if(data[id] === saldo[id] && mes.id === saldo.mes - 1) {
+                data.saldos[mes.id] = saldo.valor;
             }
         });
     };
     
-    // GRUPO /////
+    // SALDO GRUPO PLANO DE CONTA /////
         
-    var setSaldoGrupo = function(estruturas) {
+    var setSaldoPlanoContaGrupo = function(estruturas) {
         estruturas = $filter('orderBy')(estruturas, 'nivel', true);
         angular.forEach(estruturas, function(estrutura) {
-            getSaldoGrupo(estruturas, estrutura);   
+            getSaldoGrupo(estruturas, estrutura);
         });
     };
 
@@ -56,9 +56,9 @@ app.factory('SaldoService', function($filter, LISTAS) {
         })
     };
     
-    // SALDO TOTAL /////
+    // SALDO TOTAL MES PLANO DE CONTA /////
      
-    var setSaldoTotalMes = function(estruturas) {
+    var setSaldoPlanoContaTotalMes = function(estruturas) {
         var totais = {};
         angular.forEach(estruturas, function(estrutura) {
             getSaldoEstrutura(estrutura, totais);
@@ -74,11 +74,21 @@ app.factory('SaldoService', function($filter, LISTAS) {
         });
     };  
     
+    // SALDO PLANO DE CONTA /////
+    
+    var setSaldoPlanoConta = function(estruturas, saldos) {
+        setSaldo(estruturas, saldos, 'idPlanoConta');
+    }
+    
+    var setSaldoPlanoContaByMes = function(estruturas, saldos, mes) {
+        return setSaldoByMes(estruturas, saldos, mes, 'idPlanoConta');
+    }
+    
     return {
-        saldo: setSaldo,
-        saldoByMes: setSaldoByMes,
-        saldoGrupo: setSaldoGrupo,
-        saldoTotalMes: setSaldoTotalMes
+        saldoPlanoConta: setSaldoPlanoConta,
+        saldoPlanoContaByMes: setSaldoPlanoContaByMes,
+        saldoPlanoContaGrupo: setSaldoPlanoContaGrupo,
+        saldoPlanoContaTotalMes: setSaldoPlanoContaTotalMes
     }
 
 });

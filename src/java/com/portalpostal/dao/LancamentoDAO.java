@@ -1,11 +1,9 @@
 package com.portalpostal.dao;
 
 import com.portalpostal.dao.handler.LancamentoHandler;
-import com.portalpostal.dao.handler.LancamentoSaldoHandler;
-import com.portalpostal.dao.handler.PlanoContaSaldoHandler;
-import com.portalpostal.dao.handler.TipoLancamentoSaldoHandler;
+import com.portalpostal.dao.handler.SaldoHandler;
 import com.portalpostal.model.Lancamento;
-import com.portalpostal.model.PlanoContaSaldo;
+import com.portalpostal.model.Saldo;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -14,16 +12,12 @@ import java.util.Map;
 public class LancamentoDAO extends GenericDAO { 
     
     private final LancamentoHandler lancamentoHandler;
-    private final LancamentoSaldoHandler lancamentoSaldoHandler;
-    private final PlanoContaSaldoHandler planoContaSaldoHandler;
-    private final TipoLancamentoSaldoHandler tipoLancamentoSaldoHandler;
+    private final SaldoHandler saldoHandler;
 
     public LancamentoDAO(String nameDB) { 
         super(nameDB, LancamentoDAO.class);
         lancamentoHandler = new LancamentoHandler();
-        lancamentoSaldoHandler = new LancamentoSaldoHandler();
-        planoContaSaldoHandler = new PlanoContaSaldoHandler();
-        tipoLancamentoSaldoHandler = new TipoLancamentoSaldoHandler();
+        saldoHandler = new SaldoHandler();
     } 
 
     public List<Lancamento> findAll() throws Exception {
@@ -56,41 +50,38 @@ public class LancamentoDAO extends GenericDAO {
     }
 
     public List<Lancamento> findSaldo(Date dataInicio, Date dataFim) throws Exception {
-        String sql = "SELECT idConta, idPlanoConta, tipo, DATE(data) as data, sum(valor) as valor "
+        String sql = "SELECT DATE(data) as data, sum( if(tipo = 0, valor, valor * -1) ) as valor "
                    + "FROM lancamento "
                    + "WHERE DATE(data) BETWEEN :dataInicio AND :dataFim "
-                   + "GROUP BY idConta, idPlanoConta, tipo, data "
-                   + "ORDER BY idConta, idPlanoConta, tipo, data";            
+                   + "GROUP BY data "
+                   + "ORDER BY data";            
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("dataInicio", dataInicio);       
         params.put("dataFim", dataFim);   
-        return findAll(sql, params, lancamentoSaldoHandler);
+        return findAll(sql, params, saldoHandler);
     }
 
-    public List<PlanoContaSaldo> findPlanoContaSaldo(Integer ano, Integer mesInicio, Integer mesFim) throws Exception {
-        String sql = "SELECT idPlanoConta, year(data) as ano, month(data) as mes, sum(valor) as valor FROM lancamento " 
-                   + "WHERE idPlanoConta IS NOT NULL AND year(data) = :ano "
-                   + "AND month(data) BETWEEN :mesInicio AND :mesFim "
-                   + "GROUP BY idPlanoConta, ano, mes "
-                   + "ORDER BY idPlanoConta, ano, mes";            
+    public List<Saldo> findSaldoPlanoConta(Date dataInicio, Date dataFim) throws Exception {
+        String sql = "SELECT idPlanoConta as id, DATE(data) as data, sum(valor) as valor "
+                   + "FROM lancamento "
+                   + "WHERE DATE(data) BETWEEN :dataInicio AND :dataFim "
+                   + "GROUP BY idPlanoConta, data "
+                   + "ORDER BY idPlanoConta, data";            
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("ano", ano);       
-        params.put("mesInicio", mesInicio);       
-        params.put("mesFim", mesFim);       
-        return findAll(sql, params, planoContaSaldoHandler);
-    }
+        params.put("dataInicio", dataInicio);       
+        params.put("dataFim", dataFim);   
+        return findAll(sql, params, saldoHandler);
+    }    
 
-    public List<Lancamento> findSaldoByTipo(Integer tipo, Integer ano, Integer mesInicio, Integer mesFim) throws Exception {
-        String sql = "SELECT tipo, year(data) as ano, month(data) as mes, sum(valor) as valor FROM lancamento "
-                   + "WHERE tipo = :tipo AND year(data) = :ano AND month(data) BETWEEN :mesInicio AND :mesFim "
-                   + "GROUP BY tipo, ano, mes " 
-                   + "ORDER BY tipo, ano, mes";     
+    public List<Saldo> findSaldoTipo(Date dataInicio, Date dataFim) throws Exception {
+        String sql = "SELECT tipo as id, DATE(data) as data, sum(valor) as valor FROM lancamento "
+                   + "WHERE DATE(data) BETWEEN :dataInicio AND :dataFim "
+                   + "GROUP BY tipo, data " 
+                   + "ORDER BY tipo, data";     
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("tipo", tipo);       
-        params.put("ano", ano);       
-        params.put("mesInicio", mesInicio);       
-        params.put("mesFim", mesFim);       
-        return findAll(sql, params, tipoLancamentoSaldoHandler);
+        params.put("dataInicio", dataInicio);       
+        params.put("dataFim", dataFim);   
+        return findAll(sql, params, saldoHandler);
     }
     
     public List<Integer> findYearFromLancamento() throws Exception {

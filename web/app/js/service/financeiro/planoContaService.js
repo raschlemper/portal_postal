@@ -21,7 +21,6 @@ app.factory('PlanoContaService', function($http, PromiseService) {
             estrutura.descricao = getCode(estrutura.estrutura) + ' - ' + estrutura.nome; 
             if(estrutura.contas) { getEstrutura(estrutura.contas); }
         });
-        return estruturas;
     }
             
     var getCode = function(estruturas) {
@@ -92,7 +91,7 @@ app.factory('PlanoContaService', function($http, PromiseService) {
         }, 
         
         estrutura: function(estruturas) {
-            return getEstrutura(estruturas);
+            getEstrutura(estruturas);
         }, 
 
     }

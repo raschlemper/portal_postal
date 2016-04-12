@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService', 'PlanoContaService', 'LancamentoService', 'SaldoService', 'ModalService', 'LISTAS',
-    function ($scope, $q, $filter, ContaService, PlanoContaService, LancamentoService, SaldoService, ModalService, LISTAS) {
+app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService', 'PlanoContaService', 'LancamentoService', 'SaldoService', 'ModalService', 'ListaService', 'LISTAS',
+    function ($scope, $q, $filter, ContaService, PlanoContaService, LancamentoService, SaldoService, ModalService, ListaService, LISTAS) {
             
         var init = function () {
             $scope.tipos = LISTAS.lancamento;
@@ -46,8 +46,8 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService
                     min: 0,
                     title: {text: ' '}
                 },
-                series: [{"name": $scope.tipos[0].descricao, "data": receitas, color: '#90ed7d'},
-                         {"name": $scope.tipos[1].descricao, "data": despesas, color: '#f45b5b'}],
+                series: [{name: $scope.tipos[0].descricao, data: receitas, color: '#90ed7d'},
+                         {name: $scope.tipos[1].descricao, data: despesas, color: '#f45b5b'}],
                 size: {
                     height: 308
                 }     
@@ -69,13 +69,14 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService
         };
                 
         var saldosByTipo = function() {
-            var meses = getLastThreeMonths();
-            $q.all([
-                LancamentoService.findSaldoByTipo($scope.tipos[0].id, $scope.anoAtual, meses[0].id + 1, meses[meses.length - 1].id + 1),
-                LancamentoService.findSaldoByTipo($scope.tipos[1].id, $scope.anoAtual, meses[0].id + 1, meses[meses.length - 1].id + 1)
-            ]).then(function(values) {  
-                    var receitas = _.pluck(values[0], 'valor');
-                    var despesas = _.pluck(values[1], 'valor');         
+            var dataInicio = moment().endOf("month").subtract(3, 'months').format('YYYY-MM-DD');
+            var dataFim = moment().endOf("month").format('YYYY-MM-DD');
+            LancamentoService.getSaldoTipo(dataInicio, dataFim)
+                .then(function(data) {  
+                    var valuesReceita = _.filter(data, function(item) { return item.id === 0; });
+                    var valuesDespesa = _.filter(data, function(item) { return item.id === 1; });
+                    var receitas = _.pluck(valuesReceita, 'valor');
+                    var despesas = _.pluck(valuesDespesa, 'valor');         
                     configChartReceitaDespesa(receitas, despesas);
                 })
                 .catch(function(e) {
@@ -85,20 +86,28 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService
         
         // Despesas /////      
         
-        var configChartDespesa = function() {        
+        var configChartDespesa = function(values) {        
             $scope.configChartDespesa = { 
-                options: { 
-                    "chart": { "type": "areaspline" }
-                },
                 title: " ",
-                xAxis: {
-                    categories: getDescricaoMeses()   
+                options: { 
+                    chart: { type: "pie" },                
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: false
+                            },
+                            showInLegend: true
+                        }
+                    },
                 },
-                yAxis: {
-                    min: 0,
-                    title: {text: ' '}
-                },
-                series: [{"name":"Some data","data":[1,2,4],"id":"series-0","type":"pie"}],
+                series: [{                        
+                    name: 'Brands',
+                    colorByPoint: true,
+                    type: "pie",
+                    data: values
+                }],
                 size: {
                     height: 308
                 }     
@@ -107,23 +116,43 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService
         };  
         
         var saldosDespesa = function() {
-            $q.all([PlanoContaService.getStructureByTipo($scope.tipos[1].id), LancamentoService.getPlanoContaSaldo(2016, 4, 4)])
+            var dataInicio = moment().startOf("month").format('YYYY-MM-DD');
+            var dataFim = moment().endOf("month").format('YYYY-MM-DD');
+            var mesAtual = ListaService.getValue(LISTAS.meses, moment().format('MM')-1);
+            $q.all([PlanoContaService.getStructureByTipo($scope.tipos[1].id), 
+                    LancamentoService.getSaldoPlanoConta(dataInicio, dataFim)])
                .then(function(values) {  
                     var estruturas = values[0];
-                    var saldos = values[1];
-                    estruturas = PlanoContaService.estrutura(estruturas);
-                    estruturas = PlanoContaService.flatten(estruturas);
-                    SaldoService.saldoByMes(estruturas, saldos, LISTAS.meses[3]);
-                    SaldoService.saldoGrupo(estruturas);
-                    console.log(_.filter(estruturas, function(estrutura) {
+                    var saldos = formatPlanoConta(values[1]);
+                    PlanoContaService.estrutura(estruturas);
+                    var estruturas = PlanoContaService.flatten(estruturas);
+                    SaldoService.saldoPlanoContaByMes(estruturas, saldos, mesAtual);
+                    SaldoService.saldoPlanoContaGrupo(estruturas);
+                    estruturas = _.filter(estruturas, function(estrutura) {
                         return estrutura.nivel === 2;
-                    }));
-                    configChartDespesa();
+                    });
+                    configChartDespesa(getDataChartDespesa(estruturas, mesAtual));
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         };
+        
+        var formatPlanoConta = function(saldos) {
+            return _.map(saldos, function(saldo) {
+                saldo.idPlanoConta = saldo.id;
+                saldo.mes = moment(saldo.data).format('MM');
+                saldo.ano = moment(saldo.data).format('YYYY');
+                return _.pick(saldo, ['idPlanoConta', 'mes', 'ano', 'valor']);
+            });
+            
+        };
+        
+        var getDataChartDespesa = function(estruturas, mes) {            
+            return _.map(estruturas, function(estrutura) {
+                return {name: estrutura.descricao, y: estrutura.saldos[mes.id]};
+            });            
+        }
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);

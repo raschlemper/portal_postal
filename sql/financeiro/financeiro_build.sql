@@ -127,8 +127,8 @@ ADD CONSTRAINT `fk_lancamento_planoconta`
 
 CREATE TABLE `lancamento_transferencia` (
   `idLancamentoTransferencia` INT NOT NULL AUTO_INCREMENT,
-  `idContaOrigem`             INT NOT NULL,
-  `idContaDestino`            INT NOT NULL,
+  `idLancamentoOrigem`             INT NOT NULL,
+  `idLancamentoDestino`            INT NOT NULL,
   PRIMARY KEY (`idLancamentoTransferencia`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

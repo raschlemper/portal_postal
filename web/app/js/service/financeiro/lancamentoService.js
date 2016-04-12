@@ -14,17 +14,14 @@ app.factory('LancamentoService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/lancamento/saldo?dataInicio=" + dataInicio + "&dataFim=" + dataFim));
         },
 
-        getPlanoContaSaldo: function(ano, mesInicio, mesFim) {
-            var url = _contextPath + "/api/financeiro/lancamento/planoconta/saldo";
-            if(ano) { url += "?ano=" + ano; }
-            if(mesInicio) { url += "&mesInicio=" + mesInicio; }
-            if(mesFim) { url += "&mesFim=" + mesFim; }
-            return PromiseService.execute($http.get(url));
+        getSaldoPlanoConta: function(dataInicio, dataFim) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/lancamento/planoconta/saldo?dataInicio=" + dataInicio + "&dataFim=" + dataFim));
         },
 
-        findSaldoByTipo: function(tipo, ano, mesInicio, mesFim) {
+        getSaldoTipo: function(dataInicio, dataFim) {
             return PromiseService.execute(
-                    $http.get(_contextPath + "/api/financeiro/lancamento/tipo/" + tipo + "/saldo?ano=" + ano + "&mesInicio=" + mesInicio + "&mesFim=" + mesFim));
+                    $http.get(_contextPath + "/api/financeiro/lancamento/tipo/saldo?dataInicio=" + dataInicio + "&dataFim=" + dataFim));
         },
 
         findYearFromLancamento: function() {

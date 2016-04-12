@@ -2,7 +2,7 @@ package com.portalpostal.service;
 
 import com.portalpostal.dao.LancamentoDAO;
 import com.portalpostal.model.Lancamento;
-import com.portalpostal.model.PlanoContaSaldo;
+import com.portalpostal.model.Saldo;
 import java.util.Date;
 import java.util.List;
 
@@ -29,13 +29,13 @@ public class LancamentoService {
     public List<Lancamento> findSaldo(Date dataInicio, Date dataFim) throws Exception {
         return lancamentoDAO.findSaldo(dataInicio, dataFim);
     } 
-
-    public List<PlanoContaSaldo> findPlanoContaSaldo(Integer ano, Integer mesInicio, Integer mesFim) throws Exception {
-        return lancamentoDAO.findPlanoContaSaldo(ano, mesInicio, mesFim); 
-    }
     
-    public List<Lancamento> findSaldoByTipo(Integer tipo, Integer ano, Integer mesInicio, Integer mesFim) throws Exception {
-        return lancamentoDAO.findSaldoByTipo(tipo, ano, mesInicio, mesFim);
+    public List<Saldo> findSaldoPlanoConta(Date dataInicio, Date dataFim) throws Exception {
+        return lancamentoDAO.findSaldoPlanoConta(dataInicio, dataFim);
+    } 
+    
+    public List<Saldo> findSaldoTipo(Date dataInicio, Date dataFim) throws Exception {
+        return lancamentoDAO.findSaldoTipo(dataInicio, dataFim);
     } 
     
     public List<Integer> findYearFromLancamento() throws Exception {

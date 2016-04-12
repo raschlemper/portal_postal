@@ -3,13 +3,11 @@ package com.portalpostal.controller;
 import Controle.ContrErroLog;
 import com.portalpostal.validation.Validation;
 import com.portalpostal.model.Lancamento;
-import com.portalpostal.model.PlanoContaSaldo;
+import com.portalpostal.model.Saldo;
 import com.portalpostal.service.LancamentoService;
 import com.portalpostal.validation.LancamentoValidation;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -59,7 +57,7 @@ public class LancamentoController {
     @GET
     @Path("/saldo")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Lancamento> findSaldoByTipo(@QueryParam("dataInicio") String dataInicio, 
+    public List<Lancamento> findSaldo(@QueryParam("dataInicio") String dataInicio, 
             @QueryParam("dataFim") String dataFim) {
         try {
             init(); 
@@ -75,34 +73,34 @@ public class LancamentoController {
     @GET
     @Path("/planoconta/saldo")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<PlanoContaSaldo> findPlanoContaSaldo(@QueryParam("ano") Integer ano, 
-            @QueryParam("mesInicio") Integer mesInicio, @QueryParam("mesFim") Integer mesFim) {
+    public List<Saldo> findSaldoPlanoConta(@QueryParam("dataInicio") String dataInicio, 
+            @QueryParam("dataFim") String dataFim) {
         try {
-            init();    
-            if(ano == null) { ano = Calendar.getInstance().get(Calendar.YEAR); }
-            if(mesInicio == null) { mesInicio = 1; }
-            if(mesFim == null) { mesFim = 12; }
-            return lancamentoService.findPlanoContaSaldo(ano, mesInicio, mesFim);
+            init(); 
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date inicio = format.parse(dataInicio);
+            Date fim = format.parse(dataFim);
+            return lancamentoService.findSaldoPlanoConta(inicio, fim);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
-    }  
+    }
     
     @GET
-    @Path("/tipo/{tipo}/saldo")
+    @Path("/tipo/saldo")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Lancamento> findSaldoByTipo(@PathParam("tipo") Integer tipo, @QueryParam("ano") Integer ano, 
-            @QueryParam("mesInicio") Integer mesInicio, @QueryParam("mesFim") Integer mesFim) {
+    public List<Saldo> findSaldoTipo(@QueryParam("dataInicio") String dataInicio, 
+            @QueryParam("dataFim") String dataFim) {
         try {
-            init();    
-            if(ano == null) { ano = Calendar.getInstance().get(Calendar.YEAR); }
-            if(mesInicio == null) { mesInicio = 1; }
-            if(mesFim == null) { mesFim = 12; }
-            return lancamentoService.findSaldoByTipo(tipo, ano, mesInicio, mesFim);
+            init(); 
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date inicio = format.parse(dataInicio);
+            Date fim = format.parse(dataFim);
+            return lancamentoService.findSaldoTipo(inicio, fim);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
-    } 
+    }
     
     @GET
     @Path("/anos")
