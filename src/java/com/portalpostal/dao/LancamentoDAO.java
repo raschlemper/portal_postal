@@ -1,10 +1,12 @@
 package com.portalpostal.dao;
 
 import com.portalpostal.dao.handler.LancamentoHandler;
+import com.portalpostal.dao.handler.LancamentoSaldoHandler;
 import com.portalpostal.dao.handler.PlanoContaSaldoHandler;
 import com.portalpostal.dao.handler.TipoLancamentoSaldoHandler;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.PlanoContaSaldo;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,12 +14,14 @@ import java.util.Map;
 public class LancamentoDAO extends GenericDAO { 
     
     private final LancamentoHandler lancamentoHandler;
+    private final LancamentoSaldoHandler lancamentoSaldoHandler;
     private final PlanoContaSaldoHandler planoContaSaldoHandler;
     private final TipoLancamentoSaldoHandler tipoLancamentoSaldoHandler;
 
     public LancamentoDAO(String nameDB) { 
         super(nameDB, LancamentoDAO.class);
         lancamentoHandler = new LancamentoHandler();
+        lancamentoSaldoHandler = new LancamentoSaldoHandler();
         planoContaSaldoHandler = new PlanoContaSaldoHandler();
         tipoLancamentoSaldoHandler = new TipoLancamentoSaldoHandler();
     } 
@@ -49,6 +53,18 @@ public class LancamentoDAO extends GenericDAO {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idConta", idConta);       
         return findAll(sql, params, lancamentoHandler);
+    }
+
+    public List<Lancamento> findSaldo(Date dataInicio, Date dataFim) throws Exception {
+        String sql = "SELECT idConta, idPlanoConta, tipo, DATE(data) as data, sum(valor) as valor "
+                   + "FROM lancamento "
+                   + "WHERE DATE(data) BETWEEN :dataInicio AND :dataFim "
+                   + "GROUP BY idConta, idPlanoConta, tipo, data "
+                   + "ORDER BY idConta, idPlanoConta, tipo, data";            
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("dataInicio", dataInicio);       
+        params.put("dataFim", dataFim);   
+        return findAll(sql, params, lancamentoSaldoHandler);
     }
 
     public List<PlanoContaSaldo> findPlanoContaSaldo(Integer ano, Integer mesInicio, Integer mesFim) throws Exception {

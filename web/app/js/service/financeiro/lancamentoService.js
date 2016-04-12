@@ -9,6 +9,11 @@ app.factory('LancamentoService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/lancamento/"));
         },
 
+        getSaldo: function(dataInicio, dataFim) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/lancamento/saldo?dataInicio=" + dataInicio + "&dataFim=" + dataFim));
+        },
+
         getPlanoContaSaldo: function(ano, mesInicio, mesFim) {
             var url = _contextPath + "/api/financeiro/lancamento/planoconta/saldo";
             if(ano) { url += "?ano=" + ano; }

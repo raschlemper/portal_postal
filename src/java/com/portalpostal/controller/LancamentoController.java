@@ -6,7 +6,10 @@ import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.PlanoContaSaldo;
 import com.portalpostal.service.LancamentoService;
 import com.portalpostal.validation.LancamentoValidation;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -51,7 +54,23 @@ public class LancamentoController {
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
-    }    
+    }   
+    
+    @GET
+    @Path("/saldo")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Lancamento> findSaldoByTipo(@QueryParam("dataInicio") String dataInicio, 
+            @QueryParam("dataFim") String dataFim) {
+        try {
+            init(); 
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date inicio = format.parse(dataInicio);
+            Date fim = format.parse(dataFim);
+            return lancamentoService.findSaldo(inicio, fim);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }  
     
     @GET
     @Path("/planoconta/saldo")

@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('DemonstrativoController', ['$scope', '$q', 'PlanoContaService', 'LancamentoService', 'SaldoService', 'ModalService',
-    function ($scope, $q, PlanoContaService, LancamentoService, SaldoService, ModalService) {
+app.controller('DemonstrativoController', ['$scope', '$q', 'PlanoContaService', 'LancamentoService', 'SaldoService', 'GroupService', 'ModalService',
+    function ($scope, $q, PlanoContaService, LancamentoService, SaldoService, GroupService,  ModalService) {
             
         var init = function () {
             $scope.estruturasLista = [];
@@ -31,13 +31,14 @@ app.controller('DemonstrativoController', ['$scope', '$q', 'PlanoContaService', 
         }
         
         var estruturas = function(ano) {
-            $q.all([PlanoContaService.getStructure(), LancamentoService.getPlanoContaSaldo(ano, null, null)])
+            $q.all([PlanoContaService.getStructure(), 
+                    LancamentoService.getSaldo(moment("2016-01-01").format('YYYY-MM-DD'), moment("2016-12-31").format('YYYY-MM-DD'))])
                .then(function(values) {  
-                    $scope.estruturas = values[0];
-                    $scope.saldos = values[1];
-                    $scope.estruturasLista = PlanoContaService.estrutura($scope.estruturas);
+                    var estruturas = values[0];
+                    var saldos = getSaldos(values[1]);
+                    $scope.estruturasLista = PlanoContaService.estrutura(estruturas);
                     $scope.estruturasLista = PlanoContaService.flatten($scope.estruturasLista);
-                    SaldoService.saldo($scope.estruturasLista, $scope.saldos);
+                    SaldoService.saldo($scope.estruturasLista, saldos);
                     $scope.totais = SaldoService.saldoTotalMes($scope.estruturasLista);
                     SaldoService.saldoGrupo($scope.estruturasLista);
                 })
@@ -46,10 +47,47 @@ app.controller('DemonstrativoController', ['$scope', '$q', 'PlanoContaService', 
                 });
         };
         
+        var getSaldos = function(data) {
+            var lancamentos = formatPlanoConta(data);
+            return groupBy(lancamentos, ['planoConta','ano','mes']);
+            
+        }
+        
+        var formatPlanoConta = function(lancamentos) {
+            return _.map(lancamentos, function(lancamento) {
+                lancamento.mes = moment(lancamento.data).format('MM');
+                lancamento.ano = moment(lancamento.data).format('YYYY');
+                return _.pick(lancamento, ['planoConta', 'mes', 'ano', 'valor']);
+            })
+        };
+        
+        var groupBy = function(data, fields) {
+            return GroupService.saldo(data, fields)
+        }
+        
         var modalMessage = function(message) {
             ModalService.modalMessage(message);
         };
         
+        
+        
+        
+        
+        
+        
+        var saldosNovos = function() {
+            LancamentoService.getSaldo(moment("2016-01-01").format('YYYY-MM-DD'), moment("2016-12-31").format('YYYY-MM-DD'))
+               .then(function(data) {  
+                   var lancamentos = formatPlanoContaByMes(data);
+                   console.log(groupBy(lancamentos, ['planoConta','ano','mes']));
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+        
+        
+        saldosNovos();
         init();
 
     }]);

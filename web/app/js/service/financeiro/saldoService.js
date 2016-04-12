@@ -28,7 +28,7 @@ app.factory('SaldoService', function($filter, LISTAS) {
 
     var getSaldo = function(estrutura, mes, saldos) {
         angular.forEach(saldos, function(saldo) {
-            if(estrutura.idPlanoConta === saldo.planoConta.idPlanoConta && mes.id === saldo.mes - 1) {
+            if(estrutura.idPlanoConta === saldo.planoConta && mes.id === saldo.mes - 1) {
                 estrutura.saldos[mes.id] = saldo.valor;
             }
         });
