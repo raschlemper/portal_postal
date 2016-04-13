@@ -77,20 +77,14 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService
                     var saldos = formatTipo(data);
                     saldos = GroupService.saldo(saldos, ['id','ano','mes']);
                     SaldoService.saldoTipoLancamento($scope.tipos, saldos, getLastThreeMonths());
-                    var receitas = getValuesTipoLancamento($scope.tipos[0]);
-                    var despesas = getValuesTipoLancamento($scope.tipos[1]);  
+                    var receitas = getDataChartTipoLancamento($scope.tipos[0]);
+                    var despesas = getDataChartTipoLancamento($scope.tipos[1]);  
                     configChartReceitaDespesa(receitas, despesas);
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         };
-        
-        var getValuesTipoLancamento = function(tipo) {
-            var saldo = _.filter($scope.tipos, function(item) { return item.id === tipo.id; });
-            var tipos = _.pluck(saldo, 'saldos');
-            return _.values(tipos[0])
-        }
         
         var formatTipo = function(saldos) {
             return _.map(saldos, function(saldo) {
@@ -99,6 +93,12 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService
                 saldo.ano = moment(saldo.data).format('YYYY');
                 return _.pick(saldo, ['id', 'mes', 'ano', 'valor']);
             });            
+        };
+        
+        var getDataChartTipoLancamento = function(tipo) {
+            var saldo = _.filter($scope.tipos, function(item) { return item.id === tipo.id; });
+            var tipos = _.pluck(saldo, 'saldos');
+            return _.values(tipos[0])
         };
         
         // Despesas /////      
