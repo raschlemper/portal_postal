@@ -4,10 +4,10 @@ app.factory('SaldoService', function($filter, LISTAS) {
         
     // SALDOS /////
     
-    var setSaldo = function(datas, saldos, id) {
+    var setSaldo = function(datas, saldos, meses, id) {
         angular.forEach(datas, function(data) {
             data.saldos = {};
-            getMesSaldo(data, saldos, id);
+            getMesSaldo(data, saldos, meses, id);
         });
     };
     
@@ -19,8 +19,8 @@ app.factory('SaldoService', function($filter, LISTAS) {
         });
     };
 
-    var getMesSaldo = function(data, saldos, id) {
-        angular.forEach(LISTAS.meses, function(mes) {
+    var getMesSaldo = function(data, saldos, meses,  id) {
+        angular.forEach(meses, function(mes) {
             data.saldos[mes.id] = 0;
             getSaldo(data, mes, saldos, id);
         });
@@ -32,7 +32,7 @@ app.factory('SaldoService', function($filter, LISTAS) {
                 data.saldos[mes.id] = saldo.valor;
             }
         });
-    };
+    };    
     
     // SALDO GRUPO PLANO DE CONTA /////
         
@@ -77,16 +77,23 @@ app.factory('SaldoService', function($filter, LISTAS) {
     // SALDO PLANO DE CONTA /////
     
     var setSaldoPlanoConta = function(estruturas, saldos) {
-        setSaldo(estruturas, saldos, 'idPlanoConta');
+        setSaldo(estruturas, saldos, LISTAS.meses, 'idPlanoConta');
     }
     
     var setSaldoPlanoContaByMes = function(estruturas, saldos, mes) {
         return setSaldoByMes(estruturas, saldos, mes, 'idPlanoConta');
+    } 
+    
+    // SALDO TIPO LANCAMENTO /////
+    
+    var setSaldoTipoLancamento = function(tipos, saldos, meses) {
+        setSaldo(tipos, saldos, meses, 'id');
     }
     
     return {
         saldoPlanoConta: setSaldoPlanoConta,
         saldoPlanoContaByMes: setSaldoPlanoContaByMes,
+        saldoTipoLancamento: setSaldoTipoLancamento,
         saldoPlanoContaGrupo: setSaldoPlanoContaGrupo,
         saldoPlanoContaTotalMes: setSaldoPlanoContaTotalMes
     }

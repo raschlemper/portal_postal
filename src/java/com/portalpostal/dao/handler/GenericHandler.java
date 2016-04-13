@@ -28,24 +28,29 @@ class GenericHandler {
     }
     
     protected Integer getInt(ResultSet result, String columnName) throws SQLException {
+        if(!existColumn(result, columnName)) return null;
         return (Integer) result.getObject(getColumn(columnName));
     }
     
     protected String getString(ResultSet result, String columnName) throws SQLException {
+        if(!existColumn(result, columnName)) return null;
         return result.getString(getColumn(columnName));
     }
     
     protected Date getDate(ResultSet result, String columnName) throws SQLException {
+        if(!existColumn(result, columnName)) return null;
         return result.getDate(getColumn(columnName));
     }
     
     protected Double getDouble(ResultSet result, String columnName) throws SQLException {
+        if(!existColumn(result, columnName)) return null;
         Double valor = result.getDouble(getColumn(columnName));
         if (result.wasNull()) { valor = null; }
         return valor;
     }
     
     protected Boolean getBoolean(ResultSet result, String columnName) throws SQLException {
+        if(!existColumn(result, columnName)) return null;
         return result.getBoolean(getColumn(columnName));
     }
 }
