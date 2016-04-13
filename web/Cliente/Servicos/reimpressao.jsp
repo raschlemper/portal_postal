@@ -224,6 +224,8 @@
                                     <th><h3>Cidade / UF</h3></th>
                                     <th><h3>CEP</h3></th>
                                     <th><h3>N.F.</h3></th>
+                                    <th><h3>Gerada por</h3></th>
+                                    <th><h3>Impressa por</h3></th>
                                     <th><h3>Data Impressão</h3></th>
                                     <th width="50"><h3>AR</h3></th>
                                     <th class="nosort" width="60"><h3>Ver</h3></th>
@@ -263,6 +265,8 @@
                                     <td><%= des.getCidadeDes() + " / " + des.getUfDes()%></td>
                                     <td><%= des.getCepDes() %></td>
                                     <td><%= des.getNotaFiscal() %></td>
+                                    <td><%= des.getNomePreVenda() %></td>
+                                    <td><%= des.getNomeImpresso() %></td>
                                     <td><%= des.getDataImpressoFormatada() %></td>
                                     <td><%= ar%></td>
                                     <td align="center"><a onclick="verVenda(<%= des.getId()%>);" style="cursor:pointer;" ><img src="../../imagensNew/lupa.png" /></a></td>

@@ -132,7 +132,12 @@ public class ServLoginEmporium extends HttpServlet {
                     sessao.setAttribute("temETQ", cli.getUsaEtiquetador()); // Se o cliente usa o etiquetador
                     sessao.setAttribute("cliente", cli); // Se o cliente usa o etiquetador
                     sessao.setAttribute("agencia", emp); // Se o cliente usa o etiquetador
-                    if (us.getNivel() != 99) {
+                    
+                  
+                    if(us.getIsFirst() == 0){    
+                          sessao.setAttribute("senhaUser", senha);//para conferir na troca do primeiro acesso                    
+                         response.sendRedirect("Cliente/Cadastros/usuario_primeiro_acesso.jsp");       
+                    } else if (us.getNivel() != 99) {
                         response.sendRedirect("Cliente/Postagens/consultas.jsp");
                     } else {
                         response.sendRedirect("Cliente/Servicos/pre_postagem.jsp");

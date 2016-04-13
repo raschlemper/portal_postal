@@ -39,8 +39,8 @@ app.controller('ModalEditarPlanoContaController', ['$scope', '$modalInstance', '
             PlanoContaService.getStructureByTipo(planoConta.tipo.id)
                 .then(function(data) {
                     $scope.grupos = data;
-                    $scope.gruposList = PlanoContaService.estrutura($scope.grupos);
-                    $scope.gruposList = PlanoContaService.flatten($scope.gruposList);
+                    PlanoContaService.estrutura($scope.grupos);
+                    $scope.gruposList = PlanoContaService.flatten($scope.grupos);
                     $scope.gruposList = $filter('orderBy')($scope.gruposList, 'descricao', false);
                     $scope.planoConta.grupo = ListaService.getPlanoContaValue($scope.gruposList, $scope.planoConta.grupo.idPlanoConta);
                 })

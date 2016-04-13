@@ -19,6 +19,7 @@ public class ClientesUsuario {
     private ArrayList<Integer> acessos;
     private ArrayList<Integer> departamentos;
     private ArrayList<Integer> servicos;
+    private int isFirst;
 
     public ClientesUsuario(int id, int idCliente, String login, int nivel, ArrayList<Integer> acessos, ArrayList<Integer> departamentos, ArrayList<Integer> servicos) {
         this.id = id;
@@ -28,6 +29,26 @@ public class ClientesUsuario {
         this.acessos = acessos;
         this.departamentos = departamentos;
         this.servicos = servicos;
+    }
+
+    public ClientesUsuario(int id, int idCliente, String login, int nivel, ArrayList<Integer> acessos, ArrayList<Integer> departamentos, ArrayList<Integer> servicos, int isFirst) {
+        this.id = id;
+        this.idCliente = idCliente;
+        this.login = login;
+        this.nivel = nivel;
+        this.acessos = acessos;
+        this.departamentos = departamentos;
+        this.servicos = servicos;
+        this.isFirst = isFirst;
+    }
+    
+
+    public int getIsFirst() {
+        return isFirst;
+    }
+
+    public void setIsFirst(int isFirst) {
+        this.isFirst = isFirst;
     }
 
     public ArrayList<Integer> getAcessos() {

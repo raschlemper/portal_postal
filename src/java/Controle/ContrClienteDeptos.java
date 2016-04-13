@@ -95,6 +95,22 @@ public class ContrClienteDeptos {
             Conexao.desconectar(conn);
         }
     }
+    public static boolean desativaDepto(String idDepto, String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "UPDATE cliente_departamentos SET ativo = 0 WHERE idDepartamento = "+idDepto+" ;";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);            
+            valores.executeUpdate();
+            valores.close();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e);
+            ContrErroLog.inserir("ContrClienteDeptos.desativaDepto", "SQLException", sql, e.toString());
+            return false;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
     
     public static boolean alterarCartaoDepto(String nomeBD, int idCliente, int idDepto, String nome, String cartao) {
         Connection conn = Conexao.conectar(nomeBD);

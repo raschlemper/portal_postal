@@ -613,6 +613,14 @@
         <servlet-name>SerAtivaCliente</servlet-name>
         <servlet-class>Servlet.SerAtivaCliente</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ServExcluirDepto</servlet-name>
+        <servlet-class>Servlet.ServExcluirDepto</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServTrocaSenhaPortal</servlet-name>
+        <servlet-class>Servlet.ServTrocaSenhaPortal</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ServLogin</servlet-name>
         <url-pattern>/ServLogin</url-pattern>
@@ -1209,6 +1217,14 @@
     <servlet-mapping>
         <servlet-name>SerAtivaCliente</servlet-name>
         <url-pattern>/SerAtivaCliente</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServExcluirDepto</servlet-name>
+        <url-pattern>/ServExcluirDepto</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServTrocaSenhaPortal</servlet-name>
+        <url-pattern>/ServTrocaSenhaPortal</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

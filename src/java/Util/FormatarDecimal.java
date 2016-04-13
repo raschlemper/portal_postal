@@ -53,4 +53,13 @@ public class FormatarDecimal {
         return Integer.parseInt(v.trim());
     }
 
+    public static String somaDecimal(String d1, String d2){
+        
+        double s1 = Double.parseDouble(d1);
+        double s2 = Double.parseDouble(d2);        
+        double sum = s1 + s2;
+        
+        return  Double.toString(sum);
+    }
+
 }

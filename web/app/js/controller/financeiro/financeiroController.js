@@ -4,13 +4,15 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService
     function ($scope, $q, $filter, ContaService, PlanoContaService, LancamentoService, SaldoService, GroupService, ModalService, ListaService, LISTAS) {
             
         var init = function () {
+            $scope.sizeChart = 240;
             $scope.tipos = LISTAS.lancamento;
             $scope.anoAtual = new Date().getFullYear();
             $scope.mesAtual = new Date().getMonth();
+            $scope.saldoTotal = 0;
             contasSaldos(); 
-            saldosByTipo(); 
-            saldosDespesa();
-            configChartSaldos();
+            chartSaldoByTipo(); 
+            chartSaldoDespesa();
+            chartSaldo();
         }; 
         
         // Contas /////
@@ -28,6 +30,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService
         var createContasSaldosLista = function(contas) {    
             return _.map(contas, function(conta) {  
                 conta.saldo += conta.valorSaldoAbertura;
+                $scope.saldoTotal += conta.saldo;
                 return _.pick(conta, 'idConta', 'nome', 'saldo');
             })
         }
@@ -38,10 +41,11 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService
             $scope.configChartReceitaDespesa = { 
                 title: " ",
                 options: { 
-                    "chart": { "type": "column" }
+                    chart: { "type": "column" }
                 },
                 xAxis: {
-                    categories: getDescricaoMeses()   
+                    categories: getDescricaoMeses(),
+                    title: {text: ' '} 
                 },
                 yAxis: {
                     min: 0,
@@ -50,9 +54,11 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService
                 series: [{name: $scope.tipos[0].descricao, data: receitas, color: '#90ed7d'},
                          {name: $scope.tipos[1].descricao, data: despesas, color: '#f45b5b'}],
                 size: {
-                    height: 308
-                }     
-                //loading: true
+                    height: $scope.sizeChart
+                },
+                credits: {
+                    enabled: false
+                }
             };
         };
         
@@ -69,7 +75,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService
             })
         };
                 
-        var saldosByTipo = function() {
+        var chartSaldoByTipo = function() {
             var dataInicio = moment().endOf("month").subtract(3, 'months').format('YYYY-MM-DD');
             var dataFim = moment().endOf("month").format('YYYY-MM-DD');
             LancamentoService.getSaldoTipo(dataInicio, dataFim)
@@ -96,6 +102,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService
         };
         
         var getDataChartTipoLancamento = function(tipo) {
+            // achar outra maneira de fazer o filtro, esta retornando um array de array
             var saldo = _.filter($scope.tipos, function(item) { return item.id === tipo.id; });
             var tipos = _.pluck(saldo, 'saldos');
             return _.values(tipos[0])
@@ -119,13 +126,6 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService
                         }
                     },
                 },
-                xAxis: {
-                    categories: ['1750', '1800', '1850', '1900', '1950', '1999', '2050'],
-                    tickmarkPlacement: 'on',
-                    title: {
-                        enabled: false
-                    }
-                },
                 series: [{                        
                     name: 'Brands',
                     colorByPoint: true,
@@ -133,13 +133,15 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService
                     data: values
                 }],
                 size: {
-                    height: 308
-                }     
-                //loading: true
+                    height: $scope.sizeChart
+                },
+                credits: {
+                    enabled: false
+                }
             };
         };  
         
-        var saldosDespesa = function() {
+        var chartSaldoDespesa = function() {
             var dataInicio = moment().startOf("month").format('YYYY-MM-DD');
             var dataFim = moment().endOf("month").format('YYYY-MM-DD');
             var mesAtual = ListaService.getValue(LISTAS.meses, moment().format('MM')-1);
@@ -180,34 +182,61 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService
         
         // Saldos 90 dias /////
         
-        var configChartSaldos = function(values) {        
+        var configChartSaldo = function(categorias, valores) {        
             $scope.configChartSaldos = { 
-                title: " ",
+                title: " ",     
                 options: { 
-                    chart: { type: "area" },    
+                    chart: { type: "area" }
+                },
+                xAxis: {
+                    categories: categorias,
+                    title: { enabled: false }
+                },
+                yAxis: {
+                    title: { text: ' ' }
                 },
                 series: [{
-                    name: 'Asia',
-                    data: [502, 635, 809, 947, 1402, 3634, 5268]
-                }, {
-                    name: 'Africa',
-                    data: [106, 107, 111, 133, 221, 767, 1766]
-                }, {
-                    name: 'Europe',
-                    data: [163, 203, 276, 408, 547, 729, 628]
-                }, {
-                    name: 'America',
-                    data: [18, 31, 54, 156, 339, 818, 1201]
-                }, {
-                    name: 'Oceania',
-                    data: [2, 2, 2, 6, 13, 30, 46]
+                    name: 'Saldos',    
+                    data: valores
                 }],
                 size: {
-                    height: 308
-                }     
-                //loading: true
+                    height: $scope.sizeChart
+                },           
+                legend: { enabled: false },
+                credits: {
+                    enabled: false
+                }
             };
-        };  
+        };   
+        
+        var chartSaldo = function() {
+            var dataInicio = moment().endOf("month").subtract(3, 'months').format('YYYY-MM-DD');
+            var dataFim = moment().endOf("month").format('YYYY-MM-DD');
+            LancamentoService.getSaldo(dataInicio, dataFim)
+               .then(function(data) { 
+                    var saldos = formatSaldo(data);
+                    var categorias = getDataChartSaldo(saldos, 'data');
+                    var valores = getDataChartSaldo(saldos, 'valor');
+                    configChartSaldo(categorias, valores);
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+        
+        var formatSaldo = function(saldos) {
+            return _.map(saldos, function(saldo) {
+                saldo.data = $filter('date')(saldo.data, 'dd/MM');
+//                saldo.valor = $filter('currency')(saldo.valor, '')
+                return _.pick(saldo, ['data', 'valor']);
+            });
+            
+        };
+        
+        var getDataChartSaldo = function(saldos, field) {  
+            var values = _.pluck(saldos, field);
+            return _.values(values);
+        };
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);

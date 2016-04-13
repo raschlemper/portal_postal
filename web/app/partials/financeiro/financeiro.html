@@ -1,20 +1,24 @@
 <div id="page-content-wrapper">
     <div class="container-fluid">
         <div id="page-wrapper">
-            <div class="row">                
-                
+            <div class="row">   
                 <div class="col-lg-3">
                     <div class="panel panel-default">
-                        <div class="panel-heading">Contas</div>                        
-                        <ul class="list-group">
-                            <li class="list-group-item" ng-repeat="conta in contas track by conta.idConta">
-                                <strong>{{conta.nome}}</strong> </br>
-                                <span>Saldo <i class="pull-right">{{conta.saldo | currency : 'R$ '}}</i></span>
-                            </li>
-                        </ul>                        
+                        <div class="panel-heading">Contas</div>    
+                        <!--<div class="panel-body">-->
+                            <ul class="list-group list-group-overflow">
+                                <li class="list-group-item" ng-repeat="conta in contas track by conta.idConta">
+                                    <strong>{{conta.nome}}</strong> </br>
+                                    <span>Saldo <i class="pull-right">{{conta.saldo | currency : 'R$ '}}</i></span>
+                                </li>
+                            </ul>  
+                        <!--</div>-->
+                        <div class="panel-footer">
+                            <strong>Total</strong>
+                            <i class="pull-right">{{saldoTotal | currency : 'R$ '}}</i>
+                        </div>                       
                     </div>
-                </div>
-                
+                </div>                
                 <div class="col-lg-9">
                     <div class="row">  
                         <div class="col-lg-6">    
@@ -34,44 +38,30 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">  
-                        <div class="col-lg-12">    
-                            <div class="panel panel-default">
-                                <div class="panel-heading">Previsão de saldo total para os próximos 90 dias</div>
-                                <div class="panel-body panel-chart">
-                                    <highchart id="chartSaldos" config="configChartSaldos"></highchart>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
+                </div>  
             </div>
-            <div class="row">                
-                
-                <div class="col-lg-3">
+            <div class="row">                 
+                <div class="col-lg-12">    
                     <div class="panel panel-default">
-                        <div class="panel-heading">Saldo</div>
+                        <div class="panel-heading">Previsão de saldo total para os próximos 90 dias</div>
+                        <div class="panel-body panel-chart">
+                            <highchart id="chartSaldos" config="configChartSaldos"></highchart>
+                        </div>
+                    </div>
+                </div>                
+            </div>            
+            <div class="row">    
+                <div class="col-lg-12" ng-hide="true">    
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Programação</div>
                         <div class="panel-body">
-                            
+                            <div class="panel-heading">Vencidos</div>
+                            <div class="panel-heading">Para Hoje</div>
+                            <div class="panel-heading">Próximos 7 Dias</div>
                         </div>
                     </div>
-                </div>              
-                
-                <div class="col-lg-9">
-                    <div class="row">  
-                        <div class="col-lg-12">    
-                            <div class="panel panel-default">
-                                <div class="panel-heading">Programação</div>
-                                <div class="panel-body">
-                                    <div class="panel-heading">Vencidos</div>
-                                    <div class="panel-heading">Para Hoje</div>
-                                    <div class="panel-heading">Próximos 7 Dias</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </div>                
+            </div>
         </div>
     </div> 
 </div>

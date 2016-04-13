@@ -25,6 +25,29 @@
     <body>   
         <script type="text/javascript">
             waitMsg();
+            
+                       function confirmExcluir(button) {
+                bootbox.confirm({
+                    title: 'EXCLUIR DEPARTAMENTO?',
+                    message: 'Deseja realmente excluir este departamento / centro de custo?',
+                    buttons: {
+                        'cancel': {
+                            label: '<i class="fa fa-lg fa-times fa-spc"></i> CANCELAR',
+                            className: 'btn btn-default pull-left'
+                        },
+                        'confirm': {
+                            label: '<i class="fa fa-lg fa-trash fa-spc"></i> EXCLUIR',
+                            className: 'btn btn-danger pull-right'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            button.form.submit();
+                        }
+                    }
+                });
+            }
+            
         </script> 
         <jsp:include page="../includes/navBarTop.jsp"></jsp:include>
             <div id="wrapper">
@@ -86,6 +109,8 @@
                                                         <th>Departamento</th>
                                                         <th>Cartão de Postagem</th>
                                                         <th class="no-sort" width="150">Alterar</th>
+                                                        
+                                                        <th class="no-sort" style="width: 60px;">Excluir</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -105,6 +130,13 @@
                                                         <td><%= sc3.getNomeDepartamento()%></td>
                                                         <td><%= cart%></td>
                                                         <td align="center"><button type="button" class="btn btn-sm btn-warning" onclick="ajaxCartaoPostagem(<%= idClienteInc%>, <%= sc3.getIdDepartamento()%>, '<%= cartao%>', '<%= sc3.getNomeDepartamento()%>');" ><i class="fa fa-lg fa-pencil"></i></button></td>
+                                                     <td align="center">
+                                                            <form action="../../ServExcluirDepto" method="post" name="formDelDepto">                                                               
+                                                                <input type="hidden" name="idDepto" value="<%= sc3.getIdDepartamento()%>" />
+                                                                <button type="button" class="btn btn-sm btn-danger" onClick="confirmExcluir(this);" ><i class="fa fa-trash fa-lg"></i></button>
+                                                            </form>
+                                                        </td>
+                                                    
                                                     </tr>
                                                     <%}%>
                                                 </tbody>

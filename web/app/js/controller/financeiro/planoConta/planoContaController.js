@@ -31,7 +31,7 @@ app.controller('PlanoContaController', ['$scope', '$q', 'PlanoContaService', 'Mo
                     angular.forEach(values, function(value, key) {
                         $scope.planoContas[key] = value;
                         $scope.planoContasLista[key] = $scope.planoContas[key];
-                        $scope.planoContasLista[key] = PlanoContaService.estrutura($scope.planoContasLista[key]);
+                        PlanoContaService.estrutura($scope.planoContasLista[key]);
                     });
                 })
                 .catch(function(e) {
