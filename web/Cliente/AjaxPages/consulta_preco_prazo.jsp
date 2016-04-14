@@ -249,7 +249,7 @@
         Endereco endd = Util.PesquisarCep.pesquisaCEP(sCepDestino);
 
         out.println("<table style='margin: 0 auto;border-left:0;' cellspacing='0' class='tb1'>");
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 9; i++) {
             out.println("<tr>");
             if (i == 0) {
                 out.println("<td style='width:150px;background:white;'></td>");

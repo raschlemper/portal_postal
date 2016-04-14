@@ -12,27 +12,6 @@
 <%
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
-    /*
-     - dataPostagem=11/04/2016
-     - nCdEmpresa=14175215
-     - sDsSenha=06114935
-     nCdServico=40436
-     sCepOrigem=88015-976
-     sCepDestino=06474-100
-     nVlPeso=2
-     nCdFormato=1
-     nVlComprimento=30
-     nVlAltura=10
-     nVlLargura=20
-     nVlDiametro=0
-     sCdMaoPropria=N
-     nVlValorDeclarado=0.00
-     sCdAvisoRecebimento=N
-     agrupado=0
-     quantidade=2
-    
-     */
     String nomeBD = (String) session.getAttribute("nomeBD");
     int idCliente = (Integer) session.getAttribute("idCliente");
     String[] acc = Controle.contrCliente.consultaLoginPrecosPrazosCorreios(idCliente, nomeBD);
@@ -43,7 +22,6 @@
         senha = acc[1];
     }
     // TODO initialize WS operation arguments here
-    // String nCdEmpresa = request.getParameter("nCdEmpresa").trim();
     String nCdEmpresa = login;
     try {
         int codAdm = Integer.parseInt(nCdEmpresa);
@@ -52,8 +30,6 @@
     }
     try {
 
-        //String sDataPostagem = request.getParameter("dataPostagem").trim();
-        //String sDsSenha = request.getParameter("sDsSenha").trim();
         String sDataPostagem = sdf.format(new Date());
         String sDsSenha = senha;
 
@@ -91,13 +67,6 @@
             vVlLargura = "0";
         }
 
-        float p = Float.parseFloat(nVlPeso);
-        float a = Float.parseFloat(vVlAltura);
-        float l = Float.parseFloat(vVlLargura);
-        float c = Float.parseFloat(vVlComprimento);
-        float cub = (a * l * c) / 6000;
-        pesoCubico = cub;
-        pesoReal = p;
 
         String vVlDiametro = request.getParameter("nVlDiametro");
         java.math.BigDecimal nVlComprimento = new BigDecimal(vVlComprimento);
@@ -113,18 +82,6 @@
         // String nCdServico = request.getParameter("nCdServico");//"41106,40010";
         //if tem conrato
         ArrayList<Integer> listaContrato = ContrClienteContrato.consultaContratoCliente(idCliente, nomeBD);
-       // ArrayList<String> listaServUnicos = new ArrayList<String>();
-        //pac grande
-        // listaServUnicos.add("41300");
-        //sedex cobrar
-        // listaServUnicos.add("40126");
-        // listaServUnicos.add("40630");
-        // listaServUnicos.add("40432");
-        // listaServUnicos.add("40440");
-        // listaServUnicos.add("40819");
-        //pac cobrar
-        // listaServUnicos.add("41238");
-        // listaServUnicos.add("41262");
 
         //SE FOR UM SERVICO COM AMBITO NACIONAL, OBTIVER COM E SEM CONTRATO E NÃO FOR PAC AGRUPADO
         //ENTÃO CAPTA OS CÓDIGOS ECT DOS SERVIÇOS SEDEX10, SEDEX12, SEDEX E PAC E E-SEDEX(CONTRATO)        
@@ -171,40 +128,12 @@
         org.tempuri.CalcPrecoPrazoWS service = new org.tempuri.CalcPrecoPrazoWS();
         org.tempuri.CalcPrecoPrazoWSSoap port = service.getCalcPrecoPrazoWSSoap();
 
-        DecimalFormat df = new DecimalFormat("#.##");
-        DecimalFormat df3 = new DecimalFormat("#0.000");
-
-        //org.tempuri.CResultado r1 = port.calcPrazo("41068", "89110000", "65073510");
-        //org.tempuri.CResultado r1 = port.calcPrazoData("41068", "89110000", "65073510", "02/03/2016");
-        //org.tempuri.CResultado r1 = port.calcPrazoRestricao("41068", "89110000", "65073510", "05/02/2016");  
-        /*ArrayOfCServico a1 = r1.getServicos();
-         for (CServico s1 : a1.getCServico()) {
-         System.out.println("******************");
-         System.out.println("codigo : "+s1.getCodigo());
-         System.out.println("ent dom: "+s1.getEntregaDomiciliar());
-         System.out.println("ent sab: "+s1.getEntregaSabado());
-         System.out.println("erro   : "+s1.getErro());
-         System.out.println("msg err: "+s1.getMsgErro());
-         System.out.println("obs fim: "+s1.getObsFim());
-         System.out.println("prazo e: "+s1.getPrazoEntrega() + " Dias");
-         System.out.println("valor  : "+s1.getValor());
-         System.out.println("valorAR: "+s1.getValorAvisoRecebimento());
-         System.out.println("valorMP: "+s1.getValorMaoPropria());
-         System.out.println("valorSA: "+s1.getValorSemAdicionais());
-         System.out.println("valorVD: "+s1.getValorValorDeclarado());
-         System.out.println("******************");
-         }*/
         System.out.println(nCdServico);
         org.tempuri.CResultado result = port.calcPrecoPrazoData(nCdEmpresa, sDsSenha, nCdServico, sCepOrigem, sCepDestino, nVlPeso, nCdFormato, nVlComprimento, nVlAltura, nVlLargura, nVlDiametro, sCdMaoPropria, nVlValorDeclarado, sCdAvisoRecebimento, sDataPostagem);
 
         ArrayOfCServico a1 = result.getServicos();
-
         
-        
-        out.print("[");
-        
-        String sb = "";
-        
+        out.print("[");  
         StringBuffer sbf = new StringBuffer();
         for (CServico s1 : a1.getCServico()) {
             
@@ -228,7 +157,6 @@
                     sbf.append("{\"tag\" : \"coEsx\" ,");
                 }
               
-              //  sbf.append("{");
                 sbf.append("\"prazo\" : " + s1.getPrazoEntrega() + ",");
                 sbf.append("\"valorTotal\" : " + s1.getValor().replace(",", ".") + ",");
                 sbf.append("\"valorAR\" : " + s1.getValorAvisoRecebimento().replace(",", ".") + ",");

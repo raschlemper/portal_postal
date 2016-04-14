@@ -263,7 +263,7 @@
         </tbody>
         <tfoot>
             <tr style="background: #f0f0f0; color:red; font-size: 12px;">
-                <td colspan="4"></td>
+                <td colspan="5"></td>
                 <td nowrap="true" align="center"><%= qtdTotal%></td>
                 <td></td>
                 <%if (acessosUs.contains(3)) {%>

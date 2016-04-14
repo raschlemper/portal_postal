@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('App', [
+var app = app || angular.module('App', [
     'ngSanitize',
     'ngCookies',
     'ngResource',
@@ -23,6 +23,28 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
         });
 
         $stateProvider
+                            
+            /* ***** HELP ***** */
+            
+            .state('help', {
+                abstract: true,
+                url: '/help',
+                template: '<div ui-view></div>'
+            })                
+            .state('help.home', {
+                url: '/',
+                templateUrl: 'partials/help/help.html',
+                controller: 'HelpController',
+                resolve: {}
+            })
+                                            
+            /* ***** APP ***** */
+            
+            .state('app', {
+                abstract: true,
+                template: '<div ui-view></div>',
+                controller: 'AppController'
+            })
         
             /* ***** VEÍCULO ***** */
             
@@ -71,61 +93,60 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
             
             /* ***** FINANCEIRO ***** */
             
-            .state('financeiro', {
+            .state('app.financeiro', {
                 abstract: true,
                 url: '/financeiro',
                 template: '<div ui-view></div>'
-            })
-            
-            .state('financeiro.home', {
+            })            
+            .state('app.financeiro.home', {
                 url: '/',
                 templateUrl: 'partials/financeiro/financeiro.html',
                 controller: 'FinanceiroController',
                 resolve: {}
             })
-            .state('financeiro.banco', {
+            .state('app.financeiro.banco', {
                 url: '/banco',
                 templateUrl: 'partials/financeiro/banco/banco.html',
                 controller: 'BancoController',
                 resolve: {}
             })
-            .state('financeiro.contacorrente', {
+            .state('app.financeiro.contacorrente', {
                 url: '/contacorrente',
                 templateUrl: 'partials/financeiro/contaCorrente/contaCorrente.html',
                 controller: 'ContaCorrenteController',
                 resolve: {}
             })
-            .state('financeiro.carteiracobranca', {
+            .state('app.financeiro.carteiracobranca', {
                 url: '/carteiracobranca',
                 templateUrl: 'partials/financeiro/carteiraCobranca/carteiraCobranca.html',
                 controller: 'CarteiraCobrancaController',
                 resolve: {}
             })
-            .state('financeiro.cartaocredito', {
+            .state('app.financeiro.cartaocredito', {
                 url: '/cartaocredito',
                 templateUrl: 'partials/financeiro/cartaoCredito/cartaoCredito.html',
                 controller: 'CartaoCreditoController',
                 resolve: {}
             })
-            .state('financeiro.planoconta', {
+            .state('app.financeiro.planoconta', {
                 url: '/planoconta',
                 templateUrl: 'partials/financeiro/planoConta/planoConta.html',
                 controller: 'PlanoContaController',
                 resolve: {}
             })
-            .state('financeiro.conta', {
+            .state('app.financeiro.conta', {
                 url: '/conta',
                 templateUrl: 'partials/financeiro/conta/conta_lista.html',
                 controller: 'ContaController',
                 resolve: {}
             })
-            .state('financeiro.lancamento', {
+            .state('app.financeiro.lancamento', {
                 url: '/lancamento',
                 templateUrl: 'partials/financeiro/lancamento/lancamento.html',
                 controller: 'LancamentoController',
                 resolve: {}
             })
-            .state('financeiro.demonstrativo', {
+            .state('app.financeiro.demonstrativo', {
                 url: '/demonstrativo',
                 templateUrl: 'partials/financeiro/demonstrativo.html',
                 controller: 'DemonstrativoController',

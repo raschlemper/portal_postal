@@ -86,7 +86,7 @@
                                             <select class="populate placeholder" name="idCliente" id="idCliente">
                                                 <option value="">-- Selecione um Cliente --</option>
                                                 <%
-                                                    ArrayList<Clientes> listaCliente = Controle.contrCliente.getNomeCodigoMetodo(nomeBD);
+                                                    ArrayList<Clientes> listaCliente = Controle.contrCliente.getNomeCodigoMetodo(nomeBD, false);
                                                     for (Clientes c : listaCliente) {
                                                         if (idCliente == c.getCodigo()) {
                                                             out.println("<option selected value='" + c.getCodigo() + "'>[" + c.getCodigo() + "] " + c.getNome() + "</option>");

@@ -10,8 +10,8 @@
     </div><!-- navbar-header-->
 
     <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1" style="margin-top: 5px;">
-        <ul class="nav navbar-nav">
-            <li class="active" >
+        <ul id="navbar-group" class="nav navbar-nav">
+            <li class="active">
                 <button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-2" onclick="mtoggle2()"><i class="fa fa-lg fa-bars" aria-hidden="true"></i></button>
             </li>
         </ul>

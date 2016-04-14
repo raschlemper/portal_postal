@@ -50,6 +50,16 @@ app.factory('ModalService', function($modal) {
                 },
                 resolve: {}
             })
+        },
+
+        modalHelp: function () {
+            return $modal.open({
+                animation: true,
+                templateUrl: 'partials/modal/modalHelp.html',
+                controller: 'modalHelpController',
+                size: 'lg',
+                resolve: {}
+            })
         }
 
     }

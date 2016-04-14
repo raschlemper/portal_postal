@@ -569,6 +569,10 @@
         <servlet-class>Servlet.ServCriaSMTP</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>Help</servlet-name>
+        <jsp-file>/app/help.jsp</jsp-file>
+    </servlet>
+    <servlet>
         <servlet-name>App</servlet-name>
         <jsp-file>/app/index.jsp</jsp-file>
     </servlet>
@@ -1184,6 +1188,10 @@
     <servlet-mapping>
         <servlet-name>ServCriaSMTP</servlet-name>
         <url-pattern>/ServCriaSMTP</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Help</servlet-name>
+        <url-pattern>/app/help/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>App</servlet-name>

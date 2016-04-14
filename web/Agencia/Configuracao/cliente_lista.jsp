@@ -211,7 +211,7 @@
                         </thead>
                         <tbody>
                             <%
-                                ArrayList<Clientes> listaCliente = Controle.contrCliente.getNomeCodigoMetodo(nomeBD);
+                                ArrayList<Clientes> listaCliente = Controle.contrCliente.getNomeCodigoMetodo(nomeBD, false);
                                 for (int j = 0; j < listaCliente.size(); j++) {
                                     Clientes col = listaCliente.get(j);
                                     String nomeCliente = col.getNome();

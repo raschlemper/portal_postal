@@ -7,7 +7,7 @@
 %>
 <html lang="en" ng-app="App">
     <head>
-        <title>Portal Postal</title>
+        <title>Portal Postal :: Help ::</title>
         
         <base href="${pageContext.request.contextPath}/app/"/>
         <%@ include file="/NewTemplate/includes/Css_js.jsp" %>
@@ -18,12 +18,8 @@
     </head> 
     <body> 
         
-        <%@ include file="/NewTemplate/includes/navBarTop.jsp" %>
-        <div id="wrapper">
-            <%@ include file="/NewTemplate/includes/menu_agencia_bootstrap.jsp" %>
-            <div ui-view></div>
-        </div> 
-
+        <div ui-view></div>
+        
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular.min.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-cookies/angular-cookies.min.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-resource/angular-resource.min.js"></script>

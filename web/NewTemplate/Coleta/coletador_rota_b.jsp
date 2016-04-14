@@ -77,7 +77,7 @@
                                                     <select name="idCliente" id="idCliente" onchange="pegaClienteJson(this.value);">
                                                         <option value="sel" >-- Selecione um Cliente --</option>
                                                         <%
-                                                            ArrayList<Clientes> listaCliente = Controle.contrCliente.getNomeCodigoMetodo(nomeBD);
+                                                            ArrayList<Clientes> listaCliente = Controle.contrCliente.getNomeCodigoMetodo(nomeBD, false);
                                                             for (Clientes c : listaCliente) {
                                                                 out.println("<option value='" + c.getCodigo() + "'>[" + c.getCodigo() + "] " + c.getNome() + "</option>");
                                                                 jsonCliente += ",{ \"id\":\"" + c.getCodigo() 

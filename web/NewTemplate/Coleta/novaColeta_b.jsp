@@ -71,7 +71,7 @@
                                                 <select name="idCliente" id="idCliente">
                                                     <option value="sel">-- Selecione um Cliente --</option>
                                                     <%
-                                                        ArrayList<Clientes> listaCliente = Controle.contrCliente.getNomeCodigoMetodo(nomeBD);
+                                                        ArrayList<Clientes> listaCliente = Controle.contrCliente.getNomeCodigoMetodo(nomeBD, false);
                                                         for (int i = 0; i < listaCliente.size(); i++) {
                                                             if (idCliente == listaCliente.get(i).getCodigo()) {
                                                                 out.println("<option  selected value='" + listaCliente.get(i).getCodigo() + "'>[" + listaCliente.get(i).getCodigo() + "] " + listaCliente.get(i).getNome() + "</option>");
