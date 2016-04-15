@@ -140,8 +140,9 @@ function pesquisarDestinatario(nomeBD, multi) {
     var empresa = document.getElementById("empresa_d").value;
     var endereco = document.getElementById("endereco_d").value;
     var cep = document.getElementById("cep_d").value;
+    var tag = document.getElementById("tags_d").value;
 
-    http.open("GET", "../../Cliente/AjaxPages/consulta_destinatario.jsp?codigo=" + codigo + "&nome=" + nome + "&empresa=" + empresa + "&endereco=" + endereco + "&cep=" + cep + "&multi=" + multi, true);
+    http.open("GET", "../../Cliente/AjaxPages/consulta_destinatario.jsp?codigo=" + codigo + "&nome=" + nome + "&empresa=" + empresa + "&endereco=" + endereco + "&cep=" + cep + "&tags=" + tag + "&multi=" + multi, true);
     http.onreadystatechange = handleHttpResponseConsultaDest;
     http.send(null);
 }

@@ -178,7 +178,7 @@ public class ServPreVenda extends HttpServlet {
         }
         if(request.getParameter("salvarDestinatario") != null){
             if (idDest == 0) {
-                contrDestinatario.inserir(idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, pais, email_destinatario, celular, nomeBD);
+                contrDestinatario.inserir(idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, pais, email_destinatario, celular, nomeBD, "");
             } else {
                 contrDestinatario.editar(idDest, idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, pais, email_destinatario, celular, nomeBD);
             }

@@ -59,12 +59,12 @@ public class ContrDestinatarioImporta {
         for (ArquivoImportacao ai : listaAi) {
             //System.out.println("Entro " + ai.getNome());
             //INSERE O DESTINATARIO
-            inserir(ai.getIdCliente(), ai.getNome(), ai.getCpf(), ai.getEmpresa(), ai.getCep(), ai.getEndereco(), ai.getNumero(), ai.getComplemento(), ai.getBairro(), ai.getCidade(), ai.getUf(), ai.getEmail(), ai.getCelular(), "Brasil", nomeBD);            
+            inserir(ai.getIdCliente(), ai.getNome(), ai.getCpf(), ai.getEmpresa(), ai.getCep(), ai.getEndereco(), ai.getNumero(), ai.getComplemento(), ai.getBairro(), ai.getCidade(), ai.getUf(), ai.getEmail(), ai.getCelular(), "Brasil", nomeBD, ai.getObs());            
         }
     }
-    public static int inserir(int idCliente, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String email, String celular, String pais, String nomeBD) {
+    public static int inserir(int idCliente, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String email, String celular, String pais, String nomeBD, String tags) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "INSERT INTO cliente_destinatario (idCliente, nome, cpf_cnpj, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, email, celular, pais) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO cliente_destinatario (idCliente, nome, cpf_cnpj, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, email, celular, pais, tags) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         //System.out.println("inserir Destinatario -----------------\n"+sql+"\n---------------");
         
         try {
@@ -83,6 +83,7 @@ public class ContrDestinatarioImporta {
             valores.setString(12, email);
             valores.setString(13, celular);
             valores.setString(14, pais);
+            valores.setString(15, tags);
             valores.executeUpdate();
             int autoIncrementKey = 0;
             ResultSet rs = valores.getGeneratedKeys();
@@ -139,6 +140,10 @@ public class ContrDestinatarioImporta {
                     ai.setEmail("");
                     if (aux.length >= 13 && aux[12] != null) {
                         ai.setEmail(aux[12].trim());
+                    }
+                    ai.setObs("");//campo usado para tags (Entidade reaproveitada)
+                    if (aux.length >= 14 && aux[13] != null) {
+                        ai.setObs(aux[13].trim());
                     }
 
                     listaAi.add(ai);

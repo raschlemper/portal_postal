@@ -19,9 +19,9 @@ import java.util.ArrayList;
  */
 public class contrDestinatario {
 
-    public static int inserir(int idCliente, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String pais, String email, String celular, String nomeBD) {
+    public static int inserir(int idCliente, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String pais, String email, String celular, String nomeBD, String tags) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "INSERT INTO cliente_destinatario (idCliente, nome, cpf_cnpj, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, pais, email, celular) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO cliente_destinatario (idCliente, nome, cpf_cnpj, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, pais, email, celular) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement valores = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             valores.setInt(1, idCliente);
@@ -38,6 +38,7 @@ public class contrDestinatario {
             valores.setString(12, pais);
             valores.setString(13, email);
             valores.setString(14, celular);
+            valores.setString(15, tags);
             valores.executeUpdate();
             int autoIncrementKey = 0;
             ResultSet rs = valores.getGeneratedKeys();
@@ -84,6 +85,38 @@ public class contrDestinatario {
             Conexao.desconectar(conn);
         }
     }
+    public static boolean editarComTag(int idDestinatario, int idCliente, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String pais, String email, String celular, String nomeBD, String tags) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "UPDATE cliente_destinatario SET nome = ?, cpf_cnpj = ?, empresa = ?, cep = ?, endereco = ?, numero = ?, complemento = ?, bairro = ?, cidade = ?, uf = ?, pais=?, email=?, celular=?, tags =? WHERE idDestinatario = ? AND idCliente = ? ";
+        
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.setString(1, FormataString.removeSpecialChars(nome));
+            valores.setString(2, cpf_cnpj);
+            valores.setString(3, empresa);
+            valores.setString(4, cep);
+            valores.setString(5, endereco);
+            valores.setString(6, numero);
+            valores.setString(7, complemento);
+            valores.setString(8, bairro);
+            valores.setString(9, cidade);
+            valores.setString(10, uf);
+            valores.setString(11, pais);
+            valores.setString(12, email);
+            valores.setString(13, celular);
+            valores.setString(14, tags);
+            valores.setInt(15, idDestinatario);
+            valores.setInt(16, idCliente);
+            valores.executeUpdate();
+            valores.close();
+            return true;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrContato", "SQLException", sql, e.toString());
+            return false;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
 
     public static boolean deletar(int idDestinatario, int idCliente, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
@@ -101,7 +134,7 @@ public class contrDestinatario {
         }
     }
 
-    public static ArrayList<Destinatario> pesquisa(int idCli, String codigo, String nome, String cpf_cnpj, String bairro, String cidade, String cep, String emp, String end, String nomeBD) {
+    public static ArrayList<Destinatario> pesquisa(int idCli, String codigo, String nome, String cpf_cnpj, String bairro, String cidade, String cep, String emp, String end, String nomeBD, String tags) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         String sql = "SELECT * FROM cliente_destinatario"
                 + " WHERE idCliente = " + idCli
@@ -113,7 +146,9 @@ public class contrDestinatario {
                 + " OR cidade LIKE '%" + cidade + "%'"
                 + " OR endereco LIKE '%" + end + "%')"
                 + " AND cep LIKE '%" + cep + "%'"
+                + " AND tags LIKE '%" + tags + "%'"
                 + " ORDER BY nome";
+        System.out.println(sql);
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();
@@ -133,7 +168,8 @@ public class contrDestinatario {
                 String complemento = result.getString("complemento");
                 String email = result.getString("email");
                 String celular = result.getString("celular");
-                Destinatario des = new Destinatario(idDestinatario, idCliente, nom, cnpjj, empresa, cepp, ende, numero, complemento, bair, cid, uf, email, celular);
+                String tg = result.getString("tags");
+                Destinatario des = new Destinatario(idDestinatario, idCliente, nom, cnpjj, empresa, cepp, ende, numero, complemento, bair, cid, uf, email, celular, tg);
                 lista.add(des);
             }
             valores.close();
@@ -160,7 +196,7 @@ public class contrDestinatario {
                 + " GROUP BY nomep"
                 + " ORDER BY LOCATE('" + nomePesquisa + "', nomep), nomep"
                 + " LIMIT 0, 7";
-        
+ 
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();
@@ -236,7 +272,8 @@ public class contrDestinatario {
                 String complemento = result.getString("complemento");
                 String email = result.getString("email");
                 String celular = result.getString("celular");
-                Destinatario des = new Destinatario(idDestinatario, idCliente, nom, cnpjj, empresa, cepp, end, numero, complemento, bair, cid, uf, email, celular);
+                String tags = result.getString("tags");
+                Destinatario des = new Destinatario(idDestinatario, idCliente, nom, cnpjj, empresa, cepp, end, numero, complemento, bair, cid, uf, email, celular, tags);
 
                 return des;
             } else {

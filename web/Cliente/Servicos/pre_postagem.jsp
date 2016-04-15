@@ -193,7 +193,7 @@
 
                     },
                     error: function () {
-                          $('#coSdx').html('</br>erro na consulta');
+                        $('#coSdx').html('</br>erro na consulta');
                         $('#coS10').html('</br>erro na consultaa');
                         $('#coS12').html('</br>erro na consulta');
                         $('#coShj').html('</br>erro na consulta');
@@ -229,15 +229,15 @@
             function preencherCampos() {
                 var form = document.form1;
 
-                if (form.servico.value === 'SIMPLES' || form.servico.value === 'CARTA') {
-                    alert("ATENÇÃO!!!<br/><br/>O peso maximo da CARTA é de 500g!<br/>Apos este peso a CARTA vira SEDEX!");
-                } else if (form.servico.value === 'SEDEX10') {
-                    alert("ATENÇÃO!!!<br/><br/>O peso maximo do SEDEX 10 é de 10Kg!");
-                } else if (form.servico.value === 'SEDEX12') {
-                    alert("ATENÇÃO!!!<br/><br/>O peso maximo do SEDEX 12 é de 10Kg!");
-                } else if (form.servico.value === 'ESEDEX') {
-                    alert("ATENÇÃO!!!<br/><br/>O peso maximo do E-SEDEX é de 15Kg!");
-                }
+                /*   if (form.servico.value === 'SIMPLES' || form.servico.value === 'CARTA') {
+                 alert("ATENÇÃO!!!<br/><br/>O peso maximo da CARTA é de 500g!<br/>Apos este peso a CARTA vira SEDEX!");
+                 } else if (form.servico.value === 'SEDEX10') {
+                 alert("ATENÇÃO!!!<br/><br/>O peso maximo do SEDEX 10 é de 10Kg!");
+                 } else if (form.servico.value === 'SEDEX12') {
+                 alert("ATENÇÃO!!!<br/><br/>O peso maximo do SEDEX 12 é de 10Kg!");
+                 } else if (form.servico.value === 'ESEDEX') {
+                 alert("ATENÇÃO!!!<br/><br/>O peso maximo do E-SEDEX é de 15Kg!");
+                 }*/
 
                 if (form.nome.value === '') {
                     alert('Preencha o NOME do destinatário!');
@@ -418,7 +418,8 @@
                 }
             }
 
-            function alteraServ(serv) {
+            function alteraServ(serv, tipofat) {
+                document.getElementById("alertWrap").className = 'esconder';
                 if (serv === '') {
                     alert('Este usuário não pode efetuar postagem para nenhum serviço!');
                     return false;
@@ -435,6 +436,7 @@
                 document.getElementById('SEDEX12').className = "";
                 document.getElementById('ESEDEX').className = "";
                 document.getElementById('CARTA').className = "";
+                document.getElementById('PAC_COB').className = "";
                 document.getElementById('OUTROS').className = "";
                 document.getElementById(serv).className = "ativo";
                 document.getElementById("servico").value = serv;
@@ -461,12 +463,28 @@
                     document.getElementById("avisoRec").className = 'esconder';
                     document.getElementById("tipoCt").className = 'mostrar';
                     document.getElementById("tipo").selectedIndex = 1;
-                } else if (serv === 'PAC' || serv === 'PAX' || serv === 'ESEDEX') {
+                    document.getElementById("alertWrap").className = 'mostrar';
+                    document.getElementById("alertMsg").innerHTML = 'O peso maximo da CARTA é de 500g! Apos este peso a CARTA vira SEDEX!';
+                } else if (serv === 'PAC') {
                     document.getElementById("tipoPacote").className = 'esconder';
                     document.getElementById("tipo").selectedIndex = 2;
+                    if (tipofat === 0) {
+                        document.getElementById("alertWrap").className = 'mostrar';
+                        document.getElementById("alertMsg").innerHTML = 'No PAC a vista não são aceitos envelopes! Somente pacotes.';
+                    }
+                } else if (serv === 'PAX') {
+                    document.getElementById("tipoPacote").className = 'esconder';
+                    document.getElementById("tipo").selectedIndex = 2;
+                } else if (serv === 'ESEDEX') {
+                    document.getElementById("tipoPacote").className = 'esconder';
+                    document.getElementById("tipo").selectedIndex = 2;
+                    document.getElementById("alertWrap").className = 'mostrar';
+                    document.getElementById("alertMsg").innerHTML = 'O peso maximo aceito para o E-SEDEX é de 15Kg!';
                 } else if (serv === 'SEDEX10' || serv === 'SEDEX12') {
                     document.getElementById("tipoPacote").className = 'esconder';
                     document.getElementById("tipo").selectedIndex = 2;
+                    document.getElementById("alertWrap").className = 'mostrar';
+                    document.getElementById("alertMsg").innerHTML = 'O peso maximo aceito neste serviço é de 10Kg!';
                 } else if (serv === 'SEDEXC' || serv === 'PAC_COB') {
                     document.getElementById("tipoPacote").className = 'esconder';
                     document.getElementById("tipo").selectedIndex = 2;
@@ -484,7 +502,6 @@
                     document.getElementById("tipoPacote").className = 'esconder';
                     document.getElementById("tipo").selectedIndex = 2;
                 }
-
                 document.getElementById('nome').focus();
             }
 
@@ -853,21 +870,21 @@
                                         out.println("<dd> <span id='coPac'></span></dd>");
                                         out.println("</dl>");
                                     } else if (codPac != 0 && qtdPac > 0) {
-                                        out.println("<dl style='width:" + tabSize + "; border-left: 1px solid #CCC;' id='PAC' onclick=\"alteraServ('PAC');\" >");
+                                        out.println("<dl style='width:" + tabSize + "; border-left: 1px solid #CCC;' id='PAC' onclick=\"alteraServ('PAC',1);\" >");
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>&nbsp;");
                                         out.println("<dd><p>QTD.: <b>" + qtdPac + "</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_pac' value='" + codPac + "' />");
                                         out.println("<dd> <span id='coPac'></span></dd>");
                                         out.println("</dl>");
                                     } else if (codPac != 0) {
-                                        out.println("<dl style='width:" + tabSize + "; border-left: 1px solid #CCC;' id='PAC' onclick=\"alteraServ('PAC');\" >");
+                                        out.println("<dl style='width:" + tabSize + "; border-left: 1px solid #CCC;' id='PAC' onclick=\"alteraServ('PAC',1);\" >");
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>&nbsp;");
                                         out.println("<dd><p><b>S/ ETIQUETA</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_pac' value='" + codPac + "' />");
                                         out.println("<dd> <span id='coPac'></span></dd>");
                                         out.println("</dl>");
                                     } else {
-                                        out.println("<dl style='width:" + tabSize + "; border-left: 1px solid #CCC;' id='PAC' onclick=\"alteraServ('PAC');\" >");
+                                        out.println("<dl style='width:" + tabSize + "; border-left: 1px solid #CCC;' id='PAC' onclick=\"alteraServ('PAC',0);\" >");
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>&nbsp;");
                                         out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_pac' value='' />");
@@ -885,7 +902,7 @@
                                         out.println("<input type='hidden' name='cod_pax' value='" + codPax + "' />");
                                         out.println("</dl>");
                                     } else if (codPax != 0 && qtdPax > 0) {
-                                        out.println("<dl style='width:" + tabSize + ";' id='PAX' onclick=\"alteraServ('PAX');\">");
+                                        out.println("<dl style='width:" + tabSize + ";' id='PAX' onclick=\"alteraServ('PAX',1);\">");
                                         //out.println("<dd><img src='../../imagensNew/pax.png' border='0' /></dd>");
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>GRANDES FORMATOS</dd>");
                                         out.println("<dd><p>QTD.: <b>" + qtdPax + "</b></p></dd>");
@@ -917,21 +934,21 @@
                                         out.println("<dd> <span id='coSdx'></span></dd>");
                                         out.println("</dl>");
                                     } else if (codSedex != 0 && qtdSedex > 0) {
-                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEX' onclick=\"alteraServ('SEDEX');\" >");
+                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEX' onclick=\"alteraServ('SEDEX',1);\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX</b><br/>&nbsp;");//<img src="../../imagensNew/sedex.png" border="0" />
                                         out.println("<dd><p>QTD.: <b>" + qtdSedex + "</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_sedex' value='" + codSedex + "' />");
                                         out.println("<dd> <span id='coSdx'></span></dd>");
                                         out.println("</dl>");
                                     } else if (codSedex != 0) {
-                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEX' onclick=\"alteraServ('SEDEX');\" >");
+                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEX' onclick=\"alteraServ('SEDEX',1);\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX</b><br/>&nbsp;");//<img src="../../imagensNew/sedex.png" border="0" />
                                         out.println("<dd><p><b>S/ ETIQUETA</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_sedex' value='" + codSedex + "' />");
                                         out.println("<dd> <span id='coSdx'></span></dd>");
                                         out.println("</dl>");
                                     } else {
-                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEX' onclick=\"alteraServ('SEDEX');\" >");
+                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEX' onclick=\"alteraServ('SEDEX',0);\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX</b><br/>&nbsp;");//<img src="../../imagensNew/sedex.png" border="0" />
                                         out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_sedex' value='' />");
@@ -950,21 +967,21 @@
                                         out.println("<dd> <span id='coS10'></span> </dd>");
                                         out.println("</dl>");
                                     } else if (codSedex10 != 0 && qtdSedex10 > 0) {
-                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEX10' onclick=\"alteraServ('SEDEX10');\" >");
+                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEX10' onclick=\"alteraServ('SEDEX10',1);\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX 10</b><br/>&nbsp;</dd>");
                                         out.println("<dd><p>QTD.: <b>" + qtdSedex10 + "</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_sedex10' value='" + codSedex10 + "' />");
                                         out.println("<dd> <span id='coS10'></span> </dd>");
                                         out.println("</dl>");
                                     } else if (codSedex10 != 0) {
-                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEX10' onclick=\"alteraServ('SEDEX10');\" >");
+                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEX10' onclick=\"alteraServ('SEDEX10',1);\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX 10</b><br/>&nbsp;</dd>");
                                         out.println("<dd><p><b>S/ ETIQUETA</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_sedex10' value='" + codSedex10 + "' />");
                                         out.println("<dd> <span id='coS10'></span> </dd>");
                                         out.println("</dl>");
                                     } else {
-                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEX10' onclick=\"alteraServ('SEDEX10');\" >");
+                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEX10' onclick=\"alteraServ('SEDEX10',0);\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX 10</b><br/>&nbsp;</dd>");
                                         out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_sedex10' value='' />");
@@ -983,21 +1000,21 @@
                                         out.println("<dd> <span id='coS12'></span> </dd>");
                                         out.println("</dl>");
                                     } else if (codSedex12 != 0 && qtdSedex12 > 0) {
-                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEX12' onclick=\"alteraServ('SEDEX12');\" >");
+                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEX12' onclick=\"alteraServ('SEDEX12',1);\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX 12</b><br/>&nbsp;</dd>");//<img src="../../imagensNew/sedex12.png" border="0" />
                                         out.println("<dd><p>QTD.: <b>" + qtdSedex12 + "</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_sedex12' value='" + codSedex12 + "' />");
                                         out.println("<dd> <span id='coS12'></span> </dd>");
                                         out.println("</dl>");
                                     } else if (codSedex12 != 0) {
-                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEX12' onclick=\"alteraServ('SEDEX12');\" >");
+                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEX12' onclick=\"alteraServ('SEDEX12',1);\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX 12</b><br/>&nbsp;</dd>");
                                         out.println("<dd><p><b>S/ ETIQUETA</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_sedex12' value='" + codSedex12 + "' />");
                                         out.println("<dd> <span id='coS12'></span> </dd>");
                                         out.println("</dl>");
                                     } else {
-                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEX12' onclick=\"alteraServ('SEDEX12');\" >");
+                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEX12' onclick=\"alteraServ('SEDEX12',0);\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX 12</b><br/>&nbsp;</dd>");
                                         out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_sedex12' value='' />");
@@ -1016,7 +1033,7 @@
                                         out.println("<dd> <span id='coShj'></span> </dd>");
                                         out.println("</dl>");
                                     } else if (codSedexHJ != 0 && qtdSedexHJ > 0) {
-                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEXHJ' onclick=\"alteraServ('SEDEXHJ');\" >");
+                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEXHJ' onclick=\"alteraServ('SEDEXHJ',1);\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX HJ</b><br/>&nbsp;</dd>");//<img src="../../imagensNew/sedex12.png" border="0" />
                                         out.println("<dd><p>QTD.: <b>" + qtdSedexHJ + "</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_sedexHJ' value='" + codSedexHJ + "' />");
@@ -1030,7 +1047,7 @@
                                         out.println("<dd> <span id='coShj'></span> </dd>");
                                         out.println("</dl>");
                                     } else {
-                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEXHJ' onclick=\"alteraServ('SEDEXHJ');\" >");
+                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEXHJ' onclick=\"alteraServ('SEDEXHJ',0);\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX HJ</b><br/>&nbsp;</dd>");
                                         out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_sedexHJ' value='' />");
@@ -1042,14 +1059,14 @@
                                     int codEsedex = ContrClienteContrato.consultaContratoClienteGrupoServ(idCli, "ESEDEX", nomeBD);
                                     int qtdEsedex = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ("ESEDEX", 0, idCli, nomeBD);
                                     if (acs.contains(5) && codEsedex != 0 && qtdEsedex > 0) {
-                                        out.println("<dl style='width:" + tabSize + ";' id='ESEDEX' onclick=\"alteraServ('ESEDEX');\">");
+                                        out.println("<dl style='width:" + tabSize + ";' id='ESEDEX' onclick=\"alteraServ('ESEDEX',1);\">");
                                         out.println("<dd><b class='servSmall'>eSEDEX</b><br/>&nbsp;</dd>");
                                         out.println("<dd><p>QTD.: <b>" + qtdEsedex + "</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_esedex' value='" + codEsedex + "' />");
                                         out.println("<dd> <span id='coEsx'></span> </dd>");
                                         out.println("</dl>");
                                     } else if (acs.contains(5) && codEsedex != 0) {
-                                        out.println("<dl style='width:" + tabSize + ";' id='ESEDEX' onclick=\"alteraServ('ESEDEX');\">");
+                                        out.println("<dl style='width:" + tabSize + ";' id='ESEDEX' onclick=\"alteraServ('ESEDEX',1);\">");
                                         out.println("<dd><b class='servSmall'>eSEDEX</b><br/>&nbsp;</dd>");
                                         //out.println("<dd><img src='../../imagensNew/esedex.png' border='0' /></dd>");
                                         out.println("<dd><p><b>S/ ETIQUETA</b></p></dd>");
@@ -1075,19 +1092,19 @@
                                         out.println("<input type='hidden' name='cod_carta' value='" + codCarta + "' />");
                                         out.println("</dl>");
                                     } else if (codCarta != 0 && qtdCarta > 0) {
-                                        out.println("<dl style='width:" + tabSize + ";' id='CARTA' onclick=\"alteraServ('CARTA');\" >");
+                                        out.println("<dl style='width:" + tabSize + ";' id='CARTA' onclick=\"alteraServ('CARTA',1);\" >");
                                         out.println("<dd><b class='servSmall'>CARTAS</b><br/>&nbsp;</dd>");//<img src="../../imagensNew/carta.png" border="0" />
                                         out.println("<dd><p>QTD.: <b>" + qtdCarta + "</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_carta' value='" + codCarta + "' />");
                                         out.println("</dl>");
                                     } else if (codCarta != 0) {
-                                        out.println("<dl style='width:" + tabSize + ";' id='CARTA' onclick=\"alteraServ('CARTA');\" >");
+                                        out.println("<dl style='width:" + tabSize + ";' id='CARTA' onclick=\"alteraServ('CARTA',1);\" >");
                                         out.println("<dd><b class='servSmall'>CARTAS</b><br/>&nbsp;</dd>");
                                         out.println("<dd><p><b>S/ ETIQUETA</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_carta' value='" + codCarta + "' />");
                                         out.println("</dl>");
                                     } else {
-                                        out.println("<dl style='width:" + tabSize + ";' id='CARTA' onclick=\"alteraServ('CARTA');\" >");
+                                        out.println("<dl style='width:" + tabSize + ";' id='CARTA' onclick=\"alteraServ('CARTA',0);\" >");
                                         out.println("<dd><b class='servSmall'>CARTAS</b><br/>&nbsp;</dd>");
                                         out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_carta' value='' />");
@@ -1104,19 +1121,19 @@
                                         out.println("<input type='hidden' name='cod_sedexc' value='" + codSedexc + "' />");
                                         out.println("</dl>");
                                     } else if (codSedexc != 0 && qtdSedexc > 0) {
-                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEXC' onclick=\"alteraServ('SEDEXC');\" >");
+                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEXC' onclick=\"alteraServ('SEDEXC',1);\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX</b><br/>A COBRAR");//<img src="../../imagensNew/sedex_cobrar.png" border="0" />
                                         out.println("<dd><p>QTD.: <b>" + qtdSedexc + "</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_sedexc' value='" + codSedexc + "' />");
                                         out.println("</dl>");
                                     } else if (codSedexc != 0) {
-                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEXC' onclick=\"alteraServ('SEDEXC');\" >");
+                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEXC' onclick=\"alteraServ('SEDEXC',1);\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX</b><br/>A COBRAR");//<img src="../../imagensNew/sedex_cobrar.png" border="0" />
                                         out.println("<dd><p><b>S/ ETIQUETA</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_sedexc' value='" + codSedexc + "' />");
                                         out.println("</dl>");
                                     } else {
-                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEXC' onclick=\"alteraServ('SEDEXC');\" >");
+                                        out.println("<dl style='width:" + tabSize + ";' id='SEDEXC' onclick=\"alteraServ('SEDEXC',0);\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX</b><br/>A COBRAR");//<img src="../../imagensNew/sedex_cobrar.png" border="0" />
                                         out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_sedexc' value='' />");
@@ -1133,19 +1150,19 @@
                                         out.println("<input type='hidden' name='cod_sedexc' value='" + codPacCob + "' />");
                                         out.println("</dl>");
                                     } else if (codSedexc != 0 && qtdSedexc > 0) {
-                                        out.println("<dl style='width:" + tabSize + ";' id='PAC_COB' onclick=\"alteraServ('PAC_COB');\" >");
+                                        out.println("<dl style='width:" + tabSize + ";' id='PAC_COB' onclick=\"alteraServ('PAC_COB',1);\" >");
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>A COBRAR");//<img src="../../imagensNew/sedex_cobrar.png" border="0" />
                                         out.println("<dd><p>QTD.: <b>" + qtdPacCob + "</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_sedexc' value='" + codPacCob + "' />");
                                         out.println("</dl>");
                                     } else if (codSedexc != 0) {
-                                        out.println("<dl style='width:" + tabSize + ";' id='PAC_COB' onclick=\"alteraServ('PAC_COB');\" >");
+                                        out.println("<dl style='width:" + tabSize + ";' id='PAC_COB' onclick=\"alteraServ('PAC_COB',1);\" >");
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>A COBRAR");//<img src="../../imagensNew/sedex_cobrar.png" border="0" />
                                         out.println("<dd><p><b>S/ ETIQUETA</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_sedexc' value='" + codPacCob + "' />");
                                         out.println("</dl>");
                                     } else {
-                                        out.println("<dl style='width:" + tabSize + ";' id='PAC_COB' onclick=\"alteraServ('PAC_COB');\" >");
+                                        out.println("<dl style='width:" + tabSize + ";' id='PAC_COB' onclick=\"alteraServ('PAC_COB',0);\" >");
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>A COBRAR");//<img src="../../imagensNew/sedex_cobrar.png" border="0" />
                                         out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_sedexc' value='' />");
@@ -1154,7 +1171,7 @@
 
                                     ArrayList<Integer> listaOutrosServ = ContrClienteContrato.consultaOutrosServicosCliente(idCli, nomeBD);
                                     if (listaOutrosServ.size() > 0) {
-                                        out.println("<dl style='width:" + tabSize + ";' id='OUTROS' onclick=\"alteraServ('OUTROS');\">");
+                                        out.println("<dl style='width:" + tabSize + ";' id='OUTROS' onclick=\"alteraServ('OUTROS',1);\">");
                                         out.println("<dd><b class='servSmall'>OUTROS</b><br/>SERVIÇOS</dd>");
                                         out.println("<dd><p><b>- - -</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_outros' value='' />");
@@ -1210,6 +1227,12 @@
                                         </dd>
                                     </li>
                                 </div>
+                                <div class="esconder" id="alertWrap">            
+                                    <div class="infoBox">
+                                        <span class="closebtn" onclick=" document.getElementById('alertWrap').className = 'esconder';">&times;</span> 
+                                        <div id="alertMsg"></div>
+                                    </div>
+                                </div>
                                 <li class="titulo">
                                     <dd style="font-size: 11px;">DADOS DO REMETENTE</dd>
                                 </li>
@@ -1220,13 +1243,18 @@
                                     </dd>
                                     <dd>
                                         <label>Departamento / Centro de Custo</label>
-                                        <select name="departamento">
+                                        <select name="departamento" style="width: 230px;">
                                             <%
                                                 ArrayList<ClientesDeptos> listaDep = ContrClienteDeptos.consultaDeptos(idCli, nomeBD);
                                                 if (listaDep != null && listaDep.size() > 0) {
+
+                                                    if (dps.size() != 1) {
+                                                    if (listaDep.size() > 1 || dps.size() == 0) {
+
+
                                             %>
                                             <option value="-1">-- SELECIONE UM DEPARTAMENTO --</option>                                    
-                                            <%
+                                            <%                                                }}
                                                 for (int i = 0; i < listaDep.size(); i++) {
                                                     ClientesDeptos cd = listaDep.get(i);
                                                     String cartao = "0";
@@ -1627,8 +1655,8 @@
                     </form>
 
                     <form action="../../ServPreVendaExcluir" method="post" name="formDel">
-                        
-                        
+
+
                         <input type="hidden" name="nomeBD" value="<%= nomeBD%>" />
                         <input type="hidden" name="idVenda" id="idVendaDel" value="" />
                         <input type="hidden" name="numObjeto" id="numObjetoDel" value="" />

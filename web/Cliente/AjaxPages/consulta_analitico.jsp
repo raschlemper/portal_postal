@@ -27,7 +27,7 @@
                 String objeto = request.getParameter("objeto");
                 String nota = request.getParameter("notaFiscal");
                 String dest = request.getParameter("destinatario");
-                String cep = request.getParameter("cep").replaceAll("-", "");
+                String cep = request.getParameter("cep");
                 String ar = request.getParameter("ar");
                 String vd = request.getParameter("vd");
                 String uf = request.getParameter("uf");
@@ -71,7 +71,7 @@
                     sql += " AND numObjeto LIKE '%" + objeto + "%'";
                 }
                 if (!cep.equals("")) {
-                    sql += " AND cep LIKE '%" + cep + "%'";
+                     sql += " AND (cep LIKE '%" + cep + "%' OR cep LIKE '%" + cep.replaceAll("-", "") + "%') ";
                 }
                 if (!nota.equals("")) {
                     sql += " AND notaFiscal LIKE '%" + nota + "%'";

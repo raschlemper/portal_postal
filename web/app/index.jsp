@@ -82,7 +82,6 @@
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/veiculo/modalEditarVeiculoSinistroController.js"></script>
         
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/financeiroController.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/financeiroController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/demonstrativoController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/banco/bancoController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/banco/modalEditarBancoController.js"></script>

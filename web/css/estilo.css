@@ -298,3 +298,45 @@ ul.lista1 li.even{background: #f6f6f6;}
 ul.lista1 li.even:hover{background: #fef3c1;}
 ul.lista1 li.odd{background: #fafafa;}
 ul.lista1 li.odd:hover{background: #fef3c1;}
+
+
+
+/*************************************************************
+The alert message box 
+***************************************************************/
+.dangerBox {
+    padding: 20px;
+    background-color: #f44336; /* Red */
+    color: white;
+    margin-bottom: 15px;
+    font-size: medium;
+}
+.warningBox{
+    padding: 20px;
+    background-color: #ffa500; /* orange */
+    color: white;
+    margin-bottom: 15px;
+    font-size: medium;
+}
+.infoBox{
+    padding: 20px;
+    background-color: #5EA9FF; /* orange */
+    color: white;
+    margin-bottom: 15px;
+    font-size: medium;
+}
+
+/* The close button */
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+}
+
+.closebtn:hover {
+    color: black;
+}

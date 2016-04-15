@@ -25,6 +25,7 @@ public class Destinatario {
     private String uf;
     private String email;
     private String celular;
+    private String tags;
 
     public Destinatario(int idDestinatario, int idCliente, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String email, String celular) {
         this.idDestinatario = idDestinatario;
@@ -43,6 +44,35 @@ public class Destinatario {
         this.celular = celular;
     }
 
+    public Destinatario(int idDestinatario, int idCliente, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String email, String celular, String tags) {
+        this.idDestinatario = idDestinatario;
+        this.idCliente = idCliente;
+        this.nome = nome;
+        this.cpf_cnpj = cpf_cnpj;
+        this.empresa = empresa;
+        this.cep = cep;
+        this.endereco = endereco;
+        this.numero = numero;
+        this.complemento = complemento;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.uf = uf;
+        this.email = email;
+        this.celular = celular;
+        this.tags = tags;
+    }
+    
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    
+    
     public String getEmail() {
         return email;
     }
