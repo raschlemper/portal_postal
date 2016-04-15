@@ -78,13 +78,13 @@ app.controller('ModalEditarContaController', ['$scope', '$modalInstance', 'conta
         }
         
         var contaCorrenteListaPoupanca = function() {
-            _.filter($scope.contasCorrentes, function(contaCorrente) {
+            return _.filter($scope.contasCorrentes, function(contaCorrente) {
                 return (contaCorrente.poupanca);
             });
         };
         
         var contaCorrenteListaCobranca = function() {
-            _.filter($scope.contasCorrentes, function(contaCorrente) {
+            return _.filter($scope.contasCorrentes, function(contaCorrente) {
                 return (contaCorrente.carteira);
             });
         };
