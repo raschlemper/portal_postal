@@ -17,6 +17,7 @@ public class Conta {
     private Double valorSaldoAbertura;   
     private Double saldo; 
     private List<Lancamento> lancamentos;
+    private List<LancamentoProgramado> lancamentosProgramados;
 
     public Integer getIdConta() {
         return idConta;
@@ -98,5 +99,12 @@ public class Conta {
         this.lancamentos = lancamentos;
     }
 
-    
+    public List<LancamentoProgramado> getLancamentosProgramados() {
+        return lancamentosProgramados;
+    }
+
+    public void setLancamentosProgramados(List<LancamentoProgramado> lancamentosProgramados) {
+        this.lancamentosProgramados = lancamentosProgramados;
+    }
+
 }

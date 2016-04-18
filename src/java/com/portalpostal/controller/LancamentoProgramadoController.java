@@ -2,10 +2,9 @@ package com.portalpostal.controller;
 
 import Controle.ContrErroLog;
 import com.portalpostal.validation.Validation;
-import com.portalpostal.model.Conta;
-import com.portalpostal.service.ContaService;
-import com.portalpostal.service.LancamentoService;
-import com.portalpostal.validation.ContaValidation;
+import com.portalpostal.model.LancamentoProgramado;
+import com.portalpostal.service.LancamentoProgramadoService;
+import com.portalpostal.validation.LancamentoProgramadoValidation;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,8 +21,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/financeiro/conta")
-public class ContaController {
+@Path("/financeiro/lancamentoProgramado/programado")
+public class LancamentoProgramadoController {
     
     @Context
     private HttpServletRequest request;
@@ -31,71 +30,33 @@ public class ContaController {
     private HttpSession sessao;
     private String nomeBD;
     
-    private ContaService contaService;
-    private LancamentoService lancamentoService; 
+    private LancamentoProgramadoService lancamentoProgramadoService;
 
     private void init() {
         sessao = request.getSession();
         nomeBD = (String) sessao.getAttribute("nomeBD");
-        contaService = new ContaService(nomeBD);
-        lancamentoService = new LancamentoService(nomeBD);
+        lancamentoProgramadoService = new LancamentoProgramadoService(nomeBD);
     }
     
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Conta> findAll() {
+    public List<LancamentoProgramado> findAll() {
         try {
             init();    
-            return contaService.findAll();
+            return lancamentoProgramadoService.findAll();
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     }  
     
     @GET
-    @Path("/saldo")
+    @Path("/{idLancamentoProgramado}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Conta> findSaldo() {
+    public LancamentoProgramado find(@PathParam("idLancamentoProgramado") Integer idLancamentoProgramado) {
         try {
             init();    
-            return contaService.findSaldo();
-        } catch (Exception ex) {
-            throw new WebApplicationException(getMessageError(ex.getMessage()));
-        }
-    }  
-    
-    @GET
-    @Path("/{idConta}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Conta find(@PathParam("idConta") Integer idConta) {
-        try {
-            init();    
-            return contaService.find(idConta);
-        } catch (Exception ex) {
-            throw new WebApplicationException(getMessageError(ex.getMessage()));
-        }
-    }  
-    
-    @GET
-    @Path("/{idConta}/lancamento")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Conta findLancamento(@PathParam("idConta") Integer idConta) {
-        try {
-            init();    
-            return contaService.findLancamento(idConta);
-        } catch (Exception ex) {
-            throw new WebApplicationException(getMessageError(ex.getMessage()));
-        }
-    }  
-    
-    @GET
-    @Path("/{idConta}/lancamento/programado")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Conta findLancamentoProgramado(@PathParam("idConta") Integer idConta) {
-        try {
-            init();    
-            return contaService.findLancamentoProgramado(idConta);
+            return lancamentoProgramadoService.find(idLancamentoProgramado);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -105,52 +66,52 @@ public class ContaController {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Conta save(Conta conta) {
+    public LancamentoProgramado save(LancamentoProgramado lancamentoProgramado) {
         try {
             init();
-            validation(conta);
-            return contaService.save(conta);
+            validation(lancamentoProgramado);
+            return lancamentoProgramadoService.save(lancamentoProgramado);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     } 
     
     @PUT
-    @Path("/{idConta}")
+    @Path("/{idLancamentoProgramado}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Conta update(Conta conta) {
+    public LancamentoProgramado update(LancamentoProgramado lancamentoProgramado) {
         try {
             init();
-            validation(conta);
-            return contaService.update(conta);
+            validation(lancamentoProgramado);
+            return lancamentoProgramadoService.update(lancamentoProgramado);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     } 
     
     @DELETE
-    @Path("/{idConta}")
+    @Path("/{idLancamentoProgramado}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Conta delete(@PathParam("idConta") Integer idConta) {
+    public LancamentoProgramado delete(@PathParam("idLancamentoProgramado") Integer idLancamentoProgramado) {
         try {
             init();
-            return contaService.delete(idConta);
+            return lancamentoProgramadoService.delete(idLancamentoProgramado);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     } 
     
-    private void validation(Conta conta) throws Exception {  
-        Validation validacao = new ContaValidation();
-        if(!validacao.validar(conta)) {
+    private void validation(LancamentoProgramado lancamentoProgramado) throws Exception {  
+        Validation validacao = new LancamentoProgramadoValidation();
+        if(!validacao.validar(lancamentoProgramado)) {
             throw new WebApplicationException(getMessageError(validacao.getMsg()));
         } 
     }  
     
     private Response getMessageError(String msg) {  
-        int idErro = ContrErroLog.inserir("Portal Postal - ServConta", "Exception", null, msg);
+        int idErro = ContrErroLog.inserir("Portal Postal - ServLancamentoProgramado", "Exception", null, msg);
         return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN)
                 .entity("SYSTEM ERROR Nº: " + idErro + "<br/> Ocorreu um erro inesperado!").build();
     }

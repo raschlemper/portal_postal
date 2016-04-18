@@ -104,6 +104,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
                 controller: 'FinanceiroController',
                 resolve: {}
             })
+            .state('app.financeiro.demonstrativo', {
+                url: '/demonstrativo',
+                templateUrl: 'partials/financeiro/demonstrativo.html',
+                controller: 'DemonstrativoController',
+                resolve: {}
+            })
             .state('app.financeiro.banco', {
                 url: '/banco',
                 templateUrl: 'partials/financeiro/banco/banco.html',
@@ -146,10 +152,10 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
                 controller: 'LancamentoController',
                 resolve: {}
             })
-            .state('app.financeiro.demonstrativo', {
-                url: '/demonstrativo',
-                templateUrl: 'partials/financeiro/demonstrativo.html',
-                controller: 'DemonstrativoController',
+            .state('app.financeiro.lancamentoprogramado', {
+                url: '/lancamento/programado',
+                templateUrl: 'partials/financeiro/lancamentoProgramado/lancamentoProgramado.html',
+                controller: 'LancamentoController',
                 resolve: {}
             });
 

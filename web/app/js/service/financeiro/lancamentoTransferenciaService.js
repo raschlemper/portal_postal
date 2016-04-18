@@ -6,27 +6,27 @@ app.factory('LancamentoTransferenciaService', function($http, PromiseService) {
 
         getAll: function() {
             return PromiseService.execute(
-                    $http.get(_contextPath + "/api/financeiro/lancamentotransferencia/"));
+                    $http.get(_contextPath + "/api/financeiro/lancamento/transferencia/"));
         },
 
         get: function(idLancamentoTransferencia) {
             return PromiseService.execute(
-                    $http.get(_contextPath + "/api/financeiro/lancamentotransferencia/" + idLancamentoTransferencia));
+                    $http.get(_contextPath + "/api/financeiro/lancamento/transferencia/" + idLancamentoTransferencia));
         },
 
         save: function(data) {
             return PromiseService.execute(
-                    $http.post(_contextPath + "/api/financeiro/lancamentotransferencia/", data));
+                    $http.post(_contextPath + "/api/financeiro/lancamento/transferencia/", data));
         },
 
         update: function(idLancamentoTransferencia, data) {
             return PromiseService.execute(
-                    $http.put(_contextPath + "/api/financeiro/lancamentotransferencia/" + idLancamentoTransferencia, data));
+                    $http.put(_contextPath + "/api/financeiro/lancamento/transferencia/" + idLancamentoTransferencia, data));
         },
 
         delete: function(idLancamentoTransferencia) {
             return PromiseService.execute(
-                    $http.delete(_contextPath + "/api/financeiro/lancamentotransferencia/" + idLancamentoTransferencia));
+                    $http.delete(_contextPath + "/api/financeiro/lancamento/transferencia/" + idLancamentoTransferencia));
         }
 
     }

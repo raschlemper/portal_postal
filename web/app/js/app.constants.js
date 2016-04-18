@@ -53,7 +53,18 @@ app.constant('LISTAS', {
 
     "situacao": [{'id': 0, 'codigo': 'ativo', 'descricao': 'Ativo'},  
                  {'id': 1, 'codigo': 'cancelado', 'descricao': 'Cancelado'}],
-
+    
+    "frequencia": [{'id': 0, 'codigo': 'unico', 'descricao': 'Único'},  
+                   {'id': 1, 'codigo': 'diario', 'descricao': 'Diário'},  
+                   {'id': 2, 'codigo': 'semanal', 'descricao': 'Semanal'},  
+                   {'id': 3, 'codigo': 'quinzenal', 'descricao': 'Quinzenal'},  
+                   {'id': 4, 'codigo': 'mensal', 'descricao': 'Mensal'},  
+                   {'id': 5, 'codigo': 'bimestral', 'descricao': 'Bimestral'},  
+                   {'id': 6, 'codigo': 'trimestral', 'descricao': 'Trimestral'},  
+                   {'id': 7, 'codigo': 'quadrimestral', 'descricao': 'Quadrimestral'},  
+                   {'id': 8, 'codigo': 'semestral', 'descricao': 'Semestral'},  
+                   {'id': 9, 'codigo': 'anual', 'descricao': 'Anual'}],
+    
     "meses": [{'id': 0, 'codigo': 'janeiro', 'descricao': 'Janeiro', abreviacao: 'Jan'},  
               {'id': 1, 'codigo': 'fevereiro', 'descricao': 'Fevereiro', abreviacao: 'Fev'},  
               {'id': 2, 'codigo': 'marco', 'descricao': 'Março', abreviacao: 'Mar'},  
