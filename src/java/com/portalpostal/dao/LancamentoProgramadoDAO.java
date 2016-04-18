@@ -2,8 +2,6 @@ package com.portalpostal.dao;
 
 import com.portalpostal.dao.handler.LancamentoProgramadoHandler;
 import com.portalpostal.model.LancamentoProgramado;
-import com.portalpostal.model.Saldo;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,9 +53,9 @@ public class LancamentoProgramadoDAO extends GenericDAO {
 
     public LancamentoProgramado save(LancamentoProgramado lancamentoProgramado) throws Exception {  
         String sql = "INSERT INTO lancamento_programado (idConta, idPlanoConta, tipo, favorecido, numero, idTipoDocumento, "
-                   + "idTipoFormaPagamento, frequencia, quantidadeParcela, numeroParcela, data, valor, historico) "
+                   + "idTipoFormaPagamento, frequencia, quantidadeParcela, numeroParcela, data, valor, situacao, historico) "
                    + "VALUES(:idConta, :idPlanoConta, :tipo, :favorecido, :numero, :idTipoDocumento, :idTipoFormaPagamento, "
-                   + ":frequencia, :quantidadeParcela, :numeroParcela, :data, :valor, :historico)";        
+                   + ":frequencia, :quantidadeParcela, :numeroParcela, :data, :valor, :situacao, :historico)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idConta", lancamentoProgramado.getConta().getIdConta());
         params.put("idPlanoConta", (lancamentoProgramado.getPlanoConta() == null ? null : lancamentoProgramado.getPlanoConta().getIdPlanoConta()));
@@ -71,6 +69,7 @@ public class LancamentoProgramadoDAO extends GenericDAO {
         params.put("numeroParcela", lancamentoProgramado.getNumeroParcela());     
         params.put("data", lancamentoProgramado.getData());
         params.put("valor", lancamentoProgramado.getValor());    
+        params.put("situacao", lancamentoProgramado.getSituacao().ordinal());  
         params.put("historico", lancamentoProgramado.getHistorico());       
         Integer idLancamentoProgramado = save(sql, params, lancamentoProgramadoHandler);
         return find(idLancamentoProgramado);
@@ -96,7 +95,8 @@ public class LancamentoProgramadoDAO extends GenericDAO {
         params.put("quantidadeParcela", lancamentoProgramado.getQuantidadeParcela());    
         params.put("numeroParcela", lancamentoProgramado.getNumeroParcela());        
         params.put("data", lancamentoProgramado.getData());
-        params.put("valor", lancamentoProgramado.getValor());    
+        params.put("valor", lancamentoProgramado.getValor());  
+        params.put("situacao", lancamentoProgramado.getSituacao().ordinal());    
         params.put("historico", lancamentoProgramado.getHistorico());     
         update(sql, params, lancamentoProgramadoHandler);
         return lancamentoProgramado;  

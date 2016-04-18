@@ -133,6 +133,8 @@
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/financeiro/lancamentoService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/financeiro/lancamentoTransferenciaService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/financeiro/lancamentoProgramadoService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/financeiro/tipoDocumentoService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/financeiro/tipoFormaPagamentoService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/financeiro/saldoService.js"></script>
 
     </body>

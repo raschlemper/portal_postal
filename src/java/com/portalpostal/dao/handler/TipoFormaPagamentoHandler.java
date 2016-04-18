@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.sql2o.ResultSetHandler;
 
-class TipoFormaPagamentoHandler extends GenericHandler implements ResultSetHandler<TipoFormaPagamento> {
+public class TipoFormaPagamentoHandler extends GenericHandler implements ResultSetHandler<TipoFormaPagamento> {
 
     public TipoFormaPagamentoHandler() {
         super("tipo_forma_pagamento");

@@ -2,6 +2,7 @@ package com.portalpostal.model;
 
 import com.portalpostal.model.dd.TipoFrequencia;
 import com.portalpostal.model.dd.TipoLancamento;
+import com.portalpostal.model.dd.TipoSituacao;
 import java.util.Date;
 
 public class LancamentoProgramado {
@@ -19,6 +20,7 @@ public class LancamentoProgramado {
     private Integer numeroParcela;
     private Date data;
     private Double valor;
+    private TipoSituacao situacao;
     private String historico;
 
     public Integer getIdLancamentoProgramado() {
@@ -123,6 +125,14 @@ public class LancamentoProgramado {
 
     public void setValor(Double valor) {
         this.valor = valor;
+    }
+
+    public TipoSituacao getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(TipoSituacao situacao) {
+        this.situacao = situacao;
     }
 
     public String getHistorico() {

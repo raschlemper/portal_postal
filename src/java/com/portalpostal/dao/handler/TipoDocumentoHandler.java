@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.sql2o.ResultSetHandler;
 
-class TipoDocumentoHandler extends GenericHandler implements ResultSetHandler<TipoDocumento> {
+public class TipoDocumentoHandler extends GenericHandler implements ResultSetHandler<TipoDocumento> {
 
     public TipoDocumentoHandler() {
         super("tipo_documento");

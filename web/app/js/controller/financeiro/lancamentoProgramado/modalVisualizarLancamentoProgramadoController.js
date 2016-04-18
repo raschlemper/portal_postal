@@ -1,14 +1,18 @@
 'use strict';
 
-app.controller('ModalVisualizarLancamentoProgramadoController', ['$scope', '$modalInstance', 'lancamento', 
-    function ($scope, $modalInstance, lancamento) {
+app.controller('ModalVisualizarLancamentoProgramadoController', ['$scope', '$modalInstance', 'lancamentoProgramado', 
+    function ($scope, $modalInstance, lancamentoProgramado) {
 
         var init = function () { 
-            $scope.lancamento = lancamento;
+            $scope.lancamentoProgramado = lancamentoProgramado;
         };
         
         $scope.editar = function() {
-            $modalInstance.close(lancamento.idLancamento);
+            $modalInstance.close(lancamentoProgramado.idLancamentoProgramado);
+        };
+        
+        $scope.gerarLancamento = function() {
+            $modalInstance.close(lancamentoProgramado.idLancamentoProgramado, true);
         };
         
         $scope.cancel = function () {

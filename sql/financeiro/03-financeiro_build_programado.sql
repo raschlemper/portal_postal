@@ -30,6 +30,7 @@ CREATE TABLE `lancamento_programado` (
   `numeroParcela`          INT NULL,
   `data`                   DATETIME NOT NULL,
   `valor`                  DECIMAL(13,2) NOT NULL,
+  `situacao`               INT(11) NOT NULL,
   `historico`              VARCHAR(254) NOT NULL,
   PRIMARY KEY (`idLancamentoProgramado`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

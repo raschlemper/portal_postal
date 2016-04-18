@@ -1,12 +1,13 @@
 'use strict';
 
-app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalInstance', 'conta', 'lancamentoProgramado', 'ContaService', 'PlanoContaService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, conta, lancamentoProgramado, ContaService, PlanoContaService, DatePickerService, ListaService, LISTAS) {
+app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalInstance', 'conta', 'lancamentoProgramado', 'ContaService', 'PlanoContaService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'DatePickerService', 'ListaService', 'LISTAS',
+    function ($scope, $modalInstance, conta, lancamentoProgramado, ContaService, PlanoContaService, TipoDocumentoService, TipoFormaPagamentoService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {  
             $scope.datepicker = DatePickerService.default; 
             $scope.tipos = LISTAS.lancamentoProgramado; 
             $scope.frequencias = LISTAS.frequencia;
+            $scope.situacoes = LISTAS.situacao;
             $scope.lancamentoProgramado = {
                 idLancamentoProgramado: (lancamentoProgramado && lancamentoProgramado.idLancamentoProgramado) || null,
                 conta: conta || (lancamentoProgramado && lancamentoProgramado.conta) || null,
@@ -14,17 +15,20 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
                 tipo: (lancamentoProgramado && lancamentoProgramado.tipo) || $scope.tipos[0],
                 favorecido: (lancamentoProgramado && lancamentoProgramado.favorecido) || null,
                 numero: (lancamentoProgramado && lancamentoProgramado.numero) || null,     
-                frequencia: (lancamentoProgramado && lancamentoProgramado.frequencia) || $scope.frequencias[0],
                 documento: (lancamentoProgramado && lancamentoProgramado.documento) || null,  
-                formaPagamento: (lancamentoProgramado && lancamentoProgramado.formaPagamento) || null,  
+                formaPagamento: (lancamentoProgramado && lancamentoProgramado.formaPagamento) || null, 
+                frequencia: (lancamentoProgramado && lancamentoProgramado.frequencia) || $scope.frequencias[0],
                 quantidadeParcela: (lancamentoProgramado && lancamentoProgramado.quantidadeParcela) || null,
                 numeroParcela: (lancamentoProgramado && lancamentoProgramado.numeroParcela) || null,  
                 data: (lancamentoProgramado && lancamentoProgramado.data) || null,
-                valor: (lancamentoProgramado && lancamentoProgramado.valor) || null,  
+                valor: (lancamentoProgramado && lancamentoProgramado.valor) || null,    
+                situacao: (lancamentoProgramado && lancamentoProgramado.situacao) || $scope.situacoes[0],
                 historico: (lancamentoProgramado && lancamentoProgramado.historico) || null
             };             
             getTitle();
             contas();
+            tipoDocumento();
+            tipoFormaPagamento();
             $scope.changeTipo($scope.lancamentoProgramado.tipo);
         };
         
@@ -67,9 +71,44 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
                 });
         };
         
+        var tipoDocumento = function(tipo) {
+            TipoDocumentoService.findAll(tipo.id)
+                .then(function (data) {
+                    $scope.documentos = data;
+                    if($scope.lancamentoProgramado.documento) {
+                        $scope.lancamentoProgramado.documento = ListaService.getPlanoContaValue($scope.documentos, $scope.lancamentoProgramado.documento.idTipoDocumento) || data[0];
+                    } else {
+                         $scope.lancamentoProgramado.documento  = data[0];
+                    }
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+        
+        var tipoFormaPagamento = function(tipo) {
+            TipoFormaPagamentoService.findAll(tipo.id)
+                .then(function (data) {
+                    $scope.formaPagamentos = data;
+                    if($scope.lancamentoProgramado.formaPagamento) {
+                        $scope.lancamentoProgramado.formaPagamento = ListaService.getPlanoContaValue($scope.formaPagamentos, $scope.lancamentoProgramado.formaPagamento.idFormaPagamento) || data[0];
+                    } else {
+                         $scope.lancamentoProgramado.formaPagamento  = data[0];
+                    }
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+        
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
             $modalInstance.close($scope.lancamentoProgramado);            
+        };
+        
+        $scope.gerarLancamento = function(form) {
+            if (!validarForm(form)) return;
+            $modalInstance.close($scope.lancamentoProgramado, true);            
         };
         
         $scope.cancel = function () {

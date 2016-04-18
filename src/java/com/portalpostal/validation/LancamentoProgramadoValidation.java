@@ -12,6 +12,7 @@ public class LancamentoProgramadoValidation extends Validation<LancamentoProgram
         if(!validarFrequencia(lancamentoProgramado)) return false;   
         if(!validarData(lancamentoProgramado)) return false;   
         if(!validarValor(lancamentoProgramado)) return false;   
+        if(!validarSituacao(lancamentoProgramado)) return false;  
         if(!validarHistorico(lancamentoProgramado)) return false;   
         return true;
     }    
@@ -51,6 +52,12 @@ public class LancamentoProgramadoValidation extends Validation<LancamentoProgram
         setMsg("Preencha o valor do lançamento programado!");
         return false;        
     } 
+
+    public boolean validarSituacao(LancamentoProgramado lancamentoProgramado) {        
+        if(campoNotNull(lancamentoProgramado.getSituacao())) return true; 
+        setMsg("Preencha a situação do lançamento programado!");  
+        return false;        
+    }   
 
     public boolean validarHistorico(LancamentoProgramado lancamentoProgramado) {          
         if(campoNotNull(lancamentoProgramado.getHistorico())) return true; 
