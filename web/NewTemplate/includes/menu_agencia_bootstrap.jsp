@@ -98,6 +98,7 @@
                 <li><a href="${pageContext.request.contextPath}/app/financeiro/cartaocredito">Cartão Crédito</a></li>
                 <li><a href="${pageContext.request.contextPath}/app/financeiro/conta">Conta</a></li>
                 <li><a href="${pageContext.request.contextPath}/app/financeiro/lancamento">Lançamento</a></li>
+                <li><a href="${pageContext.request.contextPath}/app/financeiro/lancamento/programado">Lançamento Programado</a></li>
                 <li><a href="${pageContext.request.contextPath}/app/financeiro/demonstrativo">Demonstrativo</a></li>
             </ul>
         </li> 

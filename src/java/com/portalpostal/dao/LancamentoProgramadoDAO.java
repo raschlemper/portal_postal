@@ -76,9 +76,9 @@ public class LancamentoProgramadoDAO extends GenericDAO {
     }
 
     public LancamentoProgramado update(LancamentoProgramado lancamentoProgramado) throws Exception {
-        String sql = "UPDATE lancamento_programado "
+            String sql = "UPDATE lancamento_programado "
                    + "SET idConta = :idConta, idPlanoConta = :idPlanoConta, tipo = :tipo, favorecido = :favorecido, "
-                   + "numero = :numero, idTipoDocumento = :idTipoDocumento, idTipoformaPagamento = :idTipoformaPagamento, "
+                   + "numero = :numero, idTipoDocumento = :idTipoDocumento, idTipoFormaPagamento = :idTipoFormaPagamento, "
                    + "frequencia = :frequencia, quantidadeParcela = :quantidadeParcela, numeroParcela = :numeroParcela, "
                    + "data = :data, valor = :valor, historico = :historico, situacao = :situacao "
                    + "WHERE idLancamentoProgramado = :idLancamentoProgramado ";        

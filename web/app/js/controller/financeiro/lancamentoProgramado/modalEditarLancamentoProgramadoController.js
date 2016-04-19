@@ -23,7 +23,8 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
                 data: (lancamentoProgramado && lancamentoProgramado.data) || null,
                 valor: (lancamentoProgramado && lancamentoProgramado.valor) || null,    
                 situacao: (lancamentoProgramado && lancamentoProgramado.situacao) || $scope.situacoes[0],
-                historico: (lancamentoProgramado && lancamentoProgramado.historico) || null
+                historico: (lancamentoProgramado && lancamentoProgramado.historico) || null,
+                gerarLancamento: false
             };             
             getTitle();
             contas();
@@ -95,12 +96,14 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
+            lancamentoProgramado.gerarLancamento = false;
             $modalInstance.close($scope.lancamentoProgramado);            
         };
         
         $scope.gerarLancamento = function(form) {
             if (!validarForm(form)) return;
-            $modalInstance.close($scope.lancamentoProgramado, true);            
+            lancamentoProgramado.gerarLancamento = true;
+            $modalInstance.close($scope.lancamentoProgramado);            
         };
         
         $scope.cancel = function () {

@@ -58,7 +58,7 @@ public class LancamentoProgramadoHandler extends GenericHandler implements Resul
     }
     
     private TipoFormaPagamento getTipoFormaPagamento(ResultSet result) throws SQLException {
-        if(!existColumn(result, "tipo_documento.idTipoFormaPagamento")) return null;
+        if(!existColumn(result, "tipo_forma_pagamento.idTipoFormaPagamento")) return null;
         return new TipoFormaPagamentoHandler().handle(result); 
     }
     
