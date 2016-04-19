@@ -5,7 +5,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
 
         var init = function () {  
             $scope.datepicker = DatePickerService.default; 
-            $scope.tipos = LISTAS.lancamentoProgramado; 
+            $scope.tipos = LISTAS.lancamento; 
             $scope.frequencias = LISTAS.frequencia;
             $scope.situacoes = LISTAS.situacao;
             $scope.lancamentoProgramado = {
@@ -71,30 +71,22 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
                 });
         };
         
-        var tipoDocumento = function(tipo) {
-            TipoDocumentoService.findAll(tipo.id)
+        var tipoDocumento = function() {
+            TipoDocumentoService.getAll()
                 .then(function (data) {
                     $scope.documentos = data;
-                    if($scope.lancamentoProgramado.documento) {
-                        $scope.lancamentoProgramado.documento = ListaService.getPlanoContaValue($scope.documentos, $scope.lancamentoProgramado.documento.idTipoDocumento) || data[0];
-                    } else {
-                         $scope.lancamentoProgramado.documento  = data[0];
-                    }
+                    $scope.lancamentoProgramado.documento = $scope.lancamentoProgramado.documento || $scope.documentos[1];
                 })
                 .catch(function (e) {
                     console.log(e);
                 });
         };
         
-        var tipoFormaPagamento = function(tipo) {
-            TipoFormaPagamentoService.findAll(tipo.id)
+        var tipoFormaPagamento = function() {
+            TipoFormaPagamentoService.getAll()
                 .then(function (data) {
                     $scope.formaPagamentos = data;
-                    if($scope.lancamentoProgramado.formaPagamento) {
-                        $scope.lancamentoProgramado.formaPagamento = ListaService.getPlanoContaValue($scope.formaPagamentos, $scope.lancamentoProgramado.formaPagamento.idFormaPagamento) || data[0];
-                    } else {
-                         $scope.lancamentoProgramado.formaPagamento  = data[0];
-                    }
+                    $scope.lancamentoProgramado.formaPagamento = $scope.lancamentoProgramado.formaPagamento || $scope.formaPagamentos[1];
                 })
                 .catch(function (e) {
                     console.log(e);

@@ -19,8 +19,8 @@ public class LancamentoProgramadoDAO extends GenericDAO {
         String sql = "SELECT * FROM conta, tipo_documento, tipo_forma_pagamento, lancamento_programado "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento_programado.idPlanoConta = plano_conta.idPlanoConta) "
                    + "WHERE lancamento_programado.idConta = conta.idConta "
-                   + "AND lancamento_programado.idTipoDocumento = tipo_documento.idTipoDocumento" 
-                   + "AND lancamento_programado.idTipoFormaPagamento = tipo_documento.idTipoFormaPagamento" 
+                   + "AND lancamento_programado.idTipoDocumento = tipo_documento.idTipoDocumento " 
+                   + "AND lancamento_programado.idTipoFormaPagamento = tipo_forma_pagamento.idTipoFormaPagamento " 
                    + "ORDER BY lancamento_programado.data";        
         return findAll(sql, null, lancamentoProgramadoHandler);
     }
@@ -29,8 +29,8 @@ public class LancamentoProgramadoDAO extends GenericDAO {
         String sql = "SELECT * FROM conta, tipo_documento, tipo_forma_pagamento, lancamento_programado "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento_programado.idPlanoConta = plano_conta.idPlanoConta) "
                    + "WHERE lancamento_programado.idConta = conta.idConta "
-                   + "AND lancamento_programado.idTipoDocumento = tipo_documento.idTipoDocumento" 
-                   + "AND lancamento_programado.idTipoFormaPagamento = tipo_documento.idTipoFormaPagamento" 
+                   + "AND lancamento_programado.idTipoDocumento = tipo_documento.idTipoDocumento " 
+                   + "AND lancamento_programado.idTipoFormaPagamento = tipo_forma_pagamento.idTipoFormaPagamento " 
                    + "AND lancamento_programado.idLancamentoProgramado = :idLancamentoProgramado";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamentoProgramado", idLancamentoProgramado);
@@ -39,12 +39,12 @@ public class LancamentoProgramadoDAO extends GenericDAO {
 
     public List<LancamentoProgramado> findByConta(Integer idConta) throws Exception {
         String sql = "SELECT lancamento_programado.*, plano_conta.*, tipo_documento.*, tipo_forma_pagamento.* "
-                   + "FROM conta, tipo_documento, tipo_forma_pagamento, lancamento_programado  "
+                   + "FROM conta, tipo_documento, tipo_forma_pagamento, lancamento_programado "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento_programado.idPlanoConta = plano_conta.idPlanoConta) "
                    + "WHERE conta.idConta = lancamento_programado.idConta "
                    + "AND conta.idConta = :idConta "
-                   + "AND lancamento_programado.idTipoDocumento = tipo_documento.idTipoDocumento" 
-                   + "AND lancamento_programado.idTipoFormaPagamento = tipo_documento.idTipoFormaPagamento" 
+                   + "AND lancamento_programado.idTipoDocumento = tipo_documento.idTipoDocumento " 
+                   + "AND lancamento_programado.idTipoFormaPagamento = tipo_forma_pagamento.idTipoFormaPagamento " 
                    + "ORDER BY lancamento_programado.data";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idConta", idConta);       
@@ -63,7 +63,7 @@ public class LancamentoProgramadoDAO extends GenericDAO {
         params.put("favorecido", lancamentoProgramado.getFavorecido());     
         params.put("numero", lancamentoProgramado.getNumero());        
         params.put("idTipoDocumento", lancamentoProgramado.getDocumento().getIdTipoDocumento());        
-        params.put("idTipoformaPagamento", lancamentoProgramado.getFormaPagamento().getIdTipoFormaPagamento());          
+        params.put("idTipoFormaPagamento", lancamentoProgramado.getFormaPagamento().getIdTipoFormaPagamento());          
         params.put("frequencia", lancamentoProgramado.getFrequencia().ordinal());        
         params.put("quantidadeParcela", lancamentoProgramado.getQuantidadeParcela());     
         params.put("numeroParcela", lancamentoProgramado.getNumeroParcela());     
@@ -90,7 +90,7 @@ public class LancamentoProgramadoDAO extends GenericDAO {
         params.put("favorecido", lancamentoProgramado.getFavorecido());     
         params.put("numero", lancamentoProgramado.getNumero());        
         params.put("idTipoDocumento", lancamentoProgramado.getDocumento().getIdTipoDocumento());        
-        params.put("idTipoformaPagamento", lancamentoProgramado.getFormaPagamento().getIdTipoFormaPagamento());          
+        params.put("idTipoFormaPagamento", lancamentoProgramado.getFormaPagamento().getIdTipoFormaPagamento());          
         params.put("frequencia", lancamentoProgramado.getFrequencia().ordinal());        
         params.put("quantidadeParcela", lancamentoProgramado.getQuantidadeParcela());    
         params.put("numeroParcela", lancamentoProgramado.getNumeroParcela());        

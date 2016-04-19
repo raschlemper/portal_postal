@@ -15,7 +15,6 @@ app.controller('ModalEditarContaCorrenteController', ['$scope', '$modalInstance'
                 contaCorrenteDv: (contaCorrente && contaCorrente.contaCorrenteDv) || null,
                 poupanca: (contaCorrente && contaCorrente.poupanca)
             }; 
-            $scope.possuiCarteira = (contaCorrente && contaCorrente.carteira ? true : false);
             getTitle();
             bancos();
         };

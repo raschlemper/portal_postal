@@ -1,6 +1,6 @@
 'use strict';
 
-app.factory('LancamentoProgramadoProgramadoService', function($http, PromiseService) {
+app.factory('LancamentoProgramadoService', function($http, PromiseService) {
 
     return {
 
@@ -16,12 +16,17 @@ app.factory('LancamentoProgramadoProgramadoService', function($http, PromiseServ
 
         save: function(data) {
             return PromiseService.execute(
-                    $http.post(_contextPath + "/api/financeiro/lancamentoProgramado/", data));
+                    $http.post(_contextPath + "/api/financeiro/lancamento/programado/", data));
         },
 
         update: function(idLancamentoProgramado, data) {
             return PromiseService.execute(
                     $http.put(_contextPath + "/api/financeiro/lancamento/programado/" + idLancamentoProgramado, data));
+        },
+
+        create: function(data) {
+            return PromiseService.execute(
+                    $http.post(_contextPath + "/api/financeiro/lancamento/programado/create", data));
         },
 
         delete: function(idLancamentoProgramado) {

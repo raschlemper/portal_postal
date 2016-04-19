@@ -7,7 +7,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 public enum TipoSituacao {    
     
     ATIVO("ativo", "Ativo"),
-    CANCELADO("cancelado", "Cancelado");
+    CANCELADO("cancelado", "Cancelado"),
+    ENCERRADO("encerrado", "Encerrado");
     
     private final String codigo;
     private final String descricao;

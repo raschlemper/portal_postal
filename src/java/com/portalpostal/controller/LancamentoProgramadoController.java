@@ -21,7 +21,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/financeiro/lancamentoProgramado/programado")
+@Path("/financeiro/lancamento/programado")
 public class LancamentoProgramadoController {
     
     @Context
@@ -85,6 +85,20 @@ public class LancamentoProgramadoController {
             init();
             validation(lancamentoProgramado);
             return lancamentoProgramadoService.update(lancamentoProgramado);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    } 
+    
+    @POST
+    @Path("/create")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public LancamentoProgramado create(LancamentoProgramado lancamentoProgramado) {
+        try {
+            init();
+            validation(lancamentoProgramado);
+            return lancamentoProgramadoService.createLancamento(lancamentoProgramado);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }

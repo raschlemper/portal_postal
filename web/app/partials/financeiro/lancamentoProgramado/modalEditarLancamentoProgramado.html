@@ -33,7 +33,7 @@
                                         ng-options="planoConta.nome for planoConta in planoContas track by planoConta.idPlanoConta" ng-model="lancamentoProgramado.planoConta"></select>
                             </div>
                         </div> 
-                        <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8">
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                             <label class="small">Favorecido</label>
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
@@ -62,7 +62,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-info"></i></span>
                                 <select class="form-control" name="documento"
-                                        ng-options="documento.descricao for documento in documentos track by documento.id" ng-model="lancamentoProgramado.documento"></select>
+                                        ng-options="documento.descricao for documento in documentos track by documento.idTipoDocumento" ng-model="lancamentoProgramado.documento"></select>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -78,7 +78,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-info"></i></span>
                                 <select class="form-control" name="frequencia"
-                                        ng-options="frequencia.descricao for frequencia in frequencias track by frequencia.idTipoFrequencia" ng-model="lancamentoProgramado.frequencia"></select>
+                                        ng-options="frequencia.descricao for frequencia in frequencias track by frequencia.id" ng-model="lancamentoProgramado.frequencia"></select>
                             </div>
                         </div>
                         <!-- <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">

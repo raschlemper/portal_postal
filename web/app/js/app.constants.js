@@ -52,7 +52,8 @@ app.constant('LISTAS', {
                    {'id': 1, 'codigo': 'despesa', 'descricao': 'Despesa'}],
 
     "situacao": [{'id': 0, 'codigo': 'ativo', 'descricao': 'Ativo'},  
-                 {'id': 1, 'codigo': 'cancelado', 'descricao': 'Cancelado'}],
+                 {'id': 1, 'codigo': 'cancelado', 'descricao': 'Cancelado'},  
+                 {'id': 2, 'codigo': 'encerrado', 'descricao': 'Encerrado'}],
     
     "frequencia": [{'id': 0, 'codigo': 'unico', 'descricao': 'Único'},  
                    {'id': 1, 'codigo': 'diario', 'descricao': 'Diário'},  

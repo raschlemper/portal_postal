@@ -155,7 +155,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
             .state('app.financeiro.lancamentoprogramado', {
                 url: '/lancamento/programado',
                 templateUrl: 'partials/financeiro/lancamentoProgramado/lancamentoProgramado.html',
-                controller: 'LancamentoController',
+                controller: 'LancamentoProgramadoController',
                 resolve: {}
             });
 
