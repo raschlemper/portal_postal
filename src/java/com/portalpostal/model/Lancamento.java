@@ -1,6 +1,7 @@
 package com.portalpostal.model;
 
 import com.portalpostal.model.dd.TipoLancamento;
+import com.portalpostal.model.dd.TipoModeloLancamento;
 import com.portalpostal.model.dd.TipoSituacao;
 import java.util.Date;
 
@@ -9,12 +10,17 @@ public class Lancamento {
     private Integer idLancamento;
     private Conta conta;
     private PlanoConta planoConta;
+    private LancamentoProgramado lancamentoProgramado;
     private TipoLancamento tipo;
     private String favorecido;
     private String numero;
-    private Date data;
+    private Date dataEmissao;
+    private Date dataVencimento;
+    private Date dataPagamento;
+    private Date dataCompensacao;
     private Double valor;
     private TipoSituacao situacao;
+    private TipoModeloLancamento modelo;
     private String historico;
 
     public Integer getIdLancamento() {
@@ -41,6 +47,14 @@ public class Lancamento {
         this.planoConta = planoConta;
     }
 
+    public LancamentoProgramado getLancamentoProgramado() {
+        return lancamentoProgramado;
+    }
+
+    public void setLancamentoProgramado(LancamentoProgramado lancamentoProgramado) {
+        this.lancamentoProgramado = lancamentoProgramado;
+    }
+
     public TipoLancamento getTipo() {
         return tipo;
     }
@@ -65,12 +79,36 @@ public class Lancamento {
         this.numero = numero;
     }
 
-    public Date getData() {
-        return data;
+    public Date getDataEmissao() {
+        return dataEmissao;
     }
 
-    public void setData(Date data) {
-        this.data = data;
+    public void setDataEmissao(Date dataEmissao) {
+        this.dataEmissao = dataEmissao;
+    }
+
+    public Date getDataVencimento() {
+        return dataVencimento;
+    }
+
+    public void setDataVencimento(Date dataVencimento) {
+        this.dataVencimento = dataVencimento;
+    }
+
+    public Date getDataPagamento() {
+        return dataPagamento;
+    }
+
+    public void setDataPagamento(Date dataPagamento) {
+        this.dataPagamento = dataPagamento;
+    }
+
+    public Date getDataCompensacao() {
+        return dataCompensacao;
+    }
+
+    public void setDataCompensacao(Date dataCompensacao) {
+        this.dataCompensacao = dataCompensacao;
     }
 
     public Double getValor() {
@@ -87,6 +125,14 @@ public class Lancamento {
 
     public void setSituacao(TipoSituacao situacao) {
         this.situacao = situacao;
+    }
+
+    public TipoModeloLancamento getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(TipoModeloLancamento modelo) {
+        this.modelo = modelo;
     }
 
     public String getHistorico() {

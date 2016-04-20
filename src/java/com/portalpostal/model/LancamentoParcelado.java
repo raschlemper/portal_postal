@@ -2,35 +2,30 @@ package com.portalpostal.model;
 
 import com.portalpostal.model.dd.TipoFrequencia;
 import com.portalpostal.model.dd.TipoLancamento;
-import com.portalpostal.model.dd.TipoSituacao;
 import java.util.Date;
 
-public class LancamentoProgramado {
+public class LancamentoParcelado {
     
-    private Integer idLancamentoProgramado;
+    private Integer idLancamentoParcelado;
     private Conta conta;
     private PlanoConta planoConta;
-    private LancamentoParcelado lancamentoParcelado;
     private TipoLancamento tipo;
     private String favorecido;
     private String numero;
     private TipoDocumento documento;
     private TipoFormaPagamento formaPagamento;    
     private TipoFrequencia frequencia; 
-    private Integer numeroParcela;
+    private Integer quantidadeParcela;
     private Date dataEmissao;
-    private Date dataVencimento;
-    private Date dataPagamento;
-    private Double valor;
-    private TipoSituacao situacao;
+    private Double valorTotal;
     private String historico;
 
-    public Integer getIdLancamentoProgramado() {
-        return idLancamentoProgramado;
+    public Integer getIdLancamentoParcelado() {
+        return idLancamentoParcelado;
     }
 
-    public void setIdLancamentoProgramado(Integer idLancamentoProgramado) {
-        this.idLancamentoProgramado = idLancamentoProgramado;
+    public void setIdLancamentoParcelado(Integer idLancamentoParcelado) {
+        this.idLancamentoParcelado = idLancamentoParcelado;
     }
 
     public Conta getConta() {
@@ -47,14 +42,6 @@ public class LancamentoProgramado {
 
     public void setPlanoConta(PlanoConta planoConta) {
         this.planoConta = planoConta;
-    }
-
-    public LancamentoParcelado getLancamentoParcelado() {
-        return lancamentoParcelado;
-    }
-
-    public void setLancamentoParcelado(LancamentoParcelado lancamentoParcelado) {
-        this.lancamentoParcelado = lancamentoParcelado;
     }
 
     public TipoLancamento getTipo() {
@@ -105,12 +92,12 @@ public class LancamentoProgramado {
         this.frequencia = frequencia;
     }
 
-    public Integer getNumeroParcela() {
-        return numeroParcela;
+    public Integer getQuantidadeParcela() {
+        return quantidadeParcela;
     }
 
-    public void setNumeroParcela(Integer numeroParcela) {
-        this.numeroParcela = numeroParcela;
+    public void setQuantidadeParcela(Integer quantidadeParcela) {
+        this.quantidadeParcela = quantidadeParcela;
     }
 
     public Date getDataEmissao() {
@@ -121,36 +108,12 @@ public class LancamentoProgramado {
         this.dataEmissao = dataEmissao;
     }
 
-    public Date getDataVencimento() {
-        return dataVencimento;
+    public Double getValorTotal() {
+        return valorTotal;
     }
 
-    public void setDataVencimento(Date dataVencimento) {
-        this.dataVencimento = dataVencimento;
-    }
-
-    public Date getDataPagamento() {
-        return dataPagamento;
-    }
-
-    public void setDataPagamento(Date dataPagamento) {
-        this.dataPagamento = dataPagamento;
-    }
-
-    public Double getValor() {
-        return valor;
-    }
-
-    public void setValor(Double valor) {
-        this.valor = valor;
-    }
-
-    public TipoSituacao getSituacao() {
-        return situacao;
-    }
-
-    public void setSituacao(TipoSituacao situacao) {
-        this.situacao = situacao;
+    public void setValorTotal(Double valorTotal) {
+        this.valorTotal = valorTotal;
     }
 
     public String getHistorico() {
@@ -160,7 +123,5 @@ public class LancamentoProgramado {
     public void setHistorico(String historico) {
         this.historico = historico;
     }
-    
-    
     
 }

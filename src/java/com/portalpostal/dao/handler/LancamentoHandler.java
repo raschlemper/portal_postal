@@ -2,8 +2,10 @@ package com.portalpostal.dao.handler;
 
 import com.portalpostal.model.Conta;
 import com.portalpostal.model.Lancamento;
+import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.model.PlanoConta;
 import com.portalpostal.model.dd.TipoLancamento;
+import com.portalpostal.model.dd.TipoModeloLancamento;
 import com.portalpostal.model.dd.TipoSituacao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,12 +26,17 @@ public class LancamentoHandler extends GenericHandler implements ResultSetHandle
         lancamento.setIdLancamento(getInt(result, "idLancamento"));
         lancamento.setConta(getConta(result));
         lancamento.setPlanoConta(getPlanoConta(result));
+        lancamento.setLancamentoProgramado(getLancamentoProgramado(result));
         lancamento.setTipo(TipoLancamento.values()[getInt(result, "tipo")]);
         lancamento.setFavorecido(getString(result, "favorecido"));
         lancamento.setNumero(getString(result, "numero"));
-        lancamento.setData(getDate(result, "data"));
+        lancamento.setDataEmissao(getDate(result, "dataEmissao"));
+        lancamento.setDataVencimento(getDate(result, "dataVencimento"));
+        lancamento.setDataPagamento(getDate(result, "dataPagamento"));
+        lancamento.setDataCompensacao(getDate(result, "dataCompensacao"));
         lancamento.setValor(getDouble(result, "valor"));
         lancamento.setSituacao(TipoSituacao.values()[getInt(result, "situacao")]);
+        lancamento.setModelo(TipoModeloLancamento.values()[getInt(result, "modelo")]);
         lancamento.setHistorico(getString(result, "historico"));
         return lancamento;
     }
@@ -42,6 +49,11 @@ public class LancamentoHandler extends GenericHandler implements ResultSetHandle
     private PlanoConta getPlanoConta(ResultSet result) throws SQLException {
         if(!existColumn(result, "plano_conta.idPlanoConta")) return null;
         return new PlanoContaHandler().handle(result); 
+    }
+        
+    private LancamentoProgramado getLancamentoProgramado(ResultSet result) throws SQLException {
+        if(!existColumn(result, "lancamento_programado.idLancamentoProgramado")) return null;
+        return new LancamentoProgramadoHandler().handle(result); 
     }
     
 }

@@ -1,6 +1,7 @@
 package com.portalpostal.dao.handler;
 
 import com.portalpostal.model.Conta;
+import com.portalpostal.model.LancamentoParcelado;
 import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.model.PlanoConta;
 import com.portalpostal.model.TipoDocumento;
@@ -27,15 +28,16 @@ public class LancamentoProgramadoHandler extends GenericHandler implements Resul
         lancamentoProgramado.setIdLancamentoProgramado(getInt(result, "idLancamentoProgramado"));
         lancamentoProgramado.setConta(getConta(result));
         lancamentoProgramado.setPlanoConta(getPlanoConta(result));
+        lancamentoProgramado.setLancamentoParcelado(getLancamentoParcelado(result));
         lancamentoProgramado.setTipo(TipoLancamento.values()[getInt(result, "tipo")]);
         lancamentoProgramado.setFavorecido(getString(result, "favorecido"));
         lancamentoProgramado.setNumero(getString(result, "numero"));
         lancamentoProgramado.setDocumento(getTipoDocumento(result));
         lancamentoProgramado.setFormaPagamento(getTipoFormaPagamento(result));
         lancamentoProgramado.setFrequencia(TipoFrequencia.values()[getInt(result, "frequencia")]);
-        lancamentoProgramado.setQuantidadeParcela(getInt(result, "quantidadeParcela"));
         lancamentoProgramado.setNumeroParcela(getInt(result, "numeroParcela"));
-        lancamentoProgramado.setData(getDate(result, "data"));
+        lancamentoProgramado.setDataEmissao(getDate(result, "dataEmissao"));
+        lancamentoProgramado.setDataVencimento(getDate(result, "dataVencimento"));
         lancamentoProgramado.setValor(getDouble(result, "valor"));
         lancamentoProgramado.setSituacao(TipoSituacao.values()[getInt(result, "situacao")]);
         lancamentoProgramado.setHistorico(getString(result, "historico"));
@@ -50,6 +52,11 @@ public class LancamentoProgramadoHandler extends GenericHandler implements Resul
     private PlanoConta getPlanoConta(ResultSet result) throws SQLException {
         if(!existColumn(result, "plano_conta.idPlanoConta")) return null;
         return new PlanoContaHandler().handle(result); 
+    }
+    
+    private LancamentoParcelado getLancamentoParcelado(ResultSet result) throws SQLException {
+        if(!existColumn(result, "lancamento_parcelado.idLancamentoParcelado")) return null;
+        return new LancamentoParceladoHandler().handle(result); 
     }
     
     private TipoDocumento getTipoDocumento(ResultSet result) throws SQLException {
