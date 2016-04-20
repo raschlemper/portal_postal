@@ -7,6 +7,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             $scope.lancamentos = [];
             $scope.lancamentosLista = [];
             $scope.tipos = LISTAS.lancamento;
+            $scope.modelos = LISTAS.modeloLancamento;
             $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
             $scope.datepickerDataFim = angular.copy(DatePickerService.default);    
             $scope.lancSearch = {};
@@ -17,7 +18,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         var initTable = function() {            
             $scope.colunas = [              
                 {label: 'Tipo', column: 'tipo.descricao'},         
-                {label: 'Data', column: 'data', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
+                {label: 'Data', column: 'dataLancamento', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
                 {label: 'Número', column: 'numero'},               
                 {label: 'Favorecido', column: 'favorecido'},                
                 {label: 'Histórico', column: 'historico'},
@@ -50,7 +51,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         
         var filterByData = function(item, search) {
             if(!search.dataInicio || !search.dataFim) return true;
-            var data = moment(item.data);
+            var data = moment(item.dataPagamento);
             return (data.isBefore(search.dataFim) && data.isAfter(search.dataInicio) 
                     || (data.isSame(search.dataInicio) || data.isSame(search.dataFim)));
         };  
@@ -84,10 +85,10 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         };
         
         var criarLancamentosLista = function(data) {
-            return _.map(data.lancamentos, function(lancamento) {                
+            return _.map(data.lancamentos, function(lancamento) { 
                 if(lancamento.tipo.codigo === 'despesa') { lancamento.pagamento = lancamento.valor; } 
                 else if(lancamento.tipo.codigo === 'receita') { lancamento.deposito = lancamento.valor; }  
-                return _.pick(lancamento, 'idLancamento', 'tipo', 'data', 'numero', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico');
+                return _.pick(lancamento, 'idLancamento', 'tipo', 'dataLancamento', 'numero', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico');
             })
         };
         
@@ -183,8 +184,14 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         var ajustarDados = function(data) {                 
             data.conta = { idConta: data.conta.idConta };       
             data.planoConta = { idPlanoConta: data.planoConta.idPlanoConta }; 
-            data.tipo = data.tipo.id;
+            data.lancamentoProgramado = { idLancamentoProgramado: data.planoConta.idLancamentoProgramado }; 
+            data.tipo = data.tipo.id; 
+            data.dataEmissao = data.dataEmissao || moment();
+            data.dataVencimento = data.dataVencimento || data.dataLancamento || moment();
+            data.dataLancamento = data.dataLancamento || moment();
+            data.dataCompensacao = null;
             data.situacao = data.situacao.id;
+            data.modelo = data.modelo.id || $scope.modelos[0].id;
             return data;
         }
         
@@ -192,7 +199,11 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             var lancamentoTransferencia = { 
                 idLancamentoTransferencia: null,
                 lancamentoOrigem: getLancamento(data.contaOrigem, data),
-                lancamentoDestino: getLancamento(data.contaDestino, data)
+                lancamentoDestino: getLancamento(data.contaDestino, data),
+                numero: data.numero,
+                dataEmissao: data.dataEmissao || moment(),
+                valor: data.valor,
+                historico: data.historico
             }; 
             lancamentoTransferencia.lancamentoOrigem.tipo = $scope.tipos[1].id;
             lancamentoTransferencia.lancamentoDestino.tipo = $scope.tipos[0].id;    
@@ -205,11 +216,18 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 planoConta: null,
                 favorecido: null,
                 numero: data.numero,
-                data: data.data,
+                dataEmissao: data.dataEmissao,
+                dataVencimento: data.dataVencimento,
+                dataLancamento: data.dataLancamento,
+                dataCompensacao: data.dataCompensacao,
                 valor: data.valor,       
-                situacao: data.situacao.id,
+                situacao: data.situacao.id,   
+                modelo: $scope.modelos[1].id,
                 historico: data.historico,
-                conta: { idConta: conta.idConta }
+                conta: { idConta: conta.idConta },
+                lancamentoProgramado: { 
+                    idlancamentoProgramado : data.lancamentoProgramado.idLancamentoProgramado 
+                }
             }
         }
         

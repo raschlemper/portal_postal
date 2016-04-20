@@ -13,8 +13,7 @@ public class LancamentoProgramadoValidation extends Validation<LancamentoProgram
         if(!validarFormaPagamento(lancamentoProgramado)) return false;   
         if(!validarFrequencia(lancamentoProgramado)) return false;   
         if(!validarDataEmissao(lancamentoProgramado)) return false;    
-        if(!validarDataVencimento(lancamentoProgramado)) return false;     
-        if(!validarDataPagamento(lancamentoProgramado)) return false;    
+        if(!validarDataVencimento(lancamentoProgramado)) return false;  
         if(!validarValor(lancamentoProgramado)) return false;   
         if(!validarSituacao(lancamentoProgramado)) return false;  
         if(!validarHistorico(lancamentoProgramado)) return false;   
@@ -66,12 +65,6 @@ public class LancamentoProgramadoValidation extends Validation<LancamentoProgram
     public boolean validarDataVencimento(LancamentoProgramado lancamentoProgramado) {          
         if(campoNotNull(lancamentoProgramado.getDataVencimento())) return true; 
         setMsg("Preencha a data de vencimento do lançamento programado!");
-        return false;        
-    }
-    
-    public boolean validarDataPagamento(LancamentoProgramado lancamentoProgramado) {          
-        if(campoNotNull(lancamentoProgramado.getDataPagamento())) return true; 
-        setMsg("Preencha a data de pagamento do lançamento programado!");
         return false;        
     }
 

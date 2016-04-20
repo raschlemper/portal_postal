@@ -7,7 +7,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
             $scope.datepicker = DatePickerService.default; 
             $scope.tipos = LISTAS.lancamento; 
             $scope.frequencias = LISTAS.frequencia;
-            $scope.situacoes = LISTAS.situacao;
+            $scope.situacoes = LISTAS.situacaoLancamentoProgramado;
             $scope.lancamentoProgramado = {
                 idLancamentoProgramado: (lancamentoProgramado && lancamentoProgramado.idLancamentoProgramado) || null,
                 conta: conta || (lancamentoProgramado && lancamentoProgramado.conta) || null,

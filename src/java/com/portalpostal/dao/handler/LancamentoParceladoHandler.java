@@ -2,18 +2,16 @@ package com.portalpostal.dao.handler;
 
 import com.portalpostal.model.Conta;
 import com.portalpostal.model.LancamentoParcelado;
-import com.portalpostal.model.LancamentoParcelado;
 import com.portalpostal.model.PlanoConta;
 import com.portalpostal.model.TipoDocumento;
 import com.portalpostal.model.TipoFormaPagamento;
 import com.portalpostal.model.dd.TipoFrequencia;
 import com.portalpostal.model.dd.TipoLancamento;
-import com.portalpostal.model.dd.TipoSituacao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.sql2o.ResultSetHandler;
 
-class LancamentoParceladoHandler extends GenericHandler implements ResultSetHandler<LancamentoParcelado> {
+public class LancamentoParceladoHandler extends GenericHandler implements ResultSetHandler<LancamentoParcelado> {
     
     public LancamentoParceladoHandler() {
         super("lancamento_parcelado");

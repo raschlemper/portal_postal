@@ -1,7 +1,7 @@
 package com.portalpostal.service;
 
 import com.portalpostal.model.LancamentoProgramado;
-import com.portalpostal.model.dd.TipoSituacao;
+import com.portalpostal.model.dd.TipoSituacaoLancamentoProgramado;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -12,7 +12,7 @@ public class LancamentoProgramadoFactory {
         Integer numeroParcela = lancamentoProgramado.getNumeroParcela() + 1;
         switch (lancamentoProgramado.getFrequencia()) {
             case UNICO: 
-                lancamentoProgramado.setSituacao(TipoSituacao.ENCERRADO);
+                lancamentoProgramado.setSituacao(TipoSituacaoLancamentoProgramado.ENCERRADO);
                 break;
             case DIARIO: 
                 lancamentoProgramado.setNumeroParcela(numeroParcela);
@@ -51,7 +51,7 @@ public class LancamentoProgramadoFactory {
                 lancamentoProgramado.setDataVencimento(addYearly(lancamentoProgramado.getDataVencimento()));
                 break;
             default:
-                lancamentoProgramado.setSituacao(TipoSituacao.ENCERRADO);
+                lancamentoProgramado.setSituacao(TipoSituacaoLancamentoProgramado.ENCERRADO);
                 break;
         }
         return lancamentoProgramado;

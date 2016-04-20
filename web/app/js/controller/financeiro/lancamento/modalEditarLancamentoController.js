@@ -6,17 +6,23 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
         var init = function () {  
             $scope.datepicker = DatePickerService.default; 
             $scope.tipos = LISTAS.lancamento; 
-            $scope.situacoes = LISTAS.situacao;
+            $scope.modelos = LISTAS.modeloLancamento;
+            $scope.situacoes = LISTAS.situacaoLancamento;
             $scope.lancamento = {
                 idLancamento: (lancamento && lancamento.idLancamento) || null,
                 conta: conta || (lancamento && lancamento.conta) || null,
                 planoConta: (lancamento && lancamento.planoConta) || null,  
+                lancamentoProgramado: (lancamento && lancamento.lancamentoProgramado) || null,  
                 tipo: (lancamento && lancamento.tipo) || $scope.tipos[0],
                 favorecido: (lancamento && lancamento.favorecido) || null,
                 numero: (lancamento && lancamento.numero) || null,
-                data: (lancamento && lancamento.data) || null,
+                dataEmissao: (lancamento && lancamento.dataEmissao) || null,
+                dataVencimento: (lancamento && lancamento.dataVencimento) || null,
+                dataLancamento: (lancamento && lancamento.dataLancamento) || null,
+                dataCompensacao: (lancamento && lancamento.dataCompensacao) || null,
                 valor: (lancamento && lancamento.valor) || null,       
-                situacao: (lancamento && lancamento.situacao) || $scope.situacoes[0],
+                situacao: (lancamento && lancamento.situacao) || $scope.situacoes[0],    
+                modelo: (lancamento && lancamento.modelo) || $scope.modelos[0],
                 historico: (lancamento && lancamento.historico) || null
             }; 
             
@@ -66,19 +72,26 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
         
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
-            $modalInstance.close($scope.lancamento);            
+            var lancamento = setData($scope.lancamento, $scope.data);
+            $modalInstance.close(lancamento);            
         };
         
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
+        
+        var setData = function(lancamento, data) {
+            lancamento.dataEmissao = moment();
+            lancamento.dataVencimento = lancamento.dataLancamento;
+            return lancamento;
+        }
 
         var validarForm = function (form) {
-            if (form.data.$error.required) {
+            if (form.dataLancamento.$error.required) {
                 alert('Preencha a data do lançamento!');
                 return false;
             }       
-            if (form.data.$modelValue && !moment(form.data.$modelValue).isValid()) {
+            if (form.dataLancamento.$modelValue && !moment(form.dataLancamento.$modelValue).isValid()) {
                 alert('A data do lançamento não é válida!');
                 return false;
             }    

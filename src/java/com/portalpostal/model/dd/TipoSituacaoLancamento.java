@@ -1,19 +1,19 @@
 package com.portalpostal.model.dd;
 
-import com.portalpostal.model.serializer.TipoSituacaoSerializer;
+import com.portalpostal.model.serializer.TipoSituacaoLancamentoSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-@JsonSerialize(using = TipoSituacaoSerializer.class)
-public enum TipoSituacao {    
+@JsonSerialize(using = TipoSituacaoLancamentoSerializer.class)
+public enum TipoSituacaoLancamento {    
     
-    ATIVO("ativo", "Ativo"),
-    CANCELADO("cancelado", "Cancelado"),
-    ENCERRADO("encerrado", "Encerrado");
+    NORMAL("normal", "Normal"),
+    NAO_COMPENSADO("naocompensado", "Não Compensado"),
+    COMPENSADO("compensado", "Compensado");
     
     private final String codigo;
     private final String descricao;
     
-    TipoSituacao(String codigo, String descricao) {
+    TipoSituacaoLancamento(String codigo, String descricao) {
         this.codigo = codigo;
         this.descricao = descricao;
     }

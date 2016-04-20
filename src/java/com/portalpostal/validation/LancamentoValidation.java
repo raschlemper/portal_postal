@@ -11,9 +11,9 @@ public class LancamentoValidation extends Validation<Lancamento>{
         if(!validarTipo(lancamento)) return false;  
         if(!validarDataEmissao(lancamento)) return false;   
         if(!validarDataVencimento(lancamento)) return false;   
-        if(!validarDataPagamento(lancamento)) return false;   
+        if(!validarDataLancamento(lancamento)) return false;   
         if(!validarValor(lancamento)) return false;   
-        if(!validarSituacao(lancamento)) return false;  
+        if(!validarSituacao(lancamento)) return false;
         if(!validarHistorico(lancamento)) return false;   
         return true;
     }    
@@ -48,8 +48,8 @@ public class LancamentoValidation extends Validation<Lancamento>{
         return false;        
     }  
 
-    public boolean validarDataPagamento(Lancamento lancamento) {          
-        if(campoNotNull(lancamento.getDataPagamento())) return true; 
+    public boolean validarDataLancamento(Lancamento lancamento) {          
+        if(campoNotNull(lancamento.getDataLancamento())) return true; 
         setMsg("Preencha a data de pagamento do lançamento!");
         return false;        
     }
@@ -65,7 +65,6 @@ public class LancamentoValidation extends Validation<Lancamento>{
         setMsg("Preencha a situação do lançamento!");  
         return false;        
     }    
-
 
     public boolean validarHistorico(Lancamento lancamento) {          
         if(campoNotNull(lancamento.getHistorico())) return true; 

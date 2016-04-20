@@ -2,7 +2,8 @@ package com.portalpostal.model;
 
 import com.portalpostal.model.dd.TipoFrequencia;
 import com.portalpostal.model.dd.TipoLancamento;
-import com.portalpostal.model.dd.TipoSituacao;
+import com.portalpostal.model.dd.TipoSituacaoLancamento;
+import com.portalpostal.model.dd.TipoSituacaoLancamentoProgramado;
 import java.util.Date;
 
 public class LancamentoProgramado {
@@ -20,9 +21,8 @@ public class LancamentoProgramado {
     private Integer numeroParcela;
     private Date dataEmissao;
     private Date dataVencimento;
-    private Date dataPagamento;
     private Double valor;
-    private TipoSituacao situacao;
+    private TipoSituacaoLancamentoProgramado situacao;
     private String historico;
 
     public Integer getIdLancamentoProgramado() {
@@ -129,14 +129,6 @@ public class LancamentoProgramado {
         this.dataVencimento = dataVencimento;
     }
 
-    public Date getDataPagamento() {
-        return dataPagamento;
-    }
-
-    public void setDataPagamento(Date dataPagamento) {
-        this.dataPagamento = dataPagamento;
-    }
-
     public Double getValor() {
         return valor;
     }
@@ -145,11 +137,11 @@ public class LancamentoProgramado {
         this.valor = valor;
     }
 
-    public TipoSituacao getSituacao() {
+    public TipoSituacaoLancamentoProgramado getSituacao() {
         return situacao;
     }
 
-    public void setSituacao(TipoSituacao situacao) {
+    public void setSituacao(TipoSituacaoLancamentoProgramado situacao) {
         this.situacao = situacao;
     }
 

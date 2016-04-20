@@ -5,15 +5,14 @@ app.controller('ModalLancamentoTransferenciaController', ['$scope', '$modalInsta
 
         var init = function () {  
             $scope.datepicker = DatePickerService.default; 
-            $scope.situacoes = LISTAS.situacao;
+            $scope.situacoes = LISTAS.situacaoLancamento;
             $scope.lancamentoTransferencia = {
                 idLancamentoTransferencia: null,
                 contaOrigem: null,
                 contaDestino: null,
                 numero: null,
-                data: null,
-                valor: null,       
-                situacao: $scope.situacoes[0],
+                dataEmissao: null,
+                valor: null,     
                 historico: null
             };             
             getTitle();
@@ -46,11 +45,11 @@ app.controller('ModalLancamentoTransferenciaController', ['$scope', '$modalInsta
         };
 
         var validarForm = function (form) {
-            if (form.data.$error.required) {
+            if (form.dataEmissao.$error.required) {
                 alert('Preencha a data do lançamento!');
                 return false;
             }       
-            if (form.data.$modelValue && !moment(form.data.$modelValue).isValid()) {
+            if (form.dataEmissao.$modelValue && !moment(form.dataEmissao.$modelValue).isValid()) {
                 alert('A data do lançamento não é válida!');
                 return false;
             }    

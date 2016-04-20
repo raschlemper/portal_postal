@@ -50,10 +50,20 @@ app.constant('LISTAS', {
                 
     "lancamento": [{'id': 0, 'codigo': 'receita', 'descricao': 'Receita'},
                    {'id': 1, 'codigo': 'despesa', 'descricao': 'Despesa'}],
+                
+    "modeloLancamento": [{'id': 0, 'codigo': 'normal', 'descricao': 'Normal'},
+                         {'id': 1, 'codigo': 'transferencia', 'descricao': 'Transferência'},
+                         {'id': 2, 'codigo': 'programado', 'descricao': 'Programado'},
+                         {'id': 3, 'codigo': 'transferenciaprogramado', 'descricao': 'Transferência Programada'},
+                         {'id': 4, 'codigo': 'parcelado', 'descricao': 'Parcelado'}],
 
-    "situacao": [{'id': 0, 'codigo': 'ativo', 'descricao': 'Ativo'},  
-                 {'id': 1, 'codigo': 'cancelado', 'descricao': 'Cancelado'},  
-                 {'id': 2, 'codigo': 'encerrado', 'descricao': 'Encerrado'}],
+    "situacaoLancamento": [{'id': 0, 'codigo': 'normal', 'descricao': 'Normal'},  
+                           {'id': 1, 'codigo': 'naocompensado', 'descricao': 'Não Compensado'},  
+                           {'id': 2, 'codigo': 'compensado', 'descricao': 'Compensado'}],
+
+    "situacaoLancamentoProgramado": [{'id': 0, 'codigo': 'ativo', 'descricao': 'Ativo'},  
+                                     {'id': 1, 'codigo': 'cancelado', 'descricao': 'Cancelado'},  
+                                     {'id': 2, 'codigo': 'encerrado', 'descricao': 'Encerrado'}],
     
     "frequencia": [{'id': 0, 'codigo': 'unico', 'descricao': 'Único'},  
                    {'id': 1, 'codigo': 'diario', 'descricao': 'Diário'},  

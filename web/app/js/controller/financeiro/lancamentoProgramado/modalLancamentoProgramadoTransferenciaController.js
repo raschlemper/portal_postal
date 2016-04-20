@@ -5,7 +5,7 @@ app.controller('ModalLancamentoProgramadoTransferenciaController', ['$scope', '$
 
         var init = function () {  
             $scope.datepicker = DatePickerService.default; 
-            $scope.situacoes = LISTAS.situacao;
+            $scope.situacoes = LISTAS.situacaoLancamentoProgramado;
             $scope.lancamentoTransferencia = {
                 idLancamentoTransferencia: null,
                 contaOrigem: null,

@@ -37,9 +37,27 @@
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">
-                    <label>Data:</label>
+                    <label>Data Emissão:</label>
                 </div>
-                <div class="col-md-8">{{lancamento.data | date: 'dd/MM/yyyy'}}</div>
+                <div class="col-md-8">{{lancamento.dataEmissao | date: 'dd/MM/yyyy'}}</div>
+            </div>
+            <div class="row" ng-if="lancamento.modelo.id !== 0">
+                <div class="col-md-4 text-right">
+                    <label>Data Vencimento:</label>
+                </div>
+                <div class="col-md-8">{{lancamento.dataVencimento | date: 'dd/MM/yyyy'}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Data Lançamento</label>
+                </div>
+                <div class="col-md-8">{{lancamento.dataLancamento | date: 'dd/MM/yyyy'}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Data Compensação:</label>
+                </div>
+                <div class="col-md-8">{{lancamento.dataCompensacao | date: 'dd/MM/yyyy'}}</div>
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">
@@ -52,6 +70,12 @@
                     <label>Situação:</label>
                 </div>
                 <div class="col-md-8">{{lancamento.situacao.descricao}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Modelo:</label>
+                </div>
+                <div class="col-md-8">{{lancamento.modelo.descricao}}</div>
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">

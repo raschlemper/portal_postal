@@ -2,7 +2,7 @@ package com.portalpostal.model;
 
 import com.portalpostal.model.dd.TipoLancamento;
 import com.portalpostal.model.dd.TipoModeloLancamento;
-import com.portalpostal.model.dd.TipoSituacao;
+import com.portalpostal.model.dd.TipoSituacaoLancamento;
 import java.util.Date;
 
 public class Lancamento {
@@ -16,10 +16,10 @@ public class Lancamento {
     private String numero;
     private Date dataEmissao;
     private Date dataVencimento;
-    private Date dataPagamento;
+    private Date dataLancamento;
     private Date dataCompensacao;
     private Double valor;
-    private TipoSituacao situacao;
+    private TipoSituacaoLancamento situacao;
     private TipoModeloLancamento modelo;
     private String historico;
 
@@ -95,12 +95,12 @@ public class Lancamento {
         this.dataVencimento = dataVencimento;
     }
 
-    public Date getDataPagamento() {
-        return dataPagamento;
+    public Date getDataLancamento() {
+        return dataLancamento;
     }
 
-    public void setDataPagamento(Date dataPagamento) {
-        this.dataPagamento = dataPagamento;
+    public void setDataLancamento(Date dataLancamento) {
+        this.dataLancamento = dataLancamento;
     }
 
     public Date getDataCompensacao() {
@@ -119,11 +119,11 @@ public class Lancamento {
         this.valor = valor;
     }
 
-    public TipoSituacao getSituacao() {
+    public TipoSituacaoLancamento getSituacao() {
         return situacao;
     }
 
-    public void setSituacao(TipoSituacao situacao) {
+    public void setSituacao(TipoSituacaoLancamento situacao) {
         this.situacao = situacao;
     }
 

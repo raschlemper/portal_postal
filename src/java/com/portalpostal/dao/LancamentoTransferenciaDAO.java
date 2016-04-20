@@ -34,11 +34,16 @@ public class LancamentoTransferenciaDAO extends GenericDAO {
     }
 
     public LancamentoTransferencia save(LancamentoTransferencia lancamentoTransferencia) throws Exception {  
-        String sql = "INSERT INTO lancamento_transferencia (idLancamentoOrigem, idLancamentoDestino) "
-                   + "VALUES(:idLancamentoOrigem, :idLancamentoDestino)";        
+        String sql = "INSERT INTO lancamento_transferencia (idLancamentoOrigem, idLancamentoDestino, numero, "
+                   + "dataEmissao, valor, historico) "
+                   + "VALUES(:idLancamentoOrigem, :idLancamentoDestino, :numero, :dataEmissao, :valor, :historico)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamentoOrigem", lancamentoTransferencia.getLancamentoOrigem().getIdLancamento());
-        params.put("idLancamentoDestino", lancamentoTransferencia.getLancamentoDestino().getIdLancamento());
+        params.put("idLancamentoDestino", lancamentoTransferencia.getLancamentoDestino().getIdLancamento()); 
+        params.put("numero", lancamentoTransferencia.getNumero());            
+        params.put("dataEmissao", lancamentoTransferencia.getDataEmissao());      
+        params.put("valor", lancamentoTransferencia.getValor());   
+        params.put("historico", lancamentoTransferencia.getHistorico());         
         Integer idLancamentoTransferencia = save(sql, params, lancamentoTransferenciaHandler);
         return find(idLancamentoTransferencia);
     }
@@ -46,11 +51,16 @@ public class LancamentoTransferenciaDAO extends GenericDAO {
     public LancamentoTransferencia update(LancamentoTransferencia lancamentoTransferencia) throws Exception {
         String sql = "UPDATE lancamento_transferencia "
                    + "SET idLancamentoOrigem = :idLancamentoOrigem, idLancamentoDestino = :idLancamentoDestino "
+                   + "numero = :numero, dataEmissao = :dataEmissao, valor = :valor, historico = :historico "
                    + "WHERE idLancamentoTransferencia = :idLancamentoTransferencia ";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamentoTransferencia", lancamentoTransferencia.getIdLancamentoTransferencia());
         params.put("idLancamentoOrigem", lancamentoTransferencia.getLancamentoOrigem().getIdLancamento());
         params.put("idLancamentoDestino", lancamentoTransferencia.getLancamentoDestino().getIdLancamento());
+        params.put("numero", lancamentoTransferencia.getNumero());            
+        params.put("dataEmissao", lancamentoTransferencia.getDataEmissao());      
+        params.put("valor", lancamentoTransferencia.getValor());   
+        params.put("historico", lancamentoTransferencia.getHistorico());         
         update(sql, params, lancamentoTransferenciaHandler);
         return lancamentoTransferencia;  
     }
