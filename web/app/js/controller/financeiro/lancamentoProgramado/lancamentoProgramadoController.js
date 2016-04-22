@@ -20,19 +20,21 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', 'Lancamen
                 {label: 'Vencimento', column: 'dataVencimento', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
                 {label: 'Número/Parcela', column: 'numeroParcela'},               
                 {label: 'Favorecido', column: 'favorecido'},  
-                {label: 'Valor', column: 'valor', class: 'no-sort', filter: {name: 'currency', args: ''}},              
+                {label: 'Valor', column: 'valor', headerClass: 'no-sort', filter: {name: 'currency', args: ''}},              
                 {label: 'Situação', column: 'situacao'},  
                 {label: 'Frequência', column: 'frequencia'}
             ]            
-            $scope.events = { 
-                edit: function(lancamentoProgramado) {
-                    $scope.editar($scope.conta, lancamentoProgramado.idLancamentoProgramado);
-                },
-                remove: function(lancamentoProgramado) {
-                    $scope.excluir($scope.conta, lancamentoProgramado.idLancamentoProgramado);
-                },
-                view: function(lancamentoProgramado) {
-                    $scope.visualizar($scope.conta, lancamentoProgramado.idLancamentoProgramado);
+            $scope.linha = {
+                events: { 
+                    edit: function(lancamentoProgramado) {
+                        $scope.editar($scope.conta, lancamentoProgramado.idLancamentoProgramado);
+                    },
+                    remove: function(lancamentoProgramado) {
+                        $scope.excluir($scope.conta, lancamentoProgramado.idLancamentoProgramado);
+                    },
+                    view: function(lancamentoProgramado) {
+                        $scope.visualizar($scope.conta, lancamentoProgramado.idLancamentoProgramado);
+                    }
                 }
             };
         };

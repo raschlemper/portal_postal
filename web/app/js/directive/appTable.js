@@ -6,6 +6,7 @@ app.directive('appTable', function($filter) {
         scope: {
             lista: '=',
             colunas: '=',
+            linha: '=',
             filter: '=',
             events: '=',
             search: '='

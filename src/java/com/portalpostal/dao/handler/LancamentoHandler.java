@@ -30,6 +30,7 @@ public class LancamentoHandler extends GenericHandler implements ResultSetHandle
         lancamento.setTipo(TipoLancamento.values()[getInt(result, "tipo")]);
         lancamento.setFavorecido(getString(result, "favorecido"));
         lancamento.setNumero(getString(result, "numero"));
+        lancamento.setCompetencia(getDate(result, "competencia"));
         lancamento.setDataEmissao(getDate(result, "dataEmissao"));
         lancamento.setDataVencimento(getDate(result, "dataVencimento"));
         lancamento.setDataLancamento(getDate(result, "dataLancamento"));
@@ -38,6 +39,7 @@ public class LancamentoHandler extends GenericHandler implements ResultSetHandle
         lancamento.setSituacao(TipoSituacaoLancamento.values()[getInt(result, "situacao")]);
         lancamento.setModelo(TipoModeloLancamento.values()[getInt(result, "modelo")]);
         lancamento.setHistorico(getString(result, "historico"));
+        lancamento.setObservacao(getString(result, "observacao"));
         return lancamento;
     }
     
@@ -53,6 +55,7 @@ public class LancamentoHandler extends GenericHandler implements ResultSetHandle
         
     private LancamentoProgramado getLancamentoProgramado(ResultSet result) throws SQLException {
         if(!existColumn(result, "lancamento_programado.idLancamentoProgramado")) return null;
+        if(!existFKValue(result, "lancamento_programado.idLancamentoProgramado")) return null;
         return new LancamentoProgramadoHandler().handle(result); 
     }
     

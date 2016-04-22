@@ -4,7 +4,8 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
     function ($scope, $modalInstance, conta, lancamento, ContaService, PlanoContaService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {  
-            $scope.datepicker = DatePickerService.default; 
+            $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
+            $scope.datepickerLancamento = angular.copy(DatePickerService.default); 
             $scope.tipos = LISTAS.lancamento; 
             $scope.modelos = LISTAS.modeloLancamento;
             $scope.situacoes = LISTAS.situacaoLancamento;
@@ -16,6 +17,7 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
                 tipo: (lancamento && lancamento.tipo) || $scope.tipos[0],
                 favorecido: (lancamento && lancamento.favorecido) || null,
                 numero: (lancamento && lancamento.numero) || null,
+                competencia: (lancamento && lancamento.competencia) || null,
                 dataEmissao: (lancamento && lancamento.dataEmissao) || null,
                 dataVencimento: (lancamento && lancamento.dataVencimento) || null,
                 dataLancamento: (lancamento && lancamento.dataLancamento) || null,
@@ -23,7 +25,8 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
                 valor: (lancamento && lancamento.valor) || null,       
                 situacao: (lancamento && lancamento.situacao) || $scope.situacoes[0],    
                 modelo: (lancamento && lancamento.modelo) || $scope.modelos[0],
-                historico: (lancamento && lancamento.historico) || null
+                historico: (lancamento && lancamento.historico) || null,
+                observacao: (lancamento && lancamento.observacao) || null
             }; 
             
             getTitle();
@@ -87,6 +90,14 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
         }
 
         var validarForm = function (form) {
+            if (form.competencia.$error.required) {
+                alert('Preencha a competência do lançamento!');
+                return false;
+            }       
+            if (form.competencia.$modelValue && !moment(form.competencia.$modelValue).isValid()) {
+                alert('A competência do lançamento não é válida!');
+                return false;
+            }    
             if (form.dataLancamento.$error.required) {
                 alert('Preencha a data do lançamento!');
                 return false;

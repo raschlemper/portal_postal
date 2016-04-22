@@ -3,7 +3,9 @@ package com.portalpostal.model;
 import com.portalpostal.model.dd.TipoLancamento;
 import com.portalpostal.model.dd.TipoModeloLancamento;
 import com.portalpostal.model.dd.TipoSituacaoLancamento;
+import com.portalpostal.model.serializer.JsonDateSerializer;
 import java.util.Date;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class Lancamento {
     
@@ -14,14 +16,21 @@ public class Lancamento {
     private TipoLancamento tipo;
     private String favorecido;
     private String numero;
+    @JsonSerialize(using = JsonDateSerializer.class)
+    private Date competencia;
+    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataEmissao;
+    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataVencimento;
+    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataLancamento;
+    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataCompensacao;
     private Double valor;
     private TipoSituacaoLancamento situacao;
     private TipoModeloLancamento modelo;
     private String historico;
+    private String observacao;
 
     public Integer getIdLancamento() {
         return idLancamento;
@@ -77,6 +86,14 @@ public class Lancamento {
 
     public void setNumero(String numero) {
         this.numero = numero;
+    }
+
+    public Date getCompetencia() {
+        return competencia;
+    }
+
+    public void setCompetencia(Date competencia) {
+        this.competencia = competencia;
     }
 
     public Date getDataEmissao() {
@@ -141,6 +158,14 @@ public class Lancamento {
 
     public void setHistorico(String historico) {
         this.historico = historico;
+    }
+
+    public String getObservacao() {
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
     }
 
     

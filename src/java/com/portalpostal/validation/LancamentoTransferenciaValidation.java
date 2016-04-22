@@ -7,8 +7,10 @@ public class LancamentoTransferenciaValidation extends Validation<LancamentoTran
     @Override
     public boolean validar(LancamentoTransferencia lancamento) {
         if(!validarLancamentoOrigem(lancamento)) return false;   
-        if(!validarLancamentoDestino(lancamento)) return false;   
+        if(!validarLancamentoDestino(lancamento)) return false;    
+        if(!validarCompetencia(lancamento)) return false;   
         if(!validarDataEmissao(lancamento)) return false;   
+        if(!validarDataLancamento(lancamento)) return false;   
         if(!validarValor(lancamento)) return false;   
         if(!validarHistorico(lancamento)) return false;   
         return true;
@@ -24,11 +26,23 @@ public class LancamentoTransferenciaValidation extends Validation<LancamentoTran
         if(campoNotNull(lancamento.getLancamentoDestino())) return true; 
         setMsg("Preencha a conta de destino do lançamento!");
         return false;        
-    } 
+    }    
+
+    public boolean validarCompetencia(LancamentoTransferencia lancamento) {          
+        if(campoNotNull(lancamento.getCompetencia())) return true; 
+        setMsg("Preencha a competência do lançamento!");
+        return false;        
+    }    
 
     public boolean validarDataEmissao(LancamentoTransferencia lancamento) {          
         if(campoNotNull(lancamento.getDataEmissao())) return true; 
-        setMsg("Preencha a data de pagamento do lançamento!");
+        setMsg("Preencha a data de emissão do lançamento!");
+        return false;        
+    }
+
+    public boolean validarDataLancamento(LancamentoTransferencia lancamento) {          
+        if(campoNotNull(lancamento.getDataLancamento())) return true; 
+        setMsg("Preencha a data do lançamento!");
         return false;        
     }
 

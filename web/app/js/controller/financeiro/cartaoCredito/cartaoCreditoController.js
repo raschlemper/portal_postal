@@ -12,18 +12,20 @@ app.controller('CartaoCreditoController', ['$scope', 'CartaoCreditoService', 'Mo
         var initTable = function() {            
             $scope.colunas = [
                 {label: 'Nome', column: 'nome'},
-                {label: 'Bandeira', column: 'bandeira', class: 'col-md-3', filter: {name: 'uppercase'}},                         
-                {label: 'Limite', column: 'valorLimiteCredito', class: 'col-md-2', filter: {name: 'currency', args: 'R$ '}}
+                {label: 'Bandeira', column: 'bandeira', headerClass: 'col-md-3', filter: {name: 'uppercase'}},                         
+                {label: 'Limite', column: 'valorLimiteCredito', headerClass: 'col-md-2', filter: {name: 'currency', args: 'R$ '}}
             ]            
-            $scope.events = { 
-                edit: function(cartaoCredito) {
-                    $scope.editar(cartaoCredito.idCartaoCredito);
-                },
-                remove: function(cartaoCredito) {
-                    $scope.excluir(cartaoCredito.idCartaoCredito);
-                },
-                view: function(cartaoCredito) {
-                    $scope.visualizar(cartaoCredito.idCartaoCredito);
+            $scope.linha = {
+                events: { 
+                    edit: function(cartaoCredito) {
+                        $scope.editar(cartaoCredito.idCartaoCredito);
+                    },
+                    remove: function(cartaoCredito) {
+                        $scope.excluir(cartaoCredito.idCartaoCredito);
+                    },
+                    view: function(cartaoCredito) {
+                        $scope.visualizar(cartaoCredito.idCartaoCredito);
+                    }
                 }
             }             
         }

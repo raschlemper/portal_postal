@@ -26,33 +26,34 @@
                 ng-class="{sortorder_asc:!reverse && predicate === coluna.column, 
                            sortorder_desc:reverse  && predicate === coluna.column, 
                            sortorder: predicate !== coluna.column}"
-                class="{{coluna.class}}">
+                class="{{coluna.headerClass}}">
                 {{coluna.label}}
             </th>
-            <th class="no-sort text-center" width="100" ng-if="events.edit">Alterar</th>
-            <th class="no-sort text-center" width="100" ng-if="events.remove">Excluir</th>
-            <th class="no-sort text-center" width="100" ng-if="events.view">Detalhes</th>
+            <th class="no-sort text-center" width="100" ng-if="linha.events.edit">Alterar</th>
+            <th class="no-sort text-center" width="100" ng-if="linha.events.remove">Excluir</th>
+            <th class="no-sort text-center" width="100" ng-if="linha.events.view">Detalhes</th>
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="item in listaFiltrada = (filterList(lista, search) | orderBy : predicate : reverse | limitTo : limitTo.value : start) track by $index">
+        <tr ng-repeat="item in listaFiltrada = (filterList(lista, search) | orderBy : predicate : reverse | limitTo : limitTo.value : start) track by $index"
+            ng-class="linha.conditionalClass(item)">
             <td ng-show="showCheckbox"><input type="checkbox" ng-model="item.selected"></td>
-            <td ng-repeat="coluna in colunas track by $index">
+            <td ng-repeat="coluna in colunas track by $index" class="coluna.dataClass">
                 <span ng-if="!coluna.literal">{{column(item, coluna)}}</span>
                 <span ng-if="coluna.literal">{{coluna.column}}</span>
             </td>
-            <td align="center" ng-if="events.edit">
-                <button class="btn btn-sm btn-warning" ng-click="events.edit(item)">
+            <td align="center" ng-if="linha.events.edit">
+                <button class="btn btn-sm btn-warning" ng-click="linha.events.edit(item)">
                     <i class="fa fa-lg fa-pencil"></i>
                 </button>
             </td>
-            <td align="center" ng-if="events.remove">
-                <a class="btn btn-sm btn-danger" ng-click="events.remove(item)">
+            <td align="center" ng-if="linha.events.remove">
+                <a class="btn btn-sm btn-danger" ng-click="linha.events.remove(item)">
                     <i class="fa fa-lg fa-trash"></i>
                 </a>
             </td>
-            <td align="center" ng-if="events.view">
-                <a class="btn btn-sm btn-primary" ng-click="events.view(item)">
+            <td align="center" ng-if="linha.events.view">
+                <a class="btn btn-sm btn-primary" ng-click="linha.events.view(item)">
                     <i class="fa fa-lg fa-info"></i>
                 </a>
             </td>

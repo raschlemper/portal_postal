@@ -8,6 +8,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             $scope.lancamentosLista = [];
             $scope.tipos = LISTAS.lancamento;
             $scope.modelos = LISTAS.modeloLancamento;
+            $scope.situacoes = LISTAS.situacaoLancamento;
             $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
             $scope.datepickerDataFim = angular.copy(DatePickerService.default);    
             $scope.lancSearch = {};
@@ -22,22 +23,28 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 {label: 'Número', column: 'numero'},               
                 {label: 'Favorecido', column: 'favorecido'},                
                 {label: 'Histórico', column: 'historico'},
-                {label: 'Depósito', column: 'deposito', class: 'no-sort', filter: {name: 'currency', args: ''}},  
-                {label: 'Pagamento', column: 'pagamento', class: 'no-sort', filter: {name: 'currency', args: ''}},  
-                {label: 'Saldo', column: 'saldo', class: 'no-sort', filter: {name: 'currency', args: ''}}
+                {label: 'Depósito', column: 'deposito', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}},  
+                {label: 'Pagamento', column: 'pagamento', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}},  
+                {label: 'Saldo', column: 'saldo', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}}
             ]            
-            $scope.events = { 
-                edit: function(lancamento) {
-                    $scope.editar($scope.conta, lancamento.idLancamento);
+            $scope.linha = {
+                conditionalClass: function(item) {
+                    if(item.deposito) return 'text-primary';
+                    else if(item.pagamento) return 'text-danger';
                 },
-                remove: function(lancamento) {
-                    $scope.excluir($scope.conta, lancamento.idLancamento);
-                },
-                view: function(lancamento) {
-                    $scope.visualizar($scope.conta, lancamento.idLancamento);
-                },
-                table: function(lancamentos) {
-                    calculateSaldo(lancamentos);
+                events: { 
+                    edit: function(lancamento) {
+                        $scope.editar($scope.conta, lancamento.idLancamento);
+                    },
+                    remove: function(lancamento) {
+                        $scope.excluir($scope.conta, lancamento.idLancamento);
+                    },
+                    view: function(lancamento) {
+                        $scope.visualizar($scope.conta, lancamento.idLancamento);
+                    },
+                    table: function(lancamentos) {
+                        calculateSaldo(lancamentos);
+                    }
                 }
             };
         };
@@ -86,7 +93,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         
         var criarLancamentosLista = function(data) {
             return _.map(data.lancamentos, function(lancamento) { 
-                if(lancamento.tipo.codigo === 'despesa') { lancamento.pagamento = lancamento.valor; } 
+                if(lancamento.tipo.codigo === 'despesa') { lancamento.pagamento = lancamento.valor * -1; } 
                 else if(lancamento.tipo.codigo === 'receita') { lancamento.deposito = lancamento.valor; }  
                 return _.pick(lancamento, 'idLancamento', 'tipo', 'dataLancamento', 'numero', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico');
             })
@@ -191,7 +198,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             data.dataLancamento = data.dataLancamento || moment();
             data.dataCompensacao = null;
             data.situacao = data.situacao.id;
-            data.modelo = data.modelo.id || $scope.modelos[0].id;
+            data.modelo = data.modelo.id;
             return data;
         }
         
@@ -201,7 +208,9 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 lancamentoOrigem: getLancamento(data.contaOrigem, data),
                 lancamentoDestino: getLancamento(data.contaDestino, data),
                 numero: data.numero,
+                competencia: data.competencia,
                 dataEmissao: data.dataEmissao || moment(),
+                dataLancamento: data.dataLancamento || moment(),
                 valor: data.valor,
                 historico: data.historico
             }; 
@@ -211,24 +220,28 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         }
         
         var getLancamento = function(conta, data) {
-            return {
+            var modelo = $scope.modelos[1];
+            var lancamento = {
                 idLancamento: null,
                 planoConta: null,
                 favorecido: null,
                 numero: data.numero,
-                dataEmissao: data.dataEmissao,
-                dataVencimento: data.dataVencimento,
-                dataLancamento: data.dataLancamento,
-                dataCompensacao: data.dataCompensacao,
+                competencia: data.competencia,
+                dataEmissao: data.dataEmissao || moment(),
+                dataVencimento: data.dataLancamento || moment(),
+                dataLancamento: data.dataLancamento || moment(),
+                dataCompensacao: null,
                 valor: data.valor,       
-                situacao: data.situacao.id,   
-                modelo: $scope.modelos[1].id,
+                situacao: (data && data.situacao) || $scope.situacoes[0],  
+                modelo: modelo.id,
                 historico: data.historico,
+                observacao: null,
+                lancamentoProgramado: null,
                 conta: { idConta: conta.idConta },
-                lancamentoProgramado: { 
-                    idlancamentoProgramado : data.lancamentoProgramado.idLancamentoProgramado 
-                }
             }
+            lancamento.situacao = lancamento.situacao.id;
+            lancamento.historico = '(' + modelo.descricao + ') ' + lancamento.historico;
+            return lancamento;
         }
         
         var modalMessage = function(message) {

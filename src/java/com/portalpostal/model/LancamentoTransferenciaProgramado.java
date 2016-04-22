@@ -1,7 +1,9 @@
 package com.portalpostal.model;
 
 import com.portalpostal.model.dd.TipoFrequencia;
+import com.portalpostal.model.serializer.JsonDateSerializer;
 import java.util.Date;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class LancamentoTransferenciaProgramado {
     
@@ -12,6 +14,7 @@ public class LancamentoTransferenciaProgramado {
     private TipoDocumento documento;
     private TipoFormaPagamento formaPagamento;  
     private TipoFrequencia frequencia; 
+    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataEmissao;
     private Double valor;
     private String historico;

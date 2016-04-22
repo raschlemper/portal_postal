@@ -1,9 +1,11 @@
-ALTER TABLE lancamento RENAME `data` TO `dataEmissao`;
+ALTER TABLE lancamento CHANGE `data` `dataEmissao` DATETIME NOT NULL;
 ALTER TABLE lancamento ADD `dataVencimento` DATETIME NOT NULL;
-ALTER TABLE lancamento ADD `dataPagamento` DATETIME NOT NULL;
-ALTER TABLE lancamento ADD `dataCompensacao` DATETIME NOT NULL;
+ALTER TABLE lancamento ADD `dataLancamento` DATETIME NOT NULL;
+ALTER TABLE lancamento ADD `dataCompensacao` DATETIME NULL;
 ALTER TABLE lancamento ADD `modelo` INT(11) NOT NULL;
 ALTER TABLE lancamento ADD `idLancamentoProgramado` INT NULL;
+ALTER TABLE lancamento ADD `competencia` DATETIME NOT NULL;
+ALTER TABLE lancamento ADD `observacao` LONGTEXT DEFAULT NULL;
 
 ALTER TABLE `lancamento` 
 ADD INDEX `i_lancamento_lancamentoprogramado` (`idLancamentoProgramado` ASC);

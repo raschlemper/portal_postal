@@ -1,6 +1,8 @@
 package com.portalpostal.model;
 
+import com.portalpostal.model.serializer.JsonDateSerializer;
 import java.util.Date;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class LancamentoTransferencia {
     
@@ -8,7 +10,12 @@ public class LancamentoTransferencia {
     private Lancamento lancamentoOrigem;
     private Lancamento lancamentoDestino;
     private String numero;
+    @JsonSerialize(using = JsonDateSerializer.class)
+    private Date competencia;
+    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataEmissao;
+    @JsonSerialize(using = JsonDateSerializer.class)
+    private Date dataLancamento;
     private Double valor;
     private String historico;
 
@@ -44,12 +51,28 @@ public class LancamentoTransferencia {
         this.numero = numero;
     }
 
+    public Date getCompetencia() {
+        return competencia;
+    }
+
+    public void setCompetencia(Date competencia) {
+        this.competencia = competencia;
+    }
+
     public Date getDataEmissao() {
         return dataEmissao;
     }
 
     public void setDataEmissao(Date dataEmissao) {
         this.dataEmissao = dataEmissao;
+    }
+
+    public Date getDataLancamento() {
+        return dataLancamento;
+    }
+
+    public void setDataLancamento(Date dataLancamento) {
+        this.dataLancamento = dataLancamento;
     }
 
     public Double getValor() {

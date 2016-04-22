@@ -3,7 +3,8 @@
         <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
         <h4 class="modal-title">Visualizar Lançamento</h4>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" ng-class="{'text-primary': lancamento.tipo.codigo === 'receita',
+                                       'text-danger': lancamento.tipo.codigo === 'despesa'}">
         <div class="bootbox-body">
             <div class="row">
                 <div class="col-md-4 text-right">
@@ -37,9 +38,15 @@
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">
+                    <label>Competência:</label>
+                </div>
+                <div class="col-md-8">{{lancamento.competencia | date: 'MMMM/yyyy'}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
                     <label>Data Emissão:</label>
                 </div>
-                <div class="col-md-8">{{lancamento.dataEmissao | date: 'dd/MM/yyyy'}}</div>
+                <div class="col-md-8">{{lancamento.dataEmissao | date: 'dd/MM/yyyy HH:mm'}}</div>
             </div>
             <div class="row" ng-if="lancamento.modelo.id !== 0">
                 <div class="col-md-4 text-right">
@@ -82,6 +89,12 @@
                     <label>Histórico:</label>
                 </div>
                 <div class="col-md-8">{{(lancamento.historico)}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Observação:</label>
+                </div>
+                <div class="col-md-8">{{(lancamento.observacao)}}</div>
             </div>
         </div>
     </div>

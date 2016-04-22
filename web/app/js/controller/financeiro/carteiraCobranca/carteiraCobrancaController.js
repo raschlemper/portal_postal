@@ -17,15 +17,17 @@ app.controller('CarteiraCobrancaController', ['$scope', '$filter', 'CarteiraCobr
                 {label: 'Convênio', column: 'codigoConvenio'},                         
                 {label: 'Carteira', column: 'codigoCarteira'}
             ]            
-            $scope.events = { 
-                edit: function(carteiraCobranca) {
-                    $scope.editar(carteiraCobranca.idCarteiraCobranca);
-                },
-                remove: function(carteiraCobranca) {
-                    $scope.excluir(carteiraCobranca.idCarteiraCobranca);
-                },
-                view: function(carteiraCobranca) {
-                    $scope.visualizar(carteiraCobranca.idCarteiraCobranca);
+            $scope.linha = {
+                events: { 
+                    edit: function(carteiraCobranca) {
+                        $scope.editar(carteiraCobranca.idCarteiraCobranca);
+                    },
+                    remove: function(carteiraCobranca) {
+                        $scope.excluir(carteiraCobranca.idCarteiraCobranca);
+                    },
+                    view: function(carteiraCobranca) {
+                        $scope.visualizar(carteiraCobranca.idCarteiraCobranca);
+                    }
                 }
             }             
         }

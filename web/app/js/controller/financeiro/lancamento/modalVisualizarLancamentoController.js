@@ -5,12 +5,7 @@ app.controller('ModalVisualizarLancamentoController', ['$scope', '$modalInstance
 
         var init = function () { 
             $scope.lancamento = lancamento;
-            $scope.data = setData($scope.lancamento);
         };    
-        
-        var setData = function() {
-            return lancamento.dataPagamento || lancamento.dataVencimento;
-        }
         
         $scope.editar = function() {
             $modalInstance.close(lancamento.idLancamento);

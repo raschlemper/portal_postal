@@ -9,7 +9,6 @@ public class ContaCorrente {
     private Integer agenciaDv;
     private Integer contaCorrente;
     private Integer contaCorrenteDv;
-//    private Carteira carteira;
     private Boolean poupanca;
 
     public Integer getIdContaCorrente() {

@@ -4,7 +4,9 @@ import com.portalpostal.model.dd.TipoFrequencia;
 import com.portalpostal.model.dd.TipoLancamento;
 import com.portalpostal.model.dd.TipoSituacaoLancamento;
 import com.portalpostal.model.dd.TipoSituacaoLancamentoProgramado;
+import com.portalpostal.model.serializer.JsonDateSerializer;
 import java.util.Date;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class LancamentoProgramado {
     
@@ -19,7 +21,9 @@ public class LancamentoProgramado {
     private TipoFormaPagamento formaPagamento;    
     private TipoFrequencia frequencia; 
     private Integer numeroParcela;
+    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataEmissao;
+    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataVencimento;
     private Double valor;
     private TipoSituacaoLancamentoProgramado situacao;

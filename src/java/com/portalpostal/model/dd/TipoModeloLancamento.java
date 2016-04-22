@@ -1,9 +1,9 @@
 package com.portalpostal.model.dd;
 
-import com.portalpostal.model.serializer.TipoContaSerializer;
+import com.portalpostal.model.serializer.TipoModeloLancamentoSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-@JsonSerialize(using = TipoContaSerializer.class)
+@JsonSerialize(using = TipoModeloLancamentoSerializer.class)
 public enum TipoModeloLancamento {    
     
     NORMAL("normal", "Normal"),

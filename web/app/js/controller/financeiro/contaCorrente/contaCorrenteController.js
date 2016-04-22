@@ -12,19 +12,21 @@ app.controller('ContaCorrenteController', ['$scope', '$filter', 'ContaCorrenteSe
         var initTable = function() {            
             $scope.colunas = [
                 {label: 'Nome', column: 'nome'},
-                {label: 'Banco', column: 'banco', class: 'col-md-3'},                         
-                {label: 'Agência', column: 'agencia', class: 'col-md-2'},                         
+                {label: 'Banco', column: 'banco', headerClass: 'col-md-3'},                         
+                {label: 'Agência', column: 'agencia', headerClass: 'col-md-2'},                         
                 {label: 'Conta Corrente', column: 'contaCorrente', class: 'col-md-2'}
             ]            
-            $scope.events = { 
-                edit: function(contaCorrente) {
-                    $scope.editar(contaCorrente.idContaCorrente);
-                },
-                remove: function(contaCorrente) {
-                    $scope.excluir(contaCorrente.idContaCorrente);
-                },
-                view: function(contaCorrente) {
-                    $scope.visualizar(contaCorrente.idContaCorrente);
+            $scope.linha = {
+                events: { 
+                    edit: function(contaCorrente) {
+                        $scope.editar(contaCorrente.idContaCorrente);
+                    },
+                    remove: function(contaCorrente) {
+                        $scope.excluir(contaCorrente.idContaCorrente);
+                    },
+                    view: function(contaCorrente) {
+                        $scope.visualizar(contaCorrente.idContaCorrente);
+                    }
                 }
             }             
         }

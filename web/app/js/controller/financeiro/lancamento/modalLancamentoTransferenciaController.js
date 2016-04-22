@@ -4,14 +4,17 @@ app.controller('ModalLancamentoTransferenciaController', ['$scope', '$modalInsta
     function ($scope, $modalInstance, ContaService, DatePickerService, LISTAS) {
 
         var init = function () {  
-            $scope.datepicker = DatePickerService.default; 
+            $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
+            $scope.datepickerLancamento = angular.copy(DatePickerService.default); 
             $scope.situacoes = LISTAS.situacaoLancamento;
             $scope.lancamentoTransferencia = {
                 idLancamentoTransferencia: null,
                 contaOrigem: null,
                 contaDestino: null,
                 numero: null,
+                competencia: null,
                 dataEmissao: null,
+                dataLancamento: null,
                 valor: null,     
                 historico: null
             };             
@@ -45,11 +48,23 @@ app.controller('ModalLancamentoTransferenciaController', ['$scope', '$modalInsta
         };
 
         var validarForm = function (form) {
-            if (form.dataEmissao.$error.required) {
+            if(form.contaOrigem.$modelValue === form.contaDestino.$modelValue) {
+                alert('A conta de origem deve ser diferente da conta de destino!');
+                return false;                
+            }
+            if (form.competencia.$error.required) {
+                alert('Preencha a competência do lançamento!');
+                return false;
+            }        
+            if (form.competencia.$modelValue && !moment(form.competencia.$modelValue).isValid()) {
+                alert('A competência do lançamento não é válida!');
+                return false;
+            }    
+            if (form.dataLancamento.$error.required) {
                 alert('Preencha a data do lançamento!');
                 return false;
             }       
-            if (form.dataEmissao.$modelValue && !moment(form.dataEmissao.$modelValue).isValid()) {
+            if (form.dataLancamento.$modelValue && !moment(form.dataLancamento.$modelValue).isValid()) {
                 alert('A data do lançamento não é válida!');
                 return false;
             }    

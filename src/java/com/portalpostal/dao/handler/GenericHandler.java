@@ -12,6 +12,16 @@ class GenericHandler {
         this.table = table;
     }
     
+    protected boolean existFKValue(ResultSet result, String column) {
+        try {
+            Integer value = (Integer) result.getObject(column);
+            if (value == null) return false;
+        } catch (SQLException ex) {
+            return true;
+        }
+        return true;
+    }
+    
     protected boolean existColumn(ResultSet result, String column) {
         try {
             Integer resultFind = result.findColumn(column);
@@ -39,7 +49,7 @@ class GenericHandler {
     
     protected Date getDate(ResultSet result, String columnName) throws SQLException {
         if(!existColumn(result, columnName)) return null;
-        return result.getDate(getColumn(columnName));
+        return result.getTimestamp(getColumn(columnName));
     }
     
     protected Double getDouble(ResultSet result, String columnName) throws SQLException {

@@ -14,8 +14,8 @@ app.controller('ContaController', ['$scope', 'ContaService', 'ModalService', 'LI
         var initTable = function() {            
             $scope.colunas = [
                 {label: 'Nome', column: 'nome'},
-                {label: 'Tipo', column: 'tipo.descricao', class: 'col-md-2'},                
-                {label: 'Status', column: 'status.descricao', class: 'col-md-2'}
+                {label: 'Tipo', column: 'tipo.descricao', headerClass: 'col-md-2'},                
+                {label: 'Status', column: 'status.descricao', headerClass: 'col-md-2'}
             ]            
             $scope.events = { 
                 view: function(conta) {
