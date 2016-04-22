@@ -4,7 +4,9 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
     function ($scope, $modalInstance, conta, lancamentoProgramado, ContaService, PlanoContaService, TipoDocumentoService, TipoFormaPagamentoService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {  
-            $scope.datepicker = DatePickerService.default; 
+            $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
+            $scope.datepickerVencimento = angular.copy(DatePickerService.default); 
+            $scope.datepickerLancamento = angular.copy(DatePickerService.default); 
             $scope.tipos = LISTAS.lancamento; 
             $scope.frequencias = LISTAS.frequencia;
             $scope.situacoes = LISTAS.situacaoLancamentoProgramado;
@@ -18,14 +20,17 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
                 documento: (lancamentoProgramado && lancamentoProgramado.documento) || null,  
                 formaPagamento: (lancamentoProgramado && lancamentoProgramado.formaPagamento) || null, 
                 frequencia: (lancamentoProgramado && lancamentoProgramado.frequencia) || $scope.frequencias[0],
-                quantidadeParcela: (lancamentoProgramado && lancamentoProgramado.quantidadeParcela) || null,
                 numeroParcela: (lancamentoProgramado && lancamentoProgramado.numeroParcela) || null,  
-                data: (lancamentoProgramado && lancamentoProgramado.data) || null,
+                competencia: (lancamentoProgramado && lancamentoProgramado.competencia) || null,  
+                dataEmissao: (lancamentoProgramado && lancamentoProgramado.dataEmissao) || null,
+                dataVencimento: (lancamentoProgramado && lancamentoProgramado.dataVencimento) || null,
+                dataLancamento: (lancamentoProgramado && lancamentoProgramado.dataLancamento) || null,
                 valor: (lancamentoProgramado && lancamentoProgramado.valor) || null,    
                 situacao: (lancamentoProgramado && lancamentoProgramado.situacao) || $scope.situacoes[0],
                 historico: (lancamentoProgramado && lancamentoProgramado.historico) || null,
                 gerarLancamento: false
-            };             
+            };            
+            $scope.lancamentoProgramado.numero = $scope.lancamentoProgramado.numero + '-' + $scope.lancamentoProgramado.numeroParcela;
             getTitle();
             contas();
             tipoDocumento();
@@ -96,13 +101,13 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
-            lancamentoProgramado.gerarLancamento = false;
+            $scope.lancamentoProgramado.gerarLancamento = false;
             $modalInstance.close($scope.lancamentoProgramado);            
         };
         
         $scope.gerarLancamento = function(form) {
             if (!validarForm(form)) return;
-            lancamentoProgramado.gerarLancamento = true;
+            $scope.lancamentoProgramado.gerarLancamento = true;
             $modalInstance.close($scope.lancamentoProgramado);            
         };
         
@@ -111,14 +116,32 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         };
 
         var validarForm = function (form) {
-            if (form.data.$error.required) {
-                alert('Preencha a data do lançamento programado!');
+            if (form.competencia.$error.required) {
+                alert('Preencha a competência do lançamento programado!');
                 return false;
             }       
-            if (form.data.$modelValue && !moment(form.data.$modelValue).isValid()) {
-                alert('A data do lançamento programado não é válida!');
+            if (form.competencia.$modelValue && !moment(form.competencia.$modelValue).isValid()) {
+                alert('A competência do lançamento programado não é válida!');
                 return false;
-            }    
+            } 
+            if (form.dataVencimento.$error.required) {
+                alert('Preencha a data de vencimento do lançamento programado!');
+                return false;
+            }       
+            if (form.dataVencimento.$modelValue && !moment(form.dataVencimento.$modelValue).isValid()) {
+                alert('A data de vencimento do lançamento programado não é válida!');
+                return false;
+            } 
+            if(form.idLancamentoProgramado.$modelValue) {
+                if (form.dataLancamento.$error.required) {
+                    alert('Preencha a data do lançamento programado!');
+                    return false;
+                }       
+                if (form.dataLancamento.$modelValue && !moment(form.dataLancamento.$modelValue).isValid()) {
+                    alert('A data do lançamento programado não é válida!');
+                    return false;
+                }  
+            }
             if (form.valor.$error.required) {
                 alert('Preencha o valor do lançamento programado!');
                 return false;

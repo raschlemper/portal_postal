@@ -2,11 +2,8 @@ package com.portalpostal.model;
 
 import com.portalpostal.model.dd.TipoFrequencia;
 import com.portalpostal.model.dd.TipoLancamento;
-import com.portalpostal.model.dd.TipoSituacaoLancamento;
 import com.portalpostal.model.dd.TipoSituacaoLancamentoProgramado;
-import com.portalpostal.model.serializer.JsonDateSerializer;
 import java.util.Date;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class LancamentoProgramado {
     
@@ -21,10 +18,10 @@ public class LancamentoProgramado {
     private TipoFormaPagamento formaPagamento;    
     private TipoFrequencia frequencia; 
     private Integer numeroParcela;
-    @JsonSerialize(using = JsonDateSerializer.class)
+    private Date competencia;
     private Date dataEmissao;
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataVencimento;
+    private Date dataLancamento;
     private Double valor;
     private TipoSituacaoLancamentoProgramado situacao;
     private String historico;
@@ -117,6 +114,14 @@ public class LancamentoProgramado {
         this.numeroParcela = numeroParcela;
     }
 
+    public Date getCompetencia() {
+        return competencia;
+    }
+
+    public void setCompetencia(Date competencia) {
+        this.competencia = competencia;
+    }
+
     public Date getDataEmissao() {
         return dataEmissao;
     }
@@ -131,6 +136,14 @@ public class LancamentoProgramado {
 
     public void setDataVencimento(Date dataVencimento) {
         this.dataVencimento = dataVencimento;
+    }
+
+    public Date getDataLancamento() {
+        return dataLancamento;
+    }
+
+    public void setDataLancamento(Date dataLancamento) {
+        this.dataLancamento = dataLancamento;
     }
 
     public Double getValor() {

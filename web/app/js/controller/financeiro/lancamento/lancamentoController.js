@@ -191,7 +191,9 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         var ajustarDados = function(data) {                 
             data.conta = { idConta: data.conta.idConta };       
             data.planoConta = { idPlanoConta: data.planoConta.idPlanoConta }; 
-            data.lancamentoProgramado = { idLancamentoProgramado: data.planoConta.idLancamentoProgramado }; 
+            if(data.lancamentoProgramado) {
+                data.lancamentoProgramado = { idLancamentoProgramado: data.lancamentoProgramado.idLancamentoProgramado }; 
+            }
             data.tipo = data.tipo.id; 
             data.dataEmissao = data.dataEmissao || moment();
             data.dataVencimento = data.dataVencimento || data.dataLancamento || moment();

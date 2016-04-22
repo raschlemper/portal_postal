@@ -22,7 +22,7 @@ public class LancamentoProgramadoDAO extends GenericDAO {
                    + "WHERE lancamento_programado.idConta = conta.idConta "
                    + "AND lancamento_programado.idTipoDocumento = tipo_documento.idTipoDocumento " 
                    + "AND lancamento_programado.idTipoFormaPagamento = tipo_forma_pagamento.idTipoFormaPagamento " 
-                   + "ORDER BY lancamento_programado.data";        
+                   + "ORDER BY lancamento_programado.dataVencimento";        
         return findAll(sql, null, lancamentoProgramadoHandler);
     }
 
@@ -48,7 +48,7 @@ public class LancamentoProgramadoDAO extends GenericDAO {
                    + "AND conta.idConta = :idConta "
                    + "AND lancamento_programado.idTipoDocumento = tipo_documento.idTipoDocumento " 
                    + "AND lancamento_programado.idTipoFormaPagamento = tipo_forma_pagamento.idTipoFormaPagamento " 
-                   + "ORDER BY lancamento_programado.data";        
+                   + "ORDER BY lancamento_programado.dataVencimento";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idConta", idConta);       
         return findAll(sql, params, lancamentoProgramadoHandler);

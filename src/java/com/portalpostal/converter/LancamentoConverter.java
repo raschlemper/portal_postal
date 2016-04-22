@@ -16,7 +16,8 @@ public class LancamentoConverter {
         lancamento.setLancamentoProgramado(lancamentoProgramado);
         lancamento.setTipo(lancamentoProgramado.getTipo());
         lancamento.setFavorecido(lancamentoProgramado.getFavorecido());
-        lancamento.setNumero(lancamentoProgramado.getNumero() + "-" + lancamentoProgramado.getNumeroParcela());
+        lancamento.setNumero(lancamentoProgramado.getNumero());
+        lancamento.setCompetencia(lancamentoProgramado.getCompetencia());
         lancamento.setDataEmissao(lancamentoProgramado.getDataEmissao());
         lancamento.setDataVencimento(lancamentoProgramado.getDataVencimento());
         lancamento.setDataLancamento(new Date());

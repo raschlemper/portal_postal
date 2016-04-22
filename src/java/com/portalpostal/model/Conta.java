@@ -2,10 +2,8 @@ package com.portalpostal.model;
 
 import com.portalpostal.model.dd.TipoConta;
 import com.portalpostal.model.dd.TipoStatusConta;
-import com.portalpostal.model.serializer.JsonDateSerializer;
 import java.util.Date;
 import java.util.List;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class Conta {
     
@@ -15,7 +13,6 @@ public class Conta {
     private String nome;
     private TipoConta tipo;
     private TipoStatusConta status;
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataAbertura;
     private Double valorSaldoAbertura;   
     private Double saldo; 

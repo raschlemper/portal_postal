@@ -56,6 +56,7 @@ public class LancamentoProgramadoHandler extends GenericHandler implements Resul
     
     private LancamentoParcelado getLancamentoParcelado(ResultSet result) throws SQLException {
         if(!existColumn(result, "lancamento_parcelado.idLancamentoParcelado")) return null;
+        if(!existFKValue(result, "lancamento_parcelado.idLancamentoParcelado")) return null;
         return new LancamentoParceladoHandler().handle(result); 
     }
     

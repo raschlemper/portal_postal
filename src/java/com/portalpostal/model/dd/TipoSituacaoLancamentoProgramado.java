@@ -1,9 +1,9 @@
 package com.portalpostal.model.dd;
 
-import com.portalpostal.model.serializer.TipoSituacaoLancamentoSerializer;
+import com.portalpostal.model.serializer.TipoSituacaoLancamentoProgramadoSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-@JsonSerialize(using = TipoSituacaoLancamentoSerializer.class)
+@JsonSerialize(using = TipoSituacaoLancamentoProgramadoSerializer.class)
 public enum TipoSituacaoLancamentoProgramado {    
     
     ATIVO("ativo", "Ativo"),

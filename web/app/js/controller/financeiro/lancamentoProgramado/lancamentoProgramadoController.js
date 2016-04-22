@@ -116,17 +116,14 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', 'Lancamen
             modalSalvar(conta).then(function(result) {
                 var gerarLancamento = result.gerarLancamento;
                 result = ajustarDados(result); 
-                if(gerarLancamento) { criarLancamento(result); } 
-                else { 
-                    LancamentoProgramadoService.save(result)
-                        .then(function(data) { 
-                            modalMessage("Lançamento Programado Inserido com sucesso!");
-                            todos(conta);
-                        })
-                        .catch(function(e) {
-                            modalMessage(e);
-                        });
-                }
+                LancamentoProgramadoService.save(result)
+                    .then(function(data) { 
+                        modalMessage("Lançamento Programado Inserido com sucesso!");
+                        todos(conta);
+                    })
+                    .catch(function(e) {
+                        modalMessage(e);
+                    });
             });
         };
 
@@ -197,11 +194,16 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', 'Lancamen
         var ajustarDados = function(data) {       
             delete data.gerarLancamento;
             data.conta = { idConta: data.conta.idConta };       
-            data.planoConta = { idPlanoConta: data.planoConta.idPlanoConta }; 
-            data.lancamentoParcelado = { idLancamentoParcelado: data.lancamentoParcelado.idLancamentoParcelado }; 
+            data.planoConta = { idPlanoConta: data.planoConta.idPlanoConta };              
+            if(data.lancamentoParcelado) {
+                data.lancamentoParcelado = { idLancamentoParcelado: data.lancamentoParcelado.idLancamentoParcelado }; 
+            }
             data.documento = { idTipoDocumento: data.documento.idTipoDocumento }; 
             data.formaPagamento = { idTipoFormaPagamento: data.formaPagamento.idTipoFormaPagamento }; 
             data.tipo = data.tipo.id;
+            data.dataEmissao = data.dataEmissao || moment();
+            data.dataVencimento = data.dataVencimento || data.dataLancamento || moment();
+            data.dataLancamento = data.dataLancamento || moment();
             data.frequencia = data.frequencia.id;
             data.situacao = data.situacao.id;
             if(!data.idLancamentoProgramado) { 

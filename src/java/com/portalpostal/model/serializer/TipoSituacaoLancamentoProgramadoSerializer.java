@@ -1,6 +1,5 @@
 package com.portalpostal.model.serializer;
 
-import com.portalpostal.model.dd.TipoSituacaoLancamento;
 import com.portalpostal.model.dd.TipoSituacaoLancamentoProgramado;
 import java.io.IOException;
 import org.codehaus.jackson.JsonGenerator;

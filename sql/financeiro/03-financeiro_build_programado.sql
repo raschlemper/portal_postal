@@ -1,9 +1,9 @@
 USE pp_06895434000183;
 
-DROP TABLE tipo_documento;
-DROP TABLE tipo_forma_pagamento;
 DROP TABLE lancamento_parcelado;
 DROP TABLE lancamento_programado;
+DROP TABLE tipo_documento;
+DROP TABLE tipo_forma_pagamento;
 
 CREATE TABLE `tipo_documento` (
   `idTipoDocumento` INT NOT NULL AUTO_INCREMENT,
