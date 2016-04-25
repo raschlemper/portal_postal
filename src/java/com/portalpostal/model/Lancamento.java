@@ -14,6 +14,7 @@ public class Lancamento {
     private TipoLancamento tipo;
     private String favorecido;
     private String numero;
+    private Integer numeroParcela;
     private Date competencia;
     private Date dataEmissao;
     private Date dataVencimento;
@@ -82,6 +83,14 @@ public class Lancamento {
 
     public void setNumero(String numero) {
         this.numero = numero;
+    }
+
+    public Integer getNumeroParcela() {
+        return numeroParcela;
+    }
+
+    public void setNumeroParcela(Integer numeroParcela) {
+        this.numeroParcela = numeroParcela;
     }
 
     public Date getCompetencia() {

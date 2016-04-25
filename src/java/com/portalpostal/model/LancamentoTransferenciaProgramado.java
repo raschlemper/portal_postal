@@ -14,7 +14,6 @@ public class LancamentoTransferenciaProgramado {
     private TipoDocumento documento;
     private TipoFormaPagamento formaPagamento;  
     private TipoFrequencia frequencia; 
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataEmissao;
     private Double valor;
     private String historico;

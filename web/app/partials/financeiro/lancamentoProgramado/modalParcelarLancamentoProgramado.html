@@ -97,14 +97,14 @@
                                 <label class="small">Número</label>
                                 <div class="input-group">
                                     <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                    <input class="form-control" type="text" name="numero" ng-model="lancamentoProgramado.numero" 
+                                    <input class="form-control" type="text" name="numero" ng-model="lancamentoProgramado.numero" ng-change="createParcelas(lancamentoProgramado.quantidadeParcela)"
                                            placeholder="Número"/>  
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
                                 <label class="small">Competência</label>
                                 <div class="input-group">
-                                    <input type="text" autocomplete="off" name="competencia" class="form-control" ng-model="lancamentoProgramado.competencia" 
+                                    <input type="text" autocomplete="off" name="competencia" class="form-control" ng-model="lancamentoProgramado.competencia" ng-change="createParcelas(lancamentoProgramado.quantidadeParcela)"
                                            datepicker-popup="MMMM/yyyy" is-open="datepickerCompetencia.opened" ng-required="true"
                                            current-text="{{datepickerCompetencia.today}}" clear-text="{{datepickerCompetencia.clear}}" close-text="{{datepickerCompetencia.close}}"
                                            placeholder="Competência do lançamento" datepicker-mode="'month'" datepicker-options="{minMode: 'month'}"/>
@@ -114,7 +114,7 @@
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
                                 <label class="small">Data Vencimento</label>
                                 <div class="input-group">
-                                    <input type="text" autocomplete="off" name="dataVencimento" class="form-control" ng-model="lancamentoProgramado.dataVencimento" 
+                                    <input type="text" autocomplete="off" name="dataVencimento" class="form-control" ng-model="lancamentoProgramado.dataVencimento" ng-change="createParcelas(lancamentoProgramado.quantidadeParcela)"
                                            datepicker-popup="{{datepickerVencimento.format}}" is-open="datepickerVencimento.opened" ng-required="true"
                                            current-text="{{datepickerVencimento.today}}" clear-text="{{datepickerVencimento.clear}}" close-text="{{datepickerVencimento.close}}"
                                            placeholder="Data do vencimento"/>
@@ -125,7 +125,7 @@
                                 <label class="small">Valor</label>
                                 <div class="input-group">
                                     <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
-                                    <input type="text" autocomplete="off" name="valor" class="form-control text-right"
+                                    <input type="text" autocomplete="off" name="valor" class="form-control text-right" ng-change="createParcelas(lancamentoProgramado.quantidadeParcela)"
                                            ui-number-mask="2" placeholder="Valor do lançamento" ng-model="lancamentoProgramado.valor" ng-required="true"/>
                                 </div>
                             </div>
@@ -154,7 +154,7 @@
                                         <td class="text-center">{{parcela.dataVencimento | date : 'dd/MM/yyyy'}}</td>
                                         <td>{{parcela.valor | currency : 'R$ '}}</td>
                                         <td class="text-center">
-                                            <button type="button" class="btn btn-sm btn-primary" ng-click="lancarParcela(parcela)">
+                                            <button type="button" class="btn btn-sm btn-primary" ng-click="lancarParcela(this.lancamentoProgramadoForm, lancamentoProgramado, parcela)">
                                                 <i class="fa fa-sm fa-plus fa-spc"></i>Gerar
                                             </button>
                                         </td>

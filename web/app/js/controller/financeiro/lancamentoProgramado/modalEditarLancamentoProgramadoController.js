@@ -29,7 +29,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         
         var initStep = function() {
             if(lancamentoProgramado.quantidadeParcela) {
-                parcelarLancamento();
+                parcelarLancamento(lancamentoProgramado);
             } else {                
                 $scope.stepFrom = null; 
                 $scope.stepTo = 'editar'; 
@@ -109,6 +109,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
             delete $scope.lancamentoProgramado.parcelas;
+            lancamentoProgramado.gerarLancamento = false;
             $modalInstance.close($scope.lancamentoProgramado);            
         };
         
@@ -130,45 +131,50 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
             }
         }
         
-        $scope.lancarProgramado = function(form) {
+        $scope.lancarProgramado = function(form, lancamentoProgramado) {
             if (!validarForm(form)) return;
             $scope.stepFrom = 'editar'; 
             $scope.stepTo = 'lancar'; 
-            $scope.lancamento = getLancamento(angular.copy($scope.lancamentoProgramado), null);
+            $scope.lancamento = getLancamento(lancamentoProgramado, null, $scope.modelos[2]);
         };
         
-        $scope.lancarParcela = function(parcela) {
+        $scope.lancarParcela = function(form, lancamentoProgramado, parcela) {
+            if (!validarForm(form)) return;
             $scope.stepFrom = 'parcelar'; 
             $scope.stepTo = 'lancar'; 
-//            $scope.lancamento = lancamento;
-            $scope.lancamento = getLancamento(angular.copy($scope.lancamentoProgramado), parcela);
+            $scope.lancamento = getLancamento(lancamentoProgramado, parcela, $scope.modelos[4]);
         };
         
-        $scope.lancar = function(lancamento) {
+        $scope.lancar = function(form, lancamentoProgramado, lancamento) {
+            if (!validarForm(form)) return;
+            delete $scope.lancamentoProgramado.parcelas;
+            lancamentoProgramado.gerarLancamento = true;
             lancamento = ajusteLancamento(lancamento);
             $scope.lancamentoProgramado.lancamentos = [];
             $scope.lancamentoProgramado.lancamentos.push(lancamento);
-            $modalInstance.close($scope.lancamentoProgramado); 
+            $modalInstance.close(lancamentoProgramado); 
         };
                 
-        $scope.parcelar = function(form) {
+        $scope.parcelar = function(form, lancamentoProgramado) {
             if (!validarForm(form)) return;
-            parcelarLancamento();
+            parcelarLancamento(lancamentoProgramado);
         };
         
-        var parcelarLancamento = function() {            
+        var parcelarLancamento = function(lancamentoProgramado) {            
             $scope.stepFrom = 'editar'; 
             $scope.stepTo = 'parcelar'; 
             $scope.createParcelas(lancamentoProgramado.quantidadeParcela);
         }
                 
-        var getLancamento = function(lancamentoProgramado, parcela) {
+        var getLancamento = function(lancamentoProgramado, parcela, modelo) {
+            var numeroParcela = lancamentoProgramado.numeroParcela;
             var lancamento = {
                 conta: lancamentoProgramado.conta,
                 planoConta: lancamentoProgramado.planoConta,
                 tipo: lancamentoProgramado.tipo,
                 favorecido: lancamentoProgramado.favorecido,
                 numero: parcela.numero || lancamentoProgramado.numero + '-' + lancamentoProgramado.numeroParcela,
+                numeroParcela: numeroParcela,
                 competencia: parcela.competencia || lancamentoProgramado.competencia,
                 dataEmissao: lancamentoProgramado.dataEmissao || moment(),
                 dataVencimento: parcela.dataVencimento || lancamentoProgramado.dataVencimento,
@@ -179,8 +185,8 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
                 valorJuros: 0,
                 valorMulta: 0,
                 situacao: $scope.situacoesLancamento[0],
-                modelo: $scope.modelos[2],
-                historico: lancamentoProgramado.historico,
+                modelo: modelo,
+                historico: '(' + modelo.descricao + ') ' + lancamentoProgramado.historico,
                 observacao: null
             }  
             return lancamento;

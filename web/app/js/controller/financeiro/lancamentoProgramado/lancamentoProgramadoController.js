@@ -207,30 +207,30 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', 'Lancamen
             return data;
         } 
         
-        var ajustarDadosTransferencia = function(data) {                 
-            var lancamentoProgramadoTransferencia = { 
-                idLancamentoProgramadoTransferencia: null,
-                lancamentoProgramadoOrigem: getLancamentoProgramado(data.contaOrigem, data),
-                lancamentoProgramadoDestino: getLancamentoProgramado(data.contaDestino, data)
-            }; 
-            lancamentoProgramadoTransferencia.lancamentoProgramadoOrigem.tipo = $scope.tipos[1].id;
-            lancamentoProgramadoTransferencia.lancamentoProgramadoDestino.tipo = $scope.tipos[0].id;    
-            return lancamentoProgramadoTransferencia;
-        }
+//        var ajustarDadosTransferencia = function(data) {                 
+//            var lancamentoProgramadoTransferencia = { 
+//                idLancamentoProgramadoTransferencia: null,
+//                lancamentoProgramadoOrigem: getLancamentoProgramado(data.contaOrigem, data),
+//                lancamentoProgramadoDestino: getLancamentoProgramado(data.contaDestino, data)
+//            }; 
+//            lancamentoProgramadoTransferencia.lancamentoProgramadoOrigem.tipo = $scope.tipos[1].id;
+//            lancamentoProgramadoTransferencia.lancamentoProgramadoDestino.tipo = $scope.tipos[0].id;    
+//            return lancamentoProgramadoTransferencia;
+//        }
         
-        var getLancamentoProgramado = function(conta, data) {
-            return {
-                idLancamentoProgramado: null,
-                planoConta: null,
-                favorecido: null,
-                numero: data.numero,
-                data: data.data,
-                valor: data.valor,       
-                situacao: data.situacao.id,
-                historico: data.historico,
-                conta: { idConta: conta.idConta }
-            }
-        }
+//        var getLancamentoProgramado = function(conta, data) {
+//            return {
+//                idLancamentoProgramado: null,
+//                planoConta: null,
+//                favorecido: null,
+//                numero: data.numero,
+//                data: data.data,
+//                valor: data.valor,       
+//                situacao: data.situacao.id,
+//                historico: data.historico,
+//                conta: { idConta: conta.idConta }
+//            }
+//        }
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);

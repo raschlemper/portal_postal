@@ -18,7 +18,7 @@ public class LancamentoProgramadoDAO extends GenericDAO {
     public List<LancamentoProgramado> findAll() throws Exception {
         String sql = "SELECT * FROM conta, tipo_documento, tipo_forma_pagamento, lancamento_programado "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento_programado.idPlanoConta = plano_conta.idPlanoConta) "
-                   + "LEFT OUTER JOIN lancamento_parcelado ON(lancamento_programado.idLancamentoParcelado = lancamento_parcelado.idLancamentoParcelado) "
+//                   + "LEFT OUTER JOIN lancamento_parcelado ON(lancamento_programado.idLancamentoParcelado = lancamento_parcelado.idLancamentoParcelado) "
                    + "WHERE lancamento_programado.idConta = conta.idConta "
                    + "AND lancamento_programado.idTipoDocumento = tipo_documento.idTipoDocumento " 
                    + "AND lancamento_programado.idTipoFormaPagamento = tipo_forma_pagamento.idTipoFormaPagamento " 
@@ -29,7 +29,7 @@ public class LancamentoProgramadoDAO extends GenericDAO {
     public LancamentoProgramado find(Integer idLancamentoProgramado) throws Exception {
         String sql = "SELECT * FROM conta, tipo_documento, tipo_forma_pagamento, lancamento_programado "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento_programado.idPlanoConta = plano_conta.idPlanoConta) "
-                   + "LEFT OUTER JOIN lancamento_parcelado ON(lancamento_programado.idLancamentoParcelado = lancamento_parcelado.idLancamentoParcelado) "
+//                   + "LEFT OUTER JOIN lancamento_parcelado ON(lancamento_programado.idLancamentoParcelado = lancamento_parcelado.idLancamentoParcelado) "
                    + "WHERE lancamento_programado.idConta = conta.idConta "
                    + "AND lancamento_programado.idTipoDocumento = tipo_documento.idTipoDocumento " 
                    + "AND lancamento_programado.idTipoFormaPagamento = tipo_forma_pagamento.idTipoFormaPagamento " 
@@ -43,7 +43,7 @@ public class LancamentoProgramadoDAO extends GenericDAO {
         String sql = "SELECT lancamento_programado.*, plano_conta.*, tipo_documento.*, tipo_forma_pagamento.* "
                    + "FROM conta, tipo_documento, tipo_forma_pagamento, lancamento_programado "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento_programado.idPlanoConta = plano_conta.idPlanoConta) "
-                   + "LEFT OUTER JOIN lancamento_parcelado ON(lancamento_programado.idLancamentoParcelado = lancamento_parcelado.idLancamentoParcelado) "
+//                   + "LEFT OUTER JOIN lancamento_parcelado ON(lancamento_programado.idLancamentoParcelado = lancamento_parcelado.idLancamentoParcelado) "
                    + "WHERE conta.idConta = lancamento_programado.idConta "
                    + "AND conta.idConta = :idConta "
                    + "AND lancamento_programado.idTipoDocumento = tipo_documento.idTipoDocumento " 

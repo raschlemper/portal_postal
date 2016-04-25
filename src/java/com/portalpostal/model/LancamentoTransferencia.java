@@ -10,11 +10,8 @@ public class LancamentoTransferencia {
     private Lancamento lancamentoOrigem;
     private Lancamento lancamentoDestino;
     private String numero;
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date competencia;
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataEmissao;
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataLancamento;
     private Double valor;
     private String historico;
