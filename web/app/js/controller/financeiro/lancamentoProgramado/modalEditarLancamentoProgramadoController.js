@@ -19,14 +19,22 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
             if(!lancamentoProgramado || (lancamentoProgramado && !lancamentoProgramado.idLancamentoProgramado)) { 
                 $scope.lancamentoProgramado.numeroParcela = 1; 
             }
-            $scope.stepFrom = null; 
-            $scope.stepTo = 'editar'; 
+            initStep(); 
             getTitle();
             contas();
             tipoDocumento();
             tipoFormaPagamento();
             $scope.changeTipo($scope.lancamentoProgramado.tipo);
         };
+        
+        var initStep = function() {
+            if(lancamentoProgramado.quantidadeParcela) {
+                parcelarLancamento();
+            } else {                
+                $scope.stepFrom = null; 
+                $scope.stepTo = 'editar'; 
+            }
+        }
         
         $scope.editConta = function() {
             return (lancamentoProgramado && lancamentoProgramado.idLancamentoProgramado);
@@ -145,10 +153,14 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
                 
         $scope.parcelar = function(form) {
             if (!validarForm(form)) return;
+            parcelarLancamento();
+        };
+        
+        var parcelarLancamento = function() {            
             $scope.stepFrom = 'editar'; 
             $scope.stepTo = 'parcelar'; 
             $scope.createParcelas(lancamentoProgramado.quantidadeParcela);
-        };
+        }
                 
         var getLancamento = function(lancamentoProgramado, parcela) {
             var lancamento = {
