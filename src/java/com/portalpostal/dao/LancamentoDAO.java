@@ -95,10 +95,10 @@ public class LancamentoDAO extends GenericDAO {
     public Lancamento save(Lancamento lancamento) throws Exception {  
         String sql = "INSERT INTO lancamento (idConta, idPlanoConta, idLancamentoProgramado, tipo, favorecido, "
                    + "numero, competencia, dataEmissao, dataVencimento, dataLancamento, dataCompensacao, valor, "
-                   + "situacao, modelo, historico, observacao) "
+                   + "valorDesconto, valorJuros, valorMulta, situacao, modelo, historico, observacao) "
                    + "VALUES(:idConta, :idPlanoConta, :idLancamentoProgramado, :tipo, :favorecido, :numero, "
                    + ":competencia, :dataEmissao, :dataVencimento, :dataLancamento, :dataCompensacao, :valor, "
-                   + ":situacao, :modelo, :historico, :observacao)";        
+                   + ":valorDesconto, :valorJuros, :valorMulta, :situacao, :modelo, :historico, :observacao)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idConta", lancamento.getConta().getIdConta());
         params.put("idPlanoConta", (lancamento.getPlanoConta() == null ? null : lancamento.getPlanoConta().getIdPlanoConta()));
@@ -111,7 +111,10 @@ public class LancamentoDAO extends GenericDAO {
         params.put("dataVencimento", lancamento.getDataVencimento());      
         params.put("dataLancamento", lancamento.getDataLancamento());      
         params.put("dataCompensacao", lancamento.getDataCompensacao());      
-        params.put("valor", lancamento.getValor());    
+        params.put("valor", lancamento.getValor());       
+        params.put("valorDesconto", lancamento.getValorDesconto());       
+        params.put("valorJuros", lancamento.getValorJuros());       
+        params.put("valorMulta", lancamento.getValorMulta());    
         params.put("situacao", lancamento.getSituacao().ordinal());  
         params.put("modelo", lancamento.getModelo().ordinal());  
         params.put("historico", lancamento.getHistorico());      
@@ -125,7 +128,8 @@ public class LancamentoDAO extends GenericDAO {
                    + "SET idConta = :idConta, idPlanoConta = :idPlanoConta, idLancamentoProgramado = :idLancamentoProgramado, "
                    + "tipo = :tipo, favorecido = :favorecido, numero = :numero, competencia = :competencia, dataEmissao = :dataEmissao, "
                    + "dataVencimento = :dataVencimento, dataLancamento = :dataLancamento, dataCompensacao = :dataCompensacao, "
-                   + "valor = :valor, situacao = :situacao, modelo = :modelo, historico = :historico, observacao = :observacao "
+                   + "valor = :valor, valorDesconto = :valorDesconto, valorJuros = :valorJuros, valorMulta = :valorMulta, "
+                   + "situacao = :situacao, modelo = :modelo, historico = :historico, observacao = :observacao "
                    + "WHERE idLancamento = :idLancamento ";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamento", lancamento.getIdLancamento());
@@ -140,7 +144,10 @@ public class LancamentoDAO extends GenericDAO {
         params.put("dataVencimento", lancamento.getDataVencimento());      
         params.put("dataLancamento", lancamento.getDataLancamento());      
         params.put("dataCompensacao", lancamento.getDataCompensacao());      
-        params.put("valor", lancamento.getValor());    
+        params.put("valor", lancamento.getValor());          
+        params.put("valorDesconto", lancamento.getValorDesconto());       
+        params.put("valorJuros", lancamento.getValorJuros());       
+        params.put("valorMulta", lancamento.getValorMulta());    
         params.put("situacao", lancamento.getSituacao().ordinal());  
         params.put("modelo", lancamento.getModelo().ordinal());  
         params.put("historico", lancamento.getHistorico());     

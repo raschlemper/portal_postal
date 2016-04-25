@@ -8,13 +8,7 @@ app.controller('ModalVisualizarLancamentoProgramadoController', ['$scope', '$mod
         };
         
         $scope.editar = function() {
-            lancamentoProgramado.gerarLancamento = false;
             $modalInstance.close(lancamentoProgramado.idLancamentoProgramado);
-        };
-        
-        $scope.gerarLancamento = function() {
-            lancamentoProgramado.gerarLancamento = true;
-            $modalInstance.close(lancamentoProgramado);
         };
         
         $scope.cancel = function () {

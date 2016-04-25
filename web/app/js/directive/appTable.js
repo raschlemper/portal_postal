@@ -57,6 +57,7 @@ app.directive('appTable', function($filter) {
                 getSizeTotal();
                 getStart();
                 getFinish();
+                scope.orderBy();
                 eventTable(scope.listaFiltrada);
             };
             
@@ -104,10 +105,14 @@ app.directive('appTable', function($filter) {
                 return coluna.class;
             }
 
-            scope.order = function(predicate) {
-                scope.reverse = (scope.predicate === predicate) ? !scope.reverse : false;
+            scope.order = function(lista, predicate, reverse) {
+                scope.reverse = (scope.predicate === predicate) ? !reverse : false;
                 scope.predicate = predicate;
-                eventTable(scope.listaFiltrada);
+                reset();
+            };
+
+            scope.orderBy = function() {
+                scope.listaFiltrada = $filter('orderBy')(scope.listaFiltrada, scope.predicate, scope.reverse);
             };
             
             scope.$watchCollection('listaFiltrada', function(newValue, oldValue) {

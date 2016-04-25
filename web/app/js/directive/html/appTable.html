@@ -22,7 +22,7 @@
     <thead>
         <tr>
             <th class="no-sort text-center" width="10" ng-show="showCheckbox"></th>
-            <th ng-repeat="coluna in colunas track by $index" ng-click="order(coluna.column)"
+            <th ng-repeat="coluna in colunas track by $index" ng-click="order(listaFiltrada, coluna.column, reverse)"
                 ng-class="{sortorder_asc:!reverse && predicate === coluna.column, 
                            sortorder_desc:reverse  && predicate === coluna.column, 
                            sortorder: predicate !== coluna.column}"
@@ -35,7 +35,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="item in listaFiltrada = (filterList(lista, search) | orderBy : predicate : reverse | limitTo : limitTo.value : start) track by $index"
+        <tr ng-repeat="item in listaFiltrada = filterList(lista, search) | orderBy : predicate : reverse | limitTo : limitTo.value : start track by $index"
             ng-class="linha.conditionalClass(item)">
             <td ng-show="showCheckbox"><input type="checkbox" ng-model="item.selected"></td>
             <td ng-repeat="coluna in colunas track by $index" class="coluna.dataClass">

@@ -6,6 +6,9 @@ ALTER TABLE lancamento ADD `modelo` INT(11) NOT NULL;
 ALTER TABLE lancamento ADD `idLancamentoProgramado` INT NULL;
 ALTER TABLE lancamento ADD `competencia` DATETIME NOT NULL;
 ALTER TABLE lancamento ADD `observacao` LONGTEXT DEFAULT NULL;
+ALTER TABLE lancamento ADD `valorDesconto` DECIMAL(13,2) NOT NULL;
+ALTER TABLE lancamento ADD `valorJuros` DECIMAL(13,2) NOT NULL;
+ALTER TABLE lancamento ADD `valorMulta` DECIMAL(13,2) NOT NULL;
 
 ALTER TABLE `lancamento` 
 ADD INDEX `i_lancamento_lancamentoprogramado` (`idLancamentoProgramado` ASC);

@@ -7,6 +7,7 @@ app.factory('ModalService', function($modal) {
         modalDefault: function (templateUrl, controller, size, resolve) {
             return $modal.open({
                 animation: true,
+                backdrop: 'static',
                 templateUrl: templateUrl,
                 controller: controller,
                 size: size,

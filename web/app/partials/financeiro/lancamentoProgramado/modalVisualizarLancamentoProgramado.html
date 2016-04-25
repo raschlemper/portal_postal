@@ -52,13 +52,7 @@
                     <label>Frequência:</label>
                 </div>
                 <div class="col-md-8">{{(lancamentoProgramado.frequencia.descricao)}}</div>
-            </div>          
-            <div class="row">
-                <div class="col-md-4 text-right">
-                    <label>Quant. Parcelas:</label>
-                </div>
-                <div class="col-md-8">{{(lancamentoProgramado.quantidadeParcela)}}</div>
-            </div>        
+            </div>    
             <div class="row">
                 <div class="col-md-4 text-right">
                     <label>Núm. Parcelas:</label>
@@ -67,9 +61,21 @@
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">
-                    <label>Data:</label>
+                    <label>Competência:</label>
                 </div>
-                <div class="col-md-8">{{lancamentoProgramado.data | date: 'dd/MM/yyyy'}}</div>
+                <div class="col-md-8">{{lancamentoProgramado.competencia | date: 'MM/yyyy'}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Data Emissão:</label>
+                </div>
+                <div class="col-md-8">{{lancamentoProgramado.dataEmissao | date: 'dd/MM/yyyy'}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Data Vencimento:</label>
+                </div>
+                <div class="col-md-8">{{lancamentoProgramado.dataVencimento | date: 'dd/MM/yyyy'}}</div>
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">
@@ -92,9 +98,6 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-primary" ng-click="gerarLancamento()">
-            <i class="fa fa-lg fa-check fa-spc"></i> GERAR LANÇAMENTO
-        </button>
         <button type="button" class="btn btn-warning" ng-click="editar()">
             <i class="fa fa-lg fa-pencil fa-spc"></i> EDITAR
         </button>

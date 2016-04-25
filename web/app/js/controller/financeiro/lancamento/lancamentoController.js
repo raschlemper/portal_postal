@@ -47,6 +47,11 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                     }
                 }
             };
+            $scope.events = { 
+                table: function(lancamentos) {
+                    calculateSaldo(lancamentos);
+                }
+            }
         };
         
         $scope.filter = function(lista, search) {
@@ -104,7 +109,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             return _.map(lancamentos, function(lancamento) {
                 if((lancamento.tipo && lancamento.tipo.codigo === 'despesa') || 
                         (lancamento.tipo.codigo === 'despesa')) { 
-                    saldo -= lancamento.pagamento;
+                    saldo += lancamento.pagamento;
                 } 
                 else if((lancamento.tipo && lancamento.tipo.codigo === 'receita') || 
                         (lancamento.tipo.codigo === 'receita')) {
@@ -200,7 +205,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             data.dataLancamento = data.dataLancamento || moment();
             data.dataCompensacao = null;
             data.situacao = data.situacao.id;
-            data.modelo = data.modelo.id;
+            data.modelo = data.modelo.id; 
             return data;
         }
         
@@ -233,7 +238,10 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 dataVencimento: data.dataLancamento || moment(),
                 dataLancamento: data.dataLancamento || moment(),
                 dataCompensacao: null,
-                valor: data.valor,       
+                valor: data.valor,      
+                valorDesconto: 0,       
+                valorJuros: 0,       
+                valorMulta: 0,        
                 situacao: (data && data.situacao) || $scope.situacoes[0],  
                 modelo: modelo.id,
                 historico: data.historico,

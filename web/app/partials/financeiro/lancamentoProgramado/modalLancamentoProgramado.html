@@ -1,2 +1,3 @@
-<div ng-include="'partials/financeiro/lancamentoProgramado/modalEditarLancamentoProgramado.html'" ng-show="!lancamentoProgramado.gerarLancamento"></div>
-<div ng-include="'partials/financeiro/lancamento/modalEditarLancamento.html'" ng-show="lancamentoProgramado.gerarLancamento"></div>
+<div ng-include="'partials/financeiro/lancamentoProgramado/modalEditarLancamentoProgramado.html'"   ng-show="stepTo === 'editar'"></div>
+<div ng-include="'partials/financeiro/lancamentoProgramado/modalParcelarLancamentoProgramado.html'" ng-show="stepTo === 'parcelar'"></div>
+<div ng-include="'partials/financeiro/lancamentoProgramado/modalGerarLancamentoProgramado.html'"    ng-show="stepTo === 'lancar'"></div>

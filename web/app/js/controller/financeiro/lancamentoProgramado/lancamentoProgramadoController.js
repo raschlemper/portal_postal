@@ -99,12 +99,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', 'Lancamen
             LancamentoProgramadoService.get(idLancamentoProgramado)
                 .then(function(lancamentoProgramado) {
                      modalVisualizar(lancamentoProgramado).then(function(result) {
-                        var gerarLancamento = result.gerarLancamento;
-                        result = ajustarDados(result);
-                        if(gerarLancamento) { criarLancamento(result); } 
-                        else { 
-                            $scope.editar(conta, result.idLancamentoProgramado);
-                        }
+                        $scope.editar(conta, result);
                      })          
                 })
                 .catch(function(e) {
@@ -115,31 +110,34 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', 'Lancamen
         $scope.salvar = function(conta) {
             modalSalvar(conta).then(function(result) {
                 var gerarLancamento = result.gerarLancamento;
-                result = ajustarDados(result); 
-                LancamentoProgramadoService.save(result)
-                    .then(function(data) { 
-                        modalMessage("Lançamento Programado Inserido com sucesso!");
-                        todos(conta);
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
+                result = ajustarDados(result);
+                if(gerarLancamento) { criarLancamento(conta, result); } 
+                else { 
+                    LancamentoProgramadoService.save(result)
+                        .then(function(data) { 
+                            modalMessage("Lançamento Programado Inserido com sucesso!");
+                            todos(conta);
+                        })
+                        .catch(function(e) {
+                            modalMessage(e);
+                        });
+                }
             });
         };
 
-        $scope.transferir = function(conta) {
-            modalTransferir().then(function(result) {
-                result = ajustarDadosTransferencia(result);
-                LancamentoProgramadoTransferenciaService.save(result)
-                    .then(function(data) {  
-                        modalMessage("Lançamento Programado Transferido com sucesso!");
-                        todos(conta);
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            });
-        };
+//        $scope.transferir = function(conta) {
+//            modalTransferir().then(function(result) {
+//                result = ajustarDadosTransferencia(result);
+//                LancamentoProgramadoTransferenciaService.save(result)
+//                    .then(function(data) {  
+//                        modalMessage("Lançamento Programado Transferido com sucesso!");
+//                        todos(conta);
+//                    })
+//                    .catch(function(e) {
+//                        modalMessage(e);
+//                    });
+//            });
+//        };
 
         $scope.editar = function(conta, idLancamentoProgramado) {
             LancamentoProgramadoService.get(idLancamentoProgramado)
@@ -147,11 +145,11 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', 'Lancamen
                      modalSalvar(conta, lancamentoProgramado).then(function(result) {
                         var gerarLancamento = result.gerarLancamento;
                         result = ajustarDados(result);
-                        if(gerarLancamento) { criarLancamento(result); } 
+                        if(gerarLancamento) { criarLancamento(conta, result); } 
                         else { 
                             LancamentoProgramadoService.update(idLancamentoProgramado, result)
                                 .then(function (data) {                                
-                                    if(gerarLancamento) { gerarLancamento(data); } 
+                                    if(gerarLancamento) { gerarLancamento(conta, data); } 
                                     else { modalMessage("Lançamento Programado Alterado com sucesso!"); }
                                     todos(conta);
                                 })
@@ -181,10 +179,11 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', 'Lancamen
             });
         }; 
         
-        var criarLancamento = function(result) {  
+        var criarLancamento = function(conta, result) {  
             LancamentoProgramadoService.create(result)
                 .then(function(data) {  
                     modalMessage("Lançamento Inserido com sucesso!");
+                    todos(conta);                        
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -203,12 +202,8 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', 'Lancamen
             data.tipo = data.tipo.id;
             data.dataEmissao = data.dataEmissao || moment();
             data.dataVencimento = data.dataVencimento || data.dataLancamento || moment();
-            data.dataLancamento = data.dataLancamento || moment();
             data.frequencia = data.frequencia.id;
             data.situacao = data.situacao.id;
-            if(!data.idLancamentoProgramado) { 
-                data.numeroParcela = 1; 
-            }
             return data;
         } 
         
@@ -252,7 +247,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', 'Lancamen
         };
         
         var modalSalvar = function(conta, lancamentoProgramado) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamentoProgramado/modalEditarLancamentoProgramado.html', 'ModalEditarLancamentoProgramadoController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamentoProgramado/modalLancamentoProgramado.html', 'ModalEditarLancamentoProgramadoController', 'lg',
                 {
                     lancamentoProgramado: function() {
                         return lancamentoProgramado;
@@ -264,10 +259,10 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', 'Lancamen
             return modalInstance.result;
         };
         
-        var modalTransferir = function() {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamentoProgramado/modalLancamentoProgramadoTransferencia.html', 'ModalLancamentoProgramadoTransferenciaController', 'lg');
-            return modalInstance.result;
-        };
+//        var modalTransferir = function() {
+//            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamentoProgramado/modalLancamentoProgramadoTransferencia.html', 'ModalLancamentoProgramadoTransferenciaController', 'lg');
+//            return modalInstance.result;
+//        };
         
         var modalExcluir = function() {
             var modalInstance = ModalService.modalExcluir('Excluir Lançamento Programado?', 'Deseja realmente excluir este lançamento programado?');

@@ -36,6 +36,9 @@ public class LancamentoHandler extends GenericHandler implements ResultSetHandle
         lancamento.setDataLancamento(getDate(result, "dataLancamento"));
         lancamento.setDataCompensacao(getDate(result, "dataCompensacao"));
         lancamento.setValor(getDouble(result, "valor"));
+        lancamento.setValorDesconto(getDouble(result, "valorDesconto"));
+        lancamento.setValorJuros(getDouble(result, "valorJuros"));
+        lancamento.setValorMulta(getDouble(result, "valorMulta"));
         lancamento.setSituacao(TipoSituacaoLancamento.values()[getInt(result, "situacao")]);
         lancamento.setModelo(TipoModeloLancamento.values()[getInt(result, "modelo")]);
         lancamento.setHistorico(getString(result, "historico"));

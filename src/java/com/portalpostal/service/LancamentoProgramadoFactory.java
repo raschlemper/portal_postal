@@ -16,38 +16,47 @@ public class LancamentoProgramadoFactory {
                 break;
             case DIARIO: 
                 lancamentoProgramado.setNumeroParcela(numeroParcela);
+                lancamentoProgramado.setCompetencia(addDaily(lancamentoProgramado.getCompetencia()));
                 lancamentoProgramado.setDataVencimento(addDaily(lancamentoProgramado.getDataVencimento()));
                 break;
             case SEMANAL: 
                 lancamentoProgramado.setNumeroParcela(numeroParcela);
+                lancamentoProgramado.setCompetencia(addWeekly(lancamentoProgramado.getCompetencia()));
                 lancamentoProgramado.setDataVencimento(addWeekly(lancamentoProgramado.getDataVencimento()));
                 break;
             case QUINZENAL: 
                 lancamentoProgramado.setNumeroParcela(numeroParcela);
+                lancamentoProgramado.setCompetencia(addBiweekly(lancamentoProgramado.getCompetencia()));
                 lancamentoProgramado.setDataVencimento(addBiweekly(lancamentoProgramado.getDataVencimento()));
                 break;
             case MENSAL: 
                 lancamentoProgramado.setNumeroParcela(numeroParcela);
+                lancamentoProgramado.setCompetencia(addMonthly(lancamentoProgramado.getCompetencia()));
                 lancamentoProgramado.setDataVencimento(addMonthly(lancamentoProgramado.getDataVencimento()));
                 break;
             case BIMESTRAL: 
                 lancamentoProgramado.setNumeroParcela(numeroParcela);
+                lancamentoProgramado.setCompetencia(addBimonthly(lancamentoProgramado.getCompetencia()));
                 lancamentoProgramado.setDataVencimento(addBimonthly(lancamentoProgramado.getDataVencimento()));
                 break;
             case TRIMESTRAL: 
                 lancamentoProgramado.setNumeroParcela(numeroParcela);
+                lancamentoProgramado.setCompetencia(addQuarterly(lancamentoProgramado.getCompetencia()));
                 lancamentoProgramado.setDataVencimento(addQuarterly(lancamentoProgramado.getDataVencimento()));
                 break;
             case QUADRIMESTRAL: 
                 lancamentoProgramado.setNumeroParcela(numeroParcela);
+                lancamentoProgramado.setCompetencia(addFourMonths(lancamentoProgramado.getCompetencia()));
                 lancamentoProgramado.setDataVencimento(addFourMonths(lancamentoProgramado.getDataVencimento()));
                 break;
             case SEMESTRAL: 
                 lancamentoProgramado.setNumeroParcela(numeroParcela);
+                lancamentoProgramado.setCompetencia(addSemiannual(lancamentoProgramado.getCompetencia()));
                 lancamentoProgramado.setDataVencimento(addSemiannual(lancamentoProgramado.getDataVencimento()));
                 break;
             case ANUAL: 
                 lancamentoProgramado.setNumeroParcela(numeroParcela);
+                lancamentoProgramado.setCompetencia(addYearly(lancamentoProgramado.getCompetencia()));
                 lancamentoProgramado.setDataVencimento(addYearly(lancamentoProgramado.getDataVencimento()));
                 break;
             default:

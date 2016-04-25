@@ -43,10 +43,9 @@ public class LancamentoProgramadoService {
     } 
     
     public LancamentoProgramado createLancamento(LancamentoProgramado lancamentoProgramado) throws Exception {
-        if(lancamentoProgramado.getIdLancamentoProgramado() == null) { 
-            lancamentoProgramado = save(lancamentoProgramado); 
-        }
-        lancamentoDAO.save(getLancamento(lancamentoProgramado));
+        List<Lancamento> lancamentos = lancamentoProgramado.getLancamentos();
+        if(lancamentoProgramado.getIdLancamentoProgramado() == null) { lancamentoProgramado = save(lancamentoProgramado); }
+        for (Lancamento lancamento : lancamentos) { lancamentoDAO.save(lancamento); } 
         return update(LancamentoProgramadoFactory.execute(lancamentoProgramado));         
     }   
     

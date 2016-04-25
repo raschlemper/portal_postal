@@ -3,9 +3,7 @@ package com.portalpostal.model;
 import com.portalpostal.model.dd.TipoLancamento;
 import com.portalpostal.model.dd.TipoModeloLancamento;
 import com.portalpostal.model.dd.TipoSituacaoLancamento;
-import com.portalpostal.model.serializer.JsonDateSerializer;
 import java.util.Date;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class Lancamento {
     
@@ -16,17 +14,15 @@ public class Lancamento {
     private TipoLancamento tipo;
     private String favorecido;
     private String numero;
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date competencia;
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataEmissao;
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataVencimento;
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataLancamento;
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataCompensacao;
     private Double valor;
+    private Double valorDesconto;
+    private Double valorJuros;
+    private Double valorMulta;
     private TipoSituacaoLancamento situacao;
     private TipoModeloLancamento modelo;
     private String historico;
@@ -134,6 +130,30 @@ public class Lancamento {
 
     public void setValor(Double valor) {
         this.valor = valor;
+    }
+
+    public Double getValorDesconto() {
+        return valorDesconto;
+    }
+
+    public void setValorDesconto(Double valorDesconto) {
+        this.valorDesconto = valorDesconto;
+    }
+
+    public Double getValorJuros() {
+        return valorJuros;
+    }
+
+    public void setValorJuros(Double valorJuros) {
+        this.valorJuros = valorJuros;
+    }
+
+    public Double getValorMulta() {
+        return valorMulta;
+    }
+
+    public void setValorMulta(Double valorMulta) {
+        this.valorMulta = valorMulta;
     }
 
     public TipoSituacaoLancamento getSituacao() {

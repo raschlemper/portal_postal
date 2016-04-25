@@ -74,6 +74,24 @@
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">
+                    <label>Valor Desconto:</label>
+                </div>
+                <div class="col-md-8">{{lancamento.valorDesconto | currency: 'R$ '}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Valor Juros:</label>
+                </div>
+                <div class="col-md-8">{{lancamento.valorJuros | currency: 'R$ '}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Valor Multa:</label>
+                </div>
+                <div class="col-md-8">{{lancamento.valorMulta | currency: 'R$ '}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
                     <label>Situação:</label>
                 </div>
                 <div class="col-md-8">{{lancamento.situacao.descricao}}</div>
@@ -94,7 +112,7 @@
                 <div class="col-md-4 text-right">
                     <label>Observação:</label>
                 </div>
-                <div class="col-md-8">{{(lancamento.observacao)}}</div>
+                <div class="col-md-8 angular-with-newlines">{{(lancamento.observacao)}}</div>
             </div>
         </div>
     </div>

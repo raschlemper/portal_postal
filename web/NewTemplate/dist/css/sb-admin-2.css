@@ -3048,3 +3048,19 @@ div.list-category div.list-group-item {
     font-size: 22px;
     color: #666;
 }
+
+.divider-vertical-right {
+    border-right: 1px solid #DDD;
+}
+
+.divider-horizontal-top {
+    border-top: 1px solid #DDD;
+}
+.bg-modal-primary {
+    background-color: #337ab7;
+    color: #FFF;
+}
+.bg-modal-danger {
+    background-color: #c9302c;
+    color: #FFF;
+}

@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalInstance', 'conta', 'lancamentoProgramado', 'ContaService', 'PlanoContaService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, conta, lancamentoProgramado, ContaService, PlanoContaService, TipoDocumentoService, TipoFormaPagamentoService, DatePickerService, ListaService, LISTAS) {
+app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalInstance', 'conta', 'lancamentoProgramado', 'ContaService', 'PlanoContaService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'FrequenciaLancamentoService', 'DatePickerService', 'ListaService', 'LISTAS',
+    function ($scope, $modalInstance, conta, lancamentoProgramado, ContaService, PlanoContaService, TipoDocumentoService, TipoFormaPagamentoService, FrequenciaLancamentoService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
@@ -10,27 +10,17 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
             $scope.tipos = LISTAS.lancamento; 
             $scope.frequencias = LISTAS.frequencia;
             $scope.situacoes = LISTAS.situacaoLancamentoProgramado;
-            $scope.lancamentoProgramado = {
-                idLancamentoProgramado: (lancamentoProgramado && lancamentoProgramado.idLancamentoProgramado) || null,
-                conta: conta || (lancamentoProgramado && lancamentoProgramado.conta) || null,
-                planoConta: (lancamentoProgramado && lancamentoProgramado.planoConta) || null,  
-                tipo: (lancamentoProgramado && lancamentoProgramado.tipo) || $scope.tipos[0],
-                favorecido: (lancamentoProgramado && lancamentoProgramado.favorecido) || null,
-                numero: (lancamentoProgramado && lancamentoProgramado.numero) || null,     
-                documento: (lancamentoProgramado && lancamentoProgramado.documento) || null,  
-                formaPagamento: (lancamentoProgramado && lancamentoProgramado.formaPagamento) || null, 
-                frequencia: (lancamentoProgramado && lancamentoProgramado.frequencia) || $scope.frequencias[0],
-                numeroParcela: (lancamentoProgramado && lancamentoProgramado.numeroParcela) || null,  
-                competencia: (lancamentoProgramado && lancamentoProgramado.competencia) || null,  
-                dataEmissao: (lancamentoProgramado && lancamentoProgramado.dataEmissao) || null,
-                dataVencimento: (lancamentoProgramado && lancamentoProgramado.dataVencimento) || null,
-                dataLancamento: (lancamentoProgramado && lancamentoProgramado.dataLancamento) || null,
-                valor: (lancamentoProgramado && lancamentoProgramado.valor) || null,    
-                situacao: (lancamentoProgramado && lancamentoProgramado.situacao) || $scope.situacoes[0],
-                historico: (lancamentoProgramado && lancamentoProgramado.historico) || null,
-                gerarLancamento: false
-            };            
-            $scope.lancamentoProgramado.numero = $scope.lancamentoProgramado.numero + '-' + $scope.lancamentoProgramado.numeroParcela;
+            $scope.situacoesLancamento = LISTAS.situacaoLancamento;
+            $scope.modelos = LISTAS.modeloLancamento;
+            $scope.lancamentoProgramado = lancamentoProgramado || {}; 
+            $scope.lancamentoProgramado.tipo = (lancamentoProgramado && lancamentoProgramado.tipo) || $scope.tipos[0];
+            $scope.lancamentoProgramado.frequencia = (lancamentoProgramado && lancamentoProgramado.frequencia) || $scope.frequencias[0];
+            $scope.lancamentoProgramado.situacao = (lancamentoProgramado && lancamentoProgramado.situacao) || $scope.situacoes[0];
+            if(!lancamentoProgramado || (lancamentoProgramado && !lancamentoProgramado.idLancamentoProgramado)) { 
+                $scope.lancamentoProgramado.numeroParcela = 1; 
+            }
+            $scope.stepFrom = null; 
+            $scope.stepTo = 'editar'; 
             getTitle();
             contas();
             tipoDocumento();
@@ -88,7 +78,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
                 });
         };
         
-        var tipoFormaPagamento = function() {
+        var tipoFormaPagamento = function() { 
             TipoFormaPagamentoService.getAll()
                 .then(function (data) {
                     $scope.formaPagamentos = data;
@@ -99,17 +89,116 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
                 });
         };
         
+        $scope.getTotal = function(lancamento) {
+            if(!lancamento) return;
+            var valor = lancamento.valor || 0;
+            var valorJuros = lancamento.valorJuros || 0;
+            var valorMulta = lancamento.valorMulta || 0;
+            var valorDesconto = lancamento.valorDesconto || 0;
+            return valor + valorJuros + valorMulta - valorDesconto;
+        }
+        
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
-            $scope.lancamentoProgramado.gerarLancamento = false;
+            delete $scope.lancamentoProgramado.parcelas;
             $modalInstance.close($scope.lancamentoProgramado);            
         };
         
-        $scope.gerarLancamento = function(form) {
+        $scope.createParcelas = function(quantidade) {            
+            $scope.lancamentoProgramado.parcelas = [];
+            var frequencia = lancamentoProgramado.frequencia;
+            var competencia = lancamentoProgramado.competencia;
+            var dataVencimento = lancamentoProgramado.dataVencimento;
+            for(var i=0; i<quantidade; i++) {
+                var parcela = {
+                    numero: lancamentoProgramado.numero + '-' + (i + 1) ,
+                    competencia: competencia,
+                    dataVencimento: dataVencimento,
+                    valor: lancamentoProgramado.valor
+                }
+                $scope.lancamentoProgramado.parcelas.push(parcela);
+                competencia = FrequenciaLancamentoService.addData(frequencia, competencia);
+                dataVencimento = FrequenciaLancamentoService.addData(frequencia, dataVencimento);
+            }
+        }
+        
+        $scope.lancarProgramado = function(form) {
             if (!validarForm(form)) return;
-            $scope.lancamentoProgramado.gerarLancamento = true;
-            $modalInstance.close($scope.lancamentoProgramado);            
+            $scope.stepFrom = 'editar'; 
+            $scope.stepTo = 'lancar'; 
+            $scope.lancamento = getLancamento(angular.copy($scope.lancamentoProgramado), null);
         };
+        
+        $scope.lancarParcela = function(parcela) {
+            $scope.stepFrom = 'parcelar'; 
+            $scope.stepTo = 'lancar'; 
+//            $scope.lancamento = lancamento;
+            $scope.lancamento = getLancamento(angular.copy($scope.lancamentoProgramado), parcela);
+        };
+        
+        $scope.lancar = function(lancamento) {
+            lancamento = ajusteLancamento(lancamento);
+            $scope.lancamentoProgramado.lancamentos = [];
+            $scope.lancamentoProgramado.lancamentos.push(lancamento);
+            $modalInstance.close($scope.lancamentoProgramado); 
+        };
+                
+        $scope.parcelar = function(form) {
+            if (!validarForm(form)) return;
+            $scope.stepFrom = 'editar'; 
+            $scope.stepTo = 'parcelar'; 
+            $scope.createParcelas(lancamentoProgramado.quantidadeParcela);
+        };
+                
+        var getLancamento = function(lancamentoProgramado, parcela) {
+            var lancamento = {
+                conta: lancamentoProgramado.conta,
+                planoConta: lancamentoProgramado.planoConta,
+                tipo: lancamentoProgramado.tipo,
+                favorecido: lancamentoProgramado.favorecido,
+                numero: parcela.numero || lancamentoProgramado.numero + '-' + lancamentoProgramado.numeroParcela,
+                competencia: parcela.competencia || lancamentoProgramado.competencia,
+                dataEmissao: lancamentoProgramado.dataEmissao || moment(),
+                dataVencimento: parcela.dataVencimento || lancamentoProgramado.dataVencimento,
+                dataLancamento: null,
+                dataCompensacao: null,
+                valor: parcela.valor || lancamentoProgramado.valor,
+                valorDesconto: 0,
+                valorJuros: 0,
+                valorMulta: 0,
+                situacao: $scope.situacoesLancamento[0],
+                modelo: $scope.modelos[2],
+                historico: lancamentoProgramado.historico,
+                observacao: null
+            }  
+            return lancamento;
+        };
+        
+        var ajusteLancamento = function(lancamento) {
+            lancamento.conta = { idConta: lancamento.conta.idConta };
+            lancamento.planoConta = { idPlanoConta: lancamento.planoConta.idPlanoConta };
+            lancamento.tipo = lancamento.tipo.id;
+            lancamento.competencia = lancamento.competencia || moment();
+            lancamento.dataEmissao = lancamento.dataEmissao || moment();
+            lancamento.dataVencimento = lancamento.dataVencimento || moment();
+            lancamento.dataLancamento = lancamento.dataLancamento || moment();
+            lancamento.situacao = lancamento.situacao.id;
+            lancamento.modelo = lancamento.modelo.id;
+            return lancamento;
+        }
+        
+        $scope.voltar = function() {
+            if($scope.stepFrom === 'lancar') {
+                $scope.stepFrom = 'editar'; 
+                $scope.stepTo = 'lancar';                     
+            } else if($scope.stepFrom === 'parcelar') {
+                $scope.stepFrom = 'editar'; 
+                $scope.stepTo = 'parcelar';             
+            } else {
+                $scope.stepFrom = null; 
+                $scope.stepTo = 'editar';                        
+            }
+        }
         
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
@@ -132,16 +221,6 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
                 alert('A data de vencimento do lançamento programado não é válida!');
                 return false;
             } 
-            if(form.idLancamentoProgramado.$modelValue) {
-                if (form.dataLancamento.$error.required) {
-                    alert('Preencha a data do lançamento programado!');
-                    return false;
-                }       
-                if (form.dataLancamento.$modelValue && !moment(form.dataLancamento.$modelValue).isValid()) {
-                    alert('A data do lançamento programado não é válida!');
-                    return false;
-                }  
-            }
             if (form.valor.$error.required) {
                 alert('Preencha o valor do lançamento programado!');
                 return false;

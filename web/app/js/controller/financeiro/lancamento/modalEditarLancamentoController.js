@@ -9,25 +9,32 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
             $scope.tipos = LISTAS.lancamento; 
             $scope.modelos = LISTAS.modeloLancamento;
             $scope.situacoes = LISTAS.situacaoLancamento;
-            $scope.lancamento = {
-                idLancamento: (lancamento && lancamento.idLancamento) || null,
-                conta: conta || (lancamento && lancamento.conta) || null,
-                planoConta: (lancamento && lancamento.planoConta) || null,  
-                lancamentoProgramado: (lancamento && lancamento.lancamentoProgramado) || null,  
-                tipo: (lancamento && lancamento.tipo) || $scope.tipos[0],
-                favorecido: (lancamento && lancamento.favorecido) || null,
-                numero: (lancamento && lancamento.numero) || null,
-                competencia: (lancamento && lancamento.competencia) || null,
-                dataEmissao: (lancamento && lancamento.dataEmissao) || null,
-                dataVencimento: (lancamento && lancamento.dataVencimento) || null,
-                dataLancamento: (lancamento && lancamento.dataLancamento) || null,
-                dataCompensacao: (lancamento && lancamento.dataCompensacao) || null,
-                valor: (lancamento && lancamento.valor) || null,       
-                situacao: (lancamento && lancamento.situacao) || $scope.situacoes[0],    
-                modelo: (lancamento && lancamento.modelo) || $scope.modelos[0],
-                historico: (lancamento && lancamento.historico) || null,
-                observacao: (lancamento && lancamento.observacao) || null
-            }; 
+            $scope.lancamento = lancamento || {};
+            $scope.lancamento.tipo = (lancamento && lancamento.tipo) || $scope.tipos[0];
+            $scope.lancamento.situacao = (lancamento && lancamento.situacao) || $scope.situacoes[0];
+            $scope.lancamento.modelo = (lancamento && lancamento.modelo) || $scope.modelos[0];
+//            $scope.lancamento = {
+//                idLancamento: (lancamento && lancamento.idLancamento) || null,
+//                conta: conta || (lancamento && lancamento.conta) || null,
+//                planoConta: (lancamento && lancamento.planoConta) || null,  
+//                lancamentoProgramado: (lancamento && lancamento.lancamentoProgramado) || null,  
+//                tipo: (lancamento && lancamento.tipo) || $scope.tipos[0],
+//                favorecido: (lancamento && lancamento.favorecido) || null,
+//                numero: (lancamento && lancamento.numero) || null,
+//                competencia: (lancamento && lancamento.competencia) || null,
+//                dataEmissao: (lancamento && lancamento.dataEmissao) || null,
+//                dataVencimento: (lancamento && lancamento.dataVencimento) || null,
+//                dataLancamento: (lancamento && lancamento.dataLancamento) || null,
+//                dataCompensacao: (lancamento && lancamento.dataCompensacao) || null,
+//                valor: (lancamento && lancamento.valor) || null,      
+//                valorDesconto: (lancamento && lancamento.valorDesconto) || null,       
+//                valorJuros: (lancamento && lancamento.valorJuros) || null,       
+//                valorMulta: (lancamento && lancamento.valorMulta) || null,        
+//                situacao: (lancamento && lancamento.situacao) || $scope.situacoes[0],    
+//                modelo: (lancamento && lancamento.modelo) || $scope.modelos[0],
+//                historico: (lancamento && lancamento.historico) || null,
+//                observacao: (lancamento && lancamento.observacao) || null
+//            }; 
             
             getTitle();
             contas();
@@ -72,6 +79,14 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
                     console.log(e);
                 });
         };
+        
+        $scope.getTotal = function(lancamento) {
+            var valor = lancamento.valor || 0;
+            var valorJuros = lancamento.valorJuros || 0;
+            var valorMulta = lancamento.valorMulta || 0;
+            var valorDesconto = lancamento.valorDesconto || 0;
+            return valor + valorJuros + valorMulta - valorDesconto;
+        }
         
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
