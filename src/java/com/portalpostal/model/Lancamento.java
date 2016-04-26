@@ -4,12 +4,14 @@ import com.portalpostal.model.dd.TipoLancamento;
 import com.portalpostal.model.dd.TipoModeloLancamento;
 import com.portalpostal.model.dd.TipoSituacaoLancamento;
 import java.util.Date;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class Lancamento {
     
     private Integer idLancamento;
     private Conta conta;
     private PlanoConta planoConta;
+    @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
     private LancamentoProgramado lancamentoProgramado;
     private TipoLancamento tipo;
     private String favorecido;

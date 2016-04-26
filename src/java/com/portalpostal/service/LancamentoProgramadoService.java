@@ -5,6 +5,7 @@ import com.portalpostal.dao.LancamentoDAO;
 import com.portalpostal.dao.LancamentoProgramadoDAO;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoProgramado;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LancamentoProgramadoService {
@@ -48,8 +49,9 @@ public class LancamentoProgramadoService {
     public LancamentoProgramado createLancamento(LancamentoProgramado lancamentoProgramado) throws Exception {
         List<Lancamento> lancamentos = lancamentoProgramado.getLancamentos();
         if(lancamentoProgramado.getIdLancamentoProgramado() == null) { lancamentoProgramado = save(lancamentoProgramado); }
+        lancamentoProgramado.setLancamentos(null);
         for (Lancamento lancamento : lancamentos) { 
-            lancamento.setLancamentoProgramado(lancamentoProgramado);
+//            lancamento.setLancamentoProgramado(lancamentoProgramado);
             lancamentoDAO.save(lancamento); 
         } 
 //        return update(LancamentoProgramadoFactory.execute(lancamentoProgramado));         

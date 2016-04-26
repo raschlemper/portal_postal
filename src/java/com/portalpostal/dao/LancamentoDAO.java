@@ -53,10 +53,8 @@ public class LancamentoDAO extends GenericDAO {
     }
 
     public List<Lancamento> findByLancamentoProgramado(Integer idLancamentoProgramado) throws Exception {
-        String sql = "SELECT * FROM conta, lancamento "
-                   + "LEFT OUTER JOIN plano_conta ON(lancamento.idPlanoConta = plano_conta.idPlanoConta) "
-                   + "WHERE lancamento.idConta = conta.idConta "
-                   + "AND lancamento.idLancamentoProgramado = :idLancamentoProgramado";
+        String sql = "SELECT * FROM lancamento "
+                   + "WHERE lancamento.idLancamentoProgramado = :idLancamentoProgramado";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamentoProgramado", idLancamentoProgramado);
         return findAll(sql, params, lancamentoHandler);
