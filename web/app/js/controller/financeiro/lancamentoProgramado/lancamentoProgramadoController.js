@@ -18,7 +18,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', 'Lancamen
             $scope.colunas = [              
                 {label: 'Tipo', column: 'tipo.descricao'},         
                 {label: 'Vencimento', column: 'dataVencimento', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
-                {label: 'Número/Parcela', column: 'numeroParcela'},               
+                {label: 'Número', column: 'numeroParcela'},               
                 {label: 'Favorecido', column: 'favorecido'},  
                 {label: 'Valor', column: 'valor', headerClass: 'no-sort', filter: {name: 'currency', args: ''}},              
                 {label: 'Situação', column: 'situacao'},  
@@ -90,7 +90,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', 'Lancamen
                 }
                 lancamentoProgramado.situacao = lancamentoProgramado.situacao.descricao;
                 lancamentoProgramado.frequencia = lancamentoProgramado.frequencia.descricao + complementoDescricaoFrequencia;
-                lancamentoProgramado.numeroParcela = lancamentoProgramado.numero + '-' + lancamentoProgramado.numeroParcela;
+                lancamentoProgramado.numeroParcela = lancamentoProgramado.numero;
                 return _.pick(lancamentoProgramado, 'idLancamentoProgramado', 'tipo', 'dataVencimento', 'numeroParcela', 'favorecido', 'valor', 'situacao', 'frequencia');
             })
         };

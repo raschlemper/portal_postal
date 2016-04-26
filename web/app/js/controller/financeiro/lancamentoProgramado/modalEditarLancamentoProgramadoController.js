@@ -16,9 +16,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
             $scope.lancamentoProgramado.tipo = (lancamentoProgramado && lancamentoProgramado.tipo) || $scope.tipos[0];
             $scope.lancamentoProgramado.frequencia = (lancamentoProgramado && lancamentoProgramado.frequencia) || $scope.frequencias[0];
             $scope.lancamentoProgramado.situacao = (lancamentoProgramado && lancamentoProgramado.situacao) || $scope.situacoes[0];
-            if(!lancamentoProgramado || (lancamentoProgramado && !lancamentoProgramado.idLancamentoProgramado)) { 
-                $scope.lancamentoProgramado.numeroParcela = 1; 
-            }
+            $scope.lancamentoProgramado.numeroParcela = getNumeroParcela(lancamentoProgramado); 
             initStep(); 
             getTitle();
             contas();
@@ -28,12 +26,20 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         };
         
         var initStep = function() {
-            if(lancamentoProgramado.quantidadeParcela) {
+            if(lancamentoProgramado && lancamentoProgramado.quantidadeParcela) {
                 parcelarLancamento(lancamentoProgramado);
             } else {                
                 $scope.stepFrom = null; 
                 $scope.stepTo = 'editar'; 
             }
+        }
+        
+        var getNumeroParcela = function(lancamentoProgramado) {
+            var lancamento = _.max(lancamentoProgramado.lancamentos, function(lancamento){ 
+                return lancamento.numeroParcela; 
+            });
+            if(lancamento.numeroParcela) return lancamento.numeroParcela + 1;
+            return 1;
         }
         
         $scope.editConta = function() {
@@ -109,26 +115,36 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
             delete $scope.lancamentoProgramado.parcelas;
-            lancamentoProgramado.gerarLancamento = false;
+            $scope.lancamentoProgramado.gerarLancamento = false;
             $modalInstance.close($scope.lancamentoProgramado);            
         };
         
-        $scope.createParcelas = function(quantidade) {            
+        $scope.createParcelas = function(lancamentoProgramado) {            
             $scope.lancamentoProgramado.parcelas = [];
             var frequencia = lancamentoProgramado.frequencia;
             var competencia = lancamentoProgramado.competencia;
             var dataVencimento = lancamentoProgramado.dataVencimento;
-            for(var i=0; i<quantidade; i++) {
+            for(var i=0; i<lancamentoProgramado.quantidadeParcela; i++) {
+                var numeroParcela = (i + 1);
+                var lancamento = findParcelaBaixada(lancamentoProgramado.lancamentos, numeroParcela);
                 var parcela = {
-                    numero: lancamentoProgramado.numero + '-' + (i + 1) ,
+                    numero: lancamentoProgramado.numero,
+                    numeroParcela: numeroParcela,
                     competencia: competencia,
                     dataVencimento: dataVencimento,
-                    valor: lancamentoProgramado.valor
+                    valor: lancamentoProgramado.valor,
+                    lancamento: lancamento
                 }
                 $scope.lancamentoProgramado.parcelas.push(parcela);
                 competencia = FrequenciaLancamentoService.addData(frequencia, competencia);
                 dataVencimento = FrequenciaLancamentoService.addData(frequencia, dataVencimento);
             }
+        }
+        
+        var findParcelaBaixada = function(lancamentos, numeroParcela) {
+            return _.find(lancamentos, function(lancamento) { 
+                return lancamento.numeroParcela == numeroParcela; 
+            });
         }
         
         $scope.lancarProgramado = function(form, lancamentoProgramado) {
@@ -150,8 +166,8 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
             delete $scope.lancamentoProgramado.parcelas;
             lancamentoProgramado.gerarLancamento = true;
             lancamento = ajusteLancamento(lancamento);
-            $scope.lancamentoProgramado.lancamentos = [];
-            $scope.lancamentoProgramado.lancamentos.push(lancamento);
+            lancamentoProgramado.lancamentos = [];
+            lancamentoProgramado.lancamentos.push(lancamento);
             $modalInstance.close(lancamentoProgramado); 
         };
                 
@@ -163,24 +179,23 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         var parcelarLancamento = function(lancamentoProgramado) {            
             $scope.stepFrom = 'editar'; 
             $scope.stepTo = 'parcelar'; 
-            $scope.createParcelas(lancamentoProgramado.quantidadeParcela);
+            $scope.createParcelas(lancamentoProgramado);
         }
                 
         var getLancamento = function(lancamentoProgramado, parcela, modelo) {
-            var numeroParcela = lancamentoProgramado.numeroParcela;
             var lancamento = {
                 conta: lancamentoProgramado.conta,
                 planoConta: lancamentoProgramado.planoConta,
                 tipo: lancamentoProgramado.tipo,
                 favorecido: lancamentoProgramado.favorecido,
-                numero: parcela.numero || lancamentoProgramado.numero + '-' + lancamentoProgramado.numeroParcela,
-                numeroParcela: numeroParcela,
-                competencia: parcela.competencia || lancamentoProgramado.competencia,
+                numero: (parcela && parcela.numero) || lancamentoProgramado.numero,
+                numeroParcela: (parcela && parcela.numeroParcela) || lancamentoProgramado.numeroParcela,
+                competencia: (parcela && parcela.competencia) || lancamentoProgramado.competencia,
                 dataEmissao: lancamentoProgramado.dataEmissao || moment(),
-                dataVencimento: parcela.dataVencimento || lancamentoProgramado.dataVencimento,
+                dataVencimento: (parcela && parcela.dataVencimento) || lancamentoProgramado.dataVencimento,
                 dataLancamento: null,
                 dataCompensacao: null,
-                valor: parcela.valor || lancamentoProgramado.valor,
+                valor: (parcela && parcela.valor) || lancamentoProgramado.valor,
                 valorDesconto: 0,
                 valorJuros: 0,
                 valorMulta: 0,

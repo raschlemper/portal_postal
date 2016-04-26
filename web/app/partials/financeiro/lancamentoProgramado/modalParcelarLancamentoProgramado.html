@@ -89,7 +89,7 @@
                                 <label class="small">Quantidade Parcelas</label>
                                 <div class="input-group">
                                     <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                    <input class="form-control" type="text" name="quantidadeParcela" ng-model="lancamentoProgramado.quantidadeParcela" ng-change="createParcelas(lancamentoProgramado.quantidadeParcela)"
+                                    <input class="form-control" type="text" name="quantidadeParcela" ng-model="lancamentoProgramado.quantidadeParcela" ng-change="createParcelas(lancamentoProgramado)"
                                            placeholder="Quantidade de parcelas"/>  
                                 </div>
                             </div>
@@ -149,12 +149,13 @@
                                 </thead>     
                                 <tbody>
                                     <tr ng-repeat="parcela in lancamentoProgramado.parcelas track by $index">
-                                        <td>{{parcela.numero}}</td>
+                                        <td>{{parcela.numero}} - {{parcela.numeroParcela}}</td>
                                         <td class="text-center">{{parcela.competencia | date : 'MMMM/yyyy'}}</td>
                                         <td class="text-center">{{parcela.dataVencimento | date : 'dd/MM/yyyy'}}</td>
                                         <td>{{parcela.valor | currency : 'R$ '}}</td>
                                         <td class="text-center">
-                                            <button type="button" class="btn btn-sm btn-primary" ng-click="lancarParcela(this.lancamentoProgramadoForm, lancamentoProgramado, parcela)">
+                                            <button type="button" class="btn btn-sm btn-primary" ng-click="lancarParcela(this.lancamentoProgramadoForm, lancamentoProgramado, parcela)"
+                                                    ng-if="!parcela.lancamento" ng-disabled="lancamentoProgramado.numeroParcela !== parcela.numeroParcela">
                                                 <i class="fa fa-sm fa-plus fa-spc"></i>Gerar
                                             </button>
                                         </td>
@@ -168,7 +169,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-warning" ng-click="voltar()">
+        <button type="button" class="btn btn-warning" ng-click="voltar()" ng-if="!lancamentoProgramado.lancamentos.length && !lancamentoProgramado.quantidadeParcela">
             <i class="fa fa-lg fa-arrow-circle-left fa-spc"></i> VOLTAR
         </button>
         <button type="button" class="btn btn-default" ng-click="cancel()">

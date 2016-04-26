@@ -30,6 +30,7 @@ public class LancamentoHandler extends GenericHandler implements ResultSetHandle
         lancamento.setTipo(TipoLancamento.values()[getInt(result, "tipo")]);
         lancamento.setFavorecido(getString(result, "favorecido"));
         lancamento.setNumero(getString(result, "numero"));
+        lancamento.setNumeroParcela(getInt(result, "numeroParcela"));
         lancamento.setCompetencia(getDate(result, "competencia"));
         lancamento.setDataEmissao(getDate(result, "dataEmissao"));
         lancamento.setDataVencimento(getDate(result, "dataVencimento"));
