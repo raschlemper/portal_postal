@@ -13,6 +13,7 @@ public class Destinatario {
 
     private int idDestinatario;
     private int idCliente;
+    private int idDepartamento;
     private String nome;
     private String cpf_cnpj;
     private String empresa;
@@ -27,7 +28,7 @@ public class Destinatario {
     private String celular;
     private String tags;
 
-    public Destinatario(int idDestinatario, int idCliente, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String email, String celular) {
+    /*public Destinatario(int idDestinatario, int idCliente, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String email, String celular) {
         this.idDestinatario = idDestinatario;
         this.idCliente = idCliente;
         this.nome = nome;
@@ -42,11 +43,12 @@ public class Destinatario {
         this.uf = uf;
         this.email = email;
         this.celular = celular;
-    }
+    }*/
 
-    public Destinatario(int idDestinatario, int idCliente, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String email, String celular, String tags) {
+    public Destinatario(int idDestinatario, int idCliente, int idDepartamento, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String email, String celular, String tags) {
         this.idDestinatario = idDestinatario;
         this.idCliente = idCliente;
+        this.idDepartamento = idDepartamento;
         this.nome = nome;
         this.cpf_cnpj = cpf_cnpj;
         this.empresa = empresa;
@@ -71,7 +73,13 @@ public class Destinatario {
         this.tags = tags;
     }
 
-    
+    public int getIdDepartamento() {
+        return idDepartamento;
+    }
+
+    public void setIdDepartamento(int idDepartamento) {
+        this.idDepartamento = idDepartamento;
+    }
     
     public String getEmail() {
         return email;

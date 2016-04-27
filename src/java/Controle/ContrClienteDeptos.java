@@ -112,15 +112,25 @@ public class ContrClienteDeptos {
         }
     }
     
-    public static boolean alterarCartaoDepto(String nomeBD, int idCliente, int idDepto, String nome, String cartao) {
+    public static boolean alterarDepto(String nomeBD, int idCliente, int idDepto, String nome, String cartao, int temEndereco, String nomeEndereco, String logradouro, String numero, String complemento, String bairro, String cidade, String uf, String cep) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "UPDATE cliente_departamentos SET cartaoPostagem = ?, nomeDepartamento = ? WHERE idCliente = ? AND idDepartamento = ?;";
+        String sql = "UPDATE cliente_departamentos SET cartaoPostagem = ?, nomeDepartamento = ?, temEndereco = ?, nomeEndereco = ?, logradouro = ?, numero = ?, complemento = ?, bairro = ?, cidade = ?, uf = ?, cep = ? "
+                + " WHERE idCliente = ? AND idDepartamento = ?;";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setString(1, cartao);
             valores.setString(2, nome);
-            valores.setInt(3, idCliente);
-            valores.setInt(4, idDepto);
+            valores.setInt(3, temEndereco);
+            valores.setString(4, nomeEndereco);
+            valores.setString(5, logradouro);
+            valores.setString(6, numero);
+            valores.setString(7, complemento);
+            valores.setString(8, bairro);
+            valores.setString(9, cidade);
+            valores.setString(10, uf);
+            valores.setString(11, cep);
+            valores.setInt(12, idCliente);
+            valores.setInt(13, idDepto);
             valores.executeUpdate();
             valores.close();
             return true;
@@ -169,8 +179,18 @@ public class ContrClienteDeptos {
                 int idDepartamento = result.getInt("idDepartamento");
                 String nomeDepartamento = result.getString("nomeDepartamento");
                 String cartaoPostagem = result.getString("cartaoPostagem");
+                int codReferencia = result.getInt("codReferencia");
+                int temEndereco = result.getInt("temEndereco");
+                String nomeEndereco = result.getString("nomeEndereco");
+                String logradouro = result.getString("logradouro");
+                String numero = result.getString("numero");
+                String complemento = result.getString("complemento");
+                String bairro = result.getString("bairro");
+                String cidade = result.getString("cidade");
+                String uf = result.getString("uf");
+                String cep = result.getString("cep");
                 
-                ClientesDeptos cd = new ClientesDeptos(idDepartamento, idCliente, nomeDepartamento, cartaoPostagem);
+                ClientesDeptos cd = new ClientesDeptos(idDepartamento, idCliente, nomeDepartamento, cartaoPostagem, codReferencia, temEndereco, nomeEndereco, logradouro, numero, complemento, bairro, cidade, uf, cep);
                 lista.add(cd);
             }
             valores.close();
@@ -229,8 +249,19 @@ public class ContrClienteDeptos {
                 int idDepartamento = result.getInt("idDepartamento");
                 String nomeDepartamento = result.getString("nomeDepartamento");
                 String cartaoPostagem = result.getString("cartaoPostagem");
+                int codReferencia = result.getInt("codReferencia");
+                int temEndereco = result.getInt("temEndereco");
+                String nomeEndereco = result.getString("nomeEndereco");
+                String logradouro = result.getString("logradouro");
+                String numero = result.getString("numero");
+                String complemento = result.getString("complemento");
+                String bairro = result.getString("bairro");
+                String cidade = result.getString("cidade");
+                String uf = result.getString("uf");
+                String cep = result.getString("cep");
                 
-                lista = new ClientesDeptos(idDepartamento, idCliente, nomeDepartamento, cartaoPostagem);
+                lista = new ClientesDeptos(idDepartamento, idCliente, nomeDepartamento, cartaoPostagem, codReferencia, temEndereco, nomeEndereco, logradouro, numero, complemento, bairro, cidade, uf, cep);
+                                
             }
             valores.close();
             return lista;

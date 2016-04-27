@@ -4,31 +4,9 @@ app.controller('ModalEditarCarteiraCobrancaController', ['$scope', '$modalInstan
     function ($scope, $modalInstance, carteiraCobranca, CarteiraCobrancaService, ContaCorrenteService, CepService, ModalService) {
 
         var init = function () {  
-            $scope.carteiraCobranca = {
-                idCarteiraCobranca: (carteiraCobranca && carteiraCobranca.idCarteiraCobranca) || null,
-                contaCorrente: (carteiraCobranca && carteiraCobranca.contaCorrente) || null,
-                nome: (carteiraCobranca && carteiraCobranca.nome) || null,
-                codigoBeneficiario: (carteiraCobranca && carteiraCobranca.codigoBeneficiario) || null,
-                codigoBeneficiarioDv: (carteiraCobranca && carteiraCobranca.codigoBeneficiarioDv) || null,
-                codigoConvenio: (carteiraCobranca && carteiraCobranca.codigoConvenio) || null,
-                codigoCarteira: (carteiraCobranca && carteiraCobranca.codigoCarteira) || null,
-                aceite: (carteiraCobranca && carteiraCobranca.aceite),
-                baixa: (carteiraCobranca && carteiraCobranca.baixa),
-                especieDocumento: (carteiraCobranca && carteiraCobranca.especieDocumento) || null,
-                localPagamento: (carteiraCobranca && carteiraCobranca.localPagamento) || null,
-                instrucao01: (carteiraCobranca && carteiraCobranca.instrucao01) || null,
-                instrucao02: (carteiraCobranca && carteiraCobranca.instrucao02) || null,
-                instrucao03: (carteiraCobranca && carteiraCobranca.instrucao03) || null,
-                instrucao04: (carteiraCobranca && carteiraCobranca.instrucao04) || null,
-                instrucao05: (carteiraCobranca && carteiraCobranca.instrucao05) || null,
-                beneficiarioNome: (carteiraCobranca && carteiraCobranca.beneficiarioNome) || null,
-                beneficiarioDocumento: (carteiraCobranca && carteiraCobranca.beneficiarioDocumento) || null,
-                beneficiarioLogradouro: (carteiraCobranca && carteiraCobranca.beneficiarioLogradouro) || null,
-                beneficiarioBairro: (carteiraCobranca && carteiraCobranca.beneficiarioBairro) || null,
-                beneficiarioCidade: (carteiraCobranca && carteiraCobranca.beneficiarioCidade) || null,
-                beneficiarioUf: (carteiraCobranca && carteiraCobranca.beneficiarioUf) || null,
-                beneficiarioCep: (carteiraCobranca && carteiraCobranca.beneficiarioCep) || null
-            }; 
+            $scope.carteiraCobranca = carteiraCobranca || {};
+            $scope.carteiraCobranca.aceite = (carteiraCobranca && carteiraCobranca.aceite);
+            $scope.carteiraCobranca.baixa = (carteiraCobranca && carteiraCobranca.baixa);
             if($scope.carteiraCobranca.aceite == null) { $scope.carteiraCobranca.aceite = false; }
             if($scope.carteiraCobranca.baixa == null) { $scope.carteiraCobranca.baixa = false; }
             getTitle();

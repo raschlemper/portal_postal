@@ -238,22 +238,13 @@
 				<textFieldExpression><![CDATA[$F{siglaAmarracao}]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement x="199" y="320" width="123" height="38" uuid="0ec0c7ad-e1e7-4417-a0ab-4c302de50e62">
+				<reportElement x="199" y="332" width="123" height="26" uuid="0ec0c7ad-e1e7-4417-a0ab-4c302de50e62">
 					<printWhenExpression><![CDATA[($F{temContrato}.equals("1") && $F{nObj}.length() < 13) || $F{temContrato}.equals("0")]]></printWhenExpression>
 				</reportElement>
-				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="true" checksumRequired="false" barHeight="80">
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="true" checksumRequired="false" barHeight="50">
 					<jr:codeExpression><![CDATA[$F{nObj}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
-			<staticText>
-				<reportElement x="363" y="356" width="97" height="13" uuid="c3c40e2c-0cdf-478d-beec-35a45fa8ce0f">
-					<printWhenExpression><![CDATA[$F{nomeServico}.equals("SEDEXC")]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[SEDEX A COBRAR]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="303" y="525" width="157" height="9" uuid="01af77db-daa8-4dfd-b73a-73a80b711178">
 					<printWhenExpression><![CDATA[$F{cpf_cnpj} != null && !$F{cpf_cnpj}.equals("")]]></printWhenExpression>
@@ -312,7 +303,7 @@
 				<textFieldExpression><![CDATA[$F{pais}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="303" y="513" width="60" height="11" uuid="e3e155d7-df04-49ce-9120-72acb1314b36"/>
+				<reportElement x="303" y="513" width="76" height="11" uuid="e3e155d7-df04-49ce-9120-72acb1314b36"/>
 				<textElement verticalAlignment="Bottom">
 					<font size="8"/>
 				</textElement>
@@ -366,6 +357,15 @@
 					<font fontName="SansSerif" size="5" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{nomeChancela}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="201" y="320" width="120" height="13" uuid="a016f0b5-7185-4af1-9cc7-cd0a7c5bcb0e">
+					<printWhenExpression><![CDATA[$F{nomeServico}.equals("SEDEXC") || $F{nomeServico}.equals("PAC_COB")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["A COBRAR: R$ " + $F{valor_cobrar}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

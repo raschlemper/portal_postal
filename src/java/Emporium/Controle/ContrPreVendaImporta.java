@@ -1333,7 +1333,7 @@ public class ContrPreVendaImporta {
                     }
 
                     auxCod = 312;
-                    rom = new Destinatario(0, 0, "", "", "", "", "", "", "", "", "", "", "", "");
+                    rom = new Destinatario(0, 0, 0, "", "", "", "", "", "", "", "", "", "", "", "", "");
                     rom.setCep(buffer.substring(167, 176).trim());
                     rom.setNome(buffer.substring(3, 43).trim());
 

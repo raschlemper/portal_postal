@@ -81,6 +81,7 @@ public class ServInserirDestinatario extends HttpServlet {
                 
                 String nomeBD = (String) sessao.getAttribute("empresa");                
                 int idCliente = Integer.parseInt(request.getParameter("idCliente"));
+                int idDepartamento = Integer.parseInt(request.getParameter("idDepartamento"));
                 String nome = request.getParameter("nome");
                 String cpf_cnpj = request.getParameter("cpf_cnpj");
                 String empresa = request.getParameter("empresa");
@@ -94,7 +95,7 @@ public class ServInserirDestinatario extends HttpServlet {
                 String email = request.getParameter("email");
                 String celular = request.getParameter("celular");
                 String tags = request.getParameter("tags");
-                Controle.contrDestinatario.inserir(idCliente, nome, cpf_cnpj, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, "BR", email, celular , nomeBD, tags);
+                Controle.contrDestinatario.inserir(idCliente, idDepartamento, nome, cpf_cnpj, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, "BR", email, celular , nomeBD, tags);
                 sessao.setAttribute("msg", "Destinatário Inserido com Sucesso!");
                 response.sendRedirect("Cliente/Cadastros/destinatario_lista.jsp");
 

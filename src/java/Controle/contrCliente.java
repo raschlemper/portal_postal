@@ -64,6 +64,21 @@ public class contrCliente {
             Conexao.desconectar(conn);
         }
     }
+     
+     public static void separarDestinatarios(String nomeBD, String idCliente, int separar) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "UPDATE cliente SET separar_destinatarios = "+separar+" WHERE codigo = "+idCliente+" ;";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.executeUpdate();
+            valores.close();
+        } catch (SQLException e) {
+            System.out.println(e);
+            ContrErroLog.inserir("HOITO - criaClienteBalcao", "SQLException", sql, e.toString());
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
 
     public static int inserirCliente(String nome, String nomeFantasia, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String cep, String telefone, String email, String cnpj, double latitude, double longitude, int grupo_fat, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);

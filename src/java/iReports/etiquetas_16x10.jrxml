@@ -260,15 +260,6 @@
 					<jr:codeExpression><![CDATA[$F{nObj}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
-			<staticText>
-				<reportElement x="1" y="0" width="97" height="13" uuid="c3c40e2c-0cdf-478d-beec-35a45fa8ce0f">
-					<printWhenExpression><![CDATA[$F{nomeServico}.equals("SEDEXC")]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Left">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[SEDEX A COBRAR]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="0" y="243" width="125" height="9" uuid="01af77db-daa8-4dfd-b73a-73a80b711178">
 					<printWhenExpression><![CDATA[$F{cpf_cnpj} != null && !$F{cpf_cnpj}.equals("")]]></printWhenExpression>
@@ -325,7 +316,7 @@
 				<textFieldExpression><![CDATA[$F{nomeAc}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="100" y="0" width="142" height="12" uuid="c430d0dc-e665-4a46-b26d-8af560d8cf11"/>
+				<reportElement x="142" y="0" width="100" height="12" uuid="c430d0dc-e665-4a46-b26d-8af560d8cf11"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
@@ -348,14 +339,14 @@
 				<textFieldExpression><![CDATA[$F{observacoes}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="234" width="167" height="11" uuid="2d55d869-240a-4642-9859-346bfb3356d7"/>
+				<reportElement x="0" y="234" width="124" height="11" uuid="2d55d869-240a-4642-9859-346bfb3356d7"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{pais}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="168" y="233" width="66" height="11" uuid="e3e155d7-df04-49ce-9120-72acb1314b36"/>
+				<reportElement x="124" y="233" width="110" height="11" uuid="e3e155d7-df04-49ce-9120-72acb1314b36"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
@@ -396,6 +387,15 @@
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nObj}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="0" width="134" height="12" uuid="a6f2e945-d20e-4ce8-8cc6-96501059741b">
+					<printWhenExpression><![CDATA[$F{nomeServico}.equals("SEDEXC") || $F{nomeServico}.equals("PAC_COB")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["A COBRAR: R$ " + $F{valor_cobrar}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

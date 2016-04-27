@@ -33,7 +33,7 @@
                 String uf = request.getParameter("uf");
                 String lp = request.getParameter("lp");
 
-                String sql = "SELECT descServico, peso, quantidade, valorServico, dataPostagem, codStatus,"
+                String sql = "SELECT id, descServico, peso, quantidade, valorServico, dataPostagem, codStatus,"
                         + " numObjeto, destinatario, cep, departamento, status, dataEntrega, notaFiscal, numVenda, numCaixa,"
                         + " siglaServAdicionais, contratoEct, valorDestino, valorDeclarado, paisDestino, conteudoObjeto, altura, largura, comprimento, idPre_venda ,idOS"
                         + " FROM movimentacao"
@@ -92,8 +92,6 @@
                     sql += " AND idOS = "+lp+"";
                 }
                 sql += " ORDER BY dataPostagem DESC";
-
-                System.out.println(sql);
                 
                 ArrayList movimentacao = Controle.contrMovimentacao.getConsultaAnalitica(sql, nomeBD);
                 BigDecimal vlrTotal = new BigDecimal(0);
@@ -236,7 +234,7 @@
                     </form>                    
                     <a href='#' onclick="document.getElementById('frm<%= numeroRegistro%>').submit();"><%= numeroRegistro%></a>
                 </td>
-                <td align='left'><a href='visulizaTicket.jsp?numVenda=<%= numVenda%>&numCaixa=<%= numCaixa%>' target='_blank'><%= servico2%></a></td>
+                 <td align='left'><a href='visulizaTicket.jsp?idmov=<%= mov.getId() %>' target='_blank'><%= servico2%></a></td>
                 <td><%= peso%>g</td>
                 <td><%= dimensoes%></td>
                 <td><%= qtd%></td>
@@ -271,7 +269,7 @@
                 <td nowrap="true">R$ <%= Util.FormatarDecimal.formatarFloat(vlrDecTotal.floatValue())%></td>
                 <td nowrap="true">R$ <%= Util.FormatarDecimal.formatarFloat(vlrCobTotal.floatValue())%></td>
                 <%}%>
-                <td colspan="10"></td>
+                <td colspan="12"></td>
             </tr>
         </tfoot>
     </table>

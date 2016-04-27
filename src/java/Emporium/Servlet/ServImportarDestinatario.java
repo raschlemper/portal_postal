@@ -48,6 +48,7 @@ public class ServImportarDestinatario extends HttpServlet {
         if (nomeBD != null) {
             boolean isMultiPart = FileUpload.isMultipartContent(request);
             int idCliente = 0;
+            int idDepartamento = 0;
             if (isMultiPart) {
                 try {
                     FileItemFactory factory = new DiskFileItemFactory();
@@ -57,13 +58,15 @@ public class ServImportarDestinatario extends HttpServlet {
                     List items = upload.parseRequest(request);
                     Iterator iter = items.iterator();
                     FileItem itemImg = null;
-                    int vd = 0, ar = 0;
 
                     while (iter.hasNext()) {
                         FileItem item = (FileItem) iter.next();
                         if (item.isFormField()) {
                             if (item.getFieldName().equals("idCliente")) {
                                 idCliente = Integer.parseInt(item.getString());
+                            }
+                            if (item.getFieldName().equals("idDepartamento")) {
+                                idDepartamento = Integer.parseInt(item.getString());
                             }
                         }
                         if (!item.isFormField()) {
@@ -79,7 +82,7 @@ public class ServImportarDestinatario extends HttpServlet {
                         //CONSULTA DADOS DO CLIENTE/DEPARTAMENTO/CONTRATO
                         Clientes cli = contrCliente.consultaClienteById(idCliente, nomeBD);
                         if (cli != null) {
-                            String condicao = ContrDestinatarioImporta.importaPedido(itemImg, idCliente, nomeBD);
+                            String condicao = ContrDestinatarioImporta.importaPedido(itemImg, idCliente, idDepartamento, nomeBD);
                             response.sendRedirect("Cliente/Cadastros/destinatario_lista.jsp?msg=" + condicao);
                         } else {
                             response.sendRedirect("Cliente/Cadastros/destinatario_lista.jsp?msg=Cliente nao encontrado no banco de dados!");

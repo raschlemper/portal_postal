@@ -32,7 +32,7 @@
                 String vd = request.getParameter("vd");
                 String uf = request.getParameter("uf");
 
-                String sql = "SELECT descServico, peso, quantidade, valorServico, dataPostagem, codStatus,"
+                String sql = "SELECT id, descServico, peso, quantidade, valorServico, dataPostagem, codStatus,"
                         + " numObjeto, destinatario, cep, departamento, status, dataEntrega, notaFiscal, numVenda, numCaixa"
                         + " FROM movimentacao"
                         + " WHERE codCliente = " + idCliente;
@@ -88,9 +88,7 @@
                     sql += " AND siglaServAdicionais LIKE '%VD%'";
                 }
                 sql += " ORDER BY dataPostagem DESC";
-                
-                System.out.println(sql);
-                
+                                
                 ArrayList movimentacao = Controle.contrMovimentacao.getConsultaSintetica(sql, nomeBD);
 
                 if (movimentacao.size() >= 1) {
@@ -172,10 +170,6 @@
                                     String cepDestino = FormataString.formataCep(mov.getCep());
                                     String departamento2 = mov.getDepartamento();
                                     String status = mov.getStatus();
-
-                                    String numVenda = mov.getNumVenda();
-                                    String numCaixa = mov.getNumCaixa();
-
                                     String codStatus = ""+mov.getCodStatus();
                                     String img_status = "";
                                     String grupoStatus = Util.Situacao.consultaGrupoStatus(codStatus, status);
@@ -207,7 +201,7 @@
                     <a href='#' onclick="document.getElementById('frm<%= numeroRegistro%>').submit();"><%= numeroRegistro%></a>
                 </td>
                     <%--<a href='http://websro.correios.com.br/sro_bin/txect01$.QueryList?P_LINGUA=001&P_TIPO=001&P_COD_UNI=<%= numeroRegistro%>' target=_blank><%= numeroRegistro%></a></td>--%>
-                <td align='left'><a href='visulizaTicket.jsp?numVenda=<%= numVenda%>&numCaixa=<%= numCaixa%>' target='_blank'><%= servico2%></a></td>
+                <td align='left'><a href='visulizaTicket.jsp?idmov=<%= mov.getId() %>' target='_blank'><%= servico2%></a></td>
                 <td><%= peso%>g</td>
                 <td><%= qtd%></td>
                 <td><%= vData%></td>

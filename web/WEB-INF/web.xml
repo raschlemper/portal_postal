@@ -625,6 +625,10 @@
         <servlet-name>ServTrocaSenhaPortal</servlet-name>
         <servlet-class>Servlet.ServTrocaSenhaPortal</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ServClienteSepararDest</servlet-name>
+        <servlet-class>Servlet.ServClienteSepararDest</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ServLogin</servlet-name>
         <url-pattern>/ServLogin</url-pattern>
@@ -1234,11 +1238,19 @@
         <servlet-name>ServTrocaSenhaPortal</servlet-name>
         <url-pattern>/ServTrocaSenhaPortal</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServClienteSepararDest</servlet-name>
+        <url-pattern>/ServClienteSepararDest</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             5
         </session-timeout>
     </session-config>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/erro404.html</location>
+    </error-page>    
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>

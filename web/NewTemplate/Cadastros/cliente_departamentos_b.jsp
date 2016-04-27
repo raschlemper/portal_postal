@@ -25,8 +25,8 @@
     <body>   
         <script type="text/javascript">
             waitMsg();
-            
-                       function confirmExcluir(button) {
+
+            function confirmExcluir(button) {
                 bootbox.confirm({
                     title: 'EXCLUIR DEPARTAMENTO?',
                     message: 'Deseja realmente excluir este departamento / centro de custo?',
@@ -47,7 +47,7 @@
                     }
                 });
             }
-            
+
         </script> 
         <jsp:include page="../includes/navBarTop.jsp"></jsp:include>
             <div id="wrapper">
@@ -67,7 +67,27 @@
 
                         <div class="row">
                             <div class="col-xs-12">
-
+                                
+                                <form name="formSeparar" action="../../ServClienteSepararDest" method="post">
+                                    <ul class="list-unstyled">
+                                        <li class="list-group-item">
+                                            <div class="row form-horizontal">
+                                                <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4">
+                                                    <label>Separar Destinatários por Departamento?<br/><span style="color:red;font-size: 10px;">*Caso queira que os destinatários do seu cliente sejam visualizados somente pelo mesmo departamento que fez o cadastro do destinatário.</span></label>
+                                                    <div class="input-group">                                                        
+                                                        <span class="input-group-addon" ><i class="fa fa-info fa-fw"></i></span>                                                                                                             
+                                                        <select class="form-control" name="separar" id="separar" onchange="this.form.submit()">
+                                                            <option <%if (cliInc.getSeparar_destinatarios() == 1) {%> selected <%}%> value="1">SEPARAR POR DEPARTAMENTO</option>
+                                                            <option <%if (cliInc.getSeparar_destinatarios() == 0) {%> selected <%}%> value="0">NAO SEPARAR POR DEPARTAMENTO</option>
+                                                        </select>
+                                                        <input type="hidden" name="idCliente" value="<%= cliInc.getCodigo()%>" />
+                                                        <input type="hidden" name="nomeBD" value="<%= nomeBD %>" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </form>
                                 <form name="form1" action="../../ServInserirDepto" method="post">
                                     <ul class="list-unstyled">
                                         <li class="list-group-item list-group-heading">
@@ -109,7 +129,7 @@
                                                         <th>Departamento</th>
                                                         <th>Cartão de Postagem</th>
                                                         <th class="no-sort" width="150">Alterar</th>
-                                                        
+
                                                         <th class="no-sort" style="width: 60px;">Excluir</th>
                                                     </tr>
                                                 </thead>
@@ -130,13 +150,12 @@
                                                         <td><%= sc3.getNomeDepartamento()%></td>
                                                         <td><%= cart%></td>
                                                         <td align="center"><button type="button" class="btn btn-sm btn-warning" onclick="ajaxCartaoPostagem(<%= idClienteInc%>, <%= sc3.getIdDepartamento()%>, '<%= cartao%>', '<%= sc3.getNomeDepartamento()%>');" ><i class="fa fa-lg fa-pencil"></i></button></td>
-                                                     <td align="center">
+                                                        <td align="center">
                                                             <form action="../../ServExcluirDepto" method="post" name="formDelDepto">                                                               
                                                                 <input type="hidden" name="idDepto" value="<%= sc3.getIdDepartamento()%>" />
                                                                 <button type="button" class="btn btn-sm btn-danger" onClick="confirmExcluir(this);" ><i class="fa fa-trash fa-lg"></i></button>
                                                             </form>
                                                         </td>
-                                                    
                                                     </tr>
                                                     <%}%>
                                                 </tbody>
@@ -153,6 +172,8 @@
             </div>
         </div>
 
+        <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet" />
+        <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
         <script type="text/javascript">
 
             function preencherCampos() {
@@ -178,9 +199,9 @@
                     method: "POST",
                     url: "ajax/cliente_cartao_dep_editar_dialog.jsp",
                     data: {
-                        idCliente: idCliente, 
-                        idDepartamento: idDepartamento, 
-                        cartao: cartao, 
+                        idCliente: idCliente,
+                        idDepartamento: idDepartamento,
+                        cartao: cartao,
                         depto: depto
                     },
                     dataType: 'html'
@@ -188,10 +209,10 @@
                     editarCartaoPostagemDialog(retorno);
                 });
             }
-                        
+
             function editarCartaoPostagemDialog(retorno) {
                 bootbox.dialog({
-                    title: "Editar Cartão de Postagem do Departamento",
+                    title: "Editar Dados do Departamento",
                     message: retorno,
                     animate: true,
                     onEscape: true,
@@ -227,7 +248,7 @@
             $(document).ready(function () {
                 LoadDataTablesScripts(AllTables);
             });
-
+                        
         </script>
     </body>
 </html>

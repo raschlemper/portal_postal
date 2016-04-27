@@ -116,6 +116,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
             delete $scope.lancamentoProgramado.parcelas;
+            delete $scope.lancamentoProgramado.lancamentos;
             $scope.lancamentoProgramado.gerarLancamento = false;
             $modalInstance.close($scope.lancamentoProgramado);            
         };
@@ -169,6 +170,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
             lancamento = ajusteLancamento(lancamento);
             lancamentoProgramado.lancamentos = [];
             lancamentoProgramado.lancamentos.push(lancamento);
+            encerrarLancamentoProgramado(lancamentoProgramado, lancamento);
             $modalInstance.close(lancamentoProgramado); 
         };
                 
@@ -219,6 +221,16 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
             lancamento.situacao = lancamento.situacao.id;
             lancamento.modelo = lancamento.modelo.id;
             return lancamento;
+        }
+        
+        var encerrarLancamentoProgramado = function(lancamentoProgramado, lancamento) {
+            if(lancamentoProgramado.frequencia.codigo === 'unico') { 
+                lancamentoProgramado.situacao = $scope.situacoes[2];
+            }
+            if(lancamento.numeroParcela === lancamentoProgramado.quantidadeParcela) {
+                lancamentoProgramado.situacao = $scope.situacoes[2];                
+            }
+            
         }
         
         $scope.voltar = function() {

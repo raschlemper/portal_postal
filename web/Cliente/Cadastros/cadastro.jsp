@@ -87,10 +87,10 @@
         <script type="text/javascript">
             function preencherCampos() {
                 var form = document.form1;
-                if (form.logo_img_url.value === "") {
+             /*   if (form.logo_img_url.value === "") {
                     alert('Escolha uma imagem para o logo da etiqueta!');
                     return false;
-                }               
+                }       */        
                 form.submit();
             }
         </script>
@@ -125,7 +125,7 @@
                             </li>
                             <li>
                                 <dd style="padding: 15px 0px;">
-                                    <input name="logo_img_url" type="hidden" role="uploadcare-uploader" data-image-shrink="600x400" data-clearable data-images-only="true" value/>
+                                    <input name="logo_img_url" type="hidden" role="uploadcare-uploader" data-image-shrink="600x400" data-clearable data-images-only="true" value ="<%= url_logo%>"/>
                                 </dd>
                             </li>
                             <li class="titulo">

@@ -91,8 +91,30 @@ public class ServEditarCartaoDep extends HttpServlet {
                 int idCli = Integer.parseInt(request.getParameter("idCliente"));
                 int idDep = Integer.parseInt(request.getParameter("idDepartamento"));
                 
-                String nome = request.getParameter("nome").trim();
+                String nome = request.getParameter("nome").trim();                
                 String cartao = request.getParameter("cartao").trim();
+                
+                int temEndereco = 0;
+                String nomeEndereco = "";
+                String logradouro = "";
+                String numero = "";
+                String complemento = "";
+                String bairro = "";
+                String cidade = "";
+                String uf = "";
+                String cep = "";
+                if(request.getParameter("temEndereco") != null){
+                    temEndereco = 1;
+                    nomeEndereco = request.getParameter("nomeEndereco").trim();
+                    logradouro = request.getParameter("logradouro").trim();
+                    numero = request.getParameter("numero").trim();
+                    complemento = request.getParameter("complemento").trim();
+                    bairro = request.getParameter("bairro").trim();
+                    cidade = request.getParameter("cidade").trim();
+                    uf = request.getParameter("uf").trim();
+                    cep = request.getParameter("cep").trim();
+                }
+                
                 if(!cartao.equals("")){
                     try{
                         int cart = Integer.parseInt(cartao);
@@ -106,7 +128,7 @@ public class ServEditarCartaoDep extends HttpServlet {
                     }
                 }
 
-                Controle.ContrClienteDeptos.alterarCartaoDepto(nomeBD, idCli, idDep, nome, cartao);
+                Controle.ContrClienteDeptos.alterarDepto(nomeBD, idCli, idDep, nome, cartao, temEndereco, nomeEndereco, logradouro, numero, complemento, bairro, cidade, uf, cep);
 
                 sessao.setAttribute("msg", "Departamento alterado com sucesso!");
                                 

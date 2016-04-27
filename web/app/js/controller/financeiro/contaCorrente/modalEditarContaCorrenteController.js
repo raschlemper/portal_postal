@@ -5,16 +5,8 @@ app.controller('ModalEditarContaCorrenteController', ['$scope', '$modalInstance'
 
         var init = function () {  
             $scope.maxValue = 31;
-            $scope.contaCorrente = {
-                idContaCorrente: (contaCorrente && contaCorrente.idContaCorrente) || null,
-                nome: (contaCorrente && contaCorrente.nome) || null,
-                banco: (contaCorrente && contaCorrente.banco) || null,
-                agencia: (contaCorrente && contaCorrente.agencia) || null,
-                agenciaDv: (contaCorrente && contaCorrente.agenciaDv) || null,
-                contaCorrente: (contaCorrente && contaCorrente.contaCorrente) || null,
-                contaCorrenteDv: (contaCorrente && contaCorrente.contaCorrenteDv) || null,
-                poupanca: (contaCorrente && contaCorrente.poupanca)
-            }; 
+            $scope.contaCorrente = contaCorrente || {};
+            $scope.contaCorrente.poupanca = (contaCorrente && contaCorrente.poupanca);
             getTitle();
             bancos();
         };

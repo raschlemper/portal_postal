@@ -9,17 +9,11 @@ app.controller('ModalEditarPlanoContaController', ['$scope', '$modalInstance', '
             $scope.grupos = [];
             $scope.gruposList = [];
             $scope.isGroup = isGroup();
-            $scope.planoConta = {
-                idPlanoConta: (planoConta && planoConta.idPlanoConta) || null,
-                tipo: (planoConta && planoConta.tipo) || $scope.tipos[0],            
-                codigo: (planoConta && planoConta.codigo) || null,
-                nome: (planoConta && planoConta.nome) || null,
-                grupo: (planoConta && planoConta.grupo) || null
-            }; 
+            $scope.planoConta = planoConta || {};
+            $scope.planoConta.tipo = (planoConta && planoConta.tipo) || $scope.tipos[0]; 
             if(action === 'save') { create(); }
             todos();
-            getTitle();
-            
+            getTitle();            
         };         
         
         var isGroup = function() {

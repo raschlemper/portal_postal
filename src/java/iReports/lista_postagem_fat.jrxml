@@ -90,6 +90,7 @@
    aviso_recebimento AS ar,
    mao_propria AS mp,
    valor_declarado AS vd,
+   valor_cobrar AS vc,
    d.nome,
    cartaoPostagem
 FROM
@@ -130,6 +131,7 @@ ORDER BY
 			<fieldDescription><![CDATA[]]></fieldDescription>
 		</field>
 		<field name="cartaoPostagem" class="java.lang.String"/>
+		<field name="vc" class="java.lang.Float"/>
 		<variable name="num_obj" class="java.lang.String">
 			<initialValueExpression><![CDATA["Nº OBJETO / Nº PP"]]></initialValueExpression>
 		</variable>
@@ -169,7 +171,7 @@ WHERE qtdTotal > 0;]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="128" splitType="Stretch">
+		<band height="99" splitType="Stretch">
 			<rectangle>
 				<reportElement x="143" y="0" width="235" height="41" uuid="747f0fe5-963c-4ba5-b207-87424cd3fa52"/>
 			</rectangle>
@@ -181,9 +183,6 @@ WHERE qtdTotal > 0;]]>
 			</rectangle>
 			<rectangle>
 				<reportElement x="0" y="69" width="575" height="28" uuid="dfa70372-4a89-401d-b180-82308179ef60"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="0" y="97" width="575" height="28" uuid="dfa70372-4a89-401d-b180-82308179ef60"/>
 			</rectangle>
 			<textField>
 				<reportElement x="4" y="54" width="397" height="14" uuid="0b2f101b-9d28-46cf-9a43-c689aecf206e"/>
@@ -226,53 +225,6 @@ WHERE qtdTotal > 0;]]>
 					<jr:codeExpression><![CDATA[$P{cartaoCliente}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
-			<staticText>
-				<reportElement x="0" y="110" width="25" height="15" uuid="1c398093-5b52-46bd-af90-6b2b0b8c3140"/>
-				<textElement verticalAlignment="Middle">
-					<paragraph leftIndent="2"/>
-				</textElement>
-				<text><![CDATA[Ord]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="25" y="110" width="93" height="15" uuid="1c398093-5b52-46bd-af90-6b2b0b8c3140"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Serviço]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="118" y="110" width="84" height="15" uuid="1c398093-5b52-46bd-af90-6b2b0b8c3140"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Nº do Objeto]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="202" y="110" width="60" height="15" uuid="1c398093-5b52-46bd-af90-6b2b0b8c3140"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[CEP Destino]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="262" y="110" width="52" height="15" uuid="1c398093-5b52-46bd-af90-6b2b0b8c3140"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[VD (R$)]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="262" y="97" width="98" height="13" uuid="1c398093-5b52-46bd-af90-6b2b0b8c3140"/>
-				<textElement textAlignment="Center" verticalAlignment="Bottom"/>
-				<text><![CDATA[Serviços Adicionais]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="314" y="110" width="17" height="15" uuid="1c398093-5b52-46bd-af90-6b2b0b8c3140"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[AR]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="331" y="110" width="29" height="15" uuid="1c398093-5b52-46bd-af90-6b2b0b8c3140"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[MP]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="360" y="110" width="50" height="15" uuid="1c398093-5b52-46bd-af90-6b2b0b8c3140"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[N.F.]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="4" y="82" width="89" height="15" uuid="d742ae95-d842-4d44-94ca-988dc3380020"/>
 				<textFieldExpression><![CDATA[$P{contratoCliente}]]></textFieldExpression>
@@ -331,16 +283,6 @@ WHERE qtdTotal > 0;]]>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA["CNPJ "+ $P{cnpjCliente}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="410" y="110" width="70" height="15" uuid="d696df13-ed59-4e34-937b-67c2da3f2be2"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Destinatário]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="480" y="110" width="95" height="15" uuid="0d921496-75a6-48b2-ac04-0f20ae033a7a"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Cartão/Depto.]]></text>
-			</staticText>
 		</band>
 	</title>
 	<detail>
@@ -354,128 +296,208 @@ WHERE qtdTotal > 0;]]>
 						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
-					<jr:column width="23" uuid="5892be64-7f91-44d3-b8b1-73c34cde71fd">
-						<jr:detailCell height="20" rowSpan="1">
+					<jr:column width="15" uuid="5892be64-7f91-44d3-b8b1-73c34cde71fd">
+						<jr:columnHeader height="15" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="15" height="15" uuid="200cf076-561f-42b8-b629-4bcb718b41a2"/>
+								<textElement verticalAlignment="Middle"/>
+								<text><![CDATA[N.]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="19" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="23" height="19" uuid="f33863a3-065b-48d4-8280-4ed6babe8746"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="Monospaced"/>
+								<reportElement x="0" y="0" width="15" height="19" uuid="f33863a3-065b-48d4-8280-4ed6babe8746"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Monospaced" size="8"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="38" uuid="ed7cc14b-17b3-4dfb-bbcf-edf19a5f8098">
-						<jr:detailCell height="20" rowSpan="1">
+					<jr:column width="93" uuid="ed7cc14b-17b3-4dfb-bbcf-edf19a5f8098">
+						<jr:columnHeader height="15" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="93" height="15" uuid="0c71dde1-96d0-4a3d-af09-fa8f4f2f454c"/>
+								<textElement verticalAlignment="Middle"/>
+								<text><![CDATA[Serviço]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="19" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="38" height="19" uuid="8b652810-a4a1-467e-9d80-2149c683f0ef"/>
+								<reportElement x="0" y="0" width="93" height="19" uuid="8b652810-a4a1-467e-9d80-2149c683f0ef"/>
 								<box leftPadding="5"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="Monospaced"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Monospaced" size="8"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{codECT}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{codECT}+" "+$F{nomeServico}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="55" uuid="642431c2-42e3-4f47-9129-169f75444d7f">
-						<jr:detailCell height="20" rowSpan="1">
+					<jr:column width="74" uuid="015f0525-e14b-4100-baa1-5c7bcd31cb2e">
+						<jr:columnHeader height="15" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="74" height="15" uuid="2774c2f0-8787-4321-8d3c-b8376cc50168"/>
+								<textElement verticalAlignment="Middle"/>
+								<text><![CDATA[Nº do Objeto]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="19" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="55" height="19" uuid="8b652810-a4a1-467e-9d80-2149c683f0ef"/>
+								<reportElement x="0" y="0" width="74" height="19" uuid="f88f2d22-ddc9-4045-8c0a-40293bcf5d11"/>
 								<box leftPadding="5"/>
 								<textElement verticalAlignment="Middle">
-									<font fontName="Monospaced"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$F{nomeServico}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="84" uuid="015f0525-e14b-4100-baa1-5c7bcd31cb2e">
-						<jr:detailCell height="20" rowSpan="1">
-							<textField>
-								<reportElement x="0" y="0" width="84" height="19" uuid="f88f2d22-ddc9-4045-8c0a-40293bcf5d11"/>
-								<box leftPadding="5"/>
-								<textElement verticalAlignment="Middle">
-									<font fontName="Monospaced"/>
+									<font fontName="Monospaced" size="8"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{cod}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="60" uuid="e88bfdfc-ac93-4073-bbd6-21fe959f52b9">
-						<jr:detailCell height="20" rowSpan="1">
+						<jr:columnHeader height="15" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="60" height="15" uuid="a21a6020-c998-4135-946d-577751d6a468"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[CEP Destino]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="19" rowSpan="1">
 							<textField>
 								<reportElement x="0" y="0" width="60" height="19" uuid="a329a264-73e6-475e-b258-a87a3ffb26aa"/>
 								<box leftPadding="5"/>
-								<textElement verticalAlignment="Middle">
-									<font fontName="Monospaced"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Monospaced" size="8"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{cep}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="52" uuid="3713c024-5bec-4bca-a13c-238e13f72262">
-						<jr:detailCell height="20" rowSpan="1">
+						<jr:columnHeader height="15" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="52" height="15" uuid="ac20b418-9266-4477-9df1-935c8291118a"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle"/>
+								<text><![CDATA[VD (R$)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="19" rowSpan="1">
 							<textField>
 								<reportElement x="0" y="0" width="52" height="19" uuid="1db19aa1-3130-46ea-9a2c-5db99671cde3">
 									<printWhenExpression><![CDATA[$F{vd} > 0]]></printWhenExpression>
 								</reportElement>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="Monospaced"/>
+									<font fontName="Monospaced" size="8"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{vd}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="46" uuid="d0313c25-349b-46c1-bd25-9f7cd0fcb177">
-						<jr:detailCell height="20" rowSpan="1">
+					<jr:column width="17" uuid="af115c0c-c024-483e-9073-15868a9b0e35">
+						<jr:columnHeader height="15" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="17" height="15" uuid="c183e088-9824-4fae-b250-f904dea6db33"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[AR]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="19" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="1" width="23" height="19" uuid="1db19aa1-3130-46ea-9a2c-5db99671cde3">
+								<reportElement x="0" y="0" width="17" height="19" uuid="1db19aa1-3130-46ea-9a2c-5db99671cde3">
 									<printWhenExpression><![CDATA[$F{ar} == 1]]></printWhenExpression>
 								</reportElement>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Monospaced" size="9"/>
+									<font fontName="Monospaced" size="8"/>
 								</textElement>
 								<textFieldExpression><![CDATA["AR"]]></textFieldExpression>
 							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="17" uuid="166f2f32-7108-4733-b098-870e811f6aa1">
+						<jr:columnHeader height="15" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="17" height="15" uuid="9dfe6366-4943-444a-b9fb-db1ac66cc812"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[MP]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="19" rowSpan="1">
 							<textField>
-								<reportElement x="23" y="1" width="23" height="19" uuid="1db19aa1-3130-46ea-9a2c-5db99671cde3">
+								<reportElement x="0" y="0" width="17" height="19" uuid="1db19aa1-3130-46ea-9a2c-5db99671cde3">
 									<printWhenExpression><![CDATA[$F{mp} == 1]]></printWhenExpression>
 								</reportElement>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Monospaced" size="9"/>
+									<font fontName="Monospaced" size="8"/>
 								</textElement>
 								<textFieldExpression><![CDATA["MP"]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="50" uuid="88e0c2a6-cd69-44ba-8e6b-1aa6c5b8cf4b">
-						<jr:detailCell height="20" rowSpan="1">
+					<jr:column width="46" uuid="d0313c25-349b-46c1-bd25-9f7cd0fcb177">
+						<jr:columnHeader height="15" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="46" height="15" uuid="7da87b30-a1f4-47fb-b03e-722ae1315e52"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle"/>
+								<text><![CDATA[VC (R$)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="19" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="50" height="19" uuid="be34893b-e947-4999-9902-d2abad935940"/>
+								<reportElement x="0" y="0" width="46" height="19" uuid="aa57982b-6c60-4e76-9f10-937db20ab7dd"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="Monospaced" size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{vc}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="42" uuid="88e0c2a6-cd69-44ba-8e6b-1aa6c5b8cf4b">
+						<jr:columnHeader height="15" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="42" height="15" uuid="49f449dd-febc-4f36-8c41-73c62887c233"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[N.F.]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="19" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="42" height="19" uuid="be34893b-e947-4999-9902-d2abad935940"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Monospaced"/>
+									<font fontName="Monospaced" size="8"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{notaFiscal}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="70" uuid="4b36a944-b3a9-4638-8e49-51429efb646f">
-						<jr:detailCell height="20" rowSpan="1">
+						<jr:columnHeader height="15" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="70" height="15" uuid="36e490dc-9ae3-44ca-99dc-53b3aee206ca"/>
+								<textElement verticalAlignment="Middle"/>
+								<text><![CDATA[Destinatário]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="19" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="1" width="70" height="19" uuid="38d3c2bb-1fb9-425e-a0b5-59c21460fa89"/>
+								<reportElement x="0" y="0" width="70" height="19" uuid="38d3c2bb-1fb9-425e-a0b5-59c21460fa89"/>
 								<textElement verticalAlignment="Middle">
-									<font fontName="Monospaced" size="9"/>
+									<font fontName="Monospaced" size="8"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="95" uuid="03613a0c-0243-4fd6-972c-07a4e3a91536">
-						<jr:detailCell height="20" rowSpan="1">
+						<jr:columnHeader height="15" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="95" height="15" uuid="42a6fe11-41fd-4c07-9dcb-4ba395b98fa9"/>
+								<textElement verticalAlignment="Middle"/>
+								<text><![CDATA[Cartão Post./Depto.]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="19" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="1" width="95" height="19" uuid="86d1c725-48e9-40d4-a64a-011fefa81627"/>
+								<reportElement x="0" y="0" width="95" height="19" uuid="86d1c725-48e9-40d4-a64a-011fefa81627"/>
 								<textElement verticalAlignment="Middle">
-									<font fontName="Monospaced" size="9"/>
+									<font fontName="Monospaced" size="8"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{cartaoPostagem}+"/"+$F{departamento}]]></textFieldExpression>
 							</textField>

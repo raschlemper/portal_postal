@@ -11,6 +11,8 @@ import java.util.Date;
  * @author Administrador
  */
 public class Movimentacao {
+    
+    private int id;
  private String numCaixa;
  private String numVenda;
  private String seqVenda;
@@ -112,12 +114,31 @@ public class Movimentacao {
         this.numCaixa = numCaixa;
         this.codStatus = codStatus;
     }
+    public Movimentacao(int id, Date dataPostagem, String descServico, String numObjeto, String destinatario, float peso, String cep, float valorServico, float quantidade, String departamento, String status, Date dataEntrega, String notaFiscal, String numVenda, String numCaixa, int codStatus) {
+        this.id = id;
+        this.dataPostagem = dataPostagem;
+        this.descServico = descServico;
+        this.numObjeto = numObjeto;
+        this.destinatario = destinatario;
+        this.peso = peso;
+        this.cep = cep;
+        this.valorServico = valorServico;
+        this.quantidade = quantidade;
+        this.departamento = departamento;
+        this.status = status;
+        this.dataEntrega = dataEntrega;
+        this.notaFiscal = notaFiscal;
+        this.numVenda = numVenda;
+        this.numCaixa = numCaixa;
+        this.codStatus = codStatus;
+    }
 
-    public Movimentacao(Date dataPostagem, String descServico, String numObjeto, String destinatario,
+    public Movimentacao(int id, Date dataPostagem, String descServico, String numObjeto, String destinatario,
             float peso, String cep, float valorServico, float quantidade, String departamento, String status, Date dataEntrega, 
             String notaFiscal, String numVenda, String numCaixa, float valorDeclarado, float valorDestino, 
             String paisDestino, String contratoEct, String conteudoObjeto, String siglaServAdicionais, 
             int codStatus, float altura, float largura, float comprimento, int idPre_venda, int idOS) {
+        this.id = id;
         this.dataPostagem = dataPostagem;
         this.descServico = descServico;
         this.numObjeto = numObjeto;
@@ -146,7 +167,7 @@ public class Movimentacao {
         this.idOS = idOS;
     }
 
-    public Movimentacao(String seqVenda, Date dataPostagem, String descServico, String numObjeto, String destinatario, String notaFiscal, float peso, String cep, float valorServico, float valorDestino, float quantidade, float valorDeclarado, String contratoEct, float altura, float largura, float comprimento, String siglaServAdicionais, String paisDestino) {
+    public Movimentacao(String seqVenda, Date dataPostagem, String descServico, String numObjeto, String destinatario, String notaFiscal, float peso, String cep, float valorServico, float valorDestino, float quantidade, float valorDeclarado, String contratoEct, float altura, float largura, float comprimento, String siglaServAdicionais, String paisDestino, String codigoEct) {
         this.seqVenda = seqVenda;
         this.dataPostagem = dataPostagem;
         this.descServico = descServico;
@@ -165,8 +186,42 @@ public class Movimentacao {
         this.comprimento = comprimento;
         this.siglaServAdicionais = siglaServAdicionais;
         this.paisDestino = paisDestino;
+        this.codigoEct = codigoEct;
+    }
+    public Movimentacao(String seqVenda, Date dataPostagem, String descServico, String numObjeto, String destinatario, String notaFiscal, float peso, String cep, float valorServico, float valorDestino, float quantidade, float valorDeclarado, String contratoEct, float altura, float largura, float comprimento, String siglaServAdicionais, String paisDestino, String codigoEct, String numCaixa, String numVenda) {
+        this.seqVenda = seqVenda;
+        this.dataPostagem = dataPostagem;
+        this.descServico = descServico;
+        this.numObjeto = numObjeto;
+        this.destinatario = destinatario;
+        this.notaFiscal = notaFiscal;
+        this.peso = peso;
+        this.cep = cep;
+        this.valorServico = valorServico;
+        this.valorDestino = valorDestino;
+        this.quantidade = quantidade;
+        this.valorDeclarado = valorDeclarado;
+        this.contratoEct = contratoEct;
+        this.altura = altura;
+        this.largura = largura;
+        this.comprimento = comprimento;
+        this.siglaServAdicionais = siglaServAdicionais;
+        this.paisDestino = paisDestino;
+        this.codigoEct = codigoEct;
+        this.numVenda = numVenda;
+        this.numCaixa = numCaixa;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    
+    
     public int getIdPre_venda() {
         return idPre_venda;
     }

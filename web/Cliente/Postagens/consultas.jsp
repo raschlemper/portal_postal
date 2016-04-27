@@ -56,11 +56,11 @@
 
         <script type="text/javascript" charset="utf-8">
 
-            $(document).ready(function() {
+            $(document).ready(function () {
                 pesquisaSintetica('<%=numCliente%>', '<%=nomeBD%>');
             });
 
-            $(function() {
+            $(function () {
                 $("#dataIni").datepicker({
                     minDate: '<%=dataInicioCalendario%>',
                     maxDate: '<%= vDataAtual%>',
@@ -116,7 +116,7 @@
                     text: 'SITUAÇÕES'
                 },
                 tooltip: {
-                    formatter: function() {                        
+                    formatter: function () {
                         return "<b>" + this.point.name + "</b>: " + this.y + "";
                     }
                 },
@@ -138,7 +138,7 @@
                     x: -10,
                     y: 40,
                     borderWidth: 0,
-                    labelFormatter: function() {
+                    labelFormatter: function () {
                         return this.name + ': ' + this.y;
                     }
                 },
@@ -196,12 +196,14 @@
                                                 ClientesDeptos cd = listaDep.get(i);
                                                 if (dpsUser.contains(cd.getIdDepartamento()) || nivel == 1) {
                                                     String depto = FormataString.removeAccentsToUpper(cd.getNomeDepartamento());
-                                                    if(depto.length()>20){
-                                                        depto = depto.substring(0,20);                                                        
+                                                    if (depto.length() > 20) {
+                                                        depto = depto.substring(0, 20);
                                                     }
                                     %>
-                                    <option value="<%= cd.getIdDepartamento()+";"+depto %>"><%= cd.getNomeDepartamento()%></option>
-                                    <%}}}%>
+                                    <option value="<%= cd.getIdDepartamento() + ";" + depto%>"><%= cd.getNomeDepartamento()%></option>
+                                    <%}
+                                                        }
+                                                    }%>
                                 </select>
                             </dd>
                             <dd>
@@ -334,15 +336,10 @@
                         </li>
                     </ul>
                     <img width="100%" src="../../imagensNew/linha.jpg"/>
-
-
                     <div style="width: 100%;clear: both;">
                         <div id="titulo2" >Resultado da Pesquisa</div>
                         <div id="tableObjeto"></div>
                     </div>
-
-
-
                 </div>
             </div>
         </div>

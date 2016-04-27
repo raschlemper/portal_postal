@@ -5,6 +5,7 @@
 <%
             DecimalFormat df = new DecimalFormat("#,##0.00");
             DecimalFormat df2 = new DecimalFormat("#,##0");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             response.setContentType("text/html");
             response.setHeader("Cache-Control", "no-cache");
 
@@ -15,10 +16,9 @@
 
                 int idEmpresa = (Integer) session.getAttribute("idEmpresa");
                 int idCliente = (Integer) session.getAttribute("idCliente");
-                String vNumVenda = request.getParameter("numVenda");
-                String vNumCaixa = request.getParameter("numCaixa");
-                int numVenda = Integer.parseInt(vNumVenda);
-                int numCaixa = Integer.parseInt(vNumCaixa);
+                String idMov = request.getParameter("idmov");
+                
+                
 
 //DADOS DA EMPRESA(ACF) PARA O CABEÇALHO DO TICKET
                 Entidade.empresas emp = Controle.contrEmpresa.consultaEmpresa(idEmpresa);
@@ -43,40 +43,38 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Portal Postal | Ticket</title>
     </head>
-    <body>
+    
+    <body>               
         <%
+                
+                Entidade.Movimentacao objeto = Controle.contrMovimentacao.getMovimentacaoById(idMov,  nomeBD);
                         //arraylist de todas as vendos do numCaixa e numVenda passados
-                        ArrayList listaVenda = Controle.contrMovimentacao.getMovimentacaoByNumCaixaENumVenda(idCliente, numCaixa, numVenda, nomeBD);
-
+                
                         //verifica se o arraylist nao é vazio nem nulo
-                        if (listaVenda != null && listaVenda.size() > 0) {
+                        if (objeto != null ) {
 
                             //pega a primeira venda
-                            Entidade.Movimentacao mov1 = (Entidade.Movimentacao) listaVenda.get(0);
-                            String contrato = mov1.getContratoEct();
-                            Date dataPostagem = mov1.getDataPostagem();
-                            String seqVenda1 = mov1.getSeqVenda();
-
-                            //pega a ultima venda
-                            Entidade.Movimentacao mov2 = (Entidade.Movimentacao) listaVenda.get(listaVenda.size() - 1);
-                            String seqVenda2 = mov1.getSeqVenda();
+                         
+                            String contrato = objeto.getContratoEct();
+                            Date dataPostagem = objeto.getDataPostagem();
+                            
 
                             //inicia a variavedo do total da venda
                             float total = 0;
         %>
         <p style="font-family: Verdana; font-style: italic; font-size: 10px; color: red;">*Relatório para simples conferência.</p>
-        <p style="font-family: Verdana; font-style: italic; font-size: 10px; color: red;">*Não é uma cópia do comprovante original.</p>
+        <p style="font-family: Verdana; font-style: italic; font-size: 10px; color: red;">*Não tem realação com comprovante original.</p>
         <table width="282" cellspacing='0' cellpadding='0'>
             <tr>
                 <td><img src='../../imagensNew/ticket_topo.jpg'></td>
             </tr>
             <tr>
-                <td style='padding:0 15px 0 15px;font-family:courier;font-size:9px;color:#8a8a8a; letter-spacing:0;'>
-                    <table width='100%' cellspacing='0' border='0' style='font-family:courier;font-size:9px;color:#8a8a8a; letter-spacing:0;'>
+                <td style='padding:0 15px 0 15px;font-family:courier;font-size:9px;color:#8a8a8a; letter-spacing:0; border-left: 1px solid #EEEFFF;  border-right:  1px solid #EEEFFF;'>
+                    <table width='100%' cellspacing='0' border='0' style='font-family:courier;font-size:9px;color:#8a8a8a; letter-spacing:0;  '>
                         <tr>
                             <td colspan='4'>
-                                Não tem relação com o ticket<br/>
-                                do atendimento original da agência<br/>
+                                Não tem relação com o ticket do <br/>
+                                atendimento original<br/><br/>
                                 <%= nomeEmp%><br>
                                 CNPJ <%= cnpjEmp%><br>
                                 <%= fantasiaEmp%><br>
@@ -86,7 +84,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan='4'>--------------------------------------------------</td>
+                            <td colspan='4'>---------------------------------------------</td>
                         </tr>
                         <tr>
                             <%if (contrato.length() == 10) {%>
@@ -94,7 +92,7 @@
                             <%} else {%>
                             <td colspan='3' align='center'>SERVIÇO A VISTA</td>
                             <%}%>
-                            <td align='right'><%= numVenda%></td>
+                            <td align='right'><%= objeto.getCodigoEct() %></td>
                         </tr>
                         <%--
                         <tr>
@@ -103,9 +101,9 @@
                         </tr>
                         --%>
                         <tr>
-                            <td>Lancto</td>
-                            <td><%= dataPostagem%></td>
-                            <td colspan='2' align='right'><%= seqVenda1%> a <%= seqVenda2%></td>
+                            <td>Cx|Venda</td>
+                            <td align="center" ><%= objeto.getNumCaixa()%> | <%= objeto.getNumVenda() %></td>
+                            <td colspan='2' align='right'><%= sdf.format(dataPostagem)%></td>
                         </tr>
                         <tr>
                             <td>Cliente</td>
@@ -133,22 +131,21 @@
                         <tr>
                             <%
                             //faz o FOR de todos os objetos da venda
-                            for (int i = 0; i < listaVenda.size(); i++) {
-                                Entidade.Movimentacao mov = (Entidade.Movimentacao) listaVenda.get(i);
+                          
 
-                                String numObjeto = mov.getNumObjeto();
-                                String descServico = mov.getDescServico();
-                                String destinatario = mov.getDestinatario();
-                                String cep = mov.getCep();
-                                String paisDestino = mov.getPaisDestino();
-                                String servicosAdicionais = mov.getSiglaServAdicionais();
-                                float peso = mov.getPeso();
-                                float altura = mov.getAltura();
-                                float largura = mov.getLargura();
-                                float comprimento = mov.getComprimento();
-                                float subTotal = mov.getValorServico();
-                                float valorDestino = mov.getValorDestino();
-                                float valorDeclarado = mov.getValorDeclarado();
+                                String numObjeto = objeto.getNumObjeto();
+                                String descServico = objeto.getDescServico();
+                                String destinatario = objeto.getDestinatario();
+                                String cep = objeto.getCep();
+                                String paisDestino = objeto.getPaisDestino();
+                                String servicosAdicionais = objeto.getSiglaServAdicionais();
+                                float peso = objeto.getPeso();
+                                float altura = objeto.getAltura();
+                                float largura = objeto.getLargura();
+                                float comprimento = objeto.getComprimento();
+                                float subTotal = objeto.getValorServico();
+                                float valorDestino = objeto.getValorDestino();
+                                float valorDeclarado = objeto.getValorDeclarado();
 
                                 //soma o subTotal ao total da venda
                                 total += subTotal;
@@ -157,7 +154,7 @@
                                 ArrayList listaDeServicos = Util.ServicosAdicionais.listaDeServicos(servicosAdicionais, paisDestino, dataPostagem, nomeBD, valorDestino, valorDeclarado);
 
                                 //for para calcular o valor somente do Serviço diminuindo os serviços adicionais do total
-                                float valorServico = mov.getValorServico();
+                                float valorServico = objeto.getValorServico();
 
                                 if (listaDeServicos != null && listaDeServicos.size() > 0) {
                                     for (int j = 0; j < listaDeServicos.size(); j++) {
@@ -170,7 +167,7 @@
                                                                     
                             %>
                         <tr>
-                            <td colspan='4'>--------------------------------------------------</td>
+                            <td colspan='4'>---------------------------------------------</td>
                         </tr>
                         <tr>
                             <td colspan='3'><%= numObjeto%>&nbsp;&nbsp;<%= descServico%></td>
@@ -179,12 +176,12 @@
                         <tr>
                             <td width='15%' align='right'>Dest:</td>
                             <td width='45%'>CEP <%= cep%></td>
-                            <td width='22%' align='right'><%= df2.format(peso)%> G</td>
+                            <td width='22%' align='right'><%= df2.format(peso)%> g</td>
                             <td width='18%'></td>
                         </tr>
                         <tr>
                             <td></td>
-                            <td colspan='3'>Dimensoes (cm): <%= df.format(altura)%>x <%= df.format(largura)%>x <%= df.format(comprimento)%></td>
+                            <td colspan='3'>Dimensoes (cm): <%= df.format(altura)%> x <%= df.format(largura)%> x <%= df.format(comprimento)%></td>
                         </tr>
                         <tr>
                             <td></td>
@@ -229,17 +226,17 @@
                             <td colspan='3' align='right'>Sub-total</td>
                             <td align='right'><%= df.format(subTotal)%></td>
                         </tr>
-                        <%}%>
+                       
                         <tr>
-                            <td colspan='4'>--------------------------------------------------</td>
+                            <td colspan='4'>---------------------------------------------</td>
                         </tr>
                         <tr>
                             <td></td>
                             <td>TOTAL</td>
-                            <td align='right'>(<%= listaVenda.size()%>)</td>
+                            <td align='right'></td>
                             <td align='right'><%= df.format(total)%></td>
                         <tr>
-                            <td colspan='4'>--------------------------------------------------</td>
+                            <td colspan='4'>---------------------------------------------</td>
                         </tr>
                         <tr>
                             <td colspan='4'>

@@ -155,7 +155,7 @@
                                         <td>{{parcela.valor | currency : 'R$ '}}</td>
                                         <td class="text-center">
                                             <button type="button" class="btn btn-sm btn-primary" ng-click="lancarParcela(this.lancamentoProgramadoForm, lancamentoProgramado, parcela)"
-                                                    ng-if="!parcela.lancamento" ng-disabled="lancamentoProgramado.numeroParcela !== parcela.numeroParcela">
+                                                    ng-show="lancamentoProgramado.situacao.codigo !== 'encerrado'" ng-if="!parcela.lancamento" ng-disabled="lancamentoProgramado.numeroParcela !== parcela.numeroParcela">
                                                 <i class="fa fa-sm fa-plus fa-spc"></i>Gerar
                                             </button>
                                         </td>

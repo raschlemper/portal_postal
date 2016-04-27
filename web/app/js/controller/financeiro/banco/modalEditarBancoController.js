@@ -5,12 +5,7 @@ app.controller('ModalEditarBancoController', ['$scope', '$modalInstance', 'banco
 
         var init = function () {  
             $scope.maxValue = 999;
-            $scope.banco = {
-                idBanco: (banco && banco.idBanco) || null,
-                numero: (banco && banco.numero) || null,
-                nome: (banco && banco.nome) || null,
-                website: (banco && banco.website) || null
-            }; 
+            $scope.banco = banco || {}; 
             getTitle();
         };
         

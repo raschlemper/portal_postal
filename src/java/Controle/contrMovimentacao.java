@@ -259,7 +259,8 @@ public class contrMovimentacao {
             ResultSet result = (ResultSet) valores.executeQuery();
             
             ArrayList movimentacao = new ArrayList();
-            for (int i = 0; result.next(); i++) {
+           while (result.next()) {
+                int id = result.getInt("id");
                 Date dataPostagem = result.getDate("dataPostagem");
                 String descServico = result.getString("descServico");
                 String numObjeto = result.getString("numObjeto");
@@ -276,7 +277,7 @@ public class contrMovimentacao {
                 String numCaixa = result.getString("numCaixa");
                 int codStatus = result.getInt("codStatus");
 
-                Movimentacao mov = new Movimentacao(dataPostagem, descServico, numObjeto, destinatario1, peso, cep1, valorServico, quantidade, departamentos, status, dataEntrega, notaFiscal, numVenda, numCaixa, codStatus);
+                Movimentacao mov = new Movimentacao(id, dataPostagem, descServico, numObjeto, destinatario1, peso, cep1, valorServico, quantidade, departamentos, status, dataEntrega, notaFiscal, numVenda, numCaixa, codStatus);
                 movimentacao.add(mov);
             }
             valores.close();
@@ -298,6 +299,8 @@ public class contrMovimentacao {
 
             ArrayList movimentacao = new ArrayList();
             for (int i = 0; result.next(); i++) {
+                
+                 int id = result.getInt("id");
                 Date dataPostagem = result.getDate("dataPostagem");
                 String descServico = result.getString("descServico");
                 String numObjeto = result.getString("numObjeto");
@@ -325,7 +328,7 @@ public class contrMovimentacao {
                 int idPre_venda = result.getInt("idPre_venda");
                 int idOS = result.getInt("idOS");
 
-                Movimentacao mov = new Movimentacao(dataPostagem, descServico, numObjeto, destinatario1, peso, cep1, valorServico, quantidade, departamentos, status, dataEntrega, notaFiscal, numVenda, numCaixa, valorDeclarado, valorDestino, paisDestino, contratoEct, conteudoObjeto, siglaServAdicionais, codStatus, altura, largura, comprimento, idPre_venda, idOS);
+                Movimentacao mov = new Movimentacao(id,dataPostagem, descServico, numObjeto, destinatario1, peso, cep1, valorServico, quantidade, departamentos, status, dataEntrega, notaFiscal, numVenda, numCaixa, valorDeclarado, valorDestino, paisDestino, contratoEct, conteudoObjeto, siglaServAdicionais, codStatus, altura, largura, comprimento, idPre_venda, idOS);
                 movimentacao.add(mov);
             }
             valores.close();
@@ -341,7 +344,7 @@ public class contrMovimentacao {
     /**************************************************** PESQUISAS DO TICKET *************************************************************/
     public static ArrayList getMovimentacaoByNumCaixaENumVenda(int idCliente, int numCaixa, int numVenda, String nomeBD) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
-        String sql = "SELECT contratoEct, seqVenda, dataPostagem, descServico, numObjeto, valorServico, valorDeclarado, valorDestino,"
+        String sql = "SELECT codigoECT, contratoEct, seqVenda, dataPostagem, descServico, numObjeto, valorServico, valorDeclarado, valorDestino,"
                 + " peso, quantidade, altura, largura, comprimento, destinatario, cep, siglaServAdicionais, notaFiscal, paisDestino"
                 + " FROM movimentacao"
                 + " WHERE codCliente = " + idCliente
@@ -371,8 +374,9 @@ public class contrMovimentacao {
                 String siglaServAdicionais = result.getString("SiglaServAdicionais");
                 String notaFiscal = result.getString("notaFiscal");
                 String paisDestino = result.getString("paisDestino");
+                String codECT = result.getString("codigoECT");
 
-                Movimentacao mov = new Movimentacao(seqVenda, dataPostagem, descServico, numObjeto, destinatario, notaFiscal, peso, cep, valorServico, valorDestino, quantidade, valorDeclarado, contrato, altura, largura, comprimento, siglaServAdicionais, paisDestino);
+                Movimentacao mov = new Movimentacao(seqVenda, dataPostagem, descServico, numObjeto, destinatario, notaFiscal, peso, cep, valorServico, valorDestino, quantidade, valorDeclarado, contrato, altura, largura, comprimento, siglaServAdicionais, paisDestino, codECT);
                 movimentacao.add(mov);
             }
             valores.close();
@@ -380,6 +384,51 @@ public class contrMovimentacao {
         } catch (SQLException e) {
             ContrErroLog.inserir("HOITO - contrMovimentacao", "SQLException", sql, e.toString());
             return null;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+    public static Movimentacao getMovimentacaoById(String idMov,  String nomeBD) {
+        Connection conn = (Connection) Conexao.conectar(nomeBD);
+        String sql = "SELECT * FROM movimentacao"
+                + " WHERE id = "+idMov+" ;";
+        
+        Movimentacao mov = null ;
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+           
+            if (result.next()) {
+                String contrato = result.getString("contratoEct");
+                String seqVenda = result.getString("seqVenda");
+                Date dataPostagem = result.getDate("dataPostagem");
+                String descServico = result.getString("descServico");
+                String numObjeto = result.getString("numObjeto");
+                float valorServico = result.getFloat("valorServico");
+                float valorDeclarado = result.getFloat("valorDeclarado");
+                float valorDestino = result.getFloat("valorDestino");
+                float peso = result.getFloat("peso");
+                float quantidade = result.getFloat("quantidade");
+                float altura = result.getFloat("altura");
+                float largura = result.getFloat("largura");
+                float comprimento = result.getFloat("comprimento");
+                String destinatario = result.getString("destinatario");
+                String cep = result.getString("cep");
+                String siglaServAdicionais = result.getString("SiglaServAdicionais");
+                String notaFiscal = result.getString("notaFiscal");
+                String paisDestino = result.getString("paisDestino");
+                String codECT = result.getString("codigoECT");
+                String numCaixa = result.getString("numCaixa");
+                String numVenda = result.getString("numVenda");
+
+                mov = new Movimentacao(seqVenda, dataPostagem, descServico, numObjeto, destinatario, notaFiscal, peso, cep, valorServico, valorDestino, quantidade, valorDeclarado, contrato, altura, largura, comprimento, siglaServAdicionais, paisDestino, codECT, numCaixa, numVenda);
+                
+            }
+            valores.close();
+            return mov;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrMovimentacao", "SQLException", sql, e.toString());
+            return mov;
         } finally {
             Conexao.desconectar(conn);
         }

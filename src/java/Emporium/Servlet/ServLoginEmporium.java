@@ -115,9 +115,9 @@ public class ServLoginEmporium extends HttpServlet {
                     ClientesUsuario us = Controle.contrSenhaCliente.usuarioEmp(login, senha, nomeBD);
                     empresas emp = contrEmpresa.consultaEmpresa(idEmpresa);
 
+                    /**DEPRECATED INIT*/
                     sessao.setAttribute("idCliente", cli.getCodigo());
                     sessao.setAttribute("empresa", nomeBD);
-                    sessao.setAttribute("nomeBD", nomeBD);
                     sessao.setAttribute("idEmpresa", idEmpresa);
                     sessao.setAttribute("nomeUser", login);
                     sessao.setAttribute("nivelUsuarioEmp", us.getNivel());
@@ -125,11 +125,15 @@ public class ServLoginEmporium extends HttpServlet {
                     sessao.setAttribute("acessos", us.getAcessos());
                     sessao.setAttribute("departamentos", us.getDepartamentos());
                     sessao.setAttribute("servicos", us.getServicos());
-
                     sessao.setAttribute("nomeEmpresa", emp.getFantasia());
                     sessao.setAttribute("temColeta", emp.getColeta()); // se a agencia tem COLETA
                     sessao.setAttribute("temPV", emp.getChamada()); //se a agencia tem PRE VENDA
                     sessao.setAttribute("temETQ", cli.getUsaEtiquetador()); // Se o cliente usa o etiquetador
+                    /**DEPRECATED END*/
+                    
+                    
+                    sessao.setAttribute("nomeBD", nomeBD);
+                    sessao.setAttribute("usuario_sessao_cliente", us); // Se o cliente usa o etiquetador
                     sessao.setAttribute("cliente", cli); // Se o cliente usa o etiquetador
                     sessao.setAttribute("agencia", emp); // Se o cliente usa o etiquetador
                     

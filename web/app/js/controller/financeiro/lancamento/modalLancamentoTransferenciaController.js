@@ -7,17 +7,7 @@ app.controller('ModalLancamentoTransferenciaController', ['$scope', '$modalInsta
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
             $scope.datepickerLancamento = angular.copy(DatePickerService.default); 
             $scope.situacoes = LISTAS.situacaoLancamento;
-            $scope.lancamentoTransferencia = {
-                idLancamentoTransferencia: null,
-                contaOrigem: null,
-                contaDestino: null,
-                numero: null,
-                competencia: null,
-                dataEmissao: null,
-                dataLancamento: null,
-                valor: null,     
-                historico: null
-            };             
+            $scope.lancamentoTransferencia = {};             
             getTitle();
             contas();
         };

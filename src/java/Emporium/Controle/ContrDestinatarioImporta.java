@@ -59,12 +59,12 @@ public class ContrDestinatarioImporta {
         for (ArquivoImportacao ai : listaAi) {
             //System.out.println("Entro " + ai.getNome());
             //INSERE O DESTINATARIO
-            inserir(ai.getIdCliente(), ai.getNome(), ai.getCpf(), ai.getEmpresa(), ai.getCep(), ai.getEndereco(), ai.getNumero(), ai.getComplemento(), ai.getBairro(), ai.getCidade(), ai.getUf(), ai.getEmail(), ai.getCelular(), "Brasil", nomeBD, ai.getObs());            
+            inserir(ai.getIdCliente(), ai.getIdDepartamento(), ai.getNome(), ai.getCpf(), ai.getEmpresa(), ai.getCep(), ai.getEndereco(), ai.getNumero(), ai.getComplemento(), ai.getBairro(), ai.getCidade(), ai.getUf(), ai.getEmail(), ai.getCelular(), "Brasil", nomeBD, ai.getObs());            
         }
     }
-    public static int inserir(int idCliente, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String email, String celular, String pais, String nomeBD, String tags) {
+    public static int inserir(int idCliente, int idDepartamento, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String email, String celular, String pais, String nomeBD, String tags) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "INSERT INTO cliente_destinatario (idCliente, nome, cpf_cnpj, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, email, celular, pais, tags) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO cliente_destinatario (idCliente, nome, cpf_cnpj, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, email, celular, pais, tags, idDepartamento) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         //System.out.println("inserir Destinatario -----------------\n"+sql+"\n---------------");
         
         try {
@@ -84,6 +84,7 @@ public class ContrDestinatarioImporta {
             valores.setString(13, celular);
             valores.setString(14, pais);
             valores.setString(15, tags);
+            valores.setInt(16, idDepartamento);
             valores.executeUpdate();
             int autoIncrementKey = 0;
             ResultSet rs = valores.getGeneratedKeys();
@@ -102,7 +103,7 @@ public class ContrDestinatarioImporta {
     }
     
     //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
-    public static String importaPedido(FileItem item, int idCliente, String nomeBD) {
+    public static String importaPedido(FileItem item, int idCliente, int idDepartamento, String nomeBD) {
 
         try {
             //CONTADOR DE LINHA
@@ -122,6 +123,7 @@ public class ContrDestinatarioImporta {
                     
                     ArquivoImportacao ai = new ArquivoImportacao();
                     ai.setIdCliente(idCliente);
+                    ai.setIdDepartamento(idDepartamento);
                     ai.setNrLinha(qtdLinha + "");
                     ai.setNome(aux[0].trim());
                     ai.setEmpresa(aux[1].trim());

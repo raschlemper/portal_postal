@@ -1,3 +1,5 @@
+<%@page import="Entidade.Clientes"%>
+<%@page import="Entidade.ClientesUsuario"%>
 <%@page import="Util.FormataString"%>
 <%@page import="Controle.contrDestinatario"%>
 <%@page import="Entidade.Destinatario"%>
@@ -7,6 +9,10 @@
 <%
     String nomeBD = (String) session.getAttribute("nomeBD");
     if (nomeBD != null) {
+        
+        ClientesUsuario us = (ClientesUsuario) session.getAttribute("usuario_sessao_cliente");
+        Clientes cli = (Clientes) session.getAttribute("cliente");
+        ArrayList<Integer> dps = us.getDepartamentos();
 
         int idCliente = (Integer) session.getAttribute("idCliente");
         String cod = request.getParameter("codigo");
@@ -17,7 +23,7 @@
         String tags = request.getParameter("tags");
         String multi = request.getParameter("multi");
 
-        ArrayList<Destinatario> lista = contrDestinatario.pesquisa(idCliente, cod, nom, "", end, end, cep1, emp, end, nomeBD, tags);
+        ArrayList<Destinatario> lista = contrDestinatario.pesquisa(idCliente, cod, nom, "", end, end, cep1, emp, end, nomeBD, tags);                                    
         if (lista.size() >= 1) {
 %>
 
@@ -54,6 +60,8 @@
             <%
                 for (int i = 0; i < lista.size(); i++) {
                     Destinatario dest = lista.get(i);
+                    if (cli.getSeparar_destinatarios() == 0 || dest.getIdDepartamento() == 0 || dps.contains(dest.getIdDepartamento())) {
+                                        
                     int id = dest.getIdDestinatario();
                     String nome = FormataString.removeAccentsToUpper(dest.getNome());
                     String empresa = FormataString.removeAccentsToUpper(dest.getEmpresa());
@@ -98,7 +106,7 @@
                 <td><%= cep%></td>
                 <td><%= tag%></td>
             </tr>
-            <%}%>
+            <%}}%>
         </tbody>
     </table>
 </div>

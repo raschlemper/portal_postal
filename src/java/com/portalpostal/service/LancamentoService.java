@@ -1,7 +1,9 @@
 package com.portalpostal.service;
 
 import com.portalpostal.dao.LancamentoDAO;
+import com.portalpostal.dao.LancamentoProgramadoDAO;
 import com.portalpostal.model.Lancamento;
+import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.model.Saldo;
 import java.util.Date;
 import java.util.List;
@@ -9,9 +11,11 @@ import java.util.List;
 public class LancamentoService {
     
     private final LancamentoDAO lancamentoDAO;
+    private final LancamentoProgramadoDAO lancamentoProgramadoDAO;
 
     public LancamentoService(String nomeBD) {
         lancamentoDAO = new LancamentoDAO(nomeBD);
+        lancamentoProgramadoDAO = new LancamentoProgramadoDAO(nomeBD);
     }
     
     public List<Lancamento> findAll() throws Exception {
@@ -55,7 +59,14 @@ public class LancamentoService {
     } 
     
     public Lancamento delete(Integer idLancamento) throws Exception {
-        return lancamentoDAO.remove(idLancamento);
+        Lancamento lancamento = lancamentoDAO.remove(idLancamento);
+        LancamentoProgramado lancamentoProgamado = lancamento.getLancamentoProgramado();
+        if(lancamentoProgamado != null) {
+            Integer numeroParcela = lancamento.getNumeroParcela() - 1;
+            lancamentoProgamado.setNumeroParcela(numeroParcela);
+            lancamentoProgramadoDAO.updateNumeroParcela(lancamentoProgamado);            
+        }
+        return lancamento;
     }   
     
 }

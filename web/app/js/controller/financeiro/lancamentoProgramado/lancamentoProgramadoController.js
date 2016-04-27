@@ -84,9 +84,8 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', 'Lancamen
         var criarLancamentoProgramadosLista = function(data) {
             return _.map(data.lancamentosProgramados, function(lancamentoProgramado) {  
                 var complementoDescricaoFrequencia = '';
-                if(lancamentoProgramado.lancamentoParcelado) { 
-                    var quantidadeParcela = lancamentoProgramado.lancamentoParcelado.quantidadeParcela;
-                    complementoDescricaoFrequencia = ' - Parcelado(' + quantidadeParcela + 'x)';
+                if(lancamentoProgramado.quantidadeParcela) { 
+                    complementoDescricaoFrequencia = ' - Parcelado (' + lancamentoProgramado.quantidadeParcela + 'x)';
                 }
                 lancamentoProgramado.situacao = lancamentoProgramado.situacao.descricao;
                 lancamentoProgramado.frequencia = lancamentoProgramado.frequencia.descricao + complementoDescricaoFrequencia;

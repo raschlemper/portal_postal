@@ -5,15 +5,7 @@ app.controller('ModalEditarCartaoCreditoController', ['$scope', '$modalInstance'
 
         var init = function () {  
             $scope.maxValue = 31;
-            $scope.cartaoCredito = {
-                idCartaoCredito: (cartaoCredito && cartaoCredito.idCartaoCredito) || null,
-                contaCorrente: (cartaoCredito && cartaoCredito.contaCorrente) || null,
-                nome: (cartaoCredito && cartaoCredito.nome) || null,
-                bandeira: (cartaoCredito && cartaoCredito.bandeira) || null,
-                diaFechamento: (cartaoCredito && cartaoCredito.diaFechamento) || null,
-                diaVencimento: (cartaoCredito && cartaoCredito.diaVencimento) || null,
-                valorLimiteCredito: (cartaoCredito && cartaoCredito.valorLimiteCredito) || null
-            }; 
+            $scope.cartaoCredito = cartaoCredito || {}; 
             getTitle();
             contaCorrente();
         };

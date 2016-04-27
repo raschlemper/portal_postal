@@ -7,16 +7,9 @@ app.controller('ModalEditarContaController', ['$scope', '$modalInstance', 'conta
             $scope.tipos = LISTAS.tipoConta;
             $scope.status = LISTAS.statusConta;
             $scope.datepicker = DatePickerService.default;      
-            $scope.conta = {
-                idConta: (conta && conta.idConta) || null,
-                contaCorrente: (conta && conta.contaCorrente) || null,
-                cartaoCredito: (conta && conta.cartaoCredito) || null,
-                nome: (conta && conta.nome) || null,
-                tipo: (conta && conta.tipo) || $scope.tipos[0],
-                status: (conta && conta.status) || $scope.status[0],
-                dataAbertura: (conta && conta.dataAbertura) || null,
-                valorSaldoAbertura: (conta && conta.valorSaldoAbertura) || null
-            }; 
+            $scope.conta = conta || {};
+            $scope.conta.tipo = (conta && conta.tipo) || $scope.tipos[0];
+            $scope.conta.status = (conta && conta.status) || $scope.status[0];
             getTitle();
             contaCorrente();
             cartaoCredito();

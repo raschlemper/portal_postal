@@ -1,3 +1,6 @@
+<%@page import="Entidade.ClientesUsuario"%>
+<%@page import="Controle.ContrClienteDeptos"%>
+<%@page import="Entidade.ClientesDeptos"%>
 <%@page import="Controle.contrDestinatario"%>
 <%@page import="Entidade.Destinatario"%>
 <%@page import="Entidade.SenhaCliente"%>
@@ -9,8 +12,10 @@
     if (nomeBD == null) {
         response.sendRedirect("../../index.jsp?msg=Sua sessao expirou! Para voltar ao Portal faça seu login novamente!");
     } else {
-
-        int idCli = Integer.parseInt(String.valueOf(session.getAttribute("idCliente")));
+        ClientesUsuario us = (ClientesUsuario) session.getAttribute("usuario_sessao_cliente");
+        Clientes cli = (Clientes) session.getAttribute("cliente");
+        ArrayList<Integer> dps = us.getDepartamentos();
+        ArrayList<ClientesDeptos> listaDep = ContrClienteDeptos.consultaDeptos(cli.getCodigo(), nomeBD);
 %>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -182,10 +187,29 @@
                                     <a style="font-weight: bold;" href="ARQUIVO_EXEMPLO_DESTINATARIO.csv" target="_blank">CLIQUE AQUI PARA FAZER DOWNLOAD DO ARQUIVO DE EXEMPLO</a>
                                 </dd>
                             </li>
+                            <li>                                
+                                <dd>
+                                    <label>Departamento / Centro de Custo</label>
+                                    <select name="idDepartamento" style="width: 230px;">
+                                        <%
+                                            if (listaDep != null && listaDep.size() > 0) {
+                                                for (int i = 0; i < listaDep.size(); i++) {
+                                                    ClientesDeptos cd = listaDep.get(i);
+                                                    if (dps.contains(cd.getIdDepartamento())) {
+                                        %>
+                                        <option value="<%=cd.getIdDepartamento()%>"><%= cd.getNomeDepartamento()%></option>
+                                        <%}
+                                            }
+                                        } else {%>
+                                        <option value="0">SEM DEPARTAMENTO</option>
+                                        <%}%>
+                                    </select>
+                                </dd>
+                            </li>
                             <li>
                                 <dd>
                                     <div class="buttons">
-                                        <input type="hidden" name="idCliente" value="<%= idCli%>" />
+                                        <input type="hidden" name="idCliente" value="<%= cli.getCodigo() %>" />
                                         <button type="submit" class="positive"><img src="../../imagensNew/tick_circle.png" />IMPORTAR</button>
                                     </div>
                                 </dd>
@@ -280,16 +304,33 @@
                                     </select>
                                 </dd>
                             </li>
-                            <li>
+                            <li>                   
+                                <dd>
+                                    <label>Departamento / Centro de Custo</label>
+                                    <select name="idDepartamento" style="width: 230px;">
+                                        <%
+                                            if (listaDep != null && listaDep.size() > 0) {
+                                                for (int i = 0; i < listaDep.size(); i++) {
+                                                    ClientesDeptos cd = listaDep.get(i);
+                                                    if (dps.contains(cd.getIdDepartamento())) {
+                                        %>
+                                        <option value="<%=cd.getIdDepartamento()%>"><%= cd.getNomeDepartamento()%></option>
+                                        <%}
+                                            }
+                                        } else {%>
+                                        <option value="0">SEM DEPARTAMENTO</option>
+                                        <%}%>
+                                    </select>
+                                </dd>
                                 <dd>
                                     <label>Tags (seus mailings podem ser associados a tags) utilize @ e separe as tags com espaços ex. @mailing1 @mailing2</label>
-                                    <input type="text" name="tags" id="tags" size="169" value="" placeholder=" cadstre aqui suas tags ex. @mailing1 @mailing2" />
+                                    <input type="text" name="tags" id="tags" size="130" value="" placeholder=" cadstre aqui suas tags ex. @mailing1 @mailing2" />
                                 </dd>
                             </li>
                             <li>
                                 <dd style="width: 100%;">
                                     <div class="buttons">
-                                        <input type="hidden" name="idCliente" value="<%= idCli%>" />
+                                        <input type="hidden" name="idCliente" value="<%= cli.getCodigo()%>" />
                                         <button type="button" class="positive" onclick="return preencherCampos();"><img src="../../imagensNew/tick_circle.png" />CADASTRAR DESTINATÁRIO</button>
                                     </div>
                                 </dd>
@@ -299,14 +340,16 @@
                     <img width="100%" src="../../imagensNew/linha.jpg"/>
 
 
-                    <div id="titulo2">Lista de todos os destinatários</div>
-
-                    <div style="padding:8px 5px; background: white;">
-                        <a href="#" onclick="document.formExcelDest.action='../AjaxPages/xls_destinatarios.jsp'; document.formExcelDest.submit()"><img class="link_img" src="../../imagensNew/excel.png" /> EXPORTAR .XLS</a>
-                        <form name="formExcelDest" action="#">
-                            <input type="hidden" name="idCliente" value="<%= idCli%>" />
-                            <input type="hidden" name="nomeBD" value="<%= nomeBD%>" />
-                        </form>
+                    
+                    <div id="titulo2" style="padding-top: 8px;">
+                        Lista de todos os destinatários
+                        <div style="float: right;">
+                            <a style="color: white; font-size: 12px; background: #008ED6; border: 1px solid grey; padding: 4px;" href="#" onclick="document.formExcelDest.action = '../AjaxPages/xls_destinatarios.jsp'; document.formExcelDest.submit()"><img class="link_img" src="../../imagensNew/excel.png" /> EXPORTAR .XLS</a>
+                            <form name="formExcelDest" action="#">
+                                <input type="hidden" name="idCliente" value="<%= cli.getCodigo()%>" />
+                                <input type="hidden" name="nomeBD" value="<%= nomeBD%>" />
+                            </form>
+                        </div>
                     </div>
                     <table id="barraAtendimento" border="0">
                         <tr>
@@ -338,9 +381,10 @@
                         </thead>
                         <tbody>
                             <%
-                                ArrayList<Destinatario> lista = contrDestinatario.pesquisa(idCli, "", "", "", "", "", "", "", "", nomeBD, "");
+                                ArrayList<Destinatario> lista = contrDestinatario.pesquisa(cli.getCodigo(), "", "", "", "", "", "", "", "", nomeBD, "");
                                 for (int i = 0; i < lista.size(); i++) {
                                     Destinatario des = lista.get(i);
+                                    if (cli.getSeparar_destinatarios() == 0 || des.getIdDepartamento() == 0 || dps.contains(des.getIdDepartamento())) {
                             %>
                             <tr style="cursor:default;">
                                 <td><%= des.getIdDestinatario()%></td>
@@ -349,10 +393,10 @@
                                 <td><%= des.getEndereco() + ", " + des.getNumero()%></td>
                                 <td><%= des.getBairro()%></td>
                                 <td><%= des.getCidade() + " / " + des.getUf()%></td>
-                                <td align="center"><a onclick="verEditarDestinatario(<%= des.getIdDestinatario()%>, <%= idCli%>);" style="cursor:pointer;" ><img src="../../imagensNew/pencil.png" /></a></td>
+                                <td align="center"><a onclick="verEditarDestinatario(<%= des.getIdDestinatario()%>, <%= cli.getCodigo()%>);" style="cursor:pointer;" ><img src="../../imagensNew/pencil.png" /></a></td>
                                 <td align="center">
                                     <form action="../../ServExcluirDestinatario" method="post" name="formDel">
-                                        <input type="hidden" name="idCliente" value="<%= idCli%>" />
+                                        <input type="hidden" name="idCliente" value="<%= cli.getCodigo()%>" />
                                         <input type="hidden" name="idDestinatario" value="<%= des.getIdDestinatario()%>" />
                                         <input type="image" src="../../imagensNew/cancel.png" border="0" onClick="javascript:if (confirm('Tem certeza que deseja excluir?')) {
                                                     return true;
@@ -362,7 +406,8 @@
                                     </form>
                                 </td>
                             </tr>
-                            <%}%>
+                            <%}
+                                }%>
                         </tbody>
                     </table>
                     <div id="tablefooter" align='center'>

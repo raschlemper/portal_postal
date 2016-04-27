@@ -57,33 +57,7 @@ public class Clientes {
     private String senha_sigep;
     private int idGrupoFaturamento;
     private int ativo;
-
-    /*
-    public Clientes(int codigo, String nome, String endereco, String telefone, String bairro, String cidade, String uf, int cep, String email, String cnpj, String nomeFantasia, String complemento, String numero, String url_logo, int temContrato, String numContrato, int anoContrato, String ufContrato, String nomeContrato, int usaEtiquetador, double latitude, double longitude, String cartaoPostagem) {
-        this.codigo = codigo;
-        this.nome = nome;
-        this.endereco = endereco;
-        this.telefone = telefone;
-        this.bairro = bairro;
-        this.cidade = cidade;
-        this.uf = uf;
-        this.cep = cep;
-        this.email = email;
-        this.cnpj = cnpj;
-        this.nomeFantasia = nomeFantasia;
-        this.complemento = complemento;
-        this.numero = numero;
-        this.url_logo = url_logo;
-        this.temContrato = temContrato;
-        this.numContrato = numContrato;
-        this.anoContrato = anoContrato;
-        this.ufContrato = ufContrato;
-        this.nomeContrato = nomeContrato;
-        this.usaEtiquetador = usaEtiquetador;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.cartaoPostagem = cartaoPostagem;
-    }*/
+    private int separar_destinatarios;
 
     public Clientes(ResultSet result) throws SQLException {
 
@@ -128,7 +102,19 @@ public class Clientes {
         this.senha_sigep = result.getString("senha_sigep");
         this.idGrupoFaturamento = result.getInt("idGrupoFaturamento");
         this.ativo = result.getInt("ativo");
+        this.separar_destinatarios = result.getInt("separar_destinatarios");
 
+    }
+
+    public Clientes(int codigo, String nome) {
+        this.codigo = codigo;
+        this.nome = nome;
+    }
+
+    public Clientes(String nome, String email, int codigo) {
+        this.nome = nome;
+        this.email = email;
+        this.codigo = codigo;
     }
 
     public int getAtivo() {
@@ -139,17 +125,12 @@ public class Clientes {
         this.ativo = ativo;
     }
 
-    
-    
-    public Clientes(int codigo, String nome) {
-        this.codigo = codigo;
-        this.nome = nome;
+    public int getSeparar_destinatarios() {
+        return separar_destinatarios;
     }
 
-    public Clientes(String nome, String email, int codigo) {
-        this.nome = nome;
-        this.email = email;
-        this.codigo = codigo;
+    public void setSeparar_destinatarios(int separar_destinatarios) {
+        this.separar_destinatarios = separar_destinatarios;
     }
 
     public int getIdGrupoFaturamento() {
