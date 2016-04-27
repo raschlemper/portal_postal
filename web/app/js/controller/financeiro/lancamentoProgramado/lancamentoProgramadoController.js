@@ -179,7 +179,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', 'Lancamen
             });
         }; 
         
-        var criarLancamento = function(conta, result) {  
+        var criarLancamento = function(conta, result) { 
             LancamentoProgramadoService.create(result)
                 .then(function(data) {  
                     modalMessage("Lançamento Inserido com sucesso!");
@@ -194,16 +194,16 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', 'Lancamen
             delete data.gerarLancamento;
             data.conta = { idConta: data.conta.idConta };       
             data.planoConta = { idPlanoConta: data.planoConta.idPlanoConta };              
-            if(data.lancamentoParcelado) {
-                data.lancamentoParcelado = { idLancamentoParcelado: data.lancamentoParcelado.idLancamentoParcelado }; 
-            }
+//            if(data.lancamentoParcelado) {
+//                data.lancamentoParcelado = { idLancamentoParcelado: data.lancamentoParcelado.idLancamentoParcelado }; 
+//            }
             data.documento = { idTipoDocumento: data.documento.idTipoDocumento }; 
             data.formaPagamento = { idTipoFormaPagamento: data.formaPagamento.idTipoFormaPagamento }; 
             data.tipo = data.tipo.id;
             data.dataEmissao = data.dataEmissao || moment();
             data.dataVencimento = data.dataVencimento || data.dataLancamento || moment();
             data.frequencia = data.frequencia.id;
-            data.situacao = data.situacao.id;
+            data.situacao = data.situacao.id;   
             return data;
         } 
         

@@ -35,6 +35,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         }
         
         var getNumeroParcela = function(lancamentoProgramado) {
+            if(!lancamentoProgramado) return 1;
             var lancamento = _.max(lancamentoProgramado.lancamentos, function(lancamento){ 
                 return lancamento.numeroParcela; 
             });

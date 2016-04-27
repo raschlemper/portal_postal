@@ -82,7 +82,7 @@
                                 <div class="input-group">
                                     <span class="input-group-addon" ><i class="fa fa-info"></i></span>
                                     <select class="form-control" name="frequencia"
-                                            ng-options="frequencia.descricao for frequencia in frequencias track by frequencia.id" ng-model="lancamentoProgramado.frequencia" ng-change="createParcelas(lancamentoProgramado.quantidadeParcela)"></select>
+                                            ng-options="frequencia.descricao for frequencia in frequencias track by frequencia.id" ng-model="lancamentoProgramado.frequencia" ng-change="createParcelas(lancamentoProgramado)"></select>
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
@@ -97,14 +97,14 @@
                                 <label class="small">Número</label>
                                 <div class="input-group">
                                     <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                    <input class="form-control" type="text" name="numero" ng-model="lancamentoProgramado.numero" ng-change="createParcelas(lancamentoProgramado.quantidadeParcela)"
+                                    <input class="form-control" type="text" name="numero" ng-model="lancamentoProgramado.numero" ng-change="createParcelas(lancamentoProgramado)"
                                            placeholder="Número"/>  
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
                                 <label class="small">Competência</label>
                                 <div class="input-group">
-                                    <input type="text" autocomplete="off" name="competencia" class="form-control" ng-model="lancamentoProgramado.competencia" ng-change="createParcelas(lancamentoProgramado.quantidadeParcela)"
+                                    <input type="text" autocomplete="off" name="competencia" class="form-control" ng-model="lancamentoProgramado.competencia" ng-change="createParcelas(lancamentoProgramado)"
                                            datepicker-popup="MMMM/yyyy" is-open="datepickerCompetencia.opened" ng-required="true"
                                            current-text="{{datepickerCompetencia.today}}" clear-text="{{datepickerCompetencia.clear}}" close-text="{{datepickerCompetencia.close}}"
                                            placeholder="Competência do lançamento" datepicker-mode="'month'" datepicker-options="{minMode: 'month'}"/>
@@ -114,7 +114,7 @@
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
                                 <label class="small">Data Vencimento</label>
                                 <div class="input-group">
-                                    <input type="text" autocomplete="off" name="dataVencimento" class="form-control" ng-model="lancamentoProgramado.dataVencimento" ng-change="createParcelas(lancamentoProgramado.quantidadeParcela)"
+                                    <input type="text" autocomplete="off" name="dataVencimento" class="form-control" ng-model="lancamentoProgramado.dataVencimento" ng-change="createParcelas(lancamentoProgramado)"
                                            datepicker-popup="{{datepickerVencimento.format}}" is-open="datepickerVencimento.opened" ng-required="true"
                                            current-text="{{datepickerVencimento.today}}" clear-text="{{datepickerVencimento.clear}}" close-text="{{datepickerVencimento.close}}"
                                            placeholder="Data do vencimento"/>
@@ -125,7 +125,7 @@
                                 <label class="small">Valor</label>
                                 <div class="input-group">
                                     <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
-                                    <input type="text" autocomplete="off" name="valor" class="form-control text-right" ng-change="createParcelas(lancamentoProgramado.quantidadeParcela)"
+                                    <input type="text" autocomplete="off" name="valor" class="form-control text-right" ng-change="createParcelas(lancamentoProgramado)"
                                            ui-number-mask="2" placeholder="Valor do lançamento" ng-model="lancamentoProgramado.valor" ng-required="true"/>
                                 </div>
                             </div>
@@ -141,7 +141,7 @@
                                 <thead>
                                     <tr>
                                         <th>Número</th>
-                                        <th class="text-center">Competência</th>
+                                        <th>Competência</th>
                                         <th class="text-center">Vencimento</th>
                                         <th>Valor</th>
                                         <th class="col-md-1 text-center">Lançamento</th>
@@ -150,7 +150,7 @@
                                 <tbody>
                                     <tr ng-repeat="parcela in lancamentoProgramado.parcelas track by $index">
                                         <td>{{parcela.numero}} - {{parcela.numeroParcela}}</td>
-                                        <td class="text-center">{{parcela.competencia | date : 'MMMM/yyyy'}}</td>
+                                        <td>{{parcela.competencia | date : 'MMMM/yyyy'}}</td>
                                         <td class="text-center">{{parcela.dataVencimento | date : 'dd/MM/yyyy'}}</td>
                                         <td>{{parcela.valor | currency : 'R$ '}}</td>
                                         <td class="text-center">
