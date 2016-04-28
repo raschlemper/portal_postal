@@ -50,6 +50,10 @@ public class LancamentoService {
         return lancamentoDAO.findYearFromLancamento();
     } 
     
+    public Lancamento findLastByLancamentoProgramado(Integer idLancamentoProgramado) throws Exception {
+        return lancamentoDAO.findLastByLancamentoProgramado(idLancamentoProgramado);
+    }
+    
     public Lancamento save(Lancamento lancamento) throws Exception {
         return lancamentoDAO.save(lancamento);
     } 
@@ -67,6 +71,6 @@ public class LancamentoService {
             lancamentoProgramadoDAO.updateNumeroParcela(lancamentoProgamado);            
         }
         return lancamento;
-    }   
+    } 
     
 }

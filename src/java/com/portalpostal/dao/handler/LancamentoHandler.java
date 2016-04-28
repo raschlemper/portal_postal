@@ -2,6 +2,7 @@ package com.portalpostal.dao.handler;
 
 import com.portalpostal.model.Conta;
 import com.portalpostal.model.Lancamento;
+import com.portalpostal.model.LancamentoConciliado;
 import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.model.PlanoConta;
 import com.portalpostal.model.dd.TipoLancamento;
@@ -27,6 +28,7 @@ public class LancamentoHandler extends GenericHandler implements ResultSetHandle
         lancamento.setConta(getConta(result));
         lancamento.setPlanoConta(getPlanoConta(result));
         lancamento.setLancamentoProgramado(getLancamentoProgramado(result));
+        lancamento.setLancamentoConciliado(getLancamentoConciliado(result));
         lancamento.setTipo(TipoLancamento.values()[getInt(result, "tipo")]);
         lancamento.setFavorecido(getString(result, "favorecido"));
         lancamento.setNumero(getString(result, "numero"));
@@ -42,6 +44,7 @@ public class LancamentoHandler extends GenericHandler implements ResultSetHandle
         lancamento.setValorMulta(getDouble(result, "valorMulta"));
         lancamento.setSituacao(TipoSituacaoLancamento.values()[getInt(result, "situacao")]);
         lancamento.setModelo(TipoModeloLancamento.values()[getInt(result, "modelo")]);
+        lancamento.setAutenticacao(getString(result, "autenticacao"));
         lancamento.setHistorico(getString(result, "historico"));
         lancamento.setObservacao(getString(result, "observacao"));
         return lancamento;
@@ -61,6 +64,12 @@ public class LancamentoHandler extends GenericHandler implements ResultSetHandle
         if(!existColumn(result, "lancamento_programado.idLancamentoProgramado")) return null;
         if(!existFKValue(result, "lancamento_programado.idLancamentoProgramado")) return null;
         return new LancamentoProgramadoHandler().handle(result); 
+    }
+        
+    private LancamentoConciliado getLancamentoConciliado(ResultSet result) throws SQLException {
+        if(!existColumn(result, "lancamento_conciliado.idLancamentoConciliado")) return null;
+        if(!existFKValue(result, "lancamento_conciliado.idLancamentoConciliado")) return null;
+        return new LancamentoConciliadoHandler().handle(result); 
     }
     
 }

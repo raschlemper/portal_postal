@@ -6,3 +6,7 @@ ALTER TABLE lancamento DROP `modelo`;
 ALTER TABLE lancamento DROP `idLancamentoProgramado`;
 ALTER TABLE lancamento DROP `competencia`;
 ALTER TABLE lancamento DROP `observacao`;
+ALTER TABLE lancamento DROP `valorDesconto`;
+ALTER TABLE lancamento DROP `valorJuros`;
+ALTER TABLE lancamento DROP `valorMulta`;
+ALTER TABLE lancamento DROP `numeroParcela`;

@@ -4,15 +4,14 @@ import com.portalpostal.model.dd.TipoLancamento;
 import com.portalpostal.model.dd.TipoModeloLancamento;
 import com.portalpostal.model.dd.TipoSituacaoLancamento;
 import java.util.Date;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class Lancamento {
     
     private Integer idLancamento;
     private Conta conta;
     private PlanoConta planoConta;
-    @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
     private LancamentoProgramado lancamentoProgramado;
+    private LancamentoConciliado lancamentoConciliado;
     private TipoLancamento tipo;
     private String favorecido;
     private String numero;
@@ -28,6 +27,7 @@ public class Lancamento {
     private Double valorMulta;
     private TipoSituacaoLancamento situacao;
     private TipoModeloLancamento modelo;
+    private String autenticacao;
     private String historico;
     private String observacao;
 
@@ -61,6 +61,14 @@ public class Lancamento {
 
     public void setLancamentoProgramado(LancamentoProgramado lancamentoProgramado) {
         this.lancamentoProgramado = lancamentoProgramado;
+    }
+
+    public LancamentoConciliado getLancamentoConciliado() {
+        return lancamentoConciliado;
+    }
+
+    public void setLancamentoConciliado(LancamentoConciliado lancamentoConciliado) {
+        this.lancamentoConciliado = lancamentoConciliado;
     }
 
     public TipoLancamento getTipo() {
@@ -181,6 +189,14 @@ public class Lancamento {
 
     public void setModelo(TipoModeloLancamento modelo) {
         this.modelo = modelo;
+    }
+
+    public String getAutenticacao() {
+        return autenticacao;
+    }
+
+    public void setAutenticacao(String autenticacao) {
+        this.autenticacao = autenticacao;
     }
 
     public String getHistorico() {
