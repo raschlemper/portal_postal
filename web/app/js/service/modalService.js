@@ -39,6 +39,20 @@ app.factory('ModalService', function($modal) {
             })
         },
 
+        modalConfirmar: function (title, message) {
+            return $modal.open({
+                animation: true,
+                templateUrl: 'partials/modal/Confirmar.html',
+                controller: function($scope, $modalInstance) {
+                    $scope.title = title;
+                    $scope.message = message;        
+                    $scope.ok = function() { $modalInstance.close(); };
+                    $scope.cancel = function () { $modalInstance.dismiss('cancel'); };
+                },
+                resolve: {}
+            })
+        },
+
         modalExcluir: function (title, message) {
             return $modal.open({
                 animation: true,

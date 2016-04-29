@@ -14,6 +14,11 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/lancamento/programado/" + idLancamentoProgramado));
         },
 
+        getLast: function(idLancamentoProgramado) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/lancamento/programado/" + idLancamentoProgramado + '/last'));
+        },
+
         save: function(data) {
             return PromiseService.execute(
                     $http.post(_contextPath + "/api/financeiro/lancamento/programado/", data));

@@ -1,9 +1,11 @@
 package com.portalpostal.controller;
 
 import Controle.ContrErroLog;
+import com.portalpostal.model.Lancamento;
 import com.portalpostal.validation.Validation;
 import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.service.LancamentoProgramadoService;
+import com.portalpostal.service.LancamentoService;
 import com.portalpostal.validation.LancamentoProgramadoValidation;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -30,11 +32,13 @@ public class LancamentoProgramadoController {
     private HttpSession sessao;
     private String nomeBD;
     
+    private LancamentoService lancamentoService;
     private LancamentoProgramadoService lancamentoProgramadoService;
 
     private void init() {
         sessao = request.getSession();
         nomeBD = (String) sessao.getAttribute("nomeBD");
+        lancamentoService = new LancamentoService(nomeBD);
         lancamentoProgramadoService = new LancamentoProgramadoService(nomeBD);
     }
     
@@ -57,6 +61,18 @@ public class LancamentoProgramadoController {
         try {
             init();    
             return lancamentoProgramadoService.find(idLancamentoProgramado);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }   
+    
+    @GET
+    @Path("/{idLancamentoProgramado}/last")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Lancamento findLastByLancamentoProgramado(@PathParam("idLancamentoProgramado") Integer idLancamentoProgramado) {
+        try {
+            init();    
+            return lancamentoService.findLastByLancamentoProgramado(idLancamentoProgramado);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
