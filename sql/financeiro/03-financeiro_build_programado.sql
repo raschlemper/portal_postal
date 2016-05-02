@@ -78,7 +78,7 @@ CREATE TABLE `tipo_forma_pagamento` (
 CREATE TABLE `lancamento_programado` (
   `idLancamentoProgramado` INT NOT NULL AUTO_INCREMENT,
   `idConta`                INT NOT NULL,
-  `idPlanoConta`           INT NULL,
+  `idPlanoConta`           INT NOT NULL,
 --   `idLancamentoParcelado`  INT NULL,
   `tipo`                   INT NOT NULL,
   `favorecido`             VARCHAR(254) NULL,

@@ -7,12 +7,14 @@ public class LancamentoConciliadoValidation extends Validation<LancamentoConcili
     @Override
     public boolean validar(LancamentoConciliado lancamentoConciliado) {
         if(!validarConta(lancamentoConciliado)) return false;   
-        if(!validarPlanoConta(lancamentoConciliado)) return false; 
+        if(!validarPlanoConta(lancamentoConciliado)) return false;         
+        if(!validarLancamento(lancamentoConciliado)) return false; 
         if(!validarTipo(lancamentoConciliado)) return false;  
         if(!validarCompetencia(lancamentoConciliado)) return false;   
         if(!validarDataEmissao(lancamentoConciliado)) return false;  
         if(!validarDataLancamento(lancamentoConciliado)) return false;   
         if(!validarValor(lancamentoConciliado)) return false;    
+        if(!validarHistorico(lancamentoConciliado)) return false;  
         return true;
     }    
 
@@ -25,6 +27,12 @@ public class LancamentoConciliadoValidation extends Validation<LancamentoConcili
     public boolean validarPlanoConta(LancamentoConciliado lancamentoConciliado) {          
         if(campoNotNull(lancamentoConciliado.getPlanoConta())) return true; 
         setMsg("Preencha o plano de contas da conciliação!");
+        return false;        
+    }    
+
+    public boolean validarLancamento(LancamentoConciliado lancamentoConciliado) {          
+        if(campoNotNull(lancamentoConciliado.getLancamento())) return true; 
+        setMsg("Preencha o lançamento da conciliação!");
         return false;        
     }    
 
@@ -56,6 +64,12 @@ public class LancamentoConciliadoValidation extends Validation<LancamentoConcili
         if(campoNotNull(lancamentoConciliado.getValor())) return true; 
         setMsg("Preencha o valor da conciliação!");
         return false;        
-    }  
+    }   
+
+    public boolean validarHistorico(LancamentoConciliado lancamentoConciliado) {          
+        if(campoNotNull(lancamentoConciliado.getHistorico())) return true; 
+        setMsg("Preencha o histórico da conciliação!");
+        return false;        
+    }
     
 }

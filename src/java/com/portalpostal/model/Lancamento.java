@@ -11,7 +11,6 @@ public class Lancamento {
     private Conta conta;
     private PlanoConta planoConta;
     private LancamentoProgramado lancamentoProgramado;
-    private LancamentoConciliado lancamentoConciliado;
     private TipoLancamento tipo;
     private String favorecido;
     private String numero;
@@ -27,6 +26,7 @@ public class Lancamento {
     private Double valorMulta;
     private TipoSituacaoLancamento situacao;
     private TipoModeloLancamento modelo;
+    private Integer numeroLoteConciliado;
     private String autenticacao;
     private String historico;
     private String observacao;
@@ -61,14 +61,6 @@ public class Lancamento {
 
     public void setLancamentoProgramado(LancamentoProgramado lancamentoProgramado) {
         this.lancamentoProgramado = lancamentoProgramado;
-    }
-
-    public LancamentoConciliado getLancamentoConciliado() {
-        return lancamentoConciliado;
-    }
-
-    public void setLancamentoConciliado(LancamentoConciliado lancamentoConciliado) {
-        this.lancamentoConciliado = lancamentoConciliado;
     }
 
     public TipoLancamento getTipo() {
@@ -189,6 +181,14 @@ public class Lancamento {
 
     public void setModelo(TipoModeloLancamento modelo) {
         this.modelo = modelo;
+    }
+
+    public Integer getNumeroLoteConciliado() {
+        return numeroLoteConciliado;
+    }
+
+    public void setNumeroLoteConciliado(Integer numeroLoteConciliado) {
+        this.numeroLoteConciliado = numeroLoteConciliado;
     }
 
     public String getAutenticacao() {

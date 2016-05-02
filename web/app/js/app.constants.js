@@ -55,7 +55,8 @@ app.constant('LISTAS', {
                          {'id': 1, 'codigo': 'transferencia', 'descricao': 'Transferência'},
                          {'id': 2, 'codigo': 'programado', 'descricao': 'Programado'},
                          {'id': 3, 'codigo': 'transferenciaprogramado', 'descricao': 'Transferência Programada'},
-                         {'id': 4, 'codigo': 'parcelado', 'descricao': 'Parcelado'}],
+                         {'id': 4, 'codigo': 'parcelado', 'descricao': 'Parcelado'},
+                         {'id': 5, 'codigo': 'conciliado', 'descricao': 'Conciliado'}],
 
     "situacaoLancamento": [{'id': 0, 'codigo': 'normal', 'descricao': 'Normal'},  
                            {'id': 1, 'codigo': 'naocompensado', 'descricao': 'Não Compensado'},  

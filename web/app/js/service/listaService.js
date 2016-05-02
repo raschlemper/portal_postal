@@ -33,6 +33,12 @@ app.factory('ListaService', function() {
             if(!value) { value = list[0]; }
             return value;
         },
+
+        getLancamentoValue: function(list, key) {
+            var value = _.find(list, function(item){ return item.idLancamento == key; });
+            if(!value) { value = list[0]; }
+            return value;
+        },
         
         getValueCombustivelFipe: function(list, key) {
             var value = _.find(list, function(item){ return item.descricao.toLowerCase() == key.toLowerCase(); });

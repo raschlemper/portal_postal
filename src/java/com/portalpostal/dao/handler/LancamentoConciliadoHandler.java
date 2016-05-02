@@ -3,7 +3,6 @@ package com.portalpostal.dao.handler;
 import com.portalpostal.model.Conta;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoConciliado;
-import com.portalpostal.model.LancamentoTransferencia;
 import com.portalpostal.model.PlanoConta;
 import com.portalpostal.model.dd.TipoLancamento;
 import java.sql.ResultSet;
@@ -21,16 +20,19 @@ public class LancamentoConciliadoHandler extends GenericHandler implements Resul
     }
 
     public LancamentoConciliado handle(ResultSet result) throws SQLException {
-        LancamentoConciliado lancamento = new LancamentoConciliado();
-        lancamento.setIdLancamentoConciliado(getInt(result, "idLancamentoConciliado"));
-        lancamento.setConta(getConta(result));
-        lancamento.setPlanoConta(getPlanoConta(result));
-        lancamento.setTipo(TipoLancamento.values()[getInt(result, "tipo")]);
-        lancamento.setCompetencia(getDate(result, "competencia"));
-        lancamento.setDataEmissao(getDate(result, "dataEmissao"));
-        lancamento.setDataLancamento(getDate(result, "dataLancamento"));
-        lancamento.setValor(getDouble(result, "valor"));
-        return lancamento;
+        LancamentoConciliado lancamentoConciliado = new LancamentoConciliado();
+        lancamentoConciliado.setIdLancamentoConciliado(getInt(result, "idLancamentoConciliado"));
+        lancamentoConciliado.setConta(getConta(result));
+        lancamentoConciliado.setPlanoConta(getPlanoConta(result));
+        lancamentoConciliado.setLancamento(getLancamento(result));
+        lancamentoConciliado.setTipo(TipoLancamento.values()[getInt(result, "tipo")]);
+        lancamentoConciliado.setNumeroLote(getInt(result, "numeroLote"));
+        lancamentoConciliado.setCompetencia(getDate(result, "competencia"));
+        lancamentoConciliado.setDataEmissao(getDate(result, "dataEmissao"));
+        lancamentoConciliado.setDataLancamento(getDate(result, "dataLancamento"));
+        lancamentoConciliado.setValor(getDouble(result, "valor"));
+        lancamentoConciliado.setHistorico(getString(result, "historico"));
+        return lancamentoConciliado;
     }
     
     private Conta getConta(ResultSet result) throws SQLException {
@@ -41,6 +43,12 @@ public class LancamentoConciliadoHandler extends GenericHandler implements Resul
     private PlanoConta getPlanoConta(ResultSet result) throws SQLException {
         if(!existColumn(result, "plano_conta.idPlanoConta")) return null;
         return new PlanoContaHandler().handle(result); 
+    }
+    
+    private Lancamento getLancamento(ResultSet result) throws SQLException {
+        if(!existColumn(result, "lancamento.idLancamento")) return null;
+        if(!existFKValue(result, "lancamento.idLancamento")) return null;
+        return new LancamentoHandler().handle(result); 
     }
     
 }

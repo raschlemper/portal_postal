@@ -7,11 +7,11 @@ app.controller('ModalLancamentoConciliadoController', ['$scope', '$modalInstance
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
             $scope.datepickerLancamento = angular.copy(DatePickerService.default); 
             $scope.tipos = LISTAS.lancamento;
-            $scope.situacoes = LISTAS.situacaoLancamento;
-            $scope.lancamentoConciliado = {};             
+            $scope.lancamentoConciliado = {};  
+            $scope.lancamentoConciliado.tipo = $scope.tipos[0];        
             getTitle();
             contas();
-            $scope.changeTipo($scope.lancamento.tipo);
+            $scope.changeTipo($scope.lancamentoConciliado.tipo);
         };
         
         var getTitle = function() {
@@ -37,11 +37,7 @@ app.controller('ModalLancamentoConciliadoController', ['$scope', '$modalInstance
             PlanoContaService.findContaResultadoByTipo(tipo.id)
                 .then(function (data) {
                     $scope.planoContas = data;
-                    if($scope.lancamento.planoConta) {
-                        $scope.lancamento.planoConta = ListaService.getPlanoContaValue($scope.planoContas, $scope.lancamento.planoConta.idPlanoConta) || data[0];
-                    } else {
-                         $scope.lancamento.planoConta  = data[0];
-                    }
+                    $scope.lancamentoConciliado.planoConta = $scope.planoContas[0];
                 })
                 .catch(function (e) {
                     console.log(e);

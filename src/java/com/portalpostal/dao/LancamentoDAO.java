@@ -24,7 +24,6 @@ public class LancamentoDAO extends GenericDAO {
         String sql = "SELECT * FROM conta, lancamento "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento.idPlanoConta = plano_conta.idPlanoConta) "
                    + "LEFT OUTER JOIN lancamento_programado ON(lancamento.idLancamentoProgramado = lancamento_programado.idLancamentoProgramado) "
-                   + "LEFT OUTER JOIN lancamento_conciliado ON(lancamento.idLancamentoConciliado = lancamento_conciliado.idLancamentoConciliado) "
                    + "WHERE lancamento.idConta = conta.idConta "
                    + "ORDER BY lancamento.dataLancamento";        
         return findAll(sql, null, lancamentoHandler);
@@ -34,7 +33,6 @@ public class LancamentoDAO extends GenericDAO {
         String sql = "SELECT * FROM conta, lancamento "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento.idPlanoConta = plano_conta.idPlanoConta) "
                    + "LEFT OUTER JOIN lancamento_programado ON(lancamento.idLancamentoProgramado = lancamento_programado.idLancamentoProgramado) "
-                   + "LEFT OUTER JOIN lancamento_conciliado ON(lancamento.idLancamentoConciliado = lancamento_conciliado.idLancamentoConciliado) "
                    + "WHERE lancamento.idConta = conta.idConta "
                    + "AND lancamento.idLancamento = :idLancamento";
         Map<String, Object> params = new HashMap<String, Object>();
@@ -42,12 +40,11 @@ public class LancamentoDAO extends GenericDAO {
         return (Lancamento) find(sql, params, lancamentoHandler);
     }
 
-    public List<Lancamento> findByDataLancamento(Date dataInicio, Date dataFim) throws Exception {
+    public List<Lancamento> findLancamentoNotConciliadoByDataLancamento(Date data) throws Exception {
         String sql = "SELECT * FROM lancamento "
-                   + "WHERE lancamento.dataLancamento BETWEEN :dataInicio AND :dataFim";
+                   + "WHERE lancamento.dataLancamento <= :data";
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("dataInicio", dataInicio);
-        params.put("dataFim", dataFim);
+        params.put("data", data);
         return findAll(sql, params, lancamentoHandler);
     }
 
@@ -55,7 +52,6 @@ public class LancamentoDAO extends GenericDAO {
         String sql = "SELECT lancamento.*, plano_conta.* FROM conta, lancamento "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento.idPlanoConta = plano_conta.idPlanoConta) "
                    + "LEFT OUTER JOIN lancamento_programado ON(lancamento.idLancamentoProgramado = lancamento_programado.idLancamentoProgramado) "
-                   + "LEFT OUTER JOIN lancamento_conciliado ON(lancamento.idLancamentoConciliado = lancamento_conciliado.idLancamentoConciliado) "
                    + "WHERE conta.idConta = lancamento.idConta "
                    + "AND conta.idConta = :idConta "
                    + "ORDER BY lancamento.dataLancamento";        
@@ -117,7 +113,7 @@ public class LancamentoDAO extends GenericDAO {
                    + "WHERE lanc.idLancamentoProgramado = :idLancamentoProgramado "
                    + "AND lanc.numeroParcela = (SELECT max(lanc1.numeroParcela) "
                                              + "FROM lancamento lanc1 "
-                                             + "WHERE lanc1.idLancamentoProgramado = lanc.idLancamentoProgramado);";
+                                             + "WHERE lanc1.idLancamentoProgramado = lanc.idLancamentoProgramado)";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamentoProgramado", idLancamentoProgramado);
         Integer idLancamento = (Integer) find(sql, params, Integer.class);
@@ -125,17 +121,16 @@ public class LancamentoDAO extends GenericDAO {
     }
 
     public Lancamento save(Lancamento lancamento) throws Exception {  
-        String sql = "INSERT INTO lancamento (idConta, idPlanoConta, idLancamentoProgramado, idLancamentoConciliado, "
+        String sql = "INSERT INTO lancamento (idConta, idPlanoConta, idLancamentoProgramado, numeroLoteConciliado, "
                    + "tipo, favorecido, numero, numeroParcela, competencia, dataEmissao, dataVencimento, dataLancamento, "
                    + "dataCompensacao, valor, valorDesconto, valorJuros, valorMulta, situacao, modelo, autenticacao, historico, observacao) "
-                   + "VALUES(:idConta, :idPlanoConta, :idLancamentoProgramado, :idLancamentoConciliado, :tipo, :favorecido, "
+                   + "VALUES(:idConta, :idPlanoConta, :idLancamentoProgramado, :numeroLoteConciliado, :tipo, :favorecido, "
                    + ":numero, :numeroParcela, :competencia, :dataEmissao, :dataVencimento, :dataLancamento, :dataCompensacao, "
                    + ":valor, :valorDesconto, :valorJuros, :valorMulta, :situacao, :modelo, :autenticacao, :historico, :observacao)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idConta", lancamento.getConta().getIdConta());
         params.put("idPlanoConta", (lancamento.getPlanoConta() == null ? null : lancamento.getPlanoConta().getIdPlanoConta()));
         params.put("idLancamentoProgramado", (lancamento.getLancamentoProgramado() == null ? null : lancamento.getLancamentoProgramado().getIdLancamentoProgramado()));
-        params.put("idLancamentoConciliado", (lancamento.getLancamentoConciliado() == null ? null : lancamento.getLancamentoConciliado().getIdLancamentoConciliado()));
         params.put("tipo", lancamento.getTipo().ordinal());     
         params.put("favorecido", lancamento.getFavorecido());     
         params.put("numero", lancamento.getNumero());            
@@ -151,6 +146,7 @@ public class LancamentoDAO extends GenericDAO {
         params.put("valorMulta", lancamento.getValorMulta());    
         params.put("situacao", lancamento.getSituacao().ordinal());  
         params.put("modelo", lancamento.getModelo().ordinal());  
+        params.put("numeroLoteConciliado", lancamento.getNumeroLoteConciliado());
         params.put("autenticacao", lancamento.getHistorico());      
         params.put("historico", lancamento.getHistorico());      
         params.put("observacao", lancamento.getObservacao());        
@@ -161,7 +157,7 @@ public class LancamentoDAO extends GenericDAO {
     public Lancamento update(Lancamento lancamento) throws Exception {
         String sql = "UPDATE lancamento "
                    + "SET idConta = :idConta, idPlanoConta = :idPlanoConta, idLancamentoProgramado = :idLancamentoProgramado, "
-                   + "idLancamentoConciliado = :idLancamentoConciliado, tipo = :tipo, favorecido = :favorecido, numero = :numero, "
+                   + "numeroLoteConciliado = :numeroLoteConciliado, tipo = :tipo, favorecido = :favorecido, numero = :numero, "
                    + "numeroParcela = :numeroParcela, competencia = :competencia, dataEmissao = :dataEmissao, dataVencimento = :dataVencimento, "
                    + "dataLancamento = :dataLancamento, dataCompensacao = :dataCompensacao, valor = :valor, "
                    + "valorDesconto = :valorDesconto, valorJuros = :valorJuros, valorMulta = :valorMulta, "
@@ -172,7 +168,6 @@ public class LancamentoDAO extends GenericDAO {
         params.put("idConta", lancamento.getConta().getIdConta());
         params.put("idPlanoConta", (lancamento.getPlanoConta() == null ? null : lancamento.getPlanoConta().getIdPlanoConta()));
         params.put("idLancamentoProgramado", (lancamento.getLancamentoProgramado()== null ? null : lancamento.getLancamentoProgramado().getIdLancamentoProgramado()));
-        params.put("idLancamentoConciliado", (lancamento.getLancamentoConciliado() == null ? null : lancamento.getLancamentoConciliado().getIdLancamentoConciliado()));
         params.put("tipo", lancamento.getTipo().ordinal());     
         params.put("favorecido", lancamento.getFavorecido());     
         params.put("numero", lancamento.getNumero());                   
@@ -188,9 +183,20 @@ public class LancamentoDAO extends GenericDAO {
         params.put("valorMulta", lancamento.getValorMulta());    
         params.put("situacao", lancamento.getSituacao().ordinal());  
         params.put("modelo", lancamento.getModelo().ordinal());  
+        params.put("numeroLoteConciliado", lancamento.getNumeroLoteConciliado());
         params.put("autenticacao", lancamento.getHistorico());      
         params.put("historico", lancamento.getHistorico());     
         params.put("observacao", lancamento.getObservacao());     
+        update(sql, params, lancamentoHandler);
+        return lancamento;  
+    }
+
+    public Lancamento updateNumeroLoteConciliado(Lancamento lancamento) throws Exception {
+        String sql = "UPDATE lancamento SET numeroLoteConciliado = :numeroLoteConciliado "
+                   + "WHERE idLancamento = :idLancamento ";        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idLancamento", lancamento.getIdLancamento());
+        params.put("numeroLoteConciliado", lancamento.getNumeroLoteConciliado());
         update(sql, params, lancamentoHandler);
         return lancamento;  
     }

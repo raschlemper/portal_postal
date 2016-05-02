@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService', 'LancamentoProgramadoService', 'LancamentoTransferenciaService', 'LancamentoConciliadoService', 'ContaService', 'ModalService', 'DatePickerService', 'LISTAS',
-    function ($scope, $filter, LancamentoService, LancamentoProgramadoService, LancamentoTransferenciaService, LancamentoConciliadoService, ContaService, ModalService, DatePickerService, LISTAS) {
+app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService', 'LancamentoProgramadoService', 'LancamentoTransferenciaService', 'LancamentoConciliadoService', 'ContaService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
+    function ($scope, $filter, LancamentoService, LancamentoProgramadoService, LancamentoTransferenciaService, LancamentoConciliadoService, ContaService, ModalService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {
             $scope.lancamentos = [];
@@ -34,10 +34,23 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 },
                 events: { 
                     edit: function(lancamento) {
-                        $scope.editar($scope.conta, lancamento.idLancamento);
+                        if(validaConciliado(lancamento.idLancamento)) {
+                            modalConfirmar().then(function() {
+                                $scope.editar($scope.conta, lancamento.idLancamento);
+                            });
+                        } else {
+                            $scope.editar($scope.conta, lancamento.idLancamento);
+                        }
                     },
                     remove: function(lancamento) {
-                        $scope.excluir($scope.conta, lancamento.idLancamento);
+                        if(validaConciliado(lancamento.idLancamento)) {
+                            modalConfirmar().then(function() {
+                                $scope.excluir($scope.conta, lancamento);
+                            });
+                        } else {
+                            $scope.excluir($scope.conta, lancamento);
+                        }
+                        
                     },
                     view: function(lancamento) {
                         $scope.visualizar($scope.conta, lancamento.idLancamento);
@@ -175,10 +188,10 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         };
 
         $scope.editar = function(conta, idLancamento) {
-            if(!validaConciliado()) return;
             LancamentoService.get(idLancamento)
                 .then(function(lancamento) {
-                     modalSalvar(conta, lancamento).then(function(result) {
+                    if(!validaConciliado(lancamento)) return;
+                    modalSalvar(conta, lancamento).then(function(result) {
                         result = ajustarDados(result);
                         LancamentoService.update(idLancamento, result)
                             .then(function (data) {  
@@ -210,13 +223,12 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                         modalMessage(e);
                     });
             } else {
-                excluir(lancamento.idLancamento)
+                excluir(lancamento.idLancamento);
             }  
             
         }; 
         
         var excluir = function(idLancamento) {
-            if(!validaConciliado()) return;
             modalExcluir().then(function() {
                 LancamentoService.delete(idLancamento)
                     .then(function(data) { 
@@ -229,10 +241,10 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             });
         };
         
-        var validaConciliado = function(lancamento) {
-            if(lancamento.lancamentoConciliado) {
-                var modalInstance = modalConciliar();
-                return modalInstance;
+        var validaConciliado = function(idLancamento) {
+            var lancamento = ListaService.getLancamentoValue($scope.lancamentos, idLancamento);
+            if(lancamento.numeroLoteConciliado) {
+                return true;
             }
             return false
         }
@@ -253,28 +265,29 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             return data;
         }
         
-        var ajustarDadosTransferencia = function(data) {                 
+        var ajustarDadosTransferencia = function(data) {
+            var modelo = $scope.modelos[1];
             var lancamentoTransferencia = { 
                 idLancamentoTransferencia: null,
-                lancamentoOrigem: getLancamento(data.contaOrigem, data),
-                lancamentoDestino: getLancamento(data.contaDestino, data),
+                lancamentoOrigem: getLancamento(data.contaOrigem, null, $scope.tipos[1], modelo, data),
+                lancamentoDestino: getLancamento(data.contaDestino, null, $scope.tipos[0], modelo, data),
                 numero: data.numero,
                 competencia: data.competencia,
                 dataEmissao: data.dataEmissao || moment(),
                 dataLancamento: data.dataLancamento || moment(),
                 valor: data.valor,
                 historico: data.historico
-            }; 
-            lancamentoTransferencia.lancamentoOrigem.tipo = $scope.tipos[1].id;
-            lancamentoTransferencia.lancamentoDestino.tipo = $scope.tipos[0].id;    
+            };    
             return lancamentoTransferencia;
         }
         
         var ajustarDadosConciliado = function(data) {                 
             var lancamentoConciliado = { 
                 idLancamentoConciliado: null,
+                lancamento: getLancamento(data.conta, data.planoConta, data.tipo, $scope.modelos[5], data),          
+                conta: { idConta: data.conta.idConta },  
+                planoConta: { idPlanoConta: data.planoConta.idPlanoConta },
                 tipo: data.tipo.id,
-                lancamento: getLancamento(data.conta, data),
                 competencia: data.competencia,
                 dataEmissao: data.dataEmissao || moment(),
                 dataLancamento: data.dataLancamento || moment(),
@@ -284,13 +297,15 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             return lancamentoConciliado;
         }
         
-        var getLancamento = function(conta, data) {
-            var modelo = $scope.modelos[1];
+        var getLancamento = function(conta, planoConta, tipo, modelo, data) {
             var lancamento = {
                 idLancamento: null,
+                conta: null,
                 planoConta: null,
+                tipo: null,
                 favorecido: null,
                 numero: data.numero,
+                numeroParcela: 0,
                 competencia: data.competencia,
                 dataEmissao: data.dataEmissao || moment(),
                 dataVencimento: data.dataLancamento || moment(),
@@ -304,9 +319,11 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 modelo: modelo.id,
                 historico: data.historico,
                 observacao: null,
-                lancamentoProgramado: null,
-                conta: { idConta: conta.idConta },
+                lancamentoProgramado: null
             }
+            if(conta) { lancamento.conta = { idConta: conta.idConta }; }
+            if(planoConta) { lancamento.planoConta = { idPlanoConta: planoConta.idPlanoConta }; }
+            if(tipo) { lancamento.tipo = tipo.id; }
             lancamento.situacao = lancamento.situacao.id;
             lancamento.historico = '(' + modelo.descricao + ') ' + lancamento.historico;
             return lancamento;
@@ -350,7 +367,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         };
         
         var modalConfirmar = function() {
-            var modalInstance = ModalService.modalConfirmar('Alerta Lançamento?', 'Este lançamento está conciliado, <br/> as alterações poderão impactar no lançamento de conciliação! <br/> Deseja continuar?');
+            var modalInstance = ModalService.modalConfirmar('Alerta Lançamento', 'Este lançamento está conciliado. <br/> As alterações poderão impactar no lançamento de conciliação! <br/> Deseja continuar?');
             return modalInstance.result;
         };
         

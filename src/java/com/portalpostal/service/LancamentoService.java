@@ -24,7 +24,7 @@ public class LancamentoService {
     
     public Lancamento find(Integer idLancamento) throws Exception {
         return lancamentoDAO.find(idLancamento);
-    } 
+    }  
     
     public List<Lancamento> findByConta(Integer idConta) throws Exception {
         return lancamentoDAO.findByConta(idConta);

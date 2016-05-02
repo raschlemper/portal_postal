@@ -6,13 +6,16 @@ import java.util.Date;
 public class LancamentoConciliado {
     
     private Integer idLancamentoConciliado;
+    private Lancamento lancamento;
     private Conta conta;
     private PlanoConta planoConta;
     private TipoLancamento tipo;
+    private Integer numeroLote;
     private Date competencia;
     private Date dataEmissao;
     private Date dataLancamento;
     private Double valor;
+    private String historico;
 
     public Integer getIdLancamentoConciliado() {
         return idLancamentoConciliado;
@@ -20,6 +23,14 @@ public class LancamentoConciliado {
 
     public void setIdLancamentoConciliado(Integer idLancamentoConciliado) {
         this.idLancamentoConciliado = idLancamentoConciliado;
+    }
+
+    public Lancamento getLancamento() {
+        return lancamento;
+    }
+
+    public void setLancamento(Lancamento lancamento) {
+        this.lancamento = lancamento;
     }
 
     public Conta getConta() {
@@ -44,6 +55,14 @@ public class LancamentoConciliado {
 
     public void setTipo(TipoLancamento tipo) {
         this.tipo = tipo;
+    }
+
+    public Integer getNumeroLote() {
+        return numeroLote;
+    }
+
+    public void setNumeroLote(Integer numeroLote) {
+        this.numeroLote = numeroLote;
     }
 
     public Date getCompetencia() {
@@ -76,6 +95,14 @@ public class LancamentoConciliado {
 
     public void setValor(Double valor) {
         this.valor = valor;
+    }
+
+    public String getHistorico() {
+        return historico;
+    }
+
+    public void setHistorico(String historico) {
+        this.historico = historico;
     }
     
     

@@ -3,13 +3,13 @@
     <h4 class="modal-title">{{title}}</h4>
 </div>
 <div class="modal-body">
-    <div class="bootbox-body">{{message}}</div>
+    <div class="bootbox-body" ng-bind-html="message"></div>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn btn-default pull-left" ng-click="cancel()">
         <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR
     </button>
-    <button type="button" class="btn btn btn-danger pull-right" ng-click="ok()">
-        <i class="fa fa-lg fa-trash fa-spc"></i> EXCLUIR
+    <button type="button" class="btn btn btn-primary pull-right" ng-click="ok()">
+        <i class="fa fa-lg fa-check fa-spc"></i> CONFIRMAR
     </button>
 </div>

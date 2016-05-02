@@ -5,8 +5,6 @@ import com.portalpostal.validation.Validation;
 import com.portalpostal.model.LancamentoConciliado;
 import com.portalpostal.service.LancamentoConciliadoService;
 import com.portalpostal.validation.LancamentoConciliadoValidation;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -102,10 +100,7 @@ public class LancamentoConciliadoController {
         try {
             init();
             validation(lancamentoConciliado);
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date inicio = format.parse(dataInicio);
-            Date fim = format.parse(dataFim);
-            return lancamentoConciliadoService.createLancamento(lancamentoConciliado, inicio, fim);
+            return lancamentoConciliadoService.createLancamento(lancamentoConciliado);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }

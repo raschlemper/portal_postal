@@ -42,7 +42,7 @@ app.factory('ModalService', function($modal) {
         modalConfirmar: function (title, message) {
             return $modal.open({
                 animation: true,
-                templateUrl: 'partials/modal/Confirmar.html',
+                templateUrl: 'partials/modal/modalConfirmar.html',
                 controller: function($scope, $modalInstance) {
                     $scope.title = title;
                     $scope.message = message;        
