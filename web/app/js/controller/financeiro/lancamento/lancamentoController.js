@@ -229,16 +229,30 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         }; 
         
         var excluir = function(conta, idLancamento) {
-            modalExcluir().then(function() {
-                LancamentoService.delete(idLancamento)
-                    .then(function(data) { 
-                        modalMessage("Lançamento Removido com sucesso!");
-                        todos(conta);                        
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
+            LancamentoService.get(idLancamento)
+                .then(function(lancamento) {
+                    if(lancamento.numeroParcela < lancamento.lancamentoProgramado.numeroParcela) {                
+                        modalMessage("Este lançamento não pode ser excluído. É necessário excluir todos os lançamentos posteriores!");
+                        return;
+                    }     
+                    modalExcluir().then(function() {
+                        LancamentoService.delete(idLancamento)
+                            .then(function(data) { 
+                                modalMessage("Lançamento Removido com sucesso!");
+                                todos(conta);                        
+                            })
+                            .catch(function(e) {
+                                modalMessage(e);
+                            });
                     });
-            });
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+                
+                
+            
+            
         };
         
         var validaConciliado = function(idLancamento) {

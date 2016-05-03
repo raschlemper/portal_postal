@@ -1,3 +1,5 @@
+<%@page import="java.text.ParseException"%>
+<%@page import="java.text.DateFormat"%>
 <%@page import="Controle.ContrClienteDeptos"%>
 <%@page import="java.math.BigDecimal"%>
 <%@page import="Util.FormataString"%>
@@ -34,9 +36,15 @@
                 String lp = request.getParameter("lp");
 
                 String sql = "SELECT id, descServico, peso, quantidade, valorServico, dataPostagem, codStatus,"
+                        + " movimentacao.numObjeto, destinatario, cep, departamento, status, dataEntrega, notaFiscal, numVenda, numCaixa,"
+                        + " siglaServAdicionais, contratoEct, valorDestino, valorDeclarado, paisDestino, conteudoObjeto,"
+                        + " altura, largura, comprimento, idPre_venda ,idOS, "
+                        + " last_status_date, last_status_name, last_status_code, last_status_type, prazo_estimado, prazo_cumprido"
+                String sql = "SELECT id, descServico, peso, quantidade, valorServico, dataPostagem, codStatus,"
                         + " numObjeto, destinatario, cep, departamento, status, dataEntrega, notaFiscal, numVenda, numCaixa,"
                         + " siglaServAdicionais, contratoEct, valorDestino, valorDeclarado, paisDestino, conteudoObjeto, altura, largura, comprimento, idPre_venda ,idOS"
                         + " FROM movimentacao"
+                        + " LEFT JOIN movimentacao_tracking AS mt ON movimentacao.numObjeto = mt.numObjeto"
                         + " WHERE codCliente = " + idCliente;
                 if (dataInicio.length() == 10 && dataFinal.length() == 10) {
                     sql += " AND (dataPostagem BETWEEN '" + vDataInicio + "' AND '" + vDataFinal + "')";
@@ -68,7 +76,7 @@
                     //sql += ContrClienteDeptos.consultaDeptosWherePesquisaMovimento(dptosSessaoUsuario, idCliente, nomeBD);
                 }
                 if (!objeto.equals("")) {
-                    sql += " AND numObjeto LIKE '%" + objeto + "%'";
+                    sql += " AND movimentacao.numObjeto LIKE '%" + objeto + "%'";
                 }
                 if (!cep.equals("")) {
                      sql += " AND (cep LIKE '%" + cep + "%' OR cep LIKE '%" + cep.replaceAll("-", "") + "%') ";
@@ -161,6 +169,8 @@
                 <th width='50'><h3>DESTINO</h3></th>
                 <th width='50'><h3>PV</h3></th>
                 <th width='50'><h3>L. POST</h3></th>
+                <th width='50'><h3>PRAZO EST.</h3></th>
+                <th width='50'><h3>PRAZO REAL</h3></th>
             </tr>
         </thead>
         <tbody>
@@ -192,20 +202,53 @@
                                     String destinatario = mov.getDestinatario();
                                     String cepDestino = FormataString.formataCep(mov.getCep());
                                     String departamento2 = mov.getDepartamento();
-                                    String status = mov.getStatus();
 
                                     String numVenda = mov.getNumVenda();
-                                    String numCaixa = mov.getNumCaixa();
+                                    String numCaixa = mov.getNumCaixa();                                    
+                                    
+                                    String pz_estimado = "---";
+                                    String pz_cumprido = "---";
+                                    String atrasado = "";
+                                    if(mov.getPrazo_estimado() != null && mov.getPrazo_cumprido_date() != null){
+                                        pz_estimado = sdf.format(mov.getPrazo_estimado());
+                                        pz_cumprido = sdf.format(mov.getPrazo_cumprido_date());
+                                        if(mov.getPrazo_estimado().before(mov.getPrazo_cumprido_date())){
+                                            atrasado = "color:red;font-weight:bold;";
+                                        }
+                                    } else if(mov.getPrazo_estimado() != null){
+                                        pz_estimado = sdf.format(mov.getPrazo_estimado());
+                                        Date date = new Date();
+                                        try {
+                                            DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                                            date = (java.util.Date) formatter.parse(formatter.format(date));
+                                        } catch (ParseException e) {
+                                            //System.out.println(e.getMessage());
+                                        }
+                                        if(mov.getPrazo_estimado().before(date)){
+                                            atrasado = "color:red;font-weight:bold;";
+                                        }
+                                    }
                                     
                                     Date dataSit = mov.getDataEntrega();
                                     String dtSit = sdf.format(mov.getDataPostagem());
                                     if(dataSit!=null){
                                         dtSit = sdf.format(dataSit);
                                     }
-                                    
                                     String codStatus = ""+mov.getCodStatus();
-                                    String img_status = "";
+                                    String status = mov.getStatus();
                                     String grupoStatus = Util.Situacao.consultaGrupoStatus(codStatus, status);
+                                    if(mov.getLast_status_name() != null){ 
+                                        status = mov.getLast_status_name();
+                                        int codigoStatus = mov.getLast_status_code();
+                                        dataSit = mov.getLast_status_date();
+                                        if(dataSit!=null){
+                                            dtSit = sdf.format(mov.getLast_status_date());
+                                            dtSit = sdf.format(dataSit);
+                                        }
+                                        grupoStatus = Util.Situacao.consultaGrupoStatusNovo(codigoStatus, mov.getLast_status_type(), status);
+                                    }                                       
+                                    
+                                    String img_status = "";
                                     if (grupoStatus.equals("POSTADO")) {
                                         img_status = "../../imagensNew/mail.png";
                                         qtdPos++;
@@ -226,7 +269,7 @@
                                     
                                     String dimensoes = (int) mov.getAltura() + " x " + (int) mov.getLargura()+ " x " + (int) mov.getComprimento() + " cm";
             %>
-            <tr align='center' style="font-size: 10px;">
+            <tr align='center' style="font-size: 10px; <%= atrasado %> ">
                 <td><img class="link_img" src="<%= img_status %>" /></td>
                 <td>
                     <form name="frm<%= numeroRegistro%>" id="frm<%= numeroRegistro%>" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
@@ -234,7 +277,7 @@
                     </form>                    
                     <a href='#' onclick="document.getElementById('frm<%= numeroRegistro%>').submit();"><%= numeroRegistro%></a>
                 </td>
-                 <td align='left'><a href='visulizaTicket.jsp?idmov=<%= mov.getId() %>' target='_blank'><%= servico2%></a></td>
+                 <td align='left'><a href='visulizaTicket.jsp?idmov=<%=mov.getId()%>' target='_blank'><%= servico2%></a></td>
                 <td><%= peso%>g</td>
                 <td><%= dimensoes%></td>
                 <td><%= qtd%></td>
@@ -256,6 +299,8 @@
                 <td><%= mov.getPaisDestino() %></td>
                 <td><%= mov.getIdPre_venda() %></td>
                 <td><%= mov.getIdOS() %></td>
+                <td><%= pz_estimado %></td>
+                <td><%= pz_cumprido %></td>
             </tr>
             <%}%>
         </tbody>
@@ -269,7 +314,7 @@
                 <td nowrap="true">R$ <%= Util.FormatarDecimal.formatarFloat(vlrDecTotal.floatValue())%></td>
                 <td nowrap="true">R$ <%= Util.FormatarDecimal.formatarFloat(vlrCobTotal.floatValue())%></td>
                 <%}%>
-                <td colspan="12"></td>
+                <td colspan="14"></td>
             </tr>
         </tfoot>
     </table>

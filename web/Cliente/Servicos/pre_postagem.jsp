@@ -310,8 +310,8 @@
                     form.vd.value = '0.00';
                 }
 
-                if (form.vd.value > 0 && form.vd.value < 14) {
-                    alert('O Valor Declarado minimo é de R$ 14,00!');
+                if (form.vd.value > 0 && form.vd.value < 15) {
+                    alert('O Valor Declarado minimo é de R$ 15,00!');
                     return false;
                 } else if (form.servico.value === 'CARTA' && form.vd.value > 500) {
                     alert('O Valor Declarado Maximo de Cartas é de R$ 500,00!');

@@ -1,3 +1,6 @@
+<%@page import="java.text.ParseException"%>
+<%@page import="java.text.DateFormat"%>
+<%@page import="Entidade.Movimentacao"%>
 <%@page import="Controle.ContrClienteDeptos"%>
 <%@page import="java.math.BigDecimal"%>
 <%@page import="Util.FormataString"%>
@@ -33,8 +36,10 @@
                 String uf = request.getParameter("uf");
 
                 String sql = "SELECT id, descServico, peso, quantidade, valorServico, dataPostagem, codStatus,"
-                        + " numObjeto, destinatario, cep, departamento, status, dataEntrega, notaFiscal, numVenda, numCaixa"
+                        + " movimentacao.numObjeto, destinatario, cep, departamento, status, dataEntrega, notaFiscal, numVenda, numCaixa,"
+                        + " last_status_date, last_status_name, last_status_code, last_status_type, prazo_estimado, prazo_cumprido"
                         + " FROM movimentacao"
+                        + " LEFT JOIN movimentacao_tracking AS mt ON movimentacao.numObjeto = mt.numObjeto"
                         + " WHERE codCliente = " + idCliente;
                 if (dataInicio.length() == 10 && dataFinal.length() == 10) {
                     sql += " AND (dataPostagem BETWEEN '" + vDataInicio + "' AND '" + vDataFinal + "')";
@@ -66,7 +71,7 @@
                     //sql += ContrClienteDeptos.consultaDeptosWherePesquisaMovimento(dptosSessaoUsuario, idCliente, nomeBD);
                 }
                 if (!objeto.equals("")) {
-                    sql += " AND numObjeto LIKE '%" + objeto + "%'";
+                    sql += " AND movimentacao.numObjeto LIKE '%" + objeto + "%'";
                 }
                 if (!cep.equals("")) {
                    //sql += " AND cep LIKE '%" + cep + "%'";
@@ -146,12 +151,14 @@
                 <th width='100'><h3>SITUAÇÃO</h3></th>
                 <th><h3>NF</h3></th>
                 <th width='100'><h3>DEPARTAMENTO</h3></th>
+                <th width='50'><h3>PRAZO EST.</h3></th>
+                <th width='50'><h3>PRAZO REAL</h3></th>
             </tr>
         </thead>
         <tbody>
             <%
                                 for (int i = 0; i < movimentacao.size(); i++) {
-                                    Entidade.Movimentacao mov = (Entidade.Movimentacao) movimentacao.get(i);
+                                   Movimentacao mov = (Movimentacao) movimentacao.get(i);
                                     String servico2 = mov.getDescServico();
                                     int peso = (int) mov.getPeso();
                                     int qtd = (int) mov.getQuantidade();
@@ -169,10 +176,40 @@
                                     String destinatario = mov.getDestinatario();
                                     String cepDestino = FormataString.formataCep(mov.getCep());
                                     String departamento2 = mov.getDepartamento();
+                                    
+                                    String pz_estimado = "---";
+                                    String pz_cumprido = "---";
+                                    String atrasado = "";
+                                    if(mov.getPrazo_estimado() != null && mov.getPrazo_cumprido_date() != null){
+                                        pz_estimado = sdf.format(mov.getPrazo_estimado());
+                                        pz_cumprido = sdf.format(mov.getPrazo_cumprido_date());
+                                        if(mov.getPrazo_estimado().before(mov.getPrazo_cumprido_date())){
+                                            atrasado = "color:red;font-weight:bold;";
+                                        }
+                                    } else if(mov.getPrazo_estimado() != null){
+                                        pz_estimado = sdf.format(mov.getPrazo_estimado());
+                                        Date date = new Date();
+                                        try {
+                                            DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                                            date = (java.util.Date) formatter.parse(formatter.format(date));
+                                        } catch (ParseException e) {
+                                            //System.out.println(e.getMessage());
+                                        }
+                                        if(mov.getPrazo_estimado().before(date)){
+                                            atrasado = "color:red;font-weight:bold;";
+                                        }
+                                    }
+                                    
                                     String status = mov.getStatus();
                                     String codStatus = ""+mov.getCodStatus();
-                                    String img_status = "";
                                     String grupoStatus = Util.Situacao.consultaGrupoStatus(codStatus, status);
+                                    if(mov.getLast_status_name() != null){ 
+                                        status = mov.getLast_status_name();
+                                        int codigoStatus = mov.getLast_status_code();
+                                        grupoStatus = Util.Situacao.consultaGrupoStatusNovo(codigoStatus, mov.getLast_status_type(), status);
+                                    }                                    
+                                    
+                                    String img_status = "";
                                     if (grupoStatus.equals("POSTADO")) {
                                         img_status = "../../imagensNew/mail.png";
                                         qtdPos++;
@@ -190,7 +227,7 @@
                                         qtdEnc++;
                                     }
             %>
-            <tr align='center' style="font-size: 10px;">
+            <tr align='center' style="font-size: 10px; <%= atrasado %> ">
                 <td><img class="link_img" src="<%= img_status %>" /></td>
                 <td>
                     <%--<form name="frm<%= numeroRegistro%>" id="frm<%= numeroRegistro%>" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/multResultado.cfm" target="_blank">
@@ -201,7 +238,7 @@
                     <a href='#' onclick="document.getElementById('frm<%= numeroRegistro%>').submit();"><%= numeroRegistro%></a>
                 </td>
                     <%--<a href='http://websro.correios.com.br/sro_bin/txect01$.QueryList?P_LINGUA=001&P_TIPO=001&P_COD_UNI=<%= numeroRegistro%>' target=_blank><%= numeroRegistro%></a></td>--%>
-                <td align='left'><a href='visulizaTicket.jsp?idmov=<%= mov.getId() %>' target='_blank'><%= servico2%></a></td>
+                <td align='left'><a href='visulizaTicket.jsp?idmov=<%=mov.getId()%>' target='_blank'><%= servico2%></a></td>
                 <td><%= peso%>g</td>
                 <td><%= qtd%></td>
                 <td><%= vData%></td>
@@ -213,6 +250,8 @@
                 <td><%= status%></td>
                 <td><%= notaFiscal%></td>
                 <td><%= departamento2%></td>
+                <td><%= pz_estimado %></td>
+                <td><%= pz_cumprido %></td>
             </tr>
             <%}%>
         </tbody>
@@ -224,7 +263,7 @@
                 <%if (acessosUs.contains(3)) {%>
                 <td nowrap="true">R$ <%= Util.FormatarDecimal.formatarFloat(vlrTotal.floatValue())%></td>
                 <%}%>
-                <td colspan="5"></td>
+                <td colspan="7"></td>
             </tr>
         </tfoot>
     </table>

@@ -213,17 +213,21 @@
                                                 </thead>
                                                 <tbody>
                                                     <%
-                                                    ArrayList<Entidade.SenhaCliente> listaLogins = Controle.contrSenhaCliente.consultaTodasSenhaCliente(idClienteInc, nomeBD);
-                                                    for (int i = 0; i < listaLogins.size(); i++) {
-                                                        Entidade.SenhaCliente sc3 = listaLogins.get(i);
-                                                        String loginSc = sc3.getLogin();
-                                                        String senhaSc = sc3.getSenha();
-                                                        int nivel = sc3.getNivel();
-                                                        int id = sc3.getId();
-                                                        String nomeNivel = Controle.contrNivel.consultaNomeByIdNivel(nivel, nomeBD);
-                                                        if (nivel == 99) {
-                                                            nomeNivel = "WEB SERVICE";
-                                                        }
+                                                        ArrayList<Entidade.SenhaCliente> listaLogins = Controle.contrSenhaCliente.consultaTodasSenhaCliente(idClienteInc, nomeBD);
+                                                        for (int i = 0; i < listaLogins.size(); i++) {
+                                                            Entidade.SenhaCliente sc3 = listaLogins.get(i);
+                                                            String loginSc = sc3.getLogin();
+                                                            String senhaSc = sc3.getSenha();
+                                                            int nivel = sc3.getNivel();
+                                                            int id = sc3.getId();
+                                                            String nomeNivel = Controle.contrNivel.consultaNomeByIdNivel(nivel, nomeBD);
+                                                            if (nivel == 99) {
+                                                                nomeNivel = "WEB SERVICE";
+                                                            }
+                                                            if (nivel == 100) {
+                                                                nomeNivel = "OPERADOR MASTER";
+                                                                senhaSc = "********";
+                                                            }
                                                     %>
                                                     <tr>
                                                         <td><%= loginSc%></td>
@@ -235,9 +239,12 @@
                                                                 <input type="hidden" name="agenciaHoito" id="inputCodigo" value="<%= idEmpresa%>" />
                                                                 <input type="hidden" name="loginHoito" id="inputEmail" value="<%= loginSc%>" />
                                                                 <input type="hidden" name="senhaHoito" id="inputPassword" value="<%= senhaSc%>" />                        
+                                                                <%if (nivel < 99) {%>
                                                                 <button type="submit" class="btn btn-primary" formtarget="_blank"><i class="fa fa-sign-in fa-lg"></i></button>
-
-                                                            </form>
+                                                                    <%} else {%>
+                                                                <button type="submit" class="btn btn-primary disabled" formtarget="_blank"><i class="fa fa-sign-in fa-lg"></i></button>
+                                                                    <%}%>
+                                                            </form> 
                                                             <%--<a class="btn btn-sm btn-info" href="../../ServLoginCliente?agenciaHoito=<%= idEmpresa%>&loginHoito=<%= loginSc%>&senhaHoito=<%= senhaSc%>" target="_blank" style="cursor:pointer;" ><i class="fa fa-sign-in fa-lg"></i></a>--%>                              
                                                         </td>
                                                         <td align="center">
@@ -253,7 +260,11 @@
                                                                 <input type="hidden" name="idCliente" value="<%= idClienteInc%>" />
                                                                 <input type="hidden" name="login" value="<%= loginSc%>" />
                                                                 <input type="hidden" name="senha" value="<%= senhaSc%>" />
+                                                                <%if (nivel < 99) {%>
                                                                 <button type="button" class="btn btn-sm btn-danger" onClick="confirmExcluir(this);" ><i class="fa fa-trash fa-lg"></i></button>
+                                                                    <%} else {%>
+                                                                <button type="button" class="btn btn-sm btn-danger disabled" onClick="confirmExcluir(this);" ><i class="fa fa-trash fa-lg"></i></button>
+                                                                    <%}%>
                                                             </form>
                                                         </td>
                                                     </tr>

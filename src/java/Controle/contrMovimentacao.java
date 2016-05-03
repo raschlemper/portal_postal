@@ -257,10 +257,10 @@ public class contrMovimentacao {
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();
-            
+            //System.out.println(sql);
             ArrayList movimentacao = new ArrayList();
            while (result.next()) {
-                int id = result.getInt("id");
+                String id = result.getString("id");
                 Date dataPostagem = result.getDate("dataPostagem");
                 String descServico = result.getString("descServico");
                 String numObjeto = result.getString("numObjeto");
@@ -276,13 +276,20 @@ public class contrMovimentacao {
                 String numVenda = result.getString("numVenda");
                 String numCaixa = result.getString("numCaixa");
                 int codStatus = result.getInt("codStatus");
+                Date last_status_date = result.getDate("last_status_date");
+                int last_status_code = result.getInt("last_status_code");
+                String last_status_type = result.getString("last_status_type");
+                String last_status_name = result.getString("last_status_name");
+                Date prazo_estimado = result.getDate("prazo_estimado");
+                Timestamp prazo_cumprido = result.getTimestamp("prazo_cumprido");
 
-                Movimentacao mov = new Movimentacao(id, dataPostagem, descServico, numObjeto, destinatario1, peso, cep1, valorServico, quantidade, departamentos, status, dataEntrega, notaFiscal, numVenda, numCaixa, codStatus);
+                Movimentacao mov = new Movimentacao(id, dataPostagem, descServico, numObjeto, destinatario1, peso, cep1, valorServico, quantidade, departamentos, status, dataEntrega, notaFiscal, numVenda, numCaixa, codStatus, last_status_date, last_status_code, last_status_type, last_status_name, prazo_estimado, prazo_cumprido);
                 movimentacao.add(mov);
             }
             valores.close();
             return movimentacao;
         } catch (SQLException e) {
+            System.out.println(e+"\n"+sql);
             ContrErroLog.inserir("HOITO - contrMovimentacao", "SQLException", sql, e.toString());
             return null;
         } finally {
@@ -300,7 +307,7 @@ public class contrMovimentacao {
             ArrayList movimentacao = new ArrayList();
             for (int i = 0; result.next(); i++) {
                 
-                 int id = result.getInt("id");
+                String id = result.getString("id");
                 Date dataPostagem = result.getDate("dataPostagem");
                 String descServico = result.getString("descServico");
                 String numObjeto = result.getString("numObjeto");
@@ -327,8 +334,14 @@ public class contrMovimentacao {
                 float comprimento = result.getFloat("comprimento");
                 int idPre_venda = result.getInt("idPre_venda");
                 int idOS = result.getInt("idOS");
+                Date last_status_date = result.getDate("last_status_date");
+                int last_status_code = result.getInt("last_status_code");
+                String last_status_type = result.getString("last_status_type");
+                String last_status_name = result.getString("last_status_name");
+                Date prazo_estimado = result.getDate("prazo_estimado");
+                Timestamp prazo_cumprido = result.getTimestamp("prazo_cumprido");
 
-                Movimentacao mov = new Movimentacao(id,dataPostagem, descServico, numObjeto, destinatario1, peso, cep1, valorServico, quantidade, departamentos, status, dataEntrega, notaFiscal, numVenda, numCaixa, valorDeclarado, valorDestino, paisDestino, contratoEct, conteudoObjeto, siglaServAdicionais, codStatus, altura, largura, comprimento, idPre_venda, idOS);
+                Movimentacao mov = new Movimentacao(id,dataPostagem, descServico, numObjeto, destinatario1, peso, cep1, valorServico, quantidade, departamentos, status, dataEntrega, notaFiscal, numVenda, numCaixa, valorDeclarado, valorDestino, paisDestino, contratoEct, conteudoObjeto, siglaServAdicionais, codStatus, altura, largura, comprimento, idPre_venda, idOS, last_status_date, last_status_code, last_status_type, last_status_name, prazo_estimado, prazo_cumprido);
                 movimentacao.add(mov);
             }
             valores.close();
@@ -433,4 +446,5 @@ public class contrMovimentacao {
             Conexao.desconectar(conn);
         }
     }
+    
 }

@@ -289,6 +289,9 @@
                                                 if(nivel == 99 ){
                                                     nomeNivel = "WEB SERVICE";
                                                 }
+                                                  if(nivel == 100 ){
+                                                    nomeNivel = "OPERADOR MASTER";
+                                                }
                             %>
                             <tr style="cursor:default;">
                                 <td><%= loginSc%></td>
