@@ -9,7 +9,7 @@ app.controller('ModalEditarPlanoContaController', ['$scope', '$modalInstance', '
             $scope.grupos = [];
             $scope.gruposList = [];
             $scope.isGroup = isGroup();
-            $scope.planoConta = planoConta || {};
+            $scope.planoConta = angular.copy(planoConta) || {};
             $scope.planoConta.tipo = (planoConta && planoConta.tipo) || $scope.tipos[0]; 
             if(action === 'save') { create(); }
             todos();

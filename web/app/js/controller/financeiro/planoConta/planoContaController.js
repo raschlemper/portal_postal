@@ -44,13 +44,13 @@ app.controller('PlanoContaController', ['$scope', '$q', 'PlanoContaService', 'Mo
                 .then(function(planoConta) {                  
                     modalSalvar(planoConta, 'save')
                     .then(function(result) {                                     
-                        PlanoContaService.getByTipoGrupoCodigo(result.tipo.id, planoConta.idPlanoConta, result.codigo)
+                        PlanoContaService.getByTipoGrupoCodigo(result.tipo.id, planoConta.grupo.idPlanoConta, result.codigo)
                         .then(function(data) {
                             if(data) { modalMessage("Este Plano de Conta já existe!"); } 
                             else { return result; }
                         }).then(function(result) {   
                             if(!result) return;
-                            result = ajustarDados(result, planoConta);
+                            result = ajustarDados(result, result.grupo);
                             PlanoContaService.save(result)
                             .then(function(data) {  
                                 modalMessage("Plano de Conta " + data.nome +  " Inserido com sucesso!");
@@ -108,10 +108,11 @@ app.controller('PlanoContaController', ['$scope', '$q', 'PlanoContaService', 'Mo
             });
         }; 
         
-        var ajustarDados = function(data, planoConta) {            
+        var ajustarDados = function(data, grupo) { 
+            delete data.contas;
             data.tipo = data.tipo.id; 
             data.grupo = {
-                idPlanoConta: planoConta.idPlanoConta
+                idPlanoConta: grupo.idPlanoConta
             }
             return data;
         }

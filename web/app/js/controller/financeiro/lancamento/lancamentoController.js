@@ -217,18 +217,18 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                             modalMessage("Este lançamento não pode ser excluído. É necessário excluir todos os lançamentos posteriores!");
                             return;
                         }     
-                        excluir(lancamento.idLancamento);
+                        excluir(conta, lancamento.idLancamento);
                     })
                     .catch(function(e) {
                         modalMessage(e);
                     });
             } else {
-                excluir(lancamento.idLancamento);
+                excluir(conta, lancamento.idLancamento);
             }  
             
         }; 
         
-        var excluir = function(idLancamento) {
+        var excluir = function(conta, idLancamento) {
             modalExcluir().then(function() {
                 LancamentoService.delete(idLancamento)
                     .then(function(data) { 
