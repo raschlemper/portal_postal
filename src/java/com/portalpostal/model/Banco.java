@@ -1,11 +1,14 @@
 package com.portalpostal.model;
 
+import java.util.List;
+
 public class Banco {
     
     private Integer idBanco;
     private String nome;
     private Integer numero;
     private String website;
+    private List<ContaCorrente> contaCorrente;
 
     public Integer getIdBanco() {
         return idBanco;
@@ -37,6 +40,14 @@ public class Banco {
 
     public void setWebsite(String website) {
         this.website = website;
+    }
+
+    public List<ContaCorrente> getContaCorrente() {
+        return contaCorrente;
+    }
+
+    public void setContaCorrente(List<ContaCorrente> contaCorrente) {
+        this.contaCorrente = contaCorrente;
     }
     
 }

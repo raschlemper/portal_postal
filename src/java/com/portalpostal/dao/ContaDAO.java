@@ -35,6 +35,36 @@ public class ContaDAO extends GenericDAO {
         return (Conta) find(sql, params, contaHandler);
     }
 
+    public List<Conta> findByContaCorrente(Integer idContaCorrente) throws Exception {
+        String sql = "SELECT * FROM conta, conta_corrente "
+                   + "WHERE conta.idContaCorrente = conta_corrente.idContaCorrente "
+                   + "AND conta.idContaCorrente = :idContaCorrente "
+                   + "ORDER BY conta.idConta"; 
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idContaCorrente", idContaCorrente);       
+        return findAll(sql, params, contaHandler);
+    }
+
+    public List<Conta> findByCartaoCredito(Integer idCartaoCredito) throws Exception {
+        String sql = "SELECT * FROM conta, cartao_credito "
+                   + "WHERE conta.idCartaoCredito = cartao_credito.idCartaoCredito "
+                   + "AND conta.idCartaoCredito = :idCartaoCredito";
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idCartaoCredito", idCartaoCredito);       
+        return findAll(sql, params, contaHandler);
+    }
+
+    public List<Conta> findByCarteiraCobranca(Integer idCarteiraCobranca) throws Exception {
+        String sql = "SELECT * FROM conta, conta_corrente, carteira_cobranca "
+                   + "WHERE conta.idContaCorrente = conta_corrente.idContaCorrente "
+                   + "AND conta_corrente.idContaCorrente = carteira_cobranca.idContaCorrente "
+                   + "AND carteira_cobranca.idCarteiraCobranca = :idCarteiraCobranca "
+                   + "ORDER BY conta.idConta"; 
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idCarteiraCobranca", idCarteiraCobranca);       
+        return findAll(sql, params, contaHandler);
+    }
+
     public List<Conta> findSaldo() throws Exception {
         String sql = "SELECT *, (SELECT sum(if(lancamento.tipo = 0, lancamento.valor, lancamento.valor * -1)) " 
                                 + "FROM lancamento WHERE conta.idConta = lancamento.idConta) as saldo "

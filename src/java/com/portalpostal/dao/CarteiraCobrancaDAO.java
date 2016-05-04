@@ -31,6 +31,16 @@ public class CarteiraCobrancaDAO extends GenericDAO {
         return (CarteiraCobranca) find(sql, params, carteiraCobrancaHandler);
     }
 
+    public List<CarteiraCobranca> findByContaCorrente(Integer idContaCorrente) throws Exception {
+        String sql = "SELECT * FROM carteira_cobranca, conta_corrente "
+                   + "WHERE carteira_cobranca.idContaCorrente = conta_corrente.idContaCorrente "
+                   + "AND carteira_cobranca.idContaCorrente = :idContaCorrente "
+                   + "ORDER BY carteira_cobranca.idCarteira";  
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idContaCorrente", idContaCorrente);      
+        return findAll(sql, params, carteiraCobrancaHandler);
+    }
+
     public CarteiraCobranca save(CarteiraCobranca carteiraCobranca) throws Exception {  
         String sql = "INSERT INTO carteira_cobranca (idContaCorrente, nome, cod_beneficiario, cod_beneficiario_dv, "
                    + "cod_convenio, cod_carteira, aceite, baixa, especie_doc, local_pagamento, instrucao01, instrucao02, "

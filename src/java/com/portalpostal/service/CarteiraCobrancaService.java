@@ -1,18 +1,18 @@
 package com.portalpostal.service;
 
-import com.portalpostal.dao.CartaoCreditoDAO;
 import com.portalpostal.dao.CarteiraCobrancaDAO;
+import com.portalpostal.dao.ContaDAO;
 import com.portalpostal.model.CarteiraCobranca;
 import java.util.List;
 
 public class CarteiraCobrancaService {
     
-    private final CarteiraCobrancaDAO carteiraCobrancaDAO;    
-    private final CartaoCreditoDAO cartaoCreditoDAO;
+    private final CarteiraCobrancaDAO carteiraCobrancaDAO; 
+    private final ContaDAO contaDAO;
 
     public CarteiraCobrancaService(String nomeBD) {
         carteiraCobrancaDAO = new CarteiraCobrancaDAO(nomeBD);
-        cartaoCreditoDAO = new CartaoCreditoDAO(nomeBD);
+        contaDAO = new ContaDAO(nomeBD);
     }
     
     public List<CarteiraCobranca> findAll() throws Exception {
@@ -21,6 +21,12 @@ public class CarteiraCobrancaService {
     
     public CarteiraCobranca find(Integer idCarteiraCobranca) throws Exception {
         return carteiraCobrancaDAO.find(idCarteiraCobranca);
+    } 
+    
+    public CarteiraCobranca findConta(Integer idCarteiraCobranca) throws Exception {
+        CarteiraCobranca carteiraCobranca = find(idCarteiraCobranca);
+        carteiraCobranca.setContas(contaDAO.findByContaCorrente(idCarteiraCobranca));
+        return carteiraCobranca;
     } 
     
     public CarteiraCobranca save(CarteiraCobranca carteiraCobranca) throws Exception {

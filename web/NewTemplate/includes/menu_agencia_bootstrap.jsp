@@ -91,15 +91,22 @@
             </a>
             <ul class="nav-pills nav-stacked" style="list-style-type:none;">
                 <li><a href="${pageContext.request.contextPath}/app/financeiro/">Inicio</a></li>
-                <li><a href="${pageContext.request.contextPath}/app/financeiro/banco">Banco</a></li>
-                <li><a href="${pageContext.request.contextPath}/app/financeiro/planoconta">Plano Conta</a></li>
-                <li><a href="${pageContext.request.contextPath}/app/financeiro/contacorrente">Conta Corrente</a></li>
-                <li><a href="${pageContext.request.contextPath}/app/financeiro/carteiracobranca">Carteira Cobrança</a></li>
-                <li><a href="${pageContext.request.contextPath}/app/financeiro/cartaocredito">Cartão Crédito</a></li>
-                <li><a href="${pageContext.request.contextPath}/app/financeiro/conta">Conta</a></li>
                 <li><a href="${pageContext.request.contextPath}/app/financeiro/lancamento">Lançamento</a></li>
-                <li><a href="${pageContext.request.contextPath}/app/financeiro/lancamento/programado">Lançamento Programado</a></li>
+                <li><a href="${pageContext.request.contextPath}/app/financeiro/lancamento/programado">Programação</a></li>
                 <li><a href="${pageContext.request.contextPath}/app/financeiro/demonstrativo">Demonstrativo</a></li>
+                <li>
+                    <a href="#">
+                        Cadastros <span style="margin: 5px 10px 0 0;" class="fa-stack fa-fw pull-right"><i id="arrow" class="fa fa-chevron-down fa-stack-1x "></i></span>
+                    </a> 
+                    <ul class="nav-pills nav-stacked" style="list-style-type:none;">
+                        <li><a href="${pageContext.request.contextPath}/app/financeiro/banco">Banco</a></li>
+                        <li><a href="${pageContext.request.contextPath}/app/financeiro/planoconta">Plano Conta</a></li>
+                        <li><a href="${pageContext.request.contextPath}/app/financeiro/contacorrente">Conta Corrente</a></li>
+                        <li><a href="${pageContext.request.contextPath}/app/financeiro/carteiracobranca">Carteira Cobrança</a></li>
+                        <li><a href="${pageContext.request.contextPath}/app/financeiro/cartaocredito">Cartão Crédito</a></li>
+                        <li><a href="${pageContext.request.contextPath}/app/financeiro/conta">Conta</a></li>
+                    </ul>
+                </li>
             </ul>
         </li> 
         <%--<li>

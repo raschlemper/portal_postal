@@ -1,5 +1,7 @@
 package com.portalpostal.model;
 
+import java.util.List;
+
 public class CarteiraCobranca {
 
     private Integer idCarteiraCobranca;
@@ -25,6 +27,7 @@ public class CarteiraCobranca {
     private String beneficiarioCidade;
     private String beneficiarioUf;
     private String beneficiarioCep;
+    private List<Conta> contas;
 
     public Integer getIdCarteiraCobranca() {
         return idCarteiraCobranca;
@@ -209,6 +212,13 @@ public class CarteiraCobranca {
     public void setBeneficiarioCep(String beneficiarioCep) {
         this.beneficiarioCep = beneficiarioCep;
     }
-    
+
+    public List<Conta> getContas() {
+        return contas;
+    }
+
+    public void setContas(List<Conta> contas) {
+        this.contas = contas;
+    }    
     
 }

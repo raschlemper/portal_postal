@@ -1,5 +1,7 @@
 package com.portalpostal.model;
 
+import java.util.List;
+
 public class CartaoCredito {
     
     private Integer idCartaoCredito;
@@ -9,6 +11,7 @@ public class CartaoCredito {
     private Integer diaVencimento;
     private Double valorLimiteCredito;
     private ContaCorrente contaCorrente;
+    private List<Conta> contas;
 
     public Integer getIdCartaoCredito() {
         return idCartaoCredito;
@@ -65,5 +68,13 @@ public class CartaoCredito {
     public void setContaCorrente(ContaCorrente contaCorrente) {
         this.contaCorrente = contaCorrente;
     }    
+
+    public List<Conta> getContas() {
+        return contas;
+    }
+
+    public void setContas(List<Conta> contas) {
+        this.contas = contas;
+    }
     
 }

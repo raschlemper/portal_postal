@@ -124,24 +124,6 @@ public class Movimentacao {
         this.numCaixa = numCaixa;
         this.codStatus = codStatus;
     }
-    public Movimentacao(int id, Date dataPostagem, String descServico, String numObjeto, String destinatario, float peso, String cep, float valorServico, float quantidade, String departamento, String status, Date dataEntrega, String notaFiscal, String numVenda, String numCaixa, int codStatus) {
-        this.id = id;
-        this.dataPostagem = dataPostagem;
-        this.descServico = descServico;
-        this.numObjeto = numObjeto;
-        this.destinatario = destinatario;
-        this.peso = peso;
-        this.cep = cep;
-        this.valorServico = valorServico;
-        this.quantidade = quantidade;
-        this.departamento = departamento;
-        this.status = status;
-        this.dataEntrega = dataEntrega;
-        this.notaFiscal = notaFiscal;
-        this.numVenda = numVenda;
-        this.numCaixa = numCaixa;
-        this.codStatus = codStatus;
-    }
 
     public Movimentacao(String id, Date dataPostagem, String descServico, String numObjeto, String destinatario, float peso, String cep, float valorServico, float quantidade, String departamento, String status, Date dataEntrega, String notaFiscal, String numVenda, String numCaixa, int codStatus, Date last_status_date, int last_status_code, String last_status_type, String last_status_name, Date prazo_estimado, Timestamp prazo_cumprido) {
         this.id = id;
@@ -174,7 +156,6 @@ public class Movimentacao {
             String paisDestino, String contratoEct, String conteudoObjeto, String siglaServAdicionais,
             int codStatus, float altura, float largura, float comprimento, int idPre_venda, int idOS, 
             Date last_status_date, int last_status_code, String last_status_type, String last_status_name, Date prazo_estimado, Timestamp prazo_cumprido) {
-        this.id = id;
         this.id = id;
         this.dataPostagem = dataPostagem;
         this.descServico = descServico;
@@ -326,16 +307,6 @@ public class Movimentacao {
         this.id = id;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    
-    
     public int getIdPre_venda() {
         return idPre_venda;
     }

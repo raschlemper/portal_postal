@@ -1,5 +1,7 @@
 package com.portalpostal.model;
 
+import java.util.List;
+
 public class ContaCorrente {
     
     private Integer idContaCorrente;
@@ -10,6 +12,9 @@ public class ContaCorrente {
     private Integer contaCorrente;
     private Integer contaCorrenteDv;
     private Boolean poupanca;
+    private List<CartaoCredito> cartaoCreditos;
+    private List<CarteiraCobranca> carteiraCobrancas;
+    private List<Conta> contas;
 
     public Integer getIdContaCorrente() {
         return idContaCorrente;
@@ -73,6 +78,30 @@ public class ContaCorrente {
 
     public void setPoupanca(Boolean poupanca) {
         this.poupanca = poupanca;
+    }
+
+    public List<CartaoCredito> getCartaoCreditos() {
+        return cartaoCreditos;
+    }
+
+    public void setCartaoCreditos(List<CartaoCredito> cartaoCreditos) {
+        this.cartaoCreditos = cartaoCreditos;
+    }
+
+    public List<CarteiraCobranca> getCarteiraCobrancas() {
+        return carteiraCobrancas;
+    }
+
+    public void setCarteiraCobrancas(List<CarteiraCobranca> carteiraCobrancas) {
+        this.carteiraCobrancas = carteiraCobrancas;
+    }
+
+    public List<Conta> getContas() {
+        return contas;
+    }
+
+    public void setContas(List<Conta> contas) {
+        this.contas = contas;
     }
     
 }

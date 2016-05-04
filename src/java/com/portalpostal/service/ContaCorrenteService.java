@@ -1,18 +1,24 @@
 package com.portalpostal.service;
 
 import com.portalpostal.dao.CartaoCreditoDAO;
+import com.portalpostal.dao.CarteiraCobrancaDAO;
 import com.portalpostal.dao.ContaCorrenteDAO;
+import com.portalpostal.dao.ContaDAO;
 import com.portalpostal.model.ContaCorrente;
 import java.util.List;
 
 public class ContaCorrenteService {
     
     private final ContaCorrenteDAO contaCorrenteDAO;    
-    private final CartaoCreditoDAO cartaoCreditoDAO;
+    private final CartaoCreditoDAO cartaoCreditoDAO;   
+    private final CarteiraCobrancaDAO carteiraCobrancaDAO;
+    private final ContaDAO contaDAO;
 
     public ContaCorrenteService(String nomeBD) {
         contaCorrenteDAO = new ContaCorrenteDAO(nomeBD);
         cartaoCreditoDAO = new CartaoCreditoDAO(nomeBD);
+        carteiraCobrancaDAO = new CarteiraCobrancaDAO(nomeBD);
+        contaDAO = new ContaDAO(nomeBD);
     }
     
     public List<ContaCorrente> findAll() throws Exception {
@@ -21,6 +27,24 @@ public class ContaCorrenteService {
     
     public ContaCorrente find(Integer idContaCorrente) throws Exception {
         return contaCorrenteDAO.find(idContaCorrente);
+    }  
+    
+    public ContaCorrente findCartaoCredito(Integer idContaCorrente) throws Exception {
+        ContaCorrente contaCorrente = find(idContaCorrente);
+        contaCorrente.setCartaoCreditos(cartaoCreditoDAO.findByContaCorrente(idContaCorrente));
+        return contaCorrente;
+    }  
+    
+    public ContaCorrente findCarteiraCobranca(Integer idContaCorrente) throws Exception {
+        ContaCorrente contaCorrente = find(idContaCorrente);
+        contaCorrente.setCarteiraCobrancas(carteiraCobrancaDAO.findByContaCorrente(idContaCorrente));
+        return contaCorrente;
+    } 
+    
+    public ContaCorrente findConta(Integer idContaCorrente) throws Exception {
+        ContaCorrente contaCorrente = find(idContaCorrente);
+        contaCorrente.setContas(contaDAO.findByContaCorrente(idContaCorrente));
+        return contaCorrente;
     } 
     
     public ContaCorrente save(ContaCorrente contaCorrente) throws Exception {

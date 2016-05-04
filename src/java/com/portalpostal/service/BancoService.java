@@ -1,15 +1,19 @@
 package com.portalpostal.service;
 
 import com.portalpostal.dao.BancoDAO;
+import com.portalpostal.dao.ContaCorrenteDAO;
 import com.portalpostal.model.Banco;
+import com.portalpostal.model.ContaCorrente;
 import java.util.List;
 
 public class BancoService {
     
-    private final BancoDAO bancoDAO;
+    private final BancoDAO bancoDAO;    
+    private final ContaCorrenteDAO contaCorrenteDAO;
 
     public BancoService(String nomeBD) {
         bancoDAO = new BancoDAO(nomeBD);
+        contaCorrenteDAO = new ContaCorrenteDAO(nomeBD);
     }
     
     public List<Banco> findAll() throws Exception {
@@ -18,6 +22,12 @@ public class BancoService {
     
     public Banco find(Integer idBanco) throws Exception {
         return bancoDAO.find(idBanco);
+    } 
+    
+    public Banco findContaCorrente(Integer idBanco) throws Exception {
+        Banco banco = find(idBanco);
+        banco.setContaCorrente(contaCorrenteDAO.findByBanco(idBanco));
+        return banco;
     } 
     
     public Banco findByNumero(Integer numero) throws Exception {

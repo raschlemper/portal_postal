@@ -40,9 +40,6 @@
                         + " siglaServAdicionais, contratoEct, valorDestino, valorDeclarado, paisDestino, conteudoObjeto,"
                         + " altura, largura, comprimento, idPre_venda ,idOS, "
                         + " last_status_date, last_status_name, last_status_code, last_status_type, prazo_estimado, prazo_cumprido"
-                String sql = "SELECT id, descServico, peso, quantidade, valorServico, dataPostagem, codStatus,"
-                        + " numObjeto, destinatario, cep, departamento, status, dataEntrega, notaFiscal, numVenda, numCaixa,"
-                        + " siglaServAdicionais, contratoEct, valorDestino, valorDeclarado, paisDestino, conteudoObjeto, altura, largura, comprimento, idPre_venda ,idOS"
                         + " FROM movimentacao"
                         + " LEFT JOIN movimentacao_tracking AS mt ON movimentacao.numObjeto = mt.numObjeto"
                         + " WHERE codCliente = " + idCliente;

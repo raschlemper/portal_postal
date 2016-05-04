@@ -31,6 +31,16 @@ public class ContaCorrenteDAO extends GenericDAO {
         return (ContaCorrente) find(sql, params, contaCorrenteHandler);
     }
 
+    public List<ContaCorrente> findByBanco(Integer idBanco) throws Exception {
+        String sql = "SELECT * FROM conta_corrente, banco "
+                   + "WHERE conta_corrente.idBanco = banco.idBanco "
+                   + "AND conta_corrente.idBanco = :idBanco "
+                   + "ORDER BY conta_corrente.idContaCorrente";  
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idBanco", idBanco);      
+        return findAll(sql, params, contaCorrenteHandler);
+    }
+
     public ContaCorrente save(ContaCorrente contaCorrente) throws Exception {  
         String sql = "INSERT INTO conta_corrente (nome, idBanco, agencia, agencia_dv, contaCorrente, contaCorrente_dv, poupanca) "
                    + "VALUES(:nome, :idBanco, :agencia, :agenciaDv, :contaCorrente, :contaCorrenteDv, :poupanca)";        
