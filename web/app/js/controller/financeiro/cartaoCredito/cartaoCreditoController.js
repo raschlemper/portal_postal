@@ -93,6 +93,20 @@ app.controller('CartaoCreditoController', ['$scope', 'CartaoCreditoService', 'Mo
         };
 
         $scope.excluir = function(idCartaoCredito) {
+            CartaoCreditoService.getConta(idCartaoCredito)
+                .then(function(cartaoCredito) {   
+                    if(cartaoCredito.contas.length) {
+                        modalMessage("Este cartão crédito não pode ser excluído! <br/> Existem Contas vinculadas a este cartão de crédito.");
+                    } else {
+                        excluir(idCartaoCredito);
+                    }
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        }; 
+        
+        var excluir = function(idCartaoCredito) {
             modalExcluir().then(function() {
                 CartaoCreditoService.delete(idCartaoCredito)
                     .then(function(data) { 
@@ -102,8 +116,8 @@ app.controller('CartaoCreditoController', ['$scope', 'CartaoCreditoService', 'Mo
                     .catch(function(e) {
                         modalMessage(e);
                     });
-            });
-        }; 
+            });            
+        }
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);

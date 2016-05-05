@@ -8,7 +8,7 @@ public class Banco {
     private String nome;
     private Integer numero;
     private String website;
-    private List<ContaCorrente> contaCorrente;
+    private List<ContaCorrente> contaCorrentes;
 
     public Integer getIdBanco() {
         return idBanco;
@@ -42,12 +42,12 @@ public class Banco {
         this.website = website;
     }
 
-    public List<ContaCorrente> getContaCorrente() {
-        return contaCorrente;
+    public List<ContaCorrente> getContaCorrentes() {
+        return contaCorrentes;
     }
 
-    public void setContaCorrente(List<ContaCorrente> contaCorrente) {
-        this.contaCorrente = contaCorrente;
+    public void setContaCorrentes(List<ContaCorrente> contaCorrentes) {
+        this.contaCorrentes = contaCorrentes;
     }
     
 }

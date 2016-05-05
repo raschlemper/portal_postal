@@ -121,6 +121,30 @@ public class PlanoContaController {
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
+    } 
+    
+    @GET
+    @Path("/{idPlanoConta}/lancamento")
+    @Produces(MediaType.APPLICATION_JSON)
+    public PlanoConta findLancamento(@PathParam("idPlanoConta") Integer idPlanoConta) {
+        try {
+            init();    
+            return planoContaService.findLancamento(idPlanoConta);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }
+    
+    @GET
+    @Path("/{idPlanoConta}/lancamento/programado")
+    @Produces(MediaType.APPLICATION_JSON)
+    public PlanoConta findLancamentoProgramado(@PathParam("idPlanoConta") Integer idPlanoConta) {
+        try {
+            init();    
+            return planoContaService.findLancamentoProgramado(idPlanoConta);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
     }
     
     @POST

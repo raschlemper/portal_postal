@@ -78,6 +78,20 @@ app.controller('BancoController', ['$scope', 'BancoService', 'ModalService',
         };
 
         $scope.excluir = function(idBanco) {
+            BancoService.getContaCorrente(idBanco)
+                .then(function(banco) {   
+                    if(banco.contaCorrentes.length) {
+                        modalMessage("Este banco não pode ser excluído! <br/> Existem Contas Correntes vinculadas a este banco.");
+                    } else {
+                        excluir(idBanco);
+                    }
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        }; 
+        
+        var excluir = function(idBanco) {
             modalExcluir().then(function() {
                 BancoService.delete(idBanco)
                     .then(function(data) { 
@@ -87,8 +101,8 @@ app.controller('BancoController', ['$scope', 'BancoService', 'ModalService',
                     .catch(function(e) {
                         modalMessage(e);
                     });
-            });
-        }; 
+                });
+        }
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);

@@ -14,6 +14,8 @@ public class PlanoConta {
     private Map<Integer,Integer> estrutura;
     private PlanoConta grupo;
     private List<PlanoConta> contas;
+    private List<Lancamento> lancamentos;
+    private List<LancamentoProgramado> lancamentosProgramados;
 
     public Integer getIdPlanoConta() {
         return idPlanoConta;
@@ -77,6 +79,22 @@ public class PlanoConta {
 
     public void setContas(List<PlanoConta> contas) {
         this.contas = contas;
+    }
+
+    public List<Lancamento> getLancamentos() {
+        return lancamentos;
+    }
+
+    public void setLancamentos(List<Lancamento> lancamentos) {
+        this.lancamentos = lancamentos;
+    }
+
+    public List<LancamentoProgramado> getLancamentosProgramados() {
+        return lancamentosProgramados;
+    }
+
+    public void setLancamentosProgramados(List<LancamentoProgramado> lancamentosProgramados) {
+        this.lancamentosProgramados = lancamentosProgramados;
     }
     
 }

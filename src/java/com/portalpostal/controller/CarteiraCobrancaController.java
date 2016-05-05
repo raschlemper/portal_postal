@@ -63,6 +63,18 @@ public class CarteiraCobrancaController {
     }   
     
     @GET
+    @Path("/{idCarteiraCobranca}/conta")
+    @Produces(MediaType.APPLICATION_JSON)
+    public CarteiraCobranca findConta(@PathParam("idCarteiraCobranca") Integer idCarteiraCobranca) {
+        try {
+            init();    
+            return carteiraCobrancaService.findConta(idCarteiraCobranca);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }   
+    
+    @GET
     @Path("/{idContaCorrente}/beneficiario/{beneficiario}/{beneficiarioDv}/carteira/{carteira}")
     @Produces(MediaType.APPLICATION_JSON)
     public CarteiraCobranca findByCarteiraCobranca(@PathParam("idContaCorrente") Integer idContaCorrente, 

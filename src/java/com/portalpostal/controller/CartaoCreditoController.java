@@ -62,6 +62,18 @@ public class CartaoCreditoController {
         }
     }  
     
+    @GET
+    @Path("/{idCartaoCredito}/conta")
+    @Produces(MediaType.APPLICATION_JSON)
+    public CartaoCredito findConta(@PathParam("idCartaoCredito") Integer idCartaoCredito) {
+        try {
+            init();    
+            return cartaoCreditoService.findConta(idCartaoCredito);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }  
+    
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)

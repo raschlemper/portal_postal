@@ -1,5 +1,7 @@
 package com.portalpostal.service;
 
+import com.portalpostal.dao.LancamentoDAO;
+import com.portalpostal.dao.LancamentoProgramadoDAO;
 import com.portalpostal.dao.PlanoContaDAO;
 import com.portalpostal.model.PlanoConta;
 import java.util.HashMap;
@@ -9,9 +11,13 @@ import java.util.Map;
 public class PlanoContaService {
     
     private final PlanoContaDAO planoContaDAO;
+    private final LancamentoDAO lancamentoDAO;
+    private final LancamentoProgramadoDAO lancamentoProgramadoDAO;
 
     public PlanoContaService(String nomeBD) {
         planoContaDAO = new PlanoContaDAO(nomeBD);
+        lancamentoDAO = new LancamentoDAO(nomeBD);
+        lancamentoProgramadoDAO = new LancamentoProgramadoDAO(nomeBD);
     }
     
     public List<PlanoConta> findAll() throws Exception {
@@ -23,6 +29,18 @@ public class PlanoContaService {
         findContas(grupos, null, null);
         return grupos;
     }  
+
+    public PlanoConta findLancamento(Integer idPlanoConta) throws Exception {
+        PlanoConta planoConta = find(idPlanoConta);
+        planoConta.setLancamentos(lancamentoDAO.findByPlanoConta(idPlanoConta));
+        return planoConta;
+    } 
+
+    public PlanoConta findLancamentoProgramado(Integer idPlanoConta) throws Exception {
+        PlanoConta planoConta = find(idPlanoConta);
+        planoConta.setLancamentosProgramados(lancamentoProgramadoDAO.findByPlanoConta(idPlanoConta));
+        return planoConta;
+    }
 
     public List<PlanoConta> findByTipo(Integer tipo) throws Exception {
         List<PlanoConta> grupos = planoContaDAO.findByTipo(tipo); 

@@ -3,7 +3,6 @@ package com.portalpostal.service;
 import com.portalpostal.dao.BancoDAO;
 import com.portalpostal.dao.ContaCorrenteDAO;
 import com.portalpostal.model.Banco;
-import com.portalpostal.model.ContaCorrente;
 import java.util.List;
 
 public class BancoService {
@@ -26,7 +25,7 @@ public class BancoService {
     
     public Banco findContaCorrente(Integer idBanco) throws Exception {
         Banco banco = find(idBanco);
-        banco.setContaCorrente(contaCorrenteDAO.findByBanco(idBanco));
+        banco.setContaCorrentes(contaCorrenteDAO.findByBanco(idBanco));
         return banco;
     } 
     

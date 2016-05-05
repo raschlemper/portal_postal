@@ -60,6 +60,16 @@ public class LancamentoDAO extends GenericDAO {
         return findAll(sql, params, lancamentoHandler);
     }
 
+    public List<Lancamento> findByPlanoConta(Integer idPlanoConta) throws Exception {
+        String sql = "SELECT lancamento.* FROM lancamento, plano_conta "
+                   + "WHERE lancamento.idPlanoConta = plano_conta.idPlanoConta "
+                   + "AND lancamento.idPlanoConta = :idPlanoConta "
+                   + "ORDER BY lancamento.dataLancamento";        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idPlanoConta", idPlanoConta);       
+        return findAll(sql, params, lancamentoHandler);
+    }
+
     public List<Lancamento> findByLancamentoProgramado(Integer idLancamentoProgramado) throws Exception {
         String sql = "SELECT * FROM lancamento "
                    + "WHERE lancamento.idLancamentoProgramado = :idLancamentoProgramado";

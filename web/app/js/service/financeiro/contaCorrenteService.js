@@ -13,6 +13,21 @@ app.factory('ContaCorrenteService', function($http, PromiseService) {
             return PromiseService.execute(
                 $http.get(_contextPath + "/api/financeiro/contacorrente/" + idContaCorrente));
         },
+
+        getCartaoCredito: function(idContaCorrente) {
+            return PromiseService.execute(
+                $http.get(_contextPath + "/api/financeiro/contacorrente/" + idContaCorrente + '/cartaocredito'));
+        },
+
+        getCarteiraCobranca: function(idContaCorrente) {
+            return PromiseService.execute(
+                $http.get(_contextPath + "/api/financeiro/contacorrente/" + idContaCorrente + '/carteiracobranca'));
+        },
+
+        getConta: function(idContaCorrente) {
+            return PromiseService.execute(
+                $http.get(_contextPath + "/api/financeiro/contacorrente/" + idContaCorrente + '/conta'));
+        },
         
         getByContaCorrente: function(banco, agencia, agenciaDv, contacorrente, contacorrenteDv) {
             return PromiseService.execute(

@@ -65,6 +65,42 @@ public class ContaCorrenteController {
     }  
     
     @GET
+    @Path("/{idContaCorrente}/cartaocredito")
+    @Produces(MediaType.APPLICATION_JSON)
+    public ContaCorrente findCartaoCredito(@PathParam("idContaCorrente") Integer idContaCorrente) {
+        try {
+            init();    
+            return contaCorrenteService.findCartaoCredito(idContaCorrente);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }   
+    
+    @GET
+    @Path("/{idContaCorrente}/carteiracobranca")
+    @Produces(MediaType.APPLICATION_JSON)
+    public ContaCorrente findCarteiraCobranca(@PathParam("idContaCorrente") Integer idContaCorrente) {
+        try {
+            init();    
+            return contaCorrenteService.findCarteiraCobranca(idContaCorrente);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }    
+    
+    @GET
+    @Path("/{idContaCorrente}/conta")
+    @Produces(MediaType.APPLICATION_JSON)
+    public ContaCorrente findConta(@PathParam("idContaCorrente") Integer idContaCorrente) {
+        try {
+            init();    
+            return contaCorrenteService.findConta(idContaCorrente);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }  
+    
+    @GET
     @Path("/banco/{banco}/agencia/{agencia}/{agenciaDv}/contacorrente/{contacorrente}/{contacorrenteDv}")
     @Produces(MediaType.APPLICATION_JSON)
     public ContaCorrente findByContaCorrente(@PathParam("banco") Integer banco, @PathParam("agencia") Integer agencia,

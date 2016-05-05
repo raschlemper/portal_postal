@@ -69,6 +69,16 @@ app.factory('PlanoContaService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/planoconta/" + idPlanoConta));
         },
 
+        getLancamento: function(idPlanoConta) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/planoconta/" + idPlanoConta + '/lancamento'));
+        },
+
+        getLancamentoProgramado: function(idPlanoConta) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/planoconta/" + idPlanoConta + '/lancamento/programado'));
+        },
+
         save: function(data) {
             return PromiseService.execute(
                     $http.post(_contextPath + "/api/financeiro/planoconta/", data));

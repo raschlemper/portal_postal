@@ -14,6 +14,11 @@ app.factory('BancoService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/banco/" + idBanco));
         },
 
+        getContaCorrente: function(idBanco) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/banco/" + idBanco + '/contacorrente'));
+        },
+
         getByNumero: function(numero) {
             return PromiseService.execute(
                     $http.get(_contextPath + "/api/financeiro/banco/numero/" + numero));

@@ -54,6 +54,18 @@ public class LancamentoProgramadoDAO extends GenericDAO {
         return findAll(sql, params, lancamentoProgramadoHandler);
     }
 
+    public List<LancamentoProgramado> findByPlanoConta(Integer idPlanoConta) throws Exception {
+        String sql = "SELECT * FROM lancamento_programado, plano_conta, tipo_documento, tipo_forma_pagamento "
+                   + "WHERE lancamento_programado.idPlanoConta = plano_conta.idPlanoConta "
+                   + "AND lancamento_programado.idTipoDocumento = tipo_documento.idTipoDocumento " 
+                   + "AND lancamento_programado.idTipoFormaPagamento = tipo_forma_pagamento.idTipoFormaPagamento " 
+                   + "AND lancamento_programado.idPlanoConta = :idPlanoConta " 
+                   + "ORDER BY lancamento_programado.dataVencimento";        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idPlanoConta", idPlanoConta);       
+        return findAll(sql, params, lancamentoProgramadoHandler);
+    }
+
     public LancamentoProgramado save(LancamentoProgramado lancamentoProgramado) throws Exception {  
         String sql = "INSERT INTO lancamento_programado (idConta, idPlanoConta, tipo, favorecido, "
                    + "numero, idTipoDocumento, idTipoFormaPagamento, frequencia, quantidadeParcela, numeroParcela, competencia, "

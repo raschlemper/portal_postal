@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ContaController', ['$scope', 'ContaService', 'ModalService', 'LISTAS',
-    function ($scope, ContaService, ModalService, LISTAS) {
+app.controller('ContaController', ['$scope', '$q', 'ContaService', 'ModalService', 'LISTAS',
+    function ($scope, $q, ContaService, ModalService, LISTAS) {
 
         var init = function () {
             $scope.tipos = LISTAS.tipoConta;
@@ -95,6 +95,18 @@ app.controller('ContaController', ['$scope', 'ContaService', 'ModalService', 'LI
         };
 
         $scope.excluir = function(idConta) {
+            $q.all([ContaService.getLancamento(idConta),
+                    ContaService.getLancamentoProgramado(idConta)])
+                .then(function(values) {   
+                    if(values[0].lancamentos.length || values[1].lancamentosProgramados.length) {
+                        modalMessage("Esta conta não pode ser excluída! <br/> Existem Lançamentos vinculados a esta conta.");
+                    } else {
+                        excluir(idConta);
+                    }
+                });
+        }; 
+        
+        var excluir = function(idConta) {
             modalExcluir().then(function() {
                 ContaService.delete(idConta)
                     .then(function(data) { 
@@ -105,7 +117,7 @@ app.controller('ContaController', ['$scope', 'ContaService', 'ModalService', 'LI
                         modalMessage(e);
                     });
             });
-        }; 
+        }
         
         var ajustarDados = function(data) {            
             data.tipo = data.tipo.id;

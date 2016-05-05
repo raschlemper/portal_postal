@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ContaCorrenteController', ['$scope', '$filter', 'ContaCorrenteService', 'ModalService',
-    function ($scope, $filter, ContaCorrenteService, ModalService) {
+app.controller('ContaCorrenteController', ['$scope', '$filter', '$q', 'ContaCorrenteService', 'ModalService',
+    function ($scope, $filter, $q, ContaCorrenteService, ModalService) {
 
         var init = function () {
             $scope.contaCorrentes = [];
@@ -97,6 +97,23 @@ app.controller('ContaCorrenteController', ['$scope', '$filter', 'ContaCorrenteSe
         };
 
         $scope.excluir = function(idContaCorrente) {
+            $q.all([ContaCorrenteService.getCartaoCredito(idContaCorrente),
+                    ContaCorrenteService.getCarteiraCobranca(idContaCorrente),
+                    ContaCorrenteService.getConta(idContaCorrente)])
+                .then(function(values) {   
+                    if(values[0].cartaoCreditos.length) {
+                        modalMessage("Esta conta corrente não pode ser excluída! <br/> Existem Cartões de Crédito vinculados a esta conta corrente.");
+                    } else if(values[1].carteiraCobrancas.length) {
+                        modalMessage("Esta conta corrente não pode ser excluída! <br/> Existem Carteiras de Cobrança vinculadas a esta conta corrente.");
+                    } else if(values[2].contas.length) {
+                        modalMessage("Esta conta corrente não pode ser excluída! <br/> Existem Contas vinculadas a esta conta corrente.");
+                    } else {
+                        excluir(idContaCorrente);
+                    }
+                });
+        }; 
+        
+        var excluir = function(idContaCorrente) {
             modalExcluir().then(function() {
                 ContaCorrenteService.delete(idContaCorrente)
                     .then(function(data) { 
@@ -106,8 +123,8 @@ app.controller('ContaCorrenteController', ['$scope', '$filter', 'ContaCorrenteSe
                     .catch(function(e) {
                         modalMessage(e);
                     });
-            });
-        }; 
+            });            
+        }
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);

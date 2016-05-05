@@ -14,6 +14,11 @@ app.factory('CartaoCreditoService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/cartaocredito/" + idCartaoCredito));
         },
 
+        getConta: function(idCartaoCredito, callback) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/cartaocredito/" + idCartaoCredito + '/conta'));
+        },
+
         save: function(data, callback) {
             return PromiseService.execute(
                     $http.post(_contextPath + "/api/financeiro/cartaocredito/", data));

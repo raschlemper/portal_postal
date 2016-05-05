@@ -96,6 +96,20 @@ app.controller('CarteiraCobrancaController', ['$scope', '$filter', 'CarteiraCobr
         };
 
         $scope.excluir = function(idCarteiraCobranca) {
+            CarteiraCobrancaService.getConta(idCarteiraCobranca)
+                .then(function(carteiraCobranca) {   
+                    if(carteiraCobranca.contas.length) {
+                        modalMessage("Esta carteira de cobrança não pode ser excluída! <br/> Existem Contas vinculadas a esta carteira de cobrança.");
+                    } else {
+                        excluir(idCarteiraCobranca);
+                    }
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        }; 
+        
+        var excluir = function(idCarteiraCobranca) {
             modalExcluir().then(function() {
                 CarteiraCobrancaService.delete(idCarteiraCobranca)
                     .then(function(data) { 
@@ -106,7 +120,7 @@ app.controller('CarteiraCobrancaController', ['$scope', '$filter', 'CarteiraCobr
                         modalMessage(e);
                     });
             });
-        }; 
+        }
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);

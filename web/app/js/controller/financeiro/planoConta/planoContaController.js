@@ -96,6 +96,18 @@ app.controller('PlanoContaController', ['$scope', '$q', 'PlanoContaService', 'Mo
         };
 
         $scope.excluir = function(idPlanoConta) {
+            $q.all([PlanoContaService.getLancamento(idPlanoConta),
+                    PlanoContaService.getLancamentoProgramado(idPlanoConta)])
+                .then(function(values) {   
+                    if(values[0].lancamentos.length || values[1].lancamentosProgramados.length) {
+                        modalMessage("Este plano de conta não pode ser excluído! <br/> Existem Lançamentos vinculados a este plano de conta.");
+                    } else {
+                        excluir(idPlanoConta);
+                    }
+                });
+        }; 
+        
+        var excluir = function(idPlanoConta) {
             modalExcluir().then(function() {
                 PlanoContaService.delete(idPlanoConta)
                     .then(function(data) { 
@@ -106,7 +118,7 @@ app.controller('PlanoContaController', ['$scope', '$q', 'PlanoContaService', 'Mo
                         modalMessage(e);
                     });
             });
-        }; 
+        }
         
         var ajustarDados = function(data, grupo) { 
             delete data.contas;

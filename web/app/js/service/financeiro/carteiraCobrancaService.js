@@ -13,6 +13,11 @@ app.factory('CarteiraCobrancaService', function($http, PromiseService) {
             return PromiseService.execute(
                 $http.get(_contextPath + "/api/financeiro/carteiracobranca/" + idCarteiraCobranca));
         },
+
+        getConta: function(idCarteiraCobranca, callback) {
+            return PromiseService.execute(
+                $http.get(_contextPath + "/api/financeiro/carteiracobranca/" + idCarteiraCobranca + '/conta'));
+        },
         
         getByCarteiraCobranca: function(idContaCorrente, beneficiario, beneficiarioDv, carteira) {
             return PromiseService.execute(
