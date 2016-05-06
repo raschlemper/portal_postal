@@ -4,6 +4,8 @@ import com.portalpostal.dao.ContaDAO;
 import com.portalpostal.dao.LancamentoDAO;
 import com.portalpostal.dao.LancamentoProgramadoDAO;
 import com.portalpostal.model.Conta;
+import com.portalpostal.model.Lancamento;
+import com.portalpostal.model.LancamentoProgramado;
 import java.util.List;
 
 public class ContaService {
@@ -51,7 +53,16 @@ public class ContaService {
     } 
     
     public Conta delete(Integer idConta) throws Exception {
+        if(!podeExcluir(idConta)) throw new Exception("Esta conta não pode ser excluída!"); 
         return contaDAO.remove(idConta);
-    }   
+    }     
+    
+    public boolean podeExcluir(Integer idConta) throws Exception {
+        List<Lancamento> lancamentos = lancamentoDAO.findByConta(idConta);
+        if(!lancamentos.isEmpty()) return false;
+        List<LancamentoProgramado> lancamentoProgramados = lancamentoProgramadoDAO.findByConta(idConta);
+        if(!lancamentoProgramados.isEmpty()) return false;
+        return true;                
+    }  
     
 }

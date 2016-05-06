@@ -3,6 +3,7 @@ package com.portalpostal.service;
 import com.portalpostal.dao.CarteiraCobrancaDAO;
 import com.portalpostal.dao.ContaDAO;
 import com.portalpostal.model.CarteiraCobranca;
+import com.portalpostal.model.Conta;
 import java.util.List;
 
 public class CarteiraCobrancaService {
@@ -40,8 +41,15 @@ public class CarteiraCobrancaService {
     } 
     
     public CarteiraCobranca delete(Integer idCarteiraCobranca) throws Exception {
+        if(!podeExcluir(idCarteiraCobranca)) throw new Exception("Esta carteira de cobrança não pode ser excluída!"); 
         return carteiraCobrancaDAO.remove(idCarteiraCobranca);
-    }   
+    }       
+    
+    public boolean podeExcluir(Integer idCarteiraCobranca) throws Exception {
+        List<Conta> contas = contaDAO.findByCarteiraCobranca(idCarteiraCobranca);
+        if(!contas.isEmpty()) return false;
+        return true;                
+    } 
     
     public CarteiraCobranca findByCarteiraCobranca(Integer idContaCorrente, Integer codigoBeneficiario, 
             Integer codigoBeneficiarioDv, Integer codigoCarteira) throws Exception {

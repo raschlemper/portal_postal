@@ -3,6 +3,7 @@ package com.portalpostal.service;
 import com.portalpostal.dao.CartaoCreditoDAO;
 import com.portalpostal.dao.ContaDAO;
 import com.portalpostal.model.CartaoCredito;
+import com.portalpostal.model.Conta;
 import java.util.List;
 
 public class CartaoCreditoService {
@@ -38,7 +39,14 @@ public class CartaoCreditoService {
     } 
     
     public CartaoCredito delete(Integer idCartaoCredito) throws Exception {
+        if(!podeExcluir(idCartaoCredito)) throw new Exception("Este cartão de crédito não pode ser excluído!"); 
         return cartaoCreditoDAO.remove(idCartaoCredito);
-    }   
+    }     
+    
+    public boolean podeExcluir(Integer idCartaoCredito) throws Exception {
+        List<Conta> contas = contaDAO.findByCartaoCredito(idCartaoCredito);
+        if(!contas.isEmpty()) return false;
+        return true;                
+    } 
     
 }

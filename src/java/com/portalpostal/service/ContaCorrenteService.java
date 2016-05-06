@@ -4,6 +4,9 @@ import com.portalpostal.dao.CartaoCreditoDAO;
 import com.portalpostal.dao.CarteiraCobrancaDAO;
 import com.portalpostal.dao.ContaCorrenteDAO;
 import com.portalpostal.dao.ContaDAO;
+import com.portalpostal.model.CartaoCredito;
+import com.portalpostal.model.CarteiraCobranca;
+import com.portalpostal.model.Conta;
 import com.portalpostal.model.ContaCorrente;
 import java.util.List;
 
@@ -58,8 +61,19 @@ public class ContaCorrenteService {
     } 
     
     public ContaCorrente delete(Integer idContaCorrente) throws Exception {
+        if(!podeExcluir(idContaCorrente)) throw new Exception("Esta conta corrente não pode ser excluída!");
         return contaCorrenteDAO.remove(idContaCorrente);
-    }   
+    }       
+    
+    public boolean podeExcluir(Integer idContaCorrente) throws Exception {
+        List<CartaoCredito> cartaoCreditos = cartaoCreditoDAO.findByContaCorrente(idContaCorrente);
+        if(!cartaoCreditos.isEmpty()) return false;
+        List<CarteiraCobranca> carteiraCobrancas = carteiraCobrancaDAO.findByContaCorrente(idContaCorrente);
+        if(!carteiraCobrancas.isEmpty()) return false;
+        List<Conta> contas = contaDAO.findByContaCorrente(idContaCorrente);
+        if(!contas.isEmpty()) return false;
+        return true;                
+    } 
     
     public ContaCorrente findByContaCorrente(Integer idBanco, Integer agencia, Integer agenciaDv, 
             Integer contaCorrente, Integer contaCorrenteDv) throws Exception {

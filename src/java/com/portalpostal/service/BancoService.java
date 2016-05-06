@@ -3,6 +3,7 @@ package com.portalpostal.service;
 import com.portalpostal.dao.BancoDAO;
 import com.portalpostal.dao.ContaCorrenteDAO;
 import com.portalpostal.model.Banco;
+import com.portalpostal.model.ContaCorrente;
 import java.util.List;
 
 public class BancoService {
@@ -44,8 +45,15 @@ public class BancoService {
     } 
     
     public Banco delete(Integer idBanco) throws Exception {
+        if(!podeExcluir(idBanco)) throw new Exception("Este banco não pode ser excluído!"); 
         return bancoDAO.remove(idBanco);
-    }   
+    }    
+    
+    public boolean podeExcluir(Integer idBanco) throws Exception {
+        List<ContaCorrente> contaCorrentes = contaCorrenteDAO.findByBanco(idBanco);
+        if(!contaCorrentes.isEmpty()) return false;
+        return true;                
+    } 
     
     private void validation(Banco banco) throws Exception {  
         if(existeBanco(banco)) {

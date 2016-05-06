@@ -3,6 +3,8 @@ package com.portalpostal.service;
 import com.portalpostal.dao.LancamentoDAO;
 import com.portalpostal.dao.LancamentoProgramadoDAO;
 import com.portalpostal.dao.PlanoContaDAO;
+import com.portalpostal.model.Lancamento;
+import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.model.PlanoConta;
 import java.util.HashMap;
 import java.util.List;
@@ -80,8 +82,17 @@ public class PlanoContaService {
     } 
     
     public PlanoConta delete(Integer idPlanoConta) throws Exception {
+        if(!podeExcluir(idPlanoConta)) throw new Exception("Este plano de conta não pode ser excluído!"); 
         return planoContaDAO.remove(idPlanoConta);
-    } 
+    }     
+    
+    public boolean podeExcluir(Integer idPlanoConta) throws Exception {
+        List<Lancamento> lancamentos = lancamentoDAO.findByPlanoConta(idPlanoConta);
+        if(!lancamentos.isEmpty()) return false;
+        List<LancamentoProgramado> lancamentoProgramados = lancamentoProgramadoDAO.findByPlanoConta(idPlanoConta);
+        if(!lancamentoProgramados.isEmpty()) return false;
+        return true;                
+    }  
     
     private void findContas(List<PlanoConta> contas, Map<Integer, Integer> estrutura, Integer nivel) throws Exception { 
         nivel = getNivel(nivel);

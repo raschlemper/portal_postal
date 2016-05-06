@@ -510,6 +510,14 @@
                                             <option value="30" selected>30 Dias</option>
                                         </select>
                                     </dd>     
+                                    <dd>
+                                        <label>Solicitação de Checklist:(Apenas clientes previamente habilitados devem utilizar essa opção)</label>
+                                        <select style="width: 300px;" name="cklist">						
+                                            <option value="0">Sem Solicitação de Checklist</option>
+                                            <option value="2">Solicitação de Checklist Celular </option>
+                                            <option value="4">Solicitação de Checklist Eletrônico</option>                                            
+                                        </select>
+                                    </dd>     
                                 </li>
                                 <li>
                                     <dd style="width: 100%;">

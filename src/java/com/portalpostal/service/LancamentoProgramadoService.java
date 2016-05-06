@@ -41,8 +41,15 @@ public class LancamentoProgramadoService {
     } 
     
     public LancamentoProgramado delete(Integer idLancamentoProgramado) throws Exception {
+        if(!podeExcluir(idLancamentoProgramado)) throw new Exception("Esta conta não pode ser excluída!"); 
         return lancamentoProgramadoDAO.remove(idLancamentoProgramado);
-    } 
+    }   
+    
+    public boolean podeExcluir(Integer idLancamentoProgramado) throws Exception {
+        List<Lancamento> lancamentos = lancamentoDAO.findByLancamentoProgramado(idLancamentoProgramado);
+        if(!lancamentos.isEmpty()) return false;
+        return true;                
+    }  
     
     public LancamentoProgramado createLancamento(LancamentoProgramado lancamentoProgramado) throws Exception {
         List<Lancamento> lancamentos = lancamentoProgramado.getLancamentos();
