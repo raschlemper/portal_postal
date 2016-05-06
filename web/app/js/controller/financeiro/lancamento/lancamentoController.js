@@ -190,7 +190,6 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         $scope.editar = function(conta, idLancamento) {
             LancamentoService.get(idLancamento)
                 .then(function(lancamento) {
-                    if(!validaConciliado(lancamento)) return;
                     modalSalvar(conta, lancamento).then(function(result) {
                         result = ajustarDados(result);
                         LancamentoService.update(idLancamento, result)
@@ -249,10 +248,6 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 .catch(function(e) {
                     modalMessage(e);
                 });
-                
-                
-            
-            
         };
         
         var validaConciliado = function(idLancamento) {

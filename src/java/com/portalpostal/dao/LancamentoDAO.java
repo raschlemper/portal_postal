@@ -157,7 +157,7 @@ public class LancamentoDAO extends GenericDAO {
         params.put("situacao", lancamento.getSituacao().ordinal());  
         params.put("modelo", lancamento.getModelo().ordinal());  
         params.put("numeroLoteConciliado", lancamento.getNumeroLoteConciliado());
-        params.put("autenticacao", lancamento.getHistorico());      
+        params.put("autenticacao", lancamento.getAutenticacao());      
         params.put("historico", lancamento.getHistorico());      
         params.put("observacao", lancamento.getObservacao());        
         Integer idLancamento = save(sql, params, lancamentoHandler);
@@ -171,7 +171,7 @@ public class LancamentoDAO extends GenericDAO {
                    + "numeroParcela = :numeroParcela, competencia = :competencia, dataEmissao = :dataEmissao, dataVencimento = :dataVencimento, "
                    + "dataLancamento = :dataLancamento, dataCompensacao = :dataCompensacao, valor = :valor, "
                    + "valorDesconto = :valorDesconto, valorJuros = :valorJuros, valorMulta = :valorMulta, "
-                   + "situacao = :situacao, modelo = :modelo, autencticacao = :autenticacao, historico = :historico, observacao = :observacao "
+                   + "situacao = :situacao, modelo = :modelo, autenticacao = :autenticacao, historico = :historico, observacao = :observacao "
                    + "WHERE idLancamento = :idLancamento ";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamento", lancamento.getIdLancamento());
@@ -194,7 +194,7 @@ public class LancamentoDAO extends GenericDAO {
         params.put("situacao", lancamento.getSituacao().ordinal());  
         params.put("modelo", lancamento.getModelo().ordinal());  
         params.put("numeroLoteConciliado", lancamento.getNumeroLoteConciliado());
-        params.put("autenticacao", lancamento.getHistorico());      
+        params.put("autenticacao", lancamento.getAutenticacao());      
         params.put("historico", lancamento.getHistorico());     
         params.put("observacao", lancamento.getObservacao());     
         update(sql, params, lancamentoHandler);

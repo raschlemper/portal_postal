@@ -59,9 +59,17 @@
                                            placeholder="Histórico do lançamento"  ng-required="true"/>  
                                 </div>
                             </div>
+                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
+                                <label class="small">Autenticação</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                    <input class="form-control" type="text" name="autenticacao" ng-model="lancamento.autenticacao" 
+                                           placeholder="Autenticação do lançamento"/>  
+                                </div>
+                            </div>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <label class="small">Observação</label>
-                                <textarea class="form-control" rows="6" name="observacao" placeholder="" ng-model="lancamento.observacao"></textarea>       
+                                <textarea class="form-control" rows="3" name="observacao" placeholder="" ng-model="lancamento.observacao"></textarea>       
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">    
