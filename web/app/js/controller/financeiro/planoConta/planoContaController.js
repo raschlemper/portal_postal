@@ -39,7 +39,19 @@ app.controller('PlanoContaController', ['$scope', '$q', 'PlanoContaService', 'Mo
                 });
         };
 
-        $scope.salvar = function(idPlanoConta) {
+        $scope.salvar = function(idPlanoConta) {            
+            $q.all([PlanoContaService.getLancamento(idPlanoConta),
+                    PlanoContaService.getLancamentoProgramado(idPlanoConta)])
+                .then(function(values) {    
+                    if(values[0].lancamentos.length || values[1].lancamentosProgramados.length) {
+                        modalMessage("Não é permitido adicionar contas a um plano de conta que possua lançamentos vinculados.");
+                    } else {
+                        salvar(idPlanoConta);
+                    }
+                });
+        };
+        
+        var salvar = function(idPlanoConta) {                   
             PlanoContaService.get(idPlanoConta)
                 .then(function(planoConta) {                  
                     modalSalvar(planoConta, 'save')
@@ -65,7 +77,7 @@ app.controller('PlanoContaController', ['$scope', '$q', 'PlanoContaService', 'Mo
                 .catch(function(e) {
                     modalMessage(e);
                 });
-        };
+        }
 
         $scope.editar = function(idPlanoConta) {
             PlanoContaService.get(idPlanoConta)

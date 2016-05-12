@@ -68,19 +68,28 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         };
         
         var planoContas = function(tipo) {
-            PlanoContaService.findContaResultadoByTipo(tipo.id)
+            PlanoContaService.getStructureByTipo(tipo.id)
                 .then(function (data) {
                     $scope.planoContas = data;
+                    PlanoContaService.estrutura($scope.planoContas);
+                    $scope.planoContas = PlanoContaService.flatten($scope.planoContas);
+                    $scope.planoContas = criarPlanoContasLista($scope.planoContas);
                     if($scope.lancamentoProgramado.planoConta) {
-                        $scope.lancamentoProgramado.planoConta = ListaService.getPlanoContaValue($scope.planoContas, $scope.lancamentoProgramado.planoConta.idPlanoConta) || data[0];
+                        $scope.lancamentoProgramado.planoConta = ListaService.getPlanoContaValue($scope.planoContas, $scope.lancamentoProgramado.planoConta.idPlanoConta) || $scope.planoContas[0];
                     } else {
-                         $scope.lancamentoProgramado.planoConta  = data[0];
+                         $scope.lancamentoProgramado.planoConta  = $scope.planoContas[0];
                     }
                 })
                 .catch(function (e) {
                     console.log(e);
                 });
         };
+        
+        var criarPlanoContasLista = function(data) {
+            return _.filter(data, function(planoConta) { 
+                return !planoConta.ehGrupo;
+            });            
+        }
         
         var tipoDocumento = function() {
             TipoDocumentoService.getAll()

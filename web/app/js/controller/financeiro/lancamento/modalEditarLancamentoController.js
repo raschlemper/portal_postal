@@ -43,19 +43,28 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
         };
         
         var planoContas = function(tipo) {
-            PlanoContaService.findContaResultadoByTipo(tipo.id)
+            PlanoContaService.getStructureByTipo(tipo.id)
                 .then(function (data) {
                     $scope.planoContas = data;
+                    PlanoContaService.estrutura($scope.planoContas);
+                    $scope.planoContas = PlanoContaService.flatten($scope.planoContas);
+                    $scope.planoContas = criarPlanoContasLista($scope.planoContas);
                     if($scope.lancamento.planoConta) {
-                        $scope.lancamento.planoConta = ListaService.getPlanoContaValue($scope.planoContas, $scope.lancamento.planoConta.idPlanoConta) || data[0];
+                        $scope.lancamento.planoConta = ListaService.getPlanoContaValue($scope.planoContas, $scope.lancamento.planoConta.idPlanoConta) || $scope.planoContas[0];
                     } else {
-                         $scope.lancamento.planoConta  = data[0];
+                         $scope.lancamento.planoConta  = $scope.planoContas[0];
                     }
                 })
                 .catch(function (e) {
                     console.log(e);
                 });
         };
+        
+        var criarPlanoContasLista = function(data) {
+            return _.filter(data, function(planoConta) { 
+                return !planoConta.ehGrupo;
+            });            
+        }
         
         $scope.getTotal = function(lancamento) {
             var valor = lancamento.valor || 0;
