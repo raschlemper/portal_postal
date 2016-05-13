@@ -24,7 +24,8 @@ app.directive('appTable', function($filter) {
             
             var init = function () {   
                 scope.showCheckbox = false;  
-                scope.defaultFilter = true;              
+                scope.showMenu = false;        
+                scope.defaultFilter = true;      
                 scope.currentPage = 1; 
                 scope.maxSize = 5; 
                 scope.limitTo = scope.limits[0];

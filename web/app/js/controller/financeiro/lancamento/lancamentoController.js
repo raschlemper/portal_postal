@@ -18,7 +18,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         
         var initTable = function() {            
             $scope.colunas = [              
-                {label: 'Tipo', column: 'tipo.descricao'},         
+                {label: '', column: 'tipo.descricao', headerClass: 'no-sort', filter: {name: 'tipoLancamento', args: ''}},         
                 {label: 'Data', column: 'dataLancamento', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
                 {label: 'Número', column: 'numero'},               
                 {label: 'Favorecido', column: 'favorecido'},                
@@ -66,6 +66,14 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 }
             }
         };
+        
+        var tipo = function(valor) {
+            if(valor === $scope.tipos[0].descricao) {
+                return '<di>R</div>';
+            } else if(valor === $scope.tipos[1].descricao) {
+                return 'D';                
+            }
+        }
         
         $scope.filter = function(lista, search) {
             lista = _.filter(lista, function(item) {

@@ -29,9 +29,13 @@
                 class="{{coluna.headerClass}}">
                 {{coluna.label}}
             </th>
-            <th class="no-sort text-center" width="100" ng-if="linha.events.edit">Alterar</th>
-            <th class="no-sort text-center" width="100" ng-if="linha.events.remove">Excluir</th>
-            <th class="no-sort text-center" width="100" ng-if="linha.events.view">Detalhes</th>
+            
+            <th class="no-sort text-center" width="10" ng-show="showMenu"></th>
+            
+            <th class="no-sort text-center" width="60" ng-if="linha.events.edit" ng-show="!showMenu">Alterar</th>
+            <th class="no-sort text-center" width="60" ng-if="linha.events.remove" ng-show="!showMenu">Excluir</th>
+            <th class="no-sort text-center" width="60" ng-if="linha.events.view" ng-show="!showMenu">Detalhes</th>
+            
         </tr>
     </thead>
     <tbody>
@@ -39,24 +43,41 @@
             ng-class="linha.conditionalClass(item)">
             <td ng-show="showCheckbox"><input type="checkbox" ng-model="item.selected"></td>
             <td ng-repeat="coluna in colunas track by $index" class="coluna.dataClass">
-                <span ng-if="!coluna.literal">{{column(item, coluna)}}</span>
-                <span ng-if="coluna.literal">{{coluna.column}}</span>
+                <span ng-html-bind="{{column(item, coluna)}}"></span>
             </td>
-            <td align="center" ng-if="linha.events.edit">
+            
+            <td align="center" ng-show="showMenu">
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-lg fa-bars"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a href="#" ng-if="linha.events.edit" ng-click="linha.events.edit(item)"><i class="fa fa-pencil"></i> Alterar</a></li>
+                      <li><a href="#" ng-if="linha.events.remove" ng-click="linha.events.remove(item)"><i class="fa fa-trash"></i> Excluir</a></li>
+                      <li><a href="#" ng-if="linha.events.view" ng-click="linha.events.view(item)"><i class="fa fa-info"></i> Detalhes</a></li>
+                      <li ng-repeat="link in linha.events.links track by $index">
+                          <a href="#" ng-click="link.event(item)"><i class="fa" ng-class="link.icon"></i> {{link.name}}</a>
+                      </li>
+                    </ul>
+                </div>
+            </td>
+            
+            <td align="center" ng-if="linha.events.edit" ng-show="!showMenu">
                 <button class="btn btn-sm btn-warning" ng-click="linha.events.edit(item)">
                     <i class="fa fa-lg fa-pencil"></i>
                 </button>
             </td>
-            <td align="center" ng-if="linha.events.remove">
+            <td align="center" ng-if="linha.events.remove" ng-show="!showMenu">
                 <a class="btn btn-sm btn-danger" ng-click="linha.events.remove(item)">
                     <i class="fa fa-lg fa-trash"></i>
                 </a>
             </td>
-            <td align="center" ng-if="linha.events.view">
+            <td align="center" ng-if="linha.events.view" ng-show="!showMenu">
                 <a class="btn btn-sm btn-primary" ng-click="linha.events.view(item)">
                     <i class="fa fa-lg fa-info"></i>
                 </a>
             </td>
+            
         </tr>
     </tbody>
 </table>
