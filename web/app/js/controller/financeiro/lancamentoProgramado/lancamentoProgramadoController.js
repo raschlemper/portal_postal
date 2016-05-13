@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('LancamentoProgramadoController', ['$scope', '$filter', 'LancamentoProgramadoService', 'LancamentoService', 'ContaService', 'ModalService', 'DatePickerService', 'LISTAS',
-    function ($scope, $filter, LancamentoProgramadoService, LancamentoService, ContaService, ModalService, DatePickerService, LISTAS) {
+app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state', 'LancamentoProgramadoService', 'ContaService', 'ModalService', 'DatePickerService', 'LISTAS',
+    function ($scope, $filter, $state, LancamentoProgramadoService, ContaService, ModalService, DatePickerService, LISTAS) {
 
         var init = function () {
             $scope.lancamentoProgramados = [];
@@ -11,7 +11,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', 'Lancamen
             $scope.datepickerDataFim = angular.copy(DatePickerService.default);    
             $scope.lancSearch = {};
             contas();
-            initTable();      
+            initTable(); 
         };  
         
         var initTable = function() {            
@@ -58,7 +58,8 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', 'Lancamen
                 .then(function (data) {
                     $scope.contas = data;
                     $scope.conta = $scope.contas[0];
-                    todos($scope.conta);
+                    if($state.params.id) { $scope.editar($scope.conta, $state.params.id); }
+                    todos($scope.conta);  
                 })
                 .catch(function (e) {
                     console.log(e);

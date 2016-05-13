@@ -3069,3 +3069,15 @@ div.list-category div.list-group-item {
     text-decoration: none;
     background-color: #f5f5f5;
 }
+.col-tipo {
+    padding: 2px !important;
+}
+.col-compensado {
+    color: #9853C3;
+    padding: 2px !important;
+}
+.col-reconciliado {
+    color: #3CAB49;
+    padding: 2px !important;
+    font-size: 8pt !important;
+}

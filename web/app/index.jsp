@@ -53,6 +53,8 @@
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/placaFilter.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/renavamFilter.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/tipoLancamentoFilter.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/situacaoLancamentoFilter.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/conciliadoLancamentoFilter.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/animate/listOrdered.js"></script>
         
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/datepickerPopupDirective.js"></script>

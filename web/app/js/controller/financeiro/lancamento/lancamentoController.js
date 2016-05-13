@@ -18,7 +18,9 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         
         var initTable = function() {            
             $scope.colunas = [              
-                {label: '', column: 'tipo.descricao', headerClass: 'no-sort', filter: {name: 'tipoLancamento', args: ''}},         
+                {label: '', column: 'tipo', headerClass: 'no-sort', dataClass:'text-center col-tipo', filter: {name: 'tipoLancamento', args: ''}},         
+                {label: '', column: 'situacao', headerClass: 'no-sort', dataClass:'text-center col-compensado', filter: {name: 'situacaoLancamento', args: ''}},         
+                {label: '', column: 'numeroLoteConciliado', headerClass: 'no-sort', dataClass:'text-center col-reconciliado', filter: {name: 'conciliadoLancamento', args: ''}},         
                 {label: 'Data', column: 'dataLancamento', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
                 {label: 'Número', column: 'numero'},               
                 {label: 'Favorecido', column: 'favorecido'},                
@@ -54,9 +56,6 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                     },
                     view: function(lancamento) {
                         $scope.visualizar($scope.conta, lancamento.idLancamento);
-                    },
-                    table: function(lancamentos) {
-                        calculateSaldo(lancamentos);
                     }
                 }
             };
@@ -66,14 +65,6 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 }
             }
         };
-        
-        var tipo = function(valor) {
-            if(valor === $scope.tipos[0].descricao) {
-                return '<di>R</div>';
-            } else if(valor === $scope.tipos[1].descricao) {
-                return 'D';                
-            }
-        }
         
         $scope.filter = function(lista, search) {
             lista = _.filter(lista, function(item) {
@@ -122,7 +113,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 if(lancamento.tipo.codigo === 'despesa') { lancamento.pagamento = lancamento.valor * -1; } 
                 else if(lancamento.tipo.codigo === 'receita') { lancamento.deposito = lancamento.valor; }  
                 lancamento.numero = lancamento.numero + '-' + lancamento.numeroParcela;
-                return _.pick(lancamento, 'idLancamento', 'tipo', 'dataLancamento', 'numero', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico');
+                return _.pick(lancamento, 'idLancamento', 'tipo', 'dataLancamento', 'numero', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico', 'situacao', 'numeroLoteConciliado');
             })
         };
         
@@ -193,6 +184,14 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                         modalMessage(e);
                     });
             });
+        };
+
+        $scope.compensar = function(lancamentos) {
+            //TODO: Colocar uma mensagem perguntando se é para compensar todos os registros
+            lancamentos = _.filter(lancamentos, function(lancamento) {
+                return lancamento.selected;
+            });
+            console.log(lancamentos);
         };
 
         $scope.editar = function(conta, idLancamento) {

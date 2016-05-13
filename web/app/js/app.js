@@ -157,6 +157,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
                 templateUrl: 'partials/financeiro/lancamentoProgramado/lancamentoProgramado.html',
                 controller: 'LancamentoProgramadoController',
                 resolve: {}
+            })
+            .state('app.financeiro.lancamentoprogramado.edit', {
+                url: '/lancamento/programado/:id',
+                templateUrl: 'partials/financeiro/lancamentoProgramado/lancamentoProgramado.html',
+                controller: 'LancamentoProgramadoController',
+                resolve: {}
             });
 
     }]);

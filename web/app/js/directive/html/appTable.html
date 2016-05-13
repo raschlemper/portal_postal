@@ -42,8 +42,8 @@
         <tr ng-repeat="item in listaFiltrada = filterList(lista, search) | orderBy : predicate : reverse | limitTo : limitTo.value : start track by $index"
             ng-class="linha.conditionalClass(item)">
             <td ng-show="showCheckbox"><input type="checkbox" ng-model="item.selected"></td>
-            <td ng-repeat="coluna in colunas track by $index" class="coluna.dataClass">
-                <span ng-html-bind="{{column(item, coluna)}}"></span>
+            <td ng-repeat="coluna in colunas track by $index" ng-class="coluna.dataClass">
+                <span ng-bind-html="column(item, coluna)"></span>
             </td>
             
             <td align="center" ng-show="showMenu">
@@ -52,9 +52,9 @@
                         <i class="fa fa-lg fa-bars"></i>
                     </button>
                     <ul class="dropdown-menu">
-                      <li><a href="#" ng-if="linha.events.edit" ng-click="linha.events.edit(item)"><i class="fa fa-pencil"></i> Alterar</a></li>
-                      <li><a href="#" ng-if="linha.events.remove" ng-click="linha.events.remove(item)"><i class="fa fa-trash"></i> Excluir</a></li>
-                      <li><a href="#" ng-if="linha.events.view" ng-click="linha.events.view(item)"><i class="fa fa-info"></i> Detalhes</a></li>
+                      <li><a href="#" ng-if="linha.events.edit" ng-click="linha.events.edit(item)"><i class="fa fa-pencil fa-spc"></i>Alterar</a></li>
+                      <li><a href="#" ng-if="linha.events.remove" ng-click="linha.events.remove(item)"><i class="fa fa-trash fa-spc"></i>Excluir</a></li>
+                      <li><a href="#" ng-if="linha.events.view" ng-click="linha.events.view(item)"><i class="fa fa-info fa-spc"></i>Detalhes</a></li>
                       <li ng-repeat="link in linha.events.links track by $index">
                           <a href="#" ng-click="link.event(item)"><i class="fa" ng-class="link.icon"></i> {{link.name}}</a>
                       </li>

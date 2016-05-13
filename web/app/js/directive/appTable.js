@@ -116,6 +116,10 @@ app.directive('appTable', function($filter) {
                 scope.listaFiltrada = $filter('orderBy')(scope.listaFiltrada, scope.predicate, scope.reverse);
             };
             
+            scope.events.list = function() {
+                return scope.listaFiltrada;
+            }
+            
             scope.$watchCollection('listaFiltrada', function(newValue, oldValue) {
                 reset();
             });

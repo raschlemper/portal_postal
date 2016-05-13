@@ -123,7 +123,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-warning" ui-sref="app.financeiro.lancamentoprogramado">
+        <button type="button" class="btn btn-success" ng-click="programacao()" ng-if="lancamento.lancamentoProgramado.idLancamentoProgramado">
             <i class="fa fa-lg fa-clock-o fa-spc"></i> PROGRAMAÇÃO
         </button>
         <button type="button" class="btn btn-warning" ng-click="editar()">

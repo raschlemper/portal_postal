@@ -6,8 +6,8 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" >
                             <div class="row">
-                                <div class="col-md-4">Lista com todos os lançamentos</div>
-                                <div class="col-md-8">
+                                <div class="col-md-3">Lista com todos os lançamentos</div>
+                                <div class="col-md-9">
                                     <button class="btn btn-sm btn-primary pull-right" ng-click="salvar(conta)">
                                         <i class="fa fa-lg fa-plus fa-spc"></i> ADICIONAR 
                                     </button>                                    
@@ -19,13 +19,24 @@
                                     </button>                                    
                                     <button class="btn btn-sm btn-default pull-right" ng-click="conciliar(conta)" style="margin-right: 10px;">
                                         <i class="fa fa-lg fa-retweet fa-spc"></i> CONCILIAÇÃO 
+                                    </button>                                   
+                                    <button class="btn btn-sm btn-default pull-right" ng-click="compensar(events.list())" style="margin-right: 10px;">
+                                        <i class="fa fa-lg fa-arrow-circle-o-down fa-spc"></i> COMPENSAR 
                                     </button>
                                 </div>
                             </div>                              
                         </div>
                         <div class="panel-body">
                             <div class="dataTable_wrapper no-padding">
-                                 <app-table lista="lancamentosLista" colunas="colunas" linha="linha" events="events" filter="filter" search="lancSearch" default-filter="true" order-by-column="data">
+                                 <app-table lista="lancamentosLista" 
+                                            colunas="colunas" 
+                                            linha="linha" 
+                                            events="events" 
+                                            filter="filter" 
+                                            search="lancSearch" 
+                                            default-filter="true" 
+                                            order-by-column="data" 
+                                            show-checkbox="true">
                                     
                                     <filter-content>
                                         <div class="form-inline">
