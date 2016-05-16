@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -19,9 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 public class ServAlterarBoyColetaFixa extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -38,21 +38,20 @@ public class ServAlterarBoyColetaFixa extends HttpServlet {
              */
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ServAlterarBoyColetaFixa</title>");            
+            out.println("<title>Servlet ServAlterarBoyColetaFixa</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ServAlterarBoyColetaFixa at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
-        } finally {            
+        } finally {
             out.close();
         }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -66,8 +65,7 @@ public class ServAlterarBoyColetaFixa extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -77,21 +75,27 @@ public class ServAlterarBoyColetaFixa extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String nomeBD = request.getParameter("nomeBD");
-        String ids[] = request.getParameterValues("ids");
-        int idColetador = Integer.parseInt(request.getParameter("idColetador2"));
-        if(ids != null && ids.length>0 && idColetador>0){
-            for (int i = 0; i < ids.length; i++) {
-                String id = ids[i];
-                int idRota = Integer.parseInt(id);                
-                contrColetaFixa.alterarColetador(idColetador, idRota, nomeBD);
+
+        HttpSession sessao = request.getSession();
+        String expira = (String) sessao.getAttribute("empresa");
+        if (expira == null) {
+            response.sendRedirect("index.jsp?msgLog=3");
+        } else {
+            String nomeBD = request.getParameter("nomeBD");
+            String ids[] = request.getParameterValues("ids");
+            int idColetador = Integer.parseInt(request.getParameter("idColetador2"));
+            if (ids != null && ids.length > 0 && idColetador > 0) {
+                for (int i = 0; i < ids.length; i++) {
+                    String id = ids[i];
+                    int idRota = Integer.parseInt(id);
+                    contrColetaFixa.alterarColetador(idColetador, idRota, nomeBD);
+                }
             }
+
+            sessao.setAttribute("msg", "Rota fixa alterada com sucesso!");   
+            response.sendRedirect(request.getHeader("referer"));
         }
-        
-        //response.sendRedirect("Agencia/Coleta/coletador_lista.jsp?msg=Rota fixa alterada com sucesso!");             
-        response.sendRedirect(request.getHeader("referer")+"?msg=Rota fixa alterada com sucesso!");
-        
+
     }
 
     /**

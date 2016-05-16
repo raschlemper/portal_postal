@@ -181,19 +181,19 @@
                                     <%if (!pv.getNumObjeto().equals("avista")) {%>
                                     <td><input size="12" type="text" name="nObj<%= pv.getId()%>" value="<%= pv.getNumObjeto()%>" /></td>
                                     <%}%>
-                                    <td><input size="50" type="text" name="nome<%= pv.getId()%>" value="<%= pv.getNomeDes()%>" /></td>
-                                    <td><input type="text" name="empresa<%= pv.getId()%>" value="<%= pv.getEmpresaDes()%>" /></td>
+                                    <td><input size="50" type="text" name="nome<%= pv.getId()%>" value="<%= pv.getNomeDes()%>"  maxlength="70" /></td>
+                                    <td><input type="text" name="empresa<%= pv.getId()%>" value="<%= pv.getEmpresaDes()%>"  maxlength="40" /></td>
                                     <td><input type="text" name="cpf<%= pv.getId()%>" size="16" value="<%= pv.getCpfDes()%>" maxlength="18" onkeypress="mascara(this, maskCpfCnpj);" /></td>
                                     <td><input type="text" name="cep<%= pv.getId()%>" id="cep<%= pv.getId()%>" class="cep_input" size="8" value="<%= pv.getCepDes()%>" maxlength="9" onkeypress="mascara(this, maskCep);" /></td>
-                                    <td><input size="50" type="text" name="endereco<%= pv.getId()%>" value="<%= pv.getEnderecoDes()%>" /></td>
+                                    <td><input size="50" type="text" name="endereco<%= pv.getId()%>" value="<%= pv.getEnderecoDes()%>"  maxlength="80" /></td>
                                     <td><input type="text" name="numero<%= pv.getId()%>" size="3" value="<%= pv.getNumeroDes()%>" maxlength="8" onkeypress="mascara(this, maskNumero);" /></td>
-                                    <td><input type="text" name="complemento<%= pv.getId()%>" size="6" value="<%= pv.getComplementoDes()%>" maxlength="20" /></td>
-                                    <td><input size="30" type="text" name="bairro<%= pv.getId()%>" value="<%= pv.getBairroDes()%>" /></td>
-                                    <td><input size="30" type="text" name="cidade<%= pv.getId()%>" value="<%= pv.getCidadeDes()%>" /></td>
-                                    <td><input type="text" name="uf<%= pv.getId()%>" size="2" maxlength="2" value="<%= pv.getUfDes()%>" /></td>
-                                    <td><input size="40" type="text" name="aoscuidados<%= pv.getId()%>" value="<%= pv.getAos_cuidados()%>" /></td>
+                                    <td><input type="text" name="complemento<%= pv.getId()%>" size="6" value="<%= pv.getComplementoDes()%>" maxlength="50" /></td>
+                                    <td><input size="30" type="text" name="bairro<%= pv.getId()%>" value="<%= pv.getBairroDes()%>"  maxlength="50" /></td>
+                                    <td><input size="30" type="text" name="cidade<%= pv.getId()%>" value="<%= pv.getCidadeDes()%>"  maxlength="50" /></td>
+                                    <td><input type="text" name="uf<%= pv.getId()%>" size="2" maxlength="2" value="<%= pv.getUfDes()%>"  /></td>
+                                    <td><input size="40" type="text" name="aoscuidados<%= pv.getId()%>" value="<%= pv.getAos_cuidados()%>"  maxlength="25" /></td>
                                     <td>
-                                        <input type="text" name="nota<%= pv.getId()%>" size="8" value="<%= pv.getNotaFiscal()%>" />
+                                        <input type="text" name="nota<%= pv.getId()%>" size="8" value="<%= pv.getNotaFiscal()%>"  maxlength="40" />
                                         <input type="hidden" name="idDestinatario<%= pv.getId()%>" value="<%= pv.getIdDestinatario()%>" />
                                         <input type="hidden" name="id" value="<%= pv.getId()%>" />
                                     </td>
@@ -241,10 +241,10 @@
                                         </select>
                                     </td>
                                     <td><input type="text" name="vd<%= pv.getId()%>" size="5" value="<%= pv.getValor_declarado()%>" maxlength="8" onkeypress="mascara(this, maskReal);" /></td>
-                                    <td><input type="text" name="obs<%= pv.getId()%>" value="<%= pv.getObservacoes()%>" /></td>
-                                    <td><input type="text" name="conteudo<%= pv.getId()%>" value="<%= pv.getConteudo()%>" /></td>
-                                    <td><input type="text" name="celular<%= pv.getId()%>" value="<%= pv.getCelularDes()%>" /></td>
-                                    <td><input type="text" name="email<%= pv.getId()%>" value="<%= pv.getEmail_destinatario()%>" /></td>                                    
+                                    <td><input type="text" name="obs<%= pv.getId()%>" value="<%= pv.getObservacoes()%>"  maxlength="100" /></td>
+                                    <td><input type="text" name="conteudo<%= pv.getId()%>" value="<%= pv.getConteudo()%>"  maxlength="200" /></td>
+                                    <td><input type="text" name="celular<%= pv.getId()%>" value="<%= pv.getCelularDes()%>"  maxlength="15" /></td>
+                                    <td><input type="text" name="email<%= pv.getId()%>" value="<%= pv.getEmail_destinatario()%>"  maxlength="100" /></td>                                    
                                     <%if (pv.getPeso() > 0) {%>
                                     <td><input type="text" size="4" name="peso<%= pv.getId()%>" value="<%= pv.getPeso()%>" /></td>
                                     <td><input type="text" size="3" name="altura<%= pv.getId()%>" value="<%= pv.getAltura()%>" /></td>

@@ -1,3 +1,5 @@
+<%@page import="Entidade.empresas"%>
+<%@page import="Entidade.ClientesUsuario"%>
 <%@page import="java.math.BigDecimal"%>
 <%@page import="Util.FormataString"%>
 <%@ page import="java.sql.*, javax.swing.*, java.util.*, java.text.SimpleDateFormat, java.text.DecimalFormat, java.util.Date" %>
@@ -10,10 +12,12 @@
     int qtdEnc = 0, qtdPos = 0, qtdEnt = 0, qtdDev = 0, qtdExt = 0, qtdTotal = 0;
     BigDecimal vlrTotal = new BigDecimal(0);
 
-    int nivel = Integer.parseInt(request.getParameter("nivel"));
-    String nomeBD = request.getParameter("nomeBD");
+    if (session.getAttribute("usuario_sessao_cliente") != null) {
+
+        ClientesUsuario us = (ClientesUsuario) session.getAttribute("usuario_sessao_cliente");
+        empresas emp = (empresas) session.getAttribute("agencia");
     String sql = request.getParameter("sql");
-    ArrayList movimentacao = Controle.contrMovimentacao.getConsultaSintetica(sql, nomeBD);
+    ArrayList movimentacao = Controle.contrMovimentacao.getConsultaSintetica(sql, emp.getCnpj());
 
     if (movimentacao.size() >= 1) {
 %>
@@ -25,7 +29,7 @@
                 <th><h5>PESO</h5></th>
                 <th><h5>QTD</h5></th>
                 <th><h5>POSTAGEM</h5></th>
-                <%if (nivel != 3) {%>
+            <%if (us.getAcessos().contains(3)) {%>
                 <th><h5>VALOR</h5></th>
                 <%}%>
                 <th><h5>DESTINATÁRIO</h5></th>
@@ -87,7 +91,7 @@
                 <td><%= peso%>g</td>
                 <td><%= qtd%></td>
                 <td><%= vData%></td>
-                <% if (nivel != 3) {%>
+            <%if (us.getAcessos().contains(3)) {%>
                 <td nowrap align='left'>R$ <%= vValor%></td>
                 <% }%>
                 <td style="font-size: 10px;"><%= destinatario%></td>
@@ -103,7 +107,7 @@
                 <td colspan="3"></td>
                 <td nowrap="true" align="center"><%= qtdTotal%></td>
                 <td></td>
-                <%if (nivel != 3) {%>
+            <%if (us.getAcessos().contains(3)) {%>
                 <td nowrap="true">R$ <%= Util.FormatarDecimal.formatarFloat(vlrTotal.floatValue())%></td>
                 <%}%>
                 <td colspan="5"></td>
@@ -112,4 +116,7 @@
     </table>
 <%} else {%>
 <div align='center' style='padding-top:25px;background:#fc8878;color:black;height:50px;width:100%;font-size:20px;font-weight:bold;'>Nenhum Objeto Encontrado!</div>
+<%}%>
+<%} else {%>
+<div align='center' style='padding-top:25px;background:#fc8878;color:black;height:50px;width:100%;font-size:20px;font-weight:bold;'>Sessão expirada! Faça o login novamente!</div>
 <%}%>

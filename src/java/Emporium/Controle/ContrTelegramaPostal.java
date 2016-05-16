@@ -69,14 +69,15 @@ public class ContrTelegramaPostal {
         }
     }
     
-    public static void updateEnviado(int id, String nomeUser, String sro, String nomeBD){        
+    public static void updateEnviado(int id, String nomeUser, String sro, float valor, String nomeBD){        
         Connection conn = Conexao.conectar(nomeBD);        
-        String sql = "UPDATE telegrama_postal SET status = 1, userEnviado = ?, sro = ?, dataHoraEnviado = NOW() WHERE id = ? ";        
+        String sql = "UPDATE telegrama_postal SET status = 1, userEnviado = ?, sro = ?, valor = ?, dataHoraEnviado = NOW() WHERE id = ? ";        
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setString(1, nomeUser);
             valores.setString(2, sro);
-            valores.setInt(3, id);
+            valores.setFloat(3, valor);
+            valores.setInt(4, id);
             valores.execute();
             valores.close();
         } catch (SQLException e) {

@@ -51,7 +51,7 @@
         <link rel="stylesheet" href="../../javascript/plugins/TableSorter/styleSorterV3.css" />
         <script type="text/javascript" src="../../javascript/plugins/TableSorter/scriptSorterV3.js"></script>
         <!-- TableSorter -->
-        <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+        <script type="text/javascript" src="../../javascript/md5.js"></script>
         <script>
             var hash = CryptoJS.MD5("Message");
         </script>

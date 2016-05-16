@@ -104,6 +104,14 @@ public class ServEditarUsuario extends HttpServlet {
                 String acessosConsolidador = "";
                 
                 if(usaPortalPostal == 1){
+                    String pp[] = request.getParameterValues("acessos_pp_edit");
+                    if(pp != null){
+                        for (String acesso : pp) {
+                            acessosPortalPostal += ";" + acesso;
+                        }
+                    }
+                    
+                    /*
                     String pp_etiqueta[] = request.getParameterValues("geretq_e");
                     if(pp_etiqueta != null){
                         for (String acesso : pp_etiqueta) {
@@ -127,10 +135,17 @@ public class ServEditarUsuario extends HttpServlet {
                         for (String acesso : pp_cadastro) {
                             acessosPortalPostal += ";" + acesso;
                         }
-                    }
+                    }*/
                 }
                 
-                if(usaConsolidador == 1){                    
+                if(usaConsolidador == 1){              
+                    String con_conf[] = request.getParameterValues("acessos_cons_edit");
+                    if(con_conf != null){
+                        for (String acesso : con_conf) {
+                            acessosConsolidador += ";" + acesso;
+                        }
+                    }                 
+                    /*
                     String con_conf[] = request.getParameterValues("con_conf_e");
                     if(con_conf != null){
                         for (String acesso : con_conf) {
@@ -172,7 +187,7 @@ public class ServEditarUsuario extends HttpServlet {
                         for (String acesso : con_util) {
                             acessosConsolidador += ";" + acesso;
                         }
-                    }
+                    }*/
                 }
                 
                 if(!acessosPortalPostal.equals("")){

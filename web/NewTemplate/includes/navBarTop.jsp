@@ -5,7 +5,7 @@
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"  id="menu-toggle" onclick="mtoggle()">
             <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
         </button>
-        <a class="" href="#"><img src="${pageContext.request.contextPath}/imagensNew/logoNovaH.png" height="40" alt=""/></a>
+        <a style="margin-left: 20px;" class="" href="#"><img src="${pageContext.request.contextPath}/imagensNew/logoNovaH.png" height="40" alt=""/></a>
 
     </div><!-- navbar-header-->
 

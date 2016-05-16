@@ -20,7 +20,7 @@
                 Date dataAtual = new Date();
                 String vDataAtual = sdf.format(dataAtual);
                 String dataOntem = Util.SomaData.SomarDiasDatas(dataAtual, -1);
-                String dataInicioCalendario = Util.SomaData.SomarDiasDatas(dataAtual, -60); // diminui 2 meses                       
+                String dataInicioCalendario = Util.SomaData.SomarDiasDatas(dataAtual, -150); // diminui 5 meses                       
         %>
         <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
         <title>Portal Postal | Controle de AR</title>

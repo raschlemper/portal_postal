@@ -16,7 +16,6 @@ public class Conexao {
         try {
             //Conexão Servidor Scc4.com.br
             Class.forName("com.mysql.jdbc.Driver");
-            //String url = "jdbc:mysql://localhost:3306/pp_06895434000183?zeroDateTimeBehavior=convertToNull&autoReconnect=true";
             String url = "jdbc:mysql://localhost:3306/pp_" + nome + "?zeroDateTimeBehavior=convertToNull&autoReconnect=true";
             Connection con = DriverManager.getConnection(url, "root", "123456");
             //Connection con = DriverManager.getConnection(url,"smart_bd","33m.SMRT");

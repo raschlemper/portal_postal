@@ -1,6 +1,20 @@
 'use strict';
 
-app.factory('LancamentoProgramadoService', function($http, PromiseService) {
+app.factory('LancamentoProgramadoService', function($http, PromiseService, FrequenciaLancamentoService, LISTAS) {
+    
+    var situacoes = LISTAS.situacaoLancamentoProgramado;
+    
+    var lancamentoProgramado = function(lista, lancamento, dataInicio, dataFim) {
+        if(lancamento.situacao.id !== situacoes[0].id) return;
+        if(lancamento.quantidadeParcela && lancamento.numeroParcela > lancamento.quantidadeParcela) return;
+        var dataVencimento = moment(lancamento.dataVencimento);
+        if((dataVencimento.isSame(dataInicio) || dataVencimento.isAfter(dataInicio)) && 
+           (dataVencimento.isSame(dataFim) || dataVencimento.isBefore(dataFim))) {
+            lista.push(lancamento);  
+        }
+        if(dataVencimento.isAfter(dataFim)) return; 
+        getSaldo(lista, FrequenciaLancamentoService.execute(lancamento), dataInicio, dataFim);        
+    }
 
     return {
 
@@ -9,9 +23,9 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/lancamento/programado/"));
         },
 
-        getByDataVencimento: function(dataInicio, dataFim) {
+        getAllAtivo: function(dataInicio, dataFim) {
             return PromiseService.execute(
-                    $http.get(_contextPath + "/api/financeiro/lancamento/programado/vencimento?dataInicio=" + dataInicio + "&dataFim=" + dataFim));
+                    $http.get(_contextPath + "/api/financeiro/lancamento/programado/ativo"));
         },
 
         get: function(idLancamentoProgramado) {
@@ -52,6 +66,12 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService) {
         delete: function(idLancamentoProgramado) {
             return PromiseService.execute(
                     $http.delete(_contextPath + "/api/financeiro/lancamento/programado/" + idLancamentoProgramado));
+        },
+        
+        lancamentoProgramado: function(lancamento, dataInicio, dataFim) {
+            var lista = [];
+            lancamentoProgramado(lista, lancamento, dataInicio, dataFim)
+            return lista;
         }
 
     }

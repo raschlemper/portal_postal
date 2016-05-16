@@ -201,7 +201,14 @@ public class ServPreVendaConfirmaImp extends HttpServlet {
                     String aux[] = etq.split(";");
                     numObjeto = aux[0];
                     tipoEtiqueta = aux[1];
-                }              
+                } else if(ContrClienteEtiquetas.solicitarEtiquetasSigepWEB(codECT, cli, nomeBD)) {
+                    etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, nomeBD);
+                    if (etq != null) {
+                        String aux[] = etq.split(";");
+                        numObjeto = aux[0];
+                        tipoEtiqueta = aux[1];
+                    }
+                }
             } else if ( codECT == 0){
                 ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico);
                 codECT = se.getCodECT();

@@ -107,6 +107,10 @@ public class ServEditarLoginPortal extends HttpServlet {
                         }
                     }
                 }
+                if (request.getParameter("visualizarPrazos") != null && !request.getParameter("visualizarPrazos").equals("")) {
+                    acc += ";" + request.getParameter("visualizarPrazos");
+                }
+                
                 String departamentos[] = request.getParameterValues("departamentos");
                 String dep = "";
                 if (departamentos != null) {

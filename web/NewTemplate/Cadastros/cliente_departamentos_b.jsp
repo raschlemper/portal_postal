@@ -8,14 +8,14 @@
         response.sendRedirect("../index.jsp?msgLog=3");
     } else {
 
-        int idNivelDoUsuario = (Integer) session.getAttribute("nivel");
-        if (idNivelDoUsuario == 3) {
+        Usuario agf_usuario = (Usuario) session.getAttribute("agf_usuario");
+        empresas agf_empresa = (empresas) session.getAttribute("agf_empresa");
+        if (agf_usuario.getIdNivel() == 3) {
             response.sendRedirect("../Importacao/imp_movimento.jsp?msg=Acesso Negado!");
         }
 
-        String nomeBD = (String) session.getAttribute("empresa");
         int idClienteInc = Integer.parseInt(request.getParameter("idCliente"));
-        Entidade.Clientes cliInc = Controle.contrCliente.consultaClienteById(idClienteInc, nomeBD);
+        Entidade.Clientes cliInc = Controle.contrCliente.consultaClienteById(idClienteInc, agf_empresa.getCnpj());
 %>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -58,7 +58,7 @@
                     <div id="page-wrapper">
 
                         <jsp:include page="cliente_menu_b.jsp" >
-                            <jsp:param name="nomeBDTab" value="<%= nomeBD%>" />
+                            <jsp:param name="nomeBDTab" value="<%= agf_empresa.getCnpj()%>" />
                             <jsp:param name="activeTab" value="1" />
                             <jsp:param name="idClienteTab" value="<%= idClienteInc%>" />
                             <jsp:param name="temContratoTab" value="<%= cliInc.getTemContrato()%>" />
@@ -81,13 +81,15 @@
                                                             <option <%if (cliInc.getSeparar_destinatarios() == 0) {%> selected <%}%> value="0">NAO SEPARAR POR DEPARTAMENTO</option>
                                                         </select>
                                                         <input type="hidden" name="idCliente" value="<%= cliInc.getCodigo()%>" />
-                                                        <input type="hidden" name="nomeBD" value="<%= nomeBD %>" />
+                                                        <input type="hidden" name="nomeBD" value="<%= agf_empresa.getCnpj() %>" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </li>
                                     </ul>
                                 </form>
+                                                    
+                                <%if(agf_empresa.getTipo_sistema().equals("PORTALPOSTAL")){%>
                                 <form name="form1" action="../../ServInserirDepto" method="post">
                                     <ul class="list-unstyled">
                                         <li class="list-group-item list-group-heading">
@@ -117,6 +119,7 @@
                                         </li>
                                     </ul>
                                 </form>
+                                <%}%>
 
                                 <div class="panel panel-default">
                                     <div class="panel-heading"><label>Lista de Todos os Departamentos</label></div>
@@ -129,13 +132,14 @@
                                                         <th>Departamento</th>
                                                         <th>Cartão de Postagem</th>
                                                         <th class="no-sort" width="150">Alterar</th>
-
+                                                        <%if(agf_empresa.getTipo_sistema().equals("PORTALPOSTAL")){%>
                                                         <th class="no-sort" style="width: 60px;">Excluir</th>
+                                                        <%}%>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <%
-                                                        ArrayList<ClientesDeptos> listaLogins = Controle.ContrClienteDeptos.consultaDeptos(idClienteInc, nomeBD);
+                                                        ArrayList<ClientesDeptos> listaLogins = Controle.ContrClienteDeptos.consultaDeptos(idClienteInc, agf_empresa.getCnpj());
                                                         for (int i = 0; i < listaLogins.size(); i++) {
                                                             ClientesDeptos sc3 = listaLogins.get(i);
                                                             String cartao = sc3.getCartaoPostagem();
@@ -149,13 +153,16 @@
                                                         <td><%= sc3.getIdDepartamento()%></td>
                                                         <td><%= sc3.getNomeDepartamento()%></td>
                                                         <td><%= cart%></td>
-                                                        <td align="center"><button type="button" class="btn btn-sm btn-warning" onclick="ajaxCartaoPostagem(<%= idClienteInc%>, <%= sc3.getIdDepartamento()%>, '<%= cartao%>', '<%= sc3.getNomeDepartamento()%>');" ><i class="fa fa-lg fa-pencil"></i></button></td>
+                                                        <td align="center"><button type="button" class="btn btn-sm btn-warning" onclick="ajaxCartaoPostagem(<%= idClienteInc%>, <%= sc3.getIdDepartamento()%>, '<%= cartao%>', '<%= sc3.getNomeDepartamento()%>');" ><i class="fa fa-lg fa-pencil"></i></button></td>                                                                                                                
+                                                        <%if(agf_empresa.getTipo_sistema().equals("PORTALPOSTAL")){%>
                                                         <td align="center">
                                                             <form action="../../ServExcluirDepto" method="post" name="formDelDepto">                                                               
-                                                                <input type="hidden" name="idDepto" value="<%= sc3.getIdDepartamento()%>" />
+                                                                <input type="hidden" name="idCliente" value="<%= sc3.getIdCliente() %>" />
+                                                                <input type="hidden" name="idDepto" value="<%= sc3.getIdDepartamento() %>" />
                                                                 <button type="button" class="btn btn-sm btn-danger" onClick="confirmExcluir(this);" ><i class="fa fa-trash fa-lg"></i></button>
                                                             </form>
                                                         </td>
+                                                        <%}%>
                                                     </tr>
                                                     <%}%>
                                                 </tbody>

@@ -45,15 +45,15 @@
             <li>
                 <dd>
                     <label>Nome / Razão Social</label>
-                    <input type="text" name="nome" size="50" value="<%= des.getNome()%>" />
+                    <input type="text" name="nome" size="70" value="<%= des.getNome()%>" />
                 </dd>
                 <dd>
                     <label>CPF / CNPJ</label>
-                    <input type="text" name="cpf_cnpj" value="<%= des.getCpf_cnpj()%>" />
+                    <input type="text" name="cpf_cnpj" maxlength="18" value="<%= des.getCpf_cnpj()%>"  onkeydown="mascara(this, maskCpfCnpj);" />
                 </dd>
                 <dd>
                     <label>Empresa</label>
-                    <input type="text" name="empresa" value="<%= des.getEmpresa()%>" />
+                    <input type="text" name="empresa" maxlength="40" value="<%= des.getEmpresa()%>" />
                 </dd>
                 <dd>
                     <label>CEP<b class="obg">*</b><a onclick="window.open('http://www.buscacep.correios.com.br', 'CORREIOS');" ><img src="../../imagensNew/question.png" /></a></label>
@@ -65,26 +65,26 @@
             <li>
                 <dd>
                     <label>Endereço</label>
-                    <input type="text" name="endereco" id="endereco2" size="50" value="<%= des.getEndereco()%>" />
+                    <input type="text" name="endereco" id="endereco2" size="80" value="<%= des.getEndereco()%>" />
                 </dd>
                 <dd>
                     <label>Número</label>
-                    <input type="text" name="numero" id="numero2" size="10" maxlength="5" value="<%= des.getNumero()%>" onkeypress="mascara(this, maskNumero)" />
+                    <input type="text" name="numero" id="numero2" size="10" maxlength="8" value="<%= des.getNumero()%>" onkeypress="mascara(this, maskNumero)" />
                     <input type="checkbox" name="sn" id="sn2" value="S/N" onclick="semNumero2();" /> <span style="font-size: 14px;font-weight: bold">S/N</span>
                 </dd>
                 <dd>
                     <label>Complemento</label>
-                    <input type="text" name="complemento" id="complemento2" value="<%= des.getComplemento()%>" />
+                    <input type="text" name="complemento" id="complemento2"  maxlength="50" value="<%= des.getComplemento()%>" />
                 </dd>
                 <dd>
                     <label>Bairro</label>
-                    <input type="text" name="bairro" size="40" id="bairro2" value="<%= des.getBairro()%>" />
+                    <input type="text" name="bairro" size="40" id="bairro2"  maxlength="50" value="<%= des.getBairro()%>" />
                 </dd>
             </li>
             <li>
                 <dd>
                     <label>Cidade<b class="obg">*</b></label>
-                    <input type="text" name="cidade" id="cidade2" readonly value="<%= des.getCidade()%>" />
+                    <input type="text" name="cidade" id="cidade2"  maxlength="50" readonly value="<%= des.getCidade()%>" />
                 </dd>
 
 
@@ -125,11 +125,11 @@
             <li>
                 <dd>
                     <label>E-mail</label>
-                    <input type="text" name="email" size="35" value="<%=email %>" />
+                    <input type="text" name="email" size="35" value="<%=email %>"  maxlength="100" />
                 </dd>
                 <dd>
                     <label>Celular</label>
-                    <input type="text" name="celular" value="<%=cel %>" onkeypress="mascara(this, maskTelefone);" />
+                    <input type="text" name="celular" value="<%=cel %>"  maxlength="15" onkeypress="mascara(this, maskTelefone);" />
                 </dd>
             </li>
             <li>

@@ -144,6 +144,17 @@ public class ServReversaGerar extends HttpServlet {
                 c.setAr(ar);
                 if(!cklist.equals("0")){
                      c.setCklist(cklist);
+                     if(cklist.equals("5")){
+                        String[] pedidos = request.getParameterValues("ckPedido");
+                        String adicional = "";
+                        for (int i = 0; i < pedidos.length; i++) {
+                            adicional += ","+pedidos[i];                             
+                        }
+                        if(!adicional.equals("")){
+                            adicional = adicional.substring(1);
+                        }
+                        c.setServicoAdicional(adicional);
+                     }
                 }
                
 

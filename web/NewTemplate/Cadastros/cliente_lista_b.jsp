@@ -1,22 +1,18 @@
 <%@page import="Entidade.LogAtualizacaoContratos"%>
 <%@page import="Controle.ContrLogAtualizacaoContrato"%>
 <%@page import="Entidade.Clientes"%>
-<%@ page import = "java.util.ArrayList,java.sql.Timestamp, java.util.Date, java.text.SimpleDateFormat"%>
+<%@page import = "java.util.ArrayList,java.sql.Timestamp, java.util.Date, java.text.SimpleDateFormat"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%
-    if (session.getAttribute("usuario") == null) {
+    if (session.getAttribute("agf_usuario") == null) {
         response.sendRedirect("../../index.jsp?msgLog=3");
     } else {
-        int idNivelDoUsuario = (Integer) session.getAttribute("nivel");
-        String nomeBD = (String) session.getAttribute("empresa");
-        int idEmpresa = (Integer) session.getAttribute("idEmpresa");
-        empresas emp = (empresas) session.getAttribute("emp");
+        
+        empresas agf_empresa = (empresas) session.getAttribute("agf_empresa");
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
-        String msga = (String) session.getAttribute("msg2");
         session.setAttribute("msg2", null);
-        LogAtualizacaoContratos log = ContrLogAtualizacaoContrato.consultaUltimoLog(nomeBD);
         boolean flag = false;
         String param = "1";
         if (request.getParameter("inativos") != null) {
@@ -73,7 +69,9 @@
 
                         <div class="row">
                             <div class="well well-md"> 
-                                <button class="btn btn-success" type="submit" onclick="javascript:window.location = 'cliente_cadastro_novo_b.jsp';" name="save" id="sub"> <i class="fa fa-lg fa-spc fa-plus"></i> ADCIONAR NOVO CLIENTE</button>
+                                <%if(agf_empresa.getTipo_sistema().equals("PORTALPOSTAL")){%>
+                                    <button class="btn btn-success" type="submit" onclick="javascript:window.location = 'cliente_cadastro_novo_b.jsp';" name="save" id="sub"> <i class="fa fa-lg fa-spc fa-plus"></i> ADCIONAR NOVO CLIENTE</button>
+                                <%}%>
                                 <button style="margin-left: 10px;" class="btn btn-info" type="submit" onclick="javascript:window.location = 'cliente_login_massa_b.jsp';" name="save" id="sub"> <i class="fa fa-lg fa-spc fa-users"></i> GERAR LOGIN EM MASSA</button>
                             </div>
                         </div>
@@ -81,11 +79,13 @@
                             <div class="col-md-12">   
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Lista de Todos os Clientes
+                                        <%if(agf_empresa.getTipo_sistema().equals("PORTALPOSTAL")){%>
                                         <span class="pull-right">  
                                             <div class="form-inline">
                                                 <label><input id="ck_destivar" name="ck_desativar" type="checkbox" value="" <% if (flag) {%>checked="checked"<%}%> onclick="window.location = 'cliente_lista_b.jsp?inativos=<%=param%>';" >&nbsp;MOSTRAR TAMBÉM INATIVOS</label>
                                             </div>
                                         </span>
+                                        <%}%>
                                     </div>
                                     <div class="panel-body">
                                         <div class="dataTable_wrapper no-padding">
@@ -103,7 +103,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <%
-                                                        ArrayList<Clientes> listaCliente = Controle.contrCliente.getNomeCodigoMetodo(nomeBD, flag);
+                                                        ArrayList<Clientes> listaCliente = Controle.contrCliente.getNomeCodigoMetodo(agf_empresa.getCnpj(), flag);
                                                         for (int j = 0; j < listaCliente.size(); j++) {
                                                             Clientes col = listaCliente.get(j);
                                                             String nomeCliente = col.getNome();
@@ -155,7 +155,7 @@
                                                         <td align="center">
                                                             <button  onclick="ativaCli();" class="btn btn-sm btn-default" ><i class="fa fa-lg fa-power-off"></i></button>
                                                             <input type="hidden" id="ativar" value="<%= idCliente%>"/>
-                                                            <input type="hidden" id="nomeBD" value="<%= nomeBD%>"/>
+                                                            <input type="hidden" id="nomeBD" value="<%= agf_empresa.getCnpj()%>"/>
                                                             
                                                         </td>
                                                         <%}%>

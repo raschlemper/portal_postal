@@ -61,7 +61,7 @@
 .sidebar-nav {
     position: absolute;
     top: 0;
-    width: 250px;
+    width: 260px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -102,6 +102,23 @@
 
 .sidebar-nav li a.active:hover {
     background: #d8d8d8;
+}
+
+.sidebar-nav li a.noclass {
+    display: block;
+    text-decoration: none;
+    color: #336699;
+    padding-left: 3px;
+    cursor: default;
+}
+.sidebar-nav li a.noclass:hover {
+    display: block;
+    text-decoration: none;
+    color: #336699;
+    padding-left: 3px;
+    border-left: none;
+    background: none;
+    cursor: default;
 }
 
 .sidebar-nav li a.danger {
@@ -157,8 +174,8 @@
     }
 
     #sidebar-wrapper {
-        width: 250px;
-        margin-top: 55px;
+        width: 260px;
+        margin-top: 56px;
     }
 
     #wrapper.toggled #sidebar-wrapper {

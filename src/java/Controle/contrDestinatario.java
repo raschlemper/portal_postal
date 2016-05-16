@@ -227,6 +227,8 @@ public class contrDestinatario {
                 String cnpjj = result.getString("cpf_cnpj");
                 String complemento = result.getString("complemento");
                 String pais = result.getString("pais");
+                String celular = result.getString("celular");
+                String email = result.getString("email");
                 
                 if (separar_dest == 0 || idDepartamento == 0 || deptos.contains(idDepartamento)) {
                 ret += ",{\"value\": \"" + idDestinatario + "\", "
@@ -240,8 +242,8 @@ public class contrDestinatario {
                         + "\"cep\":\"" + cepp + "\", "
                         + "\"aoscuidados\":\"\", "
                         + "\"empresa\":\"" + Util.FormataString.removeAccentsToUpper(empresa) + "\", "
-                        + "\"email_destinatario\":\"\", "
-                        + "\"celular\":\"\", "
+                        + "\"email_destinatario\":\""+email+"\", "
+                        + "\"celular\":\""+celular+"\", "
                         + "\"cpf_cnpj\":\"" + cnpjj + "\", "
                         + "\"destino\":\"" + destino + "\", "
                         + "\"pais\":\"" + pais + "\" "

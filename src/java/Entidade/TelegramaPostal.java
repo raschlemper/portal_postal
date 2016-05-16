@@ -34,6 +34,7 @@ public class TelegramaPostal {
     private String mensagem;
     private Endereco enderecoRem;
     private Endereco enderecoDes;
+    private float valor;
 
     public TelegramaPostal(ResultSet result) throws SQLException {
         this.id = result.getInt("id");
@@ -52,8 +53,17 @@ public class TelegramaPostal {
         this.envioCopia = result.getString("envioCopia");
         this.emailCopia = result.getString("emailCopia");
         this.mensagem = result.getString("mensagem");
+        this.valor = result.getFloat("valor");
         this.enderecoRem = new Endereco(result.getString("nomeRem"), result.getString("enderecoRem"), result.getString("numeroRem"), result.getString("complementoRem"), result.getString("bairroRem"), result.getString("cidadeRem"), result.getString("ufRem"), result.getString("cepRem"));
         this.enderecoDes = new Endereco(result.getString("nomeDes"), result.getString("enderecoDes"), result.getString("numeroDes"), result.getString("complementoDes"), result.getString("bairroDes"), result.getString("cidadeDes"), result.getString("ufDes"), result.getString("cepDes"));
+    }
+
+    public float getValor() {
+        return valor;
+    }
+
+    public void setValor(float valor) {
+        this.valor = valor;
     }
 
     public String getSro() {

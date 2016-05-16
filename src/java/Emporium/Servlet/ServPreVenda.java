@@ -13,6 +13,7 @@ import Entidade.ServicoECT;
 import Util.FormataString;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -207,7 +208,16 @@ public class ServPreVenda extends HttpServlet {
                 int codECT = codECTsolicitado;
                 //VERIFICA A QTD DE ETIQUETA
                 int qtdEtq = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ(servico, 0, idCliente, nomeBD);
-                if (codECT != 0 && qtdEtq != 0) {
+                if (codECT != 0 && qtdEtq == 0) {
+                    if(ContrClienteEtiquetas.solicitarEtiquetasSigepWEB(codECT, cli, nomeBD)) {
+                        String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, nomeBD);
+                        if (etq != null) {
+                            String aux[] = etq.split(";");
+                            numObjeto = aux[0];
+                            tipoEtiqueta = aux[1];
+                        }
+                    }
+                } else if (codECT != 0 && qtdEtq != 0) {
                     String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, nomeBD);
                     if (etq != null) {
                         String aux[] = etq.split(";");

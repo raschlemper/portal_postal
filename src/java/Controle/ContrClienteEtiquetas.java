@@ -5,7 +5,14 @@
 package Controle;
 
 import Entidade.ClienteLogEtiqueta;
+import Entidade.Clientes;
+import Entidade.ServicoECT;
+import Util.CalculoEtiqueta;
 import Util.Conexao;
+import Util.FormataString;
+import Util.XTrustProvider;
+import br.com.correios.bsb.sigep.master.bean.cliente.AutenticacaoException;
+import br.com.correios.bsb.sigep.master.bean.cliente.SigepClienteException;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -25,6 +32,95 @@ public class ContrClienteEtiquetas {
             ContrErroLog.inserir("HOITO - contrContato", "SQLException", sql, e.toString());
         } finally {
             Conexao.desconectar(conn);
+        }
+    }
+
+    public static boolean solicitarEtiquetasSigepWEB(int codigoECT, Clientes c, String nomeBD) {
+        try {
+            String cnpj = c.getCnpj();
+            ServicoECT s = ContrServicoECT.consultaByCodigoECT(codigoECT);
+            String grupoServ = s.getGrupoServico();
+            int idServico = s.getIdServicoECT();
+
+            String cartao = "";
+            int uso = 0;
+            int qtd = 500;
+
+            if (c.getTemContrato() == 1 && !c.getLogin_sigep().equals("") && !c.getSenha_sigep().equals("")) {
+                String login = c.getLogin_sigep();
+                String senha = c.getSenha_sigep();
+
+                cnpj = cnpj.replaceAll("\\.", "").replaceAll("/", "").replaceAll("-", "").replaceAll(" ", "");
+                if (!cnpj.equals("") && FormataString.isCNPJ(cnpj)) {
+
+                        XTrustProvider.install();
+
+                        String a = solicitaEtiquetas("C", cnpj, new Long(idServico), qtd, login, senha);
+
+                        if (a != null && !a.equals("") && a.contains(",") && a.trim().length() == 27) {
+                            String prefixo = a.substring(0, 2);
+                            String inicial = a.substring(2, 10);
+                            String fim = a.substring(16, 24);
+
+                            String dgInicial = Util.CalculoEtiqueta.calculaDigito(Integer.parseInt(inicial));
+                            String dgFim = Util.CalculoEtiqueta.calculaDigito(Integer.parseInt(fim));
+
+                            String finicial = prefixo + inicial + dgInicial + "BR";
+                            String ffim = prefixo + fim + dgFim + "BR";
+
+                            //INSERE LOG DE ETIQUETAS
+                            int idImportacao = Controle.ContrClienteEtiquetas.insereLog(finicial, ffim, c.getCodigo(), 0, "Solicitação Automática", qtd, grupoServ, "SigepWEB", "PARA PORTAL POSTAL", nomeBD);
+
+                            //INSERE FAIXAS NO BANCO
+                            int nIni = Integer.parseInt(inicial);
+                            int nFim = Integer.parseInt(fim);
+
+                            String sql = "INSERT INTO cliente_etiquetas (seqLogica, idImportacao, idCliente, codECT, grupoServico, cartaoPostagem, utilizada) VALUES";
+                            for (int num = nIni; num <= nFim; num++) {
+                                String etiqueta = prefixo + "" + CalculoEtiqueta.concertaTamanhoNum(num) + "" + CalculoEtiqueta.calculaDigito(num) + "BR";
+                                if (num == nFim) {
+                                    sql += " ('" + etiqueta + "', " + idImportacao + ", " + c.getCodigo() + ", " + codigoECT + ", '" + grupoServ + "', '" + cartao + "', " + uso + ");";
+                                } else {
+                                    sql += " ('" + etiqueta + "', " + idImportacao + ", " + c.getCodigo() + ", " + codigoECT + ", '" + grupoServ + "', '" + cartao + "', " + uso + "),";
+                                }
+                            }
+
+                            //INSERE ETIQUETAS NO BANCO DE DADOS PARA O CLIENTE
+                            Connection conn = Conexao.conectar(nomeBD);
+                            try {
+                                PreparedStatement valores = conn.prepareStatement(sql);
+                                valores.executeUpdate();
+                                valores.close();
+                                return true;
+                            } catch (SQLException e) {
+                                ContrErroLog.inserir("HOITO - contrContato", "SQLException", sql, e.toString());
+                                return false;
+                            } finally {
+                                Conexao.desconectar(conn);
+                            }
+
+                        } else {
+                            //System.out.println("Falha ao solicitar!");
+                            return false;
+                        }
+                    } else {
+                        //System.out.println(cnpj + " - CNPJ Inválido!");
+                        return false;
+                    }
+            } else {
+                //System.out.println("Este cliente não possui uma senha do SigepWEB!");
+                return false;
+            }
+
+        } catch (AutenticacaoException ex) {
+            //System.out.println(ex);
+            return false;
+        } catch (SigepClienteException ex) {
+            //System.out.println(ex);
+            return false;
+        } catch (Exception ex) {
+            //System.out.println(ex);
+            return false;
         }
     }
 
@@ -358,4 +454,11 @@ public class ContrClienteEtiquetas {
             Conexao.desconectar(conn);
         }
     }
+
+    private static String solicitaEtiquetas(java.lang.String tipoDestinatario, java.lang.String identificador, java.lang.Long idServico, java.lang.Integer qtdEtiquetas, java.lang.String usuario, java.lang.String senha) throws AutenticacaoException, SigepClienteException {
+        br.com.correios.bsb.sigep.master.bean.cliente.AtendeClienteService service = new br.com.correios.bsb.sigep.master.bean.cliente.AtendeClienteService();
+        br.com.correios.bsb.sigep.master.bean.cliente.AtendeCliente port = service.getAtendeClientePort();
+        return port.solicitaEtiquetas(tipoDestinatario, identificador, idServico, qtdEtiquetas, usuario, senha);
+    }
+
 }

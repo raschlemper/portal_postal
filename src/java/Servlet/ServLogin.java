@@ -88,28 +88,32 @@ public class ServLogin extends HttpServlet {
             if (Controle.contrLogin.verificaStatusEmpresa(user.getIdEmpresa())) {
 
                 HttpSession sessao = request.getSession();
-                sessao.setMaxInactiveInterval(30600);
+                sessao.setMaxInactiveInterval(360000);
 
+                empresas emp = contrEmpresa.consultaEmpresa(user.getIdEmpresa());
+                
+                sessao.setAttribute("agf_usuario", user);
+                sessao.setAttribute("agf_empresa", emp);
+                
+                /*DEPRECATED*/
                 sessao.setAttribute("usuario", login);
                 sessao.setAttribute("nome", user.getNome());
                 sessao.setAttribute("nivel", user.getIdNivel());
                 sessao.setAttribute("idUsuario", user.getIdUsuario());
                 sessao.setAttribute("idEmpresa", user.getIdEmpresa());
                 sessao.setAttribute("acessosAgencia", user.getListaAcessosPortalPostal());
-
-                empresas emp = contrEmpresa.consultaEmpresa(user.getIdEmpresa());
-
                 sessao.setAttribute("emp", emp);
                 sessao.setAttribute("nomeBD", emp.getCnpj());
                 sessao.setAttribute("empresa", emp.getCnpj());
+                /*DEPRECATED*/                
 
-                if (emp.getChamada() == 1) {
+                //if (emp.getChamada() == 1) { 
                     //response.sendRedirect("./Agencia/Relatorio/painel_etiquetas.jsp");
-                    response.sendRedirect("NewTemplate/Dashboard");
-                } else {
+                response.sendRedirect("NewTemplate/Dashboard");
+                /*} else {
                     //response.sendRedirect("./Agencia/Importacao/imp_movimento.jsp");
                     response.sendRedirect("NewTemplate/Importacao/imp_movimento_b.jsp");
-                }
+                }*/
 
             } else if (caminho != null) {
                 response.sendRedirect(caminho + "?msg=Login ou Senha incorreta ou inexistente!");

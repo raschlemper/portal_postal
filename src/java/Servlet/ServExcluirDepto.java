@@ -79,8 +79,9 @@ public class ServExcluirDepto extends HttpServlet {
         } else {
             String nomeBD = (String) sessao.getAttribute("empresa");
             String idDepto = request.getParameter("idDepto");
+            String idCliente = request.getParameter("idCliente");
 
-            Controle.ContrClienteDeptos.desativaDepto(idDepto, nomeBD);
+            Controle.ContrClienteDeptos.desativaDepto(idDepto, idCliente, nomeBD);
 
             sessao.setAttribute("msg", "Departamento / Centro de Custo Excluido com Sucesso!");
 

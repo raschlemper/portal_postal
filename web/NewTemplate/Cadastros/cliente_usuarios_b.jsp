@@ -107,6 +107,7 @@
                                                         <option value="5" >GERAR ETIQUETAS</option>
                                                         <option value="6" >VER DADOS DA EMPRESA</option>
                                                         <option value="7" >CADASTRO DE DESTINATÁRIOS</option>
+                                                        <option value="8" >VISUALIZAR PRAZOS ESTIMADOS</option>
                                                     </select>
                                                     <script language="">
                                                         function selectAllCombo(combo, flag) {

@@ -21,9 +21,7 @@ import java.util.ArrayList;
 public class ContrLoginEmporium {
 
     public static Clientes login(String login, String senha, String nomeBD) {
-        
-        System.out.println(nomeBD);
-        
+                
         Connection con = Conexao.conectar(nomeBD);
         String sql = "SELECT * FROM cliente AS c"
                 + " JOIN cliente_usuarios AS u"
@@ -33,7 +31,7 @@ public class ContrLoginEmporium {
             PreparedStatement valores = con.prepareStatement(sql);
             valores.setString(1, login);
             valores.setString(2, senha);
-            System.out.println(valores.toString());
+            
             ResultSet result = (ResultSet) valores.executeQuery();
 
             Clientes cli = null;

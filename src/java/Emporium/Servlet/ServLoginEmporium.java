@@ -111,9 +111,9 @@ public class ServLoginEmporium extends HttpServlet {
 
             if (cli != null) {
                 HttpSession sessao = request.getSession();
-                sessao.invalidate();                
+                //sessao.invalidate();                
                 sessao = request.getSession();
-                sessao.setMaxInactiveInterval(1800);
+                sessao.setMaxInactiveInterval(360000);
                 
 
                 Controle.contrLogin.registraLoginDeCliente(idEmpresa, cli.getCodigo());
@@ -134,8 +134,8 @@ public class ServLoginEmporium extends HttpServlet {
                     sessao.setAttribute("departamentos", us.getDepartamentos());
                     sessao.setAttribute("servicos", us.getServicos());
                     sessao.setAttribute("nomeEmpresa", emp.getFantasia());
-                    sessao.setAttribute("temColeta", emp.getColeta()); // se a agencia tem COLETA
-                    sessao.setAttribute("temPV", emp.getChamada()); //se a agencia tem PRE VENDA
+                    sessao.setAttribute("temColeta", 1); // se a agencia tem COLETA
+                    sessao.setAttribute("temPV", 1); //se a agencia tem PRE VENDA
                     sessao.setAttribute("temETQ", cli.getUsaEtiquetador()); // Se o cliente usa o etiquetador
                     /**DEPRECATED END*/
                     

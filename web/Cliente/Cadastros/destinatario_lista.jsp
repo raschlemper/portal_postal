@@ -44,27 +44,50 @@
         <script type="text/javascript">
             function preencherCampos() {
                 var form = document.form1;
-                if (form.nome.value == "") {
+                if (form.nome.value === "") {
                     alert('Preencha o NOME do destinatário!');
                     return false;
+                } else if(form.nome.value.length > 70){
+                    alert('Tamanho máximo de 70 caracteres para o NOME do destinatário!');
+                    return false;
                 }
-                if (form.cep.value == "") {
+                if (form.cep.value === "") {
                     alert('Preencha o CEP do destinatário!');
                     return false;
+                } else if(form.cep.value.length > 9){
+                    alert('Tamanho máximo de 9 caracteres para o CEP do destinatário!');
+                    return false;
                 }
-                if (form.endereco.value == "") {
+                if (form.endereco.value === "") {
                     alert('Preencha o ENDEREÇO do destinatário!');
                     return false;
-                }
-                if (form.numero.value == "") {
-                    alert('Preencha o NÚMERO do destinatário!');
+                } else if(form.nome.value.length > 80){
+                    alert('Tamanho máximo de 80 caracteres para o ENDEREÇO do destinatário!');
                     return false;
                 }
-                if (form.cidade.value == "") {
+                if (form.numero.value === "") {
+                    alert('Preencha o NÚMERO do destinatário!');
+                    return false;
+                } else if(form.numero.value.length > 8){
+                    alert('Tamanho máximo de 8 caracteres para o NÚMERO do destinatário!');
+                    return false;
+                }
+                if(form.complemento.value.length > 50){
+                    alert('Tamanho máximo de 50 caracteres para o COMPLEMENTO do destinatário!');
+                    return false;
+                }
+                if (form.bairro.value === "") {
+                    alert('Preencha o BAIRRO do destinatário!');
+                    return false;
+                } else if(form.bairro.value.length > 50){
+                    alert('Tamanho máximo de 50 caracteres para o BAIRRO do destinatário!');
+                    return false;
+                }
+                if (form.cidade.value === "") {
                     alert('Preencha a CIDADE do destinatário!');
                     return false;
                 }
-                if (form.uf.value == "") {
+                if (form.uf.value === "") {
                     alert('Preencha a UF do destinatário!');
                     return false;
                 }
@@ -73,23 +96,50 @@
 
             function preencherCamposEdit() {
                 var form = document.form5;
-                if (form.nome.value == "") {
+                if (form.nome.value === "") {
                     alert('Preencha o NOME do destinatário!');
                     return false;
+                } else if(form.nome.value.length > 70){
+                    alert('Tamanho máximo de 70 caracteres para o NOME do destinatário!');
+                    return false;
                 }
-                if (form.cep.value == "") {
+                if (form.cep.value === "") {
                     alert('Preencha o CEP do destinatário!');
                     return false;
-                }
-                if (form.endereco.value == "") {
-                    alert('Preencha o ENDEREÇO do destinatário!');
+                } else if(form.cep.value.length > 9){
+                    alert('Tamanho máximo de 9 caracteres para o CEP do destinatário!');
                     return false;
                 }
-                if (form.cidade.value == "") {
+                if (form.endereco.value === "") {
+                    alert('Preencha o ENDEREÇO do destinatário!');
+                    return false;
+                } else if(form.nome.value.length > 80){
+                    alert('Tamanho máximo de 80 caracteres para o ENDEREÇO do destinatário!');
+                    return false;
+                }
+                if (form.numero.value === "") {
+                    alert('Preencha o NÚMERO do destinatário!');
+                    return false;
+                } else if(form.numero.value.length > 8){
+                    alert('Tamanho máximo de 8 caracteres para o NÚMERO do destinatário!');
+                    return false;
+                }
+                if(form.complemento.value.length > 50){
+                    alert('Tamanho máximo de 50 caracteres para o COMPLEMENTO do destinatário!');
+                    return false;
+                }
+                if (form.bairro.value === "") {
+                    alert('Preencha o BAIRRO do destinatário!');
+                    return false;
+                } else if(form.bairro.value.length > 50){
+                    alert('Tamanho máximo de 50 caracteres para o BAIRRO do destinatário!');
+                    return false;
+                }
+                if (form.cidade.value === "") {
                     alert('Preencha a CIDADE do destinatário!');
                     return false;
                 }
-                if (form.uf.value == "") {
+                if (form.uf.value === "") {
                     alert('Preencha a UF do destinatário!');
                     return false;
                 }
@@ -224,15 +274,15 @@
                             <li>
                                 <dd>
                                     <label>Nome / Razão Social<b class="obg">*</b></label>
-                                    <input type="text" name="nome" size="50" value="" />
+                                    <input type="text" name="nome" size="50"  maxlength="70" value="" />
                                 </dd>
                                 <dd>
                                     <label>CPF / CNPJ</label>
-                                    <input type="text" name="cpf_cnpj" value="" />
+                                    <input type="text" name="cpf_cnpj"  maxlength="18" value=""  onkeydown="mascara(this, maskCpfCnpj);" />
                                 </dd>
                                 <dd>
                                     <label>Empresa</label>
-                                    <input type="text" name="empresa" value="" />
+                                    <input type="text" name="empresa"  maxlength="40" value="" />
                                 </dd>
                                 <dd>
                                     <label>CEP<b class="obg">*</b><a onclick="window.open('http://www.buscacep.correios.com.br', 'CORREIOS');" ><img src="../../imagensNew/question.png" /></a></label>
@@ -241,34 +291,34 @@
                                 </dd>
                                 <dd>
                                     <label>E-mail</label>
-                                    <input type="text" name="email" value="" />
+                                    <input type="text" name="email"  maxlength="100" value="" />
                                 </dd>
                                 <dd>
                                     <label>Celular</label>
-                                    <input type="text" name="celular" value="" onkeypress="mascara(this, maskTelefone);" />
+                                    <input type="text" name="celular"  maxlength="15" value="" onkeypress="mascara(this, maskTelefone);" />
                                 </dd>
                             </li>
                             <li>
                                 <dd>
                                     <label>Endereço</label>
-                                    <input type="text" name="endereco" id="endereco" size="50" value="" />
+                                    <input type="text" name="endereco" id="endereco"  maxlength="80" size="50" value="" />
                                 </dd>
                                 <dd>
                                     <label>Número</label>
-                                    <input type="text" name="numero" id="numero" size="10" value="" maxlength="5" onkeypress="mascara(this, maskNumero)" />
+                                    <input type="text" name="numero" id="numero" size="10" value="" maxlength="8" onkeypress="mascara(this, maskNumero)" />
                                     <input type="checkbox" name="sn" id="sn" value="S/N" onclick="semNumero();" /> <span style="font-size: 14px;font-weight: bold">S/N</span>
                                 </dd>
                                 <dd>
                                     <label>Complemento</label>
-                                    <input type="text" name="complemento" id="complemento" value="" />
+                                    <input type="text" name="complemento" id="complemento"  maxlength="50" value="" />
                                 </dd>
                                 <dd>
                                     <label>Bairro</label>
-                                    <input type="text" name="bairro" id="bairro" value="" />
+                                    <input type="text" name="bairro" id="bairro"  maxlength="50" value="" />
                                 </dd>
                                 <dd>
                                     <label>Cidade<b class="obg">*</b></label>
-                                    <input type="text" name="cidade" id="cidade" readonly value="" />
+                                    <input type="text" name="cidade" id="cidade"  maxlength="50" readonly value="" />
                                 </dd>
                                 <dd>
                                     <label>UF<b class="obg">*</b></label>
@@ -324,7 +374,7 @@
                                 </dd>
                                 <dd>
                                     <label>Tags (seus mailings podem ser associados a tags) utilize @ e separe as tags com espaços ex. @mailing1 @mailing2</label>
-                                    <input type="text" name="tags" id="tags" size="130" value="" placeholder=" cadstre aqui suas tags ex. @mailing1 @mailing2" />
+                                    <input type="text" name="tags" id="tags" size="130" value="" placeholder="Cadastre aqui suas tags ex. @mailing1 @mailing2" />
                                 </dd>
                             </li>
                             <li>

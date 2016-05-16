@@ -250,6 +250,54 @@ public class contrMovimentacao {
             Conexao.desconectar(conn);
         }
     }
+    
+     public static Movimentacao getConsultaBySRO(String sro, String nomeBD) {
+       String sql = "SELECT * FROM movimentacao WHERE numObjeto = '"+sro+"'";
+         System.out.println(sql);
+        Connection conn = (Connection) Conexao.conectar(nomeBD);
+         Movimentacao mov = null;
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            //System.out.println(sql);
+           if (result.next()) {
+                String id = result.getString("id");
+                Date dataPostagem = result.getDate("dataPostagem");
+                String descServico = result.getString("descServico");
+                String numObjeto = result.getString("numObjeto");
+                String destinatario1 = result.getString("destinatario");
+                float peso = result.getFloat("peso");
+                String cep1 = result.getString("cep");
+                float valorServico = result.getFloat("valorServico");
+                float quantidade = result.getFloat("quantidade");
+                String departamentos = result.getString("departamento");
+                String status = result.getString("status");
+                String notaFiscal = result.getString("notaFiscal");
+                Date dataEntrega = result.getDate("dataEntrega");
+                String numVenda = result.getString("numVenda");
+                String numCaixa = result.getString("numCaixa");
+               /* int codStatus = result.getInt("codStatus");
+                Date last_status_date = result.getDate("last_status_date");
+                int last_status_code = result.getInt("last_status_code");
+                String last_status_type = result.getString("last_status_type");
+                String last_status_name = result.getString("last_status_name");
+                Date prazo_estimado = result.getDate("prazo_estimado");
+                Timestamp prazo_cumprido = result.getTimestamp("prazo_cumprido");*/
+                mov = new Movimentacao(id, dataPostagem, descServico, numObjeto, destinatario1, peso, cep1, valorServico, quantidade, departamentos, status, dataEntrega, notaFiscal, numVenda, numCaixa);
+               
+           }
+            valores.close();
+            return mov;
+        } catch (SQLException e) {
+            System.out.println(e+"\n"+sql);
+            ContrErroLog.inserir("HOITO - contrMovimentacao", "SQLException", sql, e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+    
+    
 
     /*********************************** PESQUISAS DOS RELATÓRIOS SINTETICO ***************************************/
     public static ArrayList getConsultaSintetica(String sql, String nomeBD) {

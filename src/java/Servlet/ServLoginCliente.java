@@ -65,8 +65,8 @@ public class ServLoginCliente extends HttpServlet {
                     sessao.setAttribute("servicos", us.getServicos());
                     
                     sessao.setAttribute("nomeEmpresa", emp.getFantasia());
-                    sessao.setAttribute("temColeta", emp.getColeta()); // se a agencia tem COLETA
-                    sessao.setAttribute("temPV", emp.getChamada()); //se a agencia tem PRE VENDA
+                    sessao.setAttribute("temColeta", 1); // se a agencia tem COLETA
+                    sessao.setAttribute("temPV", 1); //se a agencia tem PRE VENDA
                     sessao.setAttribute("temETQ", cli.getUsaEtiquetador()); // Se o cliente usa o etiquetador
                     sessao.setAttribute("cliente", cli); 
                     sessao.setAttribute("agencia", emp); 

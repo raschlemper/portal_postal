@@ -20,6 +20,7 @@
     <head>
         <title> Portal Postal</title>
         <%@ include file="../includes/Css_js.jsp" %>
+        <link rel="stylesheet" href="../../plugins/multiselect/css/bootstrap-select.min.css" />
     </head>
     <body>   
         <script type="text/javascript">
@@ -104,15 +105,12 @@
                                             </div>
                                         </li>
                                         <li class="list-group-item list-group-heading">
-                                            <b><%--<input type="checkbox" name="usaPortalPostal" onclick="if (this.checked) {
-                                                        $('#liPortalPostal').show();
-                                                    } else {
-                                                        $('#liPortalPostal').hide();
-                                                    }" value="1" /> --%>Usa Portal Postal? </b> 
+                                            <b>Usa Portal Postal? </b> 
                                             <input type="checkbox" name="usaPortalPostal" id="usaPortalPostal" value="1" data-size="mini" data-toggle="toggle" data-on="SIM" data-off="NÃO" data-onstyle="success" data-offstyle="danger" />
                                         </li>
                                         <li id="liPortalPostal" class="list-group-item" style="display: none;">
                                             <div class="row form-horizontal">
+                                                <%--
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                                                     <label>
                                                         ABA GERENCIAR ETIQUETAS:<br/>
@@ -153,6 +151,7 @@
                                                     </label>
                                                     <select class="form-control text-10px no-padding" name=coleta id=coleta multiple onclick="controleCombobox1(this)" size=10 >
                                                         <option value="201" >ACOMPANHAMENTO</option>
+                                                        <option value="206" >GERENCIAR ROTAS</option>
                                                         <option value="202" >NOVA COLETA</option>
                                                         <option value="203" >COLETADORES</option>
                                                         <option value="204" >TIPO DE COLETA</option>
@@ -178,8 +177,8 @@
                                                         <a style="color:blue;font-size: 8px;" onclick="selectAllCombo(document.getElementById('importacao'), true);">MARCAR TUDO</a><br/>
                                                         <a style="color:red;font-size: 8px;" onclick="selectAllCombo(document.getElementById('importacao'), false);">DESMARCAR TUDO</a><br/></label>
                                                     <select class="form-control text-10px no-padding" name="importacao" id="importacao" multiple onclick="controleCombobox2(this)" size="10" >
-                                                        <option value="301" >ARQUIVO DE MOVIMENTO</option>
-                                                        <option value="302" >ARQUIVO DE AR's</option>
+                                                        <option value="302" >ARQUIVO DE RETORNO DE AR</option>
+                                                        <option value="301" >ARQUIVO DE MOVIMENTAÇAO</option>
                                                         <option value="303" >ARQUIVO DE CLIENTES</option>
                                                         <option value="304" >ARQUIVO DE DEPARTAMENTOS</option>
                                                     </select>
@@ -206,8 +205,9 @@
                                                         <option value="401" >PREFIXO DE ETIQUETAS</option>
                                                         <option value="402" >ABRANGÊNCIA DE SERVIÇOS</option>
                                                         <option value="403" >AMARRAÇÕES</option>
-                                                        <option value="404" >USUÁRIOS</option>
+                                                        <option value="404" >USUÁRIOS DA AGÊNCIA</option>
                                                         <option value="405" >CLIENTES</option>
+                                                        <option value="407" >GRUPO DE FATURAMENTO</option>
                                                         <option value="406" >VERIFICAÇÃO DE CONTRATOS</option>
                                                     </select>
                                                     <script language="">
@@ -224,18 +224,177 @@
 
                                                     </script>
                                                 </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                                    <label>
+                                                        ABA VEICULOS:<br/>
+                                                        <a style="color:blue;font-size: 8px;" onclick="selectAllCombo(document.getElementById('veiculo'), true);">MARCAR TUDO</a><br/>
+                                                        <a style="color:red;font-size: 8px;" onclick="selectAllCombo(document.getElementById('veiculo'), false);">DESMARCAR TUDO</a><br/></label>
+                                                    <select class="form-control text-10px no-padding" name="veiculo" id="veiculo" multiple onclick="controleComboboxPP4(this)" size="10" >
+                                                        <option value="501" >CADASTRO DE VEICULO</option>
+                                                        <option value="502" >MANUTENÇAO</option>
+                                                        <option value="503" >COMBUSTIVEL</option>
+                                                        <option value="504" >MULTA</option>
+                                                        <option value="505" >SEGURO</option>
+                                                        <option value="506" >SINISTRO</option>
+                                                    </select>
+                                                    <script language="">
+                                                        function controleComboboxPP4(combo) {
+                                                            combo_aux_pp4[combo.selectedIndex] = !combo_aux_pp4[combo.selectedIndex];
+                                                            for (i = 0; i < combo.length; i++) {
+                                                                combo.options[i].selected = combo_aux_pp4[i];
+                                                            }
+                                                        }
+                                                        var combo_aux_pp4 = new Array(document.getElementById("veiculo").options.length);
+                                                        for (i = 0; i < document.getElementById("veiculo").options.length; i++) {
+                                                            combo_aux_pp4[i] = document.getElementById("veiculo").options[i].selected;
+                                                        }
+
+                                                    </script>
+                                                </div>
+                                                --%>
+                                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <select style="margin-left: 15px;" name="acessos_pp"  id="acessos_pp" data-width="auto" class="selectpicker show-tick" multiple title="Selecione os acessos permitidos..." multiple data-actions-box="true" data-selected-text-format="static" ><%--onclick="controleComboboxPP5(this)"--%>
+                                                        <optgroup label="TELEGRAMAS">
+                                                            <option value="106" >TELEGRAMAS</option>                                                            
+                                                        </optgroup>
+                                                        <optgroup label="GERENCIAR ETIQUETAS">
+                                                            <option value="101" >ETIQUETAS RESTANTES</option>
+                                                            <option value="102" >SEQUÊNCIAS GERADAS</option>
+                                                            <option value="103" >PESQUISAR ETIQUETA</option>
+                                                            <option value="104" >ETIQUETAS PENDENTES</option>
+                                                            <option value="105" >ETIQUETAS INUTILIZADAS</option>
+                                                        </optgroup>
+                                                        <optgroup label="COLETA">
+                                                            <option value="201" >ACOMPANHAMENTO</option>
+                                                            <option value="206" >GERENCIAR ROTAS</option>
+                                                            <option value="202" >NOVA COLETA</option>
+                                                            <option value="203" >COLETADORES</option>
+                                                            <option value="204" >TIPO DE COLETA</option>
+                                                            <option value="205" >HORÁRIOS DA COLETA</option>
+                                                        </optgroup>
+                                                        <optgroup label="IMPORTAÇOES">
+                                                            <option value="302" >ARQUIVO DE RETORNO DE AR</option>
+                                                            <option value="301" >ARQUIVO DE MOVIMENTAÇAO</option>
+                                                            <option value="303" >ARQUIVO DE CLIENTES</option>
+                                                            <option value="304" >ARQUIVO DE DEPARTAMENTOS</option>
+                                                        </optgroup>
+                                                        <optgroup label="CADASTROS">
+                                                            <option value="401" >PREFIXO DE ETIQUETAS</option>
+                                                            <option value="402" >ABRANGÊNCIA DE SERVIÇOS</option>
+                                                            <option value="403" >AMARRAÇÕES</option>
+                                                            <option value="404" >USUÁRIOS DA AGÊNCIA</option>
+                                                            <option value="405" >CLIENTES</option>
+                                                            <option value="407" >GRUPO DE FATURAMENTO</option>
+                                                            <option value="406" >VERIFICAÇÃO DE CONTRATOS</option>
+                                                        </optgroup>
+                                                        <optgroup label="VEICULOS">
+                                                            <option value="501" >CADASTRO DE VEICULO</option>
+                                                            <option value="502" >MANUTENÇAO</option>
+                                                            <option value="503" >COMBUSTIVEL</option>
+                                                            <option value="504" >MULTA</option>
+                                                            <option value="505" >SEGURO</option>
+                                                            <option value="506" >SINISTRO</option>
+                                                        </optgroup>
+                                                        <optgroup label="FINANCEIRO">
+                                                            <option value="601" >INICIO</option>
+                                                            <option value="602" >LANÇAMENTOS</option>
+                                                            <option value="603" >PROGRAMAÇAO</option>
+                                                            <option value="604" >DEMONSTRATIVO</option>
+                                                            <option value="605" >CADASTROS</option>
+                                                        </optgroup>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </li>
                                         <li class="list-group-item list-group-heading">
-                                            <b><%--<input type="checkbox" name="usaConsolidador" onclick="if (this.checked) {
-                                                        $('#liConsolidador').show();
-                                                    } else {
-                                                        $('#liConsolidador').hide();
-                                                    }" value="1" /> --%>Usa Consolidador? </b>
+                                            <b>Usa Consolidador? </b>
                                             <input type="checkbox" name="usaConsolidador" id="usaConsolidador" value="1" data-size="mini" data-toggle="toggle" data-on="SIM" data-off="NÃO" data-onstyle="success" data-offstyle="danger" />
                                         </li>
                                         <li id="liConsolidador" class="list-group-item" style="display: none;">
                                             <div class="row form-horizontal">
+                                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <select style="margin-left: 15px;" name="acessos_cons"  id="acessos_cons" data-width="auto" class="selectpicker show-tick" multiple title="Selecione os acessos permitidos..." multiple data-actions-box="true" data-selected-text-format="static" ><%--onclick="controleComboboxPP5(this)"--%>
+                                                        <optgroup label="CONFIGURAÇOES">
+                                                            <option value="101" >CADASTRO DE SEQUENCIAS LOGICAS</option>
+                                                            <option value="102" >CADASTRO DE SUB-CAIXAS DO SARA</option>
+                                                            <option value="103" >CONFIGURAÇÕES GERAIS</option>
+                                                            <option value="104" >CONFIGURAR IMPRESSORA</option>
+                                                            <option value="105" >CONFIGURAR BALANÇA</option>
+                                                            <option value="106" >CONFIGURAR E-MAIL</option>
+                                                        </optgroup>
+                                                        <optgroup label="IMPORTAÇOES">
+                                                            <option value="1001" >IMPORTAR ARQUIVO DE POSTAGEM</option>
+                                                            <option value="1002" >CADASTROS DE LAYOUT DE IMPORTAÇAO</option>
+                                                        </optgroup>
+                                                        <optgroup label="FERRAMENTAS">
+                                                            <option value="201" >PROCESSAR OBJETOS COM A BOXCUBO</option>
+                                                            <option value="202" >BIPAR OBJETO DE PRE-POSTAGEM</option>
+                                                            <option value="203" >VENDA LOCAL - SINTETICA</option>
+                                                            <option value="204" >VENDA LOCAL - COMPLETA</option>
+                                                            <option value="205" >VENDA LOCAL - POR CHAVE DE CLIENTE</option>
+                                                            <option value="206" >VENDA LOCAL - OBJETOS SEM REGISTRO</option>
+                                                            <option value="207" >IMPORTAÇAO DE TICKET DO SARA</option>
+                                                            <option value="208" >BIPAR OBJETOS DE PLP DE TERCEIRO</option>
+                                                            <option value="209" >CONFERIR PLP DE TERCEIRO</option>
+                                                            <option value="210" >ENTREGA INTERNA DE OBJETOS</option>
+                                                            <option value="211" >ATUALIZAR SISTEMA MANUALMENTE</option>
+                                                        </optgroup>
+                                                        <optgroup label="EXPORTAÇOES">
+                                                            <option value="301" >EXPORTAR VENDAS PARA O SARA</option>
+                                                            <option value="302" >EXPORTAR LOTES PARA VENDA EM M.F.</option>
+                                                            <option value="303" >EXPORTAR MOVIMENTO PARA PORTAL POSTAL WEB</option>
+                                                            <option value="304" >EXPORTAÇOES DE M.F. REALIZADAS</option>
+                                                            <option value="305" >EXPORTAÇOES SARA REALIZADAS</option>
+                                                        </optgroup>
+                                                        <optgroup label="EXPEDIÇAO">
+                                                            <option value="401" >FAZER EXPEDIÇAO</option>
+                                                            <option value="402" >OBJETOS NAO EXPEDIDOS</option>
+                                                            <option value="403" >IMPRIMIR/EXPORTAR MALAS</option>
+                                                            <option value="404" >SEPARAÇAO AUTOMATICA DE MALAS</option>
+                                                        </optgroup>
+                                                        <optgroup label="PESQUISAS">
+                                                            <option value="501" >PESQUISAR OBJETO POR SRO</option>
+                                                            <option value="502" >PESQUISAR OBJETOS COMPLETA</option>
+                                                            <option value="503" >PESQUISAR O.S./LISTA DE POSTAGEM</option>
+                                                            <option value="504" >PESQUISAR VENDAS LOCAIS</option>
+                                                            <option value="505" >PESQUISAR CEP</option>
+                                                            <option value="506" >PESQUISAR CLIENTES</option>
+                                                        </optgroup>
+                                                        <optgroup label="RELATORIOS">
+                                                            <option value="601" >ATENDIMENTOS DO SARA</option>
+                                                            <option value="602" >ETIQUETAS ALTERADAS</option>
+                                                            <option value="603" >OBJETOS SEM PRE-POSTAGEM</option>
+                                                            <option value="604" >CURVA ABC (RANKING)</option>
+                                                            <option value="605" >RELATORIO DE OBJETOS PROCESSADOS</option>
+                                                            <option value="606" >RELATORIO DE MOVIMENTO</option>
+                                                            <option value="607" >AUDITORIA DE CAIXAS</option>
+                                                        </optgroup>
+                                                        <optgroup label="FATURAS">
+                                                            <option value="701" >GERAR FATURAS</option>
+                                                            <option value="702" >CONSULTAR FATURAS</option>
+                                                            <option value="703" >RECEBER PAGAMENTO DE FATURA</option>
+                                                            <option value="704" >OUTROS LANÇAMENTOS</option>
+                                                            <option value="705" >POSIÇAO CONSOLIDADA DAS FATURAS</option>
+                                                        </optgroup>
+                                                        <optgroup label="BDF">
+                                                            <option value="801" >IMPORTAR DADOS DO BDF</option>
+                                                            <option value="802" >PRE-ALERTA BDF</option>
+                                                            <option value="803" >DEFINIR CLIENTE PARA ATENDIMENTO SARA</option>
+                                                        </optgroup>
+                                                        <optgroup label="UTILITARIOS">
+                                                            <option value="901" >CALCULAR DIGITO VERIFICADOR</option>
+                                                            <option value="902" >MARCAR TODOS OBJETOS COMO EXPEDIDOS</option>
+                                                            <option value="903" >IMPRIMIR CHANCELAS</option>
+                                                            <option value="904" >IMPRIMIR SEQUÊNCIAS LOGICAS DE CLIENTE</option>
+                                                            <option value="905" >ATUALIZAR IP DA BOXCUBO</option>
+                                                            <option value="906" >ATUALIZAR BANCO DE CEPS E TARIFAS</option>
+                                                            <option value="907" >FAZER BACKUP E ORGANIZAR BANCO DE DADOS</option>
+                                                        </optgroup>
+                                                    </select>
+                                                </div>
+                                                
+                                                
+                                                <%--
                                             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                                                 <label>
                                                     ABA CONFIGURAÇÕES:<br/>
@@ -243,10 +402,12 @@
                                                     <a style="color:red;font-size: 8px;" onclick="selectAllCombo(document.getElementById('con_conf'), false);">DESMARCAR TUDO</a><br/>
                                                 </label>
                                                 <select class="form-control text-10px no-padding" name=con_conf id=con_conf multiple onclick="controleCombobox4(this)" size=10 >
-                                                    <option value="101" >CONFIGURAÇÕES GERAIS</option>
-                                                    <option value="102" >CONFIGURAR E-MAIL</option>
-                                                    <option value="103" >CONFIGURAR BALANÇA</option>
+                                                    <option value="101" >CADASTRO DE SEQUENCIAS LOGICAS</option>
+                                                    <option value="102" >CADASTRO DE SUB-CAIXAS DO SARA</option>
+                                                    <option value="103" >CONFIGURAÇÕES GERAIS</option>
                                                     <option value="104" >CONFIGURAR IMPRESSORA</option>
+                                                    <option value="105" >CONFIGURAR BALANÇA</option>
+                                                    <option value="106" >CONFIGURAR E-MAIL</option>
                                                 </select>
                                                 <script language="">
                                                     function controleCombobox4(combo) {
@@ -415,8 +576,8 @@
                                                     }
 
                                                 </script>
+                                            </div>--%>
                                             </div>
-                                                </div>
                                         </li>
                                         <li class="list-group-item">
                                             <dd style="width: 100%;">
@@ -483,6 +644,17 @@
 
         <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet" />
         <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
+        
+        <script src="../../plugins/multiselect/js/bootstrap-select.js"></script>
+        <script>
+            /*$(function() {
+                $('#financeiro').change(function() {
+                    console.log($(this).val());
+                }).multipleSelect({
+                    width: '100%'
+                });
+            });*/
+        </script>
         <script type="text/javascript">
             function ajaxConfereLogin(login, divRetorno) {
                 $.ajax({

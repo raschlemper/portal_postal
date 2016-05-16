@@ -224,14 +224,14 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaCorrent
         };   
         
         var chartSaldo = function() {
-            var dataInicio = moment().endOf("month").format('YYYY-MM-DD');
-            var dataFim = moment().endOf("month").add(3, 'months').format('YYYY-MM-DD');
-            $q.all([LancamentoProgramadoService.getByDataVencimento(dataInicio, dataFim),
+            var dataInicio = moment().format('YYYY-MM-DD');
+            var dataFim = moment().add(3, 'months').format('YYYY-MM-DD');
+            $q.all([LancamentoProgramadoService.getAllAtivo(),
                     LancamentoService.getSaldo(dataInicio, dataFim),
                     ContaCorrenteService.getAll()])
                .then(function(values) { 
-                    var lancamentosSaldos = getLancamentos(values[0], dataInicio, dataFim);
-                    var saldos = formatSaldo(values[1]);
+                    var saldos = getLancamentos(values[1], values[0], dataInicio, dataFim);
+                    saldos = ajusteSaldos(saldos);
                     var limiteContaCorrente = getSaldoContaCorrente(values[2]);
                     var categorias = getDataChartSaldo(saldos, 'data');
                     var valores = getDataChartSaldo(saldos, 'valor');
@@ -242,22 +242,46 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaCorrent
                 });
         };
         
-        var getLancamentos = function(programados, dataInicio, dataFim) {  
+        var getLancamentos = function(saldos, programados, dataInicio, dataFim) { 
+            _.map(saldos, function(saldo) {
+                saldo.data = moment(saldo.data).format('YYYY-MM-DD');
+            });
             _.map(programados, function(programado) {
-                getSaldo(programado, dataInicio, dataFim);
-            })
+                var lancamentos = LancamentoProgramadoService.lancamentoProgramado(programado, dataInicio, dataFim);
+                getSaldo(saldos, lancamentos);
+            });
+            return saldos;
         };
         
-        var getSaldo = function(programado, dataInicio, dataFim) {
-            if(programado.situacao === $scope.situacoes[2]) return;
-            if(programado.numeroParcela > programado.quantidadeParcela) return;
-            var dataVencimento = moment(programado.dataVencimento);
-            if(dataVencimento.isBefore(dataInicio) || dataVencimento.isAfter(dataFim)) return;
-                console.log({id: programado.idLancamentoProgramado,
-                             data: dataVencimento,
-                             valor: programado.valor});            
-            getSaldo(FrequenciaLancamentoService.execute(programado), dataInicio, dataFim);
-            
+        var getSaldo = function(saldos, lancamentos) {
+            _.map(lancamentos, function(lancamento) {        
+                var dataVencimento = moment(lancamento.dataVencimento);            
+                saldos.push({id: lancamento.idLancamentoProgramado,
+                             data: dataVencimento.format('YYYY-MM-DD'),
+                             valor: lancamento.valor}); 
+            });
+        }
+        
+        var ajusteSaldos = function(saldos) {
+            var saldoGroup = [];
+            saldos.sort(compareData);
+            saldos = _.groupBy(saldos, 'data');
+            _.map(saldos, function(saldo, data) {
+                var total = 0;
+                _.map(saldo, function(item) {
+                    total += item.valor
+                });
+                saldoGroup.push({data: data, valor: total});
+            })
+            return formatSaldo(saldoGroup);            
+        }
+        
+        var compareData = function (a,b) {
+            a = moment(a.data);
+            b = moment(b.data);
+            if(a.isBefore(b)) return -1;
+            if(a.isAfter(b)) return 1;
+            return 0;
         }
         
         var formatSaldo = function(saldos) {

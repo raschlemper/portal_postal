@@ -4,16 +4,17 @@
 <%@page import="Emporium.Controle.ContrTelegramaPostal"%>
 <%@page import="Controle.contrCliente"%>
 <%@page import="Entidade.Contato"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <%@page import="java.util.ArrayList, java.util.Date, java.text.SimpleDateFormat, java.sql.*, java.util.Calendar, java.util.Locale" %>
 
 <%
     SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-    String nomeBD = (String) session.getAttribute("nomeBD");
-    if (nomeBD == null) {
+    
+    if (session.getAttribute("agf_empresa") == null) {
         response.sendRedirect("../../index.jsp?msg=Sua sessao expirou! Para voltar ao Portal faça seu login novamente!");
     } else {
+        Usuario user = (Usuario) session.getAttribute("agf_usuario");
+        empresas agf = (empresas) session.getAttribute("agf_empresa");
 
         String vDataAtual = sdf.format(new Date());
         if (request.getParameter("data") != null) {
@@ -28,6 +29,7 @@
         String dataBD2 = Util.FormatarData.DateToBD(vData2);
 %>
 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
     <head>
@@ -84,7 +86,7 @@
                         <div class="row">                            
                             <div class="col-lg-12">
                                 <%
-                                    ArrayList<TelegramaPostal> lista = ContrTelegramaPostal.consultaEnviados(dataBD, dataBD2, nomeBD);
+                                    ArrayList<TelegramaPostal> lista = ContrTelegramaPostal.consultaEnviados(dataBD, dataBD2, agf.getCnpj());
                                     for (TelegramaPostal t : lista) {
                                         Endereco ed = t.getEnderecoDes();
                                         Endereco er = t.getEnderecoRem();
@@ -96,6 +98,7 @@
                                             adicionais += "<br/>- CÓPIA DE TELEGRAMA - VIA " + t.getEnvioCopia() + ": " + t.getEmailCopia();
                                         }
                                 %>
+                                <form action="../../ServTelegramaEnvia">
                                 <ul class="list-unstyled">
                                     <li class="list-group-item list-group-heading">
                                         <div class="row vdivide">
@@ -129,10 +132,27 @@
                                         <b>Mensagem:</b><br/>
                                         <%= t.getMensagem()%>   
                                     </li>
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                                    <label>N° do Telegrama</label>
+                                                    <input type="text" size="10" maxlength="13" class="form-control" name="sro" value="<%= t.getSro()%>" />                                                       
+                                                    <input type="hidden" name="id" value="<%= t.getId()%>"/>
+                                                    <input type="hidden" name='nomeUser' value="<%= user.getNome() %>"/>
+                                                    <input type="hidden" name='nomeBD' value="<%= agf.getCnpj() %>"/>                                                    
+                                                </div>
+                                                <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
+                                                    <label>Valor (R$)</label>
+                                                    <input type="text" size="3" maxlength="6" class="form-control" name="valor" value="<%= t.getValor() %>"  onkeypress="mascara(this, maskReal)" />                                              
+                                                </div>
+                                            </div>
+                                        </li>
                                     <li class="list-group-item">
+                                        <button type="submit" onclick="waitMsg();" class="btn btn-success" ><i class="fa fa-lg fa-spc fa-pencil-square-o"></i> ALTERAR SRO E VALOR</button>
                                         <button type="button" class="btn btn-info" onclick="window.open('telegrama_impressao_b.jsp?id=<%= t.getId()%>', '_blank');" class="regular" ><i class="fa fa-lg fa-spc fa-print"></i> IMPRIMIR TELEGRAMA</button>                                        
-                                    </li>                                        
+                                    </li>          
                                 </ul>
+                                </form>
                                 <%}%>
 
                             </div>

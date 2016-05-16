@@ -363,7 +363,8 @@ function pesquisaSintetica(idCliente, nomeBD) {
     var uf = document.getElementById("uf").value;
     var ar = document.getElementById("ar").checked;
     var vd = document.getElementById("vd").checked;
-    http.open("GET", "../AjaxPages/consulta_sintetico.jsp?idCliente=" + idCliente + "&nomeBD=" + nomeBD + "&dataIni=" + dataInicio + "&dataFim=" + dataFinal + "&situacao=" + situacao + "&servico=" + servico + "&departamento=" + departamento + "&objeto=" + objeto + "&notaFiscal=" + notafiscal + "&destinatario=" + destinatario + "&cep=" + cep + "&ar=" + ar + "&vd=" + vd + "&uf=" + uf, true);
+    var tpFat = document.getElementById("tipoFat").value;
+    http.open("GET", "../AjaxPages/consulta_sintetico.jsp?idCliente=" + idCliente + "&nomeBD=" + nomeBD + "&dataIni=" + dataInicio + "&dataFim=" + dataFinal + "&situacao=" + situacao + "&servico=" + servico + "&departamento=" + departamento + "&objeto=" + objeto + "&notaFiscal=" + notafiscal + "&destinatario=" + destinatario + "&cep=" + cep + "&ar=" + ar + "&vd=" + vd + "&uf=" + uf +"&tipoFat=" + tpFat, true);
     http.onreadystatechange = handleHttpResponsePesquisaCustomizadaObjetos;
     http.send(null);
 }
@@ -393,9 +394,10 @@ function pesquisaAnalitica(idCliente, nomeBD) {
     var uf = document.getElementById("uf").value;
     var ar = document.getElementById("ar").checked;
     var vd = document.getElementById("vd").checked;
-    var lp = document.getElementById("lp").value;
+    var lp = document.getElementById("lp").value;    
+    var tpFat = document.getElementById("tipoFat").value;
     http.open("GET", "../AjaxPages/consulta_analitico.jsp?idCliente=" + idCliente + "&nomeBD=" + nomeBD + "&dataIni=" + dataInicio + "&dataFim=" + dataFinal + "&situacao=" + situacao + "&servico=" + servico + "&departamento=" + departamento + "&objeto=" + objeto + "&notaFiscal=" 
-            + notafiscal + "&destinatario=" + destinatario + "&cep=" + cep + "&ar=" + ar + "&vd=" + vd + "&uf=" + uf+ "&lp="+lp, true );
+            + notafiscal + "&destinatario=" + destinatario + "&cep=" + cep + "&ar=" + ar + "&vd=" + vd + "&uf=" + uf+ "&lp="+lp+ "&tipoFat=" + tpFat, true );
     http.onreadystatechange = handleHttpResponsePesquisaCustomizadaObjetos;
     http.send(null);
 }

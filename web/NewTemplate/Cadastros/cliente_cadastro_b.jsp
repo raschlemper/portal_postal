@@ -14,20 +14,19 @@
     response.setHeader("Pragma", "no-cache"); //HTTP 1.0
     response.setDateHeader("Expires", 0); //prevent caching at the proxy server
 
-    if (session.getAttribute("usuario") == null) {
+    if (session.getAttribute("agf_empresa") == null) {
         response.sendRedirect("../index.jsp?msgLog=3");
     } else {
 
-        int idNivelDoUsuario = (Integer) session.getAttribute("nivel");
-        if (idNivelDoUsuario == 3) {
+        Usuario agf_usuario = (Usuario) session.getAttribute("agf_usuario");
+        empresas agf_empresa = (empresas) session.getAttribute("agf_empresa");
+        if (agf_usuario.getIdNivel() == 3) {
             response.sendRedirect("../Importacao/imp_movimento.jsp?msg=Acesso Negado!");
         }
 
-        String nomeBD = (String) session.getAttribute("empresa");
-        int idEmpresa = (Integer) session.getAttribute("idEmpresa");
         int idClienteInc = Integer.parseInt(request.getParameter("idCliente"));
 
-        Entidade.Clientes cliInc = Controle.contrCliente.consultaClienteById(idClienteInc, nomeBD);
+        Entidade.Clientes cliInc = Controle.contrCliente.consultaClienteById(idClienteInc, agf_empresa.getCnpj());
         String cnpj = cliInc.getCnpj();
         String nome = cliInc.getNome();
         String fantasia = cliInc.getNomeFantasia();
@@ -227,22 +226,24 @@
                     <div id="page-wrapper">
 
                         <jsp:include page="cliente_menu_b.jsp" >
-                            <jsp:param name="nomeBDTab" value="<%= nomeBD%>" />
+                            <jsp:param name="nomeBDTab" value="<%= agf_empresa.getCnpj()%>" />
                             <jsp:param name="activeTab" value="0" />
                             <jsp:param name="idClienteTab" value="<%= idClienteInc%>" />
                             <jsp:param name="temContratoTab" value="<%= cliInc.getTemContrato()%>" />
                             <jsp:param name="nomeClienteTab" value="<%= cliInc.getNomeFantasia()%>" />
                         </jsp:include>   
 
-                        <div class="row">
-                            <div class="col-xs-12">
-                            <div id="destiva"> </div>
-                            <div class="form-inline">
-                                <label><input id="ck_destivar" name="ck_desativar" type="checkbox" value="<%= idClienteInc%>" onclick="desativaCli();" >&nbsp;&nbsp;DESATIVAR ESTE CLIENTE</label>
-                                <input type="hidden" name="nomeBD" value="<%=nomeBD%>" id="nomeBD" />
+                        <%if(agf_empresa.getTipo_sistema().equals("PORTALPOSTAL")){%>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                <div id="destiva"> </div>
+                                <div class="form-inline">
+                                    <label><input id="ck_destivar" name="ck_desativar" type="checkbox" value="<%= idClienteInc%>" onclick="desativaCli();" >&nbsp;&nbsp;DESATIVAR ESTE CLIENTE</label>
+                                    <input type="hidden" name="nomeBD" value="<%=agf_empresa.getCnpj()%>" id="nomeBD" />
+                                </div>
+                                </div>
                             </div>
-                            </div>
-                        </div>
+                        <%}%>
 
                         <div class="row">
                             <div class="col-xs-12">
@@ -295,7 +296,7 @@
                                                         <select class="form-control" name="grupo_fat" id="grupo_fat">
                                                             <option value="0">-- SELECIONE --</option>
                                                             <%
-                                                                ArrayList<GrupoFaturamento> listaGrupo = ContrGrupoFaturamento.consultaTodosTipoColeta(nomeBD);
+                                                                ArrayList<GrupoFaturamento> listaGrupo = ContrGrupoFaturamento.consultaTodosTipoColeta(agf_empresa.getCnpj());
                                                                 for (int i = 0; i < listaGrupo.size(); i++) {
                                                                     GrupoFaturamento gf = listaGrupo.get(i);
                                                                     String sel = "";
@@ -580,7 +581,7 @@
                                                     </label>
                                                     <select class="form-control" name='departamentos' id='departamentos' multiple='true' onclick="controleCombobox1(this)" size=10 >
                                                         <%
-                                                            ArrayList<ClientesDeptos> listaDep = ContrClienteDeptos.consultaDeptos(idClienteInc, nomeBD);
+                                                            ArrayList<ClientesDeptos> listaDep = ContrClienteDeptos.consultaDeptos(idClienteInc, agf_empresa.getCnpj());
                                                             for (int i = 0; i < listaDep.size(); i++) {
                                                                 ClientesDeptos cd = listaDep.get(i);
                                                         %>
@@ -631,7 +632,7 @@
                                                     </thead>
                                                     <tbody>
                                                         <%
-                                                            ArrayList<ClienteSMTP> lista = Controle.ContrClienteSMTP.consultaCadastroSMTP(idClienteInc, nomeBD);
+                                                            ArrayList<ClienteSMTP> lista = Controle.ContrClienteSMTP.consultaCadastroSMTP(idClienteInc, agf_empresa.getCnpj());
                                                             for (int i = 0; i < lista.size(); i++) {
                                                                 ClienteSMTP smtp = lista.get(i);
 

@@ -38,10 +38,14 @@ public class ServTelegramaEnvia extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
             String nomeBD = request.getParameter("nomeBD");
             String nomeUser = request.getParameter("nomeUser");
-            String sro = request.getParameter("sro");
-            ContrTelegramaPostal.updateEnviado(id, nomeUser, sro, nomeBD);
+            String sro = request.getParameter("sro").toUpperCase();
+            float valor = 0;
+            if(request.getParameter("valor") != null && !request.getParameter("valor").equals("")){
+                valor = Float.parseFloat(request.getParameter("valor"));
+            }
+            ContrTelegramaPostal.updateEnviado(id, nomeUser, sro, valor, nomeBD);
             //response.sendRedirect("Agencia/Telegrama/telegrama_naoenviados.jsp?msg=Telegrama marcado como enviado com sucesso!");    
-            sessao.setAttribute("msg", "Telegrama marcado como enviado com sucesso!");
+            sessao.setAttribute("msg", "Telegrama salvo com sucesso!");
             response.sendRedirect(request.getHeader("referer"));
         }
     }

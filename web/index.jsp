@@ -219,7 +219,7 @@
                     document.getElementById('inputEmail').value = $.cookie("LoginPortalPostal");
                     document.getElementById('inputCodigo').value = $.cookie("AgenciaPortalPostal");
                     document.getElementById("checkLembrar").checked = true;
-                    document.getElementById('inputPass')
+                    document.getElementById('inputPassword').focus();
                 }
             }
 

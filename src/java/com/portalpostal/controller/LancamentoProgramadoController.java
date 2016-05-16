@@ -7,8 +7,6 @@ import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.service.LancamentoProgramadoService;
 import com.portalpostal.service.LancamentoService;
 import com.portalpostal.validation.LancamentoProgramadoValidation;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -59,16 +57,12 @@ public class LancamentoProgramadoController {
     } 
     
     @GET
-    @Path("/vencimento")
+    @Path("/ativo")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<LancamentoProgramado> findByDataVencimento(@QueryParam("dataInicio") String dataInicio, 
-            @QueryParam("dataFim") String dataFim) {
+    public List<LancamentoProgramado> findAllAtivo() {
         try {
-            init();   
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date inicio = format.parse(dataInicio);
-            Date fim = format.parse(dataFim);
-            return lancamentoProgramadoService.findByDataVencimento(inicio, fim);
+            init(); 
+            return lancamentoProgramadoService.findAllAtivo();
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }

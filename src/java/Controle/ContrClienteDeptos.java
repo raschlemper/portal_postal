@@ -95,9 +95,9 @@ public class ContrClienteDeptos {
             Conexao.desconectar(conn);
         }
     }
-    public static boolean desativaDepto(String idDepto, String nomeBD) {
+    public static boolean desativaDepto(String idDepto, String idCliente, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "UPDATE cliente_departamentos SET ativo = 0 WHERE idDepartamento = "+idDepto+" ;";
+        String sql = "UPDATE cliente_departamentos SET ativo = 0 WHERE idCliente = "+idCliente+" AND idDepartamento = "+idDepto+" ;";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);            
             valores.executeUpdate();

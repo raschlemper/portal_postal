@@ -229,18 +229,16 @@
             function preencherCampos() {
                 var form = document.form1;
 
-                /*   if (form.servico.value === 'SIMPLES' || form.servico.value === 'CARTA') {
-                 alert("ATENÇÃO!!!<br/><br/>O peso maximo da CARTA é de 500g!<br/>Apos este peso a CARTA vira SEDEX!");
-                 } else if (form.servico.value === 'SEDEX10') {
-                 alert("ATENÇÃO!!!<br/><br/>O peso maximo do SEDEX 10 é de 10Kg!");
-                 } else if (form.servico.value === 'SEDEX12') {
-                 alert("ATENÇÃO!!!<br/><br/>O peso maximo do SEDEX 12 é de 10Kg!");
-                 } else if (form.servico.value === 'ESEDEX') {
-                 alert("ATENÇÃO!!!<br/><br/>O peso maximo do E-SEDEX é de 15Kg!");
-                 }*/
-
                 if (form.nome.value === '') {
                     alert('Preencha o NOME do destinatário!');
+                    return false;
+                } else if(form.nome.value.length > 70){
+                    alert('Tamanho máximo de 70 caracteres para o NOME do destinatário!');
+                    return false;
+                }
+                
+                if(form.aoscuidados.value.length > 25){
+                    alert('Tamanho máximo de 25 caracteres para o campo Aos Cuidados!');
                     return false;
                 }
 
@@ -248,6 +246,9 @@
                 if (form.servico.value !== 'OUTROS' || auxOutros[2] !== 'INT') {
                     if (form.cep.value === '' || form.cep.value.length !== 9) {
                         alert('Preencha um CEP válido do destinatário!');
+                        return false;
+                    } else if(form.cep.value.length > 9){
+                        alert('Tamanho máximo de 9 caracteres para o CEP do destinatário!');
                         return false;
                     }
                     if (form.uf.value === '') {
@@ -259,13 +260,46 @@
                 if (form.endereco.value === '') {
                     alert('Preencha o ENDEREÇO do destinatário!');
                     return false;
+                } else if(form.nome.value.length > 80){
+                    alert('Tamanho máximo de 80 caracteres para o ENDEREÇO do destinatário!');
+                    return false;
                 }
                 if (form.numero.value === '') {
                     alert('Preencha o NÚMERO do destinatário!');
                     return false;
+                } else if(form.numero.value.length > 8){
+                    alert('Tamanho máximo de 8 caracteres para o NÚMERO do destinatário!');
+                    return false;
+                }
+                if(form.complemento.value.length > 50){
+                    alert('Tamanho máximo de 50 caracteres para o COMPLEMENTO do destinatário!');
+                    return false;
+                }
+                if (form.bairro.value === "") {
+                    alert('Preencha o BAIRRO do destinatário!');
+                    return false;
+                } else if(form.bairro.value.length > 50){
+                    alert('Tamanho máximo de 50 caracteres para o BAIRRO do destinatário!');
+                    return false;
                 }
                 if (form.cidade.value === '') {
                     alert('Preencha a CIDADE do destinatário!');
+                    return false;
+                }
+                
+                
+                if(form.obs.value.length > 100){
+                    alert('Tamanho máximo de 100 caracteres para a Observação!');
+                    return false;
+                }
+                
+                if(form.conteudo.value.length > 200){
+                    alert('Tamanho máximo de 200 caracteres para o Conteúdo!');
+                    return false;
+                }
+                
+                if(form.notaFiscal.value.length > 40){
+                    alert('Tamanho máximo de 40 caracteres para a Nota Fiscal!');
                     return false;
                 }
 
@@ -1284,7 +1318,7 @@
                                     <dd>
                                         <label>Nome / Razão Social<b class="obg">*</b><a onClick="verPesquisarDestinatario('single');"><img src="../../imagensNew/lupa.png" /> PESQUISAR</a></label>
                                         <input style="display:none;" type="text" name="somefakename" />
-                                        <input type="text" name="nome" id="nome" size="50" maxlength="80" value="" autocomplete="off" style="margin-bottom: 5px;" />
+                                        <input type="text" name="nome" id="nome" size="50" maxlength="70" value="" autocomplete="off" style="margin-bottom: 5px;" />
                                         <br/><input type="checkbox" name="salvarDestinatario" id="salvarDestinatario" value="1" checked /><i> Salvar os dados do destinatário.</i>
                                     </dd>
                                     <dd>
@@ -1326,7 +1360,7 @@
                                     </dd>
                                     <dd>
                                         <label>Complemento</label>
-                                        <input type="text" size="20" name="complemento" id="complemento" maxlength="60" value="" />
+                                        <input type="text" size="20" name="complemento" id="complemento" maxlength="50" value="" />
                                     </dd>
                                     <dd>
                                         <label>Bairro</label>
@@ -1373,7 +1407,7 @@
                                 <li id="paisDest" class="esconder">
                                     <dd>
                                         <label>Estado<b class="obg">*</b></label>
-                                        <input type="text" name="estado" id="estado" maxlength="50" value="" />
+                                        <input type="text" name="estado" id="estado" maxlength="2" value="" />
                                     </dd>
                                     <dd>
                                         <label>País<b class="obg">*</b></label>
@@ -1404,7 +1438,7 @@
                                 <li>
                                     <dd>
                                         <label id="labelObs">Observações<span style="color:red;">(APARECE SOMENTE NA ETIQUETA)</span></label>
-                                        <input type="text" name="obs" id="obs" size="55" maxlength="90" value="" />
+                                        <input type="text" name="obs" id="obs" size="55" maxlength="100" value="" />
                                     </dd>
                                     <dd>
                                         <label>Conteúdo<span style="color:red;">(APARECE SOMENTE NO A.R.)</span></label>

@@ -226,6 +226,27 @@ public class ContrServicoECT {
             Conexao.desconectar(conn);
         }
     }
+    
+    //OK
+    public static ServicoECT consultaByCodigoECT(int codigoECT) {
+        Connection conn = Conexao.conectarGeral();
+        String sql = "SELECT * FROM servicos_ect WHERE codECT = " + codigoECT + ";";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            ServicoECT sv = null;
+            if (result.next()) {
+                sv = new ServicoECT(result);
+            }
+            valores.close();
+            return sv;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrNivel", "SQLException", sql, e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
 
     //OK
     public static Map<String, ServicoECT> consultaMapServicosAvista() {

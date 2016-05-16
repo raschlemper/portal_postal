@@ -149,6 +149,23 @@ public class Movimentacao {
         this.prazo_estimado = prazo_estimado;
         this.prazo_cumprido = prazo_cumprido;
     }
+    public Movimentacao(String id, Date dataPostagem, String descServico, String numObjeto, String destinatario, float peso, String cep, float valorServico, float quantidade, String departamento, String status, Date dataEntrega, String notaFiscal, String numVenda, String numCaixa) {
+        this.id = id;
+        this.dataPostagem = dataPostagem;
+        this.descServico = descServico;
+        this.numObjeto = numObjeto;
+        this.destinatario = destinatario;
+        this.peso = peso;
+        this.cep = cep;
+        this.valorServico = valorServico;
+        this.quantidade = quantidade;
+        this.departamento = departamento;
+        this.status = status;
+        this.dataEntrega = dataEntrega;
+        this.notaFiscal = notaFiscal;
+        this.numVenda = numVenda;
+        this.numCaixa = numCaixa;
+    }
 
     public Movimentacao(String id, Date dataPostagem, String descServico, String numObjeto, String destinatario,
             float peso, String cep, float valorServico, float quantidade, String departamento, String status, Date dataEntrega,

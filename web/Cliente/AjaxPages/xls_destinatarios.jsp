@@ -5,7 +5,7 @@
 <%@ page import="java.sql.*, javax.swing.*, java.util.*, java.text.SimpleDateFormat, java.text.DecimalFormat, java.util.Date" %>
 <%
     response.setContentType("application/xls");
-    response.setHeader("Content-disposition", "attachment; filename=relatorio_sintetico.xls");
+    response.setHeader("Content-disposition", "attachment; filename=relatorio_destinatarios.xls");
     response.setHeader("Cache-Control", "no-cache");
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
