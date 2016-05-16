@@ -1,11 +1,11 @@
 'use strict';
 
-app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService', 'LancamentoProgramadoService', 'LancamentoTransferenciaService', 'LancamentoConciliadoService', 'ContaService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $filter, LancamentoService, LancamentoProgramadoService, LancamentoTransferenciaService, LancamentoConciliadoService, ContaService, ModalService, DatePickerService, ListaService, LISTAS) {
+app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService', 'LancamentoProgramadoService', 'LancamentoTransferenciaService', 'LancamentoConciliadoService', 'ContaService', 'PlanoContaService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
+    function ($scope, $filter, LancamentoService, LancamentoProgramadoService, LancamentoTransferenciaService, LancamentoConciliadoService, ContaService, PlanoContaService, ModalService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {
             $scope.lancamentos = [];
-            $scope.lancamentosLista = [];
+            $scope.lancamentosLista = [];     
             $scope.tipos = LISTAS.lancamento;
             $scope.modelos = LISTAS.modeloLancamento;
             $scope.situacoes = LISTAS.situacaoLancamento;
@@ -13,16 +13,25 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             $scope.datepickerDataFim = angular.copy(DatePickerService.default);    
             $scope.lancSearch = {};
             contas();
-            initTable();      
+            initTipos();
+            initTable();
         };  
+        
+        var initTipos = function() {       
+            var modelo = angular.copy($scope.modelos[1]);
+            var maxTipo = _.max($scope.tipos, function(tipo){ return tipo.id; });
+            modelo.id = maxTipo.id + 1;
+            $scope.tipos.push(modelo);
+        }
         
         var initTable = function() {            
             $scope.colunas = [              
-                {label: '', column: 'tipo', headerClass: 'no-sort', dataClass:'text-center col-tipo', filter: {name: 'tipoLancamento', args: ''}},         
-                {label: '', column: 'situacao', headerClass: 'no-sort', dataClass:'text-center col-compensado', filter: {name: 'situacaoLancamento', args: ''}},         
+                {label: '', column: 'tipo.descricao', headerClass: 'no-sort', dataClass:'text-center col-tipo', filter: {name: 'tipoLancamento', args: 'z'}},         
+                {label: '', column: 'situacao.descricao', headerClass: 'no-sort', dataClass:'text-center col-compensado', filter: {name: 'situacaoLancamento', args: ''}},         
                 {label: '', column: 'numeroLoteConciliado', headerClass: 'no-sort', dataClass:'text-center col-reconciliado', filter: {name: 'conciliadoLancamento', args: ''}},         
-                {label: 'Data', column: 'dataLancamento', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
+                {label: 'Data', column: 'dataLancamento', dataClass: 'text-center cel-data', filter: {name: 'date', args: 'dd/MM/yy'}},                
                 {label: 'Número', column: 'numero'},               
+                {label: 'Plano Conta', column: 'planoConta'},         
                 {label: 'Favorecido', column: 'favorecido'},                
                 {label: 'Histórico', column: 'historico'},
                 {label: 'Depósito', column: 'deposito', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}},  
@@ -31,13 +40,14 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             ]            
             $scope.linha = {
                 conditionalClass: function(item) {
-                    if(item.deposito) return 'text-primary';
-                    else if(item.pagamento) return 'text-danger';
+                    if(item.tipo.id === $scope.tipos[0].id) return 'text-primary';
+                    else if(item.tipo.id === $scope.tipos[1].id) return 'text-danger';
+                    else if(item.tipo.id === $scope.tipos[$scope.tipos.length - 1].id) return 'text-warning';
                 },
                 events: { 
                     edit: function(lancamento) {
                         if(validaConciliado(lancamento.idLancamento)) {
-                            modalConfirmar().then(function() {
+                            modalConfirmarConciliado().then(function() {
                                 $scope.editar($scope.conta, lancamento.idLancamento);
                             });
                         } else {
@@ -46,7 +56,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                     },
                     remove: function(lancamento) {
                         if(validaConciliado(lancamento.idLancamento)) {
-                            modalConfirmar().then(function() {
+                            modalConfirmarConciliado().then(function() {
                                 $scope.excluir($scope.conta, lancamento);
                             });
                         } else {
@@ -85,7 +95,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 .then(function (data) {
                     $scope.contas = data;
                     $scope.conta = $scope.contas[0];
-                    todos($scope.conta);
+                    planoContas();
                 })
                 .catch(function (e) {
                     console.log(e);
@@ -96,11 +106,24 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             $scope.conta = conta;
             todos(conta);
         }
+        
+        var planoContas = function() {
+            PlanoContaService.getStructure()
+                .then(function (data) {
+                    $scope.planoContas = data;
+                    PlanoContaService.estrutura($scope.planoContas);
+                    $scope.planoContas = PlanoContaService.flatten($scope.planoContas);                 
+                    todos($scope.conta);
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
 
         var todos = function(conta) {
             ContaService.getLancamento(conta.idConta)
                 .then(function (data) {
-                    $scope.lancamentos = data.lancamentos;
+                    $scope.lancamentos = angular.copy(data.lancamentos);
                     $scope.lancamentosLista = criarLancamentosLista(data);
                 })
                 .catch(function(e) {
@@ -110,10 +133,19 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         
         var criarLancamentosLista = function(data) {
             return _.map(data.lancamentos, function(lancamento) { 
-                if(lancamento.tipo.codigo === 'despesa') { lancamento.pagamento = lancamento.valor * -1; } 
-                else if(lancamento.tipo.codigo === 'receita') { lancamento.deposito = lancamento.valor; }  
-                lancamento.numero = lancamento.numero + '-' + lancamento.numeroParcela;
-                return _.pick(lancamento, 'idLancamento', 'tipo', 'dataLancamento', 'numero', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico', 'situacao', 'numeroLoteConciliado');
+                if(lancamento.tipo.id === $scope.tipos[1].id) { lancamento.pagamento = lancamento.valor * -1; } 
+                else if(lancamento.tipo.id === $scope.tipos[0].id) { lancamento.deposito = lancamento.valor; }  
+                if(lancamento.numeroParcela) { lancamento.numero = lancamento.numero + '-' + lancamento.numeroParcela; }
+                if(lancamento.modelo.id === $scope.modelos[1].id) { 
+                    lancamento.tipo = $scope.tipos[$scope.tipos.length - 1];
+                }
+                if(lancamento.planoConta && lancamento.planoConta.idPlanoConta) { 
+                    var planoConta = ListaService.getPlanoContaValue($scope.planoContas, lancamento.planoConta.idPlanoConta); 
+                    lancamento.planoConta = planoConta.descricao;                    
+                } else {
+                    lancamento.planoConta = null;
+                }
+                return _.pick(lancamento, 'idLancamento', 'tipo', 'dataLancamento', 'numero', 'planoConta', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico', 'situacao', 'numeroLoteConciliado');
             })
         };
         
@@ -186,12 +218,26 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             });
         };
 
-        $scope.compensar = function(lancamentos) {
-            //TODO: Colocar uma mensagem perguntando se é para compensar todos os registros
-            lancamentos = _.filter(lancamentos, function(lancamento) {
-                return lancamento.selected;
+        $scope.compensar = function(conta, lancamentos) {
+            modalConfirmarCompensado().then(function() {
+                var lancamentosCompletos = [];
+                _.map(lancamentos, function(lancamento) {
+                    if(!lancamento.selected) return;
+                    var lancamentoCompleto = ListaService.getLancamentoValue($scope.lancamentos, lancamento.idLancamento);
+                    lancamentoCompleto.conta = conta;
+                    lancamentoCompleto.situacao = $scope.situacoes[2];
+                    lancamentoCompleto = ajustarDados(lancamentoCompleto);
+                    lancamentosCompletos.push(lancamentoCompleto);
+                });
+                LancamentoService.updateAll(lancamentosCompletos)
+                    .then(function (data) {  
+                        modalMessage("Lançamento Compensado com sucesso!");
+                        todos(conta);
+                    })
+                    .catch(function(e) {
+                        modalMessage(e);
+                    });
             });
-            console.log(lancamentos);
         };
 
         $scope.editar = function(conta, idLancamento) {
@@ -237,7 +283,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         var excluir = function(conta, idLancamento) {
             LancamentoService.get(idLancamento)
                 .then(function(lancamento) {
-                    if(lancamento.numeroParcela < lancamento.lancamentoProgramado.numeroParcela) {                
+                    if(lancamento.lancamentoProgramado && lancamento.numeroParcela < lancamento.lancamentoProgramado.numeroParcela) {                
                         modalMessage("Este lançamento não pode ser excluído. É necessário excluir todos os lançamentos posteriores!");
                         return;
                     }     
@@ -278,6 +324,10 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             data.dataCompensacao = null;
             data.situacao = data.situacao.id;
             data.modelo = data.modelo.id; 
+            data.valorDesconto = data.valorDesconto || 0;
+            data.valorJuros = data.valorJuros || 0;
+            data.valorMulta = data.valorMulta || 0;
+            if(data.situacao === $scope.situacoes[2].id) { data.dataCompensacao = moment(); }
             return data;
         }
         
@@ -341,7 +391,6 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             if(planoConta) { lancamento.planoConta = { idPlanoConta: planoConta.idPlanoConta }; }
             if(tipo) { lancamento.tipo = tipo.id; }
             lancamento.situacao = lancamento.situacao.id;
-            lancamento.historico = '(' + modelo.descricao + ') ' + lancamento.historico;
             return lancamento;
         }
         
@@ -382,8 +431,13 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             return modalInstance.result;
         };
         
-        var modalConfirmar = function() {
+        var modalConfirmarConciliado = function() {
             var modalInstance = ModalService.modalConfirmar('Alerta Lançamento', 'Este lançamento está conciliado. <br/> As alterações poderão impactar no lançamento de conciliação! <br/> Deseja continuar?');
+            return modalInstance.result;
+        };
+        
+        var modalConfirmarCompensado = function() {
+            var modalInstance = ModalService.modalConfirmar('Alerta Lançamento', 'Deseja compensar todos os lançamentos selecionados?');
             return modalInstance.result;
         };
         

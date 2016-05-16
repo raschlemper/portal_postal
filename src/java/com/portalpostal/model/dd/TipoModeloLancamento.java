@@ -11,7 +11,7 @@ public enum TipoModeloLancamento {
     PROGRAMADO("programado", "Programado"),
     TRANSFERENCIA_PROGRAMADO("transferenciaprogramado", "Transferência Programada"),
     PARCELADO("parcelado", "Parcelado"),
-    CONCILIADO("conciliado", "Conciliado");
+    CONCILIADO("reconciliado", "Reconciliado");
     
     private final String codigo;
     private final String descricao;

@@ -44,10 +44,10 @@
                                     <label class="small">Beneficiário</label>
                                     <div class="input-group">
                                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                        <input type="text" autocomplete="off" name="codigoBeneficiario" class="form-control" ng-model="carteiraCobranca.codigoBeneficiario" 
+                                        <input type="number" autocomplete="off" name="codigoBeneficiario" class="form-control" ng-model="carteiraCobranca.codigoBeneficiario" 
                                                ng-required="true" placeholder="Número do beneficiário"/>     
                                         <span class="input-group-addon">-</span>
-                                        <input type="text" autocomplete="off" name="codigoBeneficiarioDv" size="2" ng-maxlength="2" class="form-control" ng-model="carteiraCobranca.codigoBeneficiarioDv" 
+                                        <input type="number" autocomplete="off" name="codigoBeneficiarioDv" min="0" max="99" class="form-control" ng-model="carteiraCobranca.codigoBeneficiarioDv" 
                                                ng-required="true"/>                                               
                                     </div>
                                 </div>
@@ -55,7 +55,7 @@
                                     <label class="small">Convêncio</label>
                                     <div class="input-group">
                                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                        <input type="text" autocomplete="off" name="codigoConvenio" class="form-control" ng-model="carteiraCobranca.codigoConvenio" 
+                                        <input type="number" autocomplete="off" name="codigoConvenio" class="form-control" ng-model="carteiraCobranca.codigoConvenio" 
                                                placeholder="Número do convênio"/>   
                                     </div>
                                 </div>     
@@ -63,7 +63,7 @@
                                     <label class="small">Carteira</label>
                                     <div class="input-group">
                                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                        <input type="text" autocomplete="off" name="codigoCarteira" class="form-control" ng-model="carteiraCobranca.codigoCarteira" 
+                                        <input type="number" autocomplete="off" name="codigoCarteira" class="form-control" ng-model="carteiraCobranca.codigoCarteira" 
                                                ng-required="true" placeholder="Número da carteira"/>   
                                     </div>
                                 </div>       
@@ -72,7 +72,7 @@
                                     <div class="input-group">
                                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
                                         <input type="text" autocomplete="off" name="especieDocumento" class="form-control" ng-model="carteiraCobranca.especieDocumento" 
-                                               placeholder="Espécie de documento"/>   
+                                               maxlength="2" placeholder="Espécie de documento"/>   
                                     </div>
                                 </div>                        
                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">

@@ -22,7 +22,12 @@
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-money"></i></span>
                                 <select class="form-control" name="contaCorrente" ng-model="cartaoCredito.contaCorrente"
-                                        ng-options="contaCorrente.nome for contaCorrente in contasCorrentes track by contaCorrente.idContaCorrente"></select>
+                                    ng-options="contaCorrente.nome for contaCorrente in contasCorrentes track by contaCorrente.idContaCorrente">
+                                    <option value="">Nenhuma</option>
+                                </select>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-lg btn-primary" type="button" ng-click="openContaCorrente()"><i class="fa fa-plus-circle"></i></button>
+                                </span>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">

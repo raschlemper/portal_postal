@@ -56,7 +56,7 @@ app.constant('LISTAS', {
                          {'id': 2, 'codigo': 'programado', 'descricao': 'Programado'},
                          {'id': 3, 'codigo': 'transferenciaprogramado', 'descricao': 'Transferência Programada'},
                          {'id': 4, 'codigo': 'parcelado', 'descricao': 'Parcelado'},
-                         {'id': 5, 'codigo': 'conciliado', 'descricao': 'Conciliado'}],
+                         {'id': 5, 'codigo': 'reconciliado', 'descricao': 'Reconciliado'}],
 
     "situacaoLancamento": [{'id': 0, 'codigo': 'normal', 'descricao': 'Normal'},  
                            {'id': 1, 'codigo': 'naocompensado', 'descricao': 'Não Compensado'},  
@@ -77,17 +77,17 @@ app.constant('LISTAS', {
                    {'id': 8, 'codigo': 'semestral', 'descricao': 'Semestral'},  
                    {'id': 9, 'codigo': 'anual', 'descricao': 'Anual'}],
     
-    "meses": [{'id': 0, 'codigo': 'janeiro', 'descricao': 'Janeiro', abreviacao: 'Jan'},  
-              {'id': 1, 'codigo': 'fevereiro', 'descricao': 'Fevereiro', abreviacao: 'Fev'},  
-              {'id': 2, 'codigo': 'marco', 'descricao': 'Março', abreviacao: 'Mar'},  
-              {'id': 3, 'codigo': 'abril', 'descricao': 'Abril', abreviacao: 'Abr'},  
-              {'id': 4, 'codigo': 'maio', 'descricao': 'Maio', abreviacao: 'Mai'},  
-              {'id': 5, 'codigo': 'junho', 'descricao': 'Junho', abreviacao: 'Jun'},  
-              {'id': 6, 'codigo': 'julho', 'descricao': 'Julho', abreviacao: 'Jul'},  
-              {'id': 7, 'codigo': 'agosto', 'descricao': 'Agosto', abreviacao: 'Ago'},  
-              {'id': 8, 'codigo': 'setembro', 'descricao': 'Setembro', abreviacao: 'Set'},  
-              {'id': 9, 'codigo': 'outubro', 'descricao': 'Outubro', abreviacao: 'Out'},  
-              {'id': 10, 'codigo': 'novembro', 'descricao': 'Novembro', abreviacao: 'Nov'},  
-              {'id': 11, 'codigo': 'dezembro', 'descricao': 'Dezembro', abreviacao: 'Dez'}]
+    "meses": [{'id': 0, 'codigo': 'janeiro', 'descricao': 'Janeiro', abreviacao: 'Jan', order: 1},  
+              {'id': 1, 'codigo': 'fevereiro', 'descricao': 'Fevereiro', abreviacao: 'Fev', order: 2},  
+              {'id': 2, 'codigo': 'marco', 'descricao': 'Março', abreviacao: 'Mar', order: 3},  
+              {'id': 3, 'codigo': 'abril', 'descricao': 'Abril', abreviacao: 'Abr', order: 4},  
+              {'id': 4, 'codigo': 'maio', 'descricao': 'Maio', abreviacao: 'Mai', order: 5},  
+              {'id': 5, 'codigo': 'junho', 'descricao': 'Junho', abreviacao: 'Jun', order: 6},  
+              {'id': 6, 'codigo': 'julho', 'descricao': 'Julho', abreviacao: 'Jul', order: 7},  
+              {'id': 7, 'codigo': 'agosto', 'descricao': 'Agosto', abreviacao: 'Ago', order: 8},  
+              {'id': 8, 'codigo': 'setembro', 'descricao': 'Setembro', abreviacao: 'Set', order: 9},  
+              {'id': 9, 'codigo': 'outubro', 'descricao': 'Outubro', abreviacao: 'Out', order: 10},  
+              {'id': 10, 'codigo': 'novembro', 'descricao': 'Novembro', abreviacao: 'Nov', order: 11},  
+              {'id': 11, 'codigo': 'dezembro', 'descricao': 'Dezembro', abreviacao: 'Dez', order: 12}]
 
 });

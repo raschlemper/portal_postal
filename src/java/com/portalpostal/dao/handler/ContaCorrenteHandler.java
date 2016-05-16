@@ -26,6 +26,7 @@ public class ContaCorrenteHandler extends GenericHandler implements ResultSetHan
         contaCorrente.setContaCorrente(getInt(result, "contaCorrente"));
         contaCorrente.setContaCorrenteDv(getInt(result, "contaCorrente_dv"));
         contaCorrente.setPoupanca(getBoolean(result, "poupanca"));
+        contaCorrente.setLimite(getDouble(result, "limite"));
         return contaCorrente;
     }
     

@@ -6,21 +6,26 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" >
                             <div class="row">
-                                <div class="col-md-8">Demonstrativo Financeiro</div>
-                                <div class="col-md-4">
-                                    <div class="form-inline">
-                                        <div class="pull-right">
-                                            <label>Ano:</label>
-                                            <select class="form-control" ng-model="anoSelected" ng-change="changeAno(anoSelected)"
-                                                ng-options="ano.descricao for ano in anos track by ano.id">    
-                                            </select>
-                                        </div>
+                                <div class="col-md-7">Demonstrativo Financeiro</div>
+                                <div class="col-md-5 pull-right">
+                                    <div class="form-inline">                                        
+                                        <label>Mês:</label>
+                                        <select class="form-control" ng-model="mesSelected"
+                                            ng-options="mes.descricao for mes in meses track by mes.id">    
+                                        </select>                                            
+                                        <label>Ano:</label>
+                                        <select class="form-control" ng-model="anoSelected"
+                                            ng-options="ano.descricao for ano in anos track by ano.id">    
+                                        </select>
+                                        <button class="btn btn-sm btn-primary pull-right" ng-click="pesquisar(mesSelected, anoSelected)" style="margin-right: 10px;">
+                                            <i class="fa fa-lg fa-search fa-spc"></i> PESQUISAR 
+                                        </button>                                            
                                     </div>
                                 </div>
                             </div> 
                         </div>
                         <div class="panel-body" ng-if="!estruturasLista.length">
-                            <div class="panel-msg-info text-center">Não existem lançamentos para o peŕiodo selecionado!</div>
+                            <div class="panel-msg-info text-center">Não existem lançamentos para o período selecionado!</div>
                         </div>
                         <div class="panel-body panel-list" ng-if="estruturasLista.length">
                             
@@ -29,7 +34,9 @@
                                     <div class="row">
                                         <div class="col-md-3">Plano de Conta</div>
                                         <div class="col-md-9">
-                                            <div class="col-md-1" ng-repeat="mes in meses track by mes.id">{{mes.abreviacao}}</div>
+                                            <div class="col-md-1 text-center" ng-repeat="periodo in periodoSelected track by $index">
+                                                {{periodo.abreviacao}}<br/>{{periodo.ano}}
+                                            </div>
                                         </div>
                                     </div>                
                                 </div> 

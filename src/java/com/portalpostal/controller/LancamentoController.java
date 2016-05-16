@@ -154,6 +154,22 @@ public class LancamentoController {
         }
     } 
     
+    @PUT
+    @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void updateAll(List<Lancamento> lancamentos) {
+        try {
+            init();
+            for (Lancamento lancamento : lancamentos) {                
+                validation(lancamento);
+                lancamentoService.update(lancamento);
+            }
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    } 
+    
     @DELETE
     @Path("/{idLancamento}")
     @Produces(MediaType.APPLICATION_JSON)

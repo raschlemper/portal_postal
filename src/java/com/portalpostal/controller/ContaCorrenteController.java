@@ -53,6 +53,18 @@ public class ContaCorrenteController {
     }  
     
     @GET
+    @Path("/carteiracobranca")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ContaCorrente> findAllCarteiraCobranca() {
+        try {
+            init();    
+            return contaCorrenteService.findAllCarteiraCobranca();
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }  
+    
+    @GET
     @Path("/{idContaCorrente}")
     @Produces(MediaType.APPLICATION_JSON)
     public ContaCorrente find(@PathParam("idContaCorrente") Integer idContaCorrente) {

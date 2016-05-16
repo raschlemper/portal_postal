@@ -9,7 +9,8 @@
                             <ul class="list-group list-group-overflow">
                                 <li class="list-group-item" ng-repeat="conta in contas track by conta.idConta">
                                     <strong>{{conta.nome}}</strong> </br>
-                                    <span>Saldo <i class="pull-right">{{conta.saldo | currency : 'R$ '}}</i></span>
+                                    <span>Saldo <i class="pull-right" ng-class="{'text-danger': conta.saldo < 0}">
+                                            {{conta.saldo | currency : 'R$ '}}</i></span>
                                 </li>
                             </ul>  
                         <!--</div>-->

@@ -7,8 +7,8 @@ app.controller('ModalEditarCarteiraCobrancaController', ['$scope', '$modalInstan
             $scope.carteiraCobranca = carteiraCobranca || {};
             $scope.carteiraCobranca.aceite = (carteiraCobranca && carteiraCobranca.aceite);
             $scope.carteiraCobranca.baixa = (carteiraCobranca && carteiraCobranca.baixa);
-            if($scope.carteiraCobranca.aceite == null) { $scope.carteiraCobranca.aceite = false; }
-            if($scope.carteiraCobranca.baixa == null) { $scope.carteiraCobranca.baixa = false; }
+            if(!$scope.carteiraCobranca.aceite) { $scope.carteiraCobranca.aceite = false; }
+            if(!$scope.carteiraCobranca.baixa) { $scope.carteiraCobranca.baixa = false; }
             getTitle();
             contaCorrente();
         };
@@ -80,7 +80,7 @@ app.controller('ModalEditarCarteiraCobrancaController', ['$scope', '$modalInstan
                 alert('Preencha o dígito verificador (DV) do código do beneficiário da carteira de cobrança!');
                 return false;
             }
-            if (form.codigoBeneficiarioDv.$error.maxlength) {
+            if (form.codigoBeneficiarioDv.$error.min || form.codigoBeneficiarioDv.$error.max) {
                 alert('Preencha o dígito verificador (DV) do código do beneficiário da carteira de cobrança com no máximo 2 dígitos!');
                 return false;
             }

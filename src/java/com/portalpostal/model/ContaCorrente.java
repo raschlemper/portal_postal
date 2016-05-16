@@ -12,6 +12,7 @@ public class ContaCorrente {
     private Integer contaCorrente;
     private Integer contaCorrenteDv;
     private Boolean poupanca;
+    private Double limite;
     private List<CartaoCredito> cartaoCreditos;
     private List<CarteiraCobranca> carteiraCobrancas;
     private List<Conta> contas;
@@ -78,6 +79,14 @@ public class ContaCorrente {
 
     public void setPoupanca(Boolean poupanca) {
         this.poupanca = poupanca;
+    }
+
+    public Double getLimite() {
+        return limite;
+    }
+
+    public void setLimite(Double limite) {
+        this.limite = limite;
     }
 
     public List<CartaoCredito> getCartaoCreditos() {

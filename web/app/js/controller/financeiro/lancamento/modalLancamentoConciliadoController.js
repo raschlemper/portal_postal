@@ -15,7 +15,7 @@ app.controller('ModalLancamentoConciliadoController', ['$scope', '$modalInstance
         };
         
         var getTitle = function() {
-            $scope.title = "Inserir Novo Lançamento de Conciliado";
+            $scope.title = "Inserir Novo Lançamento Reconciliado";
         };
         
         var contas = function() {

@@ -7,6 +7,7 @@ app.controller('ModalEditarContaCorrenteController', ['$scope', '$modalInstance'
             $scope.maxValue = 31;
             $scope.contaCorrente = contaCorrente || {};
             $scope.contaCorrente.poupanca = (contaCorrente && contaCorrente.poupanca);
+            if(!$scope.contaCorrente.poupanca) { $scope.contaCorrente.poupanca = false; }
             getTitle();
             bancos();
         };
@@ -26,6 +27,29 @@ app.controller('ModalEditarContaCorrenteController', ['$scope', '$modalInstance'
                     console.log(e);
                 });
         }
+        
+        $scope.openBanco = function() {
+            modalSalvarBanco().then(function(result) {
+                BancoService.save(result)
+                    .then(function(data) {  
+                        modalMessage("Banco " + data.nome +  " Inserido com sucesso!");
+                        bancos();
+                    })
+                    .catch(function(e) {
+                        modalMessage(e);
+                    });
+            });
+        }
+        
+        var modalSalvarBanco = function(banco) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/banco/modalEditarBanco.html', 'ModalEditarBancoController', 'lg',
+                {
+                    banco: function() {
+                        return banco;
+                    }
+                });
+            return modalInstance.result;
+        };
         
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
@@ -62,7 +86,7 @@ app.controller('ModalEditarContaCorrenteController', ['$scope', '$modalInstance'
                 alert('Preencha o dígito verificador (DV) da agência da conta corrente!');
                 return false;
             }
-            if (form.agenciaDv.$error.maxlength) {
+            if (form.agenciaDv.$error.min || form.agenciaDv.$error.max) {
                 alert('Preencha o dígito verificador (DV) da agência da conta corrente com no máximo 2 dígitos!');
                 return false;
             }
@@ -74,7 +98,7 @@ app.controller('ModalEditarContaCorrenteController', ['$scope', '$modalInstance'
                 alert('Preencha o dígito verificador (DV) da conta corrente!');
                 return false;
             }
-            if (form.contaCorrenteDv.$error.maxlength) {
+            if (form.contaCorrenteDv.$error.min || form.contaCorrenteDv.$error.max) {
                 alert('Preencha o dígito verificador (DV) da conta corrente com no máximo 2 dígitos!');
                 return false;
             }

@@ -9,6 +9,11 @@ app.factory('ContaCorrenteService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/contacorrente/"));
         },
 
+        getAllCarteiraCobranca: function() {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/contacorrente/carteiracobranca"));
+        },
+
         get: function(idContaCorrente) {
             return PromiseService.execute(
                 $http.get(_contextPath + "/api/financeiro/contacorrente/" + idContaCorrente));

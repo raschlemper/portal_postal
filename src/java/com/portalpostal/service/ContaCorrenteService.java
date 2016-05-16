@@ -32,6 +32,15 @@ public class ContaCorrenteService {
         return contaCorrenteDAO.find(idContaCorrente);
     }  
     
+    public List<ContaCorrente> findAllCarteiraCobranca() throws Exception {
+        List<ContaCorrente> contas = contaCorrenteDAO.findAll();
+        for (ContaCorrente contaCorrente : contas) {
+            contaCorrente.setCarteiraCobrancas(carteiraCobrancaDAO.findByContaCorrente(contaCorrente.getIdContaCorrente()));
+        }
+        return contas;
+    }  
+    
+    
     public ContaCorrente findCartaoCredito(Integer idContaCorrente) throws Exception {
         ContaCorrente contaCorrente = find(idContaCorrente);
         contaCorrente.setCartaoCreditos(cartaoCreditoDAO.findByContaCorrente(idContaCorrente));

@@ -9,14 +9,29 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/lancamento/programado/"));
         },
 
+        getByDataVencimento: function(dataInicio, dataFim) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/lancamento/programado/vencimento?dataInicio=" + dataInicio + "&dataFim=" + dataFim));
+        },
+
         get: function(idLancamentoProgramado) {
             return PromiseService.execute(
                     $http.get(_contextPath + "/api/financeiro/lancamento/programado/" + idLancamentoProgramado));
         },
 
+        getLancamento: function(idLancamentoProgramado) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/lancamento/programado/" + idLancamentoProgramado + "/lancamento"));
+        },
+
         getLast: function(idLancamentoProgramado) {
             return PromiseService.execute(
                     $http.get(_contextPath + "/api/financeiro/lancamento/programado/" + idLancamentoProgramado + '/last'));
+        },
+
+        getByNumeroParcela: function(idLancamentoProgramado, numeroParcela) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/lancamento/programado/" + idLancamentoProgramado + '/parcela/' + numeroParcela));
         },
 
         save: function(data) {

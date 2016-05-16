@@ -44,6 +44,11 @@ app.factory('LancamentoService', function($http, PromiseService) {
                     $http.put(_contextPath + "/api/financeiro/lancamento/" + idLancamento, data));
         },
 
+        updateAll: function(data) {
+            return PromiseService.execute(
+                    $http.put(_contextPath + "/api/financeiro/lancamento/", data));
+        },
+
         delete: function(idLancamento) {
             return PromiseService.execute(
                     $http.delete(_contextPath + "/api/financeiro/lancamento/" + idLancamento));

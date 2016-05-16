@@ -4,6 +4,7 @@ import com.portalpostal.dao.LancamentoDAO;
 import com.portalpostal.dao.LancamentoProgramadoDAO;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoProgramado;
+import java.util.Date;
 import java.util.List;
 
 public class LancamentoProgramadoService {
@@ -28,8 +29,18 @@ public class LancamentoProgramadoService {
         return lancamentoProgramado;
     } 
     
+    public LancamentoProgramado findLancamento(Integer idLancamentoProgramado) throws Exception {
+        LancamentoProgramado lancamentoProgramado = find(idLancamentoProgramado);
+        lancamentoProgramado.setLancamentos(lancamentoDAO.findByLancamentoProgramado(idLancamentoProgramado));
+        return lancamentoProgramado;
+    } 
+    
     public List<LancamentoProgramado> findByConta(Integer idConta) throws Exception {
         return lancamentoProgramadoDAO.findByConta(idConta);
+    } 
+    
+    public List<LancamentoProgramado> findByDataVencimento(Date dataInicio, Date dataFim) throws Exception {
+        return lancamentoProgramadoDAO.findByDataVencimento(dataInicio, dataFim);
     } 
     
     public LancamentoProgramado save(LancamentoProgramado lancamentoProgramado) throws Exception {

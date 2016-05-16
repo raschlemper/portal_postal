@@ -65,6 +65,7 @@ app.controller('ContaCorrenteController', ['$scope', '$filter', '$q', 'ContaCorr
 
         $scope.salvar = function() {
             modalSalvar().then(function(result) {
+                result = ajustarDados(result);
                 ContaCorrenteService.save(result)
                     .then(function(data) {  
                         modalMessage("Conta Corrente " + data.nome +  " Inserida com sucesso!");
@@ -80,6 +81,7 @@ app.controller('ContaCorrenteController', ['$scope', '$filter', '$q', 'ContaCorr
             ContaCorrenteService.get(idContaCorrente)
                 .then(function(contaCorrente) {
                      modalSalvar(contaCorrente).then(function(result) {
+                        result = ajustarDados(result);
                         ContaCorrenteService.update(idContaCorrente, result)
                             .then(function (data) {  
                                 modalMessage("Conta Corrente " + data.nome + " Alterada com sucesso!");
@@ -124,6 +126,11 @@ app.controller('ContaCorrenteController', ['$scope', '$filter', '$q', 'ContaCorr
                         modalMessage(e);
                     });
             });            
+        };
+        
+        var ajustarDados = function(data) {   
+            data.limite = data.limite || 0;
+            return data;
         }
         
         var modalMessage = function(message) {

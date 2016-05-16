@@ -8,19 +8,21 @@ app.directive('appTable', function($filter) {
             colunas: '=',
             linha: '=',
             filter: '=',
-            events: '=',
+            events: '=?',
             search: '='
         },
         transclude: {
             'filterContent': '?filterContent'
         },
-        link: function(scope, element, attr, controller, transclude) { 
+        link: function(scope, element, attr, controller, transclude) {            
                         
             scope.limits = [
                 {name: '10', value: 10},
                 {name: '25', value: 25},
                 {name: '50', value: 50},
                 {name: '100', value: 100}];
+            
+            scope.events = scope.events || {};
             
             var init = function () {   
                 scope.showCheckbox = false;  
@@ -44,7 +46,7 @@ app.directive('appTable', function($filter) {
                     else if(coluna.class.indexOf("no-sort") == -1) { colunaSorter = coluna; }
                 })
                 return colunaSorter.column;
-            }
+            }; 
                         
             var setCheckBox = function() {
                 if(attr.showCheckbox) { scope.showCheckbox = (attr.showCheckbox === "true"); }

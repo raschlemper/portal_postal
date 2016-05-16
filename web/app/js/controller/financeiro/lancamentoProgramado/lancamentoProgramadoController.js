@@ -6,7 +6,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         var init = function () {
             $scope.lancamentoProgramados = [];
             $scope.lancamentoProgramadosLista = [];
-            $scope.tipos = LISTAS.lancamentoProgramado;
+            $scope.tipos = LISTAS.lancamento;
             $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
             $scope.datepickerDataFim = angular.copy(DatePickerService.default);    
             $scope.lancSearch = {};
@@ -16,7 +16,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         
         var initTable = function() {            
             $scope.colunas = [              
-                {label: 'Tipo', column: 'tipo.descricao'},         
+                {label: '', column: 'tipo', headerClass: 'no-sort', dataClass:'text-center col-tipo', filter: {name: 'tipoLancamento', args: ''}},         
                 {label: 'Vencimento', column: 'dataVencimento', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
                 {label: 'Número', column: 'numeroParcela'},               
                 {label: 'Favorecido', column: 'favorecido'},  
@@ -25,6 +25,10 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
                 {label: 'Frequência', column: 'frequencia'}
             ]            
             $scope.linha = {
+                conditionalClass: function(item) {
+                    if(item.tipo.id === $scope.tipos[0].id) return 'text-primary';
+                    else if(item.tipo.id === $scope.tipos[1].id) return 'text-danger';
+                },
                 events: { 
                     edit: function(lancamentoProgramado) {
                         $scope.editar($scope.conta, lancamentoProgramado.idLancamentoProgramado);
@@ -148,9 +152,8 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
                         if(gerarLancamento) { criarLancamento(conta, result); } 
                         else { 
                             LancamentoProgramadoService.update(idLancamentoProgramado, result)
-                                .then(function (data) {                                
-                                    if(gerarLancamento) { gerarLancamento(conta, data); } 
-                                    else { modalMessage("Lançamento Programado Alterado com sucesso!"); }
+                                .then(function (data) {  
+                                    modalMessage("Lançamento Programado Alterado com sucesso!");
                                     todos(conta);
                                 })
                                 .catch(function(e) {
@@ -161,12 +164,21 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
                 })
                 .catch(function(e) {
                     modalMessage(e.error);
-                });
-           
+                });           
         };
-
-        // Permitir excluir caso não exista lançamento gerado, caso contrário, somente será permitido alterar a situação
-        $scope.excluir = function(conta, idLancamentoProgramado) {
+        
+        $scope.excluir = function(conta, idLancamentoProgramado) {            
+            LancamentoProgramadoService.getLancamento(idLancamentoProgramado)
+                .then(function(data) {   
+                    if(data.lancamentos.length) {
+                        modalMessage("Este lançamento programado não pode ser excluído! <br/> Existem Lançamentos vinculados a este lançamento programado.");
+                    } else {
+                        excluir(conta, idLancamentoProgramado);
+                    }
+                });
+        }
+        
+        var excluir = function(conta, idLancamentoProgramado) {
             modalExcluir().then(function() {
                 LancamentoProgramadoService.delete(idLancamentoProgramado)
                     .then(function(data) { 
@@ -180,6 +192,24 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         }; 
         
         var criarLancamento = function(conta, result) { 
+            if(result.idLancamentoProgramado) {
+                LancamentoProgramadoService.getByNumeroParcela()
+                    .then(function(data) {  
+                        if(data) {
+                            modalMessage("Este lançamento não pode ser inserido, pois esta parcela já existe!");
+                        } else {
+                            create(conta, result);
+                        }
+                    })
+                    .catch(function(e) {
+                        modalMessage(e);
+                    });
+            } else {
+                create(conta, result);
+            }
+        }
+        
+        var create = function(conta, result) { 
             LancamentoProgramadoService.create(result)
                 .then(function(data) {  
                     modalMessage("Lançamento Inserido com sucesso!");

@@ -3,12 +3,13 @@
 app.factory('FrequenciaLancamentoService', function(LISTAS) {
     
     var frequencias = LISTAS.frequencia;
+    var situacoes = LISTAS.situacaoLancamentoProgramado;
     var execute = function (lancamentoProgramado) {
         if(!lancamentoProgramado) return lancamentoProgramado;
         var numeroParcela = lancamentoProgramado.numeroParcela + 1;
-        switch (lancamentoProgramado.requencia.id) {
+        switch (lancamentoProgramado.frequencia.id) {
             case frequencias[0].id: 
-                lancamentoProgramado.situacao = TipoSituacaoLancamentoProgramado.ENCERRADO;
+                lancamentoProgramado.situacao = situacoes[2];
                 break;
             case frequencias[1].id: 
                 lancamentoProgramado.numeroParcela = numeroParcela;
@@ -56,7 +57,7 @@ app.factory('FrequenciaLancamentoService', function(LISTAS) {
                 lancamentoProgramado.dataVencimento = addYearly(lancamentoProgramado.dataVencimento);
                 break;
             default:
-                lancamentoProgramado.situacao = TipoSituacaoLancamentoProgramado.ENCERRADO;
+                lancamentoProgramado.situacao = situacoes[2];
                 break;
         }
         return lancamentoProgramado;

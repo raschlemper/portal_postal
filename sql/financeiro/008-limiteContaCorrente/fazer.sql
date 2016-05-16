@@ -1,0 +1,1 @@
+ALTER TABLE conta_corrente ADD `limite` DECIMAL(13,2) NOT NULL DEFAULT 0;

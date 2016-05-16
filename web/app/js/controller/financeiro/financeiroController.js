@@ -1,11 +1,12 @@
 'use strict';
 
-app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService', 'PlanoContaService', 'LancamentoService', 'SaldoService', 'GroupService', 'ModalService', 'ListaService', 'LISTAS',
-    function ($scope, $q, $filter, ContaService, PlanoContaService, LancamentoService, SaldoService, GroupService, ModalService, ListaService, LISTAS) {
+app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaCorrenteService', 'ContaService', 'PlanoContaService', 'LancamentoService', 'LancamentoProgramadoService', 'SaldoService', 'FrequenciaLancamentoService', 'GroupService', 'ModalService', 'ListaService', 'LISTAS',
+    function ($scope, $q, $filter, ContaCorrenteService, ContaService, PlanoContaService, LancamentoService, LancamentoProgramadoService, SaldoService, FrequenciaLancamentoService, GroupService, ModalService, ListaService, LISTAS) {
             
         var init = function () {
             $scope.sizeChart = 240;
             $scope.tipos = LISTAS.lancamento;
+            $scope.situacoes = LISTAS.situacaoLancamentoProgramado;
             $scope.anoAtual = new Date().getFullYear();
             $scope.mesAtual = new Date().getMonth();
             $scope.saldoTotal = 0;
@@ -102,7 +103,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService
         };
         
         var getDataChartTipoLancamento = function(tipo) {
-            // achar outra maneira de fazer o filtro, esta retornando um array de array
+            //FIXME achar outra maneira de fazer o filtro, esta retornando um array de array
             var saldo = _.filter($scope.tipos, function(item) { return item.id === tipo.id; });
             var tipos = _.pluck(saldo, 'saldos');
             return _.values(tipos[0])
@@ -182,7 +183,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService
         
         // Saldos 90 dias /////
         
-        var configChartSaldo = function(categorias, valores) {        
+        var configChartSaldo = function(categorias, valores, limitConta) {        
             $scope.configChartSaldos = { 
                 title: " ",     
                 options: { 
@@ -193,7 +194,20 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService
                     title: { enabled: false }
                 },
                 yAxis: {
-                    title: { text: ' ' }
+                    title: { text: ' ' },
+                    min: limitConta,
+                    plotLines: [{
+                        label: {
+                            text: 'Limite Conta Corrente',
+                            style: {
+                                color: '#FF6161'
+                            }
+                        },
+                        dashStyle: 'shortdot',
+                        color: '#FE2E2E',
+                        value: limitConta,
+                        width: 1   
+                    }]
                 },
                 series: [{
                     name: 'Saldos',    
@@ -210,19 +224,41 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService
         };   
         
         var chartSaldo = function() {
-            var dataInicio = moment().endOf("month").subtract(3, 'months').format('YYYY-MM-DD');
-            var dataFim = moment().endOf("month").format('YYYY-MM-DD');
-            LancamentoService.getSaldo(dataInicio, dataFim)
-               .then(function(data) { 
-                    var saldos = formatSaldo(data);
+            var dataInicio = moment().endOf("month").format('YYYY-MM-DD');
+            var dataFim = moment().endOf("month").add(3, 'months').format('YYYY-MM-DD');
+            $q.all([LancamentoProgramadoService.getByDataVencimento(dataInicio, dataFim),
+                    LancamentoService.getSaldo(dataInicio, dataFim),
+                    ContaCorrenteService.getAll()])
+               .then(function(values) { 
+                    var lancamentosSaldos = getLancamentos(values[0], dataInicio, dataFim);
+                    var saldos = formatSaldo(values[1]);
+                    var limiteContaCorrente = getSaldoContaCorrente(values[2]);
                     var categorias = getDataChartSaldo(saldos, 'data');
                     var valores = getDataChartSaldo(saldos, 'valor');
-                    configChartSaldo(categorias, valores);
+                    configChartSaldo(categorias, valores, limiteContaCorrente);
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         };
+        
+        var getLancamentos = function(programados, dataInicio, dataFim) {  
+            _.map(programados, function(programado) {
+                getSaldo(programado, dataInicio, dataFim);
+            })
+        };
+        
+        var getSaldo = function(programado, dataInicio, dataFim) {
+            if(programado.situacao === $scope.situacoes[2]) return;
+            if(programado.numeroParcela > programado.quantidadeParcela) return;
+            var dataVencimento = moment(programado.dataVencimento);
+            if(dataVencimento.isBefore(dataInicio) || dataVencimento.isAfter(dataFim)) return;
+                console.log({id: programado.idLancamentoProgramado,
+                             data: dataVencimento,
+                             valor: programado.valor});            
+            getSaldo(FrequenciaLancamentoService.execute(programado), dataInicio, dataFim);
+            
+        }
         
         var formatSaldo = function(saldos) {
             return _.map(saldos, function(saldo) {
@@ -232,6 +268,16 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaService
             });
             
         };
+        
+        var getSaldoContaCorrente = function(contasCorrentes) {
+            var limite = 0;
+            _.map(contasCorrentes, function(contaCorrente) {
+                if(contaCorrente && contaCorrente.limite) {
+                    limite -= contaCorrente.limite;
+                }
+            });
+            return limite;
+        }
         
         var getDataChartSaldo = function(saldos, field) {  
             var values = _.pluck(saldos, field);

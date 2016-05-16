@@ -18,9 +18,9 @@
                                         <i class="fa fa-lg fa-clock-o fa-spc"></i> PROGRAMAÇÃO 
                                     </button>                                    
                                     <button class="btn btn-sm btn-default pull-right" ng-click="conciliar(conta)" style="margin-right: 10px;">
-                                        <i class="fa fa-lg fa-retweet fa-spc"></i> CONCILIAÇÃO 
+                                        <i class="fa fa-lg fa-retweet fa-spc"></i> RECONCILIAÇÃO 
                                     </button>                                   
-                                    <button class="btn btn-sm btn-default pull-right" ng-click="compensar(events.list())" style="margin-right: 10px;">
+                                    <button class="btn btn-sm btn-default pull-right" ng-click="compensar(conta, events.list())" style="margin-right: 10px;">
                                         <i class="fa fa-lg fa-arrow-circle-o-down fa-spc"></i> COMPENSAR 
                                     </button>
                                 </div>
@@ -48,7 +48,7 @@
                                                 </select>
                                             </div>
                                             
-                                            <div class="col-md-2 form-group">
+                                            <div class="col-md-3 form-group">
                                                 <label>Tipo:</label>
                                                 <select class="form-control" ng-model="lancSearch.tipo">
                                                     <option value=""> Todos </option> 
@@ -56,7 +56,7 @@
                                                 </select>
                                             </div>
                                             
-                                            <div class="col-md-6 form-group">
+                                            <div class="col-md-5 form-group">
                                                 <label>Data:</label>
                                                 <div class="input-group">
                                                     <input type="text" autocomplete="off" class="form-control" ng-model="lancSearch.dataInicio" style="width: 120px;"

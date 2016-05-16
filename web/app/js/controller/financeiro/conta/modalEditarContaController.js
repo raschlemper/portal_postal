@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalEditarContaController', ['$scope', '$modalInstance', 'conta', 'ContaCorrenteService', 'CartaoCreditoService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, conta, ContaCorrenteService, CartaoCreditoService,  DatePickerService, ListaService, LISTAS) {
+app.controller('ModalEditarContaController', ['$scope', '$modalInstance', 'conta', 'ContaCorrenteService', 'CartaoCreditoService', 'DatePickerService', 'ModalService', 'ListaService', 'LISTAS',
+    function ($scope, $modalInstance, conta, ContaCorrenteService, CartaoCreditoService,  DatePickerService, ModalService, ListaService, LISTAS) {
 
         var init = function () {  
             $scope.tipos = LISTAS.tipoConta;
@@ -21,7 +21,7 @@ app.controller('ModalEditarContaController', ['$scope', '$modalInstance', 'conta
         };
         
         var contaCorrente = function() {
-            ContaCorrenteService.getAll()
+            ContaCorrenteService.getAllCarteiraCobranca()
                 .then(function (data) {
                     $scope.contasCorrentes = data;
                     $scope.changeTipo($scope.conta.tipo);
@@ -78,9 +78,56 @@ app.controller('ModalEditarContaController', ['$scope', '$modalInstance', 'conta
         
         var contaCorrenteListaCobranca = function() {
             return _.filter($scope.contasCorrentes, function(contaCorrente) {
-                return (contaCorrente.carteira);
+                return (contaCorrente.carteiraCobrancas.length);
             });
         };
+        
+        $scope.openContaCorrente = function() {            
+            modalSalvarContaCorrente().then(function(result) {
+                ContaCorrenteService.save(result)
+                    .then(function(data) {  
+                        modalMessage("Conta Corrente " + data.nome +  " Inserida com sucesso!");
+                        contaCorrente();
+                    })
+                    .catch(function(e) {
+                        modalMessage(e);
+                    });
+            });
+        }
+        
+        $scope.openCartaoCredito = function() {   
+            modalSalvarCartaoCredito().then(function(result) {
+                CartaoCreditoService.save(result)
+                    .then(function(data) {  
+                        modalMessage("Cartão de Crédito " + data.nome +  " Inserido com sucesso!");
+                        cartaoCredito();
+                    })
+                    .catch(function(e) {
+                        modalMessage(e);
+                    });
+            });
+        }
+        
+        var modalSalvarContaCorrente = function(contaCorrente) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/contaCorrente/modalEditarContaCorrente.html', 'ModalEditarContaCorrenteController', 'lg',
+                {
+                    contaCorrente: function() {
+                        return contaCorrente;
+                    }
+                });
+            return modalInstance.result;
+        };
+        
+        var modalSalvarCartaoCredito = function(cartaoCredito) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/cartaoCredito/modalEditarCartaoCredito.html', 'ModalEditarCartaoCreditoController', 'lg',
+                {
+                    cartaoCredito: function() {
+                        return cartaoCredito;
+                    }
+                });
+            return modalInstance.result;
+        };
+        
         
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
@@ -89,6 +136,10 @@ app.controller('ModalEditarContaController', ['$scope', '$modalInstance', 'conta
         
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
+        };
+        
+        var modalMessage = function(message) {
+            ModalService.modalMessage(message);
         };
 
         var validarForm = function (form) {

@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalEditarCartaoCreditoController', ['$scope', '$modalInstance', 'cartaoCredito', 'ContaCorrenteService',
-    function ($scope, $modalInstance, cartaoCredito, ContaCorrenteService) {
+app.controller('ModalEditarCartaoCreditoController', ['$scope', '$modalInstance', 'cartaoCredito', 'ContaCorrenteService', 'ModalService',
+    function ($scope, $modalInstance, cartaoCredito, ContaCorrenteService, ModalService) {
 
         var init = function () {  
             $scope.maxValue = 31;
@@ -19,11 +19,34 @@ app.controller('ModalEditarCartaoCreditoController', ['$scope', '$modalInstance'
             ContaCorrenteService.getAll()
                 .then(function (data) {
                     $scope.contasCorrentes = data;
-                    $scope.cartaoCredito.contaCorrente = $scope.cartaoCredito.contaCorrente || $scope.contasCorrentes[0];
+                    $scope.cartaoCredito.contaCorrente = $scope.cartaoCredito.contaCorrente;
                 })
                 .catch(function (e) {
                     console.log(e);
                 });
+        };
+        
+        $scope.openContaCorrente = function() {            
+            modalSalvarContaCorrente().then(function(result) {
+                ContaCorrenteService.save(result)
+                    .then(function(data) {  
+                        modalMessage("Conta Corrente " + data.nome +  " Inserida com sucesso!");
+                        contaCorrente();
+                    })
+                    .catch(function(e) {
+                        modalMessage(e);
+                    });
+            });
+        }
+        
+        var modalSalvarContaCorrente = function(contaCorrente) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/contaCorrente/modalEditarContaCorrente.html', 'ModalEditarContaCorrenteController', 'lg',
+                {
+                    contaCorrente: function() {
+                        return contaCorrente;
+                    }
+                });
+            return modalInstance.result;
         };
         
         $scope.ok = function(form) {
@@ -33,6 +56,10 @@ app.controller('ModalEditarCartaoCreditoController', ['$scope', '$modalInstance'
         
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
+        };
+        
+        var modalMessage = function(message) {
+            ModalService.modalMessage(message);
         };
 
         var validarForm = function (form) {

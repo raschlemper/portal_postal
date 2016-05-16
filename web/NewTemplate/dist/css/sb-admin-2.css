@@ -2965,13 +2965,13 @@ div.list-category div.list-group-item {
     padding-right: 25px;
 }
 .panel-list>.list-group .list-group-header {
-    font-size: 14px;
+    font-size: 12px;
 }
 .panel-list>.list-group .list-group-footer {
-    font-size: 11px;
+    font-size: 10px;
 }
 .panel-list>.list-group .list-group-content {
-    font-size: 11px;
+    font-size: 10px;
     padding: 5px 10px;
 }
 .list-group-container {
@@ -2991,7 +2991,8 @@ div.list-category div.list-group-item {
 }
 .btn-list {
     width: 40px;
-    height: 40px;
+    height: 40px;    
+    padding: 10px 6px;
 }
 .modal-window {
     overflow: auto;
@@ -3080,4 +3081,19 @@ div.list-category div.list-group-item {
     color: #3CAB49;
     padding: 2px !important;
     font-size: 8pt !important;
+}
+
+table.table-condensed tbody tr td.cel-btn {
+    padding: 4px;
+}
+table.table-condensed tbody tr td.cel-data {
+    padding: 4px;
+    width: 65px;
+}
+.btn-table {
+    padding: 5px;
+    width: 30px;
+}
+.input-group > span.input-group-btn > button.btn-lg {
+    padding: 3px 10px;
 }

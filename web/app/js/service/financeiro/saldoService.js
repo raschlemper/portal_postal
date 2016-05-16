@@ -1,6 +1,6 @@
 'use strict';
 
-app.factory('SaldoService', function($filter, LISTAS) {   
+app.factory('SaldoService', function($filter) {   
         
     // SALDOS /////
     
@@ -14,14 +14,14 @@ app.factory('SaldoService', function($filter, LISTAS) {
     var setSaldoByMes = function(datas, saldos, mes, id) {
         angular.forEach(datas, function(data) {
             data.saldos = {};
-            data.saldos[mes.id] = 0;
+            data.saldos[mes.order] = 0;
             getSaldo(data, mes, saldos, id);
         });
     };
 
     var getMesSaldo = function(data, saldos, meses,  id) {
         angular.forEach(meses, function(mes) {
-            data.saldos[mes.id] = 0;
+            data.saldos[mes.order] = 0;
             getSaldo(data, mes, saldos, id);
         });
     };
@@ -29,7 +29,7 @@ app.factory('SaldoService', function($filter, LISTAS) {
     var getSaldo = function(data, mes, saldos, id) {
         angular.forEach(saldos, function(saldo) {
             if(data[id] === saldo[id] && mes.id === saldo.mes - 1) {
-                data.saldos[mes.id] = saldo.valor;
+                data.saldos[mes.order] = saldo.valor;
             }
         });
     };    
@@ -58,26 +58,26 @@ app.factory('SaldoService', function($filter, LISTAS) {
     
     // SALDO TOTAL MES PLANO DE CONTA /////
      
-    var setSaldoPlanoContaTotalMes = function(estruturas) {
+    var setSaldoPlanoContaTotalMes = function(estruturas, meses) {
         var totais = {};
         angular.forEach(estruturas, function(estrutura) {
-            getSaldoEstrutura(estrutura, totais);
+            getSaldoEstrutura(estrutura, totais, meses);
         });
         return totais;
     };
 
-    var getSaldoEstrutura = function(estrutura, totais) {
-        angular.forEach(LISTAS.meses, function(mes) {               
-            if(!totais[mes.id]) { totais[mes.id] = 0; }
-            if(estrutura.tipo.codigo === 'receita') { totais[mes.id] += estrutura.saldos[mes.id]; }
-            else if(estrutura.tipo.codigo === 'despesa') { totais[mes.id] -= estrutura.saldos[mes.id]; }
+    var getSaldoEstrutura = function(estrutura, totais, meses) {
+        angular.forEach(meses, function(mes) {               
+            if(!totais[mes.order]) { totais[mes.order] = 0; }
+            if(estrutura.tipo.codigo === 'receita') { totais[mes.order] += estrutura.saldos[mes.order]; }
+            else if(estrutura.tipo.codigo === 'despesa') { totais[mes.order] -= estrutura.saldos[mes.order]; }
         });
     };  
     
     // SALDO PLANO DE CONTA /////
     
-    var setSaldoPlanoConta = function(estruturas, saldos) {
-        setSaldo(estruturas, saldos, LISTAS.meses, 'idPlanoConta');
+    var setSaldoPlanoConta = function(estruturas, saldos, meses) {
+        setSaldo(estruturas, saldos, meses, 'idPlanoConta');
     }
     
     var setSaldoPlanoContaByMes = function(estruturas, saldos, mes) {

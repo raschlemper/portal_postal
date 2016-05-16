@@ -54,6 +54,10 @@ public class LancamentoService {
         return lancamentoDAO.findLastByLancamentoProgramado(idLancamentoProgramado);
     }
     
+    public Lancamento findByNumeroParcela(Integer idLancamentoProgramado, Integer numeroParcela) throws Exception {
+        return lancamentoDAO.findByNumeroParcela(idLancamentoProgramado, numeroParcela);
+    } 
+    
     public Lancamento save(Lancamento lancamento) throws Exception {
         return lancamentoDAO.save(lancamento);
     } 

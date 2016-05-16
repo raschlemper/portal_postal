@@ -90,7 +90,7 @@
                                 <div class="input-group">
                                     <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
                                     <input class="form-control" type="text" name="quantidadeParcela" ng-model="lancamentoProgramado.quantidadeParcela" ng-change="createParcelas(lancamentoProgramado)"
-                                           placeholder="Quantidade de parcelas"/>  
+                                           placeholder="Quantidade de parcelas" ng-disabled="(lancamentoProgramado.lancamentos.length)"/>  
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">

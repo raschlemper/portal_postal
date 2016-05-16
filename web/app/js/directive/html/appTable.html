@@ -32,9 +32,9 @@
             
             <th class="no-sort text-center" width="10" ng-show="showMenu"></th>
             
-            <th class="no-sort text-center" width="60" ng-if="linha.events.edit" ng-show="!showMenu">Alterar</th>
-            <th class="no-sort text-center" width="60" ng-if="linha.events.remove" ng-show="!showMenu">Excluir</th>
-            <th class="no-sort text-center" width="60" ng-if="linha.events.view" ng-show="!showMenu">Detalhes</th>
+            <th class="no-sort text-center" width="40" ng-if="linha.events.edit" ng-show="!showMenu"></th>
+            <th class="no-sort text-center" width="40" ng-if="linha.events.remove" ng-show="!showMenu"></th>
+            <th class="no-sort text-center" width="40" ng-if="linha.events.view" ng-show="!showMenu"></th>
             
         </tr>
     </thead>
@@ -62,18 +62,18 @@
                 </div>
             </td>
             
-            <td align="center" ng-if="linha.events.edit" ng-show="!showMenu">
-                <button class="btn btn-sm btn-warning" ng-click="linha.events.edit(item)">
+            <td align="center" class="cel-btn" ng-if="linha.events.edit" ng-show="!showMenu" title="Editar registro">
+                <button class="btn btn-sm btn-table btn-warning" ng-click="linha.events.edit(item)">
                     <i class="fa fa-lg fa-pencil"></i>
                 </button>
             </td>
-            <td align="center" ng-if="linha.events.remove" ng-show="!showMenu">
-                <a class="btn btn-sm btn-danger" ng-click="linha.events.remove(item)">
+            <td align="center" class="cel-btn" ng-if="linha.events.remove" ng-show="!showMenu" title="Remover registro">
+                <a class="btn btn-sm btn-table btn-danger" ng-click="linha.events.remove(item)">
                     <i class="fa fa-lg fa-trash"></i>
                 </a>
             </td>
-            <td align="center" ng-if="linha.events.view" ng-show="!showMenu">
-                <a class="btn btn-sm btn-primary" ng-click="linha.events.view(item)">
+            <td align="center" class="cel-btn" ng-if="linha.events.view" ng-show="!showMenu" title="Visualizar registro">
+                <a class="btn btn-sm btn-table btn-primary" ng-click="linha.events.view(item)">
                     <i class="fa fa-lg fa-info"></i>
                 </a>
             </td>

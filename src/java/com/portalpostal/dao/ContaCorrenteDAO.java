@@ -42,8 +42,8 @@ public class ContaCorrenteDAO extends GenericDAO {
     }
 
     public ContaCorrente save(ContaCorrente contaCorrente) throws Exception {  
-        String sql = "INSERT INTO conta_corrente (nome, idBanco, agencia, agencia_dv, contaCorrente, contaCorrente_dv, poupanca) "
-                   + "VALUES(:nome, :idBanco, :agencia, :agenciaDv, :contaCorrente, :contaCorrenteDv, :poupanca)";        
+        String sql = "INSERT INTO conta_corrente (nome, idBanco, agencia, agencia_dv, contaCorrente, contaCorrente_dv, poupanca, limite) "
+                   + "VALUES(:nome, :idBanco, :agencia, :agenciaDv, :contaCorrente, :contaCorrenteDv, :poupanca, :limite)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("nome", contaCorrente.getNome());
         params.put("idBanco", contaCorrente.getBanco().getIdBanco());
@@ -51,7 +51,8 @@ public class ContaCorrenteDAO extends GenericDAO {
         params.put("agenciaDv", contaCorrente.getAgenciaDv());
         params.put("contaCorrente", contaCorrente.getContaCorrente());
         params.put("contaCorrenteDv", contaCorrente.getContaCorrenteDv());
-        params.put("poupanca", contaCorrente.getPoupanca());      
+        params.put("poupanca", contaCorrente.getPoupanca()); 
+        params.put("limite", contaCorrente.getLimite());           
         Integer idContaCorrente = save(sql, params, contaCorrenteHandler);
         return find(idContaCorrente);
     }
@@ -59,7 +60,8 @@ public class ContaCorrenteDAO extends GenericDAO {
     public ContaCorrente update(ContaCorrente contaCorrente) throws Exception {
         String sql = "UPDATE conta_corrente "
                    + "SET nome = :nome, idBanco = :idBanco, agencia = :agencia, agencia_dv = :agenciaDv, "
-                   + "contaCorrente = :contaCorrente, contaCorrente_dv = :contaCorrenteDv, poupanca = :poupanca "
+                   + "contaCorrente = :contaCorrente, contaCorrente_dv = :contaCorrenteDv, poupanca = :poupanca, "
+                   + "limite = :limite "
                    + "WHERE idContaCorrente = :idContaCorrente ";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idContaCorrente", contaCorrente.getIdContaCorrente());
@@ -69,7 +71,8 @@ public class ContaCorrenteDAO extends GenericDAO {
         params.put("agenciaDv", contaCorrente.getAgenciaDv());
         params.put("contaCorrente", contaCorrente.getContaCorrente());
         params.put("contaCorrenteDv", contaCorrente.getContaCorrenteDv());
-        params.put("poupanca", contaCorrente.getPoupanca());       
+        params.put("poupanca", contaCorrente.getPoupanca()); 
+        params.put("limite", contaCorrente.getLimite());           
         update(sql, params, contaCorrenteHandler);
         return contaCorrente;  
     }

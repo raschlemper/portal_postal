@@ -7,6 +7,8 @@ import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.service.LancamentoProgramadoService;
 import com.portalpostal.service.LancamentoService;
 import com.portalpostal.validation.LancamentoProgramadoValidation;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -18,6 +20,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -45,10 +48,27 @@ public class LancamentoProgramadoController {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<LancamentoProgramado> findAll() {
+    public List<LancamentoProgramado> findAll(@QueryParam("dataInicio") String dataInicio, 
+            @QueryParam("dataFim") String dataFim) {
         try {
-            init();    
+            init();   
             return lancamentoProgramadoService.findAll();
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    } 
+    
+    @GET
+    @Path("/vencimento")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<LancamentoProgramado> findByDataVencimento(@QueryParam("dataInicio") String dataInicio, 
+            @QueryParam("dataFim") String dataFim) {
+        try {
+            init();   
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date inicio = format.parse(dataInicio);
+            Date fim = format.parse(dataFim);
+            return lancamentoProgramadoService.findByDataVencimento(inicio, fim);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -67,6 +87,18 @@ public class LancamentoProgramadoController {
     }   
     
     @GET
+    @Path("/{idLancamentoProgramado}/lancamento")
+    @Produces(MediaType.APPLICATION_JSON)
+    public LancamentoProgramado findLancamento(@PathParam("idLancamentoProgramado") Integer idLancamentoProgramado) {
+        try {
+            init();    
+            return lancamentoProgramadoService.findLancamento(idLancamentoProgramado);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }  
+    
+    @GET
     @Path("/{idLancamentoProgramado}/last")
     @Produces(MediaType.APPLICATION_JSON)
     public Lancamento findLastByLancamentoProgramado(@PathParam("idLancamentoProgramado") Integer idLancamentoProgramado) {
@@ -77,6 +109,19 @@ public class LancamentoProgramadoController {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     }  
+    
+    @GET
+    @Path("/{idLancamentoProgramado}/parcela/{numeroParcela}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Lancamento findByNumeroParcela(@PathParam("idLancamentoProgramado") Integer idLancamentoProgramado, 
+            @PathParam("numeroParcela") Integer numeroParcela) {
+        try {
+            init();    
+            return lancamentoService.findByNumeroParcela(idLancamentoProgramado, numeroParcela);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }   
     
     @POST
     @Path("/")

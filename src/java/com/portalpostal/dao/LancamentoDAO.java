@@ -129,6 +129,16 @@ public class LancamentoDAO extends GenericDAO {
         Integer idLancamento = (Integer) find(sql, params, Integer.class);
         return (Lancamento) find(idLancamento);
     }
+    
+    public Lancamento findByNumeroParcela(Integer idLancamentoProgramado, Integer numeroParcela) throws Exception {
+        String sql = "SELECT * FROM lancamento "
+                   + "WHERE idLancamentoProgramado is not null "
+                   + "AND idLancamentoProgramado = :idLancamentoProgramado AND numeroParcela = :numeroParcela";  
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idLancamentoProgramado", idLancamentoProgramado);
+        params.put("numeroParcela", numeroParcela);
+        return (Lancamento) find(sql, params, lancamentoHandler);
+    }
 
     public Lancamento save(Lancamento lancamento) throws Exception {  
         String sql = "INSERT INTO lancamento (idConta, idPlanoConta, idLancamentoProgramado, numeroLoteConciliado, "

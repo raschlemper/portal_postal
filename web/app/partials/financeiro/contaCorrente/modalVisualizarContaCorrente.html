@@ -35,6 +35,12 @@
                 </div>
                 <div class="col-md-8">{{(contaCorrente.poupanca ? 'Sim' : 'Não')}}</div>
             </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Limite:</label>
+                </div>
+                <div class="col-md-8">{{contaCorrente.limite | currency: 'R$ '}}</div>
+            </div>
         </div>
     </div>
     <div class="modal-footer">
