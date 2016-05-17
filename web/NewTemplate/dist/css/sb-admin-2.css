@@ -3072,6 +3072,10 @@ div.list-category div.list-group-item {
     margin-left: -10px;
     max-height: 300px;
 }
+.panel-chart-full {
+    padding: 15px;
+    margin-left: -10px;
+}
 
 .panel-msg-info {
     padding: 20px;

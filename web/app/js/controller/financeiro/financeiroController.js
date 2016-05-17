@@ -1,22 +1,57 @@
 'use strict';
 
-app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaCorrenteService', 'ContaService', 'PlanoContaService', 'LancamentoService', 'LancamentoProgramadoService', 'SaldoService', 'FrequenciaLancamentoService', 'GroupService', 'ModalService', 'ListaService', 'LISTAS',
-    function ($scope, $q, $filter, ContaCorrenteService, ContaService, PlanoContaService, LancamentoService, LancamentoProgramadoService, SaldoService, FrequenciaLancamentoService, GroupService, ModalService, ListaService, LISTAS) {
+app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'ContaCorrenteService', 'ContaService', 'PlanoContaService', 'LancamentoService', 'LancamentoProgramadoService', 'SaldoService', 'PeriodoService', 'GroupService', 'ModalService', 'ListaService', 'LISTAS',
+    function ($scope, $q, $filter, $state, ContaCorrenteService, ContaService, PlanoContaService, LancamentoService, LancamentoProgramadoService, SaldoService, PeriodoService, GroupService, ModalService, ListaService, LISTAS) {
             
         var init = function () {
             $scope.sizeChart = 240;
             $scope.tipos = LISTAS.lancamento;
             $scope.situacoes = LISTAS.situacaoLancamentoProgramado;
+            $scope.meses = LISTAS.meses;
             $scope.anoAtual = new Date().getFullYear();
             $scope.mesAtual = new Date().getMonth();
             $scope.saldoTotal = 0;
-            contasSaldos(); 
-            chartSaldoByTipo(); 
-            chartSaldoDespesa();
-            chartSaldo();
+            $scope.configChartReceitaDespesa = [];
+            $scope.configChartDespesa = [];
+            $scope.configChartSaldos = [];
+            initChart($state.params.tipo);
         }; 
         
+        var getPeriodo = function(mes, ano) {
+            return PeriodoService.periodoOneYear(mes, ano);
+        }
+        
+        var initChart = function(tipo) {
+            if(!tipo) {
+                initContas();
+                initChartReceitaDespesa()
+                initChartDespesa();
+                initChartSaldo();  
+                initSaldoProgramado();
+            } else {
+                if(tipo === 'receitadespesa') { 
+                    $scope.sizeChart = 400;
+                    $scope.showChartReceitaDespesa = true;
+                    var dataInicio = moment($scope.anoAtual + '-01-01').format('YYYY-MM-DD');
+                    var dataFim = moment($scope.anoAtual + '-12-31').format('YYYY-MM-DD');
+                    chartSaldoByTipo(LISTAS.meses, dataInicio, dataFim);     
+                }
+                if(tipo === 'despesa') { 
+                    $scope.sizeChart = 200;
+                    $scope.showChartDespesa = true;
+                    $scope.mesesDespesa = getPeriodo($scope.meses[0], $scope.anoAtual);
+                    _.map($scope.mesesDespesa, function(mes) {
+                        chartSaldoDespesa(mes);
+                    })
+                }
+            }
+        }
+        
         // Contas /////
+        
+        var initContas = function() {
+            contasSaldos();            
+        }
         
         var contasSaldos =function() {
             ContaService.getSaldo()
@@ -38,14 +73,20 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaCorrent
         
         // Receita X Despesas /////
         
-        var configChartReceitaDespesa = function(receitas, despesas) {        
-            $scope.configChartReceitaDespesa = { 
+        var initChartReceitaDespesa = function() {
+            var dataInicio = moment().endOf("month").subtract(3, 'months').format('YYYY-MM-DD');
+            var dataFim = moment().endOf("month").format('YYYY-MM-DD');
+            chartSaldoByTipo(getLastThreeMonths(), dataInicio, dataFim);             
+        }
+        
+        var configChartReceitaDespesa = function(meses, receitas, despesas) {        
+            $scope.configChartReceitaDespesa.push({ 
                 title: " ",
                 options: { 
                     chart: { "type": "column" }
                 },
                 xAxis: {
-                    categories: getDescricaoMeses(),
+                    categories: getDescricaoMeses(meses),
                     title: {text: ' '} 
                 },
                 yAxis: {
@@ -60,11 +101,10 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaCorrent
                 credits: {
                     enabled: false
                 }
-            };
+            });
         };
         
-        var getDescricaoMeses = function() {
-            var meses = getLastThreeMonths();
+        var getDescricaoMeses = function(meses) {
             return _.map(meses, function(mes) {
                 return mes.descricao;
             })
@@ -76,17 +116,15 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaCorrent
             })
         };
                 
-        var chartSaldoByTipo = function() {
-            var dataInicio = moment().endOf("month").subtract(3, 'months').format('YYYY-MM-DD');
-            var dataFim = moment().endOf("month").format('YYYY-MM-DD');
+        var chartSaldoByTipo = function(meses, dataInicio, dataFim) {
             LancamentoService.getSaldoTipo(dataInicio, dataFim)
                 .then(function(data) {  
                     var saldos = formatTipo(data);
                     saldos = GroupService.saldo(saldos, ['id','ano','mes']);
-                    SaldoService.saldoTipoLancamento($scope.tipos, saldos, getLastThreeMonths());
+                    SaldoService.saldoTipoLancamento($scope.tipos, saldos, meses);
                     var receitas = getDataChartTipoLancamento($scope.tipos[0]);
                     var despesas = getDataChartTipoLancamento($scope.tipos[1]);  
-                    configChartReceitaDespesa(receitas, despesas);
+                    configChartReceitaDespesa(meses, receitas, despesas);
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -109,10 +147,21 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaCorrent
             return _.values(tipos[0])
         };
         
-        // Despesas /////      
+        // Despesas /////    
         
-        var configChartDespesa = function(values) {        
-            $scope.configChartDespesa = { 
+        var initChartDespesa = function() {
+            var mesAtual = ListaService.getValue($scope.meses, $scope.mesAtual + 7);
+            $scope.mesesDespesa = getPeriodo(mesAtual, $scope.anoAtual - 1);  
+            $scope.mesDespesaSelected = $scope.mesesDespesa[5];
+            $scope.changeMesDespesas($scope.mesDespesaSelected);
+        };
+        
+        $scope.changeMesDespesas = function(mes) {            
+            chartSaldoDespesa(mes);
+        }
+        
+        var configChartDespesa = function(index, values) {        
+            $scope.configChartDespesa[index] = { 
                 title: " ",
                 options: { 
                     chart: { type: "pie" },                
@@ -140,12 +189,14 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaCorrent
                     enabled: false
                 }
             };
+            return $scope.configChartDespesa;
         };  
         
-        var chartSaldoDespesa = function() {
-            var dataInicio = moment().startOf("month").format('YYYY-MM-DD');
-            var dataFim = moment().endOf("month").format('YYYY-MM-DD');
-            var mesAtual = ListaService.getValue(LISTAS.meses, moment().format('MM')-1);
+        var chartSaldoDespesa = function(mes) {
+            var data = moment().month(mes.id).year(mes.ano);
+            var dataInicio = data.startOf("month").format('YYYY-MM-DD');
+            var dataFim = data.endOf("month").format('YYYY-MM-DD');
+//            var mesAtual = ListaService.getValue(LISTAS.meses, moment().format('MM')-1);
             $q.all([PlanoContaService.getStructureByTipo($scope.tipos[1].id), 
                     LancamentoService.getSaldoPlanoConta(dataInicio, dataFim)])
                .then(function(values) {  
@@ -153,12 +204,12 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaCorrent
                     var saldos = formatPlanoConta(values[1]);
                     PlanoContaService.estrutura(estruturas);
                     var estruturas = PlanoContaService.flatten(estruturas);
-                    SaldoService.saldoPlanoContaByMes(estruturas, saldos, mesAtual);
+                    SaldoService.saldoPlanoContaByMes(estruturas, saldos, mes);
                     SaldoService.saldoPlanoContaGrupo(estruturas);
                     estruturas = _.filter(estruturas, function(estrutura) {
                         return estrutura.nivel === 2;
                     });
-                    configChartDespesa(getDataChartDespesa(estruturas, mesAtual));
+                    configChartDespesa(mes.order, getDataChartDespesa(estruturas, mes));
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -177,14 +228,18 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaCorrent
         
         var getDataChartDespesa = function(estruturas, mes) {            
             return _.map(estruturas, function(estrutura) {
-                return {name: estrutura.descricao, y: estrutura.saldos[mes.id]};
+                return {name: estrutura.descricao, y: estrutura.saldos[mes.order]};
             });            
         };
         
         // Saldos 90 dias /////
         
+        var initChartSaldo = function() {
+            chartSaldo();            
+        }
+        
         var configChartSaldo = function(categorias, valores, limitConta) {        
-            $scope.configChartSaldos = { 
+            $scope.configChartSaldos.push({ 
                 title: " ",     
                 options: { 
                     chart: { type: "area" }
@@ -220,7 +275,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaCorrent
                 credits: {
                     enabled: false
                 }
-            };
+            });
         };   
         
         var chartSaldo = function() {
@@ -307,6 +362,30 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', 'ContaCorrent
             var values = _.pluck(saldos, field);
             return _.values(values);
         };
+        
+        // Saldos Programados /////
+        
+        var initSaldoProgramado = function() {
+            LancamentoProgramadoService.getAllAtivo()
+               .then(function(data) {
+                    _.map(data, function(programado) {
+                        var dataAtual = moment().format('YYYY-MM-DD');
+                        var dataUmMes = moment().add(1, "M").format('YYYY-MM-DD');
+                        var dataDoisMes = moment().add(2, "M").format('YYYY-MM-DD');
+                        var dataTresMes = moment().add(3, "M").format('YYYY-MM-DD');
+                        var lancamentosVencido = LancamentoProgramadoService.lancamentoProgramadoVencido(angular.copy(programado), dataAtual);
+                        var lancamentosHoje = LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataAtual, dataAtual);
+                        var lancamentosUmMes = LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataAtual, dataUmMes);
+                        var lancamentosDoisMes = LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataAtual, dataDoisMes);
+                        var lancamentosTresMes = LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataAtual, dataTresMes);
+
+                        console.log(lancamentosVencido, lancamentosHoje, lancamentosUmMes, lancamentosDoisMes, lancamentosTresMes);
+                    });
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });            
+        }
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);

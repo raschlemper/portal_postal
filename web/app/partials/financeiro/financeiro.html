@@ -24,17 +24,30 @@
                     <div class="row">  
                         <div class="col-lg-6">    
                             <div class="panel panel-default">
-                                <div class="panel-heading">Receitas X Despesas</div>
+                                <div class="panel-heading">Receitas X Despesas &nbsp;
+                                    <a href="#" ui-sref="app.financeiro.chart({tipo: 'receitadespesa'})" title="Ver todos os meses de {{anoAtual}}"><i class="fa fa-external-link"></i></a>
+                                </div>
                                 <div class="panel-body panel-chart">
-                                    <highchart id="chartReceitaDespesa" config="configChartReceitaDespesa"></highchart>
+                                    <highchart id="chartReceitaDespesa" config="configChartReceitaDespesa[0]"></highchart>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-6">    
                             <div class="panel panel-default">
-                                <div class="panel-heading">Despesas do Mês Atual</div>
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-md-7">Despesas do Mês &nbsp;
+                                            <a href="#" ui-sref="app.financeiro.chart({tipo: 'despesa'})" title="Ver todos os meses de {{anoAtual}}"><i class="fa fa-external-link"></i></a>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <select class="form-control" ng-model="mesDespesaSelected" ng-change="changeMesDespesas(mesDespesaSelected)"
+                                                ng-options="(mes.abreviacao + ' / ' + mes.ano) for mes in mesesDespesa track by mes.id">    
+                                            </select>               
+                                        </div>
+                                    </div>                  
+                                </div>
                                 <div class="panel-body panel-chart">
-                                    <highchart id="chartDespesa" config="configChartDespesa"></highchart>
+                                    <highchart id="chartDespesa" config="configChartDespesa[mesDespesaSelected.order]"></highchart>
                                 </div>
                             </div>
                         </div>
@@ -46,13 +59,13 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">Previsão de saldo total para os próximos 90 dias</div>
                         <div class="panel-body panel-chart">
-                            <highchart id="chartSaldos" config="configChartSaldos"></highchart>
+                            <highchart id="chartSaldos" config="configChartSaldos[0]"></highchart>
                         </div>
                     </div>
                 </div>                
             </div>            
             <div class="row">    
-                <div class="col-lg-12" ng-hide="true">    
+                <div class="col-lg-12">    
                     <div class="panel panel-default">
                         <div class="panel-heading">Programação</div>
                         <div class="panel-body">

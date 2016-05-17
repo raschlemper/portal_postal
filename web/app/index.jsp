@@ -120,6 +120,7 @@
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/listaService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/valorService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/groupService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/periodoService.js"></script>
         
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/veiculo/veiculoService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/veiculo/veiculoCombustivelService.js"></script>

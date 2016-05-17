@@ -5,15 +5,30 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
     var situacoes = LISTAS.situacaoLancamentoProgramado;
     
     var lancamentoProgramado = function(lista, lancamento, dataInicio, dataFim) {
-        if(lancamento.situacao.id !== situacoes[0].id) return;
-        if(lancamento.quantidadeParcela && lancamento.numeroParcela > lancamento.quantidadeParcela) return;
+        if(!isValid(lancamento)) return;
         var dataVencimento = moment(lancamento.dataVencimento);
         if((dataVencimento.isSame(dataInicio) || dataVencimento.isAfter(dataInicio)) && 
            (dataVencimento.isSame(dataFim) || dataVencimento.isBefore(dataFim))) {
             lista.push(lancamento);  
         }
         if(dataVencimento.isAfter(dataFim)) return; 
-        getSaldo(lista, FrequenciaLancamentoService.execute(lancamento), dataInicio, dataFim);        
+        lancamentoProgramado(lista, FrequenciaLancamentoService.execute(lancamento), dataInicio, dataFim);        
+    }
+    
+    var lancamentoProgramadoVencido = function(lista, lancamento, data) {
+        if(!isValid(lancamento)) return;
+        var dataVencimento = moment(lancamento.dataVencimento);
+        if(dataVencimento.isBefore(data)) { 
+            lista.push(lancamento); 
+            return;  
+        }
+        lancamentoProgramadoVencido(lista, FrequenciaLancamentoService.execute(lancamento), data);        
+    }
+    
+    var isValid = function(lancamento) {        
+        if(lancamento.situacao.id !== situacoes[0].id) return false;
+        if(lancamento.quantidadeParcela && lancamento.numeroParcela > lancamento.quantidadeParcela) return false;
+        return true;
     }
 
     return {
@@ -71,6 +86,12 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
         lancamentoProgramado: function(lancamento, dataInicio, dataFim) {
             var lista = [];
             lancamentoProgramado(lista, lancamento, dataInicio, dataFim)
+            return lista;
+        },
+        
+        lancamentoProgramadoVencido: function(lancamento, data) {
+            var lista = [];
+            lancamentoProgramadoVencido(lista, lancamento, data)
             return lista;
         }
 

@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoContaService', 'LancamentoService', 'SaldoService', 'GroupService', 'ModalService', 'LISTAS',
-    function ($scope, $q, $filter, PlanoContaService, LancamentoService, SaldoService, GroupService,  ModalService, LISTAS) {
+app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoContaService', 'LancamentoService', 'SaldoService', 'PeriodoService', 'GroupService', 'ModalService', 'LISTAS',
+    function ($scope, $q, $filter, PlanoContaService, LancamentoService, SaldoService, PeriodoService, GroupService,  ModalService, LISTAS) {
             
         var init = function () {
             $scope.meses = LISTAS.meses;
@@ -12,8 +12,7 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
         
         $scope.pesquisar = function(mes, ano) {
             if(!mes || !ano) return;
-            $scope.periodoSelected = [];
-            periodoSelected(mes, ano);
+            $scope.periodoSelected = PeriodoService.periodoOneYear(mes, ano.codigo);
             estruturas(mes.id + 1, ano.codigo);
         }
 
