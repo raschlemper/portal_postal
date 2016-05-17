@@ -373,18 +373,26 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                         var dataUmMes = moment().add(1, "M").format('YYYY-MM-DD');
                         var dataDoisMes = moment().add(2, "M").format('YYYY-MM-DD');
                         var dataTresMes = moment().add(3, "M").format('YYYY-MM-DD');
-                        var lancamentosVencido = LancamentoProgramadoService.lancamentoProgramadoVencido(angular.copy(programado), dataAtual);
-                        var lancamentosHoje = LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataAtual, dataAtual);
-                        var lancamentosUmMes = LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataAtual, dataUmMes);
-                        var lancamentosDoisMes = LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataAtual, dataDoisMes);
-                        var lancamentosTresMes = LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataAtual, dataTresMes);
-
-                        console.log(lancamentosVencido, lancamentosHoje, lancamentosUmMes, lancamentosDoisMes, lancamentosTresMes);
+                        $scope.lancamentosVencido = getValoresReceitaDespesa(LancamentoProgramadoService.lancamentoProgramadoVencido(angular.copy(programado), dataAtual));
+                        $scope.lancamentosHoje = getValoresReceitaDespesa(LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataAtual, dataAtual));
+                        $scope.lancamentosUmMes = getValoresReceitaDespesa(LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataAtual, dataUmMes));
+                        $scope.lancamentosDoisMeses = getValoresReceitaDespesa(LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataUmMes, dataDoisMes));
+                        $scope.lancamentosTresMeses = getValoresReceitaDespesa(LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataDoisMes, dataTresMes));
                     });
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });            
+        }
+        
+        var getValoresReceitaDespesa = function(lancamentos) {
+            var receita = 0;
+            var despesa = 0;
+            _.map(lancamentos, function(lancamento) {
+               if(lancamento.tipo.id === $scope.tipos[0].id) { receita += lancamento.valor; }
+               if(lancamento.tipo.id === $scope.tipos[1].id) { despesa -= lancamento.valor; }
+            });
+            return {receita: receita, despesa: despesa};
         }
         
         var modalMessage = function(message) {

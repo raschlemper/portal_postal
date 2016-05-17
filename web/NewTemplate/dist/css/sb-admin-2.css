@@ -3132,3 +3132,31 @@ table.table-condensed tbody tr td.cel-data {
 .input-group > span.input-group-btn > button.btn-lg {
     padding: 3px 10px;
 }
+
+.content-programacao {
+    padding: 0 15px 0 15px; 
+    margin: 10px 0 10px 0; 
+    border-right: 1px solid #CCC; 
+    color: #666;
+    width: 20%;
+    float: left;
+    position: relative;
+}
+
+.content-programacao:first-child {
+    padding: 0 15px 0 30px; 
+}
+
+.content-programacao:last-child {
+    padding: 0 30px 0 15px; 
+}
+
+.content-programacao .title {
+    width:100%; 
+    margin-bottom: 10px; 
+    border-bottom: 1px solid #CCC;
+}
+
+.content-programacao .value {
+    width:100%; 
+}
