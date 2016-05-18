@@ -47,7 +47,7 @@ public class ReportService {
     
     public ReportService jasper() throws JRException {
         JasperReport jasperReport = JasperCompileManager.compileReport(getJasperDesign());
-        jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, getCollectionDataSource(collection));
+        jasperPrint = JasperFillManager.fillReport(jasperReport, parameters);
         return this;
     }   
     
@@ -64,6 +64,7 @@ public class ReportService {
     }
     
     private JRBeanCollectionDataSource getCollectionDataSource(Collection collection) {
+        if(collection == null) return null;
         return new JRBeanCollectionDataSource(collection);
     }
 }

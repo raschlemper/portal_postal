@@ -3,11 +3,8 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="net.sf.jasperreports.json.source" class="java.lang.String">
-		<defaultValueExpression><![CDATA["http://en.wikipedia.org/w/api.php?format=json&action=query&prop=contributors&titles=" + $P{title}]]></defaultValueExpression>
-	</parameter>
-	<queryString language="json">
-		<![CDATA[query.pages]]>
+	<queryString>
+		<![CDATA[]]>
 	</queryString>
 	<background>
 		<band splitType="Stretch"/>
@@ -15,8 +12,7 @@
 	<title>
 		<band height="79" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="228c8619-c8f5-4b94-abf2-ebed53bc0421" x="0" y="0" width="555" height="79"/>
-				<textElement/>
+				<reportElement x="0" y="0" width="555" height="79" uuid="228c8619-c8f5-4b94-abf2-ebed53bc0421"/>
 				<text><![CDATA[Teste]]></text>
 			</staticText>
 		</band>

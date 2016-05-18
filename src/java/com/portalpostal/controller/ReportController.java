@@ -42,7 +42,7 @@ public class ReportController {
         try {
             init(); 
             String teste = "deu certo!!!";
-            OutputStream jasper = ReportService.create().jrxml("demonstrativo.jrxml").parameter(null).jasper().report();
+            OutputStream jasper = ReportService.create().jrxml("/iReports/demostrativo.jrxml").parameter(null).jasper().report();
             
             return Response.ok(jasper).build();
         } catch (Exception ex) {
