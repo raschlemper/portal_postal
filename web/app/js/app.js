@@ -11,7 +11,8 @@ var app = app || angular.module('App', [
     'ui.utils.masks',
     'datatables',
     'datatables.bootstrap',
-    'highcharts-ng'
+    'highcharts-ng',
+    'ngPDFViewer'
 ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
@@ -35,6 +36,21 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
                 url: '/',
                 templateUrl: 'partials/help/help.html',
                 controller: 'HelpController',
+                resolve: {}
+            })
+                                            
+            /* ***** REPORT ***** */                     
+            
+            .state('report', {
+                abstract: true,
+                url: '/report',
+                template: '<div ui-view></div>'
+            })                
+            
+            .state('report.view', {
+                url: '/{report}',
+                templateUrl: 'partials/report/report.html',
+                controller: 'ReportController',
                 resolve: {}
             })
                                             

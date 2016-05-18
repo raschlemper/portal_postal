@@ -1,13 +1,14 @@
 'use strict';
 
-app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoContaService', 'LancamentoService', 'SaldoService', 'PeriodoService', 'GroupService', 'ModalService', 'LISTAS',
-    function ($scope, $q, $filter, PlanoContaService, LancamentoService, SaldoService, PeriodoService, GroupService,  ModalService, LISTAS) {
+app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoContaService', 'LancamentoService', 'SaldoService', 'PeriodoService', 'ReportService', 'GroupService', 'ModalService', 'LISTAS',
+    function ($scope, $q, $filter, PlanoContaService, LancamentoService, SaldoService, PeriodoService, ReportService, GroupService, ModalService, LISTAS) {
             
         var init = function () {
             $scope.meses = LISTAS.meses;
             $scope.mesSelected = $scope.meses[0];
             $scope.estruturasLista = [];
             anos();
+            report();
         }; 
         
         $scope.pesquisar = function(mes, ano) {
@@ -101,6 +102,13 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
         var modalMessage = function(message) {
             ModalService.modalMessage(message);
         };
+        
+        var report = function() {
+//            window.open(_contextPath + '/report/pdf/demonstrativo');
+            var params = [];
+            params.push({id: 1, data: moment().format('YYYY-MM-DD'), valor: 3000.00});            
+            ReportService.pdf('demonstrativo', params);
+        }
         
         init();
 

@@ -573,11 +573,15 @@
         <jsp-file>/app/help.jsp</jsp-file>
     </servlet>
     <servlet>
+        <servlet-name>Report</servlet-name>
+        <jsp-file>/app/report.jsp</jsp-file>
+    </servlet>
+    <servlet>
         <servlet-name>App</servlet-name>
         <jsp-file>/app/index.jsp</jsp-file>
     </servlet>
     <servlet>
-        <servlet-name>jersey-serlvet</servlet-name>
+        <servlet-name>jersey-servlet</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
@@ -592,6 +596,23 @@
             <param-value>true</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>jersey-servlet-report</servlet-name>
+        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+            <param-value>com.portalpostal.filter.AppFilter</param-value>
+        </init-param>
+        <init-param>
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-value>com.portalpostal.report</param-value>
+        </init-param>
+        <init-param>
+            <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>2</load-on-startup>
     </servlet>
     <servlet>
         <servlet-name>ServListaPostagemRemoverObj</servlet-name>
@@ -1202,13 +1223,21 @@
         <url-pattern>/app/help/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>Report</servlet-name>
+        <url-pattern>/app/report/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>App</servlet-name>
         <url-pattern>/app/veiculo/*</url-pattern>
         <url-pattern>/app/financeiro/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>jersey-serlvet</servlet-name>
+        <servlet-name>jersey-servlet</servlet-name>
         <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>jersey-servlet-report</servlet-name>
+        <url-pattern>/report/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ServListaPostagemRemoverObj</servlet-name>
