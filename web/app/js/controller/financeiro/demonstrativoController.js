@@ -1,14 +1,13 @@
 'use strict';
 
-app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoContaService', 'LancamentoService', 'SaldoService', 'PeriodoService', 'ReportService', 'GroupService', 'ModalService', 'LISTAS',
-    function ($scope, $q, $filter, PlanoContaService, LancamentoService, SaldoService, PeriodoService, ReportService, GroupService, ModalService, LISTAS) {
+app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoContaService', 'LancamentoService', 'SaldoService', 'PeriodoService', 'DemonstrativoService', 'ReportService', 'GroupService', 'ModalService', 'LISTAS',
+    function ($scope, $q, $filter, PlanoContaService, LancamentoService, SaldoService, PeriodoService, DemonstrativoService, ReportService, GroupService, ModalService, LISTAS) {
             
         var init = function () {
             $scope.meses = LISTAS.meses;
             $scope.mesSelected = $scope.meses[0];
             $scope.estruturasLista = [];
             anos();
-            report();
         }; 
         
         $scope.pesquisar = function(mes, ano) {
@@ -48,7 +47,7 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
                     SaldoService.saldoPlanoConta($scope.estruturasLista, saldos, $scope.periodoSelected);
                     $scope.totais = SaldoService.saldoPlanoContaTotalMes($scope.estruturasLista, $scope.periodoSelected);
                     SaldoService.saldoPlanoContaGrupo($scope.estruturasLista);
-                    console.log($scope.estruturasLista);
+                    report(dataInicio, dataFim, $scope.periodoSelected, $scope.estruturasLista);
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -61,7 +60,7 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
         
         var getDataFim = function(mes, ano) {
             var dataInicio = getDataInicio(mes, ano)
-            return moment(dataInicio).add(12, 'M').format('YYYY-MM-DD HH:mm:ss');;          
+            return moment(dataInicio).add(12, 'M').subtract(1, 'seconds').format('YYYY-MM-DD HH:mm:ss');
         }
         
         var getSaldos = function(data) {
@@ -83,10 +82,12 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
             ModalService.modalMessage(message);
         };
         
-        var report = function() {
+        var report = function(dataInicio, dataFim, periodos, estruturas) {
+            var params = DemonstrativoService.report(dataInicio, dataFim, periodos, estruturas);
+//            console.log(params);
 //            window.open(_contextPath + '/report/pdf/demonstrativo');
-            var params = [];
-            params.push({id: 1, data: moment().format('YYYY-MM-DD'), valor: 3000.00});            
+//            var params = [];
+//            params.push({id: 1, data: moment().format('YYYY-MM-DD'), valor: 3000.00});            
             ReportService.pdf('demonstrativo', params);
         }
         

@@ -28,11 +28,12 @@ public class DemonstrativoReportController {
     
     private HttpSession sessao;
     private String nomeBD;
-    private String nameReport = "demonstrativo";
+    private String nameReport;
     
     private void init() {
         sessao = request.getSession();
         nomeBD = (String) sessao.getAttribute("nomeBD");
+        nameReport = "demonstrativo";
     }
     
     @GET
@@ -51,7 +52,7 @@ public class DemonstrativoReportController {
     @Path("/pdf")
     @Produces("application/pdf")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response pdf(List<Saldo> params) {
+    public Response pdf(List<DemonstartivoReportDTO> params) {
         try {
             init(); 
             return Response.ok(getReport(params)).build();
@@ -66,7 +67,7 @@ public class DemonstrativoReportController {
                     .report(); 
     }
     
-    private static List<Saldo> getCollection(String nomeBD) throws Exception {
+    private List<Saldo> getCollection(String nomeBD) throws Exception {
         LancamentoService service = new LancamentoService(nomeBD);
         Calendar data1 = new GregorianCalendar(2016,1,1);
         Calendar data2 = new GregorianCalendar(2016,12,31);

@@ -9,9 +9,7 @@ app.factory('ReportService', function($http, $state, $location) {
                 .success(function (data) {
                     var file = new Blob([data], {type: 'application/pdf'});
                     var fileURL = URL.createObjectURL(file);
-                    window.open(fileURL);            
-//                    window.open(_contextPath + "/app/report/" + fileURL);
-//                    $location.url(fileURL);
+                    window.open(fileURL);    
                 })
                 .error(function(err) {
                     console.log(err);
