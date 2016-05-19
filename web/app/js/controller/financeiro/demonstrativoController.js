@@ -35,27 +35,6 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
             })
         };  
         
-        var periodoSelected = function(mesSelected, anoSelected) {   
-            var index = 1;
-            // Ano corrente
-            _.map($scope.meses, function(mes) {
-                if(mes.id < mesSelected.id) return;
-                mes.order = index;
-                mes.ano = anoSelected.descricao;
-                $scope.periodoSelected.push(mes);
-                index++;
-            }); 
-            // Próximo ano
-            var nextAnoSelected = anoSelected.descricao + 1;
-            _.map($scope.meses, function(mes) {
-                if(mes.id >= mesSelected.id) return;
-                mes.order = index;
-                mes.ano = nextAnoSelected;
-                $scope.periodoSelected.push(mes);
-                index++;
-            });
-        };
-        
         var estruturas = function(mes, ano) {
             var dataInicio = getDataInicio(mes, ano);
             var dataFim = getDataFim(mes, ano);
@@ -69,6 +48,7 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
                     SaldoService.saldoPlanoConta($scope.estruturasLista, saldos, $scope.periodoSelected);
                     $scope.totais = SaldoService.saldoPlanoContaTotalMes($scope.estruturasLista, $scope.periodoSelected);
                     SaldoService.saldoPlanoContaGrupo($scope.estruturasLista);
+                    console.log($scope.estruturasLista);
                 })
                 .catch(function(e) {
                     modalMessage(e);

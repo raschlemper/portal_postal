@@ -39,21 +39,6 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
                 resolve: {}
             })
                                             
-            /* ***** REPORT ***** */                     
-            
-            .state('report', {
-                abstract: true,
-                url: '/report',
-                template: '<div ui-view></div>'
-            })                
-            
-            .state('report.view', {
-                url: '/{report}',
-                templateUrl: 'partials/report/report.html',
-                controller: 'ReportController',
-                resolve: {}
-            })
-                                            
             /* ***** APP ***** */
             
             .state('app', {

@@ -7,6 +7,7 @@ import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.model.PlanoConta;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -137,6 +138,23 @@ public class PlanoContaService {
         if(planoContaExist == null) return false;
         if(planoContaExist.getIdPlanoConta().equals(planoConta.getIdPlanoConta())) return false;
         return true;
+    }  
+    
+    private void getEstrutura(List<PlanoConta> planoContas) {
+        for(PlanoConta planoConta : planoContas) {            
+            planoConta.setDescricao(getCode(planoConta.getEstrutura()) + " - " + planoConta.getNome()); 
+            if(!planoConta.getContas().isEmpty()) { getEstrutura(planoConta.getContas()); }
+        }
+    }
+            
+    private String getCode(Map<Integer, Integer> estruturas) {
+        String code = "";
+        for (Map.Entry<Integer, Integer> entrySet : estruturas.entrySet()) {
+            Integer value = entrySet.getValue();
+            if(code != null) { code = code + "." + value; }
+            else { code = value.toString(); }
+        }
+        return code;
     }
     
 }

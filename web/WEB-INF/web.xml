@@ -573,10 +573,6 @@
         <jsp-file>/app/help.jsp</jsp-file>
     </servlet>
     <servlet>
-        <servlet-name>Report</servlet-name>
-        <jsp-file>/app/report.jsp</jsp-file>
-    </servlet>
-    <servlet>
         <servlet-name>App</servlet-name>
         <jsp-file>/app/index.jsp</jsp-file>
     </servlet>
@@ -1221,10 +1217,6 @@
     <servlet-mapping>
         <servlet-name>Help</servlet-name>
         <url-pattern>/app/help/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Report</servlet-name>
-        <url-pattern>/app/report/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>App</servlet-name>

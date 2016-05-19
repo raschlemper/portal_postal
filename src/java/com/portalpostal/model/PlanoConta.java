@@ -10,6 +10,7 @@ public class PlanoConta {
     private TipoPlanoConta tipo;
     private Integer codigo;
     private String nome;
+    private String descricao;
     private Integer nivel;
     private Map<Integer,Integer> estrutura;
     private PlanoConta grupo;
@@ -47,6 +48,14 @@ public class PlanoConta {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public Integer getNivel() {
