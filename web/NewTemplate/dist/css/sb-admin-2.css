@@ -1458,13 +1458,15 @@ ul.DTTT_dropdown.dropdown-menu > li:hover > a {
   -o-transition: 1s;
   transition: 1s;
 }
+
 .radio + .radio, .checkbox + .checkbox {
   margin-top: 10px;
 }
+/*
 .checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {
   position: absolute;
   clip: rect(0, 0, 0, 0);
-}
+}*/
 .checkbox i, .checkbox-inline i, .radio i, .radio-inline i {
   cursor: pointer;
   position: absolute;
@@ -1480,6 +1482,7 @@ ul.DTTT_dropdown.dropdown-menu > li:hover > a {
   font-size: 18px;
   top:2px;
 }
+
 .checkbox input[type=checkbox]:checked + i:before, .checkbox-inline input[type=checkbox]:checked + i:before {
   content:"\f046";
 }
@@ -2252,15 +2255,16 @@ label.small{
   padding: 0 15px;
 }
 .btn + .dropdown-menu {
-  margin-top: -10px;
-  background: rgba(0, 0, 0, 0.7) !important; padding: 0; border: 0; 
+// margin-top: -10px;
+//  background: rgba(0, 0, 0, 0.7) !important;
+padding: 0; border: 0; 
   right: 0; 
   left: auto; 
   min-width: 100%;
 }
 .btn + .dropdown-menu > li > a {
   padding: 5px 10px !important;
-  color: #f0f0f0;
+ ///color: #f0f0f0;
 }
 .v-txt {
   -moz-transform: rotate(-90deg);

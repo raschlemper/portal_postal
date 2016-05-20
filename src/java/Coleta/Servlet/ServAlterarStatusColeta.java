@@ -81,38 +81,38 @@ public class ServAlterarStatusColeta extends HttpServlet {
 
                 String nomeBD = (String) sessao.getAttribute("empresa");
                 int idUsuario = (Integer) sessao.getAttribute("idUsuario");
-                int idColetador = Integer.parseInt(request.getParameter("idColetador1"));
                 String statusEntrega = request.getParameter("statusEntrega");
 
                 if(statusEntrega != null && !statusEntrega.equals("0")){
 
                     int idStatusEnt = Integer.parseInt(statusEntrega);
-                    int cont = Integer.parseInt(request.getParameter("contador"));
 
                     String nomeStatus = Controle.ContrStatusEntrega.consultaNomeStatus(idStatusEnt, nomeBD);
                     String nomeUsuario = Controle.contrUsuario.consultaNomeUsuarioById(idUsuario, nomeBD);
-
-                    for (int i = 1; i <= cont; i++) {
-                        String vIdColeta = request.getParameter("idColeta" + i);
-                        if (vIdColeta != null && !vIdColeta.equals("")) {
-                            int idColeta = Integer.parseInt(vIdColeta);
-
-                            Coleta.Controle.contrColeta.darBaixa(idColeta, idStatusEnt, idStatusEnt, nomeBD);
-                            Controle.ContrLogColeta.inserir(idColeta, idUsuario, nomeUsuario, "Alterado o Status da Coleta para " + nomeStatus, nomeBD);
-                        }
+                     String idsColetas = request.getParameter("coletas");
+                  idsColetas = idsColetas.substring(1);
+                  Coleta.Controle.contrColeta.darBaixaColetas(idsColetas, idStatusEnt, idStatusEnt, nomeBD);
+                           
+                     if (idsColetas.contains(",")) {
+                    String ids[] = idsColetas.split(",");
+                    for (String id : ids) {
+                        int idColeta = Integer.parseInt(id);
+                         Controle.ContrLogColeta.inserir(idColeta, idUsuario, nomeUsuario, "Alterado o Status da Coleta para " + nomeStatus, nomeBD);
+                         
                     }
+                } else { // caso seja uma unica coleta
+                    int idColeta = Integer.parseInt(idsColetas);
+                    Controle.ContrLogColeta.inserir(idColeta, idUsuario, nomeUsuario, "Alterado o Coletador da Coleta para " + nomeStatus, nomeBD);
+
+                }
+                PrintWriter out = response.getWriter();
+                out.println("Status das coletas selecionadas alterado com Sucesso");
 
                 }
 
-                sessao.setAttribute("msg", "Status das coletas alterado com sucesso!");
-                //response.sendRedirect("Agencia/Coleta/acompanhamento.jsp?idColetador="+idColetador);
-                response.sendRedirect(request.getHeader("referer"));
-
             } catch (Exception ex) {
-                int idErro = ContrErroLog.inserir("HOITO - ServBaixaColeta", "Exception", null, ex.toString());
-                sessao.setAttribute("msg", "SYSTEM ERROR Nº: " + idErro + ";Ocorreu um erro inesperado!");
-                //response.sendRedirect("Agencia/Coleta/acompanhamento.jsp");
-                response.sendRedirect(request.getHeader("referer"));
+                 PrintWriter out = response.getWriter();
+                out.println("SYSTEM ERROR: Ocorreu um erro inesperado");
             }
         }
 

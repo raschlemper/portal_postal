@@ -33,6 +33,15 @@ public class Coleta {
     private Timestamp dataHoraAguardando;
     private String nomeStatus;
 
+    public Coleta(int idCliente, int idTipo, String tipoColeta, String nomeColetador) {
+        this.idCliente = idCliente;
+        this.idTipo = idTipo;
+        this.tipoColeta = tipoColeta;
+        this.nomeColetador = nomeColetador;
+    }
+    
+    
+
     public Coleta(int idColeta, int idCliente, int idUsuario, int idColetador, int idContato, int idTipo, int status, Timestamp dataHoraSolicitacao, Timestamp dataHoraColeta, Timestamp dataHoraBaixa, String obs, int statusEntrega, int tipoSolicitacao, Timestamp dataHoraAguardando) {
         this.idColeta = idColeta;
         this.idCliente = idCliente;

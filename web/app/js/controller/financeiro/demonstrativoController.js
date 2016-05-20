@@ -10,10 +10,15 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
             anos();
         }; 
         
-        $scope.pesquisar = function(mes, ano) {
-            if(!mes || !ano) return;
-            $scope.periodoSelected = PeriodoService.periodoOneYear(mes, ano.codigo);
-            estruturas(mes.id + 1, ano.codigo);
+        $scope.setData = function(mesSelected, anoSelected) {     
+            if(!mesSelected || !anoSelected) return;       
+            $scope.dataInicio = getDataInicio(mesSelected.id + 1, anoSelected.codigo);
+            $scope.dataFim = getDataFim(mesSelected.id + 1, anoSelected.codigo);
+            $scope.periodoSelected = PeriodoService.periodoOneYear(mesSelected, anoSelected.codigo);
+        }
+        
+        $scope.pesquisar = function(dataInicio, dataFim) {            
+            estruturas(dataInicio, dataFim);
         }
 
         var anos = function() {
@@ -21,7 +26,8 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
                 .then(function (data) {
                     $scope.anos = createAnosLista(data);
                     $scope.anoSelected = $scope.anos[$scope.anos.length-1];
-                    $scope.pesquisar($scope.mesSelected, $scope.anoSelected);
+                    $scope.setData($scope.mesSelected, $scope.anoSelected);
+                    $scope.pesquisar($scope.dataInicio, $scope.dataFim);
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -34,9 +40,7 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
             })
         };  
         
-        var estruturas = function(mes, ano) {
-            var dataInicio = getDataInicio(mes, ano);
-            var dataFim = getDataFim(mes, ano);
+        var estruturas = function(dataInicio, dataFim) {
             $q.all([PlanoContaService.getStructure(), 
                     LancamentoService.getSaldoPlanoConta(dataInicio, dataFim)])
                .then(function(values) {  
@@ -47,7 +51,6 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
                     SaldoService.saldoPlanoConta($scope.estruturasLista, saldos, $scope.periodoSelected);
                     $scope.totais = SaldoService.saldoPlanoContaTotalMes($scope.estruturasLista, $scope.periodoSelected);
                     SaldoService.saldoPlanoContaGrupo($scope.estruturasLista);
-                    report(dataInicio, dataFim, $scope.periodoSelected, $scope.estruturasLista);
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -82,12 +85,8 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
             ModalService.modalMessage(message);
         };
         
-        var report = function(dataInicio, dataFim, periodos, estruturas) {
-            var params = DemonstrativoService.report(dataInicio, dataFim, periodos, estruturas);
-//            console.log(params);
-//            window.open(_contextPath + '/report/pdf/demonstrativo');
-//            var params = [];
-//            params.push({id: 1, data: moment().format('YYYY-MM-DD'), valor: 3000.00});            
+        $scope.report = function(dataInicio, dataFim, periodos, estruturas) {
+            var params = DemonstrativoService.report(dataInicio, dataFim, periodos, estruturas);   
             ReportService.pdf('demonstrativo', params);
         }
         

@@ -1,3 +1,4 @@
+<%@page import="Coleta.Controle.contrColeta"%>
 <%@page import="Entidade.Usuario"%>
 <%@page import="Entidade.empresas"%>
 <%@page import="Emporium.Controle.ContrTelegramaPostal"%>
@@ -6,7 +7,9 @@
         Usuario usrMenu = (Usuario) session.getAttribute("agf_usuario");
         empresas empMenu = (empresas) session.getAttribute("agf_empresa");
         int qtdTelegPend = ContrTelegramaPostal.consultaQtdNaoEnviados(empMenu.getCnpj());
-        //padding-left: 50px;
+               
+        String qtdWeb = contrColeta.consultaQtdColetasSolicitadas(empMenu.getCnpj());
+        
 %>
 
 <!-- Sidebar -->
@@ -32,7 +35,7 @@
             </ul>
         </li>
         <li>
-            <a href="${pageContext.request.contextPath}/NewTemplate/Telegrama/telegrama_naoenviados_b.jsp"><span class="fa-stack fa-lg pull-left"><i class="fa fa-file-text fa-stack-1x "></i></span> Telegramas <%if (qtdTelegPend > 0) {%><span class="label label-danger"><%= qtdTelegPend%></span><%}%></a>
+            <a href="${pageContext.request.contextPath}/NewTemplate/Telegrama/telegrama_naoenviados_b.jsp"><span class="fa-stack fa-lg pull-left"><i class="fa fa-file-text fa-stack-1x "></i></span> Telegramas <%if (qtdTelegPend > 0) {%><span class="label label-danger"> <%= qtdTelegPend%></span><%}%></a>
         </li>
         <li><a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-barcode fa-stack-1x "></i></span> Gerenciar Etiquetas <span style="margin: 5px 20px 0 0;" class="fa-stack fa-fw pull-right"><i id="arrow" class="fa fa-chevron-down fa-stack-1x "></i></span></a>
             <ul class="nav-pills nav-stacked" style="list-style-type:none;">
@@ -45,10 +48,10 @@
                     <%}%>
             </ul>
         </li>
-        <li><a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-truck fa-stack-1x "></i></span> Coleta <span style="margin: 5px 20px 0 0;" class="fa-stack fa-fw pull-right"><i id="arrow" class="fa fa-chevron-down fa-stack-1x"></i></span></a>
+        <li><a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-truck fa-stack-1x "></i></span> Coleta <%if (!qtdWeb.equals("0")) {%><span class="label label-danger"> <%= qtdWeb%></span><%}%> <span style="margin: 5px 20px 0 0;" class="fa-stack fa-fw pull-right"><i id="arrow" class="fa fa-chevron-down fa-stack-1x"></i></span></a>
             <ul class="nav-pills nav-stacked" style="list-style-type:none;">
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(201)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Coleta/acompanhamento_b.jsp">Acompanhamento</a></li>   <%}%>  
-                <%if (usrMenu.getListaAcessosPortalPostal().contains(206)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Coleta/pesquisar_b.jsp">Gerenciar Rotas</a></li>  <%}%>
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(206)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Coleta/pesquisar_b_1.jsp">Gerenciar Rotas <%if (!qtdWeb.equals("0")) {%><span class="label label-danger"><%= qtdWeb%></span><%}%> </a></li>  <%}%>
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(202)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Coleta/novaColeta_b.jsp">Nova Coleta</a></li><%}%>
                     <%if (usrMenu.getIdNivel() == 1 || usrMenu.getIdNivel() == 2) {%>
                     <%if (usrMenu.getListaAcessosPortalPostal().contains(203)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Coleta/coletador_lista_b.jsp">Coletadores</a></li><%}%>

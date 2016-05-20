@@ -14,6 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -128,9 +130,46 @@ public class contrColetaFixa {
         }
     }
 
+    public static Map<Integer, ArrayList<Coleta>> verificaExistenciaRotaParaCliente(String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "SELECT idCliente, nome,fixo,tipo FROM coleta_rotas AS cr LEFT JOIN coleta_coletador AS cc ON cr.idColetador = cc.idColetador LEFT JOIN coleta_tipos "
+                + "    ON idTIpo = idTipoColeta;";
+
+        Map<Integer, ArrayList<Coleta>> lsC = new HashMap<Integer, ArrayList<Coleta>>() {
+        };
+        try {
+
+            PreparedStatement valores = conn.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            while (result.next()) {
+                int idCliente = result.getInt("idCliente");
+                String nome = result.getString("nome");
+                int fixo = result.getInt("fixo");
+                String tipo = result.getString("tipo");
+                Coleta cl = new Coleta(idCliente, fixo, tipo, nome);
+                if (lsC.containsKey(idCliente)) {
+                    ArrayList<Coleta> lCol = lsC.get(idCliente);
+                    lCol.add(cl);
+                    lsC.put(idCliente, lCol);
+                } else {
+
+                    ArrayList<Coleta> lCol = new ArrayList<Coleta>();
+                    lCol.add(cl);
+                    lsC.put(idCliente, lCol);
+                }
+            }
+            return lsC;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrColetaFixa", "SQLException", sql, e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+
     public static int consultaColetadorEventualDoCliente(int idCliente, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "SELECT idColetador FROM coleta_rotas WHERE idCliente=? and fixo=0;";
+        String sql = "SELECT idColetador FROM coleta_rotas WHERE idCliente=? ORDER BY fixo LIMIT 1;";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setInt(1, idCliente);
@@ -147,11 +186,31 @@ public class contrColetaFixa {
             Conexao.desconectar(conn);
         }
     }
-       public static int consultaTipoEscolhaColetaDoCliente(int idEmpresa) {
-       Connection conn = Conexao.conectarGeral();
-        String sql = "SELECT tipoEscolhaColeta FROM empresas WHERE idEmpresa= "+idEmpresa;
+    public static int consultaTipoColetaEventualDoCliente(int idCliente, String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "SELECT idTipo FROM coleta_rotas WHERE idCliente=? ORDER BY fixo LIMIT 1;";
         try {
-            PreparedStatement valores = conn.prepareStatement(sql);           
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.setInt(1, idCliente);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            if (result.next()) {
+                return result.getInt("idTipo");
+            } else {
+                return 0;
+            }
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrColetaFixa", "SQLException", sql, e.toString());
+            return 0;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+
+    public static int consultaTipoEscolhaColetaDoCliente(int idEmpresa) {
+        Connection conn = Conexao.conectarGeral();
+        String sql = "SELECT tipoEscolhaColeta FROM empresas WHERE idEmpresa= " + idEmpresa;
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();
             if (result.next()) {
                 return result.getInt("tipoEscolhaColeta");
@@ -221,5 +280,4 @@ public class contrColetaFixa {
         }
     }
 
-    
 }

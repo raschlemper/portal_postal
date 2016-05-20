@@ -120,6 +120,23 @@ public class contrColeta {
         }
     }
 
+    public static int darBaixaColetas(String idColetas, int status, int statusEntrega, String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "UPDATE coleta SET status=?, statusEntrega=?, dataHoraBaixa=NOW() where idColeta IN("+idColetas+")";
+
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.setInt(1, status);
+            valores.setInt(2, statusEntrega);
+            int i = valores.executeUpdate();
+            return i;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrColeta", "SQLException", sql, e.toString());
+            return -1;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
     public static int darBaixa(int idColeta, int status, int statusEntrega, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "update coleta set status=?, statusEntrega=?, dataHoraBaixa=NOW() where idColeta = ?";
@@ -146,6 +163,27 @@ public class contrColeta {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setInt(1, idColetador);
             valores.setInt(2, idColeta);
+            int i = valores.executeUpdate();
+            return i;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrColeta", "SQLException", sql, e.toString());
+            return -1;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+    public static int alterarColetadordasColetas(String idColetas, int idColetador, boolean isWeb ,String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        
+        String sql = "UPDATE coleta SET idColetador=? WHERE idColeta IN("+idColetas+");";
+        if(isWeb){
+            
+        sql = "UPDATE coleta SET idColetador = ?, status = 2 WHERE idColeta IN("+idColetas+");";
+        }
+        
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.setInt(1, idColetador);
             int i = valores.executeUpdate();
             return i;
         } catch (SQLException e) {
@@ -338,7 +376,7 @@ public class contrColeta {
 
     public static String consultaQtdColetasSolicitadas(String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "SELECT COUNT(idColeta) AS qtd FROM coleta WHERE status = 1";
+        String sql = "SELECT COUNT(idColeta) AS qtd FROM coleta WHERE status = 1";        
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();
@@ -366,16 +404,21 @@ public class contrColeta {
                 + " LEFT JOIN coleta_coletador ON coleta_coletador.idColetador = c.idColetador"
                 + " WHERE c.idColetador = ? AND DATE(dataHoraColeta) = ? ";
         if (status == 3 || status == 4) {
+           
             sql += " AND (status = 3 OR status = 4)";
         } else if (status == 2) {
+           
             sql += " AND (status = 2 OR status = 6)";
         } else if (status == 5) {
+           
             sql += " AND (status = 5 OR status = 7)";
         } else if (status > 0) {
+           
             sql += " AND status = " + status;
         }
         sql += " ORDER BY status DESC, " + ordem;
-
+        
+        
         ArrayList<Coleta> listaStatus = new ArrayList();
         try {
             PreparedStatement valores = conn.prepareStatement(sql);

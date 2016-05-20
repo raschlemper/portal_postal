@@ -19,8 +19,10 @@ import javax.servlet.http.HttpSession;
  */
 public class ServAlterarColetadorColeta extends HttpServlet {
 
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -32,14 +34,14 @@ public class ServAlterarColetadorColeta extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             /* TODO output your page here
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ServAlterarColetadorColeta</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ServAlterarColetadorColeta at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+             out.println("<html>");
+             out.println("<head>");
+             out.println("<title>Servlet ServAlterarColetadorColeta</title>");  
+             out.println("</head>");
+             out.println("<body>");
+             out.println("<h1>Servlet ServAlterarColetadorColeta at " + request.getContextPath () + "</h1>");
+             out.println("</body>");
+             out.println("</html>");
              */
         } finally {
             out.close();
@@ -47,8 +49,9 @@ public class ServAlterarColetadorColeta extends HttpServlet {
     }
 
     // <editor-fold defaultstate="collapsed" desc="Métodos HttpServlet. Clique no sinal de + à esquerda para editar o código.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -57,11 +60,12 @@ public class ServAlterarColetadorColeta extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
     }
 
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -79,42 +83,45 @@ public class ServAlterarColetadorColeta extends HttpServlet {
             try {
 
                 String nomeBD = (String) sessao.getAttribute("empresa");
-                int cont = Integer.parseInt(request.getParameter("contador"));
                 int idUsuario = (Integer) sessao.getAttribute("idUsuario");
                 int idColetador = Integer.parseInt(request.getParameter("idColetador"));
                 String nomeUsuario = Controle.contrUsuario.consultaNomeUsuarioById(idUsuario, nomeBD);
                 String nomeColetador = Coleta.Controle.contrColetador.consultaNomeColetadoresById(idColetador, nomeBD);
-                String pagina = request.getParameter("pagina");
-
-                for (int i = 1; i <= cont; i++) {
-                    String vIdColeta = request.getParameter("idColeta" + i);
-                    if (vIdColeta != null && !vIdColeta.equals("")) {
-                        int idColeta = Integer.parseInt(vIdColeta);
-                        Coleta.Controle.contrColeta.alterarColetador(idColeta, idColetador, nomeBD);
+                String idsColetas = request.getParameter("coletas");
+                boolean isWeb = Boolean.parseBoolean(request.getParameter("isweb"));
+                System.out.println("XXXXXXXXXXX");
+                System.out.println(isWeb);
+                Coleta.Controle.contrColeta.alterarColetadordasColetas(idsColetas,idColetador,isWeb,nomeBD);
+                
+                if (idsColetas.contains(",")) {
+                    
+                    String ids[] = idsColetas.split(",");
+                    for (String id : ids) {
+                        int idColeta = Integer.parseInt(id);
                         Controle.ContrLogColeta.inserir(idColeta, idUsuario, nomeUsuario, "Alterado o Coletador da Coleta para " + nomeColetador, nomeBD);
                     }
-                }
+                } else { // caso seja uma unica coleta
+                    int idColeta = Integer.parseInt(idsColetas);
+                    Controle.ContrLogColeta.inserir(idColeta, idUsuario, nomeUsuario, "Alterado o Coletador da Coleta para " + nomeColetador, nomeBD);
 
-                sessao.setAttribute("msg", "Coletados da Coleta Alterado com Sucesso!");
+                }
+                PrintWriter out = response.getWriter();
+                out.println("Coletador das coletas selecionadas alterado com Sucesso");
+              //  sessao.setAttribute("msg", "Coletados da Coleta Alterado com Sucesso!");
                 //response.sendRedirect("Agencia/Coleta/"+pagina+"?idColetador=" + idColetador);
-                response.sendRedirect(request.getHeader("referer"));
+                // response.sendRedirect(request.getHeader("referer"));
 
             } catch (Exception ex) {
                 int idErro = ContrErroLog.inserir("HOITO - ServAlterarColetadorColeta", "Exception", null, ex.toString());
-                sessao.setAttribute("msg", "SYSTEM ERROR Nº: " + idErro + ";Ocorreu um erro inesperado!");
+                PrintWriter out = response.getWriter();
+                out.println("SYSTEM ERROR Nº: " + idErro + ";Ocorreu um erro inesperado");
+
+               // sessao.setAttribute("msg", "SYSTEM ERROR Nº: " + idErro + ";Ocorreu um erro inesperado!");
                 //response.sendRedirect("Agencia/Coleta/acompanhamento.jsp");
-                response.sendRedirect(request.getHeader("referer"));
+                //  response.sendRedirect(request.getHeader("referer"));
             }
+
         }
 
     }
-
-    /** 
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 }

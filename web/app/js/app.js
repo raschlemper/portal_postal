@@ -11,8 +11,7 @@ var app = app || angular.module('App', [
     'ui.utils.masks',
     'datatables',
     'datatables.bootstrap',
-    'highcharts-ng',
-    'ngPDFViewer'
+    'highcharts-ng'
 ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',

@@ -84,6 +84,7 @@ public class ServAgendaColeta extends HttpServlet {
                 int status = 1, idTipo = 0, idUsuario = 0;
                 int idColetador = Integer.parseInt(request.getParameter("idColetador"));
                 int idCliente = Integer.parseInt(request.getParameter("idCliente"));
+                idTipo = Integer.parseInt(request.getParameter("idTipo"));
                 String obs = request.getParameter("obs");
                 String dataHoraColeta = request.getParameter("dataColeta") +" "+request.getParameter("horaColeta");
                 //formata a data para timestamp do tipo 'dd/MM/yyyy HH:mm'

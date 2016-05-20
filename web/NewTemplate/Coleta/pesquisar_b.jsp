@@ -227,7 +227,7 @@
                             %>
                             <div class="col-lg-12" id="msg">
                                 <div class="alert alert-danger">
-                                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                                    <a href="#" class="close" data-dismiss="alert"> &times;</a>
                                     <span id="spanDivServMsg">
                                         Existem coletas que não foram realizadas no(os) dia(as) <%= datasNaoFinalizadas%>.
                                     </span><br/><br/>
@@ -256,12 +256,14 @@
                                             <div class="my_planDuration"> </div>
                                             <a type="button" onclick="javascript:window.location = 'novaColeta_b.jsp'" class="btn btn-default"><i class="fa fa-plus fa-spc"></i> SOLICITAR</a>
                                         </div>
+                                        
+                                        
                                         <div class="col-xs-4 my_planHeader my_plan2">
-
                                             <div class="my_planPrice"><i class="fa fa-globe fa-lg fa-spc"></i> WEB <b style="color:red;">(<%= qtdSolicitadas%>)</b></div>
                                             <div class="my_planDuration"> </div>
                                             <a type="button" class="btn btn-default"  onclick="carregaWeb();"><i class="fa  fa-binoculars fa-spc"></i> VER</a>
                                         </div>
+                                            
                                     </div>
                                 </div>
                             </div>

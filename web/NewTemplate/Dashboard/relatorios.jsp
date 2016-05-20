@@ -212,7 +212,7 @@
                                 </div> 
                                 <form action="painel_etiquetas_pesq_b.jsp" method="post" name="form2">
                                     <div class="row">
-                                        <div class="form-group col-md-5" >
+                                        <div class="form-group col-md-8" >
                                             <label class="small">Selecione um dos Relatórios</label>
                                             <select class="populate placeholder" name="tipoRel" id="tipoRel" onchange="validaCampos(this)">
                                                 <option value="0">-- Selecione um Relatório --</option>                                                
@@ -227,7 +227,7 @@
                                         </div>  
                                     </div>
                                     <div class="row">
-                                        <div class="form-inline col-md-5" >
+                                        <div class="form-inline col-md-8" >
                                             <label class="small">Selecione o Periodo da Impressão</label>
                                             <div class="clearfix"></div>
                                             <label for="data">De</label>

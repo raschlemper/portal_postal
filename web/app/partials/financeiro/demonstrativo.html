@@ -6,19 +6,22 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" >
                             <div class="row">
-                                <div class="col-md-7">Demonstrativo Financeiro</div>
-                                <div class="col-md-5 pull-right">
-                                    <div class="form-inline">                                        
+                                <div class="col-md-5">Demonstrativo Financeiro</div>
+                                <div class="col-md-7 pull-right">
+                                    <div class="form-inline pull-right">                                        
                                         <label>Mês:</label>
-                                        <select class="form-control" ng-model="mesSelected"
+                                        <select class="form-control" ng-model="mesSelected" ng-change="setData(mesSelected, anoSelected)" style="margin-right: 10px;"
                                             ng-options="mes.descricao for mes in meses track by mes.id">    
                                         </select>                                            
                                         <label>Ano:</label>
-                                        <select class="form-control" ng-model="anoSelected"
+                                        <select class="form-control" ng-model="anoSelected" ng-change="setData(mesSelected, anoSelected)" style="margin-right: 10px;"
                                             ng-options="ano.descricao for ano in anos track by ano.id">    
                                         </select>
-                                        <button class="btn btn-sm btn-primary pull-right" ng-click="pesquisar(mesSelected, anoSelected)" style="margin-right: 10px;">
+                                        <button class="btn btn-sm btn-primary" ng-click="pesquisar(mesSelected, anoSelected, dataInicio, dataFim)" style="margin-right: 30px;">
                                             <i class="fa fa-lg fa-search fa-spc"></i> PESQUISAR 
+                                        </button>   
+                                        <button class="btn btn-sm btn-primary" ng-click="report(dataInicio, dataFim, periodoSelected, estruturasLista)" style="margin-right: 10px;">
+                                            <i class="fa fa-lg fa-print fa-spc"></i> IMPRIMIR 
                                         </button>                                            
                                     </div>
                                 </div>
