@@ -3,16 +3,9 @@ package com.portalpostal.controller;
 import Controle.ContrErroLog;
 import com.portalpostal.validation.Validation;
 import com.portalpostal.model.LancamentoAnexo;
+import com.portalpostal.service.LancamentoService;
 import com.portalpostal.service.LancamentoAnexoService;
 import com.portalpostal.validation.LancamentoAnexoValidation;
-import com.sun.jersey.core.header.FormDataContentDisposition;
-import com.sun.jersey.multipart.FormDataParam;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.text.NumberFormat;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -28,11 +21,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 @Path("/financeiro/lancamento/anexo")
 public class LancamentoAnexoController {
@@ -82,49 +70,6 @@ public class LancamentoAnexoController {
     public LancamentoAnexo save(LancamentoAnexo lancamentoAnexo) {
         try {
             init();
-            validation(lancamentoAnexo);
-            return lancamentoAnexoService.save(lancamentoAnexo);
-        } catch (Exception ex) {
-            throw new WebApplicationException(getMessageError(ex.getMessage()));
-        }
-    } 
-    
-    @POST
-    @Path("/upload")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes({MediaType.MULTIPART_FORM_DATA})
-    public LancamentoAnexo upload(@FormDataParam("file") InputStream fileInputString,
-                                  @FormDataParam("file") FormDataContentDisposition fileInputDetails) {
-        try {
-            init();
-            String fileLocation = fileInputDetails.getFileName();
-            String status = null;
-            NumberFormat myFormat = NumberFormat.getInstance();
-            myFormat.setGroupingUsed(true);
-
-            // Save the file 
-            try {
-             OutputStream out = new FileOutputStream(new File(fileLocation));
-             byte[] buffer = new byte[1024];
-             int bytes = 0;
-             long file_size = 0; 
-             while ((bytes = fileInputString.read(buffer)) != -1) {
-              out.write(buffer, 0, bytes);
-              file_size += bytes;
-             }
-             out.flush();  
-             out.close();
-
-             status = "File has been uploaded to:" + fileLocation 
-                         + ", size: " + myFormat.format(file_size) + " bytes";
-            } catch (IOException ex) {
-              ex.printStackTrace();
-            }
-            
-            LancamentoAnexo lancamentoAnexo = new LancamentoAnexo();
-            lancamentoAnexo.setLancamento(null);
-//            lancamentoAnexo.setNome(fileMetaData.getName());
-//            lancamentoAnexo.setAnexo(uploadedInputStream);
             validation(lancamentoAnexo);
             return lancamentoAnexoService.save(lancamentoAnexo);
         } catch (Exception ex) {

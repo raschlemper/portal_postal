@@ -27,6 +27,7 @@ public class LancamentoTransferenciaHandler extends GenericHandler implements Re
         lancamento.setDataLancamento(getDate(result, "dataLancamento"));
         lancamento.setValor(getDouble(result, "valor"));
         lancamento.setHistorico(getString(result, "historico"));
+        lancamento.setObservacao(getString(result, "observacao"));
         return lancamento;
     }
     

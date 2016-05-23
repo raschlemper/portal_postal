@@ -9,7 +9,7 @@ import org.sql2o.ResultSetHandler;
 public class LancamentoAnexoHandler extends GenericHandler implements ResultSetHandler<LancamentoAnexo> {
         
     public LancamentoAnexoHandler() {
-        super("lancamentoAnexo");
+        super("lancamento_anexo");
     }
     
     public LancamentoAnexoHandler(String table) {
@@ -21,7 +21,7 @@ public class LancamentoAnexoHandler extends GenericHandler implements ResultSetH
         lancamentoAnexo.setIdLancamentoAnexo(getInt(result, "idLancamentoAnexo"));
         lancamentoAnexo.setLancamento(getLancamento(result));
         lancamentoAnexo.setNome(getString(result, "nome"));
-        lancamentoAnexo.setAnexo(getBlob(result, "numero"));
+        lancamentoAnexo.setAnexo(getBinaryStream(result, "anexo"));
         return lancamentoAnexo;
     }
     

@@ -13,6 +13,7 @@ public class LancamentoTransferencia {
     private Date dataLancamento;
     private Double valor;
     private String historico;
+    private String observacao;
 
     public Integer getIdLancamentoTransferencia() {
         return idLancamentoTransferencia;
@@ -85,6 +86,13 @@ public class LancamentoTransferencia {
     public void setHistorico(String historico) {
         this.historico = historico;
     }
-    
+
+    public String getObservacao() {
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
+    }    
     
 }

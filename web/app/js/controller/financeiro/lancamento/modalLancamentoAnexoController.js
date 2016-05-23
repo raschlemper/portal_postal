@@ -1,9 +1,10 @@
 'use strict';
 
-app.controller('ModalLancamentoAnexoController', ['$scope', '$modalInstance', 'LancamentoAnexoService', 'ModalService',
-    function ($scope, $modalInstance, LancamentoAnexoService, ModalService) {
+app.controller('ModalLancamentoAnexoController', ['$scope', '$modalInstance', '$sce', 'lancamento', 'LancamentoAnexoService', 'ModalService',
+    function ($scope, $modalInstance, $sce, lancamento, LancamentoAnexoService, ModalService) {
 
         var init = function () {  
+            $scope.lancamento = lancamento;
             $scope.lancamentoAnexo = {};
             $scope.uploader = LancamentoAnexoService.getInstanceFileUpload();
             anexos();
@@ -19,24 +20,12 @@ app.controller('ModalLancamentoAnexoController', ['$scope', '$modalInstance', 'L
                 });
         }
         
-        $scope.anexar = function(form) {
-//            var anexo = form.anexo.$modelValue;
-            
-            console.log($scope.anexo);
-            
-            LancamentoAnexoService.upload($scope.anexo[0]);
-//            _.map(files, function(file) {
-//                LancamentoAnexoService.upload(file);
-//            });
-//            if(!anexos || !anexos.length) { 
-//                modaclMessage("Você deve escolher um arquivo para anexar!");
-//                return;
-//            }
-//            var fd = new FormData();
-//            fd.append('file', anexos);
-//            fd.append('idLancamento', idLancamento)
-//            LancamentoAnexoService.save(fd);
-            
+        $scope.anexar = function(lancamento) {            
+            LancamentoAnexoService.upload(lancamento.idLancamento, $scope.anexo[0]);            
+        }
+        
+        $scope.visualizar = function(anexo) {
+            $scope.contentFile = anexo.anexo;            
         }
         
         $scope.uploadComplete = function (content) {

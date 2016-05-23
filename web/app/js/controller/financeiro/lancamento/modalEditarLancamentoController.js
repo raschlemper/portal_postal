@@ -16,8 +16,6 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
             getTitle();
             contas();
             $scope.changeTipo($scope.lancamento.tipo);
-            
-            $scope.anexar();
         };
         
         $scope.editConta = function() {
@@ -86,17 +84,8 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
             $modalInstance.dismiss('cancel');
         };
 
-        $scope.anexar = function() {
-            modalAnexar().then(function(result) {
-//                result = ajustarDadosConciliado(result);
-//                LancamentoConciliadoService.create(result)
-//                    .then(function(data) {  
-//                        modalMessage("Lançamento Conciliado com sucesso!");
-//                        todos(conta);
-//                    })
-//                    .catch(function(e) {
-//                        modalMessage(e);
-//                    });
+        $scope.anexar = function(lancamento) {
+            modalAnexar(lancamento).then(function(result) {
             });
         };
         
@@ -106,8 +95,12 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
             return lancamento;
         };
         
-        var modalAnexar = function() {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamentoAnexo.html', 'ModalLancamentoAnexoController', 'lg');
+        var modalAnexar = function(lancamento) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamentoAnexo.html', 'ModalLancamentoAnexoController', 'lg', {
+                    lancamento: function() {
+                        return lancamento;
+                    }
+                });
             return modalInstance.result;
         };
 

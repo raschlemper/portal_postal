@@ -3,9 +3,15 @@ package com.portalpostal.controller;
 import Controle.ContrErroLog;
 import com.portalpostal.validation.Validation;
 import com.portalpostal.model.Lancamento;
+import com.portalpostal.model.LancamentoAnexo;
 import com.portalpostal.model.Saldo;
+import com.portalpostal.service.LancamentoAnexoService;
 import com.portalpostal.service.LancamentoService;
+import com.portalpostal.validation.LancamentoAnexoValidation;
 import com.portalpostal.validation.LancamentoValidation;
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -35,11 +41,13 @@ public class LancamentoController {
     private String nomeBD;
     
     private LancamentoService lancamentoService;
+    private LancamentoAnexoService lancamentoAnexoService;
 
     private void init() {
         sessao = request.getSession();
         nomeBD = (String) sessao.getAttribute("nomeBD");
         lancamentoService = new LancamentoService(nomeBD);
+        lancamentoAnexoService = new LancamentoAnexoService(nomeBD);
     }
     
     @GET
@@ -81,6 +89,22 @@ public class LancamentoController {
             Date inicio = format.parse(dataInicio);
             Date fim = format.parse(dataFim);
             return lancamentoService.findSaldoPlanoConta(inicio, fim);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    } 
+    
+    @GET
+    @Path("/planoconta/saldo/competencia")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Saldo> findSaldoPlanoContaCompetencia(@QueryParam("dataInicio") String dataInicio, 
+            @QueryParam("dataFim") String dataFim) {
+        try {
+            init(); 
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date inicio = format.parse(dataInicio);
+            Date fim = format.parse(dataFim);
+            return lancamentoService.findSaldoPlanoContaCompetencia(inicio, fim);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -183,12 +207,43 @@ public class LancamentoController {
         }
     } 
     
+    @POST
+    @Path("/{idLancamento}/anexo")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public LancamentoAnexo upload(@PathParam("idLancamento") Integer idLancamento,
+                                  @FormDataParam("file") InputStream fileInputString,
+                                  @FormDataParam("file") FormDataContentDisposition fileInputDetails) {
+        try {
+            init();
+            LancamentoAnexo lancamentoAnexo = new LancamentoAnexo();
+            lancamentoAnexo.setLancamento(getLancamento(idLancamento));
+            lancamentoAnexo.setNome(fileInputDetails.getFileName());
+            lancamentoAnexo.setAnexo(fileInputString);
+            validation(lancamentoAnexo);
+            return lancamentoAnexoService.save(lancamentoAnexo);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    } 
+    
+    private Lancamento getLancamento(Integer idLancamento) throws Exception {
+        return lancamentoService.find(idLancamento);
+    }
+    
     private void validation(Lancamento lancamento) throws Exception {  
         Validation validacao = new LancamentoValidation();
         if(!validacao.validar(lancamento)) {
             throw new WebApplicationException(getMessageError(validacao.getMsg()));
         } 
     }  
+    
+    private void validation(LancamentoAnexo lancamentoAnexo) throws Exception {  
+        Validation validacao = new LancamentoAnexoValidation();
+        if(!validacao.validar(lancamentoAnexo)) {
+            throw new WebApplicationException(getMessageError(validacao.getMsg()));
+        } 
+    } 
     
     private Response getMessageError(String msg) {  
         int idErro = ContrErroLog.inserir("Portal Postal - ServLancamento", "Exception", null, msg);

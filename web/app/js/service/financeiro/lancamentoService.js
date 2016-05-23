@@ -19,6 +19,11 @@ app.factory('LancamentoService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/lancamento/planoconta/saldo?dataInicio=" + dataInicio + "&dataFim=" + dataFim));
         },
 
+        getSaldoPlanoContaCompetencia: function(dataInicio, dataFim) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/lancamento/planoconta/saldo/competencia?dataInicio=" + dataInicio + "&dataFim=" + dataFim));
+        },
+
         getSaldoTipo: function(dataInicio, dataFim) {
             return PromiseService.execute(
                     $http.get(_contextPath + "/api/financeiro/lancamento/tipo/saldo?dataInicio=" + dataInicio + "&dataFim=" + dataFim));

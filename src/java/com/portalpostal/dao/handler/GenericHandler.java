@@ -1,5 +1,6 @@
 package com.portalpostal.dao.handler;
 
+import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -65,8 +66,8 @@ class GenericHandler {
         return result.getBoolean(getColumn(columnName));
     }
     
-    protected Blob getBlob(ResultSet result, String columnName) throws SQLException {
+    protected InputStream getBinaryStream(ResultSet result, String columnName) throws SQLException {
         if(!existColumn(result, columnName)) return null;
-        return result.getBlob(getColumn(columnName));
+        return result.getBinaryStream(getColumn(columnName));
     }
 }

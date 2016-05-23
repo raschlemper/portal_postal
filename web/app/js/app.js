@@ -147,6 +147,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
                 controller: 'PlanoContaController',
                 resolve: {}
             })
+            .state('app.financeiro.centrocusto', {
+                url: '/centrocusto',
+                templateUrl: 'partials/financeiro/centroCusto/centroCusto.html',
+                controller: 'CentroCustoController',
+                resolve: {}
+            })
             .state('app.financeiro.conta', {
                 url: '/conta',
                 templateUrl: 'partials/financeiro/conta/conta_lista.html',

@@ -20,7 +20,7 @@ public class PlanoContaValidation extends Validation<PlanoConta>{
     }    
 
     public boolean validarCodigo(PlanoConta planoConta) {          
-        if(campoNotNull(planoConta.getTipo())) return true; 
+        if(campoNotNull(planoConta.getCodigo())) return true; 
         setMsg("Preencha o código do plano de conta!");
         return false;        
     }  
@@ -32,7 +32,7 @@ public class PlanoContaValidation extends Validation<PlanoConta>{
     }  
 
     public boolean validarGrupo(PlanoConta planoConta) {          
-        if(campoNotNull(planoConta.getNome())) return true; 
+        if(campoNotNull(planoConta.getGrupo())) return true; 
         setMsg("Preencha o grupo do plano de conta!");
         return false;        
     }  

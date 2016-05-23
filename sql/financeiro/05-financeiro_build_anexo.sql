@@ -7,11 +7,11 @@ CREATE TABLE `lancamento_anexo` (
   `idLancamento`      INT NOT NULL,
   `nome`              VARCHAR(100) NOT NULL,
   `anexo`             BLOB NOT NULL,
-  PRIMARY KEY (`idLancamentoAnexo`
+  PRIMARY KEY (`idLancamentoAnexo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `lancamento_anexo` 
-ADD INDEX `i_lancamentoanexo_lancamento` (`idConta` ASC);
+ADD INDEX `i_lancamentoanexo_lancamento` (`idLancamentoAnexo` ASC);
 
 ALTER TABLE `lancamento_anexo` 
 ADD CONSTRAINT `fk_lancamentoanexo_lancamento`

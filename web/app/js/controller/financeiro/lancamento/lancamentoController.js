@@ -351,7 +351,8 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 dataEmissao: data.dataEmissao || moment(),
                 dataLancamento: data.dataLancamento || moment(),
                 valor: data.valor,
-                historico: data.historico
+                historico: data.historico,
+                observacao: data.observacao
             };    
             return lancamentoTransferencia;
         }
@@ -393,7 +394,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 situacao: (data && data.situacao) || $scope.situacoes[0],  
                 modelo: modelo.id,
                 historico: data.historico,
-                observacao: null,
+                observacao: data.observacao,
                 lancamentoProgramado: null
             }
             if(conta) { lancamento.conta = { idConta: conta.idConta }; }

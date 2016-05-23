@@ -40,6 +40,10 @@ public class LancamentoService {
     
     public List<Saldo> findSaldoPlanoConta(Date dataInicio, Date dataFim) throws Exception {
         return lancamentoDAO.findSaldoPlanoConta(dataInicio, dataFim);
+    }  
+    
+    public List<Saldo> findSaldoPlanoContaCompetencia(Date dataInicio, Date dataFim) throws Exception {
+        return lancamentoDAO.findSaldoPlanoContaCompetencia(dataInicio, dataFim);
     } 
     
     public List<Saldo> findSaldoTipo(Date dataInicio, Date dataFim) throws Exception {

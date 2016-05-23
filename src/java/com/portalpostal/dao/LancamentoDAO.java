@@ -70,6 +70,16 @@ public class LancamentoDAO extends GenericDAO {
         return findAll(sql, params, lancamentoHandler);
     }
 
+    public List<Lancamento> findByCentroCusto(Integer idCentroCusto) throws Exception {
+        String sql = "SELECT lancamento.* FROM lancamento, centro_custo "
+                   + "WHERE lancamento.idCentroCusto = centro_custo.idCentroCusto "
+                   + "AND lancamento.idCentroCusto = :idCentroCusto "
+                   + "ORDER BY lancamento.dataLancamento";        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idCentroCusto", idCentroCusto);       
+        return findAll(sql, params, lancamentoHandler);
+    }
+
     public List<Lancamento> findByLancamentoProgramado(Integer idLancamentoProgramado) throws Exception {
         String sql = "SELECT * FROM lancamento "
                    + "WHERE lancamento.idLancamentoProgramado = :idLancamentoProgramado";
@@ -93,7 +103,19 @@ public class LancamentoDAO extends GenericDAO {
     public List<Saldo> findSaldoPlanoConta(Date dataInicio, Date dataFim) throws Exception {
         String sql = "SELECT idPlanoConta as id, DATE(dataLancamento) as data, sum(valor) as valor "
                    + "FROM lancamento "
-                   + "WHERE DATE(dataLancamento) BETWEEN :dataInicio AND :dataFim "
+                   + "WHERE dataLancamento is not null AND DATE(dataLancamento) BETWEEN :dataInicio AND :dataFim "
+                   + "GROUP BY idPlanoConta, data "
+                   + "ORDER BY idPlanoConta, data";            
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("dataInicio", dataInicio);       
+        params.put("dataFim", dataFim);   
+        return findAll(sql, params, saldoHandler);
+    }  
+
+    public List<Saldo> findSaldoPlanoContaCompetencia(Date dataInicio, Date dataFim) throws Exception {
+        String sql = "SELECT idPlanoConta as id, DATE(dataCompetencia) as data, sum(valor) as valor "
+                   + "FROM lancamento "
+                   + "WHERE dataCompetencia is not null AND DATE(dataCompetencia) BETWEEN :dataInicio AND :dataFim "
                    + "GROUP BY idPlanoConta, data "
                    + "ORDER BY idPlanoConta, data";            
         Map<String, Object> params = new HashMap<String, Object>();

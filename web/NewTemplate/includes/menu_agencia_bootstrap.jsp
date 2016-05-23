@@ -118,6 +118,7 @@
                     <ul class="nav-pills nav-stacked" style="list-style-type:none;">
                         <li><a href="${pageContext.request.contextPath}/app/financeiro/banco">Banco</a></li>
                         <li><a href="${pageContext.request.contextPath}/app/financeiro/planoconta">Plano Conta</a></li>
+                        <li><a href="${pageContext.request.contextPath}/app/financeiro/centrocusto">Centro Custo</a></li>
                         <li><a href="${pageContext.request.contextPath}/app/financeiro/contacorrente">Conta Corrente</a></li>
                         <li><a href="${pageContext.request.contextPath}/app/financeiro/carteiracobranca">Carteira Cobrança</a></li>
                         <li><a href="${pageContext.request.contextPath}/app/financeiro/cartaocredito">Cartão Crédito</a></li>

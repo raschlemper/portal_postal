@@ -37,12 +37,12 @@ app.factory('LancamentoAnexoService', function($http, PromiseService, FileUpload
                     $http.delete(_contextPath + "/api/financeiro/lancamento/anexo/" + idLancamentoAnexo));
         },
         
-        upload: function(anexo) {
+        upload: function(idLancamento, anexo) {
             var fd = new FormData();
             fd.append('file', anexo);
             
             jQuery.ajax({
-                url: _contextPath + "/api/financeiro/lancamento/anexo/upload",
+                url: _contextPath + "/api/financeiro/lancamento/" + idLancamento + "/anexo",
                 data: fd,
                 cache: false,
                 contentType: false,

@@ -7,6 +7,8 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
             $scope.meses = LISTAS.meses;
             $scope.mesSelected = $scope.meses[0];
             $scope.estruturasLista = [];
+            $scope.withValues = false;
+            $scope.byCompetencia = false;
             anos();
         }; 
         
@@ -17,8 +19,9 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
             $scope.periodoSelected = PeriodoService.periodoOneYear(mesSelected, anoSelected.codigo);
         }
         
-        $scope.pesquisar = function(dataInicio, dataFim) {            
-            estruturas(dataInicio, dataFim);
+        $scope.pesquisar = function(byCompetencia, dataInicio, dataFim) {  
+            if(byCompetencia) { estruturasCompetencia(dataInicio, dataFim); }
+            else { estruturas(dataInicio, dataFim); }
         }
 
         var anos = function() {
@@ -27,7 +30,7 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
                     $scope.anos = createAnosLista(data);
                     $scope.anoSelected = $scope.anos[$scope.anos.length-1];
                     $scope.setData($scope.mesSelected, $scope.anoSelected);
-                    $scope.pesquisar($scope.dataInicio, $scope.dataFim);
+                    $scope.pesquisar($scope.byCompetencia, $scope.dataInicio, $scope.dataFim);
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -44,18 +47,31 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
             $q.all([PlanoContaService.getStructure(), 
                     LancamentoService.getSaldoPlanoConta(dataInicio, dataFim)])
                .then(function(values) {  
-                    var estruturas = values[0];
-                    var saldos = getSaldos(values[1]);
-                    PlanoContaService.estrutura(estruturas);
-                    $scope.estruturasLista = PlanoContaService.flatten(estruturas);
-                    SaldoService.saldoPlanoConta($scope.estruturasLista, saldos, $scope.periodoSelected);
-                    $scope.totais = SaldoService.saldoPlanoContaTotalMes($scope.estruturasLista, $scope.periodoSelected);
-                    SaldoService.saldoPlanoContaGrupo($scope.estruturasLista);
+                    montaListaSaldosEstrutura(values[0], getSaldos(values[1]));
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         };
+        
+        var estruturasCompetencia = function(dataInicio, dataFim) {
+            $q.all([PlanoContaService.getStructure(), 
+                    LancamentoService.getSaldoPlanoContaCompetencia(dataInicio, dataFim)])
+               .then(function(values) {  
+                    montaListaSaldosEstrutura(values[0], getSaldos(values[1]));
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });            
+        }
+        
+        var montaListaSaldosEstrutura = function(estruturas, saldos) {
+            PlanoContaService.estrutura(estruturas);
+            $scope.estruturasLista = PlanoContaService.flatten(estruturas);
+            SaldoService.saldoPlanoConta($scope.estruturasLista, saldos, $scope.periodoSelected);
+            $scope.totais = SaldoService.saldoPlanoContaTotalMes($scope.estruturasLista, $scope.periodoSelected);
+            SaldoService.saldoPlanoContaGrupo($scope.estruturasLista);
+        }
         
         var getDataInicio = function(mes, ano) {
             return moment(ano + "-" + mes + "-01").format('YYYY-MM-DD HH:mm:ss');            
@@ -80,6 +96,13 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
                 return _.pick(saldo, ['idPlanoConta', 'mes', 'ano', 'valor']);
             });            
         };
+        
+        $scope.showRow = function(withValues, estrutura) {
+            if(!withValues) return true;
+            var saldos = _.filter(estrutura.saldos, function(saldo){ return saldo > 0; });
+            if(!saldos.length) return false;
+            return true;
+        }
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);
