@@ -12,7 +12,8 @@ app.directive('appTable', function($filter) {
             search: '='
         },
         transclude: {
-            'filterContent': '?filterContent'
+            'filterContent': '?filterContent',
+            'rodapeContent': '?rodapeContent'
         },
         link: function(scope, element, attr, controller, transclude) {            
                         
@@ -34,6 +35,7 @@ app.directive('appTable', function($filter) {
                 scope.predicate = getPredicate(scope.colunas);
                 scope.reverse = false; 
                 setCheckBox();
+                setMenu();
                 setFilterDefault();
             };
             
@@ -50,6 +52,10 @@ app.directive('appTable', function($filter) {
                         
             var setCheckBox = function() {
                 if(attr.showCheckbox) { scope.showCheckbox = (attr.showCheckbox === "true"); }
+            };
+                        
+            var setMenu = function() {
+                if(attr.showMenu) { scope.showMenu = (attr.showMenu === "true"); }
             };
             
             var setFilterDefault = function() {

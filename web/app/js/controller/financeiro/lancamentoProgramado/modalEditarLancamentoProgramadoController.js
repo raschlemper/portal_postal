@@ -133,7 +133,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         $scope.createParcelas = function(lancamentoProgramado) {            
             $scope.lancamentoProgramado.parcelas = [];
             var frequencia = lancamentoProgramado.frequencia;
-            var competencia = lancamentoProgramado.competencia;
+            var dataCompetencia = lancamentoProgramado.dataCompetencia;
             var dataVencimento = lancamentoProgramado.dataVencimento;
             for(var i=0; i<lancamentoProgramado.quantidadeParcela; i++) {
                 var numeroParcela = (i + 1);
@@ -141,13 +141,13 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
                 var parcela = {
                     numero: lancamentoProgramado.numero,
                     numeroParcela: numeroParcela,
-                    competencia: competencia,
+                    dataCompetencia: dataCompetencia,
                     dataVencimento: dataVencimento,
                     valor: lancamentoProgramado.valor,
                     lancamento: lancamento
                 }
                 $scope.lancamentoProgramado.parcelas.push(parcela);
-                competencia = FrequenciaLancamentoService.addData(frequencia, competencia);
+                dataCompetencia = FrequenciaLancamentoService.addData(frequencia, dataCompetencia);
                 dataVencimento = FrequenciaLancamentoService.addData(frequencia, dataVencimento);
             }
         }
@@ -202,7 +202,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
                 favorecido: lancamentoProgramado.favorecido,
                 numero: (parcela && parcela.numero) || lancamentoProgramado.numero,
                 numeroParcela: (parcela && parcela.numeroParcela) || lancamentoProgramado.numeroParcela,
-                competencia: (parcela && parcela.competencia) || lancamentoProgramado.competencia,
+                dataCompetencia: (parcela && parcela.dataCompetencia) || lancamentoProgramado.dataCompetencia,
                 dataEmissao: lancamentoProgramado.dataEmissao || moment(),
                 dataVencimento: (parcela && parcela.dataVencimento) || lancamentoProgramado.dataVencimento,
                 dataLancamento: null,
@@ -223,7 +223,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
             lancamento.conta = { idConta: lancamento.conta.idConta };
             lancamento.planoConta = { idPlanoConta: lancamento.planoConta.idPlanoConta };
             lancamento.tipo = lancamento.tipo.id;
-            lancamento.competencia = lancamento.competencia || moment();
+            lancamento.dataCompetencia = lancamento.dataCompetencia || moment();
             lancamento.dataEmissao = lancamento.dataEmissao || moment();
             lancamento.dataVencimento = lancamento.dataVencimento || moment();
             lancamento.dataLancamento = lancamento.dataLancamento || moment();
@@ -260,11 +260,11 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         };
 
         var validarForm = function (form) {
-            if (form.competencia.$error.required) {
+            if (form.dataCompetencia.$error.required) {
                 alert('Preencha a competência do lançamento programado!');
                 return false;
             }       
-            if (form.competencia.$modelValue && !moment(form.competencia.$modelValue).isValid()) {
+            if (form.dataCompetencia.$modelValue && !moment(form.dataCompetencia.$modelValue).isValid()) {
                 alert('A competência do lançamento programado não é válida!');
                 return false;
             } 

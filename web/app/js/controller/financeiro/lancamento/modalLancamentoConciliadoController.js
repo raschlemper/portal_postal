@@ -54,11 +54,11 @@ app.controller('ModalLancamentoConciliadoController', ['$scope', '$modalInstance
         };
 
         var validarForm = function (form) {
-            if (form.competencia.$error.required) {
+            if (form.dataCompetencia.$error.required) {
                 alert('Preencha a competência do lançamento conciliado!');
                 return false;
             }        
-            if (form.competencia.$modelValue && !moment(form.competencia.$modelValue).isValid()) {
+            if (form.dataCompetencia.$modelValue && !moment(form.dataCompetencia.$modelValue).isValid()) {
                 alert('A competência do lançamento conciliado não é válida!');
                 return false;
             }    

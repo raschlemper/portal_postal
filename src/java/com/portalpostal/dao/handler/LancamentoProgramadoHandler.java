@@ -37,7 +37,7 @@ public class LancamentoProgramadoHandler extends GenericHandler implements Resul
         lancamentoProgramado.setFrequencia(TipoFrequencia.values()[getInt(result, "frequencia")]);
         lancamentoProgramado.setQuantidadeParcela(getInt(result, "quantidadeParcela"));
         lancamentoProgramado.setNumeroParcela(getInt(result, "numeroParcela"));
-        lancamentoProgramado.setCompetencia(getDate(result, "competencia"));
+        lancamentoProgramado.setDataCompetencia(getDate(result, "dataCompetencia"));
         lancamentoProgramado.setDataEmissao(getDate(result, "dataEmissao"));
         lancamentoProgramado.setDataVencimento(getDate(result, "dataVencimento"));
         lancamentoProgramado.setValor(getDouble(result, "valor"));

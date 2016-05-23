@@ -35,14 +35,14 @@ public class LancamentoTransferenciaDAO extends GenericDAO {
 
     public LancamentoTransferencia save(LancamentoTransferencia lancamentoTransferencia) throws Exception {  
         String sql = "INSERT INTO lancamento_transferencia (idLancamentoOrigem, idLancamentoDestino, numero, "
-                   + "competencia, dataEmissao, dataLancamento, valor, historico) "
-                   + "VALUES(:idLancamentoOrigem, :idLancamentoDestino, :numero, :competencia, :dataEmissao, "
+                   + "dataCompetencia, dataEmissao, dataLancamento, valor, historico) "
+                   + "VALUES(:idLancamentoOrigem, :idLancamentoDestino, :numero, :dataCompetencia, :dataEmissao, "
                    + ":dataLancamento, :valor, :historico)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamentoOrigem", lancamentoTransferencia.getLancamentoOrigem().getIdLancamento());
         params.put("idLancamentoDestino", lancamentoTransferencia.getLancamentoDestino().getIdLancamento()); 
         params.put("numero", lancamentoTransferencia.getNumero());                 
-        params.put("competencia", lancamentoTransferencia.getCompetencia());       
+        params.put("dataCompetencia", lancamentoTransferencia.getDataCompetencia());       
         params.put("dataEmissao", lancamentoTransferencia.getDataEmissao());       
         params.put("dataLancamento", lancamentoTransferencia.getDataLancamento());      
         params.put("valor", lancamentoTransferencia.getValor());   
@@ -54,7 +54,7 @@ public class LancamentoTransferenciaDAO extends GenericDAO {
     public LancamentoTransferencia update(LancamentoTransferencia lancamentoTransferencia) throws Exception {
         String sql = "UPDATE lancamento_transferencia "
                    + "SET idLancamentoOrigem = :idLancamentoOrigem, idLancamentoDestino = :idLancamentoDestino "
-                   + "numero = :numero, competencia = :competencia, dataEmissao = :dataEmissao, "
+                   + "numero = :numero, dataCompetencia = :dataCompetencia, dataEmissao = :dataEmissao, "
                    + "dataLancamento = :dataLancamento, valor = :valor, historico = :historico "
                    + "WHERE idLancamentoTransferencia = :idLancamentoTransferencia ";        
         Map<String, Object> params = new HashMap<String, Object>();
@@ -62,7 +62,7 @@ public class LancamentoTransferenciaDAO extends GenericDAO {
         params.put("idLancamentoOrigem", lancamentoTransferencia.getLancamentoOrigem().getIdLancamento());
         params.put("idLancamentoDestino", lancamentoTransferencia.getLancamentoDestino().getIdLancamento());
         params.put("numero", lancamentoTransferencia.getNumero());              
-        params.put("competencia", lancamentoTransferencia.getCompetencia());            
+        params.put("dataCompetencia", lancamentoTransferencia.getDataCompetencia());            
         params.put("dataEmissao", lancamentoTransferencia.getDataEmissao());      
         params.put("dataLancamento", lancamentoTransferencia.getDataLancamento());           
         params.put("valor", lancamentoTransferencia.getValor());   

@@ -8,7 +8,7 @@ public class LancamentoTransferencia {
     private Lancamento lancamentoOrigem;
     private Lancamento lancamentoDestino;
     private String numero;
-    private Date competencia;
+    private Date dataCompetencia;
     private Date dataEmissao;
     private Date dataLancamento;
     private Double valor;
@@ -46,12 +46,12 @@ public class LancamentoTransferencia {
         this.numero = numero;
     }
 
-    public Date getCompetencia() {
-        return competencia;
+    public Date getDataCompetencia() {
+        return dataCompetencia;
     }
 
-    public void setCompetencia(Date competencia) {
-        this.competencia = competencia;
+    public void setDataCompetencia(Date dataCompetencia) {
+        this.dataCompetencia = dataCompetencia;
     }
 
     public Date getDataEmissao() {

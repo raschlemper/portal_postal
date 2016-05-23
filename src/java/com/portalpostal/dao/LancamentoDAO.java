@@ -142,10 +142,10 @@ public class LancamentoDAO extends GenericDAO {
 
     public Lancamento save(Lancamento lancamento) throws Exception {  
         String sql = "INSERT INTO lancamento (idConta, idPlanoConta, idLancamentoProgramado, numeroLoteConciliado, "
-                   + "tipo, favorecido, numero, numeroParcela, competencia, dataEmissao, dataVencimento, dataLancamento, "
+                   + "tipo, favorecido, numero, numeroParcela, dataCompetencia, dataEmissao, dataVencimento, dataLancamento, "
                    + "dataCompensacao, valor, valorDesconto, valorJuros, valorMulta, situacao, modelo, autenticacao, historico, observacao) "
                    + "VALUES(:idConta, :idPlanoConta, :idLancamentoProgramado, :numeroLoteConciliado, :tipo, :favorecido, "
-                   + ":numero, :numeroParcela, :competencia, :dataEmissao, :dataVencimento, :dataLancamento, :dataCompensacao, "
+                   + ":numero, :numeroParcela, :dataCompetencia, :dataEmissao, :dataVencimento, :dataLancamento, :dataCompensacao, "
                    + ":valor, :valorDesconto, :valorJuros, :valorMulta, :situacao, :modelo, :autenticacao, :historico, :observacao)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idConta", lancamento.getConta().getIdConta());
@@ -155,7 +155,7 @@ public class LancamentoDAO extends GenericDAO {
         params.put("favorecido", lancamento.getFavorecido());     
         params.put("numero", lancamento.getNumero());            
         params.put("numeroParcela", lancamento.getNumeroParcela());        
-        params.put("competencia", lancamento.getCompetencia());                  
+        params.put("dataCompetencia", lancamento.getDataCompetencia());                  
         params.put("dataEmissao", lancamento.getDataEmissao());      
         params.put("dataVencimento", lancamento.getDataVencimento());      
         params.put("dataLancamento", lancamento.getDataLancamento());      
@@ -178,7 +178,7 @@ public class LancamentoDAO extends GenericDAO {
         String sql = "UPDATE lancamento "
                    + "SET idConta = :idConta, idPlanoConta = :idPlanoConta, idLancamentoProgramado = :idLancamentoProgramado, "
                    + "numeroLoteConciliado = :numeroLoteConciliado, tipo = :tipo, favorecido = :favorecido, numero = :numero, "
-                   + "numeroParcela = :numeroParcela, competencia = :competencia, dataEmissao = :dataEmissao, dataVencimento = :dataVencimento, "
+                   + "numeroParcela = :numeroParcela, dataCompetencia = :dataCompetencia, dataEmissao = :dataEmissao, dataVencimento = :dataVencimento, "
                    + "dataLancamento = :dataLancamento, dataCompensacao = :dataCompensacao, valor = :valor, "
                    + "valorDesconto = :valorDesconto, valorJuros = :valorJuros, valorMulta = :valorMulta, "
                    + "situacao = :situacao, modelo = :modelo, autenticacao = :autenticacao, historico = :historico, observacao = :observacao "
@@ -192,7 +192,7 @@ public class LancamentoDAO extends GenericDAO {
         params.put("favorecido", lancamento.getFavorecido());     
         params.put("numero", lancamento.getNumero());                   
         params.put("numeroParcela", lancamento.getNumeroParcela());               
-        params.put("competencia", lancamento.getCompetencia());     
+        params.put("dataCompetencia", lancamento.getDataCompetencia());     
         params.put("dataEmissao", lancamento.getDataEmissao());      
         params.put("dataVencimento", lancamento.getDataVencimento());      
         params.put("dataLancamento", lancamento.getDataLancamento());      

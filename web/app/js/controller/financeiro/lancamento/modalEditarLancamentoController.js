@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', 'conta', 'lancamento', 'ContaService', 'PlanoContaService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, conta, lancamento, ContaService, PlanoContaService, DatePickerService, ListaService, LISTAS) {
+app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', 'conta', 'lancamento', 'ContaService', 'PlanoContaService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
+    function ($scope, $modalInstance, conta, lancamento, ContaService, PlanoContaService, ModalService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
@@ -16,6 +16,8 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
             getTitle();
             contas();
             $scope.changeTipo($scope.lancamento.tipo);
+            
+            $scope.anexar();
         };
         
         $scope.editConta = function() {
@@ -83,19 +85,38 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
+
+        $scope.anexar = function() {
+            modalAnexar().then(function(result) {
+//                result = ajustarDadosConciliado(result);
+//                LancamentoConciliadoService.create(result)
+//                    .then(function(data) {  
+//                        modalMessage("Lançamento Conciliado com sucesso!");
+//                        todos(conta);
+//                    })
+//                    .catch(function(e) {
+//                        modalMessage(e);
+//                    });
+            });
+        };
         
         var setData = function(lancamento, data) {
             lancamento.dataEmissao = moment();
             lancamento.dataVencimento = lancamento.dataLancamento;
             return lancamento;
-        }
+        };
+        
+        var modalAnexar = function() {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamentoAnexo.html', 'ModalLancamentoAnexoController', 'lg');
+            return modalInstance.result;
+        };
 
         var validarForm = function (form) {
-            if (form.competencia.$error.required) {
+            if (form.dataCompetencia.$error.required) {
                 alert('Preencha a competência do lançamento!');
                 return false;
             }       
-            if (form.competencia.$modelValue && !moment(form.competencia.$modelValue).isValid()) {
+            if (form.dataCompetencia.$modelValue && !moment(form.dataCompetencia.$modelValue).isValid()) {
                 alert('A competência do lançamento não é válida!');
                 return false;
             }    

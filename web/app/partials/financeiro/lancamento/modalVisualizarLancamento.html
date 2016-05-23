@@ -14,7 +14,7 @@
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">
-                    <label>Plano de Conta</label>
+                    <label>Plano de Conta:</label>
                 </div>
                 <div class="col-md-8">{{lancamento.planoConta.nome}}</div>
             </div>
@@ -38,9 +38,9 @@
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">
-                    <label>Competência:</label>
+                    <label>Data Competência:</label>
                 </div>
-                <div class="col-md-8">{{lancamento.competencia | date: 'MMMM/yyyy'}}</div>
+                <div class="col-md-8">{{lancamento.dataCompetencia | date: 'dd/MM/yyyy'}}</div>
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">
@@ -56,7 +56,7 @@
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">
-                    <label>Data Lançamento</label>
+                    <label>Data Lançamento:</label>
                 </div>
                 <div class="col-md-8">{{lancamento.dataLancamento | date: 'dd/MM/yyyy'}}</div>
             </div>

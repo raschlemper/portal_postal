@@ -12,7 +12,7 @@ public class LancamentoProgramadoValidation extends Validation<LancamentoProgram
         if(!validarDocumento(lancamentoProgramado)) return false;   
         if(!validarFormaPagamento(lancamentoProgramado)) return false;   
         if(!validarFrequencia(lancamentoProgramado)) return false;   
-        if(!validarCompetencia(lancamentoProgramado)) return false;   
+        if(!validarDataCompetencia(lancamentoProgramado)) return false;   
         if(!validarDataEmissao(lancamentoProgramado)) return false;    
         if(!validarDataVencimento(lancamentoProgramado)) return false;  
         if(!validarValor(lancamentoProgramado)) return false;   
@@ -57,9 +57,9 @@ public class LancamentoProgramadoValidation extends Validation<LancamentoProgram
         return false;        
     }   
 
-    public boolean validarCompetencia(LancamentoProgramado lancamentoProgramado) {          
-        if(campoNotNull(lancamentoProgramado.getCompetencia())) return true; 
-        setMsg("Preencha a competência do lançamento programado!");
+    public boolean validarDataCompetencia(LancamentoProgramado lancamentoProgramado) {          
+        if(campoNotNull(lancamentoProgramado.getDataCompetencia())) return true; 
+        setMsg("Preencha a data de competência do lançamento programado!");
         return false;        
     }    
 

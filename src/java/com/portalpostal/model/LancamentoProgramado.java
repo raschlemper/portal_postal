@@ -20,7 +20,7 @@ public class LancamentoProgramado {
     private TipoFrequencia frequencia; 
     private Integer quantidadeParcela;
     private Integer numeroParcela;
-    private Date competencia;
+    private Date dataCompetencia;
     private Date dataEmissao;
     private Date dataVencimento;
     private Double valor;
@@ -124,12 +124,12 @@ public class LancamentoProgramado {
         this.numeroParcela = numeroParcela;
     }
 
-    public Date getCompetencia() {
-        return competencia;
+    public Date getDataCompetencia() {
+        return dataCompetencia;
     }
 
-    public void setCompetencia(Date competencia) {
-        this.competencia = competencia;
+    public void setDataCompetencia(Date dataCompetencia) {
+        this.dataCompetencia = dataCompetencia;
     }
 
     public Date getDataEmissao() {

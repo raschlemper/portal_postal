@@ -36,7 +36,8 @@
                                             search="lancSearch" 
                                             default-filter="true" 
                                             order-by-column="data" 
-                                            show-checkbox="true">
+                                            show-checkbox="true"
+                                            show-menu="true">
                                     
                                     <filter-content>
                                         <div class="form-inline">
@@ -75,7 +76,17 @@
                                             
                                             
                                         </div>
-                                    </filter-content>                                    
+                                    </filter-content>   
+                                    
+                                     <rodape-content>
+                                         
+                                         <div class="col-md-12">
+                                             <span class="pull-right">
+                                                <label>Saldo Final:</label> {{saldoTotal | currency : ""}}
+                                             </span>
+                                         </div> 
+                                         
+                                     </rodape-content>                                 
                                     
                                 </app-table>
                             </div>

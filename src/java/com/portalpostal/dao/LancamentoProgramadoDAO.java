@@ -75,10 +75,10 @@ public class LancamentoProgramadoDAO extends GenericDAO {
 
     public LancamentoProgramado save(LancamentoProgramado lancamentoProgramado) throws Exception {  
         String sql = "INSERT INTO lancamento_programado (idConta, idPlanoConta, tipo, favorecido, "
-                   + "numero, idTipoDocumento, idTipoFormaPagamento, frequencia, quantidadeParcela, numeroParcela, competencia, "
+                   + "numero, idTipoDocumento, idTipoFormaPagamento, frequencia, quantidadeParcela, numeroParcela, dataCompetencia, "
                    + "dataEmissao, dataVencimento, valor, situacao, historico) "
                    + "VALUES(:idConta, :idPlanoConta, :tipo, :favorecido, :numero, :idTipoDocumento, "
-                   + ":idTipoFormaPagamento, :frequencia, :quantidadeParcela, :numeroParcela, :competencia, :dataEmissao, "
+                   + ":idTipoFormaPagamento, :frequencia, :quantidadeParcela, :numeroParcela, :dataCompetencia, :dataEmissao, "
                    + ":dataVencimento, :valor, :situacao, :historico)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idConta", lancamentoProgramado.getConta().getIdConta());
@@ -92,7 +92,7 @@ public class LancamentoProgramadoDAO extends GenericDAO {
         params.put("frequencia", lancamentoProgramado.getFrequencia().ordinal());        
         params.put("quantidadeParcela", lancamentoProgramado.getQuantidadeParcela());           
         params.put("numeroParcela", lancamentoProgramado.getNumeroParcela());    
-        params.put("competencia", lancamentoProgramado.getCompetencia());       
+        params.put("dataCompetencia", lancamentoProgramado.getDataCompetencia());       
         params.put("dataEmissao", lancamentoProgramado.getDataEmissao());    
         params.put("dataVencimento", lancamentoProgramado.getDataVencimento());
         params.put("valor", lancamentoProgramado.getValor());    
@@ -107,7 +107,7 @@ public class LancamentoProgramadoDAO extends GenericDAO {
                    + "SET idConta = :idConta, idPlanoConta = :idPlanoConta, "
                    + "tipo = :tipo, favorecido = :favorecido, numero = :numero, idTipoDocumento = :idTipoDocumento, "
                    + "idTipoFormaPagamento = :idTipoFormaPagamento, frequencia = :frequencia, quantidadeParcela = :quantidadeParcela, "
-                   + "numeroParcela = :numeroParcela, competencia = :competencia, dataEmissao = :dataEmissao, "
+                   + "numeroParcela = :numeroParcela, dataCompetencia = :dataCompetencia, dataEmissao = :dataEmissao, "
                    + "dataVencimento = :dataVencimento, valor = :valor, situacao = :situacao, historico = :historico "
                    + "WHERE idLancamentoProgramado = :idLancamentoProgramado ";        
         Map<String, Object> params = new HashMap<String, Object>();
@@ -123,7 +123,7 @@ public class LancamentoProgramadoDAO extends GenericDAO {
         params.put("frequencia", lancamentoProgramado.getFrequencia().ordinal());     
         params.put("quantidadeParcela", lancamentoProgramado.getQuantidadeParcela());          
         params.put("numeroParcela", lancamentoProgramado.getNumeroParcela());    
-        params.put("competencia", lancamentoProgramado.getCompetencia());          
+        params.put("dataCompetencia", lancamentoProgramado.getDataCompetencia());          
         params.put("dataEmissao", lancamentoProgramado.getDataEmissao());    
         params.put("dataVencimento", lancamentoProgramado.getDataVencimento());
         params.put("valor", lancamentoProgramado.getValor());    

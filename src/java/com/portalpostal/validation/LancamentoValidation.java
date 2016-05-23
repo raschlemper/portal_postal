@@ -9,7 +9,7 @@ public class LancamentoValidation extends Validation<Lancamento>{
         if(!validarConta(lancamento)) return false;   
         if(!validarPlanoConta(lancamento)) return false; 
         if(!validarTipo(lancamento)) return false;  
-        if(!validarCompetencia(lancamento)) return false;   
+        if(!validarDataCompetencia(lancamento)) return false;   
         if(!validarDataEmissao(lancamento)) return false;   
         if(!validarDataVencimento(lancamento)) return false;   
         if(!validarDataLancamento(lancamento)) return false;   
@@ -37,9 +37,9 @@ public class LancamentoValidation extends Validation<Lancamento>{
         return false;        
     }     
 
-    public boolean validarCompetencia(Lancamento lancamento) {          
-        if(campoNotNull(lancamento.getCompetencia())) return true; 
-        setMsg("Preencha a competência do lançamento!");
+    public boolean validarDataCompetencia(Lancamento lancamento) {          
+        if(campoNotNull(lancamento.getDataCompetencia())) return true; 
+        setMsg("Preencha a data de competência do lançamento!");
         return false;        
     }    
 

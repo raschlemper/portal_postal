@@ -39,8 +39,9 @@
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-datatables/plugins/bootstrap/angular-datatables.bootstrap.min.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/moment/moment-with-locales.min.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/highcharts-ng/highcharts.src.js"></script>
-        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/highcharts-ng/highcharts-ng.min.js"></script>  
-
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/highcharts-ng/highcharts-ng.min.js"></script> 
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-file-upload/angular-file-upload.min.js"></script> 
+        
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/app.js"></script>         
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/app.config.js"></script>  
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/app.constants.js"></script>
@@ -60,6 +61,7 @@
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/datepickerPopupDirective.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/appTable.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/appTree.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/fileModel.js"></script>
         
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/modalController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/helpController.js"></script>
@@ -107,6 +109,7 @@
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/lancamento/modalVisualizarLancamentoController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/lancamento/modalLancamentoTransferenciaController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/lancamento/modalLancamentoConciliadoController.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/lancamento/modalLancamentoAnexoController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/lancamentoProgramado/lancamentoProgramadoController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/lancamentoProgramado/modalEditarLancamentoProgramadoController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/financeiro/lancamentoProgramado/modalVisualizarLancamentoProgramadoController.js"></script>
@@ -140,6 +143,7 @@
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/financeiro/lancamentoTransferenciaService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/financeiro/lancamentoConciliadoService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/financeiro/lancamentoProgramadoService.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/financeiro/lancamentoAnexoService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/financeiro/frequenciaLancamentoService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/financeiro/tipoDocumentoService.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/service/financeiro/tipoFormaPagamentoService.js"></script>

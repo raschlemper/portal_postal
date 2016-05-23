@@ -2,7 +2,6 @@ package com.portalpostal.dao.handler;
 
 import com.portalpostal.model.Conta;
 import com.portalpostal.model.Lancamento;
-import com.portalpostal.model.LancamentoConciliado;
 import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.model.PlanoConta;
 import com.portalpostal.model.dd.TipoLancamento;
@@ -32,7 +31,7 @@ public class LancamentoHandler extends GenericHandler implements ResultSetHandle
         lancamento.setFavorecido(getString(result, "favorecido"));
         lancamento.setNumero(getString(result, "numero"));
         lancamento.setNumeroParcela(getInt(result, "numeroParcela"));
-        lancamento.setCompetencia(getDate(result, "competencia"));
+        lancamento.setDataCompetencia(getDate(result, "dataCompetencia"));
         lancamento.setDataEmissao(getDate(result, "dataEmissao"));
         lancamento.setDataVencimento(getDate(result, "dataVencimento"));
         lancamento.setDataLancamento(getDate(result, "dataLancamento"));

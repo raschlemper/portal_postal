@@ -16,47 +16,47 @@ public class LancamentoProgramadoFactory {
                 break;
             case DIARIO: 
                 lancamentoProgramado.setNumeroParcela(numeroParcela);
-                lancamentoProgramado.setCompetencia(addDaily(lancamentoProgramado.getCompetencia()));
+                lancamentoProgramado.setDataCompetencia(addDaily(lancamentoProgramado.getDataCompetencia()));
                 lancamentoProgramado.setDataVencimento(addDaily(lancamentoProgramado.getDataVencimento()));
                 break;
             case SEMANAL: 
                 lancamentoProgramado.setNumeroParcela(numeroParcela);
-                lancamentoProgramado.setCompetencia(addWeekly(lancamentoProgramado.getCompetencia()));
+                lancamentoProgramado.setDataCompetencia(addWeekly(lancamentoProgramado.getDataCompetencia()));
                 lancamentoProgramado.setDataVencimento(addWeekly(lancamentoProgramado.getDataVencimento()));
                 break;
             case QUINZENAL: 
                 lancamentoProgramado.setNumeroParcela(numeroParcela);
-                lancamentoProgramado.setCompetencia(addBiweekly(lancamentoProgramado.getCompetencia()));
+                lancamentoProgramado.setDataCompetencia(addBiweekly(lancamentoProgramado.getDataCompetencia()));
                 lancamentoProgramado.setDataVencimento(addBiweekly(lancamentoProgramado.getDataVencimento()));
                 break;
             case MENSAL: 
                 lancamentoProgramado.setNumeroParcela(numeroParcela);
-                lancamentoProgramado.setCompetencia(addMonthly(lancamentoProgramado.getCompetencia()));
+                lancamentoProgramado.setDataCompetencia(addMonthly(lancamentoProgramado.getDataCompetencia()));
                 lancamentoProgramado.setDataVencimento(addMonthly(lancamentoProgramado.getDataVencimento()));
                 break;
             case BIMESTRAL: 
                 lancamentoProgramado.setNumeroParcela(numeroParcela);
-                lancamentoProgramado.setCompetencia(addBimonthly(lancamentoProgramado.getCompetencia()));
+                lancamentoProgramado.setDataCompetencia(addBimonthly(lancamentoProgramado.getDataCompetencia()));
                 lancamentoProgramado.setDataVencimento(addBimonthly(lancamentoProgramado.getDataVencimento()));
                 break;
             case TRIMESTRAL: 
                 lancamentoProgramado.setNumeroParcela(numeroParcela);
-                lancamentoProgramado.setCompetencia(addQuarterly(lancamentoProgramado.getCompetencia()));
+                lancamentoProgramado.setDataCompetencia(addQuarterly(lancamentoProgramado.getDataCompetencia()));
                 lancamentoProgramado.setDataVencimento(addQuarterly(lancamentoProgramado.getDataVencimento()));
                 break;
             case QUADRIMESTRAL: 
                 lancamentoProgramado.setNumeroParcela(numeroParcela);
-                lancamentoProgramado.setCompetencia(addFourMonths(lancamentoProgramado.getCompetencia()));
+                lancamentoProgramado.setDataCompetencia(addFourMonths(lancamentoProgramado.getDataCompetencia()));
                 lancamentoProgramado.setDataVencimento(addFourMonths(lancamentoProgramado.getDataVencimento()));
                 break;
             case SEMESTRAL: 
                 lancamentoProgramado.setNumeroParcela(numeroParcela);
-                lancamentoProgramado.setCompetencia(addSemiannual(lancamentoProgramado.getCompetencia()));
+                lancamentoProgramado.setDataCompetencia(addSemiannual(lancamentoProgramado.getDataCompetencia()));
                 lancamentoProgramado.setDataVencimento(addSemiannual(lancamentoProgramado.getDataVencimento()));
                 break;
             case ANUAL: 
                 lancamentoProgramado.setNumeroParcela(numeroParcela);
-                lancamentoProgramado.setCompetencia(addYearly(lancamentoProgramado.getCompetencia()));
+                lancamentoProgramado.setDataCompetencia(addYearly(lancamentoProgramado.getDataCompetencia()));
                 lancamentoProgramado.setDataVencimento(addYearly(lancamentoProgramado.getDataVencimento()));
                 break;
             default:

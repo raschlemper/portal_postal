@@ -27,7 +27,7 @@ public class LancamentoConciliadoHandler extends GenericHandler implements Resul
         lancamentoConciliado.setLancamento(getLancamento(result));
         lancamentoConciliado.setTipo(TipoLancamento.values()[getInt(result, "tipo")]);
         lancamentoConciliado.setNumeroLote(getInt(result, "numeroLote"));
-        lancamentoConciliado.setCompetencia(getDate(result, "competencia"));
+        lancamentoConciliado.setDataCompetencia(getDate(result, "dataCompetencia"));
         lancamentoConciliado.setDataEmissao(getDate(result, "dataEmissao"));
         lancamentoConciliado.setDataLancamento(getDate(result, "dataLancamento"));
         lancamentoConciliado.setValor(getDouble(result, "valor"));

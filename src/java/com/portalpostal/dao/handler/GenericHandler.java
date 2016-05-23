@@ -1,5 +1,6 @@
 package com.portalpostal.dao.handler;
 
+import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -62,5 +63,10 @@ class GenericHandler {
     protected Boolean getBoolean(ResultSet result, String columnName) throws SQLException {
         if(!existColumn(result, columnName)) return null;
         return result.getBoolean(getColumn(columnName));
+    }
+    
+    protected Blob getBlob(ResultSet result, String columnName) throws SQLException {
+        if(!existColumn(result, columnName)) return null;
+        return result.getBlob(getColumn(columnName));
     }
 }

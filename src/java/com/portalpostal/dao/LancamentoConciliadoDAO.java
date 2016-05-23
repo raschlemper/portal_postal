@@ -42,8 +42,8 @@ public class LancamentoConciliadoDAO extends GenericDAO {
 
     public LancamentoConciliado save(LancamentoConciliado lancamentoConciliado) throws Exception {  
         String sql = "INSERT INTO lancamento_conciliado (idConta, idPlanoConta, idLancamento, tipo, numeroLote, "
-                   + "competencia, dataEmissao, dataLancamento, valor, historico) "
-                   + "VALUES(:idConta, :idPlanoConta, :idLancamento, :tipo, :numeroLote, :competencia, :dataEmissao, "
+                   + "dataCompetencia, dataEmissao, dataLancamento, valor, historico) "
+                   + "VALUES(:idConta, :idPlanoConta, :idLancamento, :tipo, :numeroLote, :dataCompetencia, :dataEmissao, "
                    + ":dataLancamento, :valor, :historico)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idConta", lancamentoConciliado.getConta().getIdConta());
@@ -51,7 +51,7 @@ public class LancamentoConciliadoDAO extends GenericDAO {
         params.put("idLancamento", lancamentoConciliado.getLancamento().getIdLancamento());
         params.put("tipo", lancamentoConciliado.getTipo().ordinal()); 
         params.put("numeroLote", lancamentoConciliado.getNumeroLote()); 
-        params.put("competencia", lancamentoConciliado.getCompetencia());       
+        params.put("dataCompetencia", lancamentoConciliado.getDataCompetencia());       
         params.put("dataEmissao", lancamentoConciliado.getDataEmissao());    
         params.put("dataLancamento", lancamentoConciliado.getDataLancamento());
         params.put("valor", lancamentoConciliado.getValor());  
@@ -63,7 +63,7 @@ public class LancamentoConciliadoDAO extends GenericDAO {
     public LancamentoConciliado update(LancamentoConciliado lancamentoConciliado) throws Exception {
         String sql = "UPDATE lancamento_conciliado "
                    + "SET idConta = :idConta, idPlanoConta = :idPlanoConta, idLancamento = :idLancamento, "
-                   + "tipo = :tipo, numeroLote = :numeroLote, competencia = :competencia, dataEmissao = :dataEmissao, "
+                   + "tipo = :tipo, numeroLote = :numeroLote, dataCompetencia = :dataCompetencia, dataEmissao = :dataEmissao, "
                    + "dataLancamento = :dataLancamento, valor = :valor, historico= :historico "
                    + "WHERE idLancamentoConciliado = :idLancamentoConciliado ";        
         Map<String, Object> params = new HashMap<String, Object>();
@@ -73,7 +73,7 @@ public class LancamentoConciliadoDAO extends GenericDAO {
         params.put("idLancamento", lancamentoConciliado.getLancamento().getIdLancamento());
         params.put("tipo", lancamentoConciliado.getTipo().ordinal()); 
         params.put("numeroLote", lancamentoConciliado.getNumeroLote()); 
-        params.put("competencia", lancamentoConciliado.getCompetencia());       
+        params.put("dataCompetencia", lancamentoConciliado.getDataCompetencia());       
         params.put("dataEmissao", lancamentoConciliado.getDataEmissao());    
         params.put("dataLancamento", lancamentoConciliado.getDataLancamento());  
         params.put("valor", lancamentoConciliado.getValor());   

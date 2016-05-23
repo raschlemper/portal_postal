@@ -11,6 +11,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             $scope.situacoes = LISTAS.situacaoLancamento;
             $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
             $scope.datepickerDataFim = angular.copy(DatePickerService.default);    
+            $scope.saldoTotal = 0;
             $scope.lancSearch = {};
             contas();
             initTipos();
@@ -133,35 +134,43 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         
         var criarLancamentosLista = function(data) {
             return _.map(data.lancamentos, function(lancamento) { 
+                
                 if(lancamento.tipo.id === $scope.tipos[1].id) { lancamento.pagamento = lancamento.valor * -1; } 
                 else if(lancamento.tipo.id === $scope.tipos[0].id) { lancamento.deposito = lancamento.valor; }  
+                
                 if(lancamento.numeroParcela) { lancamento.numero = lancamento.numero + '-' + lancamento.numeroParcela; }
-                if(lancamento.modelo.id === $scope.modelos[1].id) { 
-                    lancamento.tipo = $scope.tipos[$scope.tipos.length - 1];
-                }
+                
                 if(lancamento.planoConta && lancamento.planoConta.idPlanoConta) { 
                     var planoConta = ListaService.getPlanoContaValue($scope.planoContas, lancamento.planoConta.idPlanoConta); 
                     lancamento.planoConta = planoConta.descricao;                    
                 } else {
                     lancamento.planoConta = null;
                 }
+                
+                if(lancamento.modelo.id === $scope.modelos[1].id) { 
+                    var modeloTransferencia = $scope.tipos[$scope.tipos.length - 1];
+                    lancamento.tipo = modeloTransferencia;
+                    lancamento.planoConta = modeloTransferencia.descricao;
+                }
+                
                 return _.pick(lancamento, 'idLancamento', 'tipo', 'dataLancamento', 'numero', 'planoConta', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico', 'situacao', 'numeroLoteConciliado');
             })
         };
         
         var calculateSaldo = function(lancamentos) {
             var saldo = 0;
+            $scope.saldoTotal = 0;
             return _.map(lancamentos, function(lancamento) {
-                if((lancamento.tipo && lancamento.tipo.codigo === 'despesa') || 
-                        (lancamento.tipo.codigo === 'despesa')) { 
+                if(lancamento.pagamento) { 
                     saldo += lancamento.pagamento;
+                    $scope.saldoTotal += lancamento.pagamento;
                 } 
-                else if((lancamento.tipo && lancamento.tipo.codigo === 'receita') || 
-                        (lancamento.tipo.codigo === 'receita')) {
+                else if(lancamento.deposito) {
                     saldo += lancamento.deposito;
+                    $scope.saldoTotal += lancamento.deposito;
                 }
                 lancamento.saldo = saldo;
-            })            
+            });
         };
 
         $scope.visualizar = function(conta, idLancamento) {
@@ -338,7 +347,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 lancamentoOrigem: getLancamento(data.contaOrigem, null, $scope.tipos[1], modelo, data),
                 lancamentoDestino: getLancamento(data.contaDestino, null, $scope.tipos[0], modelo, data),
                 numero: data.numero,
-                competencia: data.competencia,
+                dataCompetencia: data.dataCompetencia,
                 dataEmissao: data.dataEmissao || moment(),
                 dataLancamento: data.dataLancamento || moment(),
                 valor: data.valor,
@@ -354,7 +363,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 conta: { idConta: data.conta.idConta },  
                 planoConta: { idPlanoConta: data.planoConta.idPlanoConta },
                 tipo: data.tipo.id,
-                competencia: data.competencia,
+                dataCompetencia: data.dataCompetencia,
                 dataEmissao: data.dataEmissao || moment(),
                 dataLancamento: data.dataLancamento || moment(),
                 valor: data.valor,
@@ -372,7 +381,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 favorecido: null,
                 numero: data.numero,
                 numeroParcela: 0,
-                competencia: data.competencia,
+                dataCompetencia: data.dataCompetencia,
                 dataEmissao: data.dataEmissao || moment(),
                 dataVencimento: data.dataLancamento || moment(),
                 dataLancamento: data.dataLancamento || moment(),

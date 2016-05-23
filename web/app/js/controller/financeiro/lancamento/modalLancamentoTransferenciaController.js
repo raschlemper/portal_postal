@@ -42,11 +42,11 @@ app.controller('ModalLancamentoTransferenciaController', ['$scope', '$modalInsta
                 alert('A conta de origem deve ser diferente da conta de destino!');
                 return false;                
             }
-            if (form.competencia.$error.required) {
+            if (form.dataCompetencia.$error.required) {
                 alert('Preencha a competência do lançamento!');
                 return false;
             }        
-            if (form.competencia.$modelValue && !moment(form.competencia.$modelValue).isValid()) {
+            if (form.dataCompetencia.$modelValue && !moment(form.dataCompetencia.$modelValue).isValid()) {
                 alert('A competência do lançamento não é válida!');
                 return false;
             }    

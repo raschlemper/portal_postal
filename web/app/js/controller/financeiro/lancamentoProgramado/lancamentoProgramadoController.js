@@ -16,7 +16,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         
         var initTable = function() {            
             $scope.colunas = [              
-                {label: '', column: 'tipo', headerClass: 'no-sort', dataClass:'text-center col-tipo', filter: {name: 'tipoLancamento', args: ''}},         
+                {label: '', column: 'tipo.descricao', headerClass: 'no-sort', dataClass:'text-center col-tipo', filter: {name: 'tipoLancamento', args: ''}},         
                 {label: 'Vencimento', column: 'dataVencimento', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
                 {label: 'Número', column: 'numeroParcela'},               
                 {label: 'Favorecido', column: 'favorecido'},  
@@ -88,13 +88,16 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         
         var criarLancamentoProgramadosLista = function(data) {
             return _.map(data.lancamentosProgramados, function(lancamentoProgramado) {  
+                
                 var complementoDescricaoFrequencia = '';
                 if(lancamentoProgramado.quantidadeParcela) { 
                     complementoDescricaoFrequencia = ' - Parcelado (' + lancamentoProgramado.quantidadeParcela + 'x)';
                 }
+                
                 lancamentoProgramado.situacao = lancamentoProgramado.situacao.descricao;
                 lancamentoProgramado.frequencia = lancamentoProgramado.frequencia.descricao + complementoDescricaoFrequencia;
                 lancamentoProgramado.numeroParcela = lancamentoProgramado.numero;
+                
                 return _.pick(lancamentoProgramado, 'idLancamentoProgramado', 'tipo', 'dataVencimento', 'numeroParcela', 'favorecido', 'valor', 'situacao', 'frequencia');
             })
         };

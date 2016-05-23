@@ -97,12 +97,12 @@
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
-                                <label class="small">Competência</label>
+                                <label class="small">Data Competência</label>
                                 <div class="input-group">
-                                    <input type="text" autocomplete="off" name="competencia" class="form-control" ng-model="lancamentoProgramado.competencia" 
-                                           datepicker-popup="MMMM/yyyy" is-open="datepickerCompetencia.opened" ng-required="true"
+                                    <input type="text" autocomplete="off" name="dataCompetencia" class="form-control" ng-model="lancamentoProgramado.dataCompetencia" 
+                                           datepicker-popup="{{datepickerCompetencia.format}}" is-open="datepickerCompetencia.opened" ng-required="true"
                                            current-text="{{datepickerCompetencia.today}}" clear-text="{{datepickerCompetencia.clear}}" close-text="{{datepickerCompetencia.close}}"
-                                           placeholder="Competência do lançamento" datepicker-mode="'month'" datepicker-options="{minMode: 'month'}"/>
+                                           placeholder="Competência do lançamento"/>
                                     <span class="input-group-addon" ng-click="datepickerCompetencia.open($event)"><i class="fa fa-calendar"></i></span>
                                 </div>
                             </div>  

@@ -38,7 +38,7 @@
 	<title>
 		<band height="35" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="a74c6b6c-27b0-48e4-962a-cb2b75fa5007" x="0" y="0" width="350" height="35"/>
+				<reportElement x="0" y="0" width="350" height="35" uuid="a74c6b6c-27b0-48e4-962a-cb2b75fa5007"/>
 				<box>
 					<bottomPen lineWidth="1.0"/>
 				</box>
@@ -48,7 +48,7 @@
 				<text><![CDATA[Demonstrativo Financeiro:]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement uuid="a480009a-e957-48b7-bcf7-17c1ba8f9b84" x="350" y="0" width="125" height="35"/>
+				<reportElement x="350" y="0" width="125" height="35" uuid="a480009a-e957-48b7-bcf7-17c1ba8f9b84"/>
 				<box>
 					<bottomPen lineWidth="1.0"/>
 				</box>
@@ -58,7 +58,7 @@
 				<textFieldExpression><![CDATA[$F{dataInicio}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement uuid="7316c9bd-fa8a-465a-b72a-894df8db3142" x="475" y="0" width="125" height="35"/>
+				<reportElement x="475" y="0" width="125" height="35" uuid="7316c9bd-fa8a-465a-b72a-894df8db3142"/>
 				<box>
 					<bottomPen lineWidth="1.0"/>
 				</box>
@@ -68,11 +68,10 @@
 				<textFieldExpression><![CDATA[$F{dataFim}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="7b962551-49ce-41fc-bf1b-343b3e126381" x="600" y="0" width="202" height="35"/>
+				<reportElement x="600" y="0" width="202" height="35" uuid="7b962551-49ce-41fc-bf1b-343b3e126381"/>
 				<box>
 					<bottomPen lineWidth="1.0"/>
 				</box>
-				<textElement/>
 				<text><![CDATA[]]></text>
 			</staticText>
 		</band>
@@ -95,7 +94,7 @@
 	<summary>
 		<band height="100" splitType="Stretch">
 			<crosstab>
-				<reportElement uuid="eba49527-29c0-4683-bb03-4429b08f4db7" x="0" y="0" width="802" height="100"/>
+				<reportElement x="0" y="0" width="802" height="100" uuid="eba49527-29c0-4683-bb03-4429b08f4db7"/>
 				<rowGroup name="descricao" width="199">
 					<bucket class="java.lang.String">
 						<bucketExpression><![CDATA[$F{descricao}]]></bucketExpression>
@@ -106,7 +105,7 @@
 								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 							</box>
 							<textField>
-								<reportElement uuid="d6db03d4-808b-478b-9d5c-94760a65c3a9" style="Crosstab Data Text" x="0" y="0" width="190" height="18"/>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="190" height="18" uuid="d6db03d4-808b-478b-9d5c-94760a65c3a9"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle"/>
 								<textFieldExpression><![CDATA[$V{descricao}]]></textFieldExpression>
 							</textField>
@@ -126,7 +125,7 @@
 								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 							</box>
 							<textField pattern="MM/YYYY">
-								<reportElement uuid="1e270e11-ad53-4cf2-832a-278270114d8e" style="Crosstab Data Text" x="0" y="0" width="50" height="30"/>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="30" uuid="1e270e11-ad53-4cf2-832a-278270114d8e"/>
 								<textElement verticalAlignment="Middle"/>
 								<textFieldExpression><![CDATA[$V{periodo}]]></textFieldExpression>
 							</textField>
@@ -145,7 +144,7 @@
 							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 						</box>
 						<textField>
-							<reportElement uuid="01241e92-088d-4caa-b199-a8a481062b08" style="Crosstab Data Text" x="0" y="0" width="50" height="18"/>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="18" uuid="01241e92-088d-4caa-b199-a8a481062b08"/>
 							<textElement verticalAlignment="Middle"/>
 							<textFieldExpression><![CDATA[$V{saldoMeasure}]]></textFieldExpression>
 						</textField>
@@ -157,8 +156,7 @@
 							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 						</box>
 						<textField>
-							<reportElement uuid="721fde6b-ff2a-488d-848c-5adb7e0d9a2f" style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
-							<textElement/>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" uuid="721fde6b-ff2a-488d-848c-5adb7e0d9a2f"/>
 							<textFieldExpression><![CDATA[$V{saldoMeasure}]]></textFieldExpression>
 						</textField>
 					</cellContents>
@@ -169,8 +167,7 @@
 							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 						</box>
 						<textField>
-							<reportElement uuid="e97ed5fc-0cea-4478-89a3-b4b4f2eeb898" style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
-							<textElement/>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" uuid="e97ed5fc-0cea-4478-89a3-b4b4f2eeb898"/>
 							<textFieldExpression><![CDATA[$V{saldoMeasure}]]></textFieldExpression>
 						</textField>
 					</cellContents>
@@ -181,8 +178,7 @@
 							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 						</box>
 						<textField>
-							<reportElement uuid="2f01952d-c700-4f1e-a669-bdc5ed2610d8" style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
-							<textElement/>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" uuid="2f01952d-c700-4f1e-a669-bdc5ed2610d8"/>
 							<textFieldExpression><![CDATA[$V{saldoMeasure}]]></textFieldExpression>
 						</textField>
 					</cellContents>

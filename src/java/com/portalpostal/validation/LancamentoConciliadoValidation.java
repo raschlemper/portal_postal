@@ -10,7 +10,7 @@ public class LancamentoConciliadoValidation extends Validation<LancamentoConcili
         if(!validarPlanoConta(lancamentoConciliado)) return false;         
         if(!validarLancamento(lancamentoConciliado)) return false; 
         if(!validarTipo(lancamentoConciliado)) return false;  
-        if(!validarCompetencia(lancamentoConciliado)) return false;   
+        if(!validarDataCompetencia(lancamentoConciliado)) return false;   
         if(!validarDataEmissao(lancamentoConciliado)) return false;  
         if(!validarDataLancamento(lancamentoConciliado)) return false;   
         if(!validarValor(lancamentoConciliado)) return false;    
@@ -42,9 +42,9 @@ public class LancamentoConciliadoValidation extends Validation<LancamentoConcili
         return false;        
     }     
 
-    public boolean validarCompetencia(LancamentoConciliado lancamentoConciliado) {          
-        if(campoNotNull(lancamentoConciliado.getCompetencia())) return true; 
-        setMsg("Preencha a competência da conciliação!");
+    public boolean validarDataCompetencia(LancamentoConciliado lancamentoConciliado) {          
+        if(campoNotNull(lancamentoConciliado.getDataCompetencia())) return true; 
+        setMsg("Preencha a data de competência da conciliação!");
         return false;        
     }    
 

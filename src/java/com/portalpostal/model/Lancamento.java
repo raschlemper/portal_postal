@@ -4,7 +4,6 @@ import com.portalpostal.model.dd.TipoLancamento;
 import com.portalpostal.model.dd.TipoModeloLancamento;
 import com.portalpostal.model.dd.TipoSituacaoLancamento;
 import java.util.Date;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class Lancamento {
     
@@ -16,7 +15,7 @@ public class Lancamento {
     private String favorecido;
     private String numero;
     private Integer numeroParcela;
-    private Date competencia;
+    private Date dataCompetencia;
     private Date dataEmissao;
     private Date dataVencimento;
     private Date dataLancamento;
@@ -96,12 +95,12 @@ public class Lancamento {
         this.numeroParcela = numeroParcela;
     }
 
-    public Date getCompetencia() {
-        return competencia;
+    public Date getDataCompetencia() {
+        return dataCompetencia;
     }
 
-    public void setCompetencia(Date competencia) {
-        this.competencia = competencia;
+    public void setDataCompetencia(Date dataCompetencia) {
+        this.dataCompetencia = dataCompetencia;
     }
 
     public Date getDataEmissao() {

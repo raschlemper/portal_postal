@@ -11,7 +11,8 @@ var app = app || angular.module('App', [
     'ui.utils.masks',
     'datatables',
     'datatables.bootstrap',
-    'highcharts-ng'
+    'highcharts-ng',
+    'angularFileUpload'
 ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
