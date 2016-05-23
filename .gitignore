@@ -19,7 +19,6 @@ web/WEB-INF/jax-ws-catalog.xml
 build/
 nbproject/
 WEB-INF/wsdl/
-*.jar
 *.zip
 *.prej
 *.war
