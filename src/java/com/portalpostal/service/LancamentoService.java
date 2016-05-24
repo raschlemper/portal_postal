@@ -34,7 +34,7 @@ public class LancamentoService {
         return lancamentoDAO.findByLancamentoProgramado(idLancamentoProgramado);
     } 
     
-    public List<Lancamento> findSaldo(Date dataInicio, Date dataFim) throws Exception {
+    public List<Saldo> findSaldo(Date dataInicio, Date dataFim) throws Exception {
         return lancamentoDAO.findSaldo(dataInicio, dataFim);
     } 
     
@@ -48,6 +48,10 @@ public class LancamentoService {
     
     public List<Saldo> findSaldoTipo(Date dataInicio, Date dataFim) throws Exception {
         return lancamentoDAO.findSaldoTipo(dataInicio, dataFim);
+    } 
+    
+    public List<Saldo> findSaldoConciliado(Date data) throws Exception {
+        return lancamentoDAO.findSaldoConciliado(data);
     } 
     
     public List<Integer> findYearFromLancamento() throws Exception {

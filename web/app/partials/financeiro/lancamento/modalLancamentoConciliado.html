@@ -1,7 +1,7 @@
 <form name="lancamentoConciliadoForm" novalidate>
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
-        <h4 class="modal-title">{{title}}</h4>
+        <h4 class="modal-title">Inserir Novo Lançamento Reconciliado</h4>
     </div>
     <div class="modal-body">
         <div class="bootbox-body">
@@ -9,65 +9,67 @@
                 <li class="list-group-item">
                     <div class="row form-horizontal">
                         <input type="hidden" name="idLancamentoConciliado" ng-model="lancamentoConciliado.idLancamentoConciliado"/>    
-                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                            <label class="small">Tipo</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                <select class="form-control" name="tipo" ng-change="changeTipo(lancamentoConciliado.tipo)"
-                                        ng-options="tipo.descricao for tipo in tipos track by tipo.id" ng-model="lancamentoConciliado.tipo"></select>
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 divider-vertical-right"> 
+                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
+                                <label class="small">Data</label>
+                                <div class="input-group">
+                                    <input type="text" autocomplete="off" name="dataLancamento" class="form-control" ng-model="lancamentoConciliado.dataLancamento" 
+                                           datepicker-popup="{{datepickerLancamento.format}}" is-open="datepickerLancamento.opened" ng-required="true"
+                                           current-text="{{datepickerLancamento.today}}" clear-text="{{datepickerLancamento.clear}}" close-text="{{datepickerLancamento.close}}"
+                                           placeholder="Data da reconciliação"/>
+                                    <span class="input-group-addon" ng-click="datepickerLancamento.open($event)"><i class="fa fa-calendar"></i></span>
+                                </div> 
+                            </div> 
+                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
+                                <label class="small">Saldo após reconciliação</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
+                                    <input type="text" autocomplete="off" name="saldo" class="form-control"
+                                           ui-number-mask="2" placeholder="Saldo da reconciliação" ng-model="saldoReconciliacao" ng-required="true"/>
+                                </div>
+                            </div> 
+                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 spc-default-top">
+                                <button type="button" class="btn btn-success pull-right" ng-click="calcularSaldo(lancamentoConciliado.dataLancamento, saldoReconciliacao)">
+                                    <i class="fa fa-lg fa-save fa-spc"></i> CALCULAR RECONCILIAÇÃO
+                                </button>
                             </div>
-                        </div>   
-                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                            <label class="small">Conta</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                <select class="form-control" name="conta" 
-                                        ng-options="conta.nome for conta in contas track by conta.idConta" ng-model="lancamentoConciliado.conta"></select>
-                            </div>
-                        </div> 
-                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                            <label class="small">Plano de Conta</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                <select class="form-control" name="planoConta" 
-                                        ng-options="planoConta.nome for planoConta in planoContas track by planoConta.idPlanoConta" ng-model="lancamentoConciliado.planoConta"></select>
-                            </div>
-                        </div> 
-                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                            <label class="small">Data Competência</label>
-                            <div class="input-group">
-                                <input type="text" autocomplete="off" name="dataCompetencia" class="form-control" ng-model="lancamentoConciliado.dataCompetencia" 
-                                       datepicker-popup="{{datepickerCompetencia.format}}" is-open="datepickerCompetencia.opened" ng-required="true"
-                                       current-text="{{datepickerCompetencia.today}}" clear-text="{{datepickerCompetencia.clear}}" close-text="{{datepickerCompetencia.close}}"
-                                       placeholder="Competência do lançamento"/>
-                                <span class="input-group-addon" ng-click="datepickerCompetencia.open($event)"><i class="fa fa-calendar"></i></span>
-                            </div>
-                        </div> 
-                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                            <label class="small">Data</label>
-                            <div class="input-group">
-                                <input type="text" autocomplete="off" name="dataLancamento" class="form-control" ng-model="lancamentoConciliado.dataLancamento" 
-                                       datepicker-popup="{{datepickerLancamento.format}}" is-open="datepickerLancamento.opened" ng-required="true"
-                                       current-text="{{datepickerLancamento.today}}" clear-text="{{datepickerLancamento.clear}}" close-text="{{datepickerLancamento.close}}"
-                                       placeholder="Data do lançamento"/>
-                                <span class="input-group-addon" ng-click="datepickerLancamento.open($event)"><i class="fa fa-calendar"></i></span>
-                            </div>
-                        </div>   
-                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                            <label class="small">Valor</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
-                                <input type="text" autocomplete="off" name="valor" class="form-control"
-                                       ui-number-mask="2" placeholder="Valor do lançamento" ng-model="lancamentoConciliado.valor" ng-required="true"/>
+                            
+                            <div ng-show="saldo && saldo.diferenca">
+                                <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 divider-horizontal-top">
+                                    <label class="small">Plano de Conta</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                        <select class="form-control" name="planoConta" 
+                                                ng-options="planoConta.nome for planoConta in planoContas track by planoConta.idPlanoConta" ng-model="lancamentoConciliado.planoConta"></select>
+                                    </div>
+                                </div> 
+                                <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
+                                    <label class="small">Histórico</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input class="form-control" type="text" name="historico" ng-model="lancamentoConciliado.historico" 
+                                               placeholder="Histórico do lançamento"  ng-required="true"/>  
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
-                            <label class="small">Histórico</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input class="form-control" type="text" name="historico" ng-model="lancamentoConciliado.historico" 
-                                       placeholder="Histórico do lançamento"  ng-required="true"/>  
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-show="saldo"> 
+                            
+                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 spc-default-top">
+                                <strong>Saldo Atual</strong><i class="pull-right">{{saldo.atual | currency : 'R$ '}}</i>
+                            </div>                            
+                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 spc-default-top">
+                                <strong>Saldo Recnciliação</strong><i class="pull-right">{{saldo.reconciliacao | currency : 'R$ '}}</i>
+                            </div>                          
+                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 spc-default-top">
+                                <strong>Saldo Diferença</strong><i class="pull-right">{{saldo.diferenca | currency : 'R$ '}}</i>
                             </div>
+                            
+                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 spc-default-top" ng-show="saldo && saldo.diferenca">
+                                <strong>Existe diferença entre os saldos lançados e o saldo informado para reconciliação. <br/>
+                                        Clique em salvar para gerar o lançamento de reconciliação.</strong>
+                            </div>
+                            
                         </div>
                     </div>
                 </li>
@@ -78,7 +80,7 @@
         <button type="button" class="btn btn-default" ng-click="cancel()">
             <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR
         </button>
-        <button type="button" class="btn btn-success" ng-click="ok(this.lancamentoConciliadoForm)">
+        <button type="button" class="btn btn-success" ng-click="ok(this.lancamentoConciliadoForm)" ng-disabled="!saldo || !saldo.diferenca">
             <i class="fa fa-lg fa-save fa-spc"></i> SALVAR
         </button>
     </div>

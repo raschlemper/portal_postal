@@ -1,4 +1,4 @@
-use portalPostal;
+use portalpostal;
 
-ALTER TABLE portalPostal.empresas ADD latitude VARCHAR(254);
-ALTER TABLE portalPostal.empresas ADD longitude VARCHAR(254);
+ALTER TABLE portalpostal.empresas ADD latitude VARCHAR(254);
+ALTER TABLE portalpostal.empresas ADD longitude VARCHAR(254);

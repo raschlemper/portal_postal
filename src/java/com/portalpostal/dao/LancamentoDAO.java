@@ -91,7 +91,7 @@ public class LancamentoDAO extends GenericDAO {
         return findAll(sql, params, lancamentoHandler);
     }
 
-    public List<Lancamento> findSaldo(Date dataInicio, Date dataFim) throws Exception {
+    public List<Saldo> findSaldo(Date dataInicio, Date dataFim) throws Exception {
         String sql = "SELECT DATE(dataLancamento) as data, sum( if(tipo = 0, valor, valor * -1) ) as valor "
                    + "FROM lancamento "
                    + "WHERE DATE(dataLancamento) BETWEEN :dataInicio AND :dataFim "
@@ -135,6 +135,16 @@ public class LancamentoDAO extends GenericDAO {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("dataInicio", dataInicio);       
         params.put("dataFim", dataFim);   
+        return findAll(sql, params, saldoHandler);
+    }
+
+    public List<Saldo> findSaldoConciliado(Date data) throws Exception {
+        String sql = "SELECT sum(valor) as valor "
+                   + "FROM lancamento "
+                   + "WHERE DATE(dataLancamento) <= :data "
+                   + "AND numeroLoteConciliado is null ";            
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("data", data);        
         return findAll(sql, params, saldoHandler);
     }
     

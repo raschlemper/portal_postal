@@ -48,7 +48,9 @@
                                 <div class="input-group">
                                     <span class="input-group-addon" ><i class="fa fa-info"></i></span>
                                     <select class="form-control" name="centroCusto" 
-                                            ng-options="centroCusto.descricao for centroCusto in centroCustos track by centroCusto.idCentroCusto" ng-model="lancamento.centroCusto"></select>
+                                            ng-options="centroCusto.descricao for centroCusto in centroCustos track by centroCusto.idCentroCusto" ng-model="lancamento.centroCusto">
+                                            <option value=""></option>
+                                    </select>
                                 </div>
                             </div> 
                             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">

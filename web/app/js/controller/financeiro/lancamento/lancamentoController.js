@@ -235,7 +235,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
 
         $scope.conciliar = function(conta) {
             modalConciliar().then(function(result) {
-                result = ajustarDadosConciliado(result);
+                result = ajustarDadosConciliado(conta, result);
                 LancamentoConciliadoService.create(result)
                     .then(function(data) {  
                         modalMessage("Lançamento Conciliado com sucesso!");
@@ -378,11 +378,11 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             return lancamentoTransferencia;
         }
         
-        var ajustarDadosConciliado = function(data) {                 
+        var ajustarDadosConciliado = function(conta, data) {                 
             var lancamentoConciliado = { 
                 idLancamentoConciliado: null,
-                lancamento: getLancamento(data.conta, data.planoConta, null, data.tipo, $scope.modelos[5], data),          
-                conta: { idConta: data.conta.idConta },  
+                lancamento: getLancamento(conta, data.planoConta, null, data.tipo, $scope.modelos[5], data),          
+                conta: { idConta: conta.idConta },  
                 planoConta: { idPlanoConta: data.planoConta.idPlanoConta },
                 tipo: data.tipo.id,
                 dataCompetencia: data.dataCompetencia,

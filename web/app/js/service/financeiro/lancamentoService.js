@@ -29,6 +29,11 @@ app.factory('LancamentoService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/lancamento/tipo/saldo?dataInicio=" + dataInicio + "&dataFim=" + dataFim));
         },
 
+        getSaldoConciliado: function(data) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/lancamento/saldo/conciliado?data=" + data));
+        },
+
         findYearFromLancamento: function() {
             return PromiseService.execute(
                     $http.get(_contextPath + "/api/financeiro/lancamento/anos"));

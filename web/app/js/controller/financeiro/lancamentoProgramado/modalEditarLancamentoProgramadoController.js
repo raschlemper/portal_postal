@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalInstance', 'conta', 'lancamentoProgramado', 'ContaService', 'PlanoContaService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'FrequenciaLancamentoService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, conta, lancamentoProgramado, ContaService, PlanoContaService, TipoDocumentoService, TipoFormaPagamentoService, FrequenciaLancamentoService, DatePickerService, ListaService, LISTAS) {
+app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalInstance', 'conta', 'lancamentoProgramado', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'FrequenciaLancamentoService', 'DatePickerService', 'ListaService', 'LISTAS',
+    function ($scope, $modalInstance, conta, lancamentoProgramado, ContaService, PlanoContaService, CentroCustoService, TipoDocumentoService, TipoFormaPagamentoService, FrequenciaLancamentoService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
@@ -20,6 +20,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
             initStep(); 
             getTitle();
             contas();
+            centroCustos();
             tipoDocumento();
             tipoFormaPagamento();
             $scope.changeTipo($scope.lancamentoProgramado.tipo);
@@ -85,9 +86,31 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
                 });
         };
         
+        var centroCustos = function() {
+            CentroCustoService.getStructure()
+                .then(function (data) {
+                    $scope.centroCustos = data;
+                    CentroCustoService.estrutura($scope.centroCustos);
+                    $scope.centroCustos = CentroCustoService.flatten($scope.centroCustos);
+                    $scope.centroCustos = criarCentroCustosLista($scope.centroCustos);
+                    if($scope.lancamentoProgramado.centroCusto && $scope.lancamentoProgramado.centroCusto.idCentroCusto) {
+                        $scope.lancamentoProgramado.centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, $scope.lancamentoProgramado.centroCusto.idCentroCusto) || $scope.centroCustos[0];
+                    } 
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+        
         var criarPlanoContasLista = function(data) {
             return _.filter(data, function(planoConta) { 
                 return !planoConta.ehGrupo;
+            });            
+        }
+        
+        var criarCentroCustosLista = function(data) {
+            return _.filter(data, function(centroCusto) { 
+                return !centroCusto.ehGrupo;
             });            
         }
         
@@ -198,6 +221,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
             var lancamento = {
                 conta: lancamentoProgramado.conta,
                 planoConta: lancamentoProgramado.planoConta,
+                centroCusto: lancamentoProgramado.centroCusto,
                 tipo: lancamentoProgramado.tipo,
                 favorecido: lancamentoProgramado.favorecido,
                 numero: (parcela && parcela.numero) || lancamentoProgramado.numero,
@@ -222,6 +246,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         var ajusteLancamento = function(lancamento) {
             lancamento.conta = { idConta: lancamento.conta.idConta };
             lancamento.planoConta = { idPlanoConta: lancamento.planoConta.idPlanoConta };
+            lancamento.centroCusto = { idCentroCusto: lancamento.centroCusto.idCentroCusto };
             lancamento.tipo = lancamento.tipo.id;
             lancamento.dataCompetencia = lancamento.dataCompetencia || moment();
             lancamento.dataEmissao = lancamento.dataEmissao || moment();

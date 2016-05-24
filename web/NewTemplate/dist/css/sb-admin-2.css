@@ -3094,7 +3094,14 @@ div.list-category div.list-group-item {
 }
 
 .divider-horizontal-top {
+    margin-top: 15px; 
+    padding-top: 8px;
     border-top: 1px solid #DDD;
+}
+
+.spc-default-top {
+    margin-top: 15px; 
+    padding-top: 8px;
 }
 .bg-modal-primary {
     background-color: #337ab7;

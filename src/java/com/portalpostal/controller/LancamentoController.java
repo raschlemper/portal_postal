@@ -65,7 +65,7 @@ public class LancamentoController {
     @GET
     @Path("/saldo")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Lancamento> findSaldo(@QueryParam("dataInicio") String dataInicio, 
+    public List<Saldo> findSaldo(@QueryParam("dataInicio") String dataInicio, 
             @QueryParam("dataFim") String dataFim) {
         try {
             init(); 
@@ -124,7 +124,20 @@ public class LancamentoController {
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
-    }
+    } 
+    
+    @GET
+    @Path("/saldo/conciliado")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Saldo> findSaldoConciliado(@QueryParam("data") String data) {
+        try {
+            init(); 
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            return lancamentoService.findSaldoConciliado(format.parse(data));
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }  
     
     @GET
     @Path("/anos")

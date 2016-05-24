@@ -1,37 +1,37 @@
 'use strict';
 
-app.controller('ModalLancamentoConciliadoController', ['$scope', '$modalInstance', 'ContaService', 'PlanoContaService', 'DatePickerService', 'LISTAS',
-    function ($scope, $modalInstance, ContaService, PlanoContaService, DatePickerService, LISTAS) {
+app.controller('ModalLancamentoConciliadoController', ['$scope', '$modalInstance', 'PlanoContaService', 'LancamentoService', 'DatePickerService', 'LISTAS',
+    function ($scope, $modalInstance, PlanoContaService, LancamentoService, DatePickerService, LISTAS) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
             $scope.datepickerLancamento = angular.copy(DatePickerService.default); 
             $scope.tipos = LISTAS.lancamento;
-            $scope.lancamentoConciliado = {};  
-            $scope.lancamentoConciliado.tipo = $scope.tipos[0];        
-            getTitle();
-            contas();
-            $scope.changeTipo($scope.lancamentoConciliado.tipo);
+            $scope.lancamentoConciliado = {}; 
         };
         
-        var getTitle = function() {
-            $scope.title = "Inserir Novo Lançamento Reconciliado";
-        };
-        
-        var contas = function() {
-            ContaService.getAll()
+        $scope.calcularSaldo = function(dataLancamento, saldoReconciliacao) {
+            dataLancamento = moment(dataLancamento).format('YYYY-MM-DD HH:mm:ss');
+            LancamentoService.getSaldoConciliado(dataLancamento)
                 .then(function (data) {
-                    $scope.contas = data;
-                    $scope.lancamentoConciliado.conta = $scope.contas[0];
+                    if(!data.length) return;
+                    $scope.saldo = calcularSaldo(data[0].valor, saldoReconciliacao);
+                    if($scope.saldo.diferenca > 0) { $scope.lancamentoConciliado.tipo = $scope.tipos[0]; } 
+                    else { $scope.lancamentoConciliado.tipo = $scope.tipos[1]; }
+                    planoContas($scope.lancamentoConciliado.tipo);
                 })
                 .catch(function (e) {
                     console.log(e);
                 });
         };
         
-        $scope.changeTipo = function(tipo) {
-            planoContas(tipo);
-        };
+        var calcularSaldo = function(saldoAtual, saldoReconciliacao) {
+            return {
+                atual: saldoAtual,
+                reconciliacao: saldoReconciliacao,
+                diferenca: saldoReconciliacao - saldoAtual
+            }
+        }     
         
         var planoContas = function(tipo) {
             PlanoContaService.findContaResultadoByTipo(tipo.id)
@@ -46,22 +46,23 @@ app.controller('ModalLancamentoConciliadoController', ['$scope', '$modalInstance
         
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
+            $scope.lancamentoConciliado = ajustarDados($scope.saldo, $scope.lancamentoConciliado);
             $modalInstance.close($scope.lancamentoConciliado);            
         };
+        
+        var ajustarDados = function(saldo, lancamentoConciliado) {
+            lancamentoConciliado.dataCompetencia = lancamentoConciliado.dataLancamento;
+            lancamentoConciliado.dataEmissao = lancamentoConciliado.dataLancamento;
+            if(saldo.diferenca < 0) { lancamentoConciliado.valor = saldo.diferenca * -1; }
+            else { lancamentoConciliado.valor = saldo.diferenca; }
+            return lancamentoConciliado;
+        }
         
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
 
         var validarForm = function (form) {
-            if (form.dataCompetencia.$error.required) {
-                alert('Preencha a competência do lançamento conciliado!');
-                return false;
-            }        
-            if (form.dataCompetencia.$modelValue && !moment(form.dataCompetencia.$modelValue).isValid()) {
-                alert('A competência do lançamento conciliado não é válida!');
-                return false;
-            }    
             if (form.dataLancamento.$error.required) {
                 alert('Preencha a data do lançamento conciliado!');
                 return false;
@@ -69,11 +70,7 @@ app.controller('ModalLancamentoConciliadoController', ['$scope', '$modalInstance
             if (form.dataLancamento.$modelValue && !moment(form.dataLancamento.$modelValue).isValid()) {
                 alert('A data do lançamento conciliado não é válida!');
                 return false;
-            }    
-            if (form.valor.$error.required) {
-                alert('Preencha o valor do lançamento conciliado!');
-                return false;
-            }
+            }  
             if (form.historico.$error.required) {
                 alert('Preencha o histórico do lançamento conciliado!');
                 return false;

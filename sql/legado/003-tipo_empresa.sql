@@ -1,3 +1,3 @@
-use portalPostal;
+use portalpostal;
 
-ALTER TABLE portalPostal.empresas ADD tipo_sistema VARCHAR(254);
+ALTER TABLE portalpostal.empresas ADD tipo_sistema VARCHAR(254);

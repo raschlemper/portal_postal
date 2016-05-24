@@ -196,7 +196,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         
         var criarLancamento = function(conta, result) { 
             if(result.idLancamentoProgramado) {
-                LancamentoProgramadoService.getByNumeroParcela()
+                LancamentoProgramadoService.getByNumeroParcela(result.idLancamentoProgramado, result.numeroParcela)
                     .then(function(data) {  
                         if(data) {
                             modalMessage("Este lançamento não pode ser inserido, pois esta parcela já existe!");
@@ -226,7 +226,8 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         var ajustarDados = function(data) {       
             delete data.gerarLancamento;
             data.conta = { idConta: data.conta.idConta };       
-            data.planoConta = { idPlanoConta: data.planoConta.idPlanoConta };              
+            data.planoConta = { idPlanoConta: data.planoConta.idPlanoConta };     
+            data.centroCusto = { idCentroCusto: data.centroCusto.idCentroCusto };              
 //            if(data.lancamentoParcelado) {
 //                data.lancamentoParcelado = { idLancamentoParcelado: data.lancamentoParcelado.idLancamentoParcelado }; 
 //            }
@@ -255,6 +256,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
 //            return {
 //                idLancamentoProgramado: null,
 //                planoConta: null,
+//                centroCusto: null,
 //                favorecido: null,
 //                numero: data.numero,
 //                data: data.data,

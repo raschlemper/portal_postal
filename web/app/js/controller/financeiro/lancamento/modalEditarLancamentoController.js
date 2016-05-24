@@ -15,6 +15,7 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
             $scope.lancamento.modelo = (lancamento && lancamento.modelo) || $scope.modelos[0];            
             getTitle();
             contas();
+            centroCustos();
             $scope.changeTipo($scope.lancamento.tipo);
         };
         
@@ -40,7 +41,6 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
         
         $scope.changeTipo = function(tipo) {
             planoContas(tipo);
-            centroCustos();
         };
         
         var planoContas = function(tipo) {
@@ -68,11 +68,9 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
                     CentroCustoService.estrutura($scope.centroCustos);
                     $scope.centroCustos = CentroCustoService.flatten($scope.centroCustos);
                     $scope.centroCustos = criarCentroCustosLista($scope.centroCustos);
-                    if($scope.lancamento.centroCusto) {
+                    if($scope.lancamento.centroCusto && $scope.lancamento.centroCusto.idCentroCusto) {
                         $scope.lancamento.centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, $scope.lancamento.centroCusto.idCentroCusto) || $scope.centroCustos[0];
-                    } else {
-                         $scope.lancamento.centroCusto = null; //$scope.centroCustos[0];
-                    }
+                    } 
                 })
                 .catch(function (e) {
                     console.log(e);
