@@ -16,7 +16,9 @@ app.controller('ModalEditarCentroCustoController', ['$scope', '$modalInstance', 
         
         var isGroup = function() {
             if(action === 'save') return false;
-            if(centroCusto.contas) return true;
+            if(action === 'grupo') return true;
+            if(!centroCusto.grupo) return true;
+            if(centroCusto.centros) return true;
             return false;            
         }
         
@@ -34,7 +36,9 @@ app.controller('ModalEditarCentroCustoController', ['$scope', '$modalInstance', 
                     CentroCustoService.estrutura($scope.grupos);
                     $scope.gruposList = CentroCustoService.flatten($scope.grupos);
                     $scope.gruposList = $filter('orderBy')($scope.gruposList, 'descricao', false);
-                    $scope.centroCusto.grupo = ListaService.getCentroCustoValue($scope.gruposList, $scope.centroCusto.grupo.idCentroCusto);
+                    if($scope.centroCusto.grupo) { 
+                        $scope.centroCusto.grupo = ListaService.getCentroCustoValue($scope.gruposList, $scope.centroCusto.grupo.idCentroCusto);
+                    }
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -42,8 +46,8 @@ app.controller('ModalEditarCentroCustoController', ['$scope', '$modalInstance', 
         };
         
         var getTitle = function() {
-            if(action && action === 'edit') { $scope.title = "Editar Plano Conta"; }
-            else { $scope.title = "Inserir Novo Plano Conta"; }
+            if(action && action === 'edit') { $scope.title = "Editar Centro Custo"; }
+            else { $scope.title = "Inserir Novo Centro Custo"; }
         }
         
         $scope.ok = function(form) {

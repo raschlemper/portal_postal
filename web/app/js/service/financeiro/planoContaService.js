@@ -19,6 +19,8 @@ app.factory('PlanoContaService', function($http, PromiseService) {
     var getEstrutura = function(estruturas) {
         angular.forEach(estruturas, function(estrutura) {     
             estrutura.descricao = getCode(estrutura.estrutura) + ' - ' + estrutura.nome; 
+            estrutura.id = estrutura.idPlanoConta; 
+            estrutura.grupos = estrutura.contas; 
             if(estrutura.contas) { getEstrutura(estrutura.contas); }
         });
     }

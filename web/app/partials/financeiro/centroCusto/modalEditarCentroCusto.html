@@ -9,11 +9,11 @@
                 <li class="list-group-item">
                     <div class="row form-horizontal">
                         <input type="hidden" name="idCentroCusto" ng-model="centroCusto.idCentroCusto"/>
-                        <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8">
+                        <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8" ng-hide="isGroup">
                             <label class="small">Grupo</label>
                             <div class="input-group">                                  
                                 <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                <select class="form-control" name="grupo" ng-disabled="isGroup"
+                                <select class="form-control" name="grupo" 
                                         ng-options="grupo.descricao for grupo in gruposList track by grupo.idCentroCusto" ng-model="centroCusto.grupo"></select>
                             </div>
                         </div> 
@@ -25,7 +25,8 @@
                                        ng-required="true" placeholder="Código do centro de custo"/>                                    
                             </div>
                         </div>   
-                        <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
+                        <div ng-class="{'col-xs-12 col-sm-6 col-md-12 col-lg-12' : !isGroup,
+                                        'col-xs-12 col-sm-6 col-md-8 col-lg-8' : isGroup}">
                             <label class="small">Nome</label>
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>

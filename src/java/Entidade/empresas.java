@@ -43,6 +43,8 @@ public class empresas {
     //private int desk;
     //private int chamada;
     //private int coleta;
+    private String latitude;
+    private String longitude;
 
     /*public empresas(int idEmpresa, String empresa, String endereco, String telefone, String bairro, String cidade, String uf, String cep, String email, String cnpj, String fantasia, String complemento, String status, int chamada, int coleta, String login_ws_sigep, String senha_ws_sigep, String tipo_agencia) {
         this.idEmpresa = idEmpresa;
@@ -81,9 +83,29 @@ public class empresas {
         this.senha_ws_sigep = result.getString("senha_ws_sigep");
         this.tipo_agencia = result.getString("tipo_agencia");
         this.tipo_sistema = result.getString("tipo_sistema");
+        this.latitude = result.getString("latitude");
+        this.longitude = result.getString("longitude");
         this.tipoEscolhaColeta = result.getInt("tipoEscolhaColeta");
     }
 
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    
+    
     public String getTipo_sistema() {
         return tipo_sistema;
     }

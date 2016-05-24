@@ -7,18 +7,20 @@ app.factory('CentroCustoService', function($http, PromiseService) {
             estruturasLista.push({ 
                 idCentroCusto: estrutura.idCentroCusto,
                 nivel: estrutura.nivel, 
-                ehGrupo: (estrutura.contas ? true : false),
+                ehGrupo: (estrutura.centros ? true : false),
                 idGrupo: (estrutura.grupo ? estrutura.grupo.idCentroCusto : null),
                 descricao: estrutura.descricao 
             });
-            if(estrutura.contas) { flatten(estrutura.contas, estruturasLista); }
+            if(estrutura.centros) { flatten(estrutura.centros, estruturasLista); }
         });
     };
     
     var getEstrutura = function(estruturas) {
         angular.forEach(estruturas, function(estrutura) {     
             estrutura.descricao = getCode(estrutura.estrutura) + ' - ' + estrutura.nome; 
-            if(estrutura.contas) { getEstrutura(estrutura.contas); }
+            estrutura.id = estrutura.idCentroCusto; 
+            estrutura.grupos = estrutura.centros; 
+            if(estrutura.centros) { getEstrutura(estrutura.centros); }
         });
     }
             

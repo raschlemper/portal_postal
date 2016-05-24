@@ -8,7 +8,6 @@ public class CentroCustoValidation extends Validation<CentroCusto>{
     public boolean validar(CentroCusto centroCusto) {
         validarCodigo(centroCusto);
         validarNome(centroCusto);
-        validarGrupo(centroCusto);
         return true;
     } 
 
@@ -22,12 +21,6 @@ public class CentroCustoValidation extends Validation<CentroCusto>{
         if(campoNotNull(centroCusto.getNome())) return true; 
         setMsg("Preencha o nome do centro de custo!");
         return false;        
-    }  
-
-    public boolean validarGrupo(CentroCusto centroCusto) {          
-        if(campoNotNull(centroCusto.getGrupo())) return true; 
-        setMsg("Preencha o grupo do centro de custo!");
-        return false;        
-    }  
+    } 
     
 }

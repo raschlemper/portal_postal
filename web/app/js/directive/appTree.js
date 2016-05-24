@@ -1,4 +1,4 @@
-app.directive('appTree', function($compile, PlanoContaService) {
+app.directive('appTree', function($compile) {
     
     return {
         restrict: 'E',
@@ -12,8 +12,14 @@ app.directive('appTree', function($compile, PlanoContaService) {
             var tree;
             
             var init = function () {
-                tree = element.find('.tree');
+                scope.editGrupo = false;  
                 scope.open = [];
+                tree = element.find('.tree');
+                setEditGrupo();
+            };
+                        
+            var setEditGrupo = function() {
+                if(attr.editGrupo) { scope.editGrupo = (attr.editGrupo === "true"); }
             };
 
             scope.openFolder = function(predicate) {
@@ -29,25 +35,25 @@ app.directive('appTree', function($compile, PlanoContaService) {
                 if(!items || !items.length) return;
                 var html = '<ul>';
                 angular.forEach(items, function(item) {                     
-                    if(item.contas) { 
-                        scope.open['group_' + item.idPlanoConta] = true;
-                        html += '<li class="group_' + item.idPlanoConta + '">';
-                        html += '<i class="fa" ng-click="openFolder(' + item.idPlanoConta + ')" ' +
-                                   'ng-class="{\'fa-folder-open\': open.group_' + item.idPlanoConta + ',' + 
-                                              '\'fa-folder\': !open.group_' + item.idPlanoConta + '}"></i>';
+                    if(item.grupos) { 
+                        scope.open['group_' + item.id] = true;
+                        html += '<li class="group_' + item.id + '">';
+                        html += '<i class="fa" ng-click="openFolder(' + item.id + ')" ' +
+                                   'ng-class="{\'fa-folder-open\': open.group_' + item.id + ',' + 
+                                              '\'fa-folder\': !open.group_' + item.id + '}"></i>';
                         if(item.grupo) { 
                             html += '<div class="name">' + item.descricao;
                         } else {
                             html += '<div class="name text-uppercase" style="font-size: 13pt;"><strong>' + item.descricao + '</strong>';
                         }          
                         html += '<span class="pull-right action">';
-                        if(item.grupo) {   
-                            html += '<i class="fa fa-lg fa-pencil-square" ng-click="events.edit(' + item.idPlanoConta + ')"></i>';                                  
+                        if(item.grupo || scope.editGrupo) {   
+                            html += '<i class="fa fa-lg fa-pencil-square" ng-click="events.edit(' + item.id + ')"></i>';                                  
                         }
-                        html += '<i class="fa fa-lg fa-plus-square" ng-click="events.add(' + item.idPlanoConta + ')"></i>';
+                        html += '<i class="fa fa-lg fa-plus-square" ng-click="events.add(' + item.id + ')"></i>';
                         html += '</span>';
                         html += '</div>';
-                        html += createStructure(item.contas); 
+                        html += createStructure(item.grupos); 
                         html += '</li>';
                     } else {          
                         html += '<li>';              
@@ -58,11 +64,11 @@ app.directive('appTree', function($compile, PlanoContaService) {
                             html += '<div class="name text-uppercase" style="font-size: 13pt;"><strong>' + item.descricao + '</strong>';
                         }        
                         html += '<span class="pull-right action">';
-                        if(item.grupo) {   
-                            html += '<i class="fa fa-lg fa-trash" ng-click="events.remove(' + item.idPlanoConta + ')"></i>';
-                            html += '<i class="fa fa-lg fa-pencil-square" ng-click="events.edit(' + item.idPlanoConta + ')"></i>';                                  
+                        if(item.grupo || scope.editGrupo) {   
+                            html += '<i class="fa fa-lg fa-trash" ng-click="events.remove(' + item.id + ')"></i>';
+                            html += '<i class="fa fa-lg fa-pencil-square" ng-click="events.edit(' + item.id + ')"></i>';                                  
                         }
-                        html += '<i class="fa fa-lg fa-plus-square" ng-click="events.add(' + item.idPlanoConta + ')"></i>';
+                        html += '<i class="fa fa-lg fa-plus-square" ng-click="events.add(' + item.id + ')"></i>';
                         html += '</span>';
                         html += '</div>';
                         html += '</li>';

@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService', 'LancamentoProgramadoService', 'LancamentoTransferenciaService', 'LancamentoConciliadoService', 'ContaService', 'PlanoContaService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $filter, LancamentoService, LancamentoProgramadoService, LancamentoTransferenciaService, LancamentoConciliadoService, ContaService, PlanoContaService, ModalService, DatePickerService, ListaService, LISTAS) {
+app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService', 'LancamentoProgramadoService', 'LancamentoTransferenciaService', 'LancamentoConciliadoService', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
+    function ($scope, $filter, LancamentoService, LancamentoProgramadoService, LancamentoTransferenciaService, LancamentoConciliadoService, ContaService, PlanoContaService, CentroCustoService, ModalService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {
             $scope.lancamentos = [];
@@ -114,6 +114,19 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                     $scope.planoContas = data;
                     PlanoContaService.estrutura($scope.planoContas);
                     $scope.planoContas = PlanoContaService.flatten($scope.planoContas);                 
+                    centroCustos();
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+        
+        var centroCustos = function() {
+            CentroCustoService.getStructure()
+                .then(function (data) {
+                    $scope.centroCustos = data;
+                    PlanoContaService.estrutura($scope.centroCustos);
+                    $scope.centroCustos = CentroCustoService.flatten($scope.centroCustos);                 
                     todos($scope.conta);
                 })
                 .catch(function (e) {
@@ -145,6 +158,13 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                     lancamento.planoConta = planoConta.descricao;                    
                 } else {
                     lancamento.planoConta = null;
+                }
+                
+                if(lancamento.centroCusto && lancamento.centroCusto.idCentroCusto) { 
+                    var centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, lancamento.centroCusto.idCentroCusto); 
+                    lancamento.centroCusto = centroCusto.descricao;                    
+                } else {
+                    lancamento.centroCusto = null;
                 }
                 
                 if(lancamento.modelo.id === $scope.modelos[1].id) { 
@@ -323,6 +343,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         var ajustarDados = function(data) {                 
             data.conta = { idConta: data.conta.idConta };       
             data.planoConta = { idPlanoConta: data.planoConta.idPlanoConta }; 
+            data.centroCusto = { idCentroCusto: data.centroCusto.idCentroCusto }; 
             if(data.lancamentoProgramado) {
                 data.lancamentoProgramado = { idLancamentoProgramado: data.lancamentoProgramado.idLancamentoProgramado }; 
             }
@@ -344,8 +365,8 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             var modelo = $scope.modelos[1];
             var lancamentoTransferencia = { 
                 idLancamentoTransferencia: null,
-                lancamentoOrigem: getLancamento(data.contaOrigem, null, $scope.tipos[1], modelo, data),
-                lancamentoDestino: getLancamento(data.contaDestino, null, $scope.tipos[0], modelo, data),
+                lancamentoOrigem: getLancamento(data.contaOrigem, null, null, $scope.tipos[1], modelo, data),
+                lancamentoDestino: getLancamento(data.contaDestino, null, null,  $scope.tipos[0], modelo, data),
                 numero: data.numero,
                 dataCompetencia: data.dataCompetencia,
                 dataEmissao: data.dataEmissao || moment(),
@@ -360,7 +381,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         var ajustarDadosConciliado = function(data) {                 
             var lancamentoConciliado = { 
                 idLancamentoConciliado: null,
-                lancamento: getLancamento(data.conta, data.planoConta, data.tipo, $scope.modelos[5], data),          
+                lancamento: getLancamento(data.conta, data.planoConta, null, data.tipo, $scope.modelos[5], data),          
                 conta: { idConta: data.conta.idConta },  
                 planoConta: { idPlanoConta: data.planoConta.idPlanoConta },
                 tipo: data.tipo.id,
@@ -373,11 +394,12 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             return lancamentoConciliado;
         }
         
-        var getLancamento = function(conta, planoConta, tipo, modelo, data) {
+        var getLancamento = function(conta, planoConta, centroCusto, tipo, modelo, data) {
             var lancamento = {
                 idLancamento: null,
                 conta: null,
                 planoConta: null,
+                centroCusto: null,
                 tipo: null,
                 favorecido: null,
                 numero: data.numero,
@@ -399,6 +421,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             }
             if(conta) { lancamento.conta = { idConta: conta.idConta }; }
             if(planoConta) { lancamento.planoConta = { idPlanoConta: planoConta.idPlanoConta }; }
+            if(centroCusto) { lancamento.centroCusto = { idCentroCusto: centroCusto.idCentroCusto }; }
             if(tipo) { lancamento.tipo = tipo.id; }
             lancamento.situacao = lancamento.situacao.id;
             return lancamento;

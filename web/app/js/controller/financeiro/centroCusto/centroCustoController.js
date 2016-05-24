@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('CentroCustoController', ['$scope', '$q', 'CentroCustoService', 'ModalService', 'LISTAS',
-    function ($scope, $q, CentroCustoService, ModalService, LISTAS) {
+app.controller('CentroCustoController', ['$scope', '$q', 'CentroCustoService', 'ModalService',
+    function ($scope, $q, CentroCustoService, ModalService) {
 
         var init = function () {
             $scope.centroCustos = [];
@@ -31,6 +31,22 @@ app.controller('CentroCustoController', ['$scope', '$q', 'CentroCustoService', '
                     modalMessage(e);
                 });
         };
+        
+        $scope.grupo = function() {
+            modalSalvar(null, 'grupo')
+            .then(function(result) {  
+                if(!result) return;
+                result = ajustarDados(result, result.grupo);
+                CentroCustoService.save(result)
+                .then(function(data) {  
+                    modalMessage("Centro de Custo " + data.nome +  " Inserido com sucesso!");
+                    todos();
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+            });
+        }
 
         $scope.salvar = function(idCentroCusto) {            
             $q.all([CentroCustoService.getLancamento(idCentroCusto),
@@ -48,8 +64,9 @@ app.controller('CentroCustoController', ['$scope', '$q', 'CentroCustoService', '
             CentroCustoService.get(idCentroCusto)
                 .then(function(centroCusto) {                  
                     modalSalvar(centroCusto, 'save')
-                    .then(function(result) {                                     
-                        CentroCustoService.getByGrupoCodigo(centroCusto.grupo.idCentroCusto, result.codigo)
+                    .then(function(result) {     
+                        var grupo = centroCusto.grupo || result.grupo;
+                        CentroCustoService.getByGrupoCodigo(grupo.idCentroCusto, result.codigo)
                         .then(function(data) {
                             if(data) { modalMessage("Este Centro de Custo já existe!"); } 
                             else { return result; }
@@ -76,29 +93,38 @@ app.controller('CentroCustoController', ['$scope', '$q', 'CentroCustoService', '
             CentroCustoService.get(idCentroCusto)
                 .then(function(centroCusto) {
                      modalSalvar(centroCusto, 'edit')
-                     .then(function(result) {                                   
-                        CentroCustoService.getByGrupoCodigo(result.grupo.idCentroCusto, result.codigo)
-                        .then(function(data) {
-                            if(data && data.idCentroCusto != result.idCentroCusto) { modalMessage("Este Centro de Custo já existe!"); } 
-                            else { return result; }
-                        }).then(function(result) {    
-                            if(!result) return;
-                            result = ajustarDados(result, result.grupo);
-                            CentroCustoService.update(idCentroCusto, result)
-                            .then(function (data) {  
-                                modalMessage("Centro de Custo " + data.nome + " Alterado com sucesso!");
-                                todos();
-                            })
-                            .catch(function(e) {
-                                modalMessage(e);
+                     .then(function(result) {                    
+                        var grupo = result.grupo || centroCusto.grupo;      
+                        if(grupo) {
+                            CentroCustoService.getByGrupoCodigo(grupo.idCentroCusto, result.codigo)
+                            .then(function(data) {
+                                if(data && data.idCentroCusto != result.idCentroCusto) { modalMessage("Este Centro de Custo já existe!"); } 
+                                else { return result; }
+                            }).then(function(result) {    
+                                update(idCentroCusto, result);
                             });
-                        });
+                        } else {
+                            update(idCentroCusto, result);
+                        }
                     });
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });           
         };
+        
+        var update = function(idCentroCusto, result) {
+            if(!result) return;
+            result = ajustarDados(result, result.grupo);
+            CentroCustoService.update(idCentroCusto, result)
+            .then(function (data) {  
+                modalMessage("Centro de Custo " + data.nome + " Alterado com sucesso!");
+                todos();
+            })
+            .catch(function(e) {
+                modalMessage(e);
+            });
+        }
 
         $scope.excluir = function(idCentroCusto) {
             $q.all([CentroCustoService.getLancamento(idCentroCusto),
@@ -127,8 +153,11 @@ app.controller('CentroCustoController', ['$scope', '$q', 'CentroCustoService', '
         
         var ajustarDados = function(data, grupo) { 
             delete data.contas;
-            data.grupo = {
-                idCentroCusto: grupo.idCentroCusto
+            data.grupo = null;
+            if(grupo) {
+                data.grupo = {
+                    idCentroCusto: grupo.idCentroCusto
+                }
             }
             return data;
         }

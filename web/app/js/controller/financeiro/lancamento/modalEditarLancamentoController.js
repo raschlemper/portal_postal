@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', 'conta', 'lancamento', 'ContaService', 'PlanoContaService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, conta, lancamento, ContaService, PlanoContaService, ModalService, DatePickerService, ListaService, LISTAS) {
+app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', 'conta', 'lancamento', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
+    function ($scope, $modalInstance, conta, lancamento, ContaService, PlanoContaService, CentroCustoService, ModalService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
@@ -40,6 +40,7 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
         
         $scope.changeTipo = function(tipo) {
             planoContas(tipo);
+            centroCustos();
         };
         
         var planoContas = function(tipo) {
@@ -60,9 +61,33 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
                 });
         };
         
+        var centroCustos = function() {
+            CentroCustoService.getStructure()
+                .then(function (data) {
+                    $scope.centroCustos = data;
+                    CentroCustoService.estrutura($scope.centroCustos);
+                    $scope.centroCustos = CentroCustoService.flatten($scope.centroCustos);
+                    $scope.centroCustos = criarCentroCustosLista($scope.centroCustos);
+                    if($scope.lancamento.centroCusto) {
+                        $scope.lancamento.centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, $scope.lancamento.centroCusto.idCentroCusto) || $scope.centroCustos[0];
+                    } else {
+                         $scope.lancamento.centroCusto = null; //$scope.centroCustos[0];
+                    }
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+        
         var criarPlanoContasLista = function(data) {
             return _.filter(data, function(planoConta) { 
                 return !planoConta.ehGrupo;
+            });            
+        }
+        
+        var criarCentroCustosLista = function(data) {
+            return _.filter(data, function(centroCusto) { 
+                return !centroCusto.ehGrupo;
             });            
         }
         

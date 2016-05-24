@@ -87,7 +87,7 @@
             </ul>
         </li>
         <%}%>
-         
+        
         <li>
             <a href="#">
                 <span class="fa-stack fa-lg pull-left"><i class="fa fa-car fa-stack-1x "></i></span> Veículos <span style="margin: 5px 20px 0 0;" class="fa-stack fa-fw pull-right"><i id="arrow" class="fa fa-chevron-down fa-stack-1x "></i></span>
@@ -126,7 +126,7 @@
                     </ul>
                 </li>
             </ul>
-        </li>
+        </li> 
         <li>
             <a class="danger" href="${pageContext.request.contextPath}/ServLogout"><span class="fa-stack fa-lg pull-left"><i class="fa fa-power-off fa-stack-1x "></i></span> Sair</a>
         </li>

@@ -127,11 +127,12 @@ public class CentroCustoService {
     
     private void validation(CentroCusto centroCusto) throws Exception {  
         if(existeCentroCusto(centroCusto)) {
-            throw new Exception("Este Banco já foi cadastrado!");
+            throw new Exception("Este centro de custo já foi cadastrado!");
         } 
     }  
     
     private boolean existeCentroCusto(CentroCusto centroCusto) throws Exception {
+        if(centroCusto.getGrupo() == null) return false;
         CentroCusto centroCustoExist = centroCustoDAO.findByGrupoCodigo(
                 centroCusto.getGrupo().getIdCentroCusto(), centroCusto.getCodigo());
         if(centroCustoExist == null) return false;

@@ -7,6 +7,7 @@ import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.model.PlanoConta;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -127,7 +128,7 @@ public class PlanoContaService {
     
     private void validation(PlanoConta planoConta) throws Exception {  
         if(existePlanoConta(planoConta)) {
-            throw new Exception("Este Banco já foi cadastrado!");
+            throw new Exception("Este plano de conta já foi cadastrado!");
         } 
     }  
     

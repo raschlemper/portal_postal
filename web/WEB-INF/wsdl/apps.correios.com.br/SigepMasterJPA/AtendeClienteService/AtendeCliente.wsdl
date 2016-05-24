@@ -9,8 +9,12 @@
   <xs:element name="buscaClienteResponse" type="tns:buscaClienteResponse"/>
   <xs:element name="buscaContrato" type="tns:buscaContrato"/>
   <xs:element name="buscaContratoResponse" type="tns:buscaContratoResponse"/>
+  <xs:element name="buscaPagamentoEntrega" type="tns:buscaPagamentoEntrega"/>
+  <xs:element name="buscaPagamentoEntregaResponse" type="tns:buscaPagamentoEntregaResponse"/>
   <xs:element name="buscaServicos" type="tns:buscaServicos"/>
   <xs:element name="buscaServicosResponse" type="tns:buscaServicosResponse"/>
+  <xs:element name="cancelarObjeto" type="tns:cancelarObjeto"/>
+  <xs:element name="cancelarObjetoResponse" type="tns:cancelarObjetoResponse"/>
   <xs:element name="cancelarPedidoScol" type="tns:cancelarPedidoScol"/>
   <xs:element name="cancelarPedidoScolResponse" type="tns:cancelarPedidoScolResponse"/>
   <xs:element name="consultaCEP" type="tns:consultaCEP"/>
@@ -27,6 +31,8 @@
   <xs:element name="geraDigitoVerificadorEtiquetasResponse" type="tns:geraDigitoVerificadorEtiquetasResponse"/>
   <xs:element name="getStatusCartaoPostagem" type="tns:getStatusCartaoPostagem"/>
   <xs:element name="getStatusCartaoPostagemResponse" type="tns:getStatusCartaoPostagemResponse"/>
+  <xs:element name="getStatusPLP" type="tns:getStatusPLP"/>
+  <xs:element name="getStatusPLPResponse" type="tns:getStatusPLPResponse"/>
   <xs:element name="integrarUsuarioScol" type="tns:integrarUsuarioScol"/>
   <xs:element name="integrarUsuarioScolResponse" type="tns:integrarUsuarioScolResponse"/>
   <xs:element name="obterAssuntosPI" type="tns:obterAssuntosPI"/>
@@ -408,6 +414,51 @@
       <xs:element name="return" type="xs:boolean"/>
     </xs:sequence>
   </xs:complexType>
+  <xs:complexType name="getStatusPLP">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="arg0" type="tns:objetoPostal"/>
+      <xs:element minOccurs="0" name="arg1" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="objetoPostal">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoEtiqueta" type="xs:string"/>
+      <xs:element minOccurs="0" name="dataAtualizacaoCliente" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="dataCancelamentoEtiqueta" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="dataInclusao" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="objetoPostalPK" type="tns:objetoPostalPK"/>
+      <xs:element minOccurs="0" name="plpNu" type="xs:long"/>
+      <xs:element minOccurs="0" name="preListaPostagem" type="tns:preListaPostagem"/>
+      <xs:element minOccurs="0" name="statusEtiqueta" type="tns:statusObjetoPostal"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="objetoPostalPK">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoEtiqueta" type="xs:string"/>
+      <xs:element name="plpNu" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="preListaPostagem">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="cartaoPostagem" type="tns:cartaoPostagemERP"/>
+      <xs:element minOccurs="0" name="dataAtualizacaoCliente" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="dataAtualizacaoSara" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="dataFechamento" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="dataPostagem" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="dataPostagemSara" type="xs:dateTime"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="objetosPostais" nillable="true" type="tns:objetoPostal"/>
+      <xs:element name="plpCliente" type="xs:long"/>
+      <xs:element name="plpNu" type="xs:long"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="plpXml" nillable="true" type="xs:unsignedShort"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="plpXmlRetorno" nillable="true" type="xs:unsignedShort"/>
+      <xs:element minOccurs="0" name="status" type="tns:statusPlp"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getStatusPLPResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:statusPlp"/>
+    </xs:sequence>
+  </xs:complexType>
   <xs:complexType name="bloquearObjeto">
     <xs:sequence>
       <xs:element minOccurs="0" name="numeroEtiqueta" type="xs:string"/>
@@ -471,6 +522,17 @@
   <xs:complexType name="consultarPedidosInformacaoResponse">
     <xs:sequence>
       <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:retorno"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="buscaPagamentoEntrega">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="usuario" type="xs:string"/>
+      <xs:element minOccurs="0" name="senha" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="buscaPagamentoEntregaResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="geraDigitoVerificadorEtiquetas">
@@ -579,6 +641,19 @@
   <xs:complexType name="fechaPlpVariosServicosResponse">
     <xs:sequence>
       <xs:element minOccurs="0" name="return" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cancelarObjeto">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="idPlp" type="xs:long"/>
+      <xs:element minOccurs="0" name="numeroEtiqueta" type="xs:string"/>
+      <xs:element minOccurs="0" name="usuario" type="xs:string"/>
+      <xs:element minOccurs="0" name="senha" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cancelarObjetoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:boolean"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="validaPlp">
@@ -865,6 +940,21 @@
       <xs:enumeration value="Inativo"/>
     </xs:restriction>
   </xs:simpleType>
+  <xs:simpleType name="statusPlp">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Aberta"/>
+      <xs:enumeration value="Fechada"/>
+      <xs:enumeration value="Postada"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="statusObjetoPostal">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="EmBranco"/>
+      <xs:enumeration value="Postado"/>
+      <xs:enumeration value="Cancelado"/>
+      <xs:enumeration value="Estorno"/>
+    </xs:restriction>
+  </xs:simpleType>
   <xs:simpleType name="tipoBloqueio">
     <xs:restriction base="xs:string">
       <xs:enumeration value="FRAUDE_BLOQUEIO"/>
@@ -893,6 +983,12 @@
   </xs:simpleType>
   <xs:element name="AutenticacaoException" nillable="true" type="xs:string"/>
   <xs:element name="SigepClienteException" nillable="true" type="xs:string"/>
+  <xs:element name="Exception" type="tns:Exception"/>
+  <xs:complexType name="Exception">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
   <xs:element name="SQLException" type="tns:SQLException"/>
   <xs:complexType name="SQLException">
     <xs:sequence>
@@ -915,6 +1011,10 @@
     <wsdl:part element="tns:solicitaPLP" name="parameters">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="buscaPagamentoEntregaResponse">
+    <wsdl:part element="tns:buscaPagamentoEntregaResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="atualizaPLP">
     <wsdl:part element="tns:atualizaPLP" name="parameters">
     </wsdl:part>
@@ -927,6 +1027,10 @@
     <wsdl:part element="tns:fechaPlpResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="cancelarObjeto">
+    <wsdl:part element="tns:cancelarObjeto" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="cancelarPedidoScolResponse">
     <wsdl:part element="tns:cancelarPedidoScolResponse" name="parameters">
     </wsdl:part>
@@ -937,6 +1041,10 @@
   </wsdl:message>
   <wsdl:message name="obterAssuntosPIResponse">
     <wsdl:part element="tns:obterAssuntosPIResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cancelarObjetoResponse">
+    <wsdl:part element="tns:cancelarObjetoResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="SigepClienteException">
@@ -959,12 +1067,20 @@
     <wsdl:part element="tns:obterClienteAtualizacao" name="parameters">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="Exception">
+    <wsdl:part element="tns:Exception" name="Exception">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="atualizaPLPResponse">
     <wsdl:part element="tns:atualizaPLPResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obterClienteAtualizacaoResponse">
     <wsdl:part element="tns:obterClienteAtualizacaoResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getStatusPLPResponse">
+    <wsdl:part element="tns:getStatusPLPResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="bloquearObjeto">
@@ -985,6 +1101,14 @@
   </wsdl:message>
   <wsdl:message name="buscaContratoResponse">
     <wsdl:part element="tns:buscaContratoResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="buscaPagamentoEntrega">
+    <wsdl:part element="tns:buscaPagamentoEntrega" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getStatusPLP">
+    <wsdl:part element="tns:getStatusPLP" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="solicitarPostagemScol">
@@ -1027,20 +1151,20 @@
     <wsdl:part element="tns:validaPlpResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="validarPostagemReversa">
-    <wsdl:part element="tns:validarPostagemReversa" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="geraDigitoVerificadorEtiquetasResponse">
-    <wsdl:part element="tns:geraDigitoVerificadorEtiquetasResponse" name="parameters">
+  <wsdl:message name="solicitaXmlPlp">
+    <wsdl:part element="tns:solicitaXmlPlp" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="registrarPedidosInformacao">
     <wsdl:part element="tns:registrarPedidosInformacao" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="solicitaXmlPlp">
-    <wsdl:part element="tns:solicitaXmlPlp" name="parameters">
+  <wsdl:message name="geraDigitoVerificadorEtiquetasResponse">
+    <wsdl:part element="tns:geraDigitoVerificadorEtiquetasResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="validarPostagemReversa">
+    <wsdl:part element="tns:validarPostagemReversa" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obterAssuntosPI">
@@ -1091,12 +1215,12 @@
     <wsdl:part element="tns:buscaClienteResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="getStatusCartaoPostagem">
-    <wsdl:part element="tns:getStatusCartaoPostagem" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="getStatusCartaoPostagemResponse">
     <wsdl:part element="tns:getStatusCartaoPostagemResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getStatusCartaoPostagem">
+    <wsdl:part element="tns:getStatusCartaoPostagem" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obterEmbalagemLRSResponse">
@@ -1198,6 +1322,14 @@
       <wsdl:fault message="tns:SigepClienteException" name="SigepClienteException">
     </wsdl:fault>
     </wsdl:operation>
+    <wsdl:operation name="getStatusPLP">
+      <wsdl:input message="tns:getStatusPLP" name="getStatusPLP">
+    </wsdl:input>
+      <wsdl:output message="tns:getStatusPLPResponse" name="getStatusPLPResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:SigepClienteException" name="SigepClienteException">
+    </wsdl:fault>
+    </wsdl:operation>
     <wsdl:operation name="bloquearObjeto">
       <wsdl:input message="tns:bloquearObjeto" name="bloquearObjeto">
     </wsdl:input>
@@ -1236,6 +1368,16 @@
       <wsdl:fault message="tns:SigepClienteException" name="SigepClienteException">
     </wsdl:fault>
     </wsdl:operation>
+    <wsdl:operation name="buscaPagamentoEntrega">
+      <wsdl:input message="tns:buscaPagamentoEntrega" name="buscaPagamentoEntrega">
+    </wsdl:input>
+      <wsdl:output message="tns:buscaPagamentoEntregaResponse" name="buscaPagamentoEntregaResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:AutenticacaoException" name="AutenticacaoException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:SigepClienteException" name="SigepClienteException">
+    </wsdl:fault>
+    </wsdl:operation>
     <wsdl:operation name="geraDigitoVerificadorEtiquetas">
       <wsdl:input message="tns:geraDigitoVerificadorEtiquetas" name="geraDigitoVerificadorEtiquetas">
     </wsdl:input>
@@ -1261,6 +1403,18 @@
     </wsdl:input>
       <wsdl:output message="tns:fechaPlpVariosServicosResponse" name="fechaPlpVariosServicosResponse">
     </wsdl:output>
+      <wsdl:fault message="tns:AutenticacaoException" name="AutenticacaoException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:SigepClienteException" name="SigepClienteException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="cancelarObjeto">
+      <wsdl:input message="tns:cancelarObjeto" name="cancelarObjeto">
+    </wsdl:input>
+      <wsdl:output message="tns:cancelarObjetoResponse" name="cancelarObjetoResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:Exception" name="Exception">
+    </wsdl:fault>
       <wsdl:fault message="tns:AutenticacaoException" name="AutenticacaoException">
     </wsdl:fault>
       <wsdl:fault message="tns:SigepClienteException" name="SigepClienteException">
@@ -1506,6 +1660,18 @@
         <soap:fault name="SigepClienteException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
+    <wsdl:operation name="getStatusPLP">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getStatusPLP">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getStatusPLPResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SigepClienteException">
+        <soap:fault name="SigepClienteException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
     <wsdl:operation name="bloquearObjeto">
       <soap:operation soapAction="" style="document"/>
       <wsdl:input name="bloquearObjeto">
@@ -1563,6 +1729,21 @@
         <soap:fault name="SigepClienteException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
+    <wsdl:operation name="buscaPagamentoEntrega">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="buscaPagamentoEntrega">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="buscaPagamentoEntregaResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AutenticacaoException">
+        <soap:fault name="AutenticacaoException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="SigepClienteException">
+        <soap:fault name="SigepClienteException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
     <wsdl:operation name="geraDigitoVerificadorEtiquetas">
       <soap:operation soapAction="" style="document"/>
       <wsdl:input name="geraDigitoVerificadorEtiquetas">
@@ -1571,6 +1752,24 @@
       <wsdl:output name="geraDigitoVerificadorEtiquetasResponse">
         <soap:body use="literal"/>
       </wsdl:output>
+      <wsdl:fault name="AutenticacaoException">
+        <soap:fault name="AutenticacaoException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="SigepClienteException">
+        <soap:fault name="SigepClienteException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="cancelarObjeto">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="cancelarObjeto">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="cancelarObjetoResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Exception">
+        <soap:fault name="Exception" use="literal"/>
+      </wsdl:fault>
       <wsdl:fault name="AutenticacaoException">
         <soap:fault name="AutenticacaoException" use="literal"/>
       </wsdl:fault>

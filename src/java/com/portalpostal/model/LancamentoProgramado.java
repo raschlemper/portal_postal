@@ -11,6 +11,7 @@ public class LancamentoProgramado {
     private Integer idLancamentoProgramado;
     private Conta conta;
     private PlanoConta planoConta;
+    private CentroCusto centroCusto;
 //    private LancamentoParcelado lancamentoParcelado;
     private TipoLancamento tipo;
     private String favorecido;
@@ -50,6 +51,14 @@ public class LancamentoProgramado {
 
     public void setPlanoConta(PlanoConta planoConta) {
         this.planoConta = planoConta;
+    }
+
+    public CentroCusto getCentroCusto() {
+        return centroCusto;
+    }
+
+    public void setCentroCusto(CentroCusto centroCusto) {
+        this.centroCusto = centroCusto;
     }
 
 //    public LancamentoParcelado getLancamentoParcelado() {

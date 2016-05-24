@@ -99,4 +99,23 @@ public class contrEmpresa {
             Conexao.desconectar(con);
         }
     }
+    public static empresas consultaEmpresaCnpj(String cnpj) {
+        Connection con = Conexao.conectarGeral();
+        String sql = "SELECT * FROM empresas WHERE cnpj = ?";
+        try {
+            PreparedStatement valores = con.prepareStatement(sql);
+            valores.setString(1, cnpj);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            if (result.next()) {                
+                return new Entidade.empresas(result);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrEmpresa", "SQLException", sql, e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(con);
+        }
+    }
 }

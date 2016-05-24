@@ -53,71 +53,89 @@
                 <div class="container-fluid">
                     <div id="page-wrapper">
 
-                <div class="row">
-                    <div class="col-md-12">                       
-                        <h4 class="page-header"><b class="text-primary"><i class="fa fa-gears"></i> Cadastros</b> > <small>Horário Coleta</small></h4>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">    
-                        <form name="form1" action="../../ServHoraColeta" method="post">
-                            <div class="panel panel-default">   
-                                <div class="panel-heading">
-                                    <label>HORARIO DE INICIO E TÉRMINO DAS COLETAS EM SUA AGÊNCIA <small>(PARA SOLICITAÇÕE DE COLETA VIA WEB)</small>:</label>
-                                </div>
-                                <div class="panel-body panel-form form-horizontal">  
-                                    <div class="col-sm-4 col-md-2 col-lg-2">
-                                        <label class="control-label small" for="timefield2">Horário de Início:</label>
-                                        <div class="input-group">
-                                            <input class="form-control" placeholder="Horário de Início" name="timefield2" type="text" id="timefield2" size="8" maxlength="5" value="<%= horaIniColeta%>" onkeypress="mascara(this, maskHora)" onblur="return valida_hora(this);" />
-                                            <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4 col-md-2 col-lg-2">
-                                        <label class="control-label small" for="timefield3">Horário de Término:</label>
-                                        <div class="input-group">
-                                            <input class="form-control" placeholder="Horário de Término" name="timefield3" type="text" id="timefield3" size="8" maxlength="5" value="<%= horaFimColeta%>" onkeypress="mascara(this, maskHora)" onblur="return valida_hora(this);" />
-                                           <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="row">
+                            <div class="col-md-12">                       
+                                <h4 class="page-header"><b class="text-primary"><i class="fa fa-gears"></i> Cadastros</b> > <small>Horário Coleta</small></h4>
                             </div>
-                            <div class="panel panel-default">   
-                                <div class="panel-heading">
-                                    <label>HORÁRIO LIMITE QUE O CLIENTE PODE SOLICITAR COLETAS VIA WEB:</label>
-                                </div>
-                                <div class="panel-body panel-form form-horizontal">  
-                                    <div class="col-sm-4 col-md-2 col-lg-2">
-                                        <label class="control-label small" for="input_time">Horário Limite:</label>
-                                        <div class="input-group">
-                                            <input class="form-control" placeholder="Horário Limite" name="timefield1" type="text" id="timefield1" size="8" maxlength="5" value="<%= horaFimAcesso%>" onkeypress="mascara(this,maskHora)" onblur="return valida_hora(this);" />
-                                            <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">    
+                                <form name="form1" action="../../ServHoraColeta" method="post">
+                                    <div class="panel panel-default">   
+                                        <div class="panel-heading">
+                                            <label>HORARIO DE INICIO E TÉRMINO DAS COLETAS EM SUA AGÊNCIA <small>(PARA SOLICITAÇÕE DE COLETA VIA WEB)</small>:</label>
+                                        </div>
+                                        <div class="panel-body panel-form form-horizontal">  
+                                            <div class="col-sm-4 col-md-2 col-lg-2">
+                                                <label class="control-label small" for="timefield2">Horário de Início:</label>
+                                                <div class="input-group">
+                                                    <input class="form-control" placeholder="Horário de Início" name="timefield2" type="text" id="timefield2" size="8" maxlength="5" value="<%= horaIniColeta%>" onkeypress="mascara(this, maskHora)" onblur="return valida_hora(this);" />
+                                                    <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 col-md-2 col-lg-2">
+                                                <label class="control-label small" for="timefield3">Horário de Término:</label>
+                                                <div class="input-group">
+                                                    <input class="form-control" placeholder="Horário de Término" name="timefield3" type="text" id="timefield3" size="8" maxlength="5" value="<%= horaFimColeta%>" onkeypress="mascara(this, maskHora)" onblur="return valida_hora(this);" />
+                                                    <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>                                           
-                            <div class="panel panel-default">   
-                                <div class="panel-heading">
-                                    <label>ANTECEDÊNCIA MÍNIMA PARA O CLIENTE SOLICITAR A COLETA PELA WEB <small>(EM MINUTOS)</small>:</label>
-                                </div>
-                                <div class="panel-body panel-form form-horizontal">  
-                                    <div class="col-sm-4 col-md-2 col-lg-2">
-                                        <label class="control-label small" for="antecedencia">Antecedência:</label>
-                                        <div class="input-group">
-                                            <input class="form-control" placeholder="Min. de Antecedência" name="antecedencia" type="text" id="antecedencia" size="8" maxlength="3" value="<%= antecedencia%>" onkeypress="mascara(this, maskNumero)" />
-                                            <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
+                                    <div class="panel panel-default">   
+                                        <div class="panel-heading">
+                                            <label>HORÁRIO LIMITE QUE O CLIENTE PODE SOLICITAR COLETAS VIA WEB:</label>
+                                        </div>
+                                        <div class="panel-body panel-form form-horizontal">  
+                                            <div class="col-sm-4 col-md-2 col-lg-2">
+                                                <label class="control-label small" for="input_time">Horário Limite:</label>
+                                                <div class="input-group">
+                                                    <input class="form-control" placeholder="Horário Limite" name="timefield1" type="text" id="timefield1" size="8" maxlength="5" value="<%= horaFimAcesso%>" onkeypress="mascara(this, maskHora)" onblur="return valida_hora(this);" />
+                                                    <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>                                           
+                                    <div class="panel panel-default">   
+                                        <div class="panel-heading">
+                                            <label>ANTECEDÊNCIA MÍNIMA PARA O CLIENTE SOLICITAR A COLETA PELA WEB <small>(EM MINUTOS)</small>:</label>
+                                        </div>
+                                        <div class="panel-body panel-form form-horizontal">  
+                                            <div class="col-sm-4 col-md-2 col-lg-2">
+                                                <label class="control-label small" for="antecedencia">Antecedência:</label>
+                                                <div class="input-group">
+                                                    <input class="form-control" placeholder="Min. de Antecedência" name="antecedencia" type="text" id="antecedencia" size="8" maxlength="3" value="<%= antecedencia%>" onkeypress="mascara(this, maskNumero)" />
+                                                    <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                    <div class="panel panel-default">   
+                                        <div class="panel-heading">
+                                            <label>OPÇÕES DE ESCOLHA DE HORÁRIO DA COLETA <small>(CLIENTE)</small>:</label>
+                                        </div>
+                                        <div class="panel-body panel-form form-horizontal">  
+                                            <div class="col-sm-6">
+                                                <label class="control-label small" for="escolha">Opção do cliente:</label>
+                                               <div class="input-group">
+                                                    <select id="optHorario" class="form-control" name="tipoEscolhaCli" >
+                                                        <option value="1">ESCOLHE HORA DA COLETA</option>
+                                                        <option value="3">NÃO ESCOLHE HORA DA COLETA</option>
+                                                        <option value="2">MAIS CEDO x MAIS TARDE POSSIVEL</option>
+                                                        <option value="4">PERIODO DA MANHÃ x PERIODO DA TARDE</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="rota" value="0" />
+                                    <button type="button" class="btn btn-success" onclick="return preencherCampos();"><i class="fa fa-lg fa-spc fa-save"></i> SALVAR DADOS</button>
+                                </form>
                             </div>
-                            <input type="hidden" name="rota" value="0" />
-                            <button type="button" class="btn btn-success" onclick="return preencherCampos();"><i class="fa fa-lg fa-spc fa-save"></i> SALVAR DADOS</button>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        </div>
         </div>
         <!-- /#page-wrapper -->
 
@@ -128,7 +146,7 @@
                 $('#timefield2').timepicker({setDate: new Date()});
                 $('#timefield3').timepicker({setDate: new Date()});
             }
-            $(document).ready(function() {
+            $(document).ready(function () {
                 LoadTimePickerScript(TimePicker);
             });
 

@@ -6,13 +6,19 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" >
                             <div class="row">
-                                <div class="col-md-12">Lista com todos os Centros de Custos</div>
+                                <div class="col-md-8">Lista com todos os Centros de Custos</div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-sm btn-primary pull-right" ng-click="grupo()">
+                                        <i class="fa fa-lg fa-plus fa-spc"></i> GRUPO 
+                                    </button>
+                                </div>
+                            </div>                    
                             </div>                              
                         </div>
                         <div class="panel-body" style="padding: 10px;">
                             <div class="row">
-                                <div class="col-md-6" ng-repeat="tipo in tipos track by tipo.id">
-                                    <app-tree lista="centroCustosLista[tipo.id]" events="events"></app-tree>
+                                <div class="col-md-8">
+                                    <app-tree lista="centroCustosLista" events="events" edit-grupo="true"></app-tree>
                                 </div>
                             </div>                            
                         </div>

@@ -22,6 +22,12 @@ app.factory('ListaService', function() {
             return value;
         },
 
+        getCentroCustoValue: function(list, key) {
+            var value = _.find(list, function(item){ return item.idCentroCusto == key; });
+//            if(!value) { value = list[0]; }
+            return value;
+        },
+
         getContaCorrenteValue: function(list, key) {
             var value = _.find(list, function(item){ return item.idContaCorrente == key; });
 //            if(!value) { value = list[0]; }

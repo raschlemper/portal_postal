@@ -8,7 +8,6 @@
 <%@page import="Entidade.PreVenda"%>
 <%@page import="Entidade.ClienteLogEtiqueta"%>
 <%@ page import = "java.text.DateFormat,java.util.ArrayList,java.sql.Timestamp,java.util.Calendar, java.util.GregorianCalendar, java.util.Date, java.text.SimpleDateFormat"%>
-
 <%
     if (session.getAttribute("usuario") == null) {
         response.sendRedirect("../index.jsp?msgLog=3");
@@ -34,7 +33,6 @@
         <title>Portal Postal</title>
         <%@ include file="../includes/Css_js.jsp" %>
     </head>
-
     <body onload="fechaMsg();">   
         <script>
             waitMsg();
