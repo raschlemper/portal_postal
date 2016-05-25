@@ -1,8 +1,10 @@
 package com.portalpostal.service;
 
+import com.portalpostal.dao.LancamentoConciliadoDAO;
 import com.portalpostal.dao.LancamentoDAO;
 import com.portalpostal.dao.LancamentoProgramadoDAO;
 import com.portalpostal.model.Lancamento;
+import com.portalpostal.model.LancamentoConciliado;
 import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.model.Saldo;
 import java.util.Date;
@@ -12,10 +14,12 @@ public class LancamentoService {
     
     private final LancamentoDAO lancamentoDAO;
     private final LancamentoProgramadoDAO lancamentoProgramadoDAO;
+    private final LancamentoConciliadoDAO lancamentoConciliadoDAO;
 
     public LancamentoService(String nomeBD) {
         lancamentoDAO = new LancamentoDAO(nomeBD);
         lancamentoProgramadoDAO = new LancamentoProgramadoDAO(nomeBD);
+        lancamentoConciliadoDAO = new LancamentoConciliadoDAO(nomeBD);
     }
     
     public List<Lancamento> findAll() throws Exception {
@@ -67,10 +71,12 @@ public class LancamentoService {
     } 
     
     public Lancamento save(Lancamento lancamento) throws Exception {
+        removeLancamentoConciliado(lancamento);
         return lancamentoDAO.save(lancamento);
     } 
     
     public Lancamento update(Lancamento lancamento) throws Exception {
+        removeLancamentoConciliado(lancamento);
         return lancamentoDAO.update(lancamento);
     } 
     
@@ -82,7 +88,33 @@ public class LancamentoService {
             lancamentoProgamado.setNumeroParcela(numeroParcela);
             lancamentoProgramadoDAO.updateNumeroParcela(lancamentoProgamado);            
         }
+        removeLancamentoConciliado(lancamento);
         return lancamento;
     } 
+    
+    private void removeLancamentoConciliado(Lancamento lancamento) throws Exception {
+        if(lancamento.getNumeroLoteConciliado() != null) {
+            LancamentoConciliado lancamentoConciliado = lancamentoConciliadoDAO.findByLote(lancamento.getNumeroLoteConciliado());
+            removeLancamentoConciliadoByLote(lancamento.getNumeroLoteConciliado());
+            removeLancamentoConciliado(lancamentoConciliado.getIdLancamentoConciliado());
+        }
+        List<LancamentoConciliado> lancamentos = lancamentoConciliadoDAO.findByData(lancamento.getDataLancamento());
+        for (LancamentoConciliado lancamentoConciliado : lancamentos) {
+            removeLancamentoConciliadoByLote(lancamentoConciliado.getNumeroLote()); 
+            removeLancamentoConciliado(lancamentoConciliado.getIdLancamentoConciliado());           
+        }
+    }
+    
+    private void removeLancamentoConciliadoByLote(Integer numeroLoteConciliado) throws Exception {
+        if(numeroLoteConciliado != null) {
+            lancamentoDAO.removeNumeroLoteConciliado(numeroLoteConciliado);
+        }
+    }
+    
+    private void removeLancamentoConciliado(Integer idLancamentoConciliado) throws Exception {
+        if(idLancamentoConciliado != null) {
+            lancamentoConciliadoDAO.remove(idLancamentoConciliado);
+        }
+    }
     
 }

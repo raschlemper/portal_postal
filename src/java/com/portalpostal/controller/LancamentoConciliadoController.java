@@ -5,6 +5,8 @@ import com.portalpostal.validation.Validation;
 import com.portalpostal.model.LancamentoConciliado;
 import com.portalpostal.service.LancamentoConciliadoService;
 import com.portalpostal.validation.LancamentoConciliadoValidation;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -46,6 +48,20 @@ public class LancamentoConciliadoController {
         try {
             init();    
             return lancamentoConciliadoService.findAll();
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }  
+    
+    @GET
+    @Path("/data/{data}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<LancamentoConciliado> findByData(@PathParam("data") String data) {
+        try {
+            init();    
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date dataCorte = format.parse(data);
+            return lancamentoConciliadoService.findByData(dataCorte);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -95,8 +111,7 @@ public class LancamentoConciliadoController {
     @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public LancamentoConciliado create(LancamentoConciliado lancamentoConciliado, 
-            @QueryParam("dataInicio") String dataInicio, @QueryParam("dataFim") String dataFim) {
+    public LancamentoConciliado create(LancamentoConciliado lancamentoConciliado) {
         try {
             init();
             validation(lancamentoConciliado);

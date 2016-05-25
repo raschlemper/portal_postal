@@ -334,16 +334,16 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         
         var validaConciliado = function(idLancamento) {
             var lancamento = ListaService.getLancamentoValue($scope.lancamentos, idLancamento);
-            if(lancamento.numeroLoteConciliado) {
-                return true;
-            }
+            if(lancamento.numeroLoteConciliado) { return true; }
             return false
         }
         
         var ajustarDados = function(data) {                 
             data.conta = { idConta: data.conta.idConta };       
             data.planoConta = { idPlanoConta: data.planoConta.idPlanoConta }; 
-            data.centroCusto = { idCentroCusto: data.centroCusto.idCentroCusto }; 
+            if(data.centroCusto) {
+                data.centroCusto = { idCentroCusto: data.centroCusto.idCentroCusto };
+            }
             if(data.lancamentoProgramado) {
                 data.lancamentoProgramado = { idLancamentoProgramado: data.lancamentoProgramado.idLancamentoProgramado }; 
             }

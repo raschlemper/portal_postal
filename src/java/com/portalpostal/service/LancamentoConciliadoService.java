@@ -23,6 +23,10 @@ public class LancamentoConciliadoService {
         return lancamentoConciliadoDAO.findAll();
     }  
     
+    public List<LancamentoConciliado> findByData(Date data) throws Exception {
+        return lancamentoConciliadoDAO.findByData(data);
+    }  
+    
     public LancamentoConciliado find(Integer idLancamentoConciliado) throws Exception {
         return lancamentoConciliadoDAO.find(idLancamentoConciliado);
     } 

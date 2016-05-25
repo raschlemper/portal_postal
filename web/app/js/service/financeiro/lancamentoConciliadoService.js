@@ -9,6 +9,11 @@ app.factory('LancamentoConciliadoService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/lancamento/conciliado/"));
         },
 
+        getByData: function(data) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/lancamento/conciliado/data/" + data));
+        },
+
         get: function(idLancamentoConciliado) {
             return PromiseService.execute(
                     $http.get(_contextPath + "/api/financeiro/lancamento/conciliado/" + idLancamentoConciliado));

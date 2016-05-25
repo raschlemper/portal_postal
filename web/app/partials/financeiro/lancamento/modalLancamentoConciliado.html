@@ -11,7 +11,7 @@
                         <input type="hidden" name="idLancamentoConciliado" ng-model="lancamentoConciliado.idLancamentoConciliado"/>    
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 divider-vertical-right"> 
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
-                                <label class="small">Data</label>
+                                <label class="small">Reconciliar até a data</label>
                                 <div class="input-group">
                                     <input type="text" autocomplete="off" name="dataLancamento" class="form-control" ng-model="lancamentoConciliado.dataLancamento" 
                                            datepicker-popup="{{datepickerLancamento.format}}" is-open="datepickerLancamento.opened" ng-required="true"
@@ -65,7 +65,7 @@
                                 <strong>Saldo Diferença</strong><i class="pull-right">{{saldo.diferenca | currency : 'R$ '}}</i>
                             </div>
                             
-                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 spc-default-top" ng-show="saldo && saldo.diferenca">
+                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 divider-horizontal-top text-justify" ng-show="saldo && saldo.diferenca">
                                 <strong>Existe diferença entre os saldos lançados e o saldo informado para reconciliação. <br/>
                                         Clique em salvar para gerar o lançamento de reconciliação.</strong>
                             </div>

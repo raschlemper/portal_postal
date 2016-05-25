@@ -226,8 +226,10 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         var ajustarDados = function(data) {       
             delete data.gerarLancamento;
             data.conta = { idConta: data.conta.idConta };       
-            data.planoConta = { idPlanoConta: data.planoConta.idPlanoConta };     
-            data.centroCusto = { idCentroCusto: data.centroCusto.idCentroCusto };              
+            data.planoConta = { idPlanoConta: data.planoConta.idPlanoConta };    
+            if(data.centroCusto) {
+                data.centroCusto = { idCentroCusto: data.centroCusto.idCentroCusto }; 
+            }
 //            if(data.lancamentoParcelado) {
 //                data.lancamentoParcelado = { idLancamentoParcelado: data.lancamentoParcelado.idLancamentoParcelado }; 
 //            }

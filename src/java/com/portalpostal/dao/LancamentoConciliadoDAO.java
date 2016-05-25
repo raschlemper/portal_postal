@@ -2,6 +2,7 @@ package com.portalpostal.dao;
 
 import com.portalpostal.dao.handler.LancamentoConciliadoHandler;
 import com.portalpostal.model.LancamentoConciliado;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,15 @@ public class LancamentoConciliadoDAO extends GenericDAO {
         return findAll(sql, null, lancamentoConciliadoHandler);
     }
 
+    public List<LancamentoConciliado> findByData(Date data) throws Exception {
+        String sql = "SELECT * FROM lancamento_conciliado "
+                   + "WHERE lancamento_conciliado.dataLancamento >= :data "
+                   + "ORDER BY lancamento_conciliado.dataLancamento";  
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("data", data);      
+        return findAll(sql, params, lancamentoConciliadoHandler);
+    }
+
     public LancamentoConciliado find(Integer idLancamentoConciliado) throws Exception {
         String sql = "SELECT * FROM conta, plano_conta, lancamento, lancamento_conciliado "
                    + "WHERE lancamento_conciliado.idConta = conta.idConta "
@@ -38,6 +48,13 @@ public class LancamentoConciliadoDAO extends GenericDAO {
     public Integer findLastLote() throws Exception {
         String sql = "SELECT max(numeroLote) FROM lancamento_conciliado ";
         return (Integer) find(sql, null, Integer.class);
+    }
+
+    public LancamentoConciliado findByLote(Integer numeroLote) throws Exception {
+        String sql = "SELECT * FROM lancamento_conciliado WHERE numeroLote = :numeroLote";
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("numeroLote", numeroLote);
+        return (LancamentoConciliado) find(sql, params, lancamentoConciliadoHandler);
     }
 
     public LancamentoConciliado save(LancamentoConciliado lancamentoConciliado) throws Exception {  

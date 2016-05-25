@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', 'conta', 'lancamento', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, conta, lancamento, ContaService, PlanoContaService, CentroCustoService, ModalService, DatePickerService, ListaService, LISTAS) {
+app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', 'conta', 'lancamento', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
+    function ($scope, $modalInstance, conta, lancamento, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, ModalService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
@@ -100,7 +100,18 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
             var lancamento = setData($scope.lancamento, $scope.data);
-            $modalInstance.close(lancamento);            
+            var data = moment($scope.lancamento.dataLancamento).format('YYYY-MM-DD HH:mm:ss');
+            LancamentoConciliadoService.getByData(data)
+                .then(function(data) {  
+                    if(data.length) {
+                        modalConfirmarConciliado().then(function() {
+                            $modalInstance.close(lancamento);
+                        });
+                    } else { $modalInstance.close(lancamento); }
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });             
         };
         
         $scope.cancel = function () {
@@ -125,6 +136,15 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
                     }
                 });
             return modalInstance.result;
+        };
+        
+        var modalConfirmarConciliado = function() {
+            var modalInstance = ModalService.modalConfirmar('Alerta Lançamento', 'Você está inserindo um lançamento em um período reconciliado. <br/> Está inclusão irá impactar no lançamento de conciliação! <br/> Deseja continuar?');
+            return modalInstance.result;
+        };
+        
+        var modalMessage = function(message) {
+            ModalService.modalMessage(message);
         };
 
         var validarForm = function (form) {

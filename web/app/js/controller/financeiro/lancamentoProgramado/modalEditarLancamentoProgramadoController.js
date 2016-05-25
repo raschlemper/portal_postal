@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalInstance', 'conta', 'lancamentoProgramado', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'FrequenciaLancamentoService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, conta, lancamentoProgramado, ContaService, PlanoContaService, CentroCustoService, TipoDocumentoService, TipoFormaPagamentoService, FrequenciaLancamentoService, DatePickerService, ListaService, LISTAS) {
+app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalInstance', 'conta', 'lancamentoProgramado', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'FrequenciaLancamentoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
+    function ($scope, $modalInstance, conta, lancamentoProgramado, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, TipoDocumentoService, TipoFormaPagamentoService, FrequenciaLancamentoService, ModalService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
@@ -196,15 +196,30 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         };
         
         $scope.lancar = function(form, lancamentoProgramado, lancamento) {
-            if (!validarForm(form)) return;
+            if (!validarForm(form)) return;          
+            var data = moment(lancamentoProgramado.dataLancamento).format('YYYY-MM-DD HH:mm:ss');  
+            LancamentoConciliadoService.getByData(data)
+                .then(function(data) {  
+                    if(data.length) {
+                        modalConfirmarConciliado().then(function() {
+                            lancar(lancamentoProgramado, lancamento);
+                        });
+                    } else { lancar(lancamentoProgramado, lancamento); }
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });    
+        };
+        
+        var lancar = function(lancamentoProgramado, lancamento) {         
             delete $scope.lancamentoProgramado.parcelas;
             lancamentoProgramado.gerarLancamento = true;
             lancamento = ajusteLancamento(lancamento);
             lancamentoProgramado.lancamentos = [];
             lancamentoProgramado.lancamentos.push(lancamento);
             encerrarLancamentoProgramado(lancamentoProgramado, lancamento);
-            $modalInstance.close(lancamentoProgramado); 
-        };
+            $modalInstance.close(lancamentoProgramado);             
+        }
                 
         $scope.parcelar = function(form, lancamentoProgramado) {
             if (!validarForm(form)) return;
@@ -246,7 +261,9 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         var ajusteLancamento = function(lancamento) {
             lancamento.conta = { idConta: lancamento.conta.idConta };
             lancamento.planoConta = { idPlanoConta: lancamento.planoConta.idPlanoConta };
-            lancamento.centroCusto = { idCentroCusto: lancamento.centroCusto.idCentroCusto };
+            if(lancamento.centroCusto) {
+                lancamento.centroCusto = { idCentroCusto: lancamento.centroCusto.idCentroCusto };
+            }
             lancamento.tipo = lancamento.tipo.id;
             lancamento.dataCompetencia = lancamento.dataCompetencia || moment();
             lancamento.dataEmissao = lancamento.dataEmissao || moment();
@@ -283,7 +300,16 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
-
+        
+        var modalConfirmarConciliado = function() {
+            var modalInstance = ModalService.modalConfirmar('Alerta Lançamento', 'Você está inserindo um lançamento em um período reconciliado. <br/> Está inclusão irá impactar no lançamento de conciliação! <br/> Deseja continuar?');
+            return modalInstance.result;
+        };
+                
+        var modalMessage = function(message) {
+            ModalService.modalMessage(message);
+        };
+        
         var validarForm = function (form) {
             if (form.dataCompetencia.$error.required) {
                 alert('Preencha a competência do lançamento programado!');

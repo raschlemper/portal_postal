@@ -97,7 +97,7 @@ public class LancamentoProgramadoDAO extends GenericDAO {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idConta", lancamentoProgramado.getConta().getIdConta());
         params.put("idPlanoConta", lancamentoProgramado.getPlanoConta().getIdPlanoConta());
-        params.put("idCentroCusto", lancamentoProgramado.getCentroCusto().getIdCentroCusto());
+        params.put("idCentroCusto", (lancamentoProgramado.getCentroCusto() == null ? null : lancamentoProgramado.getCentroCusto().getIdCentroCusto()));
 //        params.put("idLancamentoParcelado", (lancamentoProgramado.getLancamentoParcelado() == null ? null : lancamentoProgramado.getLancamentoParcelado().getIdLancamentoParcelado()));
         params.put("tipo", lancamentoProgramado.getTipo().ordinal());     
         params.put("favorecido", lancamentoProgramado.getFavorecido());     
@@ -129,7 +129,7 @@ public class LancamentoProgramadoDAO extends GenericDAO {
         params.put("idLancamentoProgramado", lancamentoProgramado.getIdLancamentoProgramado());
         params.put("idConta", lancamentoProgramado.getConta().getIdConta());
         params.put("idPlanoConta", lancamentoProgramado.getPlanoConta().getIdPlanoConta());
-        params.put("idCentroCusto", lancamentoProgramado.getCentroCusto().getIdCentroCusto());
+        params.put("idCentroCusto", (lancamentoProgramado.getCentroCusto() == null ? null : lancamentoProgramado.getCentroCusto().getIdCentroCusto()));
 //        params.put("idLancamentoParcelado", (lancamentoProgramado.getLancamentoParcelado() == null ? null : lancamentoProgramado.getLancamentoParcelado().getIdLancamentoParcelado()));
         params.put("tipo", lancamentoProgramado.getTipo().ordinal());     
         params.put("favorecido", lancamentoProgramado.getFavorecido());     
