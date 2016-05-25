@@ -1,6 +1,5 @@
 package com.portalpostal.service;
 
-import com.portalpostal.dao.LancamentoDAO;
 import com.portalpostal.dao.LancamentoParceladoDAO;
 import com.portalpostal.model.LancamentoParcelado;
 import java.util.List;
@@ -8,12 +7,10 @@ import java.util.List;
 public class LancamentoParceladoService {
     
     private final LancamentoParceladoDAO lancamentoParceladoDAO;
-    private final LancamentoDAO lancamentoDAO;
 
 
     public LancamentoParceladoService(String nomeBD) {
         lancamentoParceladoDAO = new LancamentoParceladoDAO(nomeBD);
-        lancamentoDAO = new LancamentoDAO(nomeBD);
     }
     
     public List<LancamentoParcelado> findAll() throws Exception {

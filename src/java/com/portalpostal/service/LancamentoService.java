@@ -1,8 +1,6 @@
 package com.portalpostal.service;
 
-import com.portalpostal.dao.LancamentoConciliadoDAO;
 import com.portalpostal.dao.LancamentoDAO;
-import com.portalpostal.dao.LancamentoProgramadoDAO;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoConciliado;
 import com.portalpostal.model.LancamentoProgramado;
@@ -13,13 +11,13 @@ import java.util.List;
 public class LancamentoService {
     
     private final LancamentoDAO lancamentoDAO;
-    private final LancamentoProgramadoDAO lancamentoProgramadoDAO;
-    private final LancamentoConciliadoDAO lancamentoConciliadoDAO;
+    private final LancamentoProgramadoService lancamentoProgramadoService;
+    private final LancamentoConciliadoService lancamentoConciliadoService;
 
     public LancamentoService(String nomeBD) {
         lancamentoDAO = new LancamentoDAO(nomeBD);
-        lancamentoProgramadoDAO = new LancamentoProgramadoDAO(nomeBD);
-        lancamentoConciliadoDAO = new LancamentoConciliadoDAO(nomeBD);
+        lancamentoProgramadoService = new LancamentoProgramadoService(nomeBD);
+        lancamentoConciliadoService = new LancamentoConciliadoService(nomeBD);
     }
     
     public List<Lancamento> findAll() throws Exception {
@@ -29,10 +27,22 @@ public class LancamentoService {
     public Lancamento find(Integer idLancamento) throws Exception {
         return lancamentoDAO.find(idLancamento);
     }  
+
+    public List<Lancamento> findLancamentoNotConciliadoByDataLancamento(Date data) throws Exception {
+        return lancamentoDAO.findLancamentoNotConciliadoByDataLancamento(data);
+    }
     
     public List<Lancamento> findByConta(Integer idConta) throws Exception {
         return lancamentoDAO.findByConta(idConta);
     } 
+
+    public List<Lancamento> findByPlanoConta(Integer idPlanoConta) throws Exception {
+        return lancamentoDAO.findByPlanoConta(idPlanoConta);
+    }
+
+    public List<Lancamento> findByCentroCusto(Integer idCentroCusto) throws Exception {
+        return lancamentoDAO.findByCentroCusto(idCentroCusto);
+    }
     
     public List<Lancamento> findByLancamentoProgramado(Integer idLancamentoProgramado) throws Exception {
         return lancamentoDAO.findByLancamentoProgramado(idLancamentoProgramado);
@@ -77,8 +87,13 @@ public class LancamentoService {
     
     public Lancamento update(Lancamento lancamento) throws Exception {
         removeLancamentoConciliado(lancamento);
+        lancamento.setNumeroLoteConciliado(null);
         return lancamentoDAO.update(lancamento);
     } 
+
+    public Lancamento updateNumeroLoteConciliado(Lancamento lancamento) throws Exception {
+        return lancamentoDAO.updateNumeroLoteConciliado(lancamento);
+    }
     
     public Lancamento delete(Integer idLancamento) throws Exception {
         Lancamento lancamento = lancamentoDAO.remove(idLancamento);
@@ -86,7 +101,7 @@ public class LancamentoService {
         if(lancamentoProgamado != null) {
             Integer numeroParcela = lancamento.getNumeroParcela() - 1;
             lancamentoProgamado.setNumeroParcela(numeroParcela);
-            lancamentoProgramadoDAO.updateNumeroParcela(lancamentoProgamado);            
+            lancamentoProgramadoService.updateNumeroParcela(lancamentoProgamado);            
         }
         removeLancamentoConciliado(lancamento);
         return lancamento;
@@ -94,14 +109,16 @@ public class LancamentoService {
     
     private void removeLancamentoConciliado(Lancamento lancamento) throws Exception {
         if(lancamento.getNumeroLoteConciliado() != null) {
-            LancamentoConciliado lancamentoConciliado = lancamentoConciliadoDAO.findByLote(lancamento.getNumeroLoteConciliado());
+            LancamentoConciliado lancamentoConciliado = lancamentoConciliadoService.findByLote(lancamento.getNumeroLoteConciliado());
             removeLancamentoConciliadoByLote(lancamento.getNumeroLoteConciliado());
             removeLancamentoConciliado(lancamentoConciliado.getIdLancamentoConciliado());
+            removeByLancamentoConciliado(lancamentoConciliado.getLancamento().getIdLancamento());
         }
-        List<LancamentoConciliado> lancamentos = lancamentoConciliadoDAO.findByData(lancamento.getDataLancamento());
+        List<LancamentoConciliado> lancamentos = lancamentoConciliadoService.findByData(lancamento.getDataLancamento());
         for (LancamentoConciliado lancamentoConciliado : lancamentos) {
             removeLancamentoConciliadoByLote(lancamentoConciliado.getNumeroLote()); 
-            removeLancamentoConciliado(lancamentoConciliado.getIdLancamentoConciliado());           
+            removeLancamentoConciliado(lancamentoConciliado.getIdLancamentoConciliado());  
+            removeByLancamentoConciliado(lancamentoConciliado.getLancamento().getIdLancamento());         
         }
     }
     
@@ -111,9 +128,15 @@ public class LancamentoService {
         }
     }
     
+    private void removeByLancamentoConciliado(Integer idLancamento) throws Exception {
+        if(idLancamento != null) {
+            lancamentoDAO.remove(idLancamento);
+        }
+    }
+    
     private void removeLancamentoConciliado(Integer idLancamentoConciliado) throws Exception {
         if(idLancamentoConciliado != null) {
-            lancamentoConciliadoDAO.remove(idLancamentoConciliado);
+            lancamentoConciliadoService.delete(idLancamentoConciliado);
         }
     }
     

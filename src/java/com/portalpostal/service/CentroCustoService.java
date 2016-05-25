@@ -1,7 +1,5 @@
 package com.portalpostal.service;
 
-import com.portalpostal.dao.LancamentoDAO;
-import com.portalpostal.dao.LancamentoProgramadoDAO;
 import com.portalpostal.dao.CentroCustoDAO;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoProgramado;
@@ -13,13 +11,13 @@ import java.util.Map;
 public class CentroCustoService {
     
     private final CentroCustoDAO centroCustoDAO;
-    private final LancamentoDAO lancamentoDAO;
-    private final LancamentoProgramadoDAO lancamentoProgramadoDAO;
+    private final LancamentoService lancamentoService;
+    private final LancamentoProgramadoService lancamentoProgramadoService;
 
     public CentroCustoService(String nomeBD) {
         centroCustoDAO = new CentroCustoDAO(nomeBD);
-        lancamentoDAO = new LancamentoDAO(nomeBD);
-        lancamentoProgramadoDAO = new LancamentoProgramadoDAO(nomeBD);
+        lancamentoService = new LancamentoService(nomeBD);
+        lancamentoProgramadoService = new LancamentoProgramadoService(nomeBD);
     }
     
     public List<CentroCusto> findAll() throws Exception {
@@ -34,31 +32,15 @@ public class CentroCustoService {
 
     public CentroCusto findLancamento(Integer idCentroCusto) throws Exception {
         CentroCusto centroCusto = find(idCentroCusto);
-        centroCusto.setLancamentos(lancamentoDAO.findByCentroCusto(idCentroCusto));
+        centroCusto.setLancamentos(lancamentoService.findByCentroCusto(idCentroCusto));
         return centroCusto;
     } 
 
     public CentroCusto findLancamentoProgramado(Integer idCentroCusto) throws Exception {
         CentroCusto centroCusto = find(idCentroCusto);
-        centroCusto.setLancamentosProgramados(lancamentoProgramadoDAO.findByCentroCusto(idCentroCusto));
+        centroCusto.setLancamentosProgramados(lancamentoProgramadoService.findByCentroCusto(idCentroCusto));
         return centroCusto;
     }
-
-//    public List<CentroCusto> findByTipo(Integer tipo) throws Exception {
-//        List<CentroCusto> grupos = centroCustoDAO.findByTipo(tipo); 
-//        return grupos;
-//    }
-
-//    public List<CentroCusto> findContaResultadoByTipo(Integer tipo) throws Exception {
-//        List<CentroCusto> grupos = centroCustoDAO.findContaResultadoByTipo(tipo); 
-//        return grupos;
-//    }
-
-//    public List<CentroCusto> findStructureByTipo(Integer tipo) throws Exception {
-//        List<CentroCusto> grupos = centroCustoDAO.findWithoutGrupoByTipo(tipo); 
-//        findContas(grupos, null, null);
-//        return grupos;
-//    } 
 
     public CentroCusto findByGrupoCodigo(Integer grupo, Integer codigo) throws Exception {
         return centroCustoDAO.findByGrupoCodigo(grupo, codigo); 
@@ -87,9 +69,9 @@ public class CentroCustoService {
     }     
     
     public boolean podeExcluir(Integer idCentroCusto) throws Exception {
-        List<Lancamento> lancamentos = lancamentoDAO.findByCentroCusto(idCentroCusto);
+        List<Lancamento> lancamentos = lancamentoService.findByCentroCusto(idCentroCusto);
         if(!lancamentos.isEmpty()) return false;
-        List<LancamentoProgramado> lancamentoProgramados = lancamentoProgramadoDAO.findByCentroCusto(idCentroCusto);
+        List<LancamentoProgramado> lancamentoProgramados = lancamentoProgramadoService.findByCentroCusto(idCentroCusto);
         if(!lancamentoProgramados.isEmpty()) return false;
         return true;                
     }  

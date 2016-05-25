@@ -238,7 +238,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 result = ajustarDadosConciliado(conta, result);
                 LancamentoConciliadoService.create(result)
                     .then(function(data) {  
-                        modalMessage("Lançamento Conciliado com sucesso!");
+                        modalMessage("Lançamento Reconciliado com sucesso!");
                         todos(conta);
                     })
                     .catch(function(e) {
@@ -465,7 +465,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         };
         
         var modalConfirmarConciliado = function() {
-            var modalInstance = ModalService.modalConfirmar('Alerta Lançamento', 'Este lançamento está conciliado. <br/> As alterações poderão impactar no lançamento de conciliação! <br/> Deseja continuar?');
+            var modalInstance = ModalService.modalConfirmar('Alerta Lançamento', 'Este lançamento está reconciliado. <br/> A alteração irá impactar no lançamentos de reconciliação! <br/> Deseja continuar?');
             return modalInstance.result;
         };
         

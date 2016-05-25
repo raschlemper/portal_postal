@@ -175,12 +175,12 @@ public class LancamentoDAO extends GenericDAO {
         return (Lancamento) find(sql, params, lancamentoHandler);
     }
     
-    public List<Lancamento> removeNumeroLoteConciliado(Integer numeroLoteConciliado) throws Exception {
-        String sql = "UPDATE lancamento SET numeroLoteConciliado = null"
-                   + "WHERE numeroLoteConciliado = :numeroLoteConciliado";  
+    public void removeNumeroLoteConciliado(Integer numeroLoteConciliado) throws Exception {
+        String sql = "UPDATE lancamento SET numeroLoteConciliado = null "
+                   + "WHERE numeroLoteConciliado = :numeroLoteConciliado ";  
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("numeroLoteConciliado", numeroLoteConciliado);
-        return findAll(sql, params, lancamentoHandler);
+        remove(sql, params, lancamentoHandler);
     }
 
     public Lancamento save(Lancamento lancamento) throws Exception {  

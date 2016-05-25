@@ -1,6 +1,5 @@
 package com.portalpostal.service;
 
-import com.portalpostal.dao.LancamentoDAO;
 import com.portalpostal.dao.LancamentoProgramadoDAO;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoProgramado;
@@ -8,13 +7,13 @@ import java.util.List;
 
 public class LancamentoProgramadoService {
     
-    private final LancamentoProgramadoDAO lancamentoProgramadoDAO;
-    private final LancamentoDAO lancamentoDAO;
+    private final LancamentoProgramadoDAO lancamentoProgramadoDAO;    
+    private final LancamentoService lancamentoService;
 
 
     public LancamentoProgramadoService(String nomeBD) {
         lancamentoProgramadoDAO = new LancamentoProgramadoDAO(nomeBD);
-        lancamentoDAO = new LancamentoDAO(nomeBD);
+        lancamentoService = new LancamentoService(nomeBD);
     }
     
     public List<LancamentoProgramado> findAll() throws Exception {
@@ -23,20 +22,28 @@ public class LancamentoProgramadoService {
     
     public LancamentoProgramado find(Integer idLancamentoProgramado) throws Exception {
         LancamentoProgramado lancamentoProgramado = lancamentoProgramadoDAO.find(idLancamentoProgramado);
-        List<Lancamento> lancamentos = lancamentoDAO.findByLancamentoProgramado(idLancamentoProgramado);
+        List<Lancamento> lancamentos = lancamentoService.findByLancamentoProgramado(idLancamentoProgramado);
         lancamentoProgramado.setLancamentos(lancamentos);
         return lancamentoProgramado;
     } 
     
     public LancamentoProgramado findLancamento(Integer idLancamentoProgramado) throws Exception {
         LancamentoProgramado lancamentoProgramado = find(idLancamentoProgramado);
-        lancamentoProgramado.setLancamentos(lancamentoDAO.findByLancamentoProgramado(idLancamentoProgramado));
+        lancamentoProgramado.setLancamentos(lancamentoService.findByLancamentoProgramado(idLancamentoProgramado));
         return lancamentoProgramado;
     } 
     
     public List<LancamentoProgramado> findByConta(Integer idConta) throws Exception {
         return lancamentoProgramadoDAO.findByConta(idConta);
     } 
+
+    public List<LancamentoProgramado> findByPlanoConta(Integer idPlanoConta) throws Exception {
+        return lancamentoProgramadoDAO.findByPlanoConta(idPlanoConta);
+    }
+
+    public List<LancamentoProgramado> findByCentroCusto(Integer idCentroCusto) throws Exception {
+        return lancamentoProgramadoDAO.findByCentroCusto(idCentroCusto);
+    }
     
     public List<LancamentoProgramado> findAllAtivo() throws Exception {
         return lancamentoProgramadoDAO.findAllAtivo();
@@ -49,6 +56,10 @@ public class LancamentoProgramadoService {
     public LancamentoProgramado update(LancamentoProgramado lancamentoProgramado) throws Exception {
         return lancamentoProgramadoDAO.update(lancamentoProgramado);
     } 
+
+    public LancamentoProgramado updateNumeroParcela(LancamentoProgramado lancamentoProgramado) throws Exception {
+        return lancamentoProgramadoDAO.updateNumeroParcela(lancamentoProgramado);
+    }
     
     public LancamentoProgramado delete(Integer idLancamentoProgramado) throws Exception {
         if(!podeExcluir(idLancamentoProgramado)) throw new Exception("Esta conta não pode ser excluída!"); 
@@ -56,7 +67,7 @@ public class LancamentoProgramadoService {
     }   
     
     public boolean podeExcluir(Integer idLancamentoProgramado) throws Exception {
-        List<Lancamento> lancamentos = lancamentoDAO.findByLancamentoProgramado(idLancamentoProgramado);
+        List<Lancamento> lancamentos = lancamentoService.findByLancamentoProgramado(idLancamentoProgramado);
         if(!lancamentos.isEmpty()) return false;
         return true;                
     }  
@@ -67,7 +78,7 @@ public class LancamentoProgramadoService {
         lancamentoProgramado.setLancamentos(null);
         for (Lancamento lancamento : lancamentos) { 
             lancamento.setLancamentoProgramado(lancamentoProgramado);
-            lancamentoDAO.save(lancamento); 
+            lancamentoService.save(lancamento); 
         } 
         return update(lancamentoProgramado);   
     }   

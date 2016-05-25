@@ -1,9 +1,6 @@
 package com.portalpostal.service;
 
-import com.portalpostal.dao.CartaoCreditoDAO;
-import com.portalpostal.dao.CarteiraCobrancaDAO;
 import com.portalpostal.dao.ContaCorrenteDAO;
-import com.portalpostal.dao.ContaDAO;
 import com.portalpostal.model.CartaoCredito;
 import com.portalpostal.model.CarteiraCobranca;
 import com.portalpostal.model.Conta;
@@ -13,15 +10,15 @@ import java.util.List;
 public class ContaCorrenteService {
     
     private final ContaCorrenteDAO contaCorrenteDAO;    
-    private final CartaoCreditoDAO cartaoCreditoDAO;   
-    private final CarteiraCobrancaDAO carteiraCobrancaDAO;
-    private final ContaDAO contaDAO;
+    private final CartaoCreditoService cartaoCreditoService;   
+    private final CarteiraCobrancaService carteiraCobrancaService;
+    private final ContaService contaService;
 
     public ContaCorrenteService(String nomeBD) {
         contaCorrenteDAO = new ContaCorrenteDAO(nomeBD);
-        cartaoCreditoDAO = new CartaoCreditoDAO(nomeBD);
-        carteiraCobrancaDAO = new CarteiraCobrancaDAO(nomeBD);
-        contaDAO = new ContaDAO(nomeBD);
+        cartaoCreditoService = new CartaoCreditoService(nomeBD);
+        carteiraCobrancaService = new CarteiraCobrancaService(nomeBD);
+        contaService = new ContaService(nomeBD);
     }
     
     public List<ContaCorrente> findAll() throws Exception {
@@ -35,27 +32,30 @@ public class ContaCorrenteService {
     public List<ContaCorrente> findAllCarteiraCobranca() throws Exception {
         List<ContaCorrente> contas = contaCorrenteDAO.findAll();
         for (ContaCorrente contaCorrente : contas) {
-            contaCorrente.setCarteiraCobrancas(carteiraCobrancaDAO.findByContaCorrente(contaCorrente.getIdContaCorrente()));
+            contaCorrente.setCarteiraCobrancas(carteiraCobrancaService.findByContaCorrente(contaCorrente.getIdContaCorrente()));
         }
         return contas;
-    }  
+    }        
     
+    public List<ContaCorrente> findByBanco(Integer idContaCorrente) throws Exception {        
+        return contaCorrenteDAO.findByBanco(idContaCorrente);
+    }
     
     public ContaCorrente findCartaoCredito(Integer idContaCorrente) throws Exception {
         ContaCorrente contaCorrente = find(idContaCorrente);
-        contaCorrente.setCartaoCreditos(cartaoCreditoDAO.findByContaCorrente(idContaCorrente));
+        contaCorrente.setCartaoCreditos(cartaoCreditoService.findByContaCorrente(idContaCorrente));
         return contaCorrente;
     }  
     
     public ContaCorrente findCarteiraCobranca(Integer idContaCorrente) throws Exception {
         ContaCorrente contaCorrente = find(idContaCorrente);
-        contaCorrente.setCarteiraCobrancas(carteiraCobrancaDAO.findByContaCorrente(idContaCorrente));
+        contaCorrente.setCarteiraCobrancas(carteiraCobrancaService.findByContaCorrente(idContaCorrente));
         return contaCorrente;
     } 
     
     public ContaCorrente findConta(Integer idContaCorrente) throws Exception {
         ContaCorrente contaCorrente = find(idContaCorrente);
-        contaCorrente.setContas(contaDAO.findByContaCorrente(idContaCorrente));
+        contaCorrente.setContas(contaService.findByContaCorrente(idContaCorrente));
         return contaCorrente;
     } 
     
@@ -75,11 +75,11 @@ public class ContaCorrenteService {
     }       
     
     public boolean podeExcluir(Integer idContaCorrente) throws Exception {
-        List<CartaoCredito> cartaoCreditos = cartaoCreditoDAO.findByContaCorrente(idContaCorrente);
+        List<CartaoCredito> cartaoCreditos = cartaoCreditoService.findByContaCorrente(idContaCorrente);
         if(!cartaoCreditos.isEmpty()) return false;
-        List<CarteiraCobranca> carteiraCobrancas = carteiraCobrancaDAO.findByContaCorrente(idContaCorrente);
+        List<CarteiraCobranca> carteiraCobrancas = carteiraCobrancaService.findByContaCorrente(idContaCorrente);
         if(!carteiraCobrancas.isEmpty()) return false;
-        List<Conta> contas = contaDAO.findByContaCorrente(idContaCorrente);
+        List<Conta> contas = contaService.findByContaCorrente(idContaCorrente);
         if(!contas.isEmpty()) return false;
         return true;                
     } 

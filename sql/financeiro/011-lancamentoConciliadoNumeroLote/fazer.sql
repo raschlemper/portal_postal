@@ -2,7 +2,7 @@ ALTER TABLE `lancamento_conciliado`
 ADD INDEX `i_lancamentoconciliado_numerolote` (`numeroLote` ASC);
 
 ALTER TABLE `lancamento` 
-ADD INDEX `i_lancamento_lancamentoconciliado` (`numeroLoteConciliado` ASC)  COMMENT '';
+ADD INDEX `i_lancamento_lancamentoconciliado` (`numeroLoteConciliado` ASC);
 
 ALTER TABLE `lancamento` 
 ADD CONSTRAINT `fk_lancamento_lancamentoconciliado`

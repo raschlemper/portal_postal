@@ -1,7 +1,6 @@
 package com.portalpostal.service;
 
 import com.portalpostal.dao.CartaoCreditoDAO;
-import com.portalpostal.dao.ContaDAO;
 import com.portalpostal.model.CartaoCredito;
 import com.portalpostal.model.Conta;
 import java.util.List;
@@ -9,11 +8,11 @@ import java.util.List;
 public class CartaoCreditoService {
     
     private final CartaoCreditoDAO cartaoCreditoDAO;
-    private final ContaDAO contaDAO;
+    private final ContaService contaService;
 
     public CartaoCreditoService(String nomeBD) {
         cartaoCreditoDAO = new CartaoCreditoDAO(nomeBD);
-        contaDAO = new ContaDAO(nomeBD);
+        contaService = new ContaService(nomeBD);
     }
     
     public List<CartaoCredito> findAll() throws Exception {
@@ -23,10 +22,14 @@ public class CartaoCreditoService {
     public CartaoCredito find(Integer idCartaoCredito) throws Exception {
         return cartaoCreditoDAO.find(idCartaoCredito);
     } 
+
+    public List<CartaoCredito> findByContaCorrente(Integer idContaCorrente) throws Exception {
+        return cartaoCreditoDAO.findByContaCorrente(idContaCorrente);
+    }
     
     public CartaoCredito findConta(Integer idCartaoCredito) throws Exception {
         CartaoCredito cartaoCredito = find(idCartaoCredito);
-        cartaoCredito.setContas(contaDAO.findByContaCorrente(idCartaoCredito));
+        cartaoCredito.setContas(contaService.findByContaCorrente(idCartaoCredito));
         return cartaoCredito;
     } 
     
@@ -44,7 +47,7 @@ public class CartaoCreditoService {
     }     
     
     public boolean podeExcluir(Integer idCartaoCredito) throws Exception {
-        List<Conta> contas = contaDAO.findByCartaoCredito(idCartaoCredito);
+        List<Conta> contas = contaService.findByCartaoCredito(idCartaoCredito);
         if(!contas.isEmpty()) return false;
         return true;                
     } 

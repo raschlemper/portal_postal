@@ -1,7 +1,6 @@
 package com.portalpostal.service;
 
 import com.portalpostal.dao.VeiculoSeguroDAO;
-import com.portalpostal.model.VeiculoManutencao;
 import com.portalpostal.model.VeiculoSeguro;
 import java.util.Date;
 import java.util.List;

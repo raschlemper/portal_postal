@@ -197,7 +197,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         
         $scope.lancar = function(form, lancamentoProgramado, lancamento) {
             if (!validarForm(form)) return;          
-            var data = moment(lancamentoProgramado.dataLancamento).format('YYYY-MM-DD HH:mm:ss');  
+            var data = moment(lancamento.dataLancamento).format('YYYY-MM-DD HH:mm:ss');  
             LancamentoConciliadoService.getByData(data)
                 .then(function(data) {  
                     if(data.length) {
@@ -302,7 +302,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         };
         
         var modalConfirmarConciliado = function() {
-            var modalInstance = ModalService.modalConfirmar('Alerta Lançamento', 'Você está inserindo um lançamento em um período reconciliado. <br/> Está inclusão irá impactar no lançamento de conciliação! <br/> Deseja continuar?');
+            var modalInstance = ModalService.modalConfirmar('Alerta Lançamento', 'Você está inserindo um lançamento em um período reconciliado. <br/> Está inclusão irá impactar no lançamento de reconciliação! <br/> Deseja continuar?');
             return modalInstance.result;
         };
                 

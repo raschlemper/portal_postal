@@ -1,11 +1,6 @@
 package com.portalpostal.service;
 
-import com.portalpostal.dao.VeiculoCombustivelDAO;
 import com.portalpostal.dao.VeiculoDAO;
-import com.portalpostal.dao.VeiculoManutencaoDAO;
-import com.portalpostal.dao.VeiculoMultaDAO;
-import com.portalpostal.dao.VeiculoSeguroDAO;
-import com.portalpostal.dao.VeiculoSinistroDAO;
 import com.portalpostal.model.Veiculo;
 import com.portalpostal.model.VeiculoCombustivel;
 import com.portalpostal.model.VeiculoManutencao;
@@ -17,19 +12,19 @@ import java.util.List;
 public class VeiculoService {
     
     private final VeiculoDAO veiculoDAO;
-    private final VeiculoCombustivelDAO veiculoCombustivelDAO;
-    private final VeiculoManutencaoDAO veiculoManutencaoDAO;
-    private final VeiculoMultaDAO veiculoMultaDAO;
-    private final VeiculoSeguroDAO veiculoSeguroDAO;
-    private final VeiculoSinistroDAO veiculoSinistroDAO;
+    private final VeiculoCombustivelService veiculoCombustivelService;
+    private final VeiculoManutencaoService veiculoManutencaoService;
+    private final VeiculoMultaService veiculoMultaService;
+    private final VeiculoSeguroService veiculoSeguroService;
+    private final VeiculoSinistroService veiculoSinistroService;
 
     public VeiculoService(String nomeBD) {
         veiculoDAO = new VeiculoDAO(nomeBD);
-        veiculoCombustivelDAO = new VeiculoCombustivelDAO(nomeBD);
-        veiculoManutencaoDAO = new VeiculoManutencaoDAO(nomeBD);
-        veiculoMultaDAO = new VeiculoMultaDAO(nomeBD);
-        veiculoSeguroDAO = new VeiculoSeguroDAO(nomeBD);
-        veiculoSinistroDAO = new VeiculoSinistroDAO(nomeBD);
+        veiculoCombustivelService = new VeiculoCombustivelService(nomeBD);
+        veiculoManutencaoService = new VeiculoManutencaoService(nomeBD);
+        veiculoMultaService = new VeiculoMultaService(nomeBD);
+        veiculoSeguroService = new VeiculoSeguroService(nomeBD);
+        veiculoSinistroService = new VeiculoSinistroService(nomeBD);
     }
     
     public List<Veiculo> findAll() throws Exception {
@@ -60,15 +55,15 @@ public class VeiculoService {
     }    
     
     public boolean podeExcluir(Integer idVeiculo) throws Exception {
-        List<VeiculoCombustivel> combustiveis = veiculoCombustivelDAO.findByIdVeiculo(idVeiculo);
+        List<VeiculoCombustivel> combustiveis = veiculoCombustivelService.findByIdVeiculo(idVeiculo);
         if(!combustiveis.isEmpty()) return false;
-        List<VeiculoManutencao> manutencoes = veiculoManutencaoDAO.findByIdVeiculo(idVeiculo);
+        List<VeiculoManutencao> manutencoes = veiculoManutencaoService.findByIdVeiculo(idVeiculo);
         if(!manutencoes.isEmpty()) return false;
-        List<VeiculoMulta> multas = veiculoMultaDAO.findByIdVeiculo(idVeiculo);
+        List<VeiculoMulta> multas = veiculoMultaService.findByIdVeiculo(idVeiculo);
         if(!multas.isEmpty()) return false;
-        List<VeiculoSeguro> seguros = veiculoSeguroDAO.findByIdVeiculo(idVeiculo);
+        List<VeiculoSeguro> seguros = veiculoSeguroService.findByIdVeiculo(idVeiculo);
         if(!seguros.isEmpty()) return false;
-        List<VeiculoSinistro> sinistros = veiculoSinistroDAO.findByIdVeiculo(idVeiculo);
+        List<VeiculoSinistro> sinistros = veiculoSinistroService.findByIdVeiculo(idVeiculo);
         if(!sinistros.isEmpty()) return false;
         return true;                
     }   

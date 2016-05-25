@@ -1,6 +1,5 @@
 package com.portalpostal.service;
 
-import com.portalpostal.dao.LancamentoProgramadoDAO;
 import com.portalpostal.dao.LancamentoTransferenciaProgramadoDAO;
 import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.model.LancamentoTransferenciaProgramado;
@@ -9,11 +8,11 @@ import java.util.List;
 public class LancamentoTransferenciaProgramadoService {
     
     private final LancamentoTransferenciaProgramadoDAO lancamentoTransferenciaProgramadoDAO;
-    private final LancamentoProgramadoDAO lancamentoProgramadoDAO;
+    private final LancamentoProgramadoService lancamentoProgramadoService;
 
     public LancamentoTransferenciaProgramadoService(String nomeBD) {
         lancamentoTransferenciaProgramadoDAO = new LancamentoTransferenciaProgramadoDAO(nomeBD);
-        lancamentoProgramadoDAO = new LancamentoProgramadoDAO(nomeBD);
+        lancamentoProgramadoService = new LancamentoProgramadoService(nomeBD);
     }
     
     public List<LancamentoTransferenciaProgramado> findAll() throws Exception {
@@ -25,8 +24,8 @@ public class LancamentoTransferenciaProgramadoService {
     } 
     
     public LancamentoTransferenciaProgramado save(LancamentoTransferenciaProgramado lancamentoTransferenciaProgramado) throws Exception {
-        LancamentoProgramado origem = lancamentoProgramadoDAO.save(lancamentoTransferenciaProgramado.getLancamentoProgramadoOrigem());
-        LancamentoProgramado destino = lancamentoProgramadoDAO.save(lancamentoTransferenciaProgramado.getLancamentoProgramadoDestino());
+        LancamentoProgramado origem = lancamentoProgramadoService.save(lancamentoTransferenciaProgramado.getLancamentoProgramadoOrigem());
+        LancamentoProgramado destino = lancamentoProgramadoService.save(lancamentoTransferenciaProgramado.getLancamentoProgramadoDestino());
         lancamentoTransferenciaProgramado.setLancamentoProgramadoOrigem(origem);
         lancamentoTransferenciaProgramado.setLancamentoProgramadoDestino(destino);
         return lancamentoTransferenciaProgramadoDAO.save(lancamentoTransferenciaProgramado);

@@ -3,7 +3,6 @@ package com.portalpostal.controller;
 import Controle.ContrErroLog;
 import com.portalpostal.validation.Validation;
 import com.portalpostal.model.LancamentoAnexo;
-import com.portalpostal.service.LancamentoService;
 import com.portalpostal.service.LancamentoAnexoService;
 import com.portalpostal.validation.LancamentoAnexoValidation;
 import java.util.List;

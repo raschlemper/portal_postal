@@ -1,6 +1,5 @@
 package com.portalpostal.service;
 
-import com.portalpostal.dao.LancamentoDAO;
 import com.portalpostal.dao.LancamentoConciliadoDAO;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoConciliado;
@@ -11,12 +10,12 @@ import java.util.List;
 
 public class LancamentoConciliadoService {
     
-    private final LancamentoDAO lancamentoDAO;
-    private final LancamentoConciliadoDAO lancamentoConciliadoDAO;
+    private final LancamentoConciliadoDAO lancamentoConciliadoDAO;    
+    private final LancamentoService lancamentoService;
 
     public LancamentoConciliadoService(String nomeBD) {
-        lancamentoDAO = new LancamentoDAO(nomeBD);
         lancamentoConciliadoDAO = new LancamentoConciliadoDAO(nomeBD);
+        lancamentoService = new LancamentoService(nomeBD);
     }
     
     public List<LancamentoConciliado> findAll() throws Exception {
@@ -25,7 +24,11 @@ public class LancamentoConciliadoService {
     
     public List<LancamentoConciliado> findByData(Date data) throws Exception {
         return lancamentoConciliadoDAO.findByData(data);
-    }  
+    } 
+
+    public LancamentoConciliado findByLote(Integer numeroLote) throws Exception {
+        return lancamentoConciliadoDAO.findByLote(numeroLote);
+    }
     
     public LancamentoConciliado find(Integer idLancamentoConciliado) throws Exception {
         return lancamentoConciliadoDAO.find(idLancamentoConciliado);
@@ -44,15 +47,15 @@ public class LancamentoConciliadoService {
     }   
     
     public LancamentoConciliado createLancamento(LancamentoConciliado lancamentoConciliado) throws Exception {
-        Lancamento lancamentoConciliacao = lancamentoDAO.save(lancamentoConciliado.getLancamento());
+        Lancamento lancamentoConciliacao = lancamentoService.save(lancamentoConciliado.getLancamento());
         lancamentoConciliado.setLancamento(lancamentoConciliacao);
         lancamentoConciliado.setNumeroLote(getLastLote());
         lancamentoConciliado = save(lancamentoConciliado);
-        List<Lancamento> lancamentos = lancamentoDAO.findLancamentoNotConciliadoByDataLancamento(
+        List<Lancamento> lancamentos = lancamentoService.findLancamentoNotConciliadoByDataLancamento(
                         getDate(lancamentoConciliado.getDataLancamento()));
         for (Lancamento lancamento : lancamentos) {
             lancamento.setNumeroLoteConciliado(lancamentoConciliado.getNumeroLote());
-            lancamentoDAO.updateNumeroLoteConciliado(lancamento);
+            lancamentoService.updateNumeroLoteConciliado(lancamento);
         }
         return lancamentoConciliado;
     } 

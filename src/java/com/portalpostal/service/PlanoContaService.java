@@ -1,26 +1,23 @@
 package com.portalpostal.service;
 
-import com.portalpostal.dao.LancamentoDAO;
-import com.portalpostal.dao.LancamentoProgramadoDAO;
 import com.portalpostal.dao.PlanoContaDAO;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.model.PlanoConta;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 public class PlanoContaService {
     
     private final PlanoContaDAO planoContaDAO;
-    private final LancamentoDAO lancamentoDAO;
-    private final LancamentoProgramadoDAO lancamentoProgramadoDAO;
+    private final LancamentoService lancamentoService;
+    private final LancamentoProgramadoService lancamentoProgramadoService;
 
     public PlanoContaService(String nomeBD) {
         planoContaDAO = new PlanoContaDAO(nomeBD);
-        lancamentoDAO = new LancamentoDAO(nomeBD);
-        lancamentoProgramadoDAO = new LancamentoProgramadoDAO(nomeBD);
+        lancamentoService = new LancamentoService(nomeBD);
+        lancamentoProgramadoService = new LancamentoProgramadoService(nomeBD);
     }
     
     public List<PlanoConta> findAll() throws Exception {
@@ -35,13 +32,13 @@ public class PlanoContaService {
 
     public PlanoConta findLancamento(Integer idPlanoConta) throws Exception {
         PlanoConta planoConta = find(idPlanoConta);
-        planoConta.setLancamentos(lancamentoDAO.findByPlanoConta(idPlanoConta));
+        planoConta.setLancamentos(lancamentoService.findByPlanoConta(idPlanoConta));
         return planoConta;
     } 
 
     public PlanoConta findLancamentoProgramado(Integer idPlanoConta) throws Exception {
         PlanoConta planoConta = find(idPlanoConta);
-        planoConta.setLancamentosProgramados(lancamentoProgramadoDAO.findByPlanoConta(idPlanoConta));
+        planoConta.setLancamentosProgramados(lancamentoProgramadoService.findByPlanoConta(idPlanoConta));
         return planoConta;
     }
 
@@ -88,9 +85,9 @@ public class PlanoContaService {
     }     
     
     public boolean podeExcluir(Integer idPlanoConta) throws Exception {
-        List<Lancamento> lancamentos = lancamentoDAO.findByPlanoConta(idPlanoConta);
+        List<Lancamento> lancamentos = lancamentoService.findByPlanoConta(idPlanoConta);
         if(!lancamentos.isEmpty()) return false;
-        List<LancamentoProgramado> lancamentoProgramados = lancamentoProgramadoDAO.findByPlanoConta(idPlanoConta);
+        List<LancamentoProgramado> lancamentoProgramados = lancamentoProgramadoService.findByPlanoConta(idPlanoConta);
         if(!lancamentoProgramados.isEmpty()) return false;
         return true;                
     }  

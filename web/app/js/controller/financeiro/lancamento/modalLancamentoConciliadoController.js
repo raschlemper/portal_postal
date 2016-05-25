@@ -64,15 +64,15 @@ app.controller('ModalLancamentoConciliadoController', ['$scope', '$modalInstance
 
         var validarForm = function (form) {
             if (form.dataLancamento.$error.required) {
-                alert('Preencha a data do lançamento conciliado!');
+                alert('Preencha a data do lançamento reconciliado!');
                 return false;
             }       
             if (form.dataLancamento.$modelValue && !moment(form.dataLancamento.$modelValue).isValid()) {
-                alert('A data do lançamento conciliado não é válida!');
+                alert('A data do lançamento reconciliado não é válida!');
                 return false;
             }  
             if (form.historico.$error.required) {
-                alert('Preencha o histórico do lançamento conciliado!');
+                alert('Preencha o histórico do lançamento reconciliado!');
                 return false;
             }
             return true;
