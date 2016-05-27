@@ -100,7 +100,13 @@
                 <div class="col-md-4 text-right">
                     <label>Histórico:</label>
                 </div>
-                <div class="col-md-8">{{(lancamentoProgramado.historico)}}</div>
+                <div class="col-md-8">{{lancamentoProgramado.historico}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Usuário:</label>
+                </div>
+                <div class="col-md-8 angular-with-newlines">{{lancamentoProgramado.usuario | uppercase}}</div>
             </div>
         </div>
     </div>

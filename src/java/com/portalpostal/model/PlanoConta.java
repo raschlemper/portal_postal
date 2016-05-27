@@ -81,7 +81,7 @@ public class PlanoConta {
     public void setGrupo(PlanoConta grupo) {
         this.grupo = grupo;
     }
-
+    
     public List<PlanoConta> getContas() {
         return contas;
     }

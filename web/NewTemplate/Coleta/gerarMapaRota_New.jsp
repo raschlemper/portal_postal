@@ -37,6 +37,7 @@
         String coletador = Coleta.Controle.contrColetador.consultaNomeColetadoresById(idColetador, nomeBD);
 
         String geoLoc = "";
+        boolean teveColeta = Coleta.Controle.contrColeta.verificaSeJaHouveColeta(idColetador, vDataPesquisa, nomeBD);
         ArrayList listaColetasRep = Coleta.Controle.contrColeta.consultaColetasPeloStatus(2, idColetador, vDataPesquisa, "dataHoraColeta, cliente.endereco", nomeBD);
         String endAgf = agf.getEndereco() + " - " + agf.getBairro() + " - " + agf.getCidade();
 
@@ -155,11 +156,15 @@
                 <b>ROTA</b> <br>
                 <i>(Ctrl-Click para multipla selecão/deseleção)</i> <br>
                 <select multiple id="waypoints" size='8' style="font-size: 12px;">
+                    <%if(!teveColeta){%>
                     <option value="<%=agf.getLatitude()%>@<%=agf.getLongitude()%>@<%=agf.getFantasia()%>@<%=endAgf%>" id="inicio" selected><%=agf.getFantasia()%></option>
+                    <%}%>
                     <% for (int j = 0; j < listaColetasRep.size(); j++) {
                             Coleta.Entidade.Coleta col = (Coleta.Entidade.Coleta) listaColetasRep.get(j);
                             int idCliente = col.getIdCliente();
                             Entidade.Clientes cli = Controle.contrCliente.consultaClienteById(idCliente, nomeBD);
+                            if(cli!=null){
+                              
                             String nomeCliente = cli.getNomeFantasia();
 
                             //Usar DEPOIS NO googleMarker
@@ -174,15 +179,15 @@
 
                     %>
                     <option value="<%=geoLoc%>@<%=nomeCliente%>@<%=end%>" selected><%=nomeCliente%></option>
-                    <%}%>
+                    <%}}%>
                     <option value="<%=agf.getLatitude()%>@<%=agf.getLongitude()%>@<%=agf.getFantasia()%>@<%=endAgf%>" id="fim" selected><%=agf.getFantasia()%></option>
 
                 </select>
             </div>
             <div>
-                <label style="color: white">Tempo espera estimado : </label>
+                <label style="color: white">Tempo de espera: </label>
                 <input type="number" id="espera" value="10" style="margin-top: 10px;" size="4" min="1" max="120"/>
-                <span style="color: white"> minutos</span>   
+                <span style="color: white"> min.</span>   
             </div>
             <div>
                 <input type="button" class="btn" onclick="initMap();"id="submit" value="VISUALIZAR ROTA">
@@ -403,6 +408,10 @@
                                                             // console.log('LATITUDE : ' + route.legs[i].start_location.lat());
 
                                                             var myLatlng = new google.maps.LatLng(route.legs[i].start_location.lat(), route.legs[i].start_location.lng());
+                                                            if(i+1 == route.legs.length){
+                                                                var myLatlngFIM = new google.maps.LatLng(route.legs[i].end_location.lat(), route.legs[i].end_location.lng());
+                                                                criarmarkers(map, myLatlngFIM, selectedAdress[i+1], selected[i+1]);
+                                                            }
                                                             criarmarkers(map, myLatlng, selectedAdress[i], selected[i]);
 
                                                         }
@@ -414,14 +423,14 @@
 
                                                         var result = (hours < 10 ? "0" + hours : hours) + "h " + (minutes < 10 ? "0" + minutes : minutes) + "min";
 
-                                                        summaryPanel.innerHTML += '<span style="color: red;"><b>TOTAL KM: ' + (total / 1000).toFixed(1) + ' km</b></span>';
-                                                        summaryPanel.innerHTML += '<br><span style="color: red;"><b>TEMPO ESTIMADO TOTAL : ' + result + ' / (' + totalTime + ' min)</b></span>';
+                                                        summaryPanel.innerHTML += '<br/><span style="color: red;"><b>DISTÂNCIA TOTAL: ' + (total / 1000).toFixed(1) + ' km</b></span>';
+                                                        summaryPanel.innerHTML += '<br><span style="color: red;"><b>TEMPO ESTIMADO TOTAL : ' + result;// + ' / (' + totalTime + ' min)</b></span>';
 
                                                     }
 
                                                 } else {
                                                     $('#erro').show();
-                                                    window.alert('Aconteceu um erro ao desenhar o mapa ' + status);
+                                                    //window.alert('Aconteceu um erro ao desenhar o mapa ' + status);
                                                 }
                                             });
                                         })(k);

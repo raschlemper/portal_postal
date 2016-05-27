@@ -3,6 +3,7 @@ package com.portalpostal.controller;
 import Controle.ContrErroLog;
 import com.portalpostal.validation.Validation;
 import com.portalpostal.model.LancamentoAnexo;
+import com.portalpostal.service.ImageService;
 import com.portalpostal.service.LancamentoAnexoService;
 import com.portalpostal.validation.LancamentoAnexoValidation;
 import java.util.List;
@@ -29,13 +30,17 @@ public class LancamentoAnexoController {
     
     private HttpSession sessao;
     private String nomeBD;
+    private String usuario;
     
     private LancamentoAnexoService lancamentoAnexoService;
+    private ImageService imageService;
 
     private void init() {
         sessao = request.getSession();
         nomeBD = (String) sessao.getAttribute("nomeBD");
+        usuario = (String) sessao.getAttribute("usuario");  
         lancamentoAnexoService = new LancamentoAnexoService(nomeBD);
+        imageService = new ImageService();
     }
     
     @GET
@@ -62,6 +67,22 @@ public class LancamentoAnexoController {
         }
     }  
     
+    @GET
+    @Path("/lancamento/{idLancamento}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<LancamentoAnexo> findByLancamento(@PathParam("idLancamento") Integer idLancamento) {
+        try {
+            init();    
+            List<LancamentoAnexo> anexos = lancamentoAnexoService.findByLancamento(idLancamento);
+            for (LancamentoAnexo anexo : anexos) {
+                anexo.setAnexo(imageService.resizeImage(anexo.getAnexo(), 390, 320));
+            }
+            return anexos;
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }  
+    
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
@@ -70,6 +91,7 @@ public class LancamentoAnexoController {
         try {
             init();
             validation(lancamentoAnexo);
+            lancamentoAnexo.setUsuario(usuario);
             return lancamentoAnexoService.save(lancamentoAnexo);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
@@ -84,6 +106,7 @@ public class LancamentoAnexoController {
         try {
             init();
             validation(lancamentoAnexo);
+            lancamentoAnexo.setUsuario(usuario);
             return lancamentoAnexoService.update(lancamentoAnexo);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));

@@ -92,7 +92,7 @@ public class ServCarregaColetaFixa extends HttpServlet {
                     String nomeUsuario = Controle.contrUsuario.consultaNomeUsuarioById(idUsuario, nomeBD);
 
                     for (int i = 0; i < listaColetaFixa.size(); i++) {
-
+                        
                         Coleta.Entidade.ColetaFixa cf = (Coleta.Entidade.ColetaFixa) listaColetaFixa.get(i);
                         int idColetador = cf.getIdColetador();
                         int idCliente = cf.getIdCliente();

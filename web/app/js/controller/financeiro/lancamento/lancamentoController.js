@@ -442,7 +442,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         };
         
         var modalSalvar = function(conta, lancamento) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalEditarLancamento.html', 'ModalEditarLancamentoController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamento.html', 'ModalEditarLancamentoController', 'lg',
                 {
                     lancamento: function() {
                         return lancamento;

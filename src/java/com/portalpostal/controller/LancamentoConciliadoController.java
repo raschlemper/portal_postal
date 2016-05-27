@@ -18,7 +18,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -32,12 +31,14 @@ public class LancamentoConciliadoController {
     
     private HttpSession sessao;
     private String nomeBD;
+    private String usuario;
     
     private LancamentoConciliadoService lancamentoConciliadoService;
 
     private void init() {
         sessao = request.getSession();
         nomeBD = (String) sessao.getAttribute("nomeBD");
+        usuario = (String) sessao.getAttribute("usuario");  
         lancamentoConciliadoService = new LancamentoConciliadoService(nomeBD);
     }
     
@@ -87,6 +88,7 @@ public class LancamentoConciliadoController {
         try {
             init();
             validation(lancamentoConciliado);
+            lancamentoConciliado.setUsuario(usuario);
             return lancamentoConciliadoService.save(lancamentoConciliado);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
@@ -101,6 +103,7 @@ public class LancamentoConciliadoController {
         try {
             init();
             validation(lancamentoConciliado);
+            lancamentoConciliado.setUsuario(usuario);
             return lancamentoConciliadoService.update(lancamentoConciliado);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
@@ -115,6 +118,7 @@ public class LancamentoConciliadoController {
         try {
             init();
             validation(lancamentoConciliado);
+            lancamentoConciliado.setUsuario(usuario);
             return lancamentoConciliadoService.createLancamento(lancamentoConciliado);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));

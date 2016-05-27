@@ -146,6 +146,10 @@ public class ServPreVendaImportar extends HttpServlet {
                             } else if (tipo.equals("PS")) { // ARQUIVO TIPO .CSV -> SISTEMA PORTAL POSTAL                            
                                 String condicao = ContrPreVendaImporta.importaPedidoPS(fileItem, idCliente, idDepartamento, departamento, contrato, cartaoPostagem, servico, nomeBD);
                                 response.sendRedirect("Cliente/Servicos/imp_confirma.jsp?msg=" + condicao);
+                            }else if (tipo.equals("PSN")) { // ARQUIVO TIPO .CSV -> SISTEMA PORTAL POSTAL                            
+                                System.out.println("entrou PSN");
+                                String condicao = ContrPreVendaImporta.importaPedidoPSN(fileItem, idCliente, idDepartamento, departamento, contrato, cartaoPostagem, servico, nomeBD);
+                                response.sendRedirect("Cliente/Servicos/imp_confirma.jsp?msg=" + condicao);
                             } else { // ARQUIVO TIPO .CSV -> SISTEMA PORTAL POSTAL                            
                                 String condicao = ContrPreVendaImporta.importaPedido(fileItem, idCliente, idDepartamento, departamento, contrato, cartaoPostagem, servico, nomeBD);
                                 response.sendRedirect("Cliente/Servicos/imp_confirma.jsp?msg=" + condicao);

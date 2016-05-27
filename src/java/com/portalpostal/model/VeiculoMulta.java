@@ -10,7 +10,6 @@ public class VeiculoMulta {
     private Veiculo veiculo;
     private String condutor;
     private Integer numero;
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date data; 
     private Double valor;
     private Boolean descontada;

@@ -26,7 +26,6 @@
         int idCli = Integer.parseInt(String.valueOf(session.getAttribute("idCliente")));
 
         Clientes cli = (Clientes) session.getAttribute("cliente");
-        int nivel = (Integer) session.getAttribute("nivelUsuarioEmp");
         int idUser = (Integer) session.getAttribute("idUsuarioEmp");
         String nomeUser = (String) session.getAttribute("nomeUser");
         String numero = cli.getNumero();

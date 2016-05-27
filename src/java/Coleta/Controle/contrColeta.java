@@ -393,6 +393,44 @@ public class contrColeta {
         }
     }
 
+    public static boolean verificaSeJaHouveColeta(int idColetador, String data, String nomeBD){
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "SELECT *"
+                + " FROM coleta AS c"
+                + " WHERE c.idColetador = ? AND DATE(dataHoraColeta) = ? " 
+                + " AND status IN (4,5,6,7);";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.setInt(1, idColetador);
+            valores.setString(2, data);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            boolean r = result.next();
+            valores.close();
+            return r;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrColeta", "SQLException", sql, e.toString());
+            return false;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+    public static boolean verificaSeJaHouveRotaFixa(String data, String nomeBD){
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "SELECT * FROM log_coleta_fixa WHERE DATE(dataHoraCarregada) = '"+data+"';";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);           
+            ResultSet result = (ResultSet) valores.executeQuery();
+            boolean r = result.next();
+            valores.close();
+            return r;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrColeta", "SQLException", sql, e.toString());
+            return false;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+    
     public static ArrayList<Coleta> consultaColetasPeloStatus(int status, int idColetador, String data, String ordem, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "SELECT idColeta, status, idCliente, idTipo, dataHoraColeta, dataHoraAguardando, dataHoraBaixa, dataHoraSolicitacao, obs,"
@@ -416,7 +454,7 @@ public class contrColeta {
            
             sql += " AND status = " + status;
         }
-        sql += " ORDER BY status DESC, " + ordem;
+        sql += " ORDER BY " + ordem;
         
         
         ArrayList<Coleta> listaStatus = new ArrayList();

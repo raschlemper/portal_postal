@@ -178,6 +178,7 @@
                                         <option value="LINX">ARQUIVO LINX</option>
                                         <option value="WEBVENDAS">ARQUIVO WEBVENDAS</option>
                                         <option value="PS">ARQUIVO PS SERVICE</option>
+                                        <option value="PSN">ARQUIVO PS SERVICE NOVO</option>
                                         <%if(idEmp == 236505){%><option value="LADOAVESSO">ARQUIVO LADOAVESSO</option><%}%>
                                         <%if(idEmp == 236505){%><option value="INTERLOGIC">ARQUIVO INTERLOGIC</option><%}%>
                                     </select>

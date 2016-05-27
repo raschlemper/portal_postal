@@ -5,6 +5,7 @@ import com.portalpostal.validation.Validation;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoAnexo;
 import com.portalpostal.model.Saldo;
+import com.portalpostal.service.ImageService;
 import com.portalpostal.service.LancamentoAnexoService;
 import com.portalpostal.service.LancamentoService;
 import com.portalpostal.validation.LancamentoAnexoValidation;
@@ -39,15 +40,19 @@ public class LancamentoController {
     
     private HttpSession sessao;
     private String nomeBD;
+    private String usuario;
     
     private LancamentoService lancamentoService;
     private LancamentoAnexoService lancamentoAnexoService;
+    private ImageService imageService;
 
     private void init() {
         sessao = request.getSession();
         nomeBD = (String) sessao.getAttribute("nomeBD");
         lancamentoService = new LancamentoService(nomeBD);
+        usuario = (String) sessao.getAttribute("usuario");  
         lancamentoAnexoService = new LancamentoAnexoService(nomeBD);
+        imageService = new ImageService();
     }
     
     @GET
@@ -171,6 +176,7 @@ public class LancamentoController {
         try {
             init();
             validation(lancamento);
+            lancamento.setUsuario(usuario);
             return lancamentoService.save(lancamento);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
@@ -185,6 +191,7 @@ public class LancamentoController {
         try {
             init();
             validation(lancamento);
+            lancamento.setUsuario(usuario);
             return lancamentoService.update(lancamento);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
@@ -200,6 +207,7 @@ public class LancamentoController {
             init();
             for (Lancamento lancamento : lancamentos) {                
                 validation(lancamento);
+                lancamento.setUsuario(usuario);
                 lancamentoService.update(lancamento);
             }
         } catch (Exception ex) {
@@ -228,17 +236,17 @@ public class LancamentoController {
                                   @FormDataParam("file") InputStream fileInputString,
                                   @FormDataParam("file") FormDataContentDisposition fileInputDetails) {
         try {
-            init();
+            init();             
             LancamentoAnexo lancamentoAnexo = new LancamentoAnexo();
             lancamentoAnexo.setLancamento(getLancamento(idLancamento));
             lancamentoAnexo.setNome(fileInputDetails.getFileName());
-            lancamentoAnexo.setAnexo(fileInputString);
+            lancamentoAnexo.setAnexo(imageService.resizeImage(fileInputString, 200, 300));
             validation(lancamentoAnexo);
             return lancamentoAnexoService.save(lancamentoAnexo);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
-    } 
+    }   
     
     private Lancamento getLancamento(Integer idLancamento) throws Exception {
         return lancamentoService.find(idLancamento);

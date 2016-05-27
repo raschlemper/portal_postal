@@ -22,6 +22,7 @@ public class LancamentoAnexoHandler extends GenericHandler implements ResultSetH
         lancamentoAnexo.setLancamento(getLancamento(result));
         lancamentoAnexo.setNome(getString(result, "nome"));
         lancamentoAnexo.setAnexo(getBinaryStream(result, "anexo"));
+        lancamentoAnexo.setUsuario(getString(result, "usuario"));
         return lancamentoAnexo;
     }
     

@@ -48,6 +48,7 @@ public class LancamentoHandler extends GenericHandler implements ResultSetHandle
         lancamento.setAutenticacao(getString(result, "autenticacao"));
         lancamento.setHistorico(getString(result, "historico"));
         lancamento.setObservacao(getString(result, "observacao"));
+        lancamento.setUsuario(getString(result, "usuario"));
         return lancamento;
     }
     

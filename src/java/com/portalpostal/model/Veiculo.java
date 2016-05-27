@@ -26,7 +26,6 @@ public class Veiculo {
     private TipoCombustivelVeiculo combustivel;
     private TipoStatusVeiculo status;
     private TipoSituacaoVeiculo situacao;
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataCadastro;
     
     public Veiculo() {}

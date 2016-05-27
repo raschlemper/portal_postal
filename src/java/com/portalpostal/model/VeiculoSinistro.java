@@ -2,9 +2,7 @@ package com.portalpostal.model;
 
 import com.portalpostal.model.dd.TipoSinistroVeiculo;
 import com.portalpostal.model.dd.TipoResponsavelVeiculo;
-import com.portalpostal.model.serializer.JsonDateSerializer;
 import java.util.Date;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class VeiculoSinistro {
     
@@ -12,7 +10,6 @@ public class VeiculoSinistro {
     private Veiculo veiculo;
     private TipoSinistroVeiculo tipo;
     private Integer boletimOcorrencia;
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date data;
     private TipoResponsavelVeiculo responsavel;
     private String local;

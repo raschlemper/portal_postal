@@ -67,7 +67,7 @@ public class CartaoCredito {
 
     public void setContaCorrente(ContaCorrente contaCorrente) {
         this.contaCorrente = contaCorrente;
-    }    
+    }   
 
     public List<Conta> getContas() {
         return contas;

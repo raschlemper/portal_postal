@@ -31,6 +31,7 @@ public class Lancamento {
     private String autenticacao;
     private String historico;
     private String observacao;
+    private String usuario;
 
     public Integer getIdLancamento() {
         return idLancamento;
@@ -222,7 +223,14 @@ public class Lancamento {
 
     public void setObservacao(String observacao) {
         this.observacao = observacao;
+    } 
+
+    public String getUsuario() {
+        return usuario;
     }
 
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
     
 }

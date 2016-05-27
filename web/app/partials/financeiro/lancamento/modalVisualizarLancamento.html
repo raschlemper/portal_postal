@@ -112,19 +112,25 @@
                 <div class="col-md-4 text-right">
                     <label>Histórico:</label>
                 </div>
-                <div class="col-md-8">{{(lancamento.historico)}}</div>
+                <div class="col-md-8">{{lancamento.historico}}</div>
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">
                     <label>Autenticação:</label>
                 </div>
-                <div class="col-md-8">{{(lancamento.autenticacao)}}</div>
+                <div class="col-md-8">{{lancamento.autenticacao}}</div>
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">
                     <label>Observação:</label>
                 </div>
-                <div class="col-md-8 angular-with-newlines">{{(lancamento.observacao)}}</div>
+                <div class="col-md-8 angular-with-newlines">{{lancamento.observacao}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Usuário:</label>
+                </div>
+                <div class="col-md-8 angular-with-newlines">{{lancamento.usuario | uppercase}}</div>
             </div>
         </div>
     </div>

@@ -2255,8 +2255,8 @@ label.small{
   padding: 0 15px;
 }
 .btn + .dropdown-menu {
-// margin-top: -10px;
-//  background: rgba(0, 0, 0, 0.7) !important;
+/* margin-top: -10px;*/
+/*  background: rgba(0, 0, 0, 0.7) !important;*/
 padding: 0; border: 0; 
   right: 0; 
   left: auto; 
@@ -2264,7 +2264,7 @@ padding: 0; border: 0;
 }
 .btn + .dropdown-menu > li > a {
   padding: 5px 10px !important;
- ///color: #f0f0f0;
+ /*color: #f0f0f0;*/
 }
 .v-txt {
   -moz-transform: rotate(-90deg);

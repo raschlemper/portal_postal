@@ -10,59 +10,74 @@ import java.util.Map;
 
 public class PlanoContaService {
     
-    private final PlanoContaDAO planoContaDAO;
-    private final LancamentoService lancamentoService;
-    private final LancamentoProgramadoService lancamentoProgramadoService;
+    private final String nomeBD;
+    
+    private PlanoContaDAO planoContaDAO;
+    private LancamentoService lancamentoService;
+    private LancamentoProgramadoService lancamentoProgramadoService;
 
     public PlanoContaService(String nomeBD) {
+        this.nomeBD = nomeBD;
+    }
+
+    public void init() {
         planoContaDAO = new PlanoContaDAO(nomeBD);
         lancamentoService = new LancamentoService(nomeBD);
         lancamentoProgramadoService = new LancamentoProgramadoService(nomeBD);
     }
     
     public List<PlanoConta> findAll() throws Exception {
+        init();
         return planoContaDAO.findAll();
     }  
     
     public List<PlanoConta> findStructure() throws Exception {
+        init();
         List<PlanoConta> grupos = planoContaDAO.findWithoutGrupo(); 
         findContas(grupos, null, null);
         return grupos;
     }  
 
     public PlanoConta findLancamento(Integer idPlanoConta) throws Exception {
+        init();
         PlanoConta planoConta = find(idPlanoConta);
         planoConta.setLancamentos(lancamentoService.findByPlanoConta(idPlanoConta));
         return planoConta;
     } 
 
     public PlanoConta findLancamentoProgramado(Integer idPlanoConta) throws Exception {
+        init();
         PlanoConta planoConta = find(idPlanoConta);
         planoConta.setLancamentosProgramados(lancamentoProgramadoService.findByPlanoConta(idPlanoConta));
         return planoConta;
     }
 
     public List<PlanoConta> findByTipo(Integer tipo) throws Exception {
+        init();
         List<PlanoConta> grupos = planoContaDAO.findByTipo(tipo); 
         return grupos;
     }
 
     public List<PlanoConta> findContaResultadoByTipo(Integer tipo) throws Exception {
+        init();
         List<PlanoConta> grupos = planoContaDAO.findContaResultadoByTipo(tipo); 
         return grupos;
     }
 
     public List<PlanoConta> findStructureByTipo(Integer tipo) throws Exception {
+        init();
         List<PlanoConta> grupos = planoContaDAO.findWithoutGrupoByTipo(tipo); 
         findContas(grupos, null, null);
         return grupos;
     } 
 
     public PlanoConta findByTipoGrupoCodigo(Integer tipo, Integer grupo, Integer codigo) throws Exception {
+        init();
         return planoContaDAO.findByTipoGrupoCodigo(tipo, grupo, codigo); 
     }
     
     public PlanoConta find(Integer idPlanoConta) throws Exception {
+        init();
         PlanoConta planoConta =  planoContaDAO.find(idPlanoConta);
         List<PlanoConta> grupos = planoContaDAO.findByGrupo(planoConta);        
         if(!grupos.isEmpty()) { planoConta.setContas(grupos); }
@@ -70,21 +85,24 @@ public class PlanoContaService {
     } 
     
     public PlanoConta save(PlanoConta planoConta) throws Exception {
+        init();
         validation(planoConta);
         return planoContaDAO.save(planoConta);
     } 
     
     public PlanoConta update(PlanoConta planoConta) throws Exception {
+        init();
         validation(planoConta);
         return planoContaDAO.update(planoConta);
     } 
     
     public PlanoConta delete(Integer idPlanoConta) throws Exception {
+        init();
         if(!podeExcluir(idPlanoConta)) throw new Exception("Este plano de conta não pode ser excluído!"); 
         return planoContaDAO.remove(idPlanoConta);
     }     
     
-    public boolean podeExcluir(Integer idPlanoConta) throws Exception {
+    private boolean podeExcluir(Integer idPlanoConta) throws Exception {
         List<Lancamento> lancamentos = lancamentoService.findByPlanoConta(idPlanoConta);
         if(!lancamentos.isEmpty()) return false;
         List<LancamentoProgramado> lancamentoProgramados = lancamentoProgramadoService.findByPlanoConta(idPlanoConta);

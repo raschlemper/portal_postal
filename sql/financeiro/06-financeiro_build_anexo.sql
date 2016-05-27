@@ -7,6 +7,7 @@ CREATE TABLE `lancamento_anexo` (
   `idLancamento`      INT NOT NULL,
   `nome`              VARCHAR(100) NOT NULL,
   `anexo`             BLOB NOT NULL,
+  `usuario`           VARCHAR(100) DEFAULT NULL,
   PRIMARY KEY (`idLancamentoAnexo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

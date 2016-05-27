@@ -7,23 +7,32 @@ import java.util.List;
 
 public class LancamentoTransferenciaProgramadoService {
     
-    private final LancamentoTransferenciaProgramadoDAO lancamentoTransferenciaProgramadoDAO;
-    private final LancamentoProgramadoService lancamentoProgramadoService;
+    private final String nomeBD;
+    
+    private LancamentoTransferenciaProgramadoDAO lancamentoTransferenciaProgramadoDAO;
+    private LancamentoProgramadoService lancamentoProgramadoService;
 
     public LancamentoTransferenciaProgramadoService(String nomeBD) {
+        this.nomeBD = nomeBD;
+    }
+
+    public void init() {
         lancamentoTransferenciaProgramadoDAO = new LancamentoTransferenciaProgramadoDAO(nomeBD);
         lancamentoProgramadoService = new LancamentoProgramadoService(nomeBD);
     }
     
     public List<LancamentoTransferenciaProgramado> findAll() throws Exception {
+        init();
         return lancamentoTransferenciaProgramadoDAO.findAll();
     }  
     
     public LancamentoTransferenciaProgramado find(Integer idLancamentoTransferenciaProgramado) throws Exception {
+        init();
         return lancamentoTransferenciaProgramadoDAO.find(idLancamentoTransferenciaProgramado);
     } 
     
     public LancamentoTransferenciaProgramado save(LancamentoTransferenciaProgramado lancamentoTransferenciaProgramado) throws Exception {
+        init();
         LancamentoProgramado origem = lancamentoProgramadoService.save(lancamentoTransferenciaProgramado.getLancamentoProgramadoOrigem());
         LancamentoProgramado destino = lancamentoProgramadoService.save(lancamentoTransferenciaProgramado.getLancamentoProgramadoDestino());
         lancamentoTransferenciaProgramado.setLancamentoProgramadoOrigem(origem);
@@ -32,10 +41,12 @@ public class LancamentoTransferenciaProgramadoService {
     } 
     
     public LancamentoTransferenciaProgramado update(LancamentoTransferenciaProgramado lancamentoTransferenciaProgramado) throws Exception {
+        init();
         return lancamentoTransferenciaProgramadoDAO.update(lancamentoTransferenciaProgramado);
     } 
     
     public LancamentoTransferenciaProgramado delete(Integer idLancamentoTransferenciaProgramado) throws Exception {
+        init();
         return lancamentoTransferenciaProgramadoDAO.remove(idLancamentoTransferenciaProgramado);
     }   
     

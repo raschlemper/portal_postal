@@ -6,35 +6,47 @@ import java.util.List;
 
 public class TipoFormaPagamentoService {
     
-    private final TipoFormaPagamentoDAO tipoFormaPagamentoDAO;
+    private final String nomeBD;
+    
+    private TipoFormaPagamentoDAO tipoFormaPagamentoDAO;
 
     public TipoFormaPagamentoService(String nomeBD) {
+        this.nomeBD = nomeBD;
+    }
+
+    public void init() {
         tipoFormaPagamentoDAO = new TipoFormaPagamentoDAO(nomeBD);
     }
     
     public List<TipoFormaPagamento> findAll() throws Exception {
+        init();
         return tipoFormaPagamentoDAO.findAll();
     }  
     
     public TipoFormaPagamento find(Integer idTipoFormaPagamento) throws Exception {
+        init();
         return tipoFormaPagamentoDAO.find(idTipoFormaPagamento);
     } 
     
     public TipoFormaPagamento findByDescricao(String descricao) throws Exception {
+        init();
         return tipoFormaPagamentoDAO.findByDescricao(descricao);
     } 
     
     public TipoFormaPagamento save(TipoFormaPagamento tipoFormaPagamento) throws Exception {
+        init();
         validation(tipoFormaPagamento);
         return tipoFormaPagamentoDAO.save(tipoFormaPagamento);
     } 
     
     public TipoFormaPagamento update(TipoFormaPagamento tipoFormaPagamento) throws Exception {
+        init();
         validation(tipoFormaPagamento);
         return tipoFormaPagamentoDAO.update(tipoFormaPagamento);
     } 
     
     public TipoFormaPagamento delete(Integer idTipoFormaPagamento) throws Exception {
+        init();
         return tipoFormaPagamentoDAO.remove(idTipoFormaPagamento);
     }   
     

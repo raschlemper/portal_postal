@@ -25,34 +25,6 @@ public class CentroCustoDAO extends GenericDAO {
         return findAll(sql, null, centroCustoHandler);
     }
 
-//    public List<CentroCusto> findWithoutGrupoByTipo(Integer tipo) throws Exception {
-//        String sql = "SELECT * FROM centro_custo "
-//                   + "WHERE grupo IS NULL AND centro_custo.tipo = :tipo "
-//                   + "ORDER BY centro_custo.codigo ";    
-//        Map<String, Object> params = new HashMap<String, Object>();
-//        params.put("tipo", tipo);        
-//        return findAll(sql, params, centroCustoHandler);
-//    }
-
-//    public List<CentroCusto> findByTipo(Integer tipo) throws Exception {
-//        String sql = "SELECT * FROM centro_custo "
-//                   + "WHERE centro_custo.tipo = :tipo "
-//                   + "ORDER BY centro_custo.codigo ";    
-//        Map<String, Object> params = new HashMap<String, Object>();
-//        params.put("tipo", tipo);        
-//        return findAll(sql, params, centroCustoHandler);
-//    }
-
-//    public List<CentroCusto> findContaResultadoByTipo(Integer tipo) throws Exception {
-//        String sql = "SELECT * FROM centro_custo "
-//                   + "WHERE centro_custo.tipo = :tipo "
-//                   + " AND NOT EXISTS (SELECT 1 FROM centro_custo plano1 WHERE centro_custo.idCentroCusto = plano1.grupo)"
-//                   + "ORDER BY centro_custo.codigo ";    
-//        Map<String, Object> params = new HashMap<String, Object>();
-//        params.put("tipo", tipo);        
-//        return findAll(sql, params, centroCustoHandler);
-//    }
-
     public List<CentroCusto> findByGrupo(CentroCusto grupo) throws Exception {
         String sql = "SELECT * FROM centro_custo WHERE grupo = :grupo ORDER BY centro_custo.codigo";    
         Map<String, Object> params = new HashMap<String, Object>();

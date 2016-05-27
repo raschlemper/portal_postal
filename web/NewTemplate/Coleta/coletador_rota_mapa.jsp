@@ -1,20 +1,26 @@
+<%@page import="Entidade.empresas"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import = "java.text.DateFormat,java.util.ArrayList,java.sql.Timestamp, java.util.Date, java.text.SimpleDateFormat"%>
+
 <%
-    if (session.getAttribute("usuario") == null) {
+    response.setHeader("Cache-Control", "no-cache"); //HTTP 1.1
+    response.setHeader("Pragma", "no-cache"); //HTTP 1.0
+    response.setDateHeader("Expires", 0); //prevent caching at the proxy server
+
+    String nomeBD = (String) session.getAttribute("empresa");
+    if (nomeBD == null) {
         response.sendRedirect("../index.jsp?msgLog=3");
     } else {
 
-        String nomeBD = (String) session.getAttribute("empresa");
-
         //pega os parametros passados para a pagina
         String dataAtual = request.getParameter("dataPesquisa");
+        String vIdColet = request.getParameter("idColetador");
+        
         //cria uma data atual
         Date dataPesquisa = new Date();
         //declara os simple date format
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
         //verifica se a data passada pelo parametro nao eh nula nem vazia
         if (dataAtual == null || dataAtual.equals("")) {
@@ -23,45 +29,133 @@
             dataPesquisa = df.parse(dataAtual);
         }
 
-        String vDataPesquisa = sdf3.format(dataPesquisa);
-        //id do coletador
-        int idColetador = Integer.parseInt(request.getParameter("idColetador"));
+        empresas agf = Controle.contrEmpresa.consultaEmpresaCnpj(nomeBD);
+        int idColetador = Integer.parseInt(vIdColet);
         String coletador = Coleta.Controle.contrColetador.consultaNomeColetadoresById(idColetador, nomeBD);
+
+        String geoLoc = "";
+        String endAgf = agf.getEndereco() + " - " + agf.getBairro() + " - " + agf.getCidade();
+
 %>
+<!DOCTYPE html>
 <html>
     <head>
-        <title> Portal Postal</title>
-        <%@ include file="../includes/Css_js.jsp" %>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+        <meta charset="utf-8">
+        <title>Mapa - <%=coletador%></title>
+        <link rel="icon" href="${pageContext.request.contextPath}/imagensNew/favicon.ico" />
 
-        <script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=ABQIAAAAlJVKHaE-vcwZVqBrPdeTCRQtpG-lJVXecy3lwOZXVoU2jM-mXRT0zkCraFwHz9ShlAOJRH2d-1jy7w" type="text/javascript"></script>
-        <script type="text/javascript">
-            var map = null;
-            var geocoder = null;
-            var gdir;
-            var addressMarker;
-            var side_bar_html = "";
-            var gmarkers = [];
-            var htmls = [];
-            var bounds = new GLatLngBounds();
-            var Icon = new GIcon(G_DEFAULT_ICON);
-            Icon.image = "../../imagensNew/marker_verde.png";
-            var Icon2 = new GIcon(G_DEFAULT_ICON);
-            Icon2.image = "../../imagensNew/marker_azul.png";
 
-            function initialize() {
-                if (GBrowserIsCompatible()) {
-                    map = new GMap2(document.getElementById("map_canvas"));
-                    map.setCenter(new GLatLng(-27.595859, -48.547039), 15);
-                    geocoder = new GClientGeocoder();
+        <script type="text/javascript" src="../../plugins/jquery/jquery.min.js"></script>
+        <style>
+            #right-panel {
+                font-family: 'Roboto','sans-serif';
+                line-height: 30px;
+                padding-left: 10px;
+                padding-right: 10px;
+                margin-left: 10px ;
+                margin-top : 10px ;
 
-                    //map.setCenter(new GLatLng(0,0,0));
-                    map.addControl(new GLargeMapControl());
-                    map.addControl(new GMapTypeControl());
-                    map.addControl(new GOverviewMapControl());
-                }
-            <%
+                position: absolute;
+                width: 200px;
+                height: 98%;
+                background: black;
+                opacity: .95;
+                top: 0;
+                right: 38px;
+                overflow: auto;
+                border-radius: 5px;
+
+                border-width: 2px;
+                width: 20%;
+                float: left;
+                text-align: left;
+
+            }
+
+            #right-panel select, #right-panel input {
+                font-size: 15px;
+            }
+
+            #right-panel select {
+                width: 100%;
+            }
+
+            #right-panel i {
+                font-size: 12px;
+            }
+            html, body {
+                height: 100%;
+                width: 100%;
+                margin:0;
+            }
+            #map {
+                height: 100%;
+                width: 100%;
+            }
+
+            #directions-panel {
+                font-size: 11px;
+                line-height: 15px;
+                margin-top: 10px;
+                background-color: #FFEE77;
+                padding: 10px;                
+                border-radius: 5px;
+            }
+            #erro {
+                background-color: #FF7171;
+                padding: 10px;
+                color: white;                
+                border-radius: 5px;
+            }
+
+            #overlayContent {
+                color: white;
+            }
+
+            .btn {
+                margin-top: 10px;
+                background: #3498db;
+                background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+                background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+                background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+                background-image: -o-linear-gradient(top, #3498db, #2980b9);
+                background-image: linear-gradient(to bottom, #3498db, #2980b9);
+                -webkit-border-radius: 28;
+                -moz-border-radius: 28;
+                border-radius: 5px;
+                font-family: Arial;
+                color: #ffffff;
+                font-size: 15px;
+                padding: 10px 20px 10px 20px;
+                text-decoration: none;
+            }
+
+            .btn:hover {
+                background: #3cb0fd;
+                background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+                background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+                background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+                background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+                background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+                text-decoration: none;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div id="map"></div>
+        <div id="right-panel">
+            <div id="overlayContent">
+
+                <b>ROTA</b> <br>
+                <i>(Ctrl-Click para multipla selecão/deseleção)</i> <br>
+                <select multiple id="waypoints" size='8' style="font-size: 12px;">
+                    <option value="<%=agf.getLatitude()%>@<%=agf.getLongitude()%>@<%=agf.getFantasia()%>@<%=endAgf%>@48ffa0" id="inicio" selected><%=agf.getFantasia()%></option>
+                    <%
                 //contador de itens na tabela da coleta fixa
                 int cont = Integer.parseInt(request.getParameter("contador"));
+
 
                 //for que percorre a quantidade de itens que contem na tabela da coleta fixa
                 for (int i = 0; i < cont; i++) {
@@ -71,109 +165,323 @@
                         int idTipo = Integer.parseInt(request.getParameter("select" + i));
                         int fixo = Integer.parseInt(request.getParameter("fixo" + i));
                         String hora = request.getParameter("hora" + i);
+                                               
                         Entidade.Clientes cli = Controle.contrCliente.consultaClienteById(idCliente, nomeBD);
-                        String nomeCliente = cli.getNome().trim();
-                        String cidade = cli.getCidade().trim();
-                        String uf = cli.getUf().trim();
-                        String endereco = cli.getEndereco().trim();
-                        String complemento = cli.getComplemento().trim();
-                        String aux[] = endereco.split(",");
-                        String rua = endereco, numero = "";
-                        if (aux.length > 1) {
-                            rua = aux[0];
-                            numero = aux[1];
-                        }
-                        endereco = numero + " " + rua + " , " + cidade + " - " + uf;
-                        String corMarker = "../../imagensNew/marker_azul.png";
-                        if (fixo == 1) {
-                            corMarker = "../../imagensNew/marker_verde.png";
-                        }%>
-                var address = "<%= endereco%>";
-                if (geocoder) {
-                    geocoder.getLatLng(
-                            address,
-                            function(point) {
-                                if (!point) {
-                                    alert("Endereço não Encontrado:\n\n\"<%= endereco%>\"");
-                                } else {
-                                    map.setCenter(point, 16);
-                                    map.addOverlay(new GMarker(point));
-                                    map.addOverlay(createMarker(point, "<%= nomeCliente%><br><%= endereco + " " + complemento%><br />",<%= i%>,<%= fixo%>));
-                                    side_bar_html += '<li><a href="javascript:myclick(<%=i%>);" onmouseover="gmarkers[<%=i%>].setImage(\'../../imagensNew/marker_vermelho.png\');" onmouseout="gmarkers[<%=i%>].setImage(\'<%=corMarker%>\');"><%= nomeCliente%></a></li>';
-                                    bounds.extend(point);
-                                    latitude = 0;
-                                    longitude = 0;
+                        
+                        if(cli!=null){
+                              
+                            String nomeCliente = cli.getNomeFantasia();
 
-                                    // Adiciona texto na barra lateral
-                                    document.getElementById("side_bar").innerHTML = side_bar_html;
-                                    // ===== determine the zoom level from the bounds =====
-                                    map.setZoom(map.getBoundsZoomLevel(bounds));
-                                    // ===== determine the centre from the bounds ======
-                                    map.setCenter(bounds.getCenter());
-                                }
+                            //Usar DEPOIS NO googleMarker
+                            String cidade = cli.getCidade().trim();
+                            String uf = cli.getUf().trim();
+                            String endereco = cli.getEndereco().trim();
+                            String end = endereco + " , " + cli.getNumero() + " - " + cidade + " - " + uf;
+                            String complemento = cli.getComplemento().trim();
+                            
+                            String lat = cli.getLatitude() + "";
+                            String longi = cli.getLongitude() + "";
+                            geoLoc = lat + "@" + longi;
+                        
+                            String corMarker = "ffa348";
+                            if (fixo == 1) {
+                                corMarker = "48a4ff";
                             }
-                    );
-                }
-            <%}
-                }%>
-            }
-            function createMarker(point, html, contador, fixo) {
-                if (fixo === 1) {
-                    var marker = new GMarker(point, Icon);
-                } else {
-                    var marker = new GMarker(point, Icon2);
-                }
+                    %>                    
+                    <option value="<%=geoLoc%>@<%=nomeCliente%>@<%=end%>@<%=corMarker%>" selected><%=nomeCliente%></option>
+                    <%}}}%>
+                    <option value="<%=agf.getLatitude()%>@<%=agf.getLongitude()%>@<%=agf.getFantasia()%>@<%=endAgf%>@48ffa0" id="fim" selected><%=agf.getFantasia()%></option>
 
-                GEvent.addListener(marker, "click", function() {
-                    marker.openInfoWindowHtml(html);
-                });
-                // Switch icon on marker mouseover and mouseout
-                GEvent.addListener(marker, "mouseover", function() {
-                    marker.setImage("../../imagensNew/marker_vermelho.png");
-                });
-                if (fixo === 1) {
-                    GEvent.addListener(marker, "mouseout", function() {
-                        marker.setImage("../../imagensNew/marker_verde.png");
-                    });
-                } else {
-                    GEvent.addListener(marker, "mouseout", function() {
-                        marker.setImage("../../imagensNew/marker_azul.png");
-                    });
-                }
+                </select>
+            </div>
+            <div>
+                <label style="color: white">Tempo espera estimado : </label>
+                <input type="number" id="espera" value="10" style="margin-top: 10px;" size="4" min="1" max="120"/>
+                <span style="color: white"> minutos</span>   
+            </div>
+            <div>
+                <input type="button" class="btn" onclick="initMap();"id="submit" value="VISUALIZAR ROTA">
+            </div>
 
-                htmls[contador] = html;
-                gmarkers[contador] = marker;
-                return marker;
-            }
-            function myclick(i) {
-                gmarkers[i].openInfoWindowHtml(htmls[i]);
-            }
+
+            <div id="directions-panel"></div>
+            <br>
+            <div id="erro">
+                <b> Erro no cadastro de Localização !</b><br>
+                <b> Corrija o endereço dos clientes abaixo:</b>
+
+                <% //for que percorre a quantidade de itens que contem na tabela da coleta fixa
+                for (int j = 0; j < cont; j++) {
+                    String vIdCliente2 = request.getParameter("cliente" + j);
+                    if (vIdCliente2 != null && !vIdCliente2.equals("")) {
+                        int idCliente = Integer.parseInt(vIdCliente2);                                               
+                        Entidade.Clientes cli = Controle.contrCliente.consultaClienteById(idCliente, nomeBD);
+                        if(cli!=null){                            
+                        String nomeCliente = cli.getNomeFantasia();
+                        String lat = cli.getLatitude() + "";
+                        String longi = cli.getLongitude() + "";
+                        geoLoc = lat + "," + longi;
+                        if (lat.equals("0.0")) {%>                    
+                <br><a href="../Cadastros/cliente_cadastro_b.jsp?idCliente=<%=cli.getCodigo()%>" target="_blank"><%=nomeCliente%></a>
+                <%}}}}%>
+            </div>
+        </div>
+        <script>
+
+            var map = null;
+            function initMap() {
+                $('#erro').hide();
+                var directionsService = new google.maps.DirectionsService;
+                var directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
+                map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 6,
+                    center: {lat: 0.00, lng: 0.00}
+                });
+                var geocoder = new google.maps.Geocoder();
+                var location = "<%= agf.getEndereco()%> - <%= agf.getCidade()%>";
+                        geocoder.geocode({'address': location}, function (results, status) {
+                            if (status == google.maps.GeocoderStatus.OK) {
+                                map.setCenter(results[0].geometry.location);
+                            } else {
+                                map.setCenter(<%=agf.getLatitude()%>,<%=agf.getLongitude()%>);
+                            }
+                        });
+                        var trafficLayer = new google.maps.TrafficLayer();
+                        trafficLayer.setMap(map);
+                        Tour_startUp();
+                        window.tour.loadMap(map, directionsDisplay);
+                        window.tour.fitBounds(map);
+                        window.tour.calcRoute(directionsService, directionsDisplay);
+                    }
+
+
+
+                    function Tour_startUp() {
+
+                        var stops = [];
+                        window.tour = null;
+                        var selected = [];
+                        var selectedAdress = [];
+                        var markColors = [];
+
+
+                        var checkboxArray = document.getElementById('waypoints');
+                        for (var i = 0; i < checkboxArray.length; i++) {
+                            if (checkboxArray.options[i].selected) {
+                                console.log(checkboxArray[i].value);
+                                var aux = (checkboxArray[i].value).split('@');
+                                var lat = aux[0];
+                                var lon = aux[1];
+                                selected.push(aux[2]);
+                                selectedAdress.push(aux[3]);
+                                markColors.push(aux[4]);
+                                stops.push({
+                                    "Geometry": {
+                                        "Latitude": lat,
+                                        "Longitude": lon
+                                    }
+
+                                });
+                            }
+                        }
+
+
+                        if (!window.tour)
+                            window.tour = {
+                                updateStops: function (newStops) {
+                                    stops = newStops;
+                                },
+                                // map: google map object
+                                // directionsDisplay: google directionsDisplay object (comes in empty)
+                                loadMap: function (map, directionsDisplay) {
+                                    var myOptions = {
+                                        zoom: 13,
+                                        mapTypeId: window.google.maps.MapTypeId.ROADMAP
+                                    };
+                                    map.setOptions(myOptions);
+                                    directionsDisplay.setMap(map);
+                                },
+                                fitBounds: function (map) {
+                                    var bounds = new window.google.maps.LatLngBounds();
+
+                                    // extend bounds for each record
+                                    jQuery.each(stops, function (key, val) {
+                                        var myLatlng = new window.google.maps.LatLng(val.Geometry.Latitude, val.Geometry.Longitude);
+                                        bounds.extend(myLatlng);
+                                    });
+                                    map.fitBounds(bounds);
+                                },
+                                calcRoute: function (directionsService, directionsDisplay) {
+                                    var batches = [];
+                                    var itemsPerBatch = 10; // google API max = 10 - 1 start, 1 stop, and 8 waypoints
+                                    var itemsCounter = 0;
+                                    var wayptsExist = stops.length > 0;
+
+                                    while (wayptsExist) {
+                                        var subBatch = [];
+                                        var subitemsCounter = 0;
+
+                                        for (var j = itemsCounter; j < stops.length; j++) {
+                                            subitemsCounter++;
+                                            subBatch.push({
+                                                location: new window.google.maps.LatLng(stops[j].Geometry.Latitude, stops[j].Geometry.Longitude),
+                                                stopover: true
+                                            });
+                                            if (subitemsCounter == itemsPerBatch)
+                                                break;
+                                        }
+
+                                        itemsCounter += subitemsCounter;
+                                        batches.push(subBatch);
+                                        wayptsExist = itemsCounter < stops.length;
+                                        // If it runs again there are still points. Minus 1 before continuing to 
+                                        // start up with end of previous tour leg
+                                        itemsCounter--;
+                                    }
+
+                                    // now we should have a 2 dimensional array with a list of a list of waypoints
+                                    var combinedResults;
+                                    var unsortedResults = [{}]; // to hold the counter and the results themselves as they come back, to later sort
+                                    var directionsResultsReturned = 0;
+
+                                    for (var k = 0; k < batches.length; k++) {
+                                        var lastIndex = batches[k].length - 1;
+                                        var start = batches[k][0].location;
+                                        var end = batches[k][lastIndex].location;
+
+                                        // trim first and last entry from array
+                                        var waypts = [];
+                                        waypts = batches[k];
+                                        waypts.splice(0, 1);
+                                        waypts.splice(waypts.length - 1, 1);
+
+                                        var request = {
+                                            origin: start,
+                                            destination: end,
+                                            waypoints: waypts,
+                                            travelMode: window.google.maps.TravelMode.DRIVING
+                                        };
+                                        (function (kk) {
+                                            directionsService.route(request, function (result, status) {
+                                                if (status == window.google.maps.DirectionsStatus.OK) {
+
+                                                    var unsortedResult = {order: kk, result: result};
+                                                    unsortedResults.push(unsortedResult);
+
+                                                    directionsResultsReturned++;
+
+
+                                                    if (directionsResultsReturned == batches.length) // we've received all the results. put to map
+                                                    {
+                                                        // sort the returned values into their correct order
+                                                        unsortedResults.sort(function (a, b) {
+                                                            return parseFloat(a.order) - parseFloat(b.order);
+                                                        });
+                                                        var count = 0;
+                                                        for (var key in unsortedResults) {
+                                                            if (unsortedResults[key].result != null) {
+                                                                if (unsortedResults.hasOwnProperty(key)) {
+                                                                    if (count == 0) // first results. new up the combinedResults object
+                                                                        combinedResults = unsortedResults[key].result;
+                                                                    else {
+                                                                        // only building up legs, overview_path, and bounds in my consolidated object. This is not a complete 
+                                                                        // directionResults object, but enough to draw a path on the map, which is all I need
+                                                                        combinedResults.routes[0].legs = combinedResults.routes[0].legs.concat(unsortedResults[key].result.routes[0].legs);
+                                                                        combinedResults.routes[0].overview_path = combinedResults.routes[0].overview_path.concat(unsortedResults[key].result.routes[0].overview_path);
+
+                                                                        combinedResults.routes[0].bounds = combinedResults.routes[0].bounds.extend(unsortedResults[key].result.routes[0].bounds.getNorthEast());
+                                                                        combinedResults.routes[0].bounds = combinedResults.routes[0].bounds.extend(unsortedResults[key].result.routes[0].bounds.getSouthWest());
+                                                                    }
+
+                                                                    count++;
+                                                                }
+                                                            }
+                                                        }
+
+                                                        directionsDisplay.setDirections(combinedResults);
+
+                                                        var route = combinedResults.routes[0];
+                                                        var summaryPanel = document.getElementById('directions-panel');
+                                                        summaryPanel.innerHTML = '';
+                                                        // For each route, display summary information.
+                                                        var total = 0;
+                                                        var totalTime = 0;
+                                                        var espera = parseInt($('#espera').val());
+                                                        for (var i = 0; i < route.legs.length; i++) {
+                                                            var routeSegment = i + 1;
+                                                            summaryPanel.innerHTML += '<b>' + selected[i] + ' até ' + selected[i + 1] + ':</b><br>';
+                                                            //summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
+                                                            // summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
+                                                            summaryPanel.innerHTML += route.legs[i].distance.text + ' - ' + route.legs[i].duration.text + '<br>';
+                                                            total += route.legs[i].distance.value;
+                                                            totalTime += (route.legs[i].duration.value) + espera * 60;
+
+                                                            // console.log('LATITUDE : ' + route.legs[i].start_location.lat());
+
+                                                            var myLatlng = new google.maps.LatLng(route.legs[i].start_location.lat(), route.legs[i].start_location.lng());
+                                                            criarmarkers(map, myLatlng, selectedAdress[i], selected[i], markColors[i]);
+
+                                                        }
+
+
+                                                        var hours = parseInt(totalTime / 3600) % 24;
+                                                        var minutes = parseInt(totalTime / 60) % 60;
+                                                        var seconds = totalTime % 60;
+
+                                                        var result = (hours < 10 ? "0" + hours : hours) + "h " + (minutes < 10 ? "0" + minutes : minutes) + "min";
+
+                                                        summaryPanel.innerHTML += '<span style="color: red;"><b>TOTAL KM: ' + (total / 1000).toFixed(1) + ' km</b></span>';
+                                                        summaryPanel.innerHTML += '<br><span style="color: red;"><b>TEMPO ESTIMADO TOTAL : ' + result;// + ' / (' + totalTime + ' min)</b></span>';
+
+                                                    }
+
+                                                } else {
+                                                    $('#erro').show();
+                                                    //window.alert('Aconteceu um erro ao desenhar o mapa ' + status);
+                                                }
+                                            });
+                                        })(k);
+                                    }
+                                }
+                            };
+                    }
+
+                    function criarmarkers(map, myLatlng, adress, title, pinColor) {
+
+                        var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+                            new google.maps.Size(21, 34),
+                            new google.maps.Point(0,0),
+                            new google.maps.Point(10, 34));
+                        var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
+                            new google.maps.Size(40, 37),
+                            new google.maps.Point(0, 0),
+                            new google.maps.Point(12, 35));        
+                        var contentString = '<div id="content">' +
+                                '<div id="siteNotice">' +
+                                '</div>' +
+                                '<h1 id="firstHeading" class="firstHeading">' + title + '</h1>' +
+                                '<div id="bodyContent">' +
+                                '<p><b>Endreço :</b><br>' + adress + '</p>' +
+                                '</div>' +
+                                '</div>';
+                        
+                        var infowindow = new google.maps.InfoWindow({
+                            content: contentString
+                        });
+                        var marker = new google.maps.Marker({
+                            position: myLatlng,
+                            map: map,
+                            title: title,
+                            icon: pinImage,
+                            shadow: pinShadow
+                        });
+                        marker.addListener('click', function () {
+                            infowindow.open(map, marker);
+                        });
+                    }
         </script>
-    </head>
-    <body onLoad="initialize()" onUnload="GUnload();showAddress();">
-                <ul class="list-unstyled">
-                    <li class="list-group-item list-group-heading">   
-                        <div class="row">
-                        <table align="left" border="0" cellpadding="5" cellspacing="0">
-                            <tr>
-                                <th valign="middle">&nbsp;&nbsp;&nbsp;&nbsp;<img src="../../imagensNew/marker_verde.png"></th>
-                                <th valign="middle">&nbsp;&nbsp;= Coletas Fixas</th>
-                                <th valign="middle">&nbsp;&nbsp;&nbsp;&nbsp;<img src="../../imagensNew/marker_azul.png"></th>
-                                <th valign="middle">&nbsp;&nbsp;= Coletas Eventuais</th>
-                            </tr>
-                        </table>
-                            </div>
-                    </li> 
-                    <li class="list-group-item">
-                        <div class="row form-horizontal">
-                            <div class="col-sm-12 col-md-4 col-lg-4"><ol id="side_bar" ></ol></div>
-                            <div class="col-sm-12 col-md-8 col-lg-8">
-                                <div id="map_canvas" style="width:100%; height:550px;"></div>
-                            </div>
-                        </div>
-                    </li> 
-                </ul>
-
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBS02tZxaCu7zzJdlzWQuhqFrh6YvuKzk&callback=initMap">
+        </script>
     </body>
 </html>
 <%}%>

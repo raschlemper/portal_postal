@@ -29,12 +29,14 @@ public class LancamentoTransferenciaProgramadoController {
     
     private HttpSession sessao;
     private String nomeBD;
+    private String usuario;
     
     private LancamentoTransferenciaProgramadoService lancamentoTransferenciaProgramadoService;
 
     private void init() {
         sessao = request.getSession();
         nomeBD = (String) sessao.getAttribute("nomeBD");
+        usuario = (String) sessao.getAttribute("usuario");  
         lancamentoTransferenciaProgramadoService = new LancamentoTransferenciaProgramadoService(nomeBD);
     }
     
@@ -70,6 +72,7 @@ public class LancamentoTransferenciaProgramadoController {
         try {
             init();
             validation(lancamentoTransferenciaProgramado);
+            lancamentoTransferenciaProgramado.setUsuario(usuario);
             return lancamentoTransferenciaProgramadoService.save(lancamentoTransferenciaProgramado);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
@@ -84,6 +87,7 @@ public class LancamentoTransferenciaProgramadoController {
         try {
             init();
             validation(lancamentoTransferenciaProgramado);
+            lancamentoTransferenciaProgramado.setUsuario(usuario);
             return lancamentoTransferenciaProgramadoService.update(lancamentoTransferenciaProgramado);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));

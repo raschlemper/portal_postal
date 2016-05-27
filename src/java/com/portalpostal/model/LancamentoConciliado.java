@@ -16,6 +16,7 @@ public class LancamentoConciliado {
     private Date dataLancamento;
     private Double valor;
     private String historico;
+    private String usuario;
 
     public Integer getIdLancamentoConciliado() {
         return idLancamentoConciliado;
@@ -104,6 +105,13 @@ public class LancamentoConciliado {
     public void setHistorico(String historico) {
         this.historico = historico;
     }
-    
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
     
 }

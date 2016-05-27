@@ -5,7 +5,6 @@ import com.portalpostal.model.LancamentoTransferenciaProgramado;
 import com.portalpostal.model.TipoDocumento;
 import com.portalpostal.model.TipoFormaPagamento;
 import com.portalpostal.model.dd.TipoFrequencia;
-import com.portalpostal.model.dd.TipoSituacaoLancamentoProgramado;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.sql2o.ResultSetHandler;
@@ -32,6 +31,7 @@ public class LancamentoTransferenciaProgramadoHandler extends GenericHandler imp
         lancamento.setDataEmissao(getDate(result, "dataEmissao"));
         lancamento.setValor(getDouble(result, "valor"));
         lancamento.setHistorico(getString(result, "historico"));
+        lancamento.setUsuario(getString(result, "usuario"));
         return lancamento;
     }
     

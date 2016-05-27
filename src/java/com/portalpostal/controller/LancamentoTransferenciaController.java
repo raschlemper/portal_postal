@@ -29,12 +29,14 @@ public class LancamentoTransferenciaController {
     
     private HttpSession sessao;
     private String nomeBD;
+    private String usuario;
     
     private LancamentoTransferenciaService lancamentoTransferenciaService;
 
     private void init() {
         sessao = request.getSession();
         nomeBD = (String) sessao.getAttribute("nomeBD");
+        usuario = (String) sessao.getAttribute("usuario");  
         lancamentoTransferenciaService = new LancamentoTransferenciaService(nomeBD);
     }
     
@@ -70,6 +72,7 @@ public class LancamentoTransferenciaController {
         try {
             init();
             validation(lancamentoTransferencia);
+            lancamentoTransferencia.setUsuario(usuario);
             return lancamentoTransferenciaService.save(lancamentoTransferencia);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
@@ -84,6 +87,7 @@ public class LancamentoTransferenciaController {
         try {
             init();
             validation(lancamentoTransferencia);
+            lancamentoTransferencia.setUsuario(usuario);
             return lancamentoTransferenciaService.update(lancamentoTransferencia);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));

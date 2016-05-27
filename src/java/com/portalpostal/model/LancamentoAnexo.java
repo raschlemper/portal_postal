@@ -2,6 +2,7 @@ package com.portalpostal.model;
 
 import com.portalpostal.model.serializer.JsonInputStreamSerializer;
 import java.io.InputStream;
+import java.util.Date;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class LancamentoAnexo {
@@ -11,6 +12,7 @@ public class LancamentoAnexo {
     private String nome;
     @JsonSerialize(using=JsonInputStreamSerializer.class)
     private InputStream anexo;
+    private String usuario;
 
     public Integer getIdLancamentoAnexo() {
         return idLancamentoAnexo;
@@ -43,5 +45,13 @@ public class LancamentoAnexo {
     public void setAnexo(InputStream anexo) {
         this.anexo = anexo;
     } 
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
     
 }

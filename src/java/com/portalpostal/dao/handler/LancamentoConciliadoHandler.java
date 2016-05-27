@@ -32,6 +32,7 @@ public class LancamentoConciliadoHandler extends GenericHandler implements Resul
         lancamentoConciliado.setDataLancamento(getDate(result, "dataLancamento"));
         lancamentoConciliado.setValor(getDouble(result, "valor"));
         lancamentoConciliado.setHistorico(getString(result, "historico"));
+        lancamentoConciliado.setUsuario(getString(result, "usuario"));
         return lancamentoConciliado;
     }
     

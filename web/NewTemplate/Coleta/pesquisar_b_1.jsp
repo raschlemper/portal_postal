@@ -1,4 +1,6 @@
 
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
 <%@page import="Coleta.Entidade.Coletador"%>
 <%@page import="Coleta.Entidade.Coleta"%>
 <%@page import="Entidade.Clientes"%>
@@ -55,10 +57,16 @@
         }
 
         ArrayList listaColetadores = contrColetador.consultaTodosColetadoresColeta(dataPesquisaBD, situacao, nomeBD);
+        
         ArrayList<String> listaColetasAntigasNaoFinalizadas = contrColeta.consultaColetasAntigasNaoFinalizadas(idCol, nomeBD);
+        
         ArrayList<StatusEntrega> listaStatus = Controle.ContrStatusEntrega.consultaTodosStatus(nomeBD);
+        
         String qtdSolicitadas = contrColeta.consultaQtdColetasSolicitadas(nomeBD);
+        
         ArrayList listaColetasWeb = contrColeta.consultaColetasPelaWeb("dataHoraColeta, c.idColetador", nomeBD);
+        
+        boolean flagRotaFixa = contrColeta.verificaSeJaHouveRotaFixa(dataPesquisaBD, nomeBD);
 
         String nomeSituacao = "Aguardando Coleta";
         if (situacao == 4) {
@@ -68,6 +76,10 @@
         } else if (situacao == 0) {
             nomeSituacao = "Todas as Coletas";
         }
+
+        Map<String, Integer> badgMap = new HashMap<String, Integer>();
+
+        int colAberto = 0;
 
         //******************************************
 
@@ -94,7 +106,7 @@
 
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         <style>    
-            // body{ margin-top:50px;}
+            /* body{ margin-top:50px;}*/
             .nav-tabs .glyphicon:not(.no-margin) { margin-right:10px; }
             .tab-pane .list-group-item:first-child {border-top-right-radius: 0px;border-top-left-radius: 0px;}
             .tab-pane .list-group-item:last-child {border-bottom-right-radius: 0px;border-bottom-left-radius: 0px;}
@@ -118,9 +130,8 @@
 
     <body>
         <script type="text/javascript">
-            waitMsg();
-        </script>
-        <jsp:include page="../includes/navBarTop.jsp"></jsp:include>
+            waitMsg();</script>
+            <jsp:include page="../includes/navBarTop.jsp"></jsp:include>
             <div id="wrapper">
             <%@ include file="../includes/menu_agencia_bootstrap.jsp" %>
             <div id="page-content-wrapper">
@@ -140,9 +151,9 @@
                                     for (int i = 0; i < listaColetasAntigasNaoFinalizadas.size(); i++) {
                                         String dtColeta = (String) listaColetasAntigasNaoFinalizadas.get(i);
                                         if (i == 0) {
-                                            datasNaoFinalizadas += "<a style='color: blue;' href='pesquisar_b.jsp?dataPesquisa=" + dtColeta + "'>" + dtColeta + "</a>";
+                                            datasNaoFinalizadas += "<a style='color: blue;' href='pesquisar_b_1.jsp?dataPesquisa=" + dtColeta + "'>" + dtColeta + "</a>";
                                         } else {
-                                            datasNaoFinalizadas += ", <a style='color: blue;' href='pesquisar_b.jsp?dataPesquisa=" + dtColeta + "'>" + dtColeta + "</a>";
+                                            datasNaoFinalizadas += ", <a style='color: blue;' href='pesquisar_b_1.jsp?dataPesquisa=" + dtColeta + "'>" + dtColeta + "</a>";
                                         }
                                     }
                             %>
@@ -221,7 +232,7 @@
                                                     if (se.getId() > 2 && se.getId() != 6) {
                                             %>
                                             <li >
-                                                <a href="#" onclick=" alterarColetas(<%= se.getId()%>);"><%= se.getNome()%></a>                                                   
+                                                <a href="#" onclick=" alterarColetas(<%= se.getId()%>,<%= idCol%>);"><%= se.getNome()%></a>                                                   
                                             </li>
                                             <%}
                                                 }%>
@@ -241,25 +252,25 @@
                                                     int idColetador = coletador.getIdColetador();
                                             %> 
                                             <li>
-                                                <a href="#" onclick="alterarColetador(<%= idColetador%>);
+                                                <a href="#" onclick="alterarColetador(<%= idColetador%>, <%= idCol%>);
                                                         return false;"><%= idColetador%> - <%= nomeColetador%></a>
                                             </li> 
                                             <%}%>
                                         </ul>
                                     </div>
 
-                                    <button id="rotaFixa" type="button" class="btn btn-default" data-toggle="tooltip" title="Refresh" <% if (!dataPesquisa.equals(dataAtual)) {%> disabled <%}%> onclick= "ajaxLoginRestrito('../../ServCarregaColetaFixa', 'Ao RECARREGAR a rota fixa, as rotas carregadas voltam para o status inicial!', <%= idUsuario%>);">
+                                    <button id="rotaFixa" type="button" class="btn btn-default" data-toggle="tooltip" title="Refresh" <% if (!dataPesquisa.equals(dataAtual)) {%> disabled <%}%> <%if(flagRotaFixa){%>onclick="alert('Rota fixa já foi carregada nesta data!')"<%}else{%>onclick= "ajaxLoginRestrito('../../ServCarregaColetaFixa', 'Ao RECARREGAR a rota fixa, as rotas carregadas voltam para o status inicial!', <%= idUsuario%>);"<%}%>>
                                            <span class="fa fa-download"></span>  Rota Fixa 
                                     </button>
                                     <a id="printMap" target="_blank" type="button" class="btn btn-default hidden" data-toggle="tooltip" title="Mapa" >
-                                           <span class="fa fa-map-marker"></span>  Imprimir Mapa 
+                                           <span class="fa fa-map-marker"></span>  Visualizar Mapa 
                                     </a>   
                                     <a id="printRota" target="_blank" type="button" class="btn btn-default hidden" data-toggle="tooltip" title="Rota">
                                            <span class="fa fa-print"></span> Imprimir Rota 
                                     </a>
-                                    <form name="formData" id="formData" action="pesquisar_b_1.jsp"> 
-                                        <div class="btn-group pull-right">
-                                            <div class="form-inline">
+                                    <div class="btn-group pull-right">
+                                        <div class="form-inline">
+                                            <form name="formData" id="formData" action="pesquisar_b_1.jsp"> 
                                                 <div class="clearfix"></div>
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
@@ -268,9 +279,9 @@
                                                 <button type="submit" class="btn btn-sm btn-primary form-control"  href="" onclick="waitMsg();
                                                         document.formData.submit();"><i class="fa fa-lg fa-search"></i>
                                                 </button>
-                                            </div>
-                                        </div>   
-                                    </form>                             
+                                            </form>     
+                                        </div>
+                                    </div>                           
                                 </div>
                             </div>
                             <hr />
@@ -286,14 +297,22 @@
                                                 int idColetadorx = coletadorx.getIdColetador();
                                         %>                                       
                                         <li>
-                                            <a href="#rota<%= idColetadorx%>" data-toggle="tab" onclick="clickRota(<%= idColetadorx%>);
-                                                    return false;"><span class="glyphicon glyphicon-user"></span><%=nomeColetadorx%></a>
-                                        </li> 
+                                            <a id="aba<%= idColetadorx%>" href="#rota<%= idColetadorx%>" data-toggle="tab" onclick="clickRota(<%= idColetadorx%>);
+                                                    return false;">
+                                                <span class="glyphicon glyphicon-user" id=""></span>
+                                                <%=nomeColetadorx%>                                                
+                                                <span id="badgeRota<%= idColetadorx%>" class="label label-info"></span>
+                                            </a>
+                                        </li>  
                                         <%}
                                             if (!qtdSolicitadas.equals("0")) {%>
 
                                         <li>
-                                            <a href="#rotaweb" onclick="clickRota(0)" data-toggle="tab"><span class="glyphicon glyphicon-globe no-margin"></span>  <b style="color:red;"> Web(<%= qtdSolicitadas%>)</b></a>
+                                            <a href="#rotaweb" id="abaWeb" onclick="clickRota(0)" data-toggle="tab">
+                                                <span class="glyphicon glyphicon-globe no-margin"></span>  
+                                                Web
+                                                <span id="badgeRotaWeb" class="label label-danger"><%= qtdSolicitadas%></span>
+                                            </a>
                                         </li>
                                         <% }%> 
 
@@ -313,6 +332,7 @@
                                         <div class="tab-pane fade in" id="rota<%=idColetadorx%>">                                            
                                             <div class="list-group">
                                                 <%int cont = 0;
+                                                    colAberto = 0;
                                                     if (listaColetas.size() != 0) {
                                                         for (int s = 0; s < listaColetas.size(); s++) {
 
@@ -331,7 +351,7 @@
                                                             }
                                                             String tipo = col.getTipoColeta();
                                                             String obs = col.getObs();
-                                                            String dataColeta = hr1.format(col.getDataHoraColeta());
+                                                            String hrEstimada = hr1.format(col.getDataHoraColeta());
                                                             String hrColetado = " - - - - ";
                                                             if (col.getDataHoraBaixa() != null) {
                                                                 hrColetado = hr1.format(col.getDataHoraBaixa());
@@ -355,11 +375,16 @@
                                                                     int minutos = (int) Util.SomaData.diferencaEmMinutos(col.getDataHoraAguardando(), new Date());
                                                                     hrAguardando = minutos + " min";//hr1.format(col.getDataHoraAguardando());
                                                                 }
-                                                                cor = "red";
+                                                                cor = "yellow";
                                                             } else if (col.getStatusEntrega() == 5) {
                                                                 cor = "green";
                                                             } else if (col.getStatusEntrega() == 7) {
                                                                 cor = "orange";
+                                                            } else if (col.getStatusEntrega() == 3) {
+                                                                cor = "red";
+                                                            }
+                                                            if (col.getStatusEntrega() == 6 || col.getStatusEntrega() == 2) {
+                                                                colAberto++;
                                                             }
 
                                                             Clientes cli = Controle.contrCliente.consultaClienteById(idCli, nomeBD);
@@ -390,9 +415,7 @@
                                                                 <span class="text-muted text-right" style="font-size: 12px; margin-bottom: 5px;">  
                                                                     [<%= cont%>]  &nbsp; &nbsp;
                                                                 </span>
-                                                                <a data-toggle="popover" title="<%=tel%>" data-content="<%=resultado%>">
-                                                                    <%= nomeFantasia%> </a>
-                                                                -  <%=tipo%> -<%= col.getIdColeta()%>
+                                                                <a data-toggle="popover" title="<%=tel%>" data-content="<%=resultado%>"><%= nomeFantasia%> </a> -  <%=tipo%> 
                                                             </td>
                                                             <td width="150">
                                                                 <span class= "xedit" id="<%= idColeta%>;<%= idCol%>">
@@ -401,18 +424,21 @@
                                                             </td> 
                                                             <td width="150">
                                                                 <span style="color: <%=cor%>;">    
-                                                                    <%if (col.getStatusEntrega() == 6) {%> <a style="color: red;" data-toggle="popover" title="Aguardando à " data-content="<%= hrAguardando%>">
-                                                                        <%= col.getNomeStatus()%> </a>   <%} else {%><%= col.getNomeStatus()%><%}%>
+                                                                    <%if (col.getStatusEntrega() == 6) {%> 
+                                                                    <a style="color: red;" data-toggle="popover" title="Aguardando à " data-content="<%= hrAguardando%>"><%= col.getNomeStatus()%></a>   
+                                                                    <%} else {%><%= col.getNomeStatus()%>
+                                                                    <%}%>
                                                                 </span>
                                                             </td>
                                                             <td width="60">
-                                                                <span class="label label-success pull-left"><%= dataColeta%></span> 
-                                                                <span class="label label-default pull-right"> <%= hrColetado%></span> 
+                                                                <span class="label label-success pull-left"><%= hrColetado%></span> 
+                                                                <span class="label label-default pull-right"><%= hrEstimada%></span> 
                                                             </td>
                                                         </tr>
                                                     </table>
                                                 </div>
                                                 <%}
+                                                    badgMap.put(idColetadorx + "", colAberto);
                                                 } else {%>
 
                                                 <div class="list-group-item">
@@ -514,11 +540,10 @@
 
         <script type="text/javascript">
             var isW = false;
-
+            var idColetOld = 0;
             function pesquisaSituacao(situ) {
                 var dataP = $('#dataPesquisa').val();
                 window.location.replace('pesquisar_b_1.jsp?dataPesquisa=' + dataP + '&situacao=' + situ);
-
             }
 
             function alterarColetador(idColtdr) {
@@ -537,9 +562,8 @@
                         },
                 function (data, status) {
                     //console.log("Data: " + data + "\nStatus: " + status);
-                    window.location.replace('pesquisar_b_1.jsp?dataPesquisa=<%= dataPesquisa%>&msg=' + data);
+                    window.location.replace('pesquisar_b_1.jsp?dataPesquisa=<%= dataPesquisa%>&idColetador=' + idColetOld);
                 });
-
             }
 
             function alterarColetas(status) {
@@ -556,15 +580,13 @@
                         },
                 function (data, status) {
                     //  console.log("Data: " + data + "\nStatus: " + status);
-                    window.location.replace('pesquisar_b_1.jsp?dataPesquisa=<%= dataPesquisa%>&msg=' + data);
+                    window.location.replace('pesquisar_b_1.jsp?dataPesquisa=<%= dataPesquisa%>&idColetador=' + idColetOld);
                 });
-
             }
 
             function verificaCheck(sel) {
                 var csel = 'check' + sel;
                 var asel = 'line' + sel;
-
                 if (document.getElementById(csel).checked === true) {
                     document.getElementById(asel).style.backgroundColor = 'LightYellow';
                 } else {
@@ -648,6 +670,7 @@
             }
 
             function clickRota(idC) {
+                idColetOld = idC;
                 if (idC === 0) {
                     isW = true;
                 } else {
@@ -658,7 +681,6 @@
                     var id = $(this).attr("id");
                     document.getElementById(id).style.backgroundColor = 'white';
                 });
-
                 mostraBotoes();
                 if (($('#listaBaixa').is(":visible"))) {
                     $('#listaBaixa').toggleClass('hidden');
@@ -668,24 +690,22 @@
                 }
 
                 var rota = 'imprimirRota.jsp?idColetador=' + idC + '&dataPesquisa=<%= dataPesquisa%>';
-                var mapa = 'gerarMapaRota.jsp?idColetador=' + idC + '&dataPesquisa=<%= dataPesquisa%>';
+                var mapa = 'gerarMapaRota_New.jsp?idColetador=' + idC + '&dataPesquisa=<%= dataPesquisa%>';
                 $('#printRota').attr('href', rota);
                 $('#printMap').attr('href', mapa);
-
             }
 
             $(function () {
                 $('[data-toggle="popover"]').popover()
 
             });
-
-
+            
             function verificaLoginDialog(retorno) {
                 bootbox.dialog({
                     title: "Acesso Restrito!",
                     message: retorno,
                     animate: true,
-                    onEscape: true,
+                    //onEscape: true,
                     buttons: {
                         "Cancelar": {
                             label: "<i class='fa fa-lg fa-times fa-spc'></i> CANCELAR",
@@ -738,7 +758,6 @@
                 }).done(function (retorno) {
                     verificaLoginDialog(retorno);
                 });
-
             }
 
             function submitForm(servlet) {
@@ -762,7 +781,6 @@
                         document.getElementById(id).style.backgroundColor = 'LightYellow';
                     }
                 });
-
                 if ($('#listaColetas input:checked').length > 0) {
 
                 } else {
@@ -775,6 +793,9 @@
                 }
 
             });
+            function escreveBadge(idDOM, HTML) {
+                $('#' + idDOM).html(HTML);
+            }
 
 
             jQuery(document).ready(function () {
@@ -794,7 +815,6 @@
                     $target = $('#' + $input.attr('data-toggle'));
                     $target.slideToggle();
                 });
-
                 $.fn.editable.defaults.mode = 'popup';
                 $('.xedit').editable();
                 $(document).on('click', '.editable-submit', function () {
@@ -802,21 +822,18 @@
                     var x = $(this).closest('td').children('span').attr('id');
                     var y = $('.input-sm').val();
                     var aux = x.split(';');
-
                     $.ajax({
                         url: "ajax/coleta_alterar_obs.jsp",
                         data: {obs: y, idColeta: aux[0], idColetador: aux[1]},
                         type: 'POST'
                     });
                 });
-
-
+                
                 $("a.popover-ajax").each(function () {
                     $(this).popover({
                         trigger: "focus",
                         placement: function (context, source) {
                             var obj = $(source);
-
                             $.ajax({
                                 method: "GET",
                                 url: obj.data("url"),
@@ -825,15 +842,12 @@
                                     .done(function (msg) {
                                         $(context).html(msg);
                                     });
-
-
-
                         },
                         html: true,
                         content: "loading"
                     });
                 });
-
+                
                 $('body').on('click', function (e) {
                     $('[data-toggle="popover"]').each(function () {
                         //the 'is' for buttons that trigger popups
@@ -843,15 +857,33 @@
                         }
                     });
                 });
-
+                
                 $("#dataPesquisa").datepicker({
                     showAnim: 'slideDown',
                     numberOfMonths: 1
                 });
                 fechaMsg();
+            <%
+                for (Map.Entry<String, Integer> entry : badgMap.entrySet()) {
+                    if (entry.getValue() != 0) {%>
+                escreveBadge("badgeRota<%=entry.getKey()%>",<%=entry.getValue()%>);
+            <%}
+
+                            }%>
+
+
+            <%if (idCol != 0) {%>
+                $("#aba<%=idCol%>").click();
+            <%} else {%>
+                $("#abaWeb").click();
+            <% }%>
+
             }
             );
         </script>
     </body>
 </html>
 <%}%>
+
+
+

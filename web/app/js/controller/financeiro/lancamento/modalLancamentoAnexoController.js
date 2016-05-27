@@ -1,7 +1,7 @@
 'use strict';
 
 app.controller('ModalLancamentoAnexoController', ['$scope', '$modalInstance', '$sce', 'lancamento', 'LancamentoAnexoService', 'ModalService',
-    function ($scope, $modalInstance, $sce, lancamento, LancamentoAnexoService, ModalService) {
+    function ($scope, $modalInstance, conta, lancamento, LancamentoAnexoService, ModalService) {
 
         var init = function () {  
             $scope.lancamento = lancamento;
@@ -16,7 +16,7 @@ app.controller('ModalLancamentoAnexoController', ['$scope', '$modalInstance', '$
                     $scope.anexos = data;
                 })
                 .catch(function (e) {
-                    console.log(e);
+                    modalMessage(e);
                 });
         }
         
@@ -35,7 +35,8 @@ app.controller('ModalLancamentoAnexoController', ['$scope', '$modalInstance', '$
         
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
-            $modalInstance.close($scope.lancamentoConciliado);            
+            modalSalvar(conta, lancamento);
+            $modalInstance.close($scope.lancamentoAnexo);            
         };
         
         var modalMessage = function(message) {
@@ -48,7 +49,20 @@ app.controller('ModalLancamentoAnexoController', ['$scope', '$modalInstance', '$
                 return false;
             }   
             return true;
-        }     
+        };
+        
+        var modalSalvar = function(conta, lancamento) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamento.html', 'ModalEditarLancamentoController', 'lg',
+                {
+                    lancamento: function() {
+                        return lancamento;
+                    },
+                    conta: function() {
+                        return conta;
+                    }
+                });
+            return modalInstance.result;
+        };
 
         init();
 

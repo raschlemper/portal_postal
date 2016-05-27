@@ -1,9 +1,7 @@
 package com.portalpostal.model;
 
 import com.portalpostal.model.dd.TipoFrequencia;
-import com.portalpostal.model.serializer.JsonDateSerializer;
 import java.util.Date;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class LancamentoTransferenciaProgramado {
     
@@ -17,6 +15,7 @@ public class LancamentoTransferenciaProgramado {
     private Date dataEmissao;
     private Double valor;
     private String historico;
+    private String usuario;
 
     public Integer getIdLancamentoTransferenciaProgramado() {
         return idLancamentoTransferenciaProgramado;
@@ -96,6 +95,14 @@ public class LancamentoTransferenciaProgramado {
 
     public void setHistorico(String historico) {
         this.historico = historico;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
     
 }

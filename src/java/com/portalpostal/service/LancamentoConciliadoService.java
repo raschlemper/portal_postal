@@ -10,43 +10,57 @@ import java.util.List;
 
 public class LancamentoConciliadoService {
     
-    private final LancamentoConciliadoDAO lancamentoConciliadoDAO;    
-    private final LancamentoService lancamentoService;
+    private final String nomeBD;
+    
+    private LancamentoConciliadoDAO lancamentoConciliadoDAO;    
+    private LancamentoService lancamentoService;
 
     public LancamentoConciliadoService(String nomeBD) {
+        this.nomeBD = nomeBD;
+    }
+
+    public void init() {
         lancamentoConciliadoDAO = new LancamentoConciliadoDAO(nomeBD);
         lancamentoService = new LancamentoService(nomeBD);
     }
     
     public List<LancamentoConciliado> findAll() throws Exception {
+        init();
         return lancamentoConciliadoDAO.findAll();
     }  
     
     public List<LancamentoConciliado> findByData(Date data) throws Exception {
+        init();
         return lancamentoConciliadoDAO.findByData(data);
     } 
 
     public LancamentoConciliado findByLote(Integer numeroLote) throws Exception {
+        init();
         return lancamentoConciliadoDAO.findByLote(numeroLote);
     }
     
     public LancamentoConciliado find(Integer idLancamentoConciliado) throws Exception {
+        init();
         return lancamentoConciliadoDAO.find(idLancamentoConciliado);
     } 
     
     public LancamentoConciliado save(LancamentoConciliado lancamentoConciliado) throws Exception {
+        init();
         return lancamentoConciliadoDAO.save(lancamentoConciliado);
     } 
     
     public LancamentoConciliado update(LancamentoConciliado lancamentoConciliado) throws Exception {
+        init();
         return lancamentoConciliadoDAO.update(lancamentoConciliado);
     } 
     
     public LancamentoConciliado delete(Integer idLancamentoConciliado) throws Exception {
+        init();
         return lancamentoConciliadoDAO.remove(idLancamentoConciliado);
     }   
     
     public LancamentoConciliado createLancamento(LancamentoConciliado lancamentoConciliado) throws Exception {
+        init();
         Lancamento lancamentoConciliacao = lancamentoService.save(lancamentoConciliado.getLancamento());
         lancamentoConciliado.setLancamento(lancamentoConciliacao);
         lancamentoConciliado.setNumeroLote(getLastLote());

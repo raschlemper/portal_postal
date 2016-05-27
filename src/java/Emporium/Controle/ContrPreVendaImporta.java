@@ -464,6 +464,112 @@ public class ContrPreVendaImporta {
         }
 
     }
+    public static String importaPedidoPSN(FileItem item, int idCliente, int idDepartamento, String departamento, String contrato, String cartaoPostagem, String servicoEscolhido, String nomeBD) {
+
+        try {
+            System.out.println("entrou importaPedidoPSN");
+            //CONTADOR DE LINHA
+            int qtdLinha = 1;
+            ArrayList<ArquivoImportacao> listaAi = new ArrayList<ArquivoImportacao>();
+            BufferedReader le = new BufferedReader(new InputStreamReader(item.getInputStream(), "ISO-8859-1"));
+            // LE UMA LINHA DO ARQUIVO PARA PULAR O CABEÇALHO
+            le.readLine();
+            while (le.ready()) {
+                System.out.println("linha "+ qtdLinha);
+                //LE UMA LINHA DO ARQUIVO E DIVIDE A LINHA POR PONTO E VIRGULA
+                String[] aux = le.readLine().replace(";", " ; ").split(";");
+                //ADICIONA CONTADOR DE LINHA
+                qtdLinha++;
+                //VERIFICA QUANTIDADE MAXIMA DE LINHAS PERMITIDAS
+                if (qtdLinha > MAX_ALLOWED) {
+                    return "Quantidade maxima de importacao de " + MAX_ALLOWED + " objetos por importacao!";
+                } else if (aux != null && aux.length >= 15) {
+                    ArquivoImportacao ai = new ArquivoImportacao();
+                    ai.setIdCliente(idCliente);
+                    ai.setIdDepartamento(idDepartamento);
+                    ai.setDepartamento(departamento);
+                    ai.setContrato(contrato);
+                    ai.setCartaoPostagem(cartaoPostagem);
+                    ai.setMetodoInsercao("IMPORTACAO_PSN");
+                    ai.setCodECT(0);
+                    ai.setNrLinha(qtdLinha + "");
+                    ai.setNrObjeto(aux[9].trim());
+                     System.out.println("linha "+ qtdLinha+" sro "+ aux[9].trim());
+                    ai.setNome(aux[1].trim());
+                    ai.setEmpresa("");
+                    ai.setCpf("");
+                    ai.setCep(aux[8].trim());
+                    ai.setEndereco(aux[2].trim());
+                    ai.setNumero(aux[3].trim());
+                    ai.setComplemento(aux[4].trim());
+                    ai.setBairro(aux[5].trim());
+                    ai.setCidade(aux[6].trim());
+                    ai.setUf(aux[7].trim());
+                    ai.setEmail("");
+                    ai.setCelular("");
+                    ai.setAosCuidados("");
+                    ai.setNotaFiscal(aux[11].trim());
+                    String serv = aux[10].trim().toUpperCase();
+                    if(serv.equals("109819")){
+                        serv = "PAC";
+                    }else if(serv.equals("109810")){
+                         serv = "SEDEX";
+                    }
+                    ai.setServico(serv);
+
+                    // limita o tamanho da observação e do conteudo
+                    String obs = aux[12].trim();
+                    String cont = aux[12].trim();
+
+                    if (obs.length() > 50) {
+                        obs = obs.substring(0, 49);
+                    }
+                    if (cont.length() > 50) {
+                        cont = cont.substring(0, 49);
+                    }
+                    ai.setObs(obs);
+                    ai.setConteudo(cont);
+                    ai.setChave("");
+                    ai.setPeso(aux[13].trim());
+                    ai.setAltura("4");
+                    ai.setLargura("11");
+                    ai.setComprimento("24");
+                    ai.setAr("0");
+                    ai.setMp("0");
+                    ai.setVd("0");
+                    listaAi.add(ai);
+
+                }
+            }
+            le.close();
+
+            if (listaAi.size() > 0) {
+                //valida os dados do arquivo para efetuar a importacao
+                listaAi = validaDadosArquivo(listaAi, idCliente, servicoEscolhido, nomeBD);
+                if (!falha.equals("")) {
+                    //retorna mensagem de falha
+                    return falha;
+                } else {
+                    //MONTA SQL
+                    String sql = montaSqlPedido(listaAi, nomeBD);
+                    boolean flag = inserir(sql, nomeBD);
+                    if (flag) {
+                        return "Pedidos Importados Com Sucesso!";
+                    } else {
+                        return "Falha ao importar Pedidos!";
+                    }
+                }
+            } else {
+                return "Nenhum pedido no arquivo para importar!";
+            }
+
+        } catch (IOException e) {
+            return "Não foi possivel ler o arquivo: " + e;
+        } catch (Exception e) {
+            return "Falha na importacao dos pedidos: " + e;
+        }
+
+    }
 
     //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
     public static String importaPedidoWebVendas(FileItem item, int idCliente, int idDepartamento, String departamento, String contrato, String cartaoPostagem, String servicoEscolhido, String nomeBD) {

@@ -32,6 +32,7 @@ public class LancamentoProgramadoController {
     
     private HttpSession sessao;
     private String nomeBD;
+    private String usuario;
     
     private LancamentoService lancamentoService;
     private LancamentoProgramadoService lancamentoProgramadoService;
@@ -39,6 +40,7 @@ public class LancamentoProgramadoController {
     private void init() {
         sessao = request.getSession();
         nomeBD = (String) sessao.getAttribute("nomeBD");
+        usuario = (String) sessao.getAttribute("usuario");  
         lancamentoService = new LancamentoService(nomeBD);
         lancamentoProgramadoService = new LancamentoProgramadoService(nomeBD);
     }
@@ -125,6 +127,7 @@ public class LancamentoProgramadoController {
         try {
             init();
             validation(lancamentoProgramado);
+            lancamentoProgramado.setUsuario(usuario);
             return lancamentoProgramadoService.save(lancamentoProgramado);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
@@ -153,6 +156,7 @@ public class LancamentoProgramadoController {
         try {
             init();
             validation(lancamentoProgramado);
+            lancamentoProgramado.setUsuario(usuario);
             return lancamentoProgramadoService.createLancamento(lancamentoProgramado);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));

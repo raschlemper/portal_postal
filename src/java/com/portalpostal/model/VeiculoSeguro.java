@@ -14,9 +14,7 @@ public class VeiculoSeguro {
     private String assegurado;
     private Double valorFranquia;
     private TipoSeguroVeiculo indenizacao;
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataInicioVigencia;
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataFimVigencia;
     
     public VeiculoSeguro() {}

@@ -12,7 +12,6 @@ public class VeiculoCombustivel {
     private TipoCombustivelVeiculo tipo;
     private Integer quantidade;
     private Double valorUnitario;
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date data; 
     private Double valorTotal;
     private Integer quilometragem;

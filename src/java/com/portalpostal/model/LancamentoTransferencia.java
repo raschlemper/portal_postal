@@ -14,6 +14,7 @@ public class LancamentoTransferencia {
     private Double valor;
     private String historico;
     private String observacao;
+    private String usuario;
 
     public Integer getIdLancamentoTransferencia() {
         return idLancamentoTransferencia;
@@ -93,6 +94,14 @@ public class LancamentoTransferencia {
 
     public void setObservacao(String observacao) {
         this.observacao = observacao;
-    }    
+    }   
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
     
 }

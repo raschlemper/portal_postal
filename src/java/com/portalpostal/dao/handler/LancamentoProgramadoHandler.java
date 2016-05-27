@@ -2,7 +2,6 @@ package com.portalpostal.dao.handler;
 
 import com.portalpostal.model.CentroCusto;
 import com.portalpostal.model.Conta;
-import com.portalpostal.model.LancamentoParcelado;
 import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.model.PlanoConta;
 import com.portalpostal.model.TipoDocumento;
@@ -30,7 +29,6 @@ public class LancamentoProgramadoHandler extends GenericHandler implements Resul
         lancamentoProgramado.setConta(getConta(result));
         lancamentoProgramado.setPlanoConta(getPlanoConta(result));
         lancamentoProgramado.setCentroCusto(getCentroCusto(result));
-//        lancamentoProgramado.setLancamentoParcelado(getLancamentoParcelado(result));
         lancamentoProgramado.setTipo(TipoLancamento.values()[getInt(result, "tipo")]);
         lancamentoProgramado.setFavorecido(getString(result, "favorecido"));
         lancamentoProgramado.setNumero(getString(result, "numero"));
@@ -45,6 +43,7 @@ public class LancamentoProgramadoHandler extends GenericHandler implements Resul
         lancamentoProgramado.setValor(getDouble(result, "valor"));
         lancamentoProgramado.setSituacao(TipoSituacaoLancamentoProgramado.values()[getInt(result, "situacao")]);
         lancamentoProgramado.setHistorico(getString(result, "historico"));
+        lancamentoProgramado.setUsuario(getString(result, "usuario"));
         return lancamentoProgramado;
     }
     
@@ -61,12 +60,6 @@ public class LancamentoProgramadoHandler extends GenericHandler implements Resul
     private CentroCusto getCentroCusto(ResultSet result) throws SQLException {
         if(!existColumn(result, "centro_custo.idCentroCusto")) return null;
         return new CentroCustoHandler().handle(result); 
-    }
-    
-    private LancamentoParcelado getLancamentoParcelado(ResultSet result) throws SQLException {
-        if(!existColumn(result, "lancamento_parcelado.idLancamentoParcelado")) return null;
-        if(!existFKValue(result, "lancamento_parcelado.idLancamentoParcelado")) return null;
-        return new LancamentoParceladoHandler().handle(result); 
     }
     
     private TipoDocumento getTipoDocumento(ResultSet result) throws SQLException {

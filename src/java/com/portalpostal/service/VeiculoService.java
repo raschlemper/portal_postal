@@ -11,14 +11,20 @@ import java.util.List;
 
 public class VeiculoService {
     
-    private final VeiculoDAO veiculoDAO;
-    private final VeiculoCombustivelService veiculoCombustivelService;
-    private final VeiculoManutencaoService veiculoManutencaoService;
-    private final VeiculoMultaService veiculoMultaService;
-    private final VeiculoSeguroService veiculoSeguroService;
-    private final VeiculoSinistroService veiculoSinistroService;
+    private final String nomeBD;
+    
+    private VeiculoDAO veiculoDAO;
+    private VeiculoCombustivelService veiculoCombustivelService;
+    private VeiculoManutencaoService veiculoManutencaoService;
+    private VeiculoMultaService veiculoMultaService;
+    private VeiculoSeguroService veiculoSeguroService;
+    private VeiculoSinistroService veiculoSinistroService;
 
     public VeiculoService(String nomeBD) {
+        this.nomeBD = nomeBD;
+    }
+
+    public void init() {
         veiculoDAO = new VeiculoDAO(nomeBD);
         veiculoCombustivelService = new VeiculoCombustivelService(nomeBD);
         veiculoManutencaoService = new VeiculoManutencaoService(nomeBD);
@@ -28,33 +34,39 @@ public class VeiculoService {
     }
     
     public List<Veiculo> findAll() throws Exception {
+        init();
         return veiculoDAO.findAll();
     }  
     
     public Veiculo find(Integer idVeiculo) throws Exception {
+        init();
         return veiculoDAO.find(idVeiculo);
     }  
     
     public Veiculo findByPlaca(String placa) throws Exception {
+        init();
         return veiculoDAO.findByPlaca(placa);
     } 
     
     public Veiculo save(Veiculo veiculo) throws Exception {
+        init();
         validation(veiculo);
         return veiculoDAO.save(veiculo);
     } 
     
     public Veiculo update(Veiculo veiculo) throws Exception {
+        init();
         validation(veiculo);
         return veiculoDAO.update(veiculo);
     } 
     
     public Veiculo delete(Integer idVeiculo) throws Exception {
+        init();
         if(!podeExcluir(idVeiculo)) throw new Exception("O veículo não pode ser excluído!"); 
         return veiculoDAO.remove(idVeiculo);
     }    
     
-    public boolean podeExcluir(Integer idVeiculo) throws Exception {
+    private boolean podeExcluir(Integer idVeiculo) throws Exception {
         List<VeiculoCombustivel> combustiveis = veiculoCombustivelService.findByIdVeiculo(idVeiculo);
         if(!combustiveis.isEmpty()) return false;
         List<VeiculoManutencao> manutencoes = veiculoManutencaoService.findByIdVeiculo(idVeiculo);

@@ -12,7 +12,7 @@ public class LancamentoTransferenciaProgramadoDAO extends GenericDAO {
 
     public LancamentoTransferenciaProgramadoDAO(String nameDB) { 
         super(nameDB, LancamentoTransferenciaProgramadoDAO.class);
-        lancamentoTransferenciaProgramadoHandler = new LancamentoTransferenciaProgramadoHandler();
+        this.lancamentoTransferenciaProgramadoHandler = new LancamentoTransferenciaProgramadoHandler();
     } 
 
     public List<LancamentoTransferenciaProgramado> findAll() throws Exception {
@@ -36,9 +36,9 @@ public class LancamentoTransferenciaProgramadoDAO extends GenericDAO {
 
     public LancamentoTransferenciaProgramado save(LancamentoTransferenciaProgramado lancamentoTransferenciaProgramado) throws Exception {  
         String sql = "INSERT INTO lancamento_programado_transferencia (idLancamentoProgramadoOrigem, idLancamentoProgramadoDestino, numero, "
-                   + "documento, formaPagamento, frequencia, dataEmissao, valor, historico) "
+                   + "documento, formaPagamento, frequencia, dataEmissao, valor, historico, usuario) "
                    + "VALUES(:idLancamentoProgramadoOrigem, :idLancamentoProgramadoDestino, :numero, :documento, :formaPagamento, "
-                   + ":frequencia, :dataEmissao, :valor, :historico)";        
+                   + ":frequencia, :dataEmissao, :valor, :historico, :usuario)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamentoProgramadoOrigem", lancamentoTransferenciaProgramado.getLancamentoProgramadoOrigem().getIdLancamentoProgramado());
         params.put("idLancamentoProgramadoDestino", lancamentoTransferenciaProgramado.getLancamentoProgramadoDestino().getIdLancamentoProgramado()); 
@@ -48,7 +48,8 @@ public class LancamentoTransferenciaProgramadoDAO extends GenericDAO {
         params.put("frequencia", lancamentoTransferenciaProgramado.getFrequencia().ordinal());           
         params.put("dataEmissao", lancamentoTransferenciaProgramado.getDataEmissao());      
         params.put("valor", lancamentoTransferenciaProgramado.getValor());   
-        params.put("historico", lancamentoTransferenciaProgramado.getHistorico());         
+        params.put("historico", lancamentoTransferenciaProgramado.getHistorico());                
+        params.put("usuario", lancamentoTransferenciaProgramado.getUsuario());
         Integer idLancamentoTransferenciaProgramado = save(sql, params, lancamentoTransferenciaProgramadoHandler);
         return find(idLancamentoTransferenciaProgramado);
     }
@@ -57,7 +58,7 @@ public class LancamentoTransferenciaProgramadoDAO extends GenericDAO {
         String sql = "UPDATE lancamento_programado_transferencia "
                    + "SET idLancamentoProgramadoOrigem = :idLancamentoProgramadoOrigem, idLancamentoProgramadoDestino = :idLancamentoProgramadoDestino "
                    + "numero = :numero, documento = :documento, formaPagamento = :formaPagamento, frequencia = :frequencia, dataEmissao = :dataEmissao, "
-                   + "valor = :valor, historico = :historico "
+                   + "valor = :valor, historico = :historico, usuario = :usuario "
                    + "WHERE idLancamentoTransferenciaProgramado = :idLancamentoTransferenciaProgramado ";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamentoTransferenciaProgramado", lancamentoTransferenciaProgramado.getIdLancamentoTransferenciaProgramado());
@@ -69,7 +70,8 @@ public class LancamentoTransferenciaProgramadoDAO extends GenericDAO {
         params.put("frequencia", lancamentoTransferenciaProgramado.getFrequencia().ordinal());           
         params.put("dataEmissao", lancamentoTransferenciaProgramado.getDataEmissao());      
         params.put("valor", lancamentoTransferenciaProgramado.getValor());   
-        params.put("historico", lancamentoTransferenciaProgramado.getHistorico());            
+        params.put("historico", lancamentoTransferenciaProgramado.getHistorico());              
+        params.put("usuario", lancamentoTransferenciaProgramado.getUsuario());
         update(sql, params, lancamentoTransferenciaProgramadoHandler);
         return lancamentoTransferenciaProgramado;  
     }

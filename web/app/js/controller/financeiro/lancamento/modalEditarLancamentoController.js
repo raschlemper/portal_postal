@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', 'conta', 'lancamento', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, conta, lancamento, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, ModalService, DatePickerService, ListaService, LISTAS) {
+app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', 'conta', 'lancamento', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'LancamentoAnexoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
+    function ($scope, $modalInstance, conta, lancamento, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, LancamentoAnexoService, ModalService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
@@ -12,12 +12,18 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
             $scope.lancamento = lancamento || {};
             $scope.lancamento.tipo = (lancamento && lancamento.tipo) || $scope.tipos[0];
             $scope.lancamento.situacao = (lancamento && lancamento.situacao) || $scope.situacoes[0];
-            $scope.lancamento.modelo = (lancamento && lancamento.modelo) || $scope.modelos[0];            
+            $scope.lancamento.modelo = (lancamento && lancamento.modelo) || $scope.modelos[0];      
+            initStep();
             getTitle();
             contas();
             centroCustos();
             $scope.changeTipo($scope.lancamento.tipo);
         };
+        
+        var initStep = function() {           
+            $scope.stepFrom = null; 
+            $scope.stepTo = 'editar'; 
+        }
         
         $scope.editConta = function() {
             return (lancamento && lancamento.idLancamento);
@@ -90,12 +96,12 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
         }
         
         $scope.getTotal = function(lancamento) {
-            var valor = lancamento.valor || 0;
-            var valorJuros = lancamento.valorJuros || 0;
-            var valorMulta = lancamento.valorMulta || 0;
-            var valorDesconto = lancamento.valorDesconto || 0;
-            return valor + valorJuros + valorMulta - valorDesconto;
-        }
+            lancamento.valor = lancamento.valor || 0;
+            lancamento.valorJuros = lancamento.valorJuros || 0;
+            lancamento.valorMulta = lancamento.valorMulta || 0;
+            lancamento.valorDesconto = lancamento.valorDesconto || 0;
+            return lancamento.valor + lancamento.valorJuros + lancamento.valorMulta - lancamento.valorDesconto;
+        };
         
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
@@ -119,23 +125,50 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
         };
 
         $scope.anexar = function(lancamento) {
-            modalAnexar(lancamento).then(function(result) {
-            });
+            $scope.stepFrom = 'editar'; 
+            $scope.stepTo = 'anexar'; 
+            anexos(lancamento.idLancamento);
         };
+        
+        $scope.setAnexo = function(lancamento, anexo) {            
+            LancamentoAnexoService.upload(lancamento.idLancamento, anexo[0])
+                .done(function (data) {
+                    $scope.anexoFile = null;
+                    anexos(lancamento.idLancamento);
+                }).fail(function (e) {
+                    console.log(e);
+                });
+            anexos(lancamento.idLancamento);           
+        };
+        
+        $scope.removeAnexo = function(anexo) {            
+            LancamentoAnexoService.delete(anexo.idLancamentoAnexo);      
+            anexos(lancamento.idLancamento);      
+        };
+        
+        $scope.visualizarAnexo = function(anexo) {
+            $scope.contentFile = anexo.anexo;            
+        }
+        
+        $scope.voltar = function() {
+            $scope.stepFrom = 'anexar'; 
+            $scope.stepTo = 'editar';             
+        }
+        
+        var anexos = function(idLancamento) {
+            LancamentoAnexoService.getLancamento(idLancamento)
+                .then(function (data) {
+                    $scope.anexos = data;
+                })
+                .catch(function (e) {
+                    modalMessage(e);
+                });
+        }
         
         var setData = function(lancamento, data) {
             lancamento.dataEmissao = moment();
             lancamento.dataVencimento = lancamento.dataLancamento;
             return lancamento;
-        };
-        
-        var modalAnexar = function(lancamento) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamentoAnexo.html', 'ModalLancamentoAnexoController', 'lg', {
-                    lancamento: function() {
-                        return lancamento;
-                    }
-                });
-            return modalInstance.result;
         };
         
         var modalConfirmarConciliado = function() {
@@ -173,7 +206,15 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
                 return false;
             }
             return true;
-        }     
+        }    
+
+        var validarFormAnexo = function (form) {
+            if (form.file.$error.required) {
+                alert('Selecione o arquivo!');
+                return false;
+            }   
+            return true;
+        }; 
 
         init();
 

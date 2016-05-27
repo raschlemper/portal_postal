@@ -21,6 +21,11 @@ app.factory('LancamentoAnexoService', function($http, PromiseService, FileUpload
             return PromiseService.execute(
                     $http.get(_contextPath + "/api/financeiro/lancamento/anexo/" + idLancamentoAnexo));
         },
+        
+        getLancamento: function(idLancamento) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/lancamento/anexo/lancamento/" + idLancamento));
+        },
 
         save: function(data) {
             return PromiseService.execute(
@@ -39,18 +44,14 @@ app.factory('LancamentoAnexoService', function($http, PromiseService, FileUpload
         
         upload: function(idLancamento, anexo) {
             var fd = new FormData();
-            fd.append('file', anexo);
-            
-            jQuery.ajax({
+            fd.append('file', anexo);            
+            return jQuery.ajax({
                 url: _contextPath + "/api/financeiro/lancamento/" + idLancamento + "/anexo",
                 data: fd,
                 cache: false,
                 contentType: false,
                 processData: false,
-                type: 'POST',
-                success: function(data){
-                    alert(data);
-                }
+                type: 'POST'                                       
             });
 //            return PromiseService.execute(
 //                    $http.post(_contextPath + "/api/financeiro/lancamento/anexo/upload", fd, {

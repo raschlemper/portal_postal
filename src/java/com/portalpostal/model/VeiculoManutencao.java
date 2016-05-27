@@ -12,9 +12,7 @@ public class VeiculoManutencao {
     private TipoManutencaoVeiculo tipo;
     private Integer quilometragem;
     private Double valor;
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataManutencao;
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataAgendamento;
     private String descricao;
     

@@ -138,11 +138,11 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         
         $scope.getTotal = function(lancamento) {
             if(!lancamento) return;
-            var valor = lancamento.valor || 0;
-            var valorJuros = lancamento.valorJuros || 0;
-            var valorMulta = lancamento.valorMulta || 0;
-            var valorDesconto = lancamento.valorDesconto || 0;
-            return valor + valorJuros + valorMulta - valorDesconto;
+            lancamento.valor = lancamento.valor || 0;
+            lancamento.valorJuros = lancamento.valorJuros || 0;
+            lancamento.valorMulta = lancamento.valorMulta || 0;
+            lancamento.valorDesconto = lancamento.valorDesconto || 0;
+            return lancamento.valor + lancamento.valorJuros + lancamento.valorMulta - lancamento.valorDesconto;
         }
         
         $scope.ok = function(form) {

@@ -5,10 +5,10 @@
 <div class="modal-body" style="padding-bottom: 0;">
     <div class="bootbox-body">
         <div class="row">
-            <form name="lancamentoAnexoForm" ng-submit="anexar(lancamento)">
+            <form name="lancamentoAnexoForm" ng-submit="setAnexo(lancamento, anexoFile)">
                 <div class="col-md-10">
                     <label>Selecione o arquivo que você deseja anexar a este lançamento</label>
-                    <input type="file" name="anexo" file-model="anexo"/>
+                    <input type="file" name="anexo" file-model="anexoFile"/>
                 </div>
                 <div class="col-md-2">
                     <!--<input type="button" class="btn btn-default" value="Anexar" ng-click="anexar(uploader.queue)" />--> 
@@ -16,11 +16,11 @@
                 </div>
             </form>
         </div>
-        <div class="row" style="margin-top: 20px;height: 360px;">
+        <div class="row" style="margin-top: 20px; width: 100%; height: 360px;">
            <div class="col-md-6">
                <div class="list-group">
-                   <div class="list-group-item" style="border-left: none; border-right: none;"
-                        ng-repeat="anexo in anexos track by anexo.idLancamentoAnexo" ng-click="visualizar(anexo)">
+                   <div class="list-group-item" style="border-left: none; border-right: none; cursor: pointer"
+                        ng-repeat="anexo in anexos track by anexo.idLancamentoAnexo" ng-click="visualizarAnexo(anexo)">
                         <div class="row">
                             <div class="col-md-10">
                                 <div class="row">
@@ -29,22 +29,25 @@
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <div class="pull-right"><button class="btn btn-danger btn-md" style="height: 35px; padding: 0 6px" ng-click="remove(anexo)"><span class="fa fa-trash"></span></button></div>
+                                <div class="pull-right"><button class="btn btn-danger btn-md" style="height: 35px; padding: 0 6px" ng-click="removeAnexo(anexo)"><span class="fa fa-trash"></span></button></div>
                             </div>
                         </div>
                     </div>    
                 </div>
            </div>
-           <div class="col-md-6" style="background-color: #e5e5e5; height: 100%">
-               <img data-ng-src="data:image/PNG;base64,{{contentFile}}">
+           <div class="col-md-6 text-center" style="background-color: #e5e5e5; height: 100%; padding: 20px;">
+               <img style=" max-height: 320px; max-width: 390px; height: 100%; width: 100%;" data-ng-src="data:image/PNG;base64,{{contentFile}}">
            </div>
         </div>
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-primary" ng-click="ok()">
-        <i class="fa fa-lg fa-check fa-spc"></i> OK
+    <button type="button" class="btn btn-default" ng-click="voltar()">
+        <i class="fa fa-lg fa-arrow-circle-left fa-spc"></i> VOLTAR
     </button>
+<!--    <button type="button" class="btn btn-primary" ng-click="voltar()">
+        <i class="fa fa-lg fa-check fa-spc"></i> OK
+    </button>-->
 </div>
 
   

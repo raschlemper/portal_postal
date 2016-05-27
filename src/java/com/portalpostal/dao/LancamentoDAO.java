@@ -16,8 +16,8 @@ public class LancamentoDAO extends GenericDAO {
 
     public LancamentoDAO(String nameDB) { 
         super(nameDB, LancamentoDAO.class);
-        lancamentoHandler = new LancamentoHandler();
-        saldoHandler = new SaldoHandler();
+        this.lancamentoHandler = new LancamentoHandler();
+        this.saldoHandler = new SaldoHandler();
     } 
 
     public List<Lancamento> findAll() throws Exception {
@@ -186,10 +186,10 @@ public class LancamentoDAO extends GenericDAO {
     public Lancamento save(Lancamento lancamento) throws Exception {  
         String sql = "INSERT INTO lancamento (idConta, idPlanoConta, idCentroCusto, idLancamentoProgramado, numeroLoteConciliado, "
                    + "tipo, favorecido, numero, numeroParcela, dataCompetencia, dataEmissao, dataVencimento, dataLancamento, "
-                   + "dataCompensacao, valor, valorDesconto, valorJuros, valorMulta, situacao, modelo, autenticacao, historico, observacao) "
+                   + "dataCompensacao, valor, valorDesconto, valorJuros, valorMulta, situacao, modelo, autenticacao, historico, observacao, usuario) "
                    + "VALUES(:idConta, :idPlanoConta, :idCentroCusto, :idLancamentoProgramado, :numeroLoteConciliado, :tipo, :favorecido, "
                    + ":numero, :numeroParcela, :dataCompetencia, :dataEmissao, :dataVencimento, :dataLancamento, :dataCompensacao, "
-                   + ":valor, :valorDesconto, :valorJuros, :valorMulta, :situacao, :modelo, :autenticacao, :historico, :observacao)";        
+                   + ":valor, :valorDesconto, :valorJuros, :valorMulta, :situacao, :modelo, :autenticacao, :historico, :observacao, :usuario)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idConta", lancamento.getConta().getIdConta());
         params.put("idPlanoConta", (lancamento.getPlanoConta() == null ? null : lancamento.getPlanoConta().getIdPlanoConta()));
@@ -213,7 +213,8 @@ public class LancamentoDAO extends GenericDAO {
         params.put("numeroLoteConciliado", lancamento.getNumeroLoteConciliado());
         params.put("autenticacao", lancamento.getAutenticacao());      
         params.put("historico", lancamento.getHistorico());      
-        params.put("observacao", lancamento.getObservacao());        
+        params.put("observacao", lancamento.getObservacao());           
+        params.put("usuario", lancamento.getUsuario()); 
         Integer idLancamento = save(sql, params, lancamentoHandler);
         return find(idLancamento);
     }
@@ -225,7 +226,7 @@ public class LancamentoDAO extends GenericDAO {
                    + "numeroParcela = :numeroParcela, dataCompetencia = :dataCompetencia, dataEmissao = :dataEmissao, dataVencimento = :dataVencimento, "
                    + "dataLancamento = :dataLancamento, dataCompensacao = :dataCompensacao, valor = :valor, "
                    + "valorDesconto = :valorDesconto, valorJuros = :valorJuros, valorMulta = :valorMulta, "
-                   + "situacao = :situacao, modelo = :modelo, autenticacao = :autenticacao, historico = :historico, observacao = :observacao "
+                   + "situacao = :situacao, modelo = :modelo, autenticacao = :autenticacao, historico = :historico, observacao = :observacao, usuario = :usuario "
                    + "WHERE idLancamento = :idLancamento ";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamento", lancamento.getIdLancamento());
@@ -251,7 +252,8 @@ public class LancamentoDAO extends GenericDAO {
         params.put("numeroLoteConciliado", lancamento.getNumeroLoteConciliado());
         params.put("autenticacao", lancamento.getAutenticacao());      
         params.put("historico", lancamento.getHistorico());     
-        params.put("observacao", lancamento.getObservacao());     
+        params.put("observacao", lancamento.getObservacao());           
+        params.put("usuario", lancamento.getUsuario()); 
         update(sql, params, lancamentoHandler);
         return lancamento;  
     }

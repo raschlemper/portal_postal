@@ -12,7 +12,6 @@ public class LancamentoProgramado {
     private Conta conta;
     private PlanoConta planoConta;
     private CentroCusto centroCusto;
-//    private LancamentoParcelado lancamentoParcelado;
     private TipoLancamento tipo;
     private String favorecido;
     private String numero;
@@ -27,6 +26,7 @@ public class LancamentoProgramado {
     private Double valor;
     private TipoSituacaoLancamentoProgramado situacao;
     private String historico;
+    private String usuario;
     private List<Lancamento> lancamentos;
 
     public Integer getIdLancamentoProgramado() {
@@ -60,14 +60,6 @@ public class LancamentoProgramado {
     public void setCentroCusto(CentroCusto centroCusto) {
         this.centroCusto = centroCusto;
     }
-
-//    public LancamentoParcelado getLancamentoParcelado() {
-//        return lancamentoParcelado;
-//    }
-
-//    public void setLancamentoParcelado(LancamentoParcelado lancamentoParcelado) {
-//        this.lancamentoParcelado = lancamentoParcelado;
-//    }
 
     public TipoLancamento getTipo() {
         return tipo;
@@ -179,6 +171,14 @@ public class LancamentoProgramado {
 
     public void setHistorico(String historico) {
         this.historico = historico;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
     public List<Lancamento> getLancamentos() {
