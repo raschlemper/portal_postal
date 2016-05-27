@@ -63,7 +63,7 @@
             <td ng-show="showCheckbox"><input type="checkbox" ng-model="item.selected"></td>
             
             <td ng-repeat="coluna in colunas track by $index" ng-class="coluna.dataClass">
-                <span ng-bind-html="column(item, coluna)"></span>
+                <span compile="column(item, coluna)"></span>
             </td>
             
             <td align="center" class="cel-btn" ng-if="linha.events.edit" ng-show="!showMenu" title="Editar registro">

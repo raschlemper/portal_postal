@@ -51,17 +51,20 @@
         
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/run/stateRun.js"></script>
         
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/anexoFilter.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/placaFilter.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/renavamFilter.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/tipoLancamentoFilter.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/situacaoLancamentoFilter.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/conciliadoLancamentoFilter.js"></script>
+        
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/animate/listOrdered.js"></script>
         
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/datepickerPopupDirective.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/appTable.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/appTree.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/fileModel.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/compile.js"></script>
         
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/modalController.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/controller/helpController.js"></script>

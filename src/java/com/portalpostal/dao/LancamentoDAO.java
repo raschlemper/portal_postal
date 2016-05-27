@@ -21,7 +21,8 @@ public class LancamentoDAO extends GenericDAO {
     } 
 
     public List<Lancamento> findAll() throws Exception {
-        String sql = "SELECT * FROM conta, lancamento "
+        String sql = "SELECT *, (SELECT count(1) FROM lancamento_anexo WHERE lancamento.idLancamento = lancamento_anexo.idLancamento) as anexos "
+                   + "FROM conta, lancamento "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento.idPlanoConta = plano_conta.idPlanoConta) "
                    + "LEFT OUTER JOIN centro_custo ON(lancamento.idCentroCusto = centro_custo.idCentroCusto) "
                    + "LEFT OUTER JOIN lancamento_programado ON(lancamento.idLancamentoProgramado = lancamento_programado.idLancamentoProgramado) "
@@ -51,7 +52,9 @@ public class LancamentoDAO extends GenericDAO {
     }
 
     public List<Lancamento> findByConta(Integer idConta) throws Exception {
-        String sql = "SELECT lancamento.*, plano_conta.*, centro_custo.* FROM conta, lancamento "
+        String sql = "SELECT lancamento.*, plano_conta.*, centro_custo.*, "
+                   + "(SELECT count(1) FROM lancamento_anexo WHERE lancamento.idLancamento = lancamento_anexo.idLancamento) as anexos "
+                   + "FROM conta, lancamento "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento.idPlanoConta = plano_conta.idPlanoConta) "
                    + "LEFT OUTER JOIN centro_custo ON(lancamento.idCentroCusto = centro_custo.idCentroCusto) "
                    + "LEFT OUTER JOIN lancamento_programado ON(lancamento.idLancamentoProgramado = lancamento_programado.idLancamentoProgramado) "

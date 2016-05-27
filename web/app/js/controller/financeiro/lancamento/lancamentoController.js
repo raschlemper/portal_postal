@@ -27,8 +27,9 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         
         var initTable = function() {            
             $scope.colunas = [              
-                {label: '', column: 'tipo.descricao', headerClass: 'no-sort', dataClass:'text-center col-tipo', filter: {name: 'tipoLancamento', args: 'z'}},         
-                {label: '', column: 'situacao.descricao', headerClass: 'no-sort', dataClass:'text-center col-compensado', filter: {name: 'situacaoLancamento', args: ''}},         
+                {label: '', column: 'tipo.descricao', headerClass: 'no-sort', dataClass:'text-center col-tipo', filter: {name: 'tipoLancamento', args: ''}},               
+                {label: '', column: 'anexos', headerClass: 'no-sort', dataClass:'text-center col-defualt', filter: {name: 'anexo', args: '', callback: 'linha.events.anexar(item)'}},           
+                {label: '', column: 'situacao.descricao', headerClass: 'no-sort', dataClass:'text-center col-compensado', filter: {name: 'situacaoLancamento', args: ''}}, 
                 {label: '', column: 'numeroLoteConciliado', headerClass: 'no-sort', dataClass:'text-center col-reconciliado', filter: {name: 'conciliadoLancamento', args: ''}},         
                 {label: 'Data', column: 'dataLancamento', dataClass: 'text-center cel-data', filter: {name: 'date', args: 'dd/MM/yy'}},                
                 {label: 'Número', column: 'numero'},               
@@ -67,6 +68,9 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                     },
                     view: function(lancamento) {
                         $scope.visualizar($scope.conta, lancamento.idLancamento);
+                    },
+                    anexar: function(lancamento) {
+                        $scope.editar($scope.conta, lancamento.idLancamento, true);
                     }
                 }
             };
@@ -173,7 +177,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                     lancamento.planoConta = modeloTransferencia.descricao;
                 }
                 
-                return _.pick(lancamento, 'idLancamento', 'tipo', 'dataLancamento', 'numero', 'planoConta', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico', 'situacao', 'numeroLoteConciliado');
+                return _.pick(lancamento, 'idLancamento', 'tipo', 'anexos', 'dataLancamento', 'numero', 'planoConta', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico', 'situacao', 'numeroLoteConciliado');
             })
         };
         
@@ -206,7 +210,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         };
 
         $scope.salvar = function(conta) {
-            modalSalvar(conta).then(function(result) {
+            modalSalvar(conta, null, false).then(function(result) {
                 result = ajustarDados(result);
                 LancamentoService.save(result)
                     .then(function(data) {  
@@ -269,10 +273,10 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             });
         };
 
-        $scope.editar = function(conta, idLancamento) {
+        $scope.editar = function(conta, idLancamento, goToAnexo) {
             LancamentoService.get(idLancamento)
                 .then(function(lancamento) {
-                    modalSalvar(conta, lancamento).then(function(result) {
+                    modalSalvar(conta, lancamento, goToAnexo).then(function(result) {
                         result = ajustarDados(result);
                         LancamentoService.update(idLancamento, result)
                             .then(function (data) {  
@@ -441,7 +445,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             return modalInstance.result;
         };
         
-        var modalSalvar = function(conta, lancamento) {
+        var modalSalvar = function(conta, lancamento, goToAnexo) {
             var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamento.html', 'ModalEditarLancamentoController', 'lg',
                 {
                     lancamento: function() {
@@ -449,6 +453,9 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                     },
                     conta: function() {
                         return conta;
+                    },
+                    goToAnexo: function() {
+                        return goToAnexo;
                     }
                 });
             return modalInstance.result;

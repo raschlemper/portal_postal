@@ -74,9 +74,9 @@ public class LancamentoAnexoController {
         try {
             init();    
             List<LancamentoAnexo> anexos = lancamentoAnexoService.findByLancamento(idLancamento);
-            for (LancamentoAnexo anexo : anexos) {
-                anexo.setAnexo(imageService.resizeImage(anexo.getAnexo(), 390, 320));
-            }
+//            for (LancamentoAnexo anexo : anexos) {
+//                anexo.setAnexo(imageService.resizeImage(anexo.getAnexo(), 390, 320));
+//            }
             return anexos;
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));

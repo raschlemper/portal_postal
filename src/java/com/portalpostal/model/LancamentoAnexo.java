@@ -1,14 +1,15 @@
 package com.portalpostal.model;
 
+import com.portalpostal.model.dd.TipoFile;
 import com.portalpostal.model.serializer.JsonInputStreamSerializer;
 import java.io.InputStream;
-import java.util.Date;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class LancamentoAnexo {
     
     private Integer idLancamentoAnexo;
     private Lancamento lancamento;
+    private TipoFile tipo;
     private String nome;
     @JsonSerialize(using=JsonInputStreamSerializer.class)
     private InputStream anexo;
@@ -28,6 +29,14 @@ public class LancamentoAnexo {
 
     public void setLancamento(Lancamento lancamento) {
         this.lancamento = lancamento;
+    }
+
+    public TipoFile getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoFile tipo) {
+        this.tipo = tipo;
     }
 
     public String getNome() {

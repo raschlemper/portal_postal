@@ -5,6 +5,7 @@ DROP TABLE lancamento_anexo;
 CREATE TABLE `lancamento_anexo` (
   `idLancamentoAnexo` INT NOT NULL AUTO_INCREMENT,
   `idLancamento`      INT NOT NULL,
+  `tipo`              INT NOT NULL,
   `nome`              VARCHAR(100) NOT NULL,
   `anexo`             BLOB NOT NULL,
   `usuario`           VARCHAR(100) DEFAULT NULL,

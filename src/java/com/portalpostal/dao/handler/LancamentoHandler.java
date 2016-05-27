@@ -49,6 +49,7 @@ public class LancamentoHandler extends GenericHandler implements ResultSetHandle
         lancamento.setHistorico(getString(result, "historico"));
         lancamento.setObservacao(getString(result, "observacao"));
         lancamento.setUsuario(getString(result, "usuario"));
+        lancamento.setAnexos(getAnexos(result));
         return lancamento;
     }
     
@@ -71,6 +72,13 @@ public class LancamentoHandler extends GenericHandler implements ResultSetHandle
         if(!existColumn(result, "lancamento_programado.idLancamentoProgramado")) return null;
         if(!existFKValue(result, "lancamento_programado.idLancamentoProgramado")) return null;
         return new LancamentoProgramadoHandler().handle(result); 
+    }
+        
+    private boolean getAnexos(ResultSet result) throws SQLException {
+        if(!existColumn(result, "anexos")) return false;
+        Long quantidade = getLong(result, "anexos", null);
+        if(quantidade > 0) return true;
+        return false;
     }
     
 }

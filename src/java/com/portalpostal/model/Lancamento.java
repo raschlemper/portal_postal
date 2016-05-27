@@ -32,6 +32,7 @@ public class Lancamento {
     private String historico;
     private String observacao;
     private String usuario;
+    private boolean anexos;
 
     public Integer getIdLancamento() {
         return idLancamento;
@@ -231,6 +232,14 @@ public class Lancamento {
 
     public void setUsuario(String usuario) {
         this.usuario = usuario;
+    }
+
+    public boolean isAnexos() {
+        return anexos;
+    }
+
+    public void setAnexos(boolean anexos) {
+        this.anexos = anexos;
     }
     
 }

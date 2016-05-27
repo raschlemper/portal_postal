@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', 'conta', 'lancamento', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'LancamentoAnexoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, conta, lancamento, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, LancamentoAnexoService, ModalService, DatePickerService, ListaService, LISTAS) {
+app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', 'conta', 'lancamento', 'goToAnexo', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'LancamentoAnexoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
+    function ($scope, $modalInstance, conta, lancamento, goToAnexo, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, LancamentoAnexoService, ModalService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
@@ -20,9 +20,13 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
             $scope.changeTipo($scope.lancamento.tipo);
         };
         
-        var initStep = function() {           
-            $scope.stepFrom = null; 
-            $scope.stepTo = 'editar'; 
+        var initStep = function() {      
+            if(goToAnexo){                
+                $scope.anexar(lancamento);
+            } else {
+                $scope.stepFrom = null; 
+                $scope.stepTo = 'editar'; 
+            }
         }
         
         $scope.editConta = function() {

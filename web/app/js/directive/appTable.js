@@ -93,7 +93,8 @@ app.directive('appTable', function($filter) {
             scope.column = function(item, coluna) {
                 var colunas = coluna.column.split('.');
                 var value = getColumn(item, angular.copy(colunas));
-                if(coluna.filter){ value = $filter(coluna.filter.name)(value, coluna.filter.args); }
+                if(coluna.filter && coluna.filter.callback){ value = $filter(coluna.filter.name)(value, coluna.filter.callback); }
+                else if(coluna.filter){ value = $filter(coluna.filter.name)(value, coluna.filter.args); }
                 return value;
             }
             

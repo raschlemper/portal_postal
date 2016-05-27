@@ -3116,6 +3116,10 @@ div.list-category div.list-group-item {
     text-decoration: none;
     background-color: #f5f5f5;
 }
+.col-defualt {
+    color: #000;
+    padding: 2px !important;
+}
 .col-tipo {
     padding: 2px !important;
 }

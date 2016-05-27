@@ -11,6 +11,8 @@ import com.portalpostal.service.LancamentoService;
 import com.portalpostal.validation.LancamentoAnexoValidation;
 import com.portalpostal.validation.LancamentoValidation;
 import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.BodyPart;
+import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataParam;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -234,19 +236,21 @@ public class LancamentoController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public LancamentoAnexo upload(@PathParam("idLancamento") Integer idLancamento,
                                   @FormDataParam("file") InputStream fileInputString,
-                                  @FormDataParam("file") FormDataContentDisposition fileInputDetails) {
+                                  @FormDataParam("file") FormDataContentDisposition fileInputDetails,
+                                  @FormDataParam("file") FormDataBodyPart bodyPart) {
         try {
             init();             
             LancamentoAnexo lancamentoAnexo = new LancamentoAnexo();
             lancamentoAnexo.setLancamento(getLancamento(idLancamento));
             lancamentoAnexo.setNome(fileInputDetails.getFileName());
-            lancamentoAnexo.setAnexo(imageService.resizeImage(fileInputString, 200, 300));
+            lancamentoAnexo.setAnexo(
+                    imageService.trataInputStream(bodyPart.getMediaType().getSubtype(), fileInputString, 200, 300));
             validation(lancamentoAnexo);
             return lancamentoAnexoService.save(lancamentoAnexo);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
-    }   
+    } 
     
     private Lancamento getLancamento(Integer idLancamento) throws Exception {
         return lancamentoService.find(idLancamento);

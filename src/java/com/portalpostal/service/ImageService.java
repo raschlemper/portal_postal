@@ -1,5 +1,6 @@
 package com.portalpostal.service;
 
+import com.sun.jersey.multipart.FormDataBodyPart;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -9,7 +10,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
 
-public class ImageService {
+public class ImageService {      
+    
+    public InputStream trataInputStream(String type, InputStream fileInputString, int targetWidth, int targetHeight) {
+        if(type.equalsIgnoreCase("JPEG")) { return resizeImage(fileInputString, targetWidth, targetHeight); }
+        if(type.equalsIgnoreCase("PNG")) { return resizeImage(fileInputString, targetWidth, targetHeight); }
+        if(type.equalsIgnoreCase("JPG")) { return resizeImage(fileInputString, targetWidth, targetHeight); }
+        return fileInputString;
+    }
     
     public InputStream resizeImage(InputStream inputStream, int targetWidth, int targetHeight) {  
         try {  

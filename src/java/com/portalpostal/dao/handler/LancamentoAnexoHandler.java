@@ -2,6 +2,7 @@ package com.portalpostal.dao.handler;
 
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoAnexo;
+import com.portalpostal.model.dd.TipoFile;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.sql2o.ResultSetHandler;
@@ -20,6 +21,7 @@ public class LancamentoAnexoHandler extends GenericHandler implements ResultSetH
         LancamentoAnexo lancamentoAnexo = new LancamentoAnexo();
         lancamentoAnexo.setIdLancamentoAnexo(getInt(result, "idLancamentoAnexo"));
         lancamentoAnexo.setLancamento(getLancamento(result));
+//        lancamentoAnexo.setTipo(TipoFile.values()[getInt(result, "tipo")]);
         lancamentoAnexo.setNome(getString(result, "nome"));
         lancamentoAnexo.setAnexo(getBinaryStream(result, "anexo"));
         lancamentoAnexo.setUsuario(getString(result, "usuario"));
