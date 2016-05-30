@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalLancamentoConciliadoController', ['$scope', '$modalInstance', 'conta', 'PlanoContaService', 'CentroCustoService', 'ContaService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, conta, PlanoContaService, CentroCustoService, ContaService, DatePickerService, ListaService, LISTAS) {
+app.controller('ModalLancamentoConciliarController', ['$scope', '$modalInstance', 'conta', 'PlanoContaService', 'CentroCustoService', 'ContaService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
+    function ($scope, $modalInstance, conta, PlanoContaService, CentroCustoService, ContaService, ModalService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {  
             $scope.conta = conta;
@@ -85,11 +85,35 @@ app.controller('ModalLancamentoConciliadoController', ['$scope', '$modalInstance
             return lancamentoConciliado;
         }
         
+        $scope.validarPlanoConta = function(planoConta) {
+            if(planoConta.ehGrupo) {
+                modalMessage("Só é permitido realizar lançamentos em plano de conta que não possuam planos de conta vinculados!");
+            }
+        }
+        
+        $scope.validarCentroCusto = function(planoConta) {
+            if(planoConta.ehGrupo) {
+                modalMessage("Só é permitido realizar lançamentos em centro de custo que não possuam centros de custo vinculados!");
+            }
+        }
+        
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
+        
+        var modalMessage = function(message) {
+            ModalService.modalMessage(message);
+        };
 
         var validarForm = function (form) {
+            if($scope.lancamentoConciliado.planoConta.ehGrupo) {
+                alert("Só é permitido realizar lançamentos em plano de conta que não possuam planos de conta vinculados!");
+                return false;
+            }
+            if($scope.lancamentoConciliado.centroCusto.ehGrupo) {
+                alert("Só é permitido realizar lançamentos em centro de custo que não possuam centros de custo vinculados!");
+                return false;
+            }
             if (form.dataLancamento.$error.required) {
                 alert('Preencha a data do lançamento reconciliado!');
                 return false;

@@ -547,7 +547,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         };
         
         var modalVisualizar = function(lancamento) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalVisualizarLancamento.html', 'ModalVisualizarLancamentoController', 'md',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamentoVisualizar.html', 'ModalLancamentoVisualizarController', 'lg',
                 {
                     lancamento: function() {
                         return lancamento;
@@ -556,8 +556,8 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             return modalInstance.result;
         };
         
-        var modalSalvar = function(conta, lancamento, tipo, goToAnexo) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamento.html', 'ModalEditarLancamentoController', 'lg',
+        var modalSalvar = function(conta, lancamento, tipo, anexo) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamento.html', 'ModalLancamentoEditarController', 'lg',
                 {
                     lancamento: function() {
                         return lancamento;
@@ -568,15 +568,15 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                     tipo: function() {
                         return tipo;
                     },
-                    goToAnexo: function() {
-                        return goToAnexo;
+                    anexo: function() {
+                        return anexo;
                     }
                 });
             return modalInstance.result;
         };
         
         var modalTransferir = function(lancamentoTransferencia) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamentoTransferencia.html', 'ModalLancamentoTransferenciaController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamentoTransferir.html', 'ModalLancamentoTransferirController', 'lg',
                 {
                     lancamentoTransferencia: function() {
                         return lancamentoTransferencia;
@@ -586,7 +586,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         };
         
         var modalConciliar = function(conta) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamentoConciliado.html', 'ModalLancamentoConciliadoController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamentoConciliar.html', 'ModalLancamentoConciliarController', 'lg',
                 {
                     conta: function() {
                         return conta;

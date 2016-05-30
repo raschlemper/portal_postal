@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('ModalEditarCarteiraCobrancaController', ['$scope', '$modalInstance', 'carteiraCobranca', 'CarteiraCobrancaService', 'ContaCorrenteService', 'CepService', 'ModalService',
+app.controller('ModalCarteiraCobrancaEditarController', ['$scope', '$modalInstance', 'carteiraCobranca', 'CarteiraCobrancaService', 'ContaCorrenteService', 'CepService', 'ModalService',
     function ($scope, $modalInstance, carteiraCobranca, CarteiraCobrancaService, ContaCorrenteService, CepService, ModalService) {
 
         var init = function () {  
@@ -15,7 +15,7 @@ app.controller('ModalEditarCarteiraCobrancaController', ['$scope', '$modalInstan
         
         var getTitle = function() {
             if(carteiraCobranca && carteiraCobranca.idCarteiraCobranca) { $scope.title = "Editar Carteira de Cobrança"; }
-            else { $scope.title = "Inserir Nova Carteira de Cobrança"; }
+            else { $scope.title = "Inserir Carteira de Cobrança"; }
         };
         
         var contaCorrente = function() {

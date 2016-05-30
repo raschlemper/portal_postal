@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('ModalVisualizarCartaoCreditoController', ['$scope', '$modalInstance', 'cartaoCredito', 
+app.controller('ModalCartaoCreditoVisualizarController', ['$scope', '$modalInstance', 'cartaoCredito', 
     function ($scope, $modalInstance, cartaoCredito) {
 
         var init = function () { 

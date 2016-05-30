@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalInstance', 'conta', 'tipo', 'lancamentoProgramado', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'FrequenciaLancamentoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
+app.controller('ModalLancamentoProgramadoEditarController', ['$scope', '$modalInstance', 'conta', 'tipo', 'lancamentoProgramado', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'FrequenciaLancamentoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
     function ($scope, $modalInstance, conta, tipo, lancamentoProgramado, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, TipoDocumentoService, TipoFormaPagamentoService, FrequenciaLancamentoService, ModalService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {  
@@ -18,7 +18,6 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
             $scope.lancamentoProgramado.frequencia = (lancamentoProgramado && lancamentoProgramado.frequencia) || $scope.frequencias[0];
             $scope.lancamentoProgramado.situacao = (lancamentoProgramado && lancamentoProgramado.situacao) || $scope.situacoes[0];
             $scope.lancamentoProgramado.numeroParcela = getNumeroParcela(lancamentoProgramado); 
-            initStep(); 
             getTitle();
             contas();
             centroCustos();
@@ -30,9 +29,8 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         var initStep = function() {
             if(lancamentoProgramado && lancamentoProgramado.quantidadeParcela) {
                 parcelarLancamento(lancamentoProgramado);
-            } else {                
-                $scope.stepFrom = null; 
-                $scope.stepTo = 'editar'; 
+            } else {            
+                goToEditar(); 
             }
         }
         
@@ -51,7 +49,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         
         var getTitle = function() {
             if(lancamentoProgramado && lancamentoProgramado.idLancamentoProgramado) { $scope.title = "Editar Lançamento Programado"; }
-            else { $scope.title = "Inserir Novo Lançamento Programado"; }
+            else { $scope.title = "Inserir Lançamento Programado"; }
         };
         
         var contas = function() {
@@ -77,6 +75,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
                     } else {
                          $scope.lancamentoProgramado.planoConta  = $scope.planoContas[0];
                     }
+                    initStep(); 
                 })
                 .catch(function (e) {
                     console.log(e);
@@ -181,17 +180,15 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         
         $scope.lancarProgramado = function(form, lancamentoProgramado) {
             if(!validaConta(lancamentoProgramado.conta)) return;
-            if (!validarForm(form)) return;
-            $scope.stepFrom = 'editar'; 
-            $scope.stepTo = 'lancar'; 
+            if (!validarForm(form)) return;         
+            goToLancar();
             $scope.lancamento = getLancamento(lancamentoProgramado, null, $scope.modelos[2]);
         };
         
         $scope.lancarParcela = function(form, lancamentoProgramado, parcela) {
             if(!validaConta(lancamentoProgramado.conta)) return;
-            if (!validarForm(form)) return;
-            $scope.stepFrom = 'parcelar'; 
-            $scope.stepTo = 'lancar'; 
+            if (!validarForm(form)) return;           
+            goToLancar();
             $scope.lancamento = getLancamento(lancamentoProgramado, parcela, $scope.modelos[4]);
         };
         
@@ -215,7 +212,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         var lancar = function(lancamentoProgramado, lancamento) {         
             delete $scope.lancamentoProgramado.parcelas;
             lancamentoProgramado.gerarLancamento = true;
-            lancamento = ajusteLancamento(lancamento);
+            lancamento = ajustarLancamento(lancamento);
             lancamentoProgramado.lancamentos = [];
             lancamentoProgramado.lancamentos.push(lancamento);
             encerrarLancamentoProgramado(lancamentoProgramado, lancamento);
@@ -229,10 +226,54 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         };
         
         var parcelarLancamento = function(lancamentoProgramado) {            
-            $scope.stepFrom = 'editar'; 
-            $scope.stepTo = 'parcelar'; 
+            goToParcelar();
             $scope.createParcelas(lancamentoProgramado);
         }
+        
+        $scope.ratear = function() {
+            goToRatear();
+            $scope.lancamento.rateios = [];
+            setRateioDefault();
+        };
+        
+        $scope.cancelarRatear = function() {
+            goToEditar();
+            $scope.lancamento.rateios = null;
+        };
+        
+        $scope.salvarRateio = function(rateio) {
+            var saldo = saldoRateio();
+            if(saldo + rateio.valor > $scope.lancamento.valor) {
+                modalMessage("A soma dos valores de rateio é superior ao valor do lançamento!");
+                return;
+            }
+            $scope.lancamento.rateios.push(rateio);
+            setRateioDefault();
+        }
+        
+        $scope.editarRateio = function(rateio, index) {
+            $scope.rateio = rateio;
+            $scope.removerRateio(index);
+        }
+        
+        $scope.removerRateio = function(index) {     
+            $scope.lancamento.rateios.splice(index, 1); 
+            setRateioDefault();   
+        }
+        
+        var setRateioDefault = function() {
+            $scope.rateio = {};
+            $scope.rateio.planoConta = $scope.planoContas[0];
+            $scope.rateio.valor = $scope.lancamento.valor - saldoRateio();
+        }
+        
+        var saldoRateio = function() {            
+            var saldo = 0;
+            _.map($scope.lancamento.rateios, function(rateio) {
+                saldo += rateio.valor;
+            });
+            return saldo;
+        };
                 
         var getLancamento = function(lancamentoProgramado, parcela, modelo) {
             var lancamento = {
@@ -268,7 +309,7 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
             return true;
         }
         
-        var ajusteLancamento = function(lancamento) {
+        var ajustarLancamento = function(lancamento) {
             lancamento.conta = { idConta: lancamento.conta.idConta };
             lancamento.planoConta = { idPlanoConta: lancamento.planoConta.idPlanoConta };
             if(lancamento.centroCusto) {
@@ -296,20 +337,39 @@ app.controller('ModalEditarLancamentoProgramadoController', ['$scope', '$modalIn
         
         $scope.voltar = function() {
             if($scope.stepFrom === 'lancar') {
-                $scope.stepFrom = 'editar'; 
-                $scope.stepTo = 'lancar';                     
+                goToLancar();                   
             } else if($scope.stepFrom === 'parcelar') {
-                $scope.stepFrom = 'editar'; 
-                $scope.stepTo = 'parcelar';             
+                goToParcelar();                      
+            } else if($scope.stepFrom === 'ratear') {
+                goToRatear();            
             } else {
-                $scope.stepFrom = null; 
-                $scope.stepTo = 'editar';                        
+                goToEditar();
             }
         }
         
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
+        
+        var goToEditar = function() {
+            $scope.stepFrom = angular.copy($scope.stepTo);
+            $scope.stepTo = 'editar';             
+        }
+        
+        var goToLancar = function() {
+            $scope.stepFrom = angular.copy($scope.stepTo);
+            $scope.stepTo = 'lancar';             
+        }
+        
+        var goToParcelar = function() {
+            $scope.stepFrom = angular.copy($scope.stepTo);
+            $scope.stepTo = 'parcelar';             
+        }
+        
+        var goToRatear = function() {
+            $scope.stepFrom = angular.copy($scope.stepTo);
+            $scope.stepTo = 'ratear';             
+        }
         
         var modalConfirmarConciliado = function() {
             var modalInstance = ModalService.modalConfirmar('Alerta Lançamento', 'Você está inserindo um lançamento em um período reconciliado. <br/> Está inclusão irá impactar no lançamento de reconciliação! <br/> Deseja continuar?');

@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('ModalLancamentoTransferenciaController', ['$scope', '$modalInstance', 'lancamentoTransferencia', 'ContaService', 'DatePickerService', 'LISTAS',
+app.controller('ModalLancamentoTransferirController', ['$scope', '$modalInstance', 'lancamentoTransferencia', 'ContaService', 'DatePickerService', 'LISTAS',
     function ($scope, $modalInstance, lancamentoTransferencia, ContaService, DatePickerService, LISTAS) {
 
         var init = function () {  
@@ -13,7 +13,8 @@ app.controller('ModalLancamentoTransferenciaController', ['$scope', '$modalInsta
         };
         
         var getTitle = function() {
-            $scope.title = "Inserir Novo Lançamento de Transferência";
+            if(lancamentoTransferencia && lancamentoTransferencia.idLancamentoTransferencia) { $scope.title = "Editar Lançamento de Transferência" }
+            else { $scope.title = "Inserir Lançamento de Transferência"; }
         };
         
         var contas = function() {

@@ -3,6 +3,7 @@ package com.portalpostal.dao.handler;
 import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.Date;
 
 class GenericHandler {
@@ -52,8 +53,12 @@ class GenericHandler {
     }
     
     protected Long getLong(ResultSet result, String columnName, String table) throws SQLException {
-        if(!existColumn(result, columnName)) return null;
-        return (Long) result.getObject(getColumn(columnName, table));
+        if(!existColumn(result, columnName)) return null;   
+        Object valor = result.getObject(getColumn(columnName, table));
+        if(valor instanceof Integer) { 
+            return ((Integer) valor).longValue();
+        }
+        return (Long) valor;
     }
     
     protected String getString(ResultSet result, String columnName) throws SQLException {

@@ -130,7 +130,7 @@ app.controller('ContaController', ['$scope', '$q', 'ContaService', 'ModalService
         };
         
         var modalVisualizar = function(conta) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/conta/modalVisualizarConta.html', 'ModalVisualizarContaController', 'md',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/conta/modalContaVisualizar.html', 'ModalContaVisualizarController', 'md',
                 {
                     conta: function() {
                         return conta;
@@ -140,7 +140,7 @@ app.controller('ContaController', ['$scope', '$q', 'ContaService', 'ModalService
         };
         
         var modalSalvar = function(conta) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/conta/modalEditarConta.html', 'ModalEditarContaController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/conta/modalContaEditar.html', 'ModalContaEditarController', 'lg',
                 {
                     conta: function() {
                         return conta;

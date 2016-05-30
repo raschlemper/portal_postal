@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('ModalLancamentoAnexoController', ['$scope', '$modalInstance', '$sce', 'lancamento', 'LancamentoAnexoService', 'ModalService',
+app.controller('ModalLancamentoAnexarController', ['$scope', '$modalInstance', '$sce', 'lancamento', 'LancamentoAnexoService', 'ModalService',
     function ($scope, $modalInstance, conta, lancamento, LancamentoAnexoService, ModalService) {
 
         var init = function () {  
@@ -52,7 +52,7 @@ app.controller('ModalLancamentoAnexoController', ['$scope', '$modalInstance', '$
         };
         
         var modalSalvar = function(conta, lancamento) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamento.html', 'ModalEditarLancamentoController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamento.html', 'ModalLancamentoEditarController', 'lg',
                 {
                     lancamento: function() {
                         return lancamento;

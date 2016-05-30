@@ -127,7 +127,7 @@ app.controller('CarteiraCobrancaController', ['$scope', '$filter', 'CarteiraCobr
         };
         
         var modalVisualizar = function(carteiraCobranca) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/carteiraCobranca/modalVisualizarCarteiraCobranca.html', 'ModalVisualizarCarteiraCobrancaController', 'md',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/carteiraCobranca/modalCarteiraCobrancaVisualizar.html', 'ModalCarteiraCobrancaVisualizarController', 'md',
                 {
                     carteiraCobranca: function() {
                         return carteiraCobranca;
@@ -137,7 +137,7 @@ app.controller('CarteiraCobrancaController', ['$scope', '$filter', 'CarteiraCobr
         };
         
         var modalSalvar = function(carteiraCobranca) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/carteiraCobranca/modalEditarCarteiraCobranca.html', 'ModalEditarCarteiraCobrancaController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/carteiraCobranca/modalCarteiraCobrancaEditar.html', 'ModalCarteiraCobrancaEditarController', 'lg',
                 {
                     carteiraCobranca: function() {
                         return carteiraCobranca;

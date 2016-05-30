@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', 'conta', 'lancamento', 'tipo', 'goToAnexo', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'LancamentoAnexoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, conta, lancamento, tipo, goToAnexo, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, LancamentoAnexoService, ModalService, DatePickerService, ListaService, LISTAS) {
+app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', 'conta', 'lancamento', 'tipo', 'anexo', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'LancamentoAnexoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
+    function ($scope, $modalInstance, conta, lancamento, tipo, anexo, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, LancamentoAnexoService, ModalService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
@@ -9,12 +9,10 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
             $scope.modelos = LISTAS.modeloLancamento;
             $scope.situacoes = LISTAS.situacaoLancamento;
             $scope.lancamento = lancamento || {};
-            $scope.lancamento.rateios = lancamento.rateios || [];
+            $scope.lancamento.rateios = (lancamento && lancamento.rateios) || [];
             $scope.lancamento.tipo = (lancamento && lancamento.tipo) || tipo;
             $scope.lancamento.situacao = (lancamento && lancamento.situacao) || $scope.situacoes[0];
-            $scope.lancamento.modelo = (lancamento && lancamento.modelo) || $scope.modelos[0];      
-            initStep();
-            initRateio(lancamento);
+            $scope.lancamento.modelo = (lancamento && lancamento.modelo) || $scope.modelos[0];
             getTitle();
             contas();
             centroCustos();
@@ -22,17 +20,16 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
         };
                 
         var initStep = function() {      
-//            if(goToAnexo){                
+//            if(anexo){                
 //                $scope.anexar(lancamento);
 //            } else {
-                $scope.stepFrom = null; 
-                $scope.stepTo = 'editar'; 
+                if(existRateio(lancamento)) { $scope.ratear(); }
+                else { goToEditar(); }
 //            }
         }
         
-        var initRateio = function(lancamento) {
-            if(lancamento && lancamento.rateios && lancamento.rateios.length) { $scope.ratearValor = true; }
-            else { $scope.ratearValor = false; }
+        var existRateio = function(lancamento) {
+            return lancamento && lancamento.rateios && lancamento.rateios.length;
         }
         
         $scope.editConta = function() {
@@ -66,7 +63,8 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
                         $scope.lancamento.planoConta = ListaService.getPlanoContaValue($scope.planoContas, $scope.lancamento.planoConta.idPlanoConta) || $scope.planoContas[0];
                     } else {
                          $scope.lancamento.planoConta  = $scope.planoContas[0];
-                    }
+                    }      
+                    initStep();
                 })
                 .catch(function (e) {
                     console.log(e);
@@ -101,15 +99,15 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
             });            
         }
         
-        $scope.ratear = function(valor) {
+        $scope.ratear = function() {
+            goToRatear();
             $scope.lancamento.rateios = [];
-            $scope.ratearValor = true;
             setRateioDefault();
         };
         
         $scope.cancelarRatear = function() {
+            goToEditar();
             $scope.lancamento.rateios = null;
-            $scope.ratearValor = false;
         };
         
         $scope.salvarRateio = function(rateio) {
@@ -128,7 +126,8 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
         }
         
         $scope.removerRateio = function(index) {     
-            $scope.lancamento.rateios.splice(index, 1);    
+            $scope.lancamento.rateios.splice(index, 1); 
+            setRateioDefault();   
         }
         
         var setRateioDefault = function() {
@@ -213,6 +212,22 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
             return lancamento;
         };
         
+        var goToEditar = function() {
+            $scope.stepFrom = angular.copy($scope.stepTo);
+            $scope.stepTo = 'editar';             
+        }
+        
+        var goToRatear = function() {
+            $scope.stepFrom = angular.copy($scope.stepTo); 
+            $scope.stepTo = 'ratear'; 
+        }
+        
+        var goToAnexar = function() {
+            $scope.stepFrom = angular.copy($scope.stepTo); 
+            $scope.stepTo = 'anexar'; 
+            //anexos(lancamento.idLancamento);
+        }
+        
         var modalConfirmarConciliado = function() {
             var modalInstance = ModalService.modalConfirmar('Alerta Lançamento', 'Você está inserindo um lançamento em um período reconciliado. <br/> Está inclusão irá impactar no lançamento de conciliação! <br/> Deseja continuar?');
             return modalInstance.result;
@@ -223,7 +238,7 @@ app.controller('ModalEditarLancamentoController', ['$scope', '$modalInstance', '
         };
 
         var validarForm = function (form) {
-            if ($scope.ratearValor) {
+            if ($scope.lancamento.rateios && $scope.lancamento.rateios.length) {
                 var saldo = saldoRateio();
                 if(saldo !== form.valor.$modelValue) {
                     alert("A soma dos valores de rateio é superior ao valor do lançamento!");

@@ -96,8 +96,10 @@ public class LancamentoDAO extends GenericDAO {
     }
 
     public List<Saldo> findSaldo(Date dataInicio, Date dataFim) throws Exception {
-        String sql = "SELECT DATE(dataLancamento) as data, sum( if(tipo = 0, valor, valor * -1) ) as valor "
+        String sql = "SELECT DATE(lancamento.dataLancamento) as data, "
+                          + "SUM( IF(lancamento.tipo = 0, IFNULL(lancamento_rateio.valor, lancamento.valor), IFNULL(lancamento_rateio.valor, lancamento.valor) * -1) ) as valor "
                    + "FROM lancamento "
+                   + "LEFT OUTER JOIN lancamento_rateio ON(lancamento.idLancamento = lancamento_rateio.idLancamento) "
                    + "WHERE DATE(dataLancamento) BETWEEN :dataInicio AND :dataFim "
                    + "GROUP BY data "
                    + "ORDER BY data";            
@@ -108,12 +110,15 @@ public class LancamentoDAO extends GenericDAO {
     }
 
     public List<Saldo> findSaldoPlanoConta(Date dataInicio, Date dataFim) throws Exception {
-        String sql = "SELECT idPlanoConta as id, DATE(dataLancamento) as data, sum(valor) as valor "
+        String sql = "SELECT IFNULL(lancamento_rateio.idPlanoConta, lancamento.idPlanoConta) as id, "
+                          + "DATE(lancamento.dataLancamento) as data, "
+                          + "SUM(IFNULL(lancamento_rateio.valor, lancamento.valor)) as valor "
                    + "FROM lancamento "
+                   + "LEFT OUTER JOIN lancamento_rateio ON(lancamento.idLancamento = lancamento_rateio.idLancamento) "
                    + "WHERE dataLancamento is not null AND DATE(dataLancamento) BETWEEN :dataInicio AND :dataFim "
                    + "AND lancamento.modelo <> 1 "
-                   + "GROUP BY idPlanoConta, data "
-                   + "ORDER BY idPlanoConta, data";            
+                   + "GROUP BY id, data "
+                   + "ORDER BY id, data";            
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("dataInicio", dataInicio);       
         params.put("dataFim", dataFim);   
@@ -121,12 +126,15 @@ public class LancamentoDAO extends GenericDAO {
     }  
 
     public List<Saldo> findSaldoCentroCusto(Date dataInicio, Date dataFim) throws Exception {
-        String sql = "SELECT idCentroCusto as id, DATE(dataLancamento) as data, sum(valor) as valor "
+        String sql = "SELECT IFNULL(lancamento_rateio.idCentroCusto, lancamento.idCentroCusto) as id, "
+                          + "DATE(lancamento.dataLancamento) as data, "
+                          + "SUM(IFNULL(lancamento_rateio.valor, lancamento.valor)) as valor "
                    + "FROM lancamento "
+                   + "LEFT OUTER JOIN lancamento_rateio ON(lancamento.idLancamento = lancamento_rateio.idLancamento) "
                    + "WHERE dataLancamento is not null AND DATE(dataLancamento) BETWEEN :dataInicio AND :dataFim "
                    + "AND lancamento.modelo <> 1 "
-                   + "GROUP BY idCentroCusto, data "
-                   + "ORDER BY idCentroCusto, data";            
+                   + "GROUP BY id, data "
+                   + "ORDER BY id, data";            
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("dataInicio", dataInicio);       
         params.put("dataFim", dataFim);   
@@ -134,12 +142,15 @@ public class LancamentoDAO extends GenericDAO {
     }  
 
     public List<Saldo> findSaldoPlanoContaCompetencia(Date dataInicio, Date dataFim) throws Exception {
-        String sql = "SELECT idPlanoConta as id, DATE(dataCompetencia) as data, sum(valor) as valor "
+        String sql = "SELECT IFNULL(lancamento_rateio.idPlanoConta, lancamento.idPlanoConta) as id, "
+                          + "DATE(lancamento.dataCompetencia) as data, "
+                          + "SUM(IFNULL(lancamento_rateio.valor, lancamento.valor)) as valor "
                    + "FROM lancamento "
+                   + "LEFT OUTER JOIN lancamento_rateio ON(lancamento.idLancamento = lancamento_rateio.idLancamento) "
                    + "WHERE dataCompetencia is not null AND DATE(dataCompetencia) BETWEEN :dataInicio AND :dataFim "
                    + "AND lancamento.modelo <> 1 "
-                   + "GROUP BY idPlanoConta, data "
-                   + "ORDER BY idPlanoConta, data";            
+                   + "GROUP BY id, data "
+                   + "ORDER BY id, data";            
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("dataInicio", dataInicio);       
         params.put("dataFim", dataFim);   
@@ -147,12 +158,15 @@ public class LancamentoDAO extends GenericDAO {
     }  
 
     public List<Saldo> findSaldoCentroCustoCompetencia(Date dataInicio, Date dataFim) throws Exception {
-        String sql = "SELECT idCentroCusto as id, DATE(dataCompetencia) as data, sum(valor) as valor "
+        String sql = "SELECT IFNULL(lancamento_rateio.idCentroCusto, lancamento.idCentroCusto) as id, "
+                          + "DATE(lancamento.dataCompetencia) as data, "
+                          + "SUM(IFNULL(lancamento_rateio.valor, lancamento.valor)) as valor "
                    + "FROM lancamento "
+                   + "LEFT OUTER JOIN lancamento_rateio ON(lancamento.idLancamento = lancamento_rateio.idLancamento) "
                    + "WHERE dataCompetencia is not null AND DATE(dataCompetencia) BETWEEN :dataInicio AND :dataFim "
                    + "AND lancamento.modelo <> 1 "
-                   + "GROUP BY idCentroCusto, data "
-                   + "ORDER BY idCentroCusto, data";            
+                   + "GROUP BY id, data "
+                   + "ORDER BY id, data";            
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("dataInicio", dataInicio);       
         params.put("dataFim", dataFim);   
@@ -160,11 +174,14 @@ public class LancamentoDAO extends GenericDAO {
     }     
 
     public List<Saldo> findSaldoTipo(Date dataInicio, Date dataFim) throws Exception {
-        String sql = "SELECT tipo as id, DATE(dataLancamento) as data, sum(valor) as valor FROM lancamento "
+        String sql = "SELECT lancamento.tipo as id, DATE(lancamento.dataLancamento) as data, "
+                          + "SUM(IFNULL(lancamento_rateio.valor, lancamento.valor)) as valor "
+                   + "FROM lancamento "
+                   + "LEFT OUTER JOIN lancamento_rateio ON(lancamento.idLancamento = lancamento_rateio.idLancamento) "
                    + "WHERE DATE(dataLancamento) BETWEEN :dataInicio AND :dataFim "
                    + "AND lancamento.modelo <> 1 "
-                   + "GROUP BY tipo, data " 
-                   + "ORDER BY tipo, data";     
+                   + "GROUP BY lancamento.tipo, data " 
+                   + "ORDER BY lancamento.tipo, data";     
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("dataInicio", dataInicio);       
         params.put("dataFim", dataFim);   

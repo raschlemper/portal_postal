@@ -138,7 +138,7 @@ app.controller('ContaCorrenteController', ['$scope', '$filter', '$q', 'ContaCorr
         };
         
         var modalVisualizar = function(contaCorrente) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/contaCorrente/modalVisualizarContaCorrente.html', 'ModalVisualizarContaCorrenteController', 'md',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/contaCorrente/modalContaCorrenteVisualizar.html', 'ModalContaCorrenteVisualizarController', 'md',
                 {
                     contaCorrente: function() {
                         return contaCorrente;
@@ -148,7 +148,7 @@ app.controller('ContaCorrenteController', ['$scope', '$filter', '$q', 'ContaCorr
         };
         
         var modalSalvar = function(contaCorrente) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/contaCorrente/modalEditarContaCorrente.html', 'ModalEditarContaCorrenteController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/contaCorrente/modalContaCorrenteEditar.html', 'ModalContaCorrenteEditarController', 'lg',
                 {
                     contaCorrente: function() {
                         return contaCorrente;

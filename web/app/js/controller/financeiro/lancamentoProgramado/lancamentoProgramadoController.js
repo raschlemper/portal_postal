@@ -294,7 +294,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         };
         
         var modalVisualizar = function(lancamentoProgramado) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamentoProgramado/modalVisualizarLancamentoProgramado.html', 'ModalVisualizarLancamentoProgramadoController', 'md',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamentoProgramado/modalLancamentoProgramadoVisualizar.html', 'ModalLancamentoProgramadoVisualizarController', 'md',
                 {
                     lancamentoProgramado: function() {
                         return lancamentoProgramado;
@@ -304,7 +304,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         };
         
         var modalSalvar = function(conta, tipo, lancamentoProgramado) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamentoProgramado/modalLancamentoProgramado.html', 'ModalEditarLancamentoProgramadoController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamentoProgramado/modalLancamentoProgramado.html', 'ModalLancamentoProgramadoEditarController', 'lg',
                 {
                     lancamentoProgramado: function() {
                         return lancamentoProgramado;
@@ -320,7 +320,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         };
         
 //        var modalTransferir = function() {
-//            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamentoProgramado/modalLancamentoProgramadoTransferencia.html', 'ModalLancamentoProgramadoTransferenciaController', 'lg');
+//            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamentoProgramado/modalLancamentoProgramadoTransferir.html', 'ModalLancamentoProgramadoTransferirController', 'lg');
 //            return modalInstance.result;
 //        };
         

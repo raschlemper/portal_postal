@@ -1,6 +1,19 @@
 'use strict';
 
 app.factory('LancamentoService', function($http, PromiseService) {
+    
+    var lancamentoFromRateio = function(lancamento) {
+        var rateios = [];
+        _.map(lancamento.rateios, function(rateio) {
+            var lancamentoRateio = angular.copy(lancamento);
+            lancamentoRateio.planoConta = rateio.planoConta;
+            lancamentoRateio.centroCusto = rateio.centroCusto;
+            lancamentoRateio.valor = rateio.valor;
+            lancamentoRateio.observacao = rateio.observacao;
+            rateios.push(lancamentoRateio);
+        });
+        return rateios;
+    }
 
     return {
 
@@ -67,6 +80,18 @@ app.factory('LancamentoService', function($http, PromiseService) {
         delete: function(idLancamento) {
             return PromiseService.execute(
                     $http.delete(_contextPath + "/api/financeiro/lancamento/" + idLancamento));
+        },
+        
+        lancamentoFromRateio: function(lancamento) {
+            return lancamentoFromRateio(lancamento);
+        },
+        
+        lancamentosFromRateio: function(lancamentos) {
+            var rateios = [];
+            _.union(rateios, _.map(lancamentos, function(lancamento) {
+                return lancamentoFromRateio(lancamento);
+            }));
+            return rateios;
         }
 
     }

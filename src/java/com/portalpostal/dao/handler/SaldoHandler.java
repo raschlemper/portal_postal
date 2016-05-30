@@ -18,7 +18,7 @@ public class SaldoHandler extends GenericHandler implements ResultSetHandler<Sal
     @Override
     public Saldo handle(ResultSet result) throws SQLException {
         Saldo saldo = new Saldo();
-        saldo.setId(getInt(result, "id"));
+        saldo.setId(getLong(result, "id"));
         saldo.setData(getDate(result, "data"));
         saldo.setValor(getDouble(result, "valor"));
         return saldo;    

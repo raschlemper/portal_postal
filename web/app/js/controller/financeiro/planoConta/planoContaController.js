@@ -146,7 +146,7 @@ app.controller('PlanoContaController', ['$scope', '$q', 'PlanoContaService', 'Mo
         };
         
         var modalSalvar = function(planoConta, action) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/planoConta/modalEditarPlanoConta.html', 'ModalEditarPlanoContaController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/planoConta/modalPlanoContaEditar.html', 'ModalPlanoContaEditarController', 'lg',
                 {
                     planoConta: function() {
                         return planoConta;

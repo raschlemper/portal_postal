@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('ModalEditarBancoController', ['$scope', '$modalInstance', 'banco', 'BancoService', 'ModalService',
+app.controller('ModalBancoEditarController', ['$scope', '$modalInstance', 'banco', 'BancoService', 'ModalService',
     function ($scope, $modalInstance, banco, BancoService, ModalService) {
 
         var init = function () {  
@@ -11,7 +11,7 @@ app.controller('ModalEditarBancoController', ['$scope', '$modalInstance', 'banco
         
         var getTitle = function() {
             if(banco && banco.idBanco) { $scope.title = "Editar Banco"; }
-            else { $scope.title = "Inserir Novo Banco"; }
+            else { $scope.title = "Inserir Banco"; }
         }
         
         $scope.ok = function(form) {

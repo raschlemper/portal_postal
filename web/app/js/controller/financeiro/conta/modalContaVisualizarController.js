@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('ModalVisualizarContaController', ['$scope', '$modalInstance', 'conta', 
+app.controller('ModalContaVisualizarController', ['$scope', '$modalInstance', 'conta', 
     function ($scope, $modalInstance, conta) {
 
         var init = function () { 

@@ -16,19 +16,28 @@ public class LancamentoRateioDAO extends GenericDAO {
     } 
 
     public List<LancamentoRateio> findAll() throws Exception {
-        String sql = "SELECT * FROM lancamento_rateio ORDER BY lancamento_rateio.idLancamentoRateio";        
+        String sql = "SELECT * FROM lancamento_rateio "
+                   + "LEFT OUTER JOIN plano_conta ON(lancamento_rateio.idPlanoConta = plano_conta.idPlanoConta) "
+                   + "LEFT OUTER JOIN centro_custo ON(lancamento_rateio.idCentroCusto = centro_custo.idCentroCusto) "
+                   + "ORDER BY lancamento_rateio.idLancamentoRateio";        
         return findAll(sql, null, lancamentoRateioHandler);
     }
 
     public LancamentoRateio find(Integer idLancamentoRateio) throws Exception {
-        String sql = "SELECT * FROM lancamento_rateio WHERE lancamento_rateio.idLancamentoRateio = :idLancamentoRateio";
+        String sql = "SELECT * FROM lancamento_rateio "
+                   + "LEFT OUTER JOIN plano_conta ON(lancamento_rateio.idPlanoConta = plano_conta.idPlanoConta) "
+                   + "LEFT OUTER JOIN centro_custo ON(lancamento_rateio.idCentroCusto = centro_custo.idCentroCusto) "
+                   + "WHERE lancamento_rateio.idLancamentoRateio = :idLancamentoRateio";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamentoRateio", idLancamentoRateio);
         return (LancamentoRateio) find(sql, params, lancamentoRateioHandler);
     }
 
     public List<LancamentoRateio> findByLancamento(Integer idLancamento) throws Exception {
-        String sql = "SELECT * FROM lancamento_rateio WHERE lancamento_rateio.idLancamento = :idLancamento";
+        String sql = "SELECT * FROM lancamento_rateio "
+                   + "LEFT OUTER JOIN plano_conta ON(lancamento_rateio.idPlanoConta = plano_conta.idPlanoConta) "
+                   + "LEFT OUTER JOIN centro_custo ON(lancamento_rateio.idCentroCusto = centro_custo.idCentroCusto) "
+                   + "WHERE lancamento_rateio.idLancamento = :idLancamento";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamento", idLancamento);
         return findAll(sql, params, lancamentoRateioHandler);

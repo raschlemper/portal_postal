@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('ModalLancamentoProgramadoTransferenciaController', ['$scope', '$modalInstance', 'ContaService', 'DatePickerService', 'LISTAS',
+app.controller('ModalLancamentoProgramadoTransferirController', ['$scope', '$modalInstance', 'ContaService', 'DatePickerService', 'LISTAS',
     function ($scope, $modalInstance, ContaService, DatePickerService, LISTAS) {
 
         var init = function () {  

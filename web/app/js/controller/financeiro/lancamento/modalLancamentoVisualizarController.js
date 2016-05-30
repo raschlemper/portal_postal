@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('ModalVisualizarLancamentoController', ['$scope', '$modalInstance', '$state', 'lancamento', 
+app.controller('ModalLancamentoVisualizarController', ['$scope', '$modalInstance', '$state', 'lancamento', 
     function ($scope, $modalInstance, $state, lancamento) {
 
         var init = function () { 

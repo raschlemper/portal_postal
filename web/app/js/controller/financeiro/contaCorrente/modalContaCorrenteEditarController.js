@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('ModalEditarContaCorrenteController', ['$scope', '$modalInstance', 'contaCorrente', 'ContaCorrenteService', 'BancoService', 'ModalService',
+app.controller('ModalContaCorrenteEditarController', ['$scope', '$modalInstance', 'contaCorrente', 'ContaCorrenteService', 'BancoService', 'ModalService',
     function ($scope, $modalInstance, contaCorrente, ContaCorrenteService, BancoService, ModalService) {
 
         var init = function () {  
@@ -14,7 +14,7 @@ app.controller('ModalEditarContaCorrenteController', ['$scope', '$modalInstance'
         
         var getTitle = function() {
             if(contaCorrente && contaCorrente.idContaCorrente) { $scope.title = "Editar Conta Corrente"; }
-            else { $scope.title = "Inserir Nova Conta Corrente"; }
+            else { $scope.title = "Inserir Conta Corrente"; }
         }
         
         var bancos = function() {
@@ -42,7 +42,7 @@ app.controller('ModalEditarContaCorrenteController', ['$scope', '$modalInstance'
         }
         
         var modalSalvarBanco = function(banco) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/banco/modalEditarBanco.html', 'ModalEditarBancoController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/banco/modalBancoEditar.html', 'ModalBancoEditarController', 'lg',
                 {
                     banco: function() {
                         return banco;

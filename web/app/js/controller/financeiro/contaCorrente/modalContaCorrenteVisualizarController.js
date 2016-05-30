@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('ModalVisualizarContaCorrenteController', ['$scope', '$modalInstance', '$filter', 'contaCorrente', 
+app.controller('ModalContaCorrenteVisualizarController', ['$scope', '$modalInstance', '$filter', 'contaCorrente', 
     function ($scope, $modalInstance, $filter, contaCorrente) {
 
         var init = function () { 

@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('ModalEditarPlanoContaController', ['$scope', '$modalInstance', '$filter', 'planoConta', 'action', 'PlanoContaService', 'ListaService', 'LISTAS',
+app.controller('ModalPlanoContaEditarController', ['$scope', '$modalInstance', '$filter', 'planoConta', 'action', 'PlanoContaService', 'ListaService', 'LISTAS',
     function ($scope, $modalInstance, $filter, planoConta, action, PlanoContaService, ListaService, LISTAS) {
 
         var init = function () {  
@@ -45,7 +45,7 @@ app.controller('ModalEditarPlanoContaController', ['$scope', '$modalInstance', '
         
         var getTitle = function() {
             if(action && action === 'edit') { $scope.title = "Editar Plano Conta"; }
-            else { $scope.title = "Inserir Novo Plano Conta"; }
+            else { $scope.title = "Inserir Plano Conta"; }
         }
         
         $scope.ok = function(form) {

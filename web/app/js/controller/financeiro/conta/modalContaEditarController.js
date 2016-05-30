@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('ModalEditarContaController', ['$scope', '$modalInstance', 'conta', 'ContaCorrenteService', 'CartaoCreditoService', 'DatePickerService', 'ModalService', 'ListaService', 'LISTAS',
+app.controller('ModalContaEditarController', ['$scope', '$modalInstance', 'conta', 'ContaCorrenteService', 'CartaoCreditoService', 'DatePickerService', 'ModalService', 'ListaService', 'LISTAS',
     function ($scope, $modalInstance, conta, ContaCorrenteService, CartaoCreditoService,  DatePickerService, ModalService, ListaService, LISTAS) {
 
         var init = function () {  
@@ -17,7 +17,7 @@ app.controller('ModalEditarContaController', ['$scope', '$modalInstance', 'conta
         
         var getTitle = function() {
             if(conta && conta.idConta) { $scope.title = "Editar Conta"; }
-            else { $scope.title = "Inserir Nova Conta"; }
+            else { $scope.title = "Inserir Conta"; }
         };
         
         var contaCorrente = function() {
@@ -109,7 +109,7 @@ app.controller('ModalEditarContaController', ['$scope', '$modalInstance', 'conta
         }
         
         var modalSalvarContaCorrente = function(contaCorrente) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/contaCorrente/modalEditarContaCorrente.html', 'ModalEditarContaCorrenteController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/contaCorrente/modalContaCorrenteEditar.html', 'ModalContaCorrenteEditarController', 'lg',
                 {
                     contaCorrente: function() {
                         return contaCorrente;
@@ -119,7 +119,7 @@ app.controller('ModalEditarContaController', ['$scope', '$modalInstance', 'conta
         };
         
         var modalSalvarCartaoCredito = function(cartaoCredito) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/cartaoCredito/modalEditarCartaoCredito.html', 'ModalEditarCartaoCreditoController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/cartaoCredito/modalCartaoCreditoEditar.html', 'ModalCartaoCreditoEditarController', 'lg',
                 {
                     cartaoCredito: function() {
                         return cartaoCredito;

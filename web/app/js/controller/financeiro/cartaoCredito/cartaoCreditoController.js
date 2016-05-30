@@ -124,7 +124,7 @@ app.controller('CartaoCreditoController', ['$scope', 'CartaoCreditoService', 'Mo
         };
         
         var modalVisualizar = function(cartaoCredito) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/cartaoCredito/modalVisualizarCartaoCredito.html', 'ModalVisualizarCartaoCreditoController', 'md',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/cartaoCredito/modalCartaoCreditoVisualizar.html', 'ModalCartaoCreditoVisualizarController', 'md',
                 {
                     cartaoCredito: function() {
                         return cartaoCredito;
@@ -134,7 +134,7 @@ app.controller('CartaoCreditoController', ['$scope', 'CartaoCreditoService', 'Mo
         };
         
         var modalSalvar = function(cartaoCredito) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/cartaoCredito/modalEditarCartaoCredito.html', 'ModalEditarCartaoCreditoController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/cartaoCredito/modalCartaoCreditoEditar.html', 'ModalCartaoCreditoEditarController', 'lg',
                 {
                     cartaoCredito: function() {
                         return cartaoCredito;

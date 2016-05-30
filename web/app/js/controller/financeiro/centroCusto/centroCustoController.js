@@ -167,7 +167,7 @@ app.controller('CentroCustoController', ['$scope', '$q', 'CentroCustoService', '
         };
         
         var modalSalvar = function(centroCusto, action) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/centroCusto/modalEditarCentroCusto.html', 'ModalEditarCentroCustoController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/centroCusto/modalCentroCustoEditar.html', 'ModalCentroCustoEditarController', 'lg',
                 {
                     centroCusto: function() {
                         return centroCusto;
