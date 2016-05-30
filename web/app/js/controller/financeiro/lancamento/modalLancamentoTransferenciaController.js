@@ -1,13 +1,13 @@
 'use strict';
 
-app.controller('ModalLancamentoTransferenciaController', ['$scope', '$modalInstance', 'ContaService', 'DatePickerService', 'LISTAS',
-    function ($scope, $modalInstance, ContaService, DatePickerService, LISTAS) {
+app.controller('ModalLancamentoTransferenciaController', ['$scope', '$modalInstance', 'lancamentoTransferencia', 'ContaService', 'DatePickerService', 'LISTAS',
+    function ($scope, $modalInstance, lancamentoTransferencia, ContaService, DatePickerService, LISTAS) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
             $scope.datepickerLancamento = angular.copy(DatePickerService.default); 
             $scope.situacoes = LISTAS.situacaoLancamento;
-            $scope.lancamentoTransferencia = {};             
+            $scope.lancamentoTransferencia = lancamentoTransferencia || {};             
             getTitle();
             contas();
         };
@@ -20,8 +20,8 @@ app.controller('ModalLancamentoTransferenciaController', ['$scope', '$modalInsta
             ContaService.getAll()
                 .then(function (data) {
                     $scope.contas = data;
-                    $scope.lancamentoTransferencia.contaOrigem = $scope.contas[0];
-                    $scope.lancamentoTransferencia.contaDestino = $scope.contas[0];
+                    $scope.lancamentoTransferencia.contaOrigem = ($scope.lancamentoTransferencia.lancamentoOrigem && $scope.lancamentoTransferencia.lancamentoOrigem.conta) || $scope.contas[0];
+                    $scope.lancamentoTransferencia.contaDestino = ($scope.lancamentoTransferencia.lancamentoDestino && $scope.lancamentoTransferencia.lancamentoDestino.conta) || $scope.contas[0];
                 })
                 .catch(function (e) {
                     console.log(e);

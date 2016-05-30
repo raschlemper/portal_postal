@@ -9,7 +9,7 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
         var dataVencimento = moment(lancamento.dataVencimento);
         if((dataVencimento.isSame(dataInicio) || dataVencimento.isAfter(dataInicio)) && 
            (dataVencimento.isSame(dataFim) || dataVencimento.isBefore(dataFim))) {
-            lista.push(lancamento);  
+            lista.push(angular.copy(lancamento));  
         }
         if(dataVencimento.isAfter(dataFim)) return; 
         lancamentoProgramado(lista, FrequenciaLancamentoService.execute(lancamento), dataInicio, dataFim);        

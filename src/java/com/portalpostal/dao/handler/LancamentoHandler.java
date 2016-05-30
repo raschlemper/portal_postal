@@ -4,6 +4,7 @@ import com.portalpostal.model.CentroCusto;
 import com.portalpostal.model.Conta;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoProgramado;
+import com.portalpostal.model.LancamentoTransferencia;
 import com.portalpostal.model.PlanoConta;
 import com.portalpostal.model.dd.TipoLancamento;
 import com.portalpostal.model.dd.TipoModeloLancamento;
@@ -29,6 +30,7 @@ public class LancamentoHandler extends GenericHandler implements ResultSetHandle
         lancamento.setPlanoConta(getPlanoConta(result));
         lancamento.setCentroCusto(getCentroCusto(result));
         lancamento.setLancamentoProgramado(getLancamentoProgramado(result));
+        lancamento.setLancamentoTransferencia(getLancamentoTransferencia(result));
         lancamento.setTipo(TipoLancamento.values()[getInt(result, "tipo")]);
         lancamento.setFavorecido(getString(result, "favorecido"));
         lancamento.setNumero(getString(result, "numero"));
@@ -73,6 +75,15 @@ public class LancamentoHandler extends GenericHandler implements ResultSetHandle
         if(!existFKValue(result, "lancamento_programado.idLancamentoProgramado")) return null;
         return new LancamentoProgramadoHandler().handle(result); 
     }
+        
+    private LancamentoTransferencia getLancamentoTransferencia(ResultSet result) throws SQLException {
+        if(!existColumn(result, "lancamento_transferencia.idLancamentoTransferencia")) return null;
+        if(!existFKValue(result, "lancamento_transferencia.idLancamentoTransferencia")) return null;
+        Integer id = getInt(result, "idLancamentoTransferencia", "lancamento_transferencia");
+        LancamentoTransferencia transferencia = new LancamentoTransferencia();
+        transferencia.setIdLancamentoTransferencia(id);
+        return transferencia;
+    }        
         
     private boolean getAnexos(ResultSet result) throws SQLException {
         if(!existColumn(result, "anexos")) return false;

@@ -28,7 +28,10 @@ public class LancamentoTransferenciaService {
     
     public LancamentoTransferencia find(Integer idLancamentoTransferencia) throws Exception {
         init();
-        return lancamentoTransferenciaDAO.find(idLancamentoTransferencia);
+        LancamentoTransferencia lancamentoTransferencia = lancamentoTransferenciaDAO.find(idLancamentoTransferencia);
+        lancamentoTransferencia.setLancamentoOrigem(lancamentoService.find(lancamentoTransferencia.getLancamentoOrigem().getIdLancamento()));
+        lancamentoTransferencia.setLancamentoDestino(lancamentoService.find(lancamentoTransferencia.getLancamentoDestino().getIdLancamento()));
+        return lancamentoTransferencia;
     }  
     
     public LancamentoTransferencia findByLancamento(Integer idLancamento) throws Exception {
@@ -49,6 +52,10 @@ public class LancamentoTransferenciaService {
     
     public LancamentoTransferencia update(LancamentoTransferencia lancamentoTransferencia) throws Exception {
         init();
+        Lancamento origem = lancamentoService.update(lancamentoTransferencia.getLancamentoOrigem());
+        Lancamento destino = lancamentoService.update(lancamentoTransferencia.getLancamentoDestino());
+        lancamentoTransferencia.setLancamentoOrigem(origem);
+        lancamentoTransferencia.setLancamentoDestino(destino);
         return lancamentoTransferenciaDAO.update(lancamentoTransferencia);
     } 
     

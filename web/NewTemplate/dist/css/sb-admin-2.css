@@ -2990,7 +2990,7 @@ div.list-category div.list-group-item {
     color: #666;
 }
 .list-group .list-group-item span.item-list {
-    color: #666;
+/*    color: #666;*/
 }
 .panel-list>.list-group .list-group-header,
 .panel-list>.list-group .list-group-footer {
@@ -3034,7 +3034,7 @@ div.list-category div.list-group-item {
 }
 
 .form-inline div.form-group {
-    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .col-ident-1 {
@@ -3111,10 +3111,28 @@ div.list-category div.list-group-item {
     background-color: #c9302c;
     color: #FFF;
 }
-.dropdown-menu > li > a:hover {
+.bg-modal-success {
+    background-color: #5cb85c;
+    color: #FFF;
+}
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > div:hover{
     color: #000;
     text-decoration: none;
     background-color: #f5f5f5;
+}
+.btn + .dropdown-menu > li > div {
+    padding: 5px 10px !important;
+    /* color: #f0f0f0; */
+}
+.dropdown-menu > li > div {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
 }
 .col-defualt {
     color: #000;
@@ -3132,7 +3150,10 @@ div.list-category div.list-group-item {
     padding: 2px !important;
     font-size: 8pt !important;
 }
-
+.col-transferencia {
+    color: #5cb85c;
+    padding: 2px !important;
+}
 table.table-condensed tbody tr td.cel-btn {
     padding: 4px;
 }
@@ -3179,4 +3200,19 @@ table.table-condensed tbody tr td.cel-menu {
 
 .content-programacao .value {
     width:100%; 
+}
+
+.spc-right {
+    margin-right: 10px !important;
+}
+.title-table {
+    padding-top: 10px; 
+    border-top: 1px solid #CCC; 
+    font-size: 16pt;
+}
+.text-primary {
+    color: #337ab7 !important;
+}
+.text-danger {
+    color: #a94442 !important;
 }

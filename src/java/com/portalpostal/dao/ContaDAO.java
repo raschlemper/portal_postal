@@ -2,6 +2,7 @@ package com.portalpostal.dao;
 
 import com.portalpostal.dao.handler.ContaHandler;
 import com.portalpostal.model.Conta;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,7 @@ public class ContaDAO extends GenericDAO {
 
     public ContaDAO(String nameDB) { 
         super(nameDB, ContaDAO.class);
-        contaHandler = new ContaHandler();
+        this.contaHandler = new ContaHandler();
     } 
 
     public List<Conta> findAll() throws Exception {
@@ -68,8 +69,20 @@ public class ContaDAO extends GenericDAO {
     public List<Conta> findSaldo() throws Exception {
         String sql = "SELECT *, (SELECT sum(if(lancamento.tipo = 0, lancamento.valor, lancamento.valor * -1)) " 
                                 + "FROM lancamento WHERE conta.idConta = lancamento.idConta) as saldo "
-                   + "FROM conta;";        
+                   + "FROM conta";        
         return findAll(sql, null, contaHandler);
+    }
+
+    public Conta findSaldoLancamento(Integer idConta, Date data) throws Exception {
+        String sql = "SELECT *, (SELECT sum(if(tipo=0, valor, valor * -1)) FROM lancamento "
+                              + "WHERE DATE(dataLancamento) <= :data "
+                              + "AND conta.idConta = lancamento.idConta) as saldo "
+                   + "FROM conta "                 
+                   + "WHERE idConta = :idConta ";        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idConta", idConta);
+        params.put("data", data);        
+        return (Conta) find(sql, params, contaHandler);
     }
 
     public Conta save(Conta conta) throws Exception {  

@@ -9,10 +9,12 @@ app.directive('appTable', function($filter) {
             linha: '=',
             filter: '=',
             events: '=?',
-            search: '='
+            search: '=',
+            title: '@'
         },
         transclude: {
             'filterContent': '?filterContent',
+            'titleContent': '?titleContent',
             'rodapeContent': '?rodapeContent'
         },
         link: function(scope, element, attr, controller, transclude) {            
@@ -28,15 +30,26 @@ app.directive('appTable', function($filter) {
             var init = function () {   
                 scope.showCheckbox = false;  
                 scope.showMenu = false;        
-                scope.defaultFilter = true;      
+                scope.defaultFilter = true;    
+                scope.showColumnMenu = false;        
                 scope.currentPage = 1; 
                 scope.maxSize = 5; 
                 scope.limitTo = scope.limits[0];
                 scope.predicate = getPredicate(scope.colunas);
                 scope.reverse = false; 
+                scope.colunasSelected = [];
                 setCheckBox();
                 setMenu();
                 setFilterDefault();
+                setColumnMenu();
+                setSelected();
+            };
+            
+            var setSelected = function() {
+                _.map(scope.colunas, function(coluna) {
+                    if(angular.isUndefined(coluna.showColumn)) { coluna.showColumn = false; }   
+                    if(angular.isUndefined(coluna.selected)) { coluna.selected = true; }
+                })
             };
             
             var getPredicate = function(colunas) {
@@ -60,6 +73,10 @@ app.directive('appTable', function($filter) {
             
             var setFilterDefault = function() {
                 if(attr.defaultFilter) { scope.defaultFilter = (attr.defaultFilter === "true"); }
+            };
+            
+            var setColumnMenu = function() {
+                if(attr.showColumnMenu) { scope.showColumnMenu = (attr.showColumnMenu === "true"); }
             };
             
             var reset = function() {
@@ -127,7 +144,18 @@ app.directive('appTable', function($filter) {
             
             scope.events.list = function() {
                 return scope.listaFiltrada;
+            }     
+            
+            scope.showColumn = function(event, coluna) {
+                event.stopPropagation();
+                coluna.selected = !coluna.selected;
             }
+            
+            scope.$watchCollection('selectAll', function(newValue, oldValue) {
+                _.map(scope.listaFiltrada, function(item) {
+                    item.selected = newValue;
+                });    
+            });
             
             scope.$watchCollection('listaFiltrada', function(newValue, oldValue) {
                 reset();

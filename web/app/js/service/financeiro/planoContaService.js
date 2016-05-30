@@ -1,6 +1,21 @@
 'use strict';
 
-app.factory('PlanoContaService', function($http, PromiseService) {    
+app.factory('PlanoContaService', function($http, PromiseService) { 
+    
+    var identing = function(estruturas) {        
+        angular.forEach(estruturas, function(estrutura) {            
+            estrutura.descricao = formatingEstrutura(estrutura.nivel) + estrutura.descricao;
+        });
+    };
+    
+    var formatingEstrutura = function(count) {
+        if(count>1) { count = count * 4; }
+        var result = "";
+        for(var i=1; i<count; i++){
+            result+= String.fromCharCode(160);
+        }
+        return result;
+    }
         
     var flatten = function(estruturas, estruturasLista) {
         angular.forEach(estruturas, function(estrutura) {
@@ -94,6 +109,10 @@ app.factory('PlanoContaService', function($http, PromiseService) {
         delete: function(idPlanoConta) {
             return PromiseService.execute(
                     $http.delete(_contextPath + "/api/financeiro/planoconta/" + idPlanoConta));
+        },
+        
+        identing: function(estruturas) {
+            identing(estruturas);
         },
         
         flatten: function(estruturas) {

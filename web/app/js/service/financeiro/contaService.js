@@ -19,6 +19,11 @@ app.factory('ContaService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/conta/saldo"));
         },
 
+        getSaldoLancamento: function(idConta, data) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/conta/" + idConta + "/saldo/lancamento?data=" + data));
+        },
+
         getLancamento: function(idConta) {
             return PromiseService.execute(
                     $http.get(_contextPath + "/api/financeiro/conta/" + idConta + "/lancamento"));

@@ -75,10 +75,10 @@ public class LancamentoTransferenciaDAO extends GenericDAO {
 
     public LancamentoTransferencia update(LancamentoTransferencia lancamentoTransferencia) throws Exception {
         String sql = "UPDATE lancamento_transferencia "
-                   + "SET idLancamentoOrigem = :idLancamentoOrigem, idLancamentoDestino = :idLancamentoDestino "
+                   + "SET idLancamentoOrigem = :idLancamentoOrigem, idLancamentoDestino = :idLancamentoDestino, "
                    + "numero = :numero, dataCompetencia = :dataCompetencia, dataEmissao = :dataEmissao, "
                    + "dataLancamento = :dataLancamento, valor = :valor, historico = :historico, observacao = :observacao, "
-                   + "usuario = :usuario"
+                   + "usuario = :usuario "
                    + "WHERE idLancamentoTransferencia = :idLancamentoTransferencia ";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamentoTransferencia", lancamentoTransferencia.getIdLancamentoTransferencia());

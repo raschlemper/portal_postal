@@ -65,12 +65,7 @@ public class LancamentoConciliadoService {
         lancamentoConciliado.setLancamento(lancamentoConciliacao);
         lancamentoConciliado.setNumeroLote(getLastLote());
         lancamentoConciliado = save(lancamentoConciliado);
-        List<Lancamento> lancamentos = lancamentoService.findLancamentoNotConciliadoByDataLancamento(
-                        getDate(lancamentoConciliado.getDataLancamento()));
-        for (Lancamento lancamento : lancamentos) {
-            lancamento.setNumeroLoteConciliado(lancamentoConciliado.getNumeroLote());
-            lancamentoService.updateNumeroLoteConciliado(lancamento);
-        }
+        lancamentoService.updateNumeroLoteConciliado(lancamentoConciliado.getDataLancamento(), lancamentoConciliado.getNumeroLote());
         return lancamentoConciliado;
     } 
     

@@ -11,10 +11,7 @@
                                     <div class="form-inline pull-right">  
                                         <button class="btn btn-sm btn-primary" ng-click="report(dataInicio, dataFim, periodoSelected, estruturasLista)" style="margin-right: 10px;">
                                             <i class="fa fa-lg fa-print fa-spc"></i> IMPRIMIR 
-                                        </button>   
-                                        <button class="btn btn-sm btn-primary" ng-click="report(dataInicio, dataFim, periodoSelected, estruturasLista)" style="margin-right: 10px;">
-                                            <i class="fa fa-lg fa-print fa-spc"></i> IMPRIMIR 
-                                        </button>                                            
+                                        </button>                                          
                                     </div>
                                 </div>
                             </div> 
@@ -31,7 +28,10 @@
                                             <input type="checkbox" ng-model="withValues" style="margin-right: 10px;">
                                         </label>   
                                         <label>Por Competência
-                                            <input type="checkbox" ng-model="byCompetencia" ng-change="pesquisar(byCompetencia, dataInicio, dataFim)" style="margin-right: 10px;">
+                                            <input type="checkbox" ng-model="byCompetencia" ng-change="pesquisar(byCompetencia, byCentroCusto, dataInicio, dataFim)" style="margin-right: 10px;">
+                                        </label> 
+                                        <label>Por Centro de Custo
+                                            <input type="checkbox" ng-model="byCentroCusto" ng-change="pesquisar(byCompetencia, byCentroCusto, dataInicio, dataFim)" style="margin-right: 10px;">
                                         </label>
                                         <label>Mês:</label>
                                         <select class="form-control" ng-model="mesSelected" ng-change="setData(mesSelected, anoSelected)" style="margin-right: 10px;"
@@ -41,7 +41,7 @@
                                         <select class="form-control" ng-model="anoSelected" ng-change="setData(mesSelected, anoSelected)" style="margin-right: 10px;"
                                             ng-options="ano.descricao for ano in anos track by ano.id">    
                                         </select>
-                                        <button class="btn btn-sm btn-primary" ng-click="pesquisar(mesSelected, anoSelected, dataInicio, dataFim)" style="margin-right: 30px;">
+                                        <button class="btn btn-sm btn-primary" ng-click="pesquisar(byCompetencia, byCentroCusto, dataInicio, dataFim)" style="margin-right: 30px;">
                                             <i class="fa fa-lg fa-search fa-spc"></i> PESQUISAR 
                                         </button>  
                                     </div>
@@ -51,7 +51,8 @@
                             <div class="list-group margin-top">
                                 <div class="list-group-item list-group-header">
                                     <div class="row">
-                                        <div class="col-md-3">Plano de Conta</div>
+                                        <div class="col-md-3" ng-if="!byCentroCusto">Plano de Conta</div>
+                                        <div class="col-md-3" ng-if="byCentroCusto">Centro de Custo</div>
                                         <div class="col-md-9">
                                             <div class="col-md-1 text-center" ng-repeat="periodo in periodoSelected track by $index">
                                                 {{periodo.abreviacao}}<br/>{{periodo.ano}}
@@ -60,7 +61,9 @@
                                     </div>                
                                 </div> 
                                 <div class="list-group-container">
-                                    <div class="list-group-item list-group-content" ng-repeat="estrutura in estruturasLista track by estrutura.idPlanoConta" ng-show="showRow(withValues, estrutura)">
+                                    <div class="list-group-item list-group-content" ng-repeat="estrutura in estruturasLista track by $index" ng-show="showRow(withValues, estrutura)"
+                                         ng-class="{'text-primary': estrutura.tipo.id === tipos[0].id,
+                                                    'text-danger': estrutura.tipo.id === tipos[1].id}">
                                         <div class="row" ng-class="{'col-list-item-group': estrutura.ehGrupo}">
                                             <div class="col-md-3">
                                                 <span class="item-list col-ident-{{estrutura.nivel}}">{{estrutura.descricao}}</span>

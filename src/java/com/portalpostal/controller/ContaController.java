@@ -6,6 +6,7 @@ import com.portalpostal.model.Conta;
 import com.portalpostal.service.ContaService;
 import com.portalpostal.service.LancamentoService;
 import com.portalpostal.validation.ContaValidation;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,6 +18,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -60,6 +62,20 @@ public class ContaController {
         try {
             init();    
             return contaService.findSaldo();
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }  
+    
+    @GET
+    @Path("/{idConta}/saldo/lancamento")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Conta findSaldoLancamento(@PathParam("idConta") Integer idConta,
+            @QueryParam("data") String data) {
+        try {
+            init(); 
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            return contaService.findSaldoLancamento(idConta, format.parse(data));
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }

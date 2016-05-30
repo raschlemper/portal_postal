@@ -11,7 +11,6 @@ import com.portalpostal.service.LancamentoService;
 import com.portalpostal.validation.LancamentoAnexoValidation;
 import com.portalpostal.validation.LancamentoValidation;
 import com.sun.jersey.core.header.FormDataContentDisposition;
-import com.sun.jersey.multipart.BodyPart;
 import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataParam;
 import java.io.InputStream;
@@ -99,6 +98,22 @@ public class LancamentoController {
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
+    }  
+    
+    @GET
+    @Path("/centrocusto/saldo")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Saldo> findSaldoCentroCusto(@QueryParam("dataInicio") String dataInicio, 
+            @QueryParam("dataFim") String dataFim) {
+        try {
+            init(); 
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date inicio = format.parse(dataInicio);
+            Date fim = format.parse(dataFim);
+            return lancamentoService.findSaldoCentroCusto(inicio, fim);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
     } 
     
     @GET
@@ -112,6 +127,22 @@ public class LancamentoController {
             Date inicio = format.parse(dataInicio);
             Date fim = format.parse(dataFim);
             return lancamentoService.findSaldoPlanoContaCompetencia(inicio, fim);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }
+    
+    @GET
+    @Path("/centrocusto/saldo/competencia")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Saldo> findSaldoCentroCustoCompetencia(@QueryParam("dataInicio") String dataInicio, 
+            @QueryParam("dataFim") String dataFim) {
+        try {
+            init(); 
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date inicio = format.parse(dataInicio);
+            Date fim = format.parse(dataFim);
+            return lancamentoService.findSaldoCentroCustoCompetencia(inicio, fim);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -132,19 +163,6 @@ public class LancamentoController {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     } 
-    
-    @GET
-    @Path("/saldo/conciliado")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Saldo> findSaldoConciliado(@QueryParam("data") String data) {
-        try {
-            init(); 
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            return lancamentoService.findSaldoConciliado(format.parse(data));
-        } catch (Exception ex) {
-            throw new WebApplicationException(getMessageError(ex.getMessage()));
-        }
-    }  
     
     @GET
     @Path("/anos")

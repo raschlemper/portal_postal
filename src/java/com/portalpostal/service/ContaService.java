@@ -4,6 +4,7 @@ import com.portalpostal.dao.ContaDAO;
 import com.portalpostal.model.Conta;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoProgramado;
+import java.util.Date;
 import java.util.List;
 
 public class ContaService {
@@ -52,6 +53,11 @@ public class ContaService {
     public List<Conta> findSaldo() throws Exception {
         init();
         return contaDAO.findSaldo();
+    }  
+    
+    public Conta findSaldoLancamento(Integer idConta, Date data) throws Exception {
+        init();
+        return contaDAO.findSaldoLancamento(idConta, data);
     }  
     
     public Conta findLancamento(Integer idConta) throws Exception {

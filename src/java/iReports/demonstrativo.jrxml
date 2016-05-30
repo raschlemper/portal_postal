@@ -143,9 +143,9 @@
 						<box>
 							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 						</box>
-						<textField>
+						<textField pattern="#,##0.00">
 							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="18" uuid="01241e92-088d-4caa-b199-a8a481062b08"/>
-							<textElement verticalAlignment="Middle"/>
+							<textElement verticalAlignment="Middle" textAlignment="Center"/>       
 							<textFieldExpression><![CDATA[$V{saldoMeasure}]]></textFieldExpression>
 						</textField>
 					</cellContents>

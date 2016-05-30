@@ -1,7 +1,7 @@
 <form name="lancamentoConciliadoForm" novalidate>
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
-        <h4 class="modal-title">Inserir Novo Lançamento Reconciliado</h4>
+        <h4 class="modal-title">Inserir Lançamento Reconciliado</h4>
     </div>
     <div class="modal-body">
         <div class="bootbox-body">
@@ -29,7 +29,7 @@
                                 </div>
                             </div> 
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 spc-default-top">
-                                <button type="button" class="btn btn-success pull-right" ng-click="calcularSaldo(lancamentoConciliado.dataLancamento, saldoReconciliacao)">
+                                <button type="button" class="btn btn-success pull-right" ng-click="calcularSaldo(conta, lancamentoConciliado.dataLancamento, saldoReconciliacao)">
                                     <i class="fa fa-lg fa-save fa-spc"></i> CALCULAR RECONCILIAÇÃO
                                 </button>
                             </div>
@@ -39,8 +39,18 @@
                                     <label class="small">Plano de Conta</label>
                                     <div class="input-group">
                                         <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                        <select class="form-control" name="planoConta" 
-                                                ng-options="planoConta.nome for planoConta in planoContas track by planoConta.idPlanoConta" ng-model="lancamentoConciliado.planoConta"></select>
+                                        <select class="form-control" name="planoConta"
+                                                ng-options="planoConta.descricao for planoConta in planoContas track by planoConta.idPlanoConta" ng-model="lancamentoConciliado.planoConta"></select>
+                                    </div>
+                                </div> 
+                                <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
+                                    <label class="small">Centro de Custo</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                        <select class="form-control" name="centroCusto" 
+                                            ng-options="centroCusto.descricao for centroCusto in centroCustos track by centroCusto.idCentroCusto" ng-model="lancamentoConciliado.centroCusto">
+                                            <option value=""></option>
+                                        </select>
                                     </div>
                                 </div> 
                                 <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
@@ -65,7 +75,7 @@
                                 <strong>Saldo Diferença</strong><i class="pull-right">{{saldo.diferenca | currency : 'R$ '}}</i>
                             </div>
                             
-                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 divider-horizontal-top text-justify" ng-show="saldo && saldo.diferenca">
+                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 divider-horizontal-top text-justify" style="margin-top: 43px;" ng-show="saldo && saldo.diferenca">
                                 <strong>Existe diferença entre os saldos lançados e o saldo informado para reconciliação. <br/>
                                         Clique em salvar para gerar o lançamento de reconciliação.</strong>
                             </div>

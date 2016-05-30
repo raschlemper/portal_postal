@@ -1,5 +1,6 @@
 package com.portalpostal.dao.handler;
 
+import com.portalpostal.model.CentroCusto;
 import com.portalpostal.model.Conta;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoConciliado;
@@ -24,6 +25,7 @@ public class LancamentoConciliadoHandler extends GenericHandler implements Resul
         lancamentoConciliado.setIdLancamentoConciliado(getInt(result, "idLancamentoConciliado"));
         lancamentoConciliado.setConta(getConta(result));
         lancamentoConciliado.setPlanoConta(getPlanoConta(result));
+        lancamentoConciliado.setCentroCusto(getCentroCusto(result));
         lancamentoConciliado.setLancamento(getLancamento(result));
         lancamentoConciliado.setTipo(TipoLancamento.values()[getInt(result, "tipo")]);
         lancamentoConciliado.setNumeroLote(getInt(result, "numeroLote"));
@@ -44,6 +46,11 @@ public class LancamentoConciliadoHandler extends GenericHandler implements Resul
     private PlanoConta getPlanoConta(ResultSet result) throws SQLException {
         if(!existColumn(result, "plano_conta.idPlanoConta")) return null;
         return new PlanoContaHandler().handle(result); 
+    }
+    
+    private CentroCusto getCentroCusto(ResultSet result) throws SQLException {
+        if(!existColumn(result, "centro_custo.idCentroCusto")) return null;
+        return new CentroCustoHandler().handle(result); 
     }
     
     private Lancamento getLancamento(ResultSet result) throws SQLException {

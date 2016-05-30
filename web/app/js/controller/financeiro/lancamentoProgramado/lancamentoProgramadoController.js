@@ -7,16 +7,19 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
             $scope.lancamentoProgramados = [];
             $scope.lancamentoProgramadosLista = [];
             $scope.tipos = LISTAS.lancamento;
+            $scope.modelos = LISTAS.modeloLancamento;
             $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
             $scope.datepickerDataFim = angular.copy(DatePickerService.default);    
             $scope.lancSearch = {};
             contas();
+            todos();  
             initTable(); 
         };  
         
         var initTable = function() {            
             $scope.colunas = [              
-                {label: '', column: 'tipo.descricao', headerClass: 'no-sort', dataClass:'text-center col-tipo', filter: {name: 'tipoLancamento', args: ''}},         
+                {label: '', column: 'tipo', headerClass: 'no-sort', dataClass:'text-center col-tipo', filter: {name: 'tipoLancamento', args: ''}},       
+                {label: 'Conta', column: 'conta.nome', filter: {name: 'date', args: 'dd/MM/yyyy'}},                      
                 {label: 'Vencimento', column: 'dataVencimento', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
                 {label: 'Número', column: 'numeroParcela'},               
                 {label: 'Favorecido', column: 'favorecido'},  
@@ -31,7 +34,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
                 },
                 events: { 
                     edit: function(lancamentoProgramado) {
-                        $scope.editar($scope.conta, lancamentoProgramado.idLancamentoProgramado);
+                        $scope.editar($scope.conta, lancamentoProgramado.tipo, lancamentoProgramado.idLancamentoProgramado);
                     },
                     remove: function(lancamentoProgramado) {
                         $scope.excluir($scope.conta, lancamentoProgramado.idLancamentoProgramado);
@@ -46,59 +49,76 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         $scope.filter = function(lista, search) {
             lista = _.filter(lista, function(item) {
                 return filterByData(item, search);
-            });              
-            return $filter('filter')(lista, search.tipo);
-        };
+            });  
+            lista = filterTipo(lista, search);
+            lista = filterConta(lista, search);
+            return lista;
+        }
         
         var filterByData = function(item, search) {
             if(!search.dataInicio || !search.dataFim) return true;
             var data = moment(item.dataVencimento);
             return (data.isBefore(search.dataFim) && data.isAfter(search.dataInicio) 
                     || (data.isSame(search.dataInicio) || data.isSame(search.dataFim)));
-        };  
+        }; 
+        
+        var filterTipo = function(lista, search) {          
+            if(!search.tipo) return lista;
+            var tipo = JSON.parse(search.tipo); 
+            lista = _.filter(lista, function(item) {
+                return item.tipo.id === tipo.id;
+            });
+            return lista;
+        }
+        
+        var filterConta = function(lista, search) {          
+            if(!search.conta) return lista;
+            var conta = JSON.parse(search.conta); 
+            lista = _.filter(lista, function(item) {
+                return item.conta.idConta === conta.idConta;
+            });
+            return lista;
+        }
         
         var contas = function() {
             ContaService.getAll()
                 .then(function (data) {
                     $scope.contas = data;
-                    $scope.conta = $scope.contas[0];
                     if($state.params.id) { $scope.editar($scope.conta, $state.params.id); }
-                    todos($scope.conta);  
                 })
                 .catch(function (e) {
                     console.log(e);
                 });
         };
-        
-        $scope.changeConta = function(conta) {
-            $scope.conta = conta;
-            todos(conta);
-        }
 
-        var todos = function(conta) {
-            ContaService.getLancamentoProgramado(conta.idConta)
+        var todos = function() {
+            LancamentoProgramadoService.getAll()
                 .then(function (data) {
-                    $scope.lancamentoProgramados = data.lancamentoProgramados;
-                    $scope.lancamentoProgramadosLista = criarLancamentoProgramadosLista(data);
+                    $scope.lancamentoProgramados = data;
+                    $scope.lancamentoProgramadosLista = criarLancamentoProgramadosLista($scope.lancamentoProgramados);
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         };
         
-        var criarLancamentoProgramadosLista = function(data) {
-            return _.map(data.lancamentosProgramados, function(lancamentoProgramado) {  
+        var criarLancamentoProgramadosLista = function(lancamentosProgramados) {
+            return _.map(lancamentosProgramados, function(lancamentoProgramado) {  
+                
+                lancamentoProgramado.tipo.modelo = $scope.modelos[2];
                 
                 var complementoDescricaoFrequencia = '';
                 if(lancamentoProgramado.quantidadeParcela) { 
-                    complementoDescricaoFrequencia = ' - Parcelado (' + lancamentoProgramado.quantidadeParcela + 'x)';
+                    complementoDescricaoFrequencia = ' - ' + lancamentoProgramado.quantidadeParcela + 'x (' + $filter('currency')(lancamentoProgramado.valor, 'R$ ') + ')';
+                    lancamentoProgramado.tipo.modelo = $scope.modelos[4];
                 }
                 
                 lancamentoProgramado.situacao = lancamentoProgramado.situacao.descricao;
                 lancamentoProgramado.frequencia = lancamentoProgramado.frequencia.descricao + complementoDescricaoFrequencia;
                 lancamentoProgramado.numeroParcela = lancamentoProgramado.numero;
+                lancamentoProgramado.tipo.modelo = $scope.modelos;
                 
-                return _.pick(lancamentoProgramado, 'idLancamentoProgramado', 'tipo', 'dataVencimento', 'numeroParcela', 'favorecido', 'valor', 'situacao', 'frequencia');
+                return _.pick(lancamentoProgramado, 'idLancamentoProgramado', 'conta', 'tipo', 'dataVencimento', 'numeroParcela', 'favorecido', 'valor', 'situacao', 'frequencia');
             })
         };
 
@@ -106,7 +126,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
             LancamentoProgramadoService.get(idLancamentoProgramado)
                 .then(function(lancamentoProgramado) {
                      modalVisualizar(lancamentoProgramado).then(function(result) {
-                        $scope.editar(conta, result);
+                        $scope.editar(conta, lancamentoProgramado.tipo, result);
                      })          
                 })
                 .catch(function(e) {
@@ -114,8 +134,8 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
                 });
         };
 
-        $scope.salvar = function(conta) {
-            modalSalvar(conta).then(function(result) {
+        $scope.salvar = function(conta, tipo) {
+            modalSalvar(conta, tipo, null).then(function(result) {
                 var gerarLancamento = result.gerarLancamento;
                 result = ajustarDados(result);
                 if(gerarLancamento) { criarLancamento(conta, result); } 
@@ -146,10 +166,10 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
 //            });
 //        };
 
-        $scope.editar = function(conta, idLancamentoProgramado) {
+        $scope.editar = function(conta, tipo, idLancamentoProgramado) {
             LancamentoProgramadoService.get(idLancamentoProgramado)
                 .then(function(lancamentoProgramado) {
-                     modalSalvar(conta, lancamentoProgramado).then(function(result) {
+                     modalSalvar(conta, tipo, lancamentoProgramado).then(function(result) {
                         var gerarLancamento = result.gerarLancamento;
                         result = ajustarDados(result);
                         if(gerarLancamento) { criarLancamento(conta, result); } 
@@ -283,11 +303,14 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
             return modalInstance.result;
         };
         
-        var modalSalvar = function(conta, lancamentoProgramado) {
+        var modalSalvar = function(conta, tipo, lancamentoProgramado) {
             var modalInstance = ModalService.modalDefault('partials/financeiro/lancamentoProgramado/modalLancamentoProgramado.html', 'ModalEditarLancamentoProgramadoController', 'lg',
                 {
                     lancamentoProgramado: function() {
                         return lancamentoProgramado;
+                    },
+                    tipo: function() {
+                        return tipo;
                     },
                     conta: function() {
                         return conta;

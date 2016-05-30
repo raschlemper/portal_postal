@@ -4,6 +4,7 @@ import com.portalpostal.model.dd.TipoLancamento;
 import com.portalpostal.model.dd.TipoModeloLancamento;
 import com.portalpostal.model.dd.TipoSituacaoLancamento;
 import java.util.Date;
+import java.util.List;
 
 public class Lancamento {
     
@@ -12,6 +13,7 @@ public class Lancamento {
     private PlanoConta planoConta;
     private CentroCusto centroCusto;
     private LancamentoProgramado lancamentoProgramado;
+    private LancamentoTransferencia lancamentoTransferencia;
     private TipoLancamento tipo;
     private String favorecido;
     private String numero;
@@ -33,6 +35,7 @@ public class Lancamento {
     private String observacao;
     private String usuario;
     private boolean anexos;
+    private List<LancamentoRateio> rateios;
 
     public Integer getIdLancamento() {
         return idLancamento;
@@ -72,6 +75,14 @@ public class Lancamento {
 
     public void setLancamentoProgramado(LancamentoProgramado lancamentoProgramado) {
         this.lancamentoProgramado = lancamentoProgramado;
+    }
+
+    public LancamentoTransferencia getLancamentoTransferencia() {
+        return lancamentoTransferencia;
+    }
+
+    public void setLancamentoTransferencia(LancamentoTransferencia lancamentoTransferencia) {
+        this.lancamentoTransferencia = lancamentoTransferencia;
     }
 
     public TipoLancamento getTipo() {
@@ -240,6 +251,14 @@ public class Lancamento {
 
     public void setAnexos(boolean anexos) {
         this.anexos = anexos;
+    }
+
+    public List<LancamentoRateio> getRateios() {
+        return rateios;
+    }
+
+    public void setRateios(List<LancamentoRateio> rateios) {
+        this.rateios = rateios;
     }
     
 }

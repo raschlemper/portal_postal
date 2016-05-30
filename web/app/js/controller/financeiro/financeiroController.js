@@ -156,7 +156,8 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
             $scope.changeMesDespesas($scope.mesDespesaSelected);
         };
         
-        $scope.changeMesDespesas = function(mes) {            
+        $scope.changeMesDespesas = function(mes) {    
+            $scope.configChartDespesa[mes.order] = {}
             chartSaldoDespesa(mes);
         }
         
@@ -189,7 +190,6 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                     enabled: false
                 }
             };
-            return $scope.configChartDespesa;
         };  
         
         var chartSaldoDespesa = function(mes) {
@@ -242,7 +242,21 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
             $scope.configChartSaldos.push({ 
                 title: " ",     
                 options: { 
-                    chart: { type: "area" }
+                    chart: { type: "area" },           
+                    plotOptions: {
+                        area: {
+                            marker: {
+                                enabled: false,
+                                symbol: 'circle',
+                                radius: 2,
+                                states: {
+                                    hover: {
+                                        enabled: true
+                                    }
+                                }
+                            }
+                        }
+                    },
                 },
                 xAxis: {
                     categories: categorias,
@@ -286,10 +300,12 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                     ContaCorrenteService.getAll()])
                .then(function(values) { 
                     var saldos = getLancamentos(values[1], values[0], dataInicio, dataFim);
+                    addDataSemSaldo(moment(dataInicio), moment(dataInicio), moment(dataFim), saldos);
                     saldos = ajusteSaldos(saldos);
                     var limiteContaCorrente = getSaldoContaCorrente(values[2]);
                     var categorias = getDataChartSaldo(saldos, 'data');
                     var valores = getDataChartSaldo(saldos, 'valor');
+                    valores = addSaldoContas($scope.saldoTotal, valores);
                     configChartSaldo(categorias, valores, limiteContaCorrente);
                 })
                 .catch(function(e) {
@@ -326,9 +342,19 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                 _.map(saldo, function(item) {
                     total += item.valor
                 });
-                saldoGroup.push({data: data, valor: total});
+                saldoGroup.push(getDataSaldo(data, total));
             })
             return formatSaldo(saldoGroup);            
+        };
+        
+        var addDataSemSaldo = function(data, dataInicio, dataFim, saldos) {
+            if(data.isBefore(dataInicio) || data.isAfter(dataFim)) return;
+            saldos.push(getDataSaldo(data.format('YYYY-MM-DD'), 0));
+            addDataSemSaldo(data.add(1,'days'), dataInicio, dataFim, saldos)
+        }
+        
+        var getDataSaldo = function(data, total) {
+            return {data: data, valor: total};
         }
         
         var compareData = function (a,b) {
@@ -363,6 +389,11 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
             return _.values(values);
         };
         
+        var addSaldoContas = function(saldoContas, saldos) {
+            return _.map(saldos, function(saldo) {
+                return saldo + saldoContas;
+            })
+        }
         // Saldos Programados /////
         
         var initSaldoProgramado = function() {

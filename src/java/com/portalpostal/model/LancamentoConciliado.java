@@ -9,6 +9,7 @@ public class LancamentoConciliado {
     private Lancamento lancamento;
     private Conta conta;
     private PlanoConta planoConta;
+    private CentroCusto centroCusto;
     private TipoLancamento tipo;
     private Integer numeroLote;
     private Date dataCompetencia;
@@ -48,6 +49,14 @@ public class LancamentoConciliado {
 
     public void setPlanoConta(PlanoConta planoConta) {
         this.planoConta = planoConta;
+    }
+
+    public CentroCusto getCentroCusto() {
+        return centroCusto;
+    }
+
+    public void setCentroCusto(CentroCusto centroCusto) {
+        this.centroCusto = centroCusto;
     }
 
     public TipoLancamento getTipo() {

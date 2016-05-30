@@ -42,6 +42,15 @@ app.factory('SaldoService', function($filter) {
             getSaldoGrupo(estruturas, estrutura);
         });
     };
+    
+    // SALDO GRUPO CENTRO DE CUSTO /////
+                
+    var setSaldoCentroCustoGrupo = function(estruturas) {
+        estruturas = $filter('orderBy')(estruturas, 'nivel', true);
+        angular.forEach(estruturas, function(estrutura) {
+            getSaldoGrupo(estruturas, estrutura);
+        });
+    };
 
     var getSaldoGrupo = function(estruturas, estruturaGrupo) {
         var estruturaSaldo = _.find(estruturas, function(estrutura) { 
@@ -65,12 +74,26 @@ app.factory('SaldoService', function($filter) {
         });
         return totais;
     };
+    
+    // SALDO TOTAL MES CENTRO DE CUSTO /////
+     
+    var setSaldoCentroCustoTotalMes = function(estruturas, meses) {
+        var totais = {};
+        angular.forEach(estruturas, function(estrutura) {
+            getSaldoEstrutura(estrutura, totais, meses);
+        });
+        return totais;
+    };
 
     var getSaldoEstrutura = function(estrutura, totais, meses) {
         angular.forEach(meses, function(mes) {               
             if(!totais[mes.order]) { totais[mes.order] = 0; }
-            if(estrutura.tipo.codigo === 'receita') { totais[mes.order] += estrutura.saldos[mes.order]; }
-            else if(estrutura.tipo.codigo === 'despesa') { totais[mes.order] -= estrutura.saldos[mes.order]; }
+            if(estrutura.tipo) {
+                if(estrutura.tipo.codigo === 'receita') { totais[mes.order] += estrutura.saldos[mes.order]; }
+                else if(estrutura.tipo.codigo === 'despesa') { totais[mes.order] -= estrutura.saldos[mes.order]; }
+            } else {
+                totais[mes.order] += estrutura.saldos[mes.order];
+            }    
         });
     };  
     
@@ -84,6 +107,16 @@ app.factory('SaldoService', function($filter) {
         return setSaldoByMes(estruturas, saldos, mes, 'idPlanoConta');
     } 
     
+    // SALDO CENTRO DE CUSTO /////
+    
+    var setSaldoCentroCusto = function(estruturas, saldos, meses) {
+        setSaldo(estruturas, saldos, meses, 'idCentroCusto');
+    }
+    
+    var setSaldoCentroCustoByMes = function(estruturas, saldos, mes) {
+        return setSaldoByMes(estruturas, saldos, mes, 'idCentroCusto');
+    } 
+    
     // SALDO TIPO LANCAMENTO /////
     
     var setSaldoTipoLancamento = function(tipos, saldos, meses) {
@@ -92,10 +125,14 @@ app.factory('SaldoService', function($filter) {
     
     return {
         saldoPlanoConta: setSaldoPlanoConta,
+        saldoCentroCusto: setSaldoCentroCusto,
         saldoPlanoContaByMes: setSaldoPlanoContaByMes,
+        saldoCentroCustoByMes: setSaldoCentroCustoByMes,
         saldoTipoLancamento: setSaldoTipoLancamento,
         saldoPlanoContaGrupo: setSaldoPlanoContaGrupo,
-        saldoPlanoContaTotalMes: setSaldoPlanoContaTotalMes
+        saldoCentroCustoGrupo: setSaldoCentroCustoGrupo,
+        saldoPlanoContaTotalMes: setSaldoPlanoContaTotalMes,
+        saldoCentroCustoTotalMes: setSaldoCentroCustoTotalMes
     }
 
 });

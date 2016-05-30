@@ -11,15 +11,7 @@
                     <div class="row form-horizontal">
                         <input type="hidden" name="idLancamento" ng-model="lancamento.idLancamento"/>  
                         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 divider-vertical-right">
-                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                <label class="small">Tipo</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                    <select class="form-control" name="tipo" ng-change="changeTipo(lancamento.tipo)"
-                                            ng-options="tipo.descricao for tipo in tipos track by tipo.id" ng-model="lancamento.tipo"></select>
-                                </div>
-                            </div>   
-                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
                                 <label class="small">Situação</label>
                                 <div class="input-group">
                                     <span class="input-group-addon" ><i class="fa fa-info"></i></span>
@@ -34,25 +26,7 @@
                                     <select class="form-control" name="conta" 
                                             ng-options="conta.nome for conta in contas track by conta.idConta" ng-model="lancamento.conta"></select>
                                 </div>
-                            </div> 
-                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
-                                <label class="small">Plano de Conta</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                    <select class="form-control" name="planoConta" 
-                                            ng-options="planoConta.descricao for planoConta in planoContas track by planoConta.idPlanoConta" ng-model="lancamento.planoConta"></select>
-                                </div>
-                            </div> 
-                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
-                                <label class="small">Centro de Custo</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                    <select class="form-control" name="centroCusto" 
-                                        ng-options="centroCusto.descricao for centroCusto in centroCustos track by centroCusto.idCentroCusto" ng-model="lancamento.centroCusto">
-                                        <option value=""></option>
-                                    </select>
-                                </div>
-                            </div> 
+                            </div>
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
                                 <label class="small">Favorecido</label>
                                 <div class="input-group">
@@ -77,12 +51,30 @@
                                            placeholder="Autenticação do lançamento"/>  
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="!ratearValor">
                                 <label class="small">Observação</label>
                                 <textarea class="form-control" rows="3" name="observacao" placeholder="" ng-model="lancamento.observacao"></textarea>       
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">    
+                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">     
+                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12"  ng-show="!ratearValor">
+                                <label class="small">Plano de Conta</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                    <select class="form-control" name="planoConta" trim-app
+                                            ng-options="planoConta.descricao for planoConta in planoContas track by planoConta.idPlanoConta" ng-model="lancamento.planoConta"></select>
+                                </div>
+                            </div> 
+                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12"  ng-show="!ratearValor">
+                                <label class="small">Centro de Custo</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                    <select class="form-control" name="centroCusto" 
+                                        ng-options="centroCusto.descricao for centroCusto in centroCustos track by centroCusto.idCentroCusto" ng-model="lancamento.centroCusto">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div> 
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
                                 <label class="small">Número</label>
                                 <div class="input-group">
@@ -91,16 +83,6 @@
                                            placeholder="Número"/>  
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
-                                <label class="small">Data Competência</label>
-                                <div class="input-group">
-                                    <input type="text" autocomplete="off" name="dataCompetencia" class="form-control" ng-model="lancamento.dataCompetencia" 
-                                           datepicker-popup="{{datepickerCompetencia.format}}" is-open="datepickerCompetencia.opened" ng-required="true"
-                                           current-text="{{datepickerCompetencia.today}}" clear-text="{{datepickerCompetencia.clear}}" close-text="{{datepickerCompetencia.close}}"
-                                           placeholder="Competência do lançamento"/>
-                                    <span class="input-group-addon" ng-click="datepickerCompetencia.open($event)"><i class="fa fa-calendar"></i></span>
-                                </div>
-                            </div> 
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
                                 <label class="small">Data</label>
                                 <div class="input-group">
@@ -112,40 +94,96 @@
                                 </div>
                             </div>   
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
+                                <label class="small">Data Competência</label>
+                                <div class="input-group">
+                                    <input type="text" autocomplete="off" name="dataCompetencia" class="form-control" ng-model="lancamento.dataCompetencia" 
+                                           datepicker-popup="{{datepickerCompetencia.format}}" is-open="datepickerCompetencia.opened" ng-required="true"
+                                           current-text="{{datepickerCompetencia.today}}" clear-text="{{datepickerCompetencia.clear}}" close-text="{{datepickerCompetencia.close}}"
+                                           placeholder="Competência do lançamento"/>
+                                    <span class="input-group-addon" ng-click="datepickerCompetencia.open($event)"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div> 
+                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
                                 <label class="small">Valor</label>
                                 <div class="input-group">
                                     <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
-                                    <input type="text" autocomplete="off" name="valor" class="form-control text-right" 
+                                    <input type="text" autocomplete="off" name="valor" class="form-control text-right" ng-disabled="ratearValor"
                                            ui-number-mask="2" placeholder="Valor do lançamento" ng-model="lancamento.valor" ng-required="true"/>
                                 </div>
-                            </div>  
-                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
-                                <label class="small">Valor Desconto</label>
+                            </div> 
+                        </div>
+                    </div>
+                    <hr ng-show="ratearValor"/>
+                    <div ng-show="ratearValor" style="padding:10px;">
+                        <div class="row">                      
+                            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                <label class="small">Plano de Conta</label>
                                 <div class="input-group">
-                                    <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
-                                    <input type="text" autocomplete="off" name="valorDesconto" class="form-control text-right"
-                                           ui-number-mask="2" placeholder="Valor de desconto" ng-model="lancamento.valorDesconto" ng-required="true"/>
+                                    <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                    <select class="form-control" name="planoConta" trim-app
+                                            ng-options="planoConta.descricao for planoConta in planoContas track by planoConta.idPlanoConta" ng-model="rateio.planoConta"></select>
                                 </div>
-                            </div>  
-                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
-                                <label class="small">Valor Juros</label>
+                            </div> 
+                            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                <label class="small">Centro de Custo</label>
                                 <div class="input-group">
-                                    <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
-                                    <input type="text" autocomplete="off" name="valorJuros" class="form-control text-right"
-                                           ui-number-mask="2" placeholder="Valor de juros" ng-model="lancamento.valorJuros" ng-required="true"/>
+                                    <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                    <select class="form-control" name="centroCusto" 
+                                        ng-options="centroCusto.descricao for centroCusto in centroCustos track by centroCusto.idCentroCusto" ng-model="rateio.centroCusto">
+                                        <option value=""></option>
+                                    </select>
                                 </div>
-                            </div>  
-                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
-                                <label class="small">Valor Multa</label>
+                            </div> 
+                            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                                <label class="small">Observação</label>
+                                <textarea class="form-control" rows="1" name="observacao" ng-model="rateio.observacao"></textarea>       
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2">
+                                <label class="small">Valor</label>
                                 <div class="input-group">
                                     <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
-                                    <input type="text" autocomplete="off" name="valorMulta" class="form-control text-right"
-                                           ui-number-mask="2" placeholder="Valor de multa" ng-model="lancamento.valorMulta" ng-required="true"/>
+                                    <input type="text" autocomplete="off" name="valorRateio" class="form-control text-right"
+                                           ui-number-mask="2" ng-model="rateio.valor" ng-required="true"/>
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 divider-horizontal-top">
-                                <strong>Total</strong><i class="pull-right">{{getTotal(lancamento) | currency : 'R$ '}}</i>
+                            <div class="col-xs-12 col-sm-6 col-md-1 col-lg-1">
+                                <div class="input-group" style="margin-top: 23px;">
+                                    <button type="button" class="btn btn-primary" ng-click="salvarRateio(rateio)">
+                                        <i class="fa fa-lg fa-plus-circle"></i>
+                                    </button>
+                                </div>
                             </div>
+                        </div>
+                        <div class="row divider-horizontal-top">
+                            <div class="table-responsive container-fluid">
+                                <table class="table table-striped table-hover table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-md-3">Plano Conta</th>
+                                            <th class="col-md-3">Centro Custo</th>
+                                            <th class="col-md-2">Observação</th>
+                                            <th class="col-md-2">Valor</th>
+                                            <th class="col-md-2 text-center"></th>
+                                        </tr>
+                                    </thead>     
+                                    <tbody>
+                                        <tr ng-repeat="rateio in lancamento.rateios track by $index">
+                                            <td>{{rateio.planoConta.descricao}}</td>
+                                            <td>{{rateio.centroCusto.descricao}}</td>
+                                            <td>{{rateio.observacao}}</td>
+                                            <td>{{rateio.valor | currency : 'R$ '}}</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-xs btn-warning" ng-click="editarRateio(rateio, $index)">
+                                                    <i class="fa fa-sm fa-pencil"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-xs btn-danger" ng-click="removerRateio($index)">
+                                                    <i class="fa fa-sm fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>             
                         </div>
                     </div>
                 </li>
@@ -153,8 +191,14 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-default" ng-click="anexar(lancamento)"  ng-if="lancamento.idLancamento">
+<!--        <button type="button" class="btn btn-default" ng-click="anexar(lancamento)"  ng-if="lancamento.idLancamento">
             <i class="fa fa-lg fa-paperclip fa-spc"></i> ANEXAR
+        </button>-->
+        <button type="button" class="btn btn-default" ng-click="ratear(lancamento.valor)" ng-show="!ratearValor" ng-disabled="!lancamento.valor">
+            <i class="fa fa-lg fa-check fa-spc"></i> RATEAR
+        </button>
+        <button type="button" class="btn btn-default" ng-click="cancelarRatear(lancamento.valor)" ng-show="ratearValor">
+            <i class="fa fa-lg fa-check fa-spc"></i> CANCELAR RATEIO
         </button>
         <button type="button" class="btn btn-default" ng-click="cancel()">
             <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR

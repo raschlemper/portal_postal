@@ -25,7 +25,6 @@ public class LancamentoDAO extends GenericDAO {
                    + "FROM conta, lancamento "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento.idPlanoConta = plano_conta.idPlanoConta) "
                    + "LEFT OUTER JOIN centro_custo ON(lancamento.idCentroCusto = centro_custo.idCentroCusto) "
-                   + "LEFT OUTER JOIN lancamento_programado ON(lancamento.idLancamentoProgramado = lancamento_programado.idLancamentoProgramado) "
                    + "WHERE lancamento.idConta = conta.idConta "
                    + "ORDER BY lancamento.dataLancamento";        
         return findAll(sql, null, lancamentoHandler);
@@ -35,7 +34,8 @@ public class LancamentoDAO extends GenericDAO {
         String sql = "SELECT * FROM conta, lancamento "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento.idPlanoConta = plano_conta.idPlanoConta) "
                    + "LEFT OUTER JOIN centro_custo ON(lancamento.idCentroCusto = centro_custo.idCentroCusto) "
-                   + "LEFT OUTER JOIN lancamento_programado ON(lancamento.idLancamentoProgramado = lancamento_programado.idLancamentoProgramado) "
+                   + "LEFT OUTER JOIN lancamento_transferencia ON(lancamento.idLancamento = lancamento_transferencia.idLancamentoOrigem OR "
+                                                               + "lancamento.idLancamento = lancamento_transferencia.idLancamentoDestino) "
                    + "WHERE lancamento.idConta = conta.idConta "
                    + "AND lancamento.idLancamento = :idLancamento";
         Map<String, Object> params = new HashMap<String, Object>();
@@ -52,12 +52,13 @@ public class LancamentoDAO extends GenericDAO {
     }
 
     public List<Lancamento> findByConta(Integer idConta) throws Exception {
-        String sql = "SELECT lancamento.*, plano_conta.*, centro_custo.*, "
+        String sql = "SELECT lancamento.*, plano_conta.*, centro_custo.*, lancamento_transferencia.*, "
                    + "(SELECT count(1) FROM lancamento_anexo WHERE lancamento.idLancamento = lancamento_anexo.idLancamento) as anexos "
                    + "FROM conta, lancamento "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento.idPlanoConta = plano_conta.idPlanoConta) "
                    + "LEFT OUTER JOIN centro_custo ON(lancamento.idCentroCusto = centro_custo.idCentroCusto) "
-                   + "LEFT OUTER JOIN lancamento_programado ON(lancamento.idLancamentoProgramado = lancamento_programado.idLancamentoProgramado) "
+                   + "LEFT OUTER JOIN lancamento_transferencia ON(lancamento.idLancamento = lancamento_transferencia.idLancamentoOrigem OR "
+                                                               + "lancamento.idLancamento = lancamento_transferencia.idLancamentoDestino) "
                    + "WHERE conta.idConta = lancamento.idConta "
                    + "AND conta.idConta = :idConta "
                    + "ORDER BY lancamento.dataLancamento";        
@@ -110,8 +111,22 @@ public class LancamentoDAO extends GenericDAO {
         String sql = "SELECT idPlanoConta as id, DATE(dataLancamento) as data, sum(valor) as valor "
                    + "FROM lancamento "
                    + "WHERE dataLancamento is not null AND DATE(dataLancamento) BETWEEN :dataInicio AND :dataFim "
+                   + "AND lancamento.modelo <> 1 "
                    + "GROUP BY idPlanoConta, data "
                    + "ORDER BY idPlanoConta, data";            
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("dataInicio", dataInicio);       
+        params.put("dataFim", dataFim);   
+        return findAll(sql, params, saldoHandler);
+    }  
+
+    public List<Saldo> findSaldoCentroCusto(Date dataInicio, Date dataFim) throws Exception {
+        String sql = "SELECT idCentroCusto as id, DATE(dataLancamento) as data, sum(valor) as valor "
+                   + "FROM lancamento "
+                   + "WHERE dataLancamento is not null AND DATE(dataLancamento) BETWEEN :dataInicio AND :dataFim "
+                   + "AND lancamento.modelo <> 1 "
+                   + "GROUP BY idCentroCusto, data "
+                   + "ORDER BY idCentroCusto, data";            
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("dataInicio", dataInicio);       
         params.put("dataFim", dataFim);   
@@ -122,32 +137,37 @@ public class LancamentoDAO extends GenericDAO {
         String sql = "SELECT idPlanoConta as id, DATE(dataCompetencia) as data, sum(valor) as valor "
                    + "FROM lancamento "
                    + "WHERE dataCompetencia is not null AND DATE(dataCompetencia) BETWEEN :dataInicio AND :dataFim "
+                   + "AND lancamento.modelo <> 1 "
                    + "GROUP BY idPlanoConta, data "
                    + "ORDER BY idPlanoConta, data";            
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("dataInicio", dataInicio);       
         params.put("dataFim", dataFim);   
         return findAll(sql, params, saldoHandler);
-    }    
+    }  
+
+    public List<Saldo> findSaldoCentroCustoCompetencia(Date dataInicio, Date dataFim) throws Exception {
+        String sql = "SELECT idCentroCusto as id, DATE(dataCompetencia) as data, sum(valor) as valor "
+                   + "FROM lancamento "
+                   + "WHERE dataCompetencia is not null AND DATE(dataCompetencia) BETWEEN :dataInicio AND :dataFim "
+                   + "AND lancamento.modelo <> 1 "
+                   + "GROUP BY idCentroCusto, data "
+                   + "ORDER BY idCentroCusto, data";            
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("dataInicio", dataInicio);       
+        params.put("dataFim", dataFim);   
+        return findAll(sql, params, saldoHandler);
+    }     
 
     public List<Saldo> findSaldoTipo(Date dataInicio, Date dataFim) throws Exception {
         String sql = "SELECT tipo as id, DATE(dataLancamento) as data, sum(valor) as valor FROM lancamento "
                    + "WHERE DATE(dataLancamento) BETWEEN :dataInicio AND :dataFim "
+                   + "AND lancamento.modelo <> 1 "
                    + "GROUP BY tipo, data " 
                    + "ORDER BY tipo, data";     
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("dataInicio", dataInicio);       
         params.put("dataFim", dataFim);   
-        return findAll(sql, params, saldoHandler);
-    }
-
-    public List<Saldo> findSaldoConciliado(Date data) throws Exception {
-        String sql = "SELECT sum(valor) as valor "
-                   + "FROM lancamento "
-                   + "WHERE DATE(dataLancamento) <= :data "
-                   + "AND numeroLoteConciliado is null ";            
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("data", data);        
         return findAll(sql, params, saldoHandler);
     }
     
@@ -178,12 +198,12 @@ public class LancamentoDAO extends GenericDAO {
         return (Lancamento) find(sql, params, lancamentoHandler);
     }
     
-    public void removeNumeroLoteConciliado(Integer numeroLoteConciliado) throws Exception {
+    public void removeNumeroLoteConciliado(Date data) throws Exception {
         String sql = "UPDATE lancamento SET numeroLoteConciliado = null "
-                   + "WHERE numeroLoteConciliado = :numeroLoteConciliado ";  
+                   + "WHERE lancamento.dataLancamento >= :data ";        
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("numeroLoteConciliado", numeroLoteConciliado);
-        remove(sql, params, lancamentoHandler);
+        params.put("data", data);
+        update(sql, params, lancamentoHandler);
     }
 
     public Lancamento save(Lancamento lancamento) throws Exception {  
@@ -261,14 +281,13 @@ public class LancamentoDAO extends GenericDAO {
         return lancamento;  
     }
 
-    public Lancamento updateNumeroLoteConciliado(Lancamento lancamento) throws Exception {
+    public void updateNumeroLoteConciliado(Date data, Integer numeroLoteConciliado) throws Exception {
         String sql = "UPDATE lancamento SET numeroLoteConciliado = :numeroLoteConciliado "
-                   + "WHERE idLancamento = :idLancamento ";        
+                   + "WHERE lancamento.dataLancamento <= :data ";        
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("idLancamento", lancamento.getIdLancamento());
-        params.put("numeroLoteConciliado", lancamento.getNumeroLoteConciliado());
+        params.put("data", data);
+        params.put("numeroLoteConciliado", numeroLoteConciliado);
         update(sql, params, lancamentoHandler);
-        return lancamento;  
     }
 
     public Lancamento remove(Integer idLancamento) throws Exception { 
