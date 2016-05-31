@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state', 'LancamentoProgramadoService', 'ContaService', 'ModalService', 'DatePickerService', 'LISTAS',
-    function ($scope, $filter, $state, LancamentoProgramadoService, ContaService, ModalService, DatePickerService, LISTAS) {
+app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state', 'LancamentoProgramadoService', 'ContaService', 'ModalService', 'DatePickerService', 'LISTAS', 'MESSAGES',
+    function ($scope, $filter, $state, LancamentoProgramadoService, ContaService, ModalService, DatePickerService, LISTAS, MESSAGES) {
 
         var init = function () {
             $scope.lancamentoProgramados = [];
@@ -142,7 +142,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
                 else { 
                     LancamentoProgramadoService.save(result)
                         .then(function(data) { 
-                            modalMessage("Lançamento Programado Inserido com sucesso!");
+                            modalMessage(MESSAGES.lancamento.programar.sucesso.INSERIDO_SUCESSO);
                             todos(conta);
                         })
                         .catch(function(e) {
@@ -176,7 +176,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
                         else { 
                             LancamentoProgramadoService.update(idLancamentoProgramado, result)
                                 .then(function (data) {  
-                                    modalMessage("Lançamento Programado Alterado com sucesso!");
+                                    modalMessage(MESSAGES.lancamento.programar.sucesso.ALTERADO_SUCESSO);
                                     todos(conta);
                                 })
                                 .catch(function(e) {
@@ -194,7 +194,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
             LancamentoProgramadoService.getLancamento(idLancamentoProgramado)
                 .then(function(data) {   
                     if(data.lancamentos.length) {
-                        modalMessage("Este lançamento programado não pode ser excluído! <br/> Existem Lançamentos vinculados a este lançamento programado.");
+                        modalMessage(MESSAGES.lancamento.programar.info.LANCAMENTO_VINCULADOS);
                     } else {
                         excluir(conta, idLancamentoProgramado);
                     }
@@ -205,7 +205,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
             modalExcluir().then(function() {
                 LancamentoProgramadoService.delete(idLancamentoProgramado)
                     .then(function(data) { 
-                        modalMessage("Lançamento Programado Removido com sucesso!");
+                        modalMessage(MESSAGES.lancamento.programar.sucesso.REMOVIDO_SUCESSO);
                         todos(conta);                        
                     })
                     .catch(function(e) {
@@ -219,7 +219,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
                 LancamentoProgramadoService.getByNumeroParcela(result.idLancamentoProgramado, result.numeroParcela)
                     .then(function(data) {  
                         if(data) {
-                            modalMessage("Este lançamento não pode ser inserido, pois esta parcela já existe!");
+                            modalMessage(MESSAGES.lancamento.programar.info.PARCELA_EXISTENTE);
                         } else {
                             create(conta, result);
                         }
@@ -235,7 +235,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         var create = function(conta, result) { 
             LancamentoProgramadoService.create(result)
                 .then(function(data) {  
-                    modalMessage("Lançamento Inserido com sucesso!");
+                    modalMessage(MESSAGES.lancamento.sucesso.INSERIDO_SUCESSO);
                     todos(conta);                        
                 })
                 .catch(function(e) {
@@ -325,7 +325,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
 //        };
         
         var modalExcluir = function() {
-            var modalInstance = ModalService.modalExcluir('Excluir Lançamento Programado?', 'Deseja realmente excluir este lançamento programado?');
+            var modalInstance = ModalService.modalExcluir(MESSAGES.lancamento.programar.info.ALERT_EXCLUIR, MESSAGES.lancamento.programar.info.CONFIRMAR_EXCLUIR);
             return modalInstance.result;
         };
         

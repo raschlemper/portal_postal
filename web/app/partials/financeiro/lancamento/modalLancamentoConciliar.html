@@ -39,7 +39,7 @@
                                     <label class="small">Plano de Conta</label>
                                     <div class="input-group">
                                         <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                        <select class="form-control" name="planoConta"
+                                        <select class="form-control" name="planoConta" ng-change="validarPlanoConta(lancamentoConciliado.planoConta)"
                                                 ng-options="planoConta.descricao for planoConta in planoContas track by planoConta.idPlanoConta" ng-model="lancamentoConciliado.planoConta"></select>
                                     </div>
                                 </div> 
@@ -47,7 +47,7 @@
                                     <label class="small">Centro de Custo</label>
                                     <div class="input-group">
                                         <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                        <select class="form-control" name="centroCusto" 
+                                        <select class="form-control" name="centroCusto" ng-change="validarCentroCusto(lancamentoConciliado.centroCusto)" 
                                             ng-options="centroCusto.descricao for centroCusto in centroCustos track by centroCusto.idCentroCusto" ng-model="lancamentoConciliado.centroCusto">
                                             <option value=""></option>
                                         </select>

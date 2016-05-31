@@ -98,7 +98,7 @@
                                 <label class="small">Plano de Conta</label>
                                 <div class="input-group">
                                     <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                    <select class="form-control" name="planoConta" trim-app
+                                    <select class="form-control" name="planoConta" ng-change="validarPlanoConta(rateio.planoConta)"
                                             ng-options="planoConta.descricao for planoConta in planoContas track by planoConta.idPlanoConta" ng-model="rateio.planoConta"></select>
                                 </div>
                             </div> 
@@ -106,7 +106,7 @@
                                 <label class="small">Centro de Custo</label>
                                 <div class="input-group">
                                     <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                    <select class="form-control" name="centroCusto" 
+                                    <select class="form-control" name="centroCusto" ng-change="validarCentroCusto(rateio.centroCusto)"
                                         ng-options="centroCusto.descricao for centroCusto in centroCustos track by centroCusto.idCentroCusto" ng-model="rateio.centroCusto">
                                         <option value=""></option>
                                     </select>
@@ -126,7 +126,7 @@
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-1 col-lg-1">
                                 <div class="input-group" style="margin-top: 23px;">
-                                    <button type="button" class="btn btn-primary" ng-click="salvarRateio(rateio)">
+                                    <button type="button" class="btn btn-primary" ng-disabled="(rateio.valor <= 0)" ng-click="salvarRateio(rateio)">
                                         <i class="fa fa-lg fa-plus-circle"></i>
                                     </button>
                                 </div>

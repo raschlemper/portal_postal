@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalLancamentoProgramadoEditarController', ['$scope', '$modalInstance', 'conta', 'tipo', 'lancamentoProgramado', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'FrequenciaLancamentoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, conta, tipo, lancamentoProgramado, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, TipoDocumentoService, TipoFormaPagamentoService, FrequenciaLancamentoService, ModalService, DatePickerService, ListaService, LISTAS) {
+app.controller('ModalLancamentoProgramadoEditarController', ['$scope', '$modalInstance', 'conta', 'tipo', 'lancamentoProgramado', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'FrequenciaLancamentoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS', 'MESSAGES',
+    function ($scope, $modalInstance, conta, tipo, lancamentoProgramado, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, TipoDocumentoService, TipoFormaPagamentoService, FrequenciaLancamentoService, ModalService, DatePickerService, ListaService, LISTAS, MESSAGES) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
@@ -209,7 +209,12 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', '$modalIn
                 });    
         };
         
-        var lancar = function(lancamentoProgramado, lancamento) {         
+        var lancar = function(lancamentoProgramado, lancamento) {  
+            if(!lancamento.rateios) {
+                if(!$scope.validarValor(lancamento.valor)) return;
+                if(!$scope.validarPlanoConta(lancamento.planoConta)) return;
+                if(!$scope.validarCentroCusto(lancamento.centroCusto)) return;      
+            }
             delete $scope.lancamentoProgramado.parcelas;
             lancamentoProgramado.gerarLancamento = true;
             lancamento = ajustarLancamento(lancamento);
@@ -242,9 +247,12 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', '$modalIn
         };
         
         $scope.salvarRateio = function(rateio) {
+            if(!$scope.validarValor(rateio.valor)) return;
+            if(!$scope.validarPlanoConta(rateio.planoConta)) return;
+            if(!$scope.validarCentroCusto(rateio.centroCusto)) return;
             var saldo = saldoRateio();
             if(saldo + rateio.valor > $scope.lancamento.valor) {
-                modalMessage("A soma dos valores de rateio é superior ao valor do lançamento!");
+                modalMessage(MESSAGES.lancamento.ratear.validacao.SALDO_INCORRETO);
                 return;
             }
             $scope.lancamento.rateios.push(rateio);
@@ -301,15 +309,7 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', '$modalIn
             return lancamento;
         };
         
-        var validaConta = function(conta) {
-            if(conta.status.id === $scope.statusConta[1].id) {
-                modalMessage("Esta conta está encerrada!");
-                return false;
-            };
-            return true;
-        }
-        
-        var ajustarLancamento = function(lancamento) {
+        var ajustarLancamento = function(lancamento) { 
             lancamento.conta = { idConta: lancamento.conta.idConta };
             lancamento.planoConta = { idPlanoConta: lancamento.planoConta.idPlanoConta };
             if(lancamento.centroCusto) {
@@ -351,6 +351,40 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', '$modalIn
             $modalInstance.dismiss('cancel');
         };
         
+        var validaConta = function(conta) {
+            if(conta.status.id === $scope.statusConta[1].id) {
+                modalMessage(MESSAGES.conta.info.CONTA_ENCERRADO);
+                return false;
+            };
+            return true;
+        };
+        
+        $scope.validarPlanoConta = function(planoConta) {
+            if(!planoConta) return true;
+            if(planoConta.ehGrupo) {
+                modalMessage(MESSAGES.planoConta.info.NAO_PERMITE_GRUPO);
+                return false;
+            }
+            return true;
+        }
+        
+        $scope.validarCentroCusto = function(centroCusto) {
+            if(!centroCusto) return true;
+            if(centroCusto.ehGrupo) {
+                modalMessage(MESSAGES.centroCusto.info.NAO_PERMITE_GRUPO);
+                return false;
+            }
+            return true;
+        }
+        
+        $scope.validarValor = function(valor) {
+            if(!valor || valor < 0 || valor == 0) {
+                modalMessage(MESSAGES.lancamento.validacao.VALOR_VALIDA);
+                return false;
+            }
+            return true;
+        }
+        
         var goToEditar = function() {
             $scope.stepFrom = angular.copy($scope.stepTo);
             $scope.stepTo = 'editar';             
@@ -372,7 +406,7 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', '$modalIn
         }
         
         var modalConfirmarConciliado = function() {
-            var modalInstance = ModalService.modalConfirmar('Alerta Lançamento', 'Você está inserindo um lançamento em um período reconciliado. <br/> Está inclusão irá impactar no lançamento de reconciliação! <br/> Deseja continuar?');
+            var modalInstance = ModalService.modalConfirmar(MESSAGES.lancamento.info.ALERT, MESSAGES.lancamento.conciliar.info.CONFIRMAR_INCLUIR);
             return modalInstance.result;
         };
                 
@@ -380,29 +414,37 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', '$modalIn
             ModalService.modalMessage(message);
         };
         
-        var validarForm = function (form) {
+        var validarForm = function (form) {     
+            if($scope.lancamentoProgramado.planoConta.ehGrupo) {
+                alert(MESSAGES.planoConta.info.NAO_PERMITE_GRUPO);
+                return false;
+            }
+            if($scope.lancamentoProgramado.centroCusto.ehGrupo) {
+                alert(MESSAGES.centroCusto.info.NAO_PERMITE_GRUPO);
+                return false;
+            } 
             if (form.dataCompetencia.$error.required) {
-                alert('Preencha a competência do lançamento programado!');
+                alert(MESSAGES.lancamento.programar.validacao.DATA_COMPETENCIA_REQUERIDA);
                 return false;
             }       
             if (form.dataCompetencia.$modelValue && !moment(form.dataCompetencia.$modelValue).isValid()) {
-                alert('A competência do lançamento programado não é válida!');
+                alert(MESSAGES.lancamento.programar.validacao.DATA_COMPETENCIA_VALIDA);
                 return false;
             } 
             if (form.dataVencimento.$error.required) {
-                alert('Preencha a data de vencimento do lançamento programado!');
+                alert(MESSAGES.lancamento.programar.validacao.DATA_LANCAMENTO_REQUERIDA);
                 return false;
             }       
             if (form.dataVencimento.$modelValue && !moment(form.dataVencimento.$modelValue).isValid()) {
-                alert('A data de vencimento do lançamento programado não é válida!');
+                alert(MESSAGES.lancamento.programar.validacao.DATA_LANCAMENTO_VALIDA);
                 return false;
             } 
             if (form.valor.$error.required) {
-                alert('Preencha o valor do lançamento programado!');
+                alert(MESSAGES.lancamento.programar.validacao.VALOR_REQUERIDA);
                 return false;
             }
             if (form.historico.$error.required) {
-                alert('Preencha o histórico do lançamento programado!');
+                alert(MESSAGES.lancamento.programar.validacao.HISTORICO_REQUERIDA);
                 return false;
             }
             return true;

@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', 'conta', 'lancamento', 'tipo', 'anexo', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'LancamentoAnexoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, conta, lancamento, tipo, anexo, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, LancamentoAnexoService, ModalService, DatePickerService, ListaService, LISTAS) {
+app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', 'conta', 'lancamento', 'tipo', 'anexo', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'LancamentoAnexoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS', 'MESSAGES',
+    function ($scope, $modalInstance, conta, lancamento, tipo, anexo, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, LancamentoAnexoService, ModalService, DatePickerService, ListaService, LISTAS, MESSAGES) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
@@ -111,9 +111,12 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
         };
         
         $scope.salvarRateio = function(rateio) {
+            if(!$scope.validarValor(rateio.valor)) return;
+            if(!$scope.validarPlanoConta(rateio.planoConta)) return;
+            if(!$scope.validarCentroCusto(rateio.centroCusto)) return;
             var saldo = saldoRateio();
             if(saldo + rateio.valor > $scope.lancamento.valor) {
-                modalMessage("A soma dos valores de rateio é superior ao valor do lançamento!");
+                modalMessage(MESSAGES.lancamento.ratear.validacao.SALDO_INCORRETO);
                 return;
             }
             $scope.lancamento.rateios.push(rateio);
@@ -164,6 +167,32 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
+        
+        $scope.validarPlanoConta = function(planoConta) {
+            if(!planoConta) return true;
+            if(planoConta.ehGrupo) {
+                modalMessage(MESSAGES.planoConta.info.NAO_PERMITE_GRUPO);
+                return false;
+            }
+            return true;
+        }
+        
+        $scope.validarCentroCusto = function(centroCusto) {
+            if(!centroCusto) return true;
+            if(centroCusto.ehGrupo) {
+                modalMessage(MESSAGES.centroCusto.info.NAO_PERMITE_GRUPO);
+                return false;
+            }
+            return true;
+        }
+        
+        $scope.validarValor = function(valor) {
+            if(!valor || valor < 0 || valor == 0) {
+                modalMessage(MESSAGES.lancamento.validacao.VALOR_VALIDA);
+                return false;
+            }
+            return true;
+        }
 
 //        $scope.anexar = function(lancamento) {
 //            $scope.stepFrom = 'editar'; 
@@ -229,7 +258,7 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
         }
         
         var modalConfirmarConciliado = function() {
-            var modalInstance = ModalService.modalConfirmar('Alerta Lançamento', 'Você está inserindo um lançamento em um período reconciliado. <br/> Está inclusão irá impactar no lançamento de conciliação! <br/> Deseja continuar?');
+            var modalInstance = ModalService.modalConfirmar(MESSAGES.lancamento.info.ALERT, MESSAGES.lancamento.conciliar.info.CONFIRMAR_INCLUIR);
             return modalInstance.result;
         };
         
@@ -241,32 +270,40 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
             if ($scope.lancamento.rateios && $scope.lancamento.rateios.length) {
                 var saldo = saldoRateio();
                 if(saldo !== form.valor.$modelValue) {
-                    alert("A soma dos valores de rateio é superior ao valor do lançamento!");
+                    alert(MESSAGES.lancamento.ratear.validacao.SALDO_INCORRETO);
                     return false;                    
                 }
-            }       
+            }      
+            if(!$scope.lancamento.rateios && $scope.lancamento.planoConta.ehGrupo) {
+                alert(MESSAGES.planoConta.info.NAO_PERMITE_GRUPO);
+                return false;
+            }
+            if(!$scope.lancamento.rateios && $scope.lancamento.centroCusto.ehGrupo) {
+                alert(MESSAGES.centroCusto.info.NAO_PERMITE_GRUPO);
+                return false;
+            } 
             if (form.dataCompetencia.$error.required) {
-                alert('Preencha a competência do lançamento!');
+                alert(MESSAGES.lancamento.validacao.DATA_COMPETENCIA_REQUERIDA);
                 return false;
             }       
             if (form.dataCompetencia.$modelValue && !moment(form.dataCompetencia.$modelValue).isValid()) {
-                alert('A competência do lançamento não é válida!');
+                alert(MESSAGES.lancamento.validacao.DATA_COMPETENCIA_VALIDA);
                 return false;
             }    
             if (form.dataLancamento.$error.required) {
-                alert('Preencha a data do lançamento!');
+                alert(MESSAGES.lancamento.validacao.DATA_LANCAMENTO_REQUERIDA);
                 return false;
             }       
             if (form.dataLancamento.$modelValue && !moment(form.dataLancamento.$modelValue).isValid()) {
-                alert('A data do lançamento não é válida!');
+                alert(MESSAGES.lancamento.validacao.DATA_LANCAMENTO_VALIDA);
                 return false;
             }    
             if (form.valor.$error.required) {
-                alert('Preencha o valor do lançamento!');
+                alert(MESSAGES.lancamento.validacao.VALOR_REQUERIDA);
                 return false;
             }
             if (form.historico.$error.required) {
-                alert('Preencha o histórico do lançamento!');
+                alert(MESSAGES.lancamento.validacao.HISTORICO_REQUERIDA);
                 return false;
             }
             return true;
@@ -274,7 +311,7 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
 
         var validarFormAnexo = function (form) {
             if (form.file.$error.required) {
-                alert('Selecione o arquivo!');
+                alert(MESSAGES.lancamento.anexar.validacao.ARQUIVO_REQUERIDA);
                 return false;
             }   
             return true;

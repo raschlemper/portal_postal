@@ -1,7 +1,8 @@
 'use strict';
 
-app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService', 'LancamentoProgramadoService', 'LancamentoTransferenciaService', 'LancamentoConciliadoService', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $filter, LancamentoService, LancamentoProgramadoService, LancamentoTransferenciaService, LancamentoConciliadoService, ContaService, PlanoContaService, CentroCustoService, ModalService, DatePickerService, ListaService, LISTAS) {
+app.controller('LancamentoController', 
+    ['$scope', '$filter', 'LancamentoService', 'LancamentoProgramadoService', 'LancamentoTransferenciaService', 'LancamentoConciliadoService', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS', 'MESSAGES',
+    function ($scope, $filter, LancamentoService, LancamentoProgramadoService, LancamentoTransferenciaService, LancamentoConciliadoService, ContaService, PlanoContaService, CentroCustoService, ModalService, DatePickerService, ListaService, LISTAS, MESSAGES) {
 
         var init = function () {
             $scope.lancamentos = [];
@@ -245,7 +246,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 result = ajustarDados(result);
                 LancamentoService.save(result)
                     .then(function(data) {  
-                        modalMessage("Lançamento Inserido com sucesso!");
+                        modalMessage(MESSAGES.lancamento.sucesso.INSERIDO_SUCESSO);
                         todos(conta);
                     })
                     .catch(function(e) {
@@ -283,7 +284,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         var saveTransferencia = function(conta, lancamentoTransferencia) {
             LancamentoTransferenciaService.save(lancamentoTransferencia)
                 .then(function(data) {  
-                    modalMessage("Lançamento Transferido com sucesso!");
+                    modalMessage(MESSAGES.lancamento.transferir.sucesso.INSERIDO_SUCESSO);
                     todos(conta);
                 })
                 .catch(function(e) {
@@ -294,7 +295,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         var updateTransferencia = function(conta, lancamentoTransferencia) {
             LancamentoTransferenciaService.update(lancamentoTransferencia.idLancamentoTransferencia, lancamentoTransferencia)
                 .then(function(data) {  
-                    modalMessage("Lançamento Transferido com sucesso!");
+                    modalMessage(MESSAGES.lancamento.transferir.sucesso.ALTERADO_SUCESSO);
                     todos(conta);
                 })
                 .catch(function(e) {
@@ -307,7 +308,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 result = ajustarDadosConciliado(conta, result);
                 LancamentoConciliadoService.create(result)
                     .then(function(data) {  
-                        modalMessage("Lançamento Reconciliado com sucesso!");
+                        modalMessage(MESSAGES.lancamento.conciliar.sucesso.INSERIDO_SUCESSO);
                         todos(conta);
                     })
                     .catch(function(e) {
@@ -338,7 +339,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         var compensarTodos = function(conta, lancamentos) {
             LancamentoService.updateAll(lancamentos)
                 .then(function (data) {  
-                    modalMessage("Lançamento Compensado com sucesso!");
+                    modalMessage(MESSAGES.lancamento.compensar.sucesso.INSERIDO_SUCESSO);
                     todos(conta);
                 })
                 .catch(function(e) {
@@ -365,7 +366,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                             result = ajustarDados(result);
                             LancamentoService.update(idLancamento, result)
                                 .then(function (data) {  
-                                    modalMessage("Lançamento Alterado com sucesso!");
+                                    modalMessage(MESSAGES.lancamento.compensar.sucesso.ALTERADO_SUCESSO);
                                     todos(conta);
                                 })
                                 .catch(function(e) {
@@ -386,7 +387,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
                 LancamentoProgramadoService.get(lancamento.lancamentoProgramado.idLancamentoProgramado)
                     .then(function(lancamento) {
                         if(lancamento.idLancamento !== lancamento.lancamentoProgramado.idLancamentoProgramado) {                
-                            modalMessage("Este lançamento não pode ser excluído. É necessário excluir todos os lançamentos posteriores!");
+                            modalMessage(MESSAGES.lancamento.info.EXCLUIR_POSTERIOR);
                             return;
                         }     
                         excluir(conta, lancamento.idLancamento);
@@ -404,13 +405,13 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
             LancamentoService.get(idLancamento)
                 .then(function(lancamento) {
                     if(lancamento.lancamentoProgramado && lancamento.numeroParcela < lancamento.lancamentoProgramado.numeroParcela) {                
-                        modalMessage("Este lançamento não pode ser excluído. É necessário excluir todos os lançamentos posteriores!");
+                        modalMessage(MESSAGES.lancamento.info.EXCLUIR_POSTERIOR);
                         return;
                     }     
                     modalExcluir().then(function() {
                         LancamentoService.delete(idLancamento)
                             .then(function(data) { 
-                                modalMessage("Lançamento Removido com sucesso!");
+                                modalMessage(MESSAGES.lancamento.sucesso.REMOVIDO_SUCESSO);
                                 todos(conta);                        
                             })
                             .catch(function(e) {
@@ -425,7 +426,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         
         var validaConta = function(conta) {
             if(conta.status.id === $scope.statusConta[1].id) {
-                modalMessage("Esta conta está encerrada!");
+                modalMessage(MESSAGES.conta.info.CONTA_ENCERRADO);
                 return false;
             };
             return true;
@@ -511,7 +512,7 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         
         var getLancamento = function(conta, planoConta, centroCusto, tipo, modelo, data, lancamentoOriginal) {
             var lancamento = {
-                idLancamento: lancamentoOriginal.idLancamento || null,
+                idLancamento: (lancamentoOriginal && lancamentoOriginal.idLancamento) || null,
                 conta: null,
                 planoConta: null,
                 centroCusto: null,
@@ -596,17 +597,17 @@ app.controller('LancamentoController', ['$scope', '$filter', 'LancamentoService'
         };
         
         var modalConfirmarConciliado = function() {
-            var modalInstance = ModalService.modalConfirmar('Alerta Lançamento', 'Este lançamento está reconciliado. <br/> A alteração irá impactar no lançamentos de reconciliação! <br/> Deseja continuar?');
+            var modalInstance = ModalService.modalConfirmar(MESSAGES.lancamento.info.ALERT, MESSAGES.lancamento.conciliar.info.CONFIRMAR_ALTERAR);
             return modalInstance.result;
         };
         
         var modalConfirmarCompensado = function() {
-            var modalInstance = ModalService.modalConfirmar('Alerta Lançamento', 'Deseja compensar todos os lançamentos selecionados?');
+            var modalInstance = ModalService.modalConfirmar(MESSAGES.lancamento.info.ALERT, MESSAGES.lancamento.compensar.info.CONFIRMAR_TODOS);
             return modalInstance.result;
         };
         
         var modalExcluir = function() {
-            var modalInstance = ModalService.modalExcluir('Excluir Lançamento?', 'Deseja realmente excluir este lançamento?');
+            var modalInstance = ModalService.modalExcluir(MESSAGES.lancamento.info.ALERT_EXCLUIR, MESSAGES.lancamento.info.CONFIRMAR_EXCLUIR);
             return modalInstance.result;
         };
         

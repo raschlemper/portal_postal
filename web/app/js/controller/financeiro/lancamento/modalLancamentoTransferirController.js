@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalLancamentoTransferirController', ['$scope', '$modalInstance', 'lancamentoTransferencia', 'ContaService', 'DatePickerService', 'LISTAS',
-    function ($scope, $modalInstance, lancamentoTransferencia, ContaService, DatePickerService, LISTAS) {
+app.controller('ModalLancamentoTransferirController', ['$scope', '$modalInstance', 'lancamentoTransferencia', 'ContaService', 'DatePickerService', 'LISTAS', 'MESSAGES',
+    function ($scope, $modalInstance, lancamentoTransferencia, ContaService, DatePickerService, LISTAS, MESSAGES) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
@@ -40,31 +40,31 @@ app.controller('ModalLancamentoTransferirController', ['$scope', '$modalInstance
 
         var validarForm = function (form) {
             if(form.contaOrigem.$modelValue === form.contaDestino.$modelValue) {
-                alert('A conta de origem deve ser diferente da conta de destino!');
+                alert(MESSAGES.lancamento.transferir.validacao.CONTA_DIFERENTE);
                 return false;                
             }
             if (form.dataCompetencia.$error.required) {
-                alert('Preencha a competência do lançamento!');
+                alert(MESSAGES.lancamento.transferir.validacao.DATA_COMPETENCIA_REQUERIDA);
                 return false;
             }        
             if (form.dataCompetencia.$modelValue && !moment(form.dataCompetencia.$modelValue).isValid()) {
-                alert('A competência do lançamento não é válida!');
+                alert(MESSAGES.lancamento.transferir.validacao.DATA_COMPETENCIA_VALIDA);
                 return false;
             }    
             if (form.dataLancamento.$error.required) {
-                alert('Preencha a data do lançamento!');
+                alert(MESSAGES.lancamento.transferir.validacao.DATA_LANCAMENTO_REQUERIDA);
                 return false;
             }       
             if (form.dataLancamento.$modelValue && !moment(form.dataLancamento.$modelValue).isValid()) {
-                alert('A data do lançamento não é válida!');
+                alert(MESSAGES.lancamento.transferir.validacao.DATA_LANCAMENTO_VALIDA);
                 return false;
             }    
             if (form.valor.$error.required) {
-                alert('Preencha o valor do lançamento!');
+                alert(MESSAGES.lancamento.transferir.validacao.VALOR_REQUERIDA);
                 return false;
             }
             if (form.historico.$error.required) {
-                alert('Preencha o histórico do lançamento!');
+                alert(MESSAGES.lancamento.transferir.validacao.HISTORICO_REQUERIDA);
                 return false;
             }
             return true;

@@ -1,7 +1,8 @@
 'use strict';
 
-app.controller('ModalLancamentoConciliarController', ['$scope', '$modalInstance', 'conta', 'PlanoContaService', 'CentroCustoService', 'ContaService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, conta, PlanoContaService, CentroCustoService, ContaService, ModalService, DatePickerService, ListaService, LISTAS) {
+app.controller('ModalLancamentoConciliarController', 
+    ['$scope', '$modalInstance', 'conta', 'PlanoContaService', 'CentroCustoService', 'ContaService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS', "MESSAGES",
+    function ($scope, $modalInstance, conta, PlanoContaService, CentroCustoService, ContaService, ModalService, DatePickerService, ListaService, LISTAS, MESSAGES) {
 
         var init = function () {  
             $scope.conta = conta;
@@ -64,7 +65,9 @@ app.controller('ModalLancamentoConciliarController', ['$scope', '$modalInstance'
                     if($scope.lancamentoConciliado.centroCusto && $scope.lancamentoConciliado.centroCusto.idCentroCusto) {
                         $scope.lancamentoConciliado.centroCusto = ListaService.getCentroCustoValue(
                                 $scope.centroCustos, $scope.lancamentoConciliado.centroCusto.idCentroCusto) || $scope.centroCustos[0];
-                    } 
+                    } else {
+                         $scope.lancamentoConciliado.centroCusto  = null;
+                    }
                 })
                 .catch(function (e) {
                     console.log(e);
@@ -85,45 +88,45 @@ app.controller('ModalLancamentoConciliarController', ['$scope', '$modalInstance'
             return lancamentoConciliado;
         }
         
-        $scope.validarPlanoConta = function(planoConta) {
-            if(planoConta.ehGrupo) {
-                modalMessage("Só é permitido realizar lançamentos em plano de conta que não possuam planos de conta vinculados!");
-            }
-        }
-        
-        $scope.validarCentroCusto = function(planoConta) {
-            if(planoConta.ehGrupo) {
-                modalMessage("Só é permitido realizar lançamentos em centro de custo que não possuam centros de custo vinculados!");
-            }
-        }
-        
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
+        
+        $scope.validarPlanoConta = function(planoConta) {
+            if(planoConta.ehGrupo) {
+                modalMessage(MESSAGES.planoConta.info.NAO_PERMITE_GRUPO);
+            }
+        }
+        
+        $scope.validarCentroCusto = function(centroCusto) {
+            if(centroCusto.ehGrupo) {
+                modalMessage(MESSAGES.centroCusto.info.NAO_PERMITE_GRUPO);
+            }
+        }
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);
         };
 
         var validarForm = function (form) {
-            if($scope.lancamentoConciliado.planoConta.ehGrupo) {
-                alert("Só é permitido realizar lançamentos em plano de conta que não possuam planos de conta vinculados!");
+            if($scope.lancamentoConciliado.planoConta && $scope.lancamentoConciliado.planoConta.ehGrupo) {
+                alert(MESSAGES.planoConta.info.NAO_PERMITE_GRUPO);
                 return false;
             }
-            if($scope.lancamentoConciliado.centroCusto.ehGrupo) {
-                alert("Só é permitido realizar lançamentos em centro de custo que não possuam centros de custo vinculados!");
+            if($scope.lancamentoConciliado.centroCusto && $scope.lancamentoConciliado.centroCusto.ehGrupo) {
+                alert(MESSAGES.centroCusto.info.NAO_PERMITE_GRUPO);
                 return false;
             }
             if (form.dataLancamento.$error.required) {
-                alert('Preencha a data do lançamento reconciliado!');
+                alert(MESSAGES.lancamento.conciliar.validacao.DATA_LANCAMENTO_REQUERIDA);
                 return false;
             }       
             if (form.dataLancamento.$modelValue && !moment(form.dataLancamento.$modelValue).isValid()) {
-                alert('A data do lançamento reconciliado não é válida!');
+                alert(MESSAGES.lancamento.conciliar.validacao.DATA_LANCAMENTO_VALIDA);
                 return false;
             }  
             if (form.historico.$error.required) {
-                alert('Preencha o histórico do lançamento reconciliado!');
+                alert(MESSAGES.lancamento.conciliar.validacao.HISTORICO_REQUERIDA);
                 return false;
             }
             return true;

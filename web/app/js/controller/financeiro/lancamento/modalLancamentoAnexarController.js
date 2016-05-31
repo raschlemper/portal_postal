@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalLancamentoAnexarController', ['$scope', '$modalInstance', '$sce', 'lancamento', 'LancamentoAnexoService', 'ModalService',
-    function ($scope, $modalInstance, conta, lancamento, LancamentoAnexoService, ModalService) {
+app.controller('ModalLancamentoAnexarController', ['$scope', '$modalInstance', '$sce', 'lancamento', 'LancamentoAnexoService', 'ModalService', 'MESSAGES',
+    function ($scope, $modalInstance, conta, lancamento, LancamentoAnexoService, ModalService, MESSAGES) {
 
         var init = function () {  
             $scope.lancamento = lancamento;
@@ -45,7 +45,7 @@ app.controller('ModalLancamentoAnexarController', ['$scope', '$modalInstance', '
 
         var validarForm = function (form) {
             if (form.file.$error.required) {
-                alert('Selecione o arquivo!');
+                alert(MESSAGES.lancamento.anexar.validacao.ARQUIVO_REQUERIDA);
                 return false;
             }   
             return true;
