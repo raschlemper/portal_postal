@@ -121,13 +121,13 @@
 <!--        <button type="button" class="btn btn-default" ng-click="anexar(lancamento)"  ng-if="lancamento.idLancamento">
             <i class="fa fa-lg fa-paperclip fa-spc"></i> ANEXAR
         </button>-->
-        <button type="button" class="btn btn-default" ng-click="ratear()" ng-disabled="!lancamento.valor">
+        <button type="button" class="btn btn-default" ng-click="ratear(this.lancamentoForm, lancamento)" ng-disabled="!lancamento.valor">
             <i class="fa fa-lg fa-check fa-spc"></i> RATEAR
         </button>
         <button type="button" class="btn btn-default" ng-click="cancel()">
             <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR
         </button>
-        <button type="button" class="btn btn-success" ng-click="ok(this.lancamentoForm)">
+        <button type="button" class="btn btn-success" ng-click="ok(this.lancamentoForm, lancamento)">
             <i class="fa fa-lg fa-save fa-spc"></i> SALVAR
         </button>
     </div>

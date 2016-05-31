@@ -6,8 +6,14 @@ app.controller('ModalLancamentoAnexarController', ['$scope', '$modalInstance', '
         var init = function () {  
             $scope.lancamento = lancamento;
             $scope.lancamentoAnexo = {};
-            $scope.uploader = LancamentoAnexoService.getInstanceFileUpload();
+            getTitle();
             anexos();
+        };
+                
+        // ***** CONTROLLER ***** //
+        
+        var getTitle = function() {
+            $scope.title = MESSAGES.lancamento.anexar.title.INSERIR; 
         };
         
         var anexos = function() {
@@ -16,21 +22,18 @@ app.controller('ModalLancamentoAnexarController', ['$scope', '$modalInstance', '
                     $scope.anexos = data;
                 })
                 .catch(function (e) {
-                    modalMessage(e);
+                    console.log(e);
                 });
-        }
+        };
+                
+        // ***** ANEXAR ***** //
         
         $scope.anexar = function(lancamento) {            
             LancamentoAnexoService.upload(lancamento.idLancamento, $scope.anexo[0]);            
-        }
+        };
         
         $scope.visualizar = function(anexo) {
             $scope.contentFile = anexo.anexo;            
-        }
-        
-        $scope.uploadComplete = function (content) {
-            $scope.response = JSON.parse(content);
-            console.log($scope.response);
         };
         
         $scope.ok = function(form) {
@@ -38,10 +41,8 @@ app.controller('ModalLancamentoAnexarController', ['$scope', '$modalInstance', '
             modalSalvar(conta, lancamento);
             $modalInstance.close($scope.lancamentoAnexo);            
         };
-        
-        var modalMessage = function(message) {
-            ModalService.modalMessage(message);
-        };
+                
+        // ***** VALIDAR ***** //
 
         var validarForm = function (form) {
             if (form.file.$error.required) {
@@ -50,6 +51,8 @@ app.controller('ModalLancamentoAnexarController', ['$scope', '$modalInstance', '
             }   
             return true;
         };
+                
+        // ***** MODAL ***** //
         
         var modalSalvar = function(conta, lancamento) {
             var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamento.html', 'ModalLancamentoEditarController', 'lg',

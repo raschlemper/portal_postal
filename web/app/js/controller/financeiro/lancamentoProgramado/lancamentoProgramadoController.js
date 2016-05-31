@@ -11,10 +11,13 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
             $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
             $scope.datepickerDataFim = angular.copy(DatePickerService.default);    
             $scope.lancSearch = {};
+            getTitle();
             contas();
             todos();  
             initTable(); 
         };  
+        
+        // ***** TABLE ***** //
         
         var initTable = function() {            
             $scope.colunas = [              
@@ -80,6 +83,12 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
             return lista;
         }
         
+        // ***** CONTROLLER ***** //
+        
+        var getTitle = function() {
+            $scope.title = MESSAGES.lancamento.programar.title.LISTA; 
+        };
+        
         var contas = function() {
             ContaService.getAll()
                 .then(function (data) {
@@ -98,7 +107,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
                     $scope.lancamentoProgramadosLista = criarLancamentoProgramadosLista($scope.lancamentoProgramados);
                 })
                 .catch(function(e) {
-                    modalMessage(e);
+                    console.log(e);
                 });
         };
         
@@ -121,36 +130,142 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
                 return _.pick(lancamentoProgramado, 'idLancamentoProgramado', 'conta', 'tipo', 'dataVencimento', 'numeroParcela', 'favorecido', 'valor', 'situacao', 'frequencia');
             })
         };
+        
+        // ***** VISUALIZAR ***** //
 
-        $scope.visualizar = function(conta, idLancamentoProgramado) {
-            LancamentoProgramadoService.get(idLancamentoProgramado)
-                .then(function(lancamentoProgramado) {
-                     modalVisualizar(lancamentoProgramado).then(function(result) {
-                        $scope.editar(conta, lancamentoProgramado.tipo, result);
-                     })          
+        $scope.visualizar = function(conta, lancamentoProgramado) {
+            LancamentoProgramadoService.get(lancamentoProgramado.idLancamentoProgramado)
+                .then(function(result) {
+                     modalVisualizar(result)
+                        .then(function(lancamentoProgramadoEditar) {
+                            $scope.editar(conta, lancamentoProgramadoEditar, result);
+                        })          
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         };
+        
+        // ***** SALVAR ***** //
 
         $scope.salvar = function(conta, tipo) {
             modalSalvar(conta, tipo, null).then(function(result) {
                 var gerarLancamento = result.gerarLancamento;
                 result = ajustarDados(result);
-                if(gerarLancamento) { criarLancamento(conta, result); } 
-                else { 
-                    LancamentoProgramadoService.save(result)
-                        .then(function(data) { 
-                            modalMessage(MESSAGES.lancamento.programar.sucesso.INSERIDO_SUCESSO);
-                            todos(conta);
-                        })
-                        .catch(function(e) {
-                            modalMessage(e);
-                        });
-                }
+                salvar(conta, result, gerarLancamento);
             });
         };
+        
+        var salvar = function(conta, lancamentoProgramado, gerarLancamento) {
+            if(gerarLancamento) { criarLancamento(conta, lancamentoProgramado); } 
+            else { 
+                LancamentoProgramadoService.save(lancamentoProgramado)
+                    .then(function(data) { 
+                        modalMessage(MESSAGES.lancamento.programar.sucesso.INSERIDO_SUCESSO);
+                        todos(conta);
+                    })
+                    .catch(function(e) {
+                        modalMessage(e);
+                    });
+            }            
+        }
+        
+        // ***** EDITAR ***** //
+
+        $scope.editar = function(conta, lancamentoProgramado) {
+            LancamentoProgramadoService.get(lancamentoProgramado.idLancamentoProgramado)
+                .then(function(result) {
+                     editarLancamento(conta, lancamentoProgramado);
+                })
+                .catch(function(e) {
+                    modalMessage(e.error);
+                });           
+        };
+        
+        var editarLancamento = function(conta, lancamentoProgramado) {                   
+            modalSalvar(conta, lancamentoProgramado.tipo, lancamentoProgramado)
+                .then(function(result) {
+                    var gerarLancamento = result.gerarLancamento;
+                    result = ajustarDados(result);
+                    if(gerarLancamento) { criarLancamento(conta, result); } 
+                    else { editar(conta, result); }
+                });            
+        };
+        
+        var editar = function(conta, lancamentoProgramado) {
+            LancamentoProgramadoService.update(lancamentoProgramado.idLancamentoProgramado, lancamentoProgramado)
+                .then(function (data) {  
+                    modalMessage(MESSAGES.lancamento.programar.sucesso.ALTERADO_SUCESSO);
+                    todos(conta);
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+        
+        var criarLancamento = function(conta, lancamentoProgramado) { 
+            if(lancamentoProgramado.idLancamentoProgramado) {
+                LancamentoProgramadoService.getByNumeroParcela(lancamentoProgramado.idLancamentoProgramado, lancamentoProgramado.numeroParcela)
+                    .then(function(data) {  
+                        if(data) {
+                            modalMessage(MESSAGES.lancamento.programar.info.PARCELA_EXISTENTE);
+                        } else {
+                            create(conta, lancamentoProgramado);
+                        }
+                    })
+                    .catch(function(e) {
+                        modalMessage(e);
+                    });
+            } else {
+                create(conta, lancamentoProgramado);
+            }
+        };
+        
+        var create = function(conta, lancamentoProgramado) { 
+            LancamentoProgramadoService.create(lancamentoProgramado)
+                .then(function(data) {  
+                    modalMessage(MESSAGES.lancamento.sucesso.INSERIDO_SUCESSO);
+                    todos(conta);                        
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+        
+        // ***** EXCLUIR ***** //
+        
+        $scope.excluir = function(conta, lancamentoProgramado) {            
+            LancamentoProgramadoService.getLancamento(lancamentoProgramado.idLancamentoProgramado)
+                .then(function(data) {   
+                    if(data.lancamentos.length) {
+                        modalMessage(MESSAGES.lancamento.programar.info.LANCAMENTO_VINCULADOS);
+                    } else {
+                        excluirLancamento(conta, lancamentoProgramado);
+                    }
+                });
+        };
+        
+        var excluirLancamento = function(conta, lancamentoProgramado) {
+            modalExcluir()
+                .then(function() {
+                    excluir(conta, lancamentoProgramado);
+                });
+        };
+        
+        var excluir = function(conta, lancamentoProgramado) {
+            modalExcluir().then(function() {
+                LancamentoProgramadoService.delete(lancamentoProgramado.idLancamentoProgramado)
+                    .then(function(data) { 
+                        modalMessage(MESSAGES.lancamento.programar.sucesso.REMOVIDO_SUCESSO);
+                        todos(conta);                        
+                    })
+                    .catch(function(e) {
+                        modalMessage(e);
+                    });
+            });
+        }; 
+        
+        // ***** TRANSFERIR ***** //
 
 //        $scope.transferir = function(conta) {
 //            modalTransferir().then(function(result) {
@@ -165,83 +280,10 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
 //                    });
 //            });
 //        };
-
-        $scope.editar = function(conta, tipo, idLancamentoProgramado) {
-            LancamentoProgramadoService.get(idLancamentoProgramado)
-                .then(function(lancamentoProgramado) {
-                     modalSalvar(conta, tipo, lancamentoProgramado).then(function(result) {
-                        var gerarLancamento = result.gerarLancamento;
-                        result = ajustarDados(result);
-                        if(gerarLancamento) { criarLancamento(conta, result); } 
-                        else { 
-                            LancamentoProgramadoService.update(idLancamentoProgramado, result)
-                                .then(function (data) {  
-                                    modalMessage(MESSAGES.lancamento.programar.sucesso.ALTERADO_SUCESSO);
-                                    todos(conta);
-                                })
-                                .catch(function(e) {
-                                    modalMessage(e);
-                                });
-                        }
-                    });
-                })
-                .catch(function(e) {
-                    modalMessage(e.error);
-                });           
-        };
+                
+        // ***** VALIDAR ***** //
         
-        $scope.excluir = function(conta, idLancamentoProgramado) {            
-            LancamentoProgramadoService.getLancamento(idLancamentoProgramado)
-                .then(function(data) {   
-                    if(data.lancamentos.length) {
-                        modalMessage(MESSAGES.lancamento.programar.info.LANCAMENTO_VINCULADOS);
-                    } else {
-                        excluir(conta, idLancamentoProgramado);
-                    }
-                });
-        }
-        
-        var excluir = function(conta, idLancamentoProgramado) {
-            modalExcluir().then(function() {
-                LancamentoProgramadoService.delete(idLancamentoProgramado)
-                    .then(function(data) { 
-                        modalMessage(MESSAGES.lancamento.programar.sucesso.REMOVIDO_SUCESSO);
-                        todos(conta);                        
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            });
-        }; 
-        
-        var criarLancamento = function(conta, result) { 
-            if(result.idLancamentoProgramado) {
-                LancamentoProgramadoService.getByNumeroParcela(result.idLancamentoProgramado, result.numeroParcela)
-                    .then(function(data) {  
-                        if(data) {
-                            modalMessage(MESSAGES.lancamento.programar.info.PARCELA_EXISTENTE);
-                        } else {
-                            create(conta, result);
-                        }
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            } else {
-                create(conta, result);
-            }
-        }
-        
-        var create = function(conta, result) { 
-            LancamentoProgramadoService.create(result)
-                .then(function(data) {  
-                    modalMessage(MESSAGES.lancamento.sucesso.INSERIDO_SUCESSO);
-                    todos(conta);                        
-                })
-                .catch(function(e) {
-                    modalMessage(e);
-                });
-        }
+        // ***** AJUSTAR ***** //
         
         var ajustarDados = function(data) {       
             delete data.gerarLancamento;
@@ -288,6 +330,8 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
 //                conta: { idConta: conta.idConta }
 //            }
 //        }
+        
+        // ***** MODAL ***** //
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);

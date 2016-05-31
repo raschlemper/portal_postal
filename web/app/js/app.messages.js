@@ -21,6 +21,14 @@ app.constant('MESSAGES', {
     },
 
     lancamento: { 
+        title: {
+            INSERIR: "Inserir Lançamento",
+            EDITAR: "Editar Lançamento",
+            VISUALIZAR: "Visualizar Lançamento",
+            GERAR: "Gerar Lançamento",
+            PARCELAR: "Parcelar Lançamento",
+            LISTA: "Lista com todos os lançamentos"
+        },
         sucesso: {
             INSERIDO_SUCESSO: "Lançamento Inserido com sucesso!",
             ALTERADO_SUCESSO: "Lançamento Alterado com sucesso!",
@@ -42,6 +50,12 @@ app.constant('MESSAGES', {
             HISTORICO_REQUERIDA: "Preencha o histórico do lançamento!"
         },
         programar: {
+            title: {
+                INSERIR: "Inserir Lançamento Programado",
+                EDITAR: "Editar Lançamento Programado",
+                VISUALIZAR: "Visualizar Lançamento Programado",
+                LISTA: "Lista com todos os lançamentos"
+            },
             sucesso: {
                 INSERIDO_SUCESSO: "Lançamento Programado Inserido com sucesso!",
                 ALTERADO_SUCESSO: "Lançamento Programado Alterado com sucesso!",
@@ -64,6 +78,10 @@ app.constant('MESSAGES', {
             }            
         },
         transferir: {
+            title: {
+                INSERIR: "Inserir Lançamento de Transferência",
+                EDITAR: "Editar Lançamento de Transferência"
+            },
             sucesso: {
                 INSERIDO_SUCESSO: "Lançamento Transferido com sucesso!",
                 ALTERADO_SUCESSO: "Lançamento Transferido com sucesso!"
@@ -80,6 +98,9 @@ app.constant('MESSAGES', {
             }            
         },
         conciliar: {
+            title: {
+                INSERIR: "Inserir Lançamento Reconciliado"
+            },
             sucesso: {
                 INSERIDO_SUCESSO: "Lançamento Reconciliado com sucesso!"
             },
@@ -94,11 +115,17 @@ app.constant('MESSAGES', {
             }
         },
         ratear: {
+            title: {
+                INSERIR: "Ratear Lançamento",
+            },
             validacao: {
                 SALDO_INCORRETO: "A soma dos valores de rateio é superior ao valor do lançamento!"
             }
         },
         anexar: {
+            title: {
+                INSERIR: "Inserir Anexo"
+            },
             validacao: {
                 ARQUIVO_REQUERIDA: "Selecione o arquivo!"
             }

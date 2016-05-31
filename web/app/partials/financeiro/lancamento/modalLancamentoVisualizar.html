@@ -2,7 +2,7 @@
     <div class="modal-header" ng-class="{'bg-modal-primary': lancamento.tipo.codigo === 'receita', 
                                          'bg-modal-danger': lancamento.tipo.codigo === 'despesa'}">
         <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
-        <h4 class="modal-title">Visualizar Lançamento {{lancamento.modelo.descricao}}</h4>
+        <h4 class="modal-title">{{title}}</h4>
     </div>
     <div class="modal-body">
         <div class="bootbox-body">

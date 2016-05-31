@@ -8,13 +8,18 @@ app.controller('ModalLancamentoTransferirController', ['$scope', '$modalInstance
             $scope.datepickerLancamento = angular.copy(DatePickerService.default); 
             $scope.situacoes = LISTAS.situacaoLancamento;
             $scope.lancamentoTransferencia = lancamentoTransferencia || {};             
-            getTitle();
+            getTitle(lancamentoTransferencia);
             contas();
         };
+                
+        // ***** CONTROLLER ***** //   
         
-        var getTitle = function() {
-            if(lancamentoTransferencia && lancamentoTransferencia.idLancamentoTransferencia) { $scope.title = "Editar Lançamento de Transferência" }
-            else { $scope.title = "Inserir Lançamento de Transferência"; }
+        var getTitle = function(lancamentoTransferencia) {
+            if(lancamentoTransferencia && lancamentoTransferencia.idLancamentoTransferencia) { 
+                $scope.title = MESSAGES.lancamento.transferir.title.EDITAR; 
+            } else { 
+                $scope.title = MESSAGES.lancamento.transferir.title.INSERIR; 
+            }
         };
         
         var contas = function() {
@@ -29,14 +34,16 @@ app.controller('ModalLancamentoTransferirController', ['$scope', '$modalInstance
                 });
         };
         
-        $scope.ok = function(form) {
+        $scope.ok = function(form, lancamentoTransferencia) {
             if (!validarForm(form)) return;
-            $modalInstance.close($scope.lancamentoTransferencia);            
+            $modalInstance.close(lancamentoTransferencia);            
         };
         
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
+                
+        // ***** VALIDAR ***** //  
 
         var validarForm = function (form) {
             if(form.contaOrigem.$modelValue === form.contaDestino.$modelValue) {

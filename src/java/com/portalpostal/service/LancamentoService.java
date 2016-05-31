@@ -176,7 +176,7 @@ public class LancamentoService {
     }
     
     private List<LancamentoRateio> saveOrUpdateRateio(Lancamento lancamento) throws Exception {
-        if(lancamento.getRateios() == null) {
+        if(lancamento.getRateios() == null || lancamento.getRateios().isEmpty()) {
             removerRateio(getRateios(lancamento.getIdLancamento()));
             return null;
         }

@@ -1,7 +1,7 @@
 <form name="lancamentoConciliadoForm" novalidate>
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
-        <h4 class="modal-title">Inserir Lançamento Reconciliado</h4>
+        <h4 class="modal-title">{{title}}</h4>
     </div>
     <div class="modal-body">
         <div class="bootbox-body">
@@ -90,7 +90,7 @@
         <button type="button" class="btn btn-default" ng-click="cancel()">
             <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR
         </button>
-        <button type="button" class="btn btn-success" ng-click="ok(this.lancamentoConciliadoForm)" ng-disabled="!saldo || !saldo.diferenca">
+        <button type="button" class="btn btn-success" ng-click="ok(this.lancamentoConciliadoForm, lancamentoConciliado)" ng-disabled="!saldo || !saldo.diferenca">
             <i class="fa fa-lg fa-save fa-spc"></i> SALVAR
         </button>
     </div>

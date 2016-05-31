@@ -2,7 +2,7 @@
     <div class="modal-header" ng-class="{'bg-modal-primary': lancamentoProgramado.tipo.codigo === 'receita', 
                                          'bg-modal-danger': lancamentoProgramado.tipo.codigo === 'despesa'}">
         <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
-        <h4 class="modal-title">{{title}} - Gerar Lançamento</h4>
+        <h4 class="modal-title">{{titleGerar}} - Gerar Lançamento</h4>
     </div>
     <div class="modal-body">
         <div class="bootbox-body">
@@ -153,7 +153,7 @@
         <button type="button" class="btn btn-warning" ng-click="voltar()">
             <i class="fa fa-lg fa-arrow-circle-left fa-spc"></i> VOLTAR
         </button>
-        <button type="button" class="btn btn-default" ng-click="ratear()" ng-disabled="!lancamento.valor">
+        <button type="button" class="btn btn-default" ng-click="ratear(this.lancamentoForm, lancamento)" ng-disabled="!lancamento.valor">
             <i class="fa fa-lg fa-check fa-spc"></i> RATEAR
         </button>
         <button type="button" class="btn btn-default" ng-click="cancel()">

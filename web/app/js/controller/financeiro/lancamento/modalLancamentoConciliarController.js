@@ -6,35 +6,17 @@ app.controller('ModalLancamentoConciliarController',
 
         var init = function () {  
             $scope.conta = conta;
-            $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
             $scope.datepickerLancamento = angular.copy(DatePickerService.default); 
             $scope.tipos = LISTAS.lancamento;
             $scope.lancamentoConciliado = {}; 
+            getTitle();
         };
+                
+        // ***** CONTROLLER ***** //   
         
-        $scope.calcularSaldo = function(conta, dataLancamento, saldoReconciliacao) {
-            dataLancamento = moment(dataLancamento).format('YYYY-MM-DD HH:mm:ss');
-            ContaService.getSaldoLancamento(conta.idConta, dataLancamento)
-                .then(function (data) {
-                    if(!data) return;
-                    $scope.saldo = calcularSaldo(data.saldo, saldoReconciliacao);
-                    if($scope.saldo.diferenca > 0) { $scope.lancamentoConciliado.tipo = $scope.tipos[0]; } 
-                    else { $scope.lancamentoConciliado.tipo = $scope.tipos[1]; }
-                    planoContas($scope.lancamentoConciliado.tipo);
-                    centroCustos();
-                })
-                .catch(function (e) {
-                    console.log(e);
-                });
+        var getTitle = function() {
+            $scope.title = MESSAGES.lancamento.conciliar.title.INSERIR; 
         };
-        
-        var calcularSaldo = function(saldoAtual, saldoReconciliacao) {
-            return {
-                atual: saldoAtual,
-                reconciliacao: saldoReconciliacao,
-                diferenca: saldoReconciliacao - saldoAtual
-            }
-        }     
         
         var planoContas = function(tipo) {
             PlanoContaService.getStructureByTipo(tipo.id)
@@ -73,12 +55,44 @@ app.controller('ModalLancamentoConciliarController',
                     console.log(e);
                 });
         };
+                
+        // ***** CONCILIAR ***** // 
         
-        $scope.ok = function(form) {
-            if (!validarForm(form)) return;
-            $scope.lancamentoConciliado = ajustarDados($scope.saldo, $scope.lancamentoConciliado);
-            $modalInstance.close($scope.lancamentoConciliado);            
+        $scope.calcularSaldo = function(conta, dataLancamento, saldoReconciliacao) {
+            dataLancamento = moment(dataLancamento).format('YYYY-MM-DD HH:mm:ss');
+            ContaService.getSaldoLancamento(conta.idConta, dataLancamento)
+                .then(function (data) {
+                    if(!data) return;
+                    $scope.saldo = calcularSaldo(data.saldo, saldoReconciliacao);
+                    if($scope.saldo.diferenca > 0) { $scope.lancamentoConciliado.tipo = $scope.tipos[0]; } 
+                    else { $scope.lancamentoConciliado.tipo = $scope.tipos[1]; }
+                    planoContas($scope.lancamentoConciliado.tipo);
+                    centroCustos();
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
         };
+        
+        var calcularSaldo = function(saldoAtual, saldoReconciliacao) {
+            return {
+                atual: saldoAtual,
+                reconciliacao: saldoReconciliacao,
+                diferenca: saldoReconciliacao - saldoAtual
+            }
+        };
+        
+        $scope.ok = function(form, lancamentoConciliado) {
+            if (!validarForm(form)) return;
+            $scope.lancamentoConciliado = ajustarDados($scope.saldo, lancamentoConciliado);
+            $modalInstance.close(lancamentoConciliado);            
+        };
+        
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+                
+        // ***** AJUSTAR ***** //  
         
         var ajustarDados = function(saldo, lancamentoConciliado) {
             lancamentoConciliado.dataCompetencia = lancamentoConciliado.dataLancamento;
@@ -86,26 +100,20 @@ app.controller('ModalLancamentoConciliarController',
             if(saldo.diferenca < 0) { lancamentoConciliado.valor = saldo.diferenca * -1; }
             else { lancamentoConciliado.valor = saldo.diferenca; }
             return lancamentoConciliado;
-        }
-        
-        $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
         };
+                
+        // ***** VALIDAR ***** //  
         
         $scope.validarPlanoConta = function(planoConta) {
             if(planoConta.ehGrupo) {
                 modalMessage(MESSAGES.planoConta.info.NAO_PERMITE_GRUPO);
             }
-        }
+        };
         
         $scope.validarCentroCusto = function(centroCusto) {
             if(centroCusto.ehGrupo) {
                 modalMessage(MESSAGES.centroCusto.info.NAO_PERMITE_GRUPO);
             }
-        }
-        
-        var modalMessage = function(message) {
-            ModalService.modalMessage(message);
         };
 
         var validarForm = function (form) {
@@ -130,7 +138,13 @@ app.controller('ModalLancamentoConciliarController',
                 return false;
             }
             return true;
-        }     
+        };
+                
+        // ***** MODAL ***** //  
+        
+        var modalMessage = function(message) {
+            ModalService.modalMessage(message);
+        };  
 
         init();
 

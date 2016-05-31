@@ -2,7 +2,7 @@
     <div class="modal-header" ng-class="{'bg-modal-primary': lancamento.tipo.codigo === 'receita', 
                                          'bg-modal-danger': lancamento.tipo.codigo === 'despesa'}">
         <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
-        <h4 class="modal-title">Ratear Lançamento</h4>
+        <h4 class="modal-title">{{titleRatear}}</h4>
     </div>
     <div class="modal-body">
         <div class="bootbox-body">
@@ -85,7 +85,7 @@
                                 <label class="small">Valor</label>
                                 <div class="input-group">
                                     <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
-                                    <input type="text" autocomplete="off" name="valor" class="form-control text-right" ng-disabled="ratearValor"
+                                    <input type="text" autocomplete="off" name="valor" class="form-control text-right" ng-disabled="lancamento.rateios && !lancamento.rateios.length"
                                            ui-number-mask="2" placeholder="Valor do lançamento" ng-model="lancamento.valor" ng-required="true"/>
                                 </div>
                             </div> 
@@ -178,7 +178,7 @@
         <button type="button" class="btn btn-default" ng-click="cancel()">
             <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR
         </button>
-        <button type="button" class="btn btn-success" ng-click="ok(this.lancamentoForm)">
+        <button type="button" class="btn btn-success" ng-click="ok(this.lancamentoForm, lancamento)">
             <i class="fa fa-lg fa-save fa-spc"></i> SALVAR
         </button>
     </div>

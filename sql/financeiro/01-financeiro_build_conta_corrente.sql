@@ -1,4 +1,3 @@
-
 USE pp_06895434000183;
 
 DROP TABLE banco;

@@ -1,19 +1,23 @@
 'use strict';
 
-app.controller('ModalLancamentoProgramadoTransferirController', ['$scope', '$modalInstance', 'ContaService', 'DatePickerService', 'LISTAS',
-    function ($scope, $modalInstance, ContaService, DatePickerService, LISTAS) {
+app.controller('ModalLancamentoProgramadoTransferirController', ['$scope', '$modalInstance', 'lancamentoTransferencia', 'ContaService', 'DatePickerService', 'LISTAS', 'MESSAGES',
+    function ($scope, $modalInstance, lancamentoTransferencia, ContaService, DatePickerService, LISTAS, MESSAGES) {
 
-        var init = function () {  
-            $scope.datepicker = DatePickerService.default; 
-            $scope.situacoes = LISTAS.situacaoLancamentoProgramado;
-            $scope.lancamentoTransferencia = {};
-            $scope.lancamentoTransferencia.situacao = $scope.situacoes[0];             
-            getTitle();
+        var init = function () { 
+            $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
+            $scope.datepickerLancamento = angular.copy(DatePickerService.default); 
+            $scope.situacoes = LISTAS.situacaoLancamento;
+            $scope.lancamentoTransferencia = lancamentoTransferencia || {};              
+            getTitle(lancamentoTransferencia);
             contas();
         };
         
-        var getTitle = function() {
-            $scope.title = "Inserir Novo Lançamento de Transferência";
+        var getTitle = function(lancamentoTransferencia) {
+            if(lancamentoTransferencia && lancamentoTransferencia.idLancamentoTransferencia) { 
+                $scope.title = MESSAGES.lancamento.transferir.title.EDITAR; 
+            } else { 
+                $scope.title = MESSAGES.lancamento.transferir.title.INSERIR; 
+            }
         };
         
         var contas = function() {
@@ -28,9 +32,9 @@ app.controller('ModalLancamentoProgramadoTransferirController', ['$scope', '$mod
                 });
         };
         
-        $scope.ok = function(form) {
+        $scope.ok = function(form, lancamentoTransferencia) {
             if (!validarForm(form)) return;
-            $modalInstance.close($scope.lancamentoTransferencia);            
+            $modalInstance.close(lancamentoTransferencia);            
         };
         
         $scope.cancel = function () {

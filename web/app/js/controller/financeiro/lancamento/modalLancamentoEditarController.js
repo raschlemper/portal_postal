@@ -8,37 +8,58 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
             $scope.datepickerLancamento = angular.copy(DatePickerService.default); 
             $scope.modelos = LISTAS.modeloLancamento;
             $scope.situacoes = LISTAS.situacaoLancamento;
+            $scope.statusConta = LISTAS.statusConta;
             $scope.lancamento = lancamento || {};
             $scope.lancamento.rateios = (lancamento && lancamento.rateios) || [];
             $scope.lancamento.tipo = (lancamento && lancamento.tipo) || tipo;
             $scope.lancamento.situacao = (lancamento && lancamento.situacao) || $scope.situacoes[0];
             $scope.lancamento.modelo = (lancamento && lancamento.modelo) || $scope.modelos[0];
-            getTitle();
+            getTitle(tipo);
             contas();
             centroCustos();
             planoContas($scope.lancamento.tipo);  
         };
                 
-        var initStep = function() {      
+        // ***** NAVEGAR ***** //  
+                
+        var initStep = function(lancamento) {      
 //            if(anexo){                
 //                $scope.anexar(lancamento);
 //            } else {
-                if(existRateio(lancamento)) { $scope.ratear(); }
+                if(existRateio(lancamento)) { ratear(lancamento); }
                 else { goToEditar(); }
 //            }
-        }
+        };
         
         var existRateio = function(lancamento) {
             return lancamento && lancamento.rateios && lancamento.rateios.length;
-        }
+        };
         
-        $scope.editConta = function() {
-            return (lancamento && lancamento.idLancamento);
-        }
+        var goToEditar = function() {
+            $scope.stepFrom = angular.copy($scope.stepTo);
+            $scope.stepTo = 'editar';             
+        };
         
-        var getTitle = function() {
-            if(lancamento && lancamento.idLancamento) { $scope.title = "Editar Lançamento " + tipo.descricao; }
-            else { $scope.title = "Inserir Lançamento " + tipo.descricao; }
+        var goToRatear = function() {
+            $scope.stepFrom = angular.copy($scope.stepTo); 
+            $scope.stepTo = 'ratear'; 
+        };
+        
+        var goToAnexar = function() {
+            $scope.stepFrom = angular.copy($scope.stepTo); 
+            $scope.stepTo = 'anexar'; 
+            //anexos(lancamento.idLancamento);
+        };
+                
+        // ***** CONTROLLER ***** //  
+        
+        var getTitle = function(tipo) {
+            if(lancamento && lancamento.idLancamento) { 
+                $scope.title = MESSAGES.lancamento.title.EDITAR + " " + tipo.descricao; 
+            } else { 
+                $scope.title = MESSAGES.lancamento.title.INSERIR + " " + tipo.descricao; 
+            }
+            $scope.titleRatear = MESSAGES.lancamento.ratear.title.INSERIR;
         };
         
         var contas = function() {
@@ -64,7 +85,7 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
                     } else {
                          $scope.lancamento.planoConta  = $scope.planoContas[0];
                     }      
-                    initStep();
+                    initStep($scope.lancamento);
                 })
                 .catch(function (e) {
                     console.log(e);
@@ -91,66 +112,19 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
             return _.filter(data, function(planoConta) { 
                 return !planoConta.ehGrupo;
             });            
-        }
+        };
         
         var criarCentroCustosLista = function(data) {
             return _.filter(data, function(centroCusto) { 
                 return !centroCusto.ehGrupo;
             });            
-        }
-        
-        $scope.ratear = function() {
-            goToRatear();
-            $scope.lancamento.rateios = [];
-            setRateioDefault();
         };
         
-        $scope.cancelarRatear = function() {
-            goToEditar();
-            $scope.lancamento.rateios = null;
-        };
-        
-        $scope.salvarRateio = function(rateio) {
-            if(!$scope.validarValor(rateio.valor)) return;
-            if(!$scope.validarPlanoConta(rateio.planoConta)) return;
-            if(!$scope.validarCentroCusto(rateio.centroCusto)) return;
-            var saldo = saldoRateio();
-            if(saldo + rateio.valor > $scope.lancamento.valor) {
-                modalMessage(MESSAGES.lancamento.ratear.validacao.SALDO_INCORRETO);
-                return;
-            }
-            $scope.lancamento.rateios.push(rateio);
-            setRateioDefault();
-        }
-        
-        $scope.editarRateio = function(rateio, index) {
-            $scope.rateio = rateio;
-            $scope.removerRateio(index);
-        }
-        
-        $scope.removerRateio = function(index) {     
-            $scope.lancamento.rateios.splice(index, 1); 
-            setRateioDefault();   
-        }
-        
-        var setRateioDefault = function() {
-            $scope.rateio = {};
-            $scope.rateio.planoConta = $scope.planoContas[0];
-            $scope.rateio.valor = $scope.lancamento.valor - saldoRateio();
-        }
-        
-        var saldoRateio = function() {            
-            var saldo = 0;
-            _.map($scope.lancamento.rateios, function(rateio) {
-                saldo += rateio.valor;
-            });
-            return saldo;
-        };
-        
-        $scope.ok = function(form) {
-            if (!validarForm(form)) return;
-            var lancamento = setData($scope.lancamento, $scope.data);
-            var data = moment($scope.lancamento.dataLancamento).format('YYYY-MM-DD HH:mm:ss');
+        $scope.ok = function(form, lancamento) {
+            if(!validaConta(lancamento.conta)) return;
+            if (!validarForm(form, lancamento)) return;
+            var lancamento = ajustarDados(lancamento);
+            var data = moment(lancamento.dataLancamento).format('YYYY-MM-DD HH:mm:ss');
             LancamentoConciliadoService.getByData(data)
                 .then(function(data) {  
                     if(data.length) {
@@ -167,34 +141,67 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
+                
+        // ***** RATEAR ***** //  
         
-        $scope.validarPlanoConta = function(planoConta) {
-            if(!planoConta) return true;
-            if(planoConta.ehGrupo) {
-                modalMessage(MESSAGES.planoConta.info.NAO_PERMITE_GRUPO);
-                return false;
-            }
-            return true;
+        $scope.ratear = function(form, lancamento) {
+            if(!validaConta(lancamento.conta)) return;
+            if (!validarForm(form, lancamento)) return;  
+            ratear(lancamento);
+        };
+        
+        var ratear = function(lancamento) {       
+            goToRatear();
+            $scope.lancamento.rateios = [];
+            setRateioDefault();            
         }
         
-        $scope.validarCentroCusto = function(centroCusto) {
-            if(!centroCusto) return true;
-            if(centroCusto.ehGrupo) {
-                modalMessage(MESSAGES.centroCusto.info.NAO_PERMITE_GRUPO);
-                return false;
-            }
-            return true;
-        }
+        $scope.cancelarRatear = function() {
+            goToEditar();
+            $scope.lancamento.rateios = null;
+        };
         
-        $scope.validarValor = function(valor) {
-            if(!valor || valor < 0 || valor == 0) {
-                modalMessage(MESSAGES.lancamento.validacao.VALOR_VALIDA);
-                return false;
+        $scope.salvarRateio = function(rateio) {
+            if(!$scope.validarPlanoConta(rateio.planoConta)) return;
+            if(!$scope.validarCentroCusto(rateio.centroCusto)) return;
+            var saldo = saldoRateio();
+            if(saldo + rateio.valor > $scope.lancamento.valor) {
+                modalMessage(MESSAGES.lancamento.ratear.validacao.SALDO_INCORRETO);
+                return;
             }
-            return true;
-        }
+            $scope.lancamento.rateios.push(rateio);
+            setRateioDefault();
+        };
+        
+        $scope.editarRateio = function(rateio, index) {
+            $scope.rateio = rateio;
+            $scope.removerRateio(index);
+        };
+        
+        $scope.removerRateio = function(index) {     
+            $scope.lancamento.rateios.splice(index, 1); 
+            setRateioDefault();   
+        };
+        
+        var setRateioDefault = function() {
+            $scope.rateio = {};
+            $scope.rateio.planoConta = $scope.planoContas[0];
+            $scope.rateio.valor = $scope.lancamento.valor - saldoRateio();
+        };
+        
+        var saldoRateio = function() {            
+            var saldo = 0;
+            _.map($scope.lancamento.rateios, function(rateio) {
+                saldo += rateio.valor;
+            });
+            return saldo;
+        };
+                
+        // ***** ANEXAR ***** //  
 
-//        $scope.anexar = function(lancamento) {
+//        $scope.anexar = function(form, lancamento) {
+//            if(!validaConta(lancamento.conta)) return;
+//            if (!validarForm(form)) return;         
 //            $scope.stepFrom = 'editar'; 
 //            $scope.stepTo = 'anexar'; 
 //            anexos(lancamento.idLancamento);
@@ -234,53 +241,72 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
 //                    modalMessage(e);
 //                });
 //        }
+                
+        // ***** AJUSTAR ***** // 
         
-        var setData = function(lancamento, data) {
+        var ajustarDados = function(lancamento) {
             lancamento.dataEmissao = moment();
             lancamento.dataVencimento = lancamento.dataLancamento;
             return lancamento;
         };
+                
+        // ***** VALIDAR ***** //  
         
-        var goToEditar = function() {
-            $scope.stepFrom = angular.copy($scope.stepTo);
-            $scope.stepTo = 'editar';             
-        }
-        
-        var goToRatear = function() {
-            $scope.stepFrom = angular.copy($scope.stepTo); 
-            $scope.stepTo = 'ratear'; 
-        }
-        
-        var goToAnexar = function() {
-            $scope.stepFrom = angular.copy($scope.stepTo); 
-            $scope.stepTo = 'anexar'; 
-            //anexos(lancamento.idLancamento);
-        }
-        
-        var modalConfirmarConciliado = function() {
-            var modalInstance = ModalService.modalConfirmar(MESSAGES.lancamento.info.ALERT, MESSAGES.lancamento.conciliar.info.CONFIRMAR_INCLUIR);
-            return modalInstance.result;
+        var validaConta = function(conta) {
+            if(conta.status.id === $scope.statusConta[1].id) {
+                modalMessage(MESSAGES.conta.info.CONTA_ENCERRADO);
+                return false;
+            };
+            return true;
         };
         
-        var modalMessage = function(message) {
-            ModalService.modalMessage(message);
-        };
-
-        var validarForm = function (form) {
-            if ($scope.lancamento.rateios && $scope.lancamento.rateios.length) {
-                var saldo = saldoRateio();
-                if(saldo !== form.valor.$modelValue) {
-                    alert(MESSAGES.lancamento.ratear.validacao.SALDO_INCORRETO);
-                    return false;                    
-                }
-            }      
-            if(!$scope.lancamento.rateios && $scope.lancamento.planoConta.ehGrupo) {
+        $scope.validarPlanoConta = function(planoConta) {
+            if(!planoConta) return true;
+            if(planoConta.ehGrupo) {
                 alert(MESSAGES.planoConta.info.NAO_PERMITE_GRUPO);
                 return false;
             }
-            if(!$scope.lancamento.rateios && $scope.lancamento.centroCusto.ehGrupo) {
+            return true;
+        };
+        
+        $scope.validarCentroCusto = function(centroCusto) {
+            if(!centroCusto) return true;
+            if(centroCusto.ehGrupo) {
                 alert(MESSAGES.centroCusto.info.NAO_PERMITE_GRUPO);
                 return false;
+            }
+            return true;
+        };
+        
+        var validarRateio = function(lancamento) {
+            if (!lancamento.rateios || !lancamento.rateios.length) return true;
+            var saldo = saldoRateio();
+            if(saldo !== lancamento.valor) {
+                alert(MESSAGES.lancamento.ratear.validacao.SALDO_INCORRETO);
+                return false;                    
+            }
+            _.map(lancamento.rateios, function(rateio) {
+                if($scope.validarPlanoConta(rateio.planoConta)) {
+                    return false;
+                }
+                if(!$scope.validarCentroCusto(rateio.centroCusto)) {
+                    return false;
+                }
+            });  
+            return true;
+        };
+
+        var validarForm = function (form, lancamento) {
+            if(!validarRateio(lancamento)) {
+                return false;
+            }
+            if(!lancamento.rateios || !lancamento.rateios.length) {
+                if(!$scope.validarPlanoConta(lancamento.planoConta)) {
+                    return false;
+                }
+                if(!$scope.validarCentroCusto(lancamento.centroCusto)) {
+                    return false;
+                }
             } 
             if (form.dataCompetencia.$error.required) {
                 alert(MESSAGES.lancamento.validacao.DATA_COMPETENCIA_REQUERIDA);
@@ -307,7 +333,7 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
                 return false;
             }
             return true;
-        }    
+        };  
 
         var validarFormAnexo = function (form) {
             if (form.file.$error.required) {
@@ -316,6 +342,17 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
             }   
             return true;
         }; 
+                
+        // ***** MODAL ***** //  
+        
+        var modalConfirmarConciliado = function() {
+            var modalInstance = ModalService.modalConfirmar(MESSAGES.lancamento.info.ALERT, MESSAGES.lancamento.conciliar.info.CONFIRMAR_INCLUIR);
+            return modalInstance.result;
+        };
+        
+        var modalMessage = function(message) {
+            ModalService.modalMessage(message);
+        };
 
         init();
 
