@@ -27,10 +27,10 @@ public class LancamentoConciliadoDAO extends GenericDAO {
     }
 
     public List<LancamentoConciliado> findByData(Date data) throws Exception {
-        String sql = "SELECT * FROM lancamento, lancamento_conciliado "
-                   + "WHERE lancamento_conciliado.idLancamento = lancamento.idLancamento "
-                   + "AND lancamento_conciliado.dataLancamento >= :data "
-                   + "AND exists (SELECT 1 FROM lancamento lanc1 WHERE lanc1.numeroLoteConciliado = lancamento_conciliado.numeroLote)"
+        String sql = "SELECT * FROM lancamento_conciliado "
+                   + "WHERE exists (SELECT 1 FROM lancamento lanc1 "
+                                 + "WHERE lanc1.numeroLoteConciliado = lancamento_conciliado.numeroLote "
+                                 + "AND lanc1.dataLancamento >= :data) "
                    + "ORDER BY lancamento_conciliado.dataLancamento";  
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("data", data);      

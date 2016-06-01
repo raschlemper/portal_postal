@@ -296,51 +296,65 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', '$modalIn
         
         $scope.ratear = function(form, lancamento) {
             if(!validaConta(lancamento.conta)) return;
-            if (!validarForm(form, lancamento)) return;           
-            goToRatear();
-            lancamento.rateios = [];
-            setRateioDefault();
+            ratear(lancamento);
         };
+        
+        var ratear = function(lancamento) {       
+            goToRatear();
+            lancamento.rateios = lancamento.rateios || [];
+            criarRateiosLista(lancamento.rateios);
+            setRateioDefault(lancamento);            
+        }
         
         $scope.cancelarRatear = function() {
             goToEditar();
-            $scope.lancamento.rateios = null;
+            $scope.lancamento.rateios = [];
         };
         
-        $scope.salvarRateio = function(rateio) {
+        $scope.salvarRateio = function(lancamento, rateio) {
             if(!$scope.validarPlanoConta(rateio.planoConta)) return;
             if(!$scope.validarCentroCusto(rateio.centroCusto)) return;
-            var saldo = saldoRateio();
-            if(saldo + rateio.valor > $scope.lancamento.valor) {
+            var saldo = saldoRateio(lancamento);
+            if(saldo + rateio.valor > lancamento.valor) {
                 modalMessage(MESSAGES.lancamento.ratear.validacao.SALDO_INCORRETO);
                 return;
             }
             $scope.lancamento.rateios.push(rateio);
-            setRateioDefault();
-        }
+            setRateioDefault(lancamento);
+        };
         
         $scope.editarRateio = function(rateio, index) {
             $scope.rateio = rateio;
             $scope.removerRateio(index);
-        }
+        };
         
         $scope.removerRateio = function(index) {     
-            $scope.lancamento.rateios.splice(index, 1); 
-            setRateioDefault();   
-        }
+            $scope.lancamento.rateios.splice(index, 1);
+        };
         
-        var setRateioDefault = function() {
+        var setRateioDefault = function(lancamento) {
             $scope.rateio = {};
             $scope.rateio.planoConta = $scope.planoContas[0];
-            $scope.rateio.valor = $scope.lancamento.valor - saldoRateio();
-        }
+            $scope.rateio.valor = lancamento.valor - saldoRateio(lancamento);
+        };
         
-        var saldoRateio = function() {            
+        var saldoRateio = function(lancamento) {            
             var saldo = 0;
-            _.map($scope.lancamento.rateios, function(rateio) {
+            _.map(lancamento.rateios, function(rateio) {
                 saldo += rateio.valor;
             });
             return saldo;
+        };
+        
+        var criarRateiosLista = function(rateios) {
+            return _.map(rateios, function(rateio) {                 
+                if(rateio.planoConta && rateio.planoConta.idPlanoConta) { 
+                    rateio.planoConta = ListaService.getPlanoContaValue($scope.planoContas, rateio.planoConta.idPlanoConta); 
+                }                 
+                if(rateio.centroCusto && rateio.centroCusto.idCentroCusto) { 
+                    rateio.centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, rateio.centroCusto.idCentroCusto); 
+                } 
+            })
         };
         
         // ***** AJUSTAR ***** //

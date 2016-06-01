@@ -131,17 +131,19 @@ public class LancamentoService {
     
     public Lancamento save(Lancamento lancamento) throws Exception {
         init();
-        removerLancamentoConciliado(lancamento);
-        lancamento.setRateios(saveOrUpdateRateio(lancamento));
-        return lancamentoDAO.save(lancamento);
+        Lancamento lancamentoResult = lancamentoDAO.save(ajustaLancamentoRateio(lancamento));
+        removerLancamentoConciliado(lancamentoResult);
+        lancamentoResult.setRateios(lancamento.getRateios());
+        lancamentoResult.setRateios(saveOrUpdateRateio(lancamentoResult));
+        return lancamentoResult;
     } 
     
     public Lancamento update(Lancamento lancamento) throws Exception {
         init();
-        removerLancamentoConciliado(lancamento);
-        lancamento.setRateios(saveOrUpdateRateio(lancamento));
-        lancamento.setNumeroLoteConciliado(null);
-        return lancamentoDAO.update(lancamento);
+        Lancamento lancamentoResult = lancamentoDAO.update(ajustaLancamentoRateio(lancamento));
+        removerLancamentoConciliado(lancamentoResult);
+        lancamentoResult.setRateios(saveOrUpdateRateio(lancamento));
+        return lancamentoResult;
     } 
 
     public void updateNumeroLoteConciliado(Date data, Integer numeroLoteConciliado) throws Exception {
@@ -155,7 +157,7 @@ public class LancamentoService {
         removerLancamentoTransferencia(lancamento);
         removerLancamentoProgramado(lancamento);
         removerLancamentoConciliado(lancamento);
-        removerRateio(lancamento.getRateios());
+        removerRateio(lancamento);
         return lancamentoDAO.remove(idLancamento);     
     } 
     
@@ -176,16 +178,11 @@ public class LancamentoService {
     }
     
     private List<LancamentoRateio> saveOrUpdateRateio(Lancamento lancamento) throws Exception {
-        if(lancamento.getRateios() == null || lancamento.getRateios().isEmpty()) {
-            removerRateio(getRateios(lancamento.getIdLancamento()));
-            return null;
-        }
+        removerRateio(lancamento);
         List<LancamentoRateio> rateiosLista = new ArrayList<LancamentoRateio>();
-        lancamento.setPlanoConta(null);
-        lancamento.setCentroCusto(null);
-        lancamento.setObservacao(null);
+        if(lancamento.getRateios() == null) return rateiosLista;
         for (LancamentoRateio rateio : lancamento.getRateios()) {
-            rateio.setLancamento(lancamento);
+            rateio.setLancamento(createLancamentoToRateio(lancamento));
             if(rateio.getIdLancamentoRateio() != null) {
                 rateiosLista.add(lancamentoRateioService.update(rateio));
             } else {
@@ -195,12 +192,29 @@ public class LancamentoService {
         return rateiosLista;
     }
     
-    private List<LancamentoRateio> removerRateio(List<LancamentoRateio> rateios) throws Exception {
-        List<LancamentoRateio> rateiosLista = new ArrayList<LancamentoRateio>();
-        for (LancamentoRateio rateio : rateios) {
-            rateiosLista.add(lancamentoRateioService.delete(rateio.getIdLancamentoRateio()));
+    private Lancamento ajustaLancamentoRateio(Lancamento lancamento) {
+        if(lancamento.getRateios() == null || lancamento.getRateios().isEmpty()) { return lancamento; }
+        lancamento.setPlanoConta(null);
+        lancamento.setCentroCusto(null);
+        lancamento.setObservacao(null);
+        lancamento.setNumeroLoteConciliado(null);
+        return lancamento;
+    }
+    
+    private Lancamento createLancamentoToRateio(Lancamento lancamento) {        
+        Lancamento lancamentoRateio = new Lancamento();
+        lancamentoRateio.setIdLancamento(lancamento.getIdLancamento());
+        return lancamentoRateio;
+    }
+    
+    private void removerRateio(Lancamento lancamento) throws Exception {
+        List<LancamentoRateio> rateios = getRateios(lancamento.getIdLancamento());
+        List<LancamentoRateio> rateiosLancamento = lancamento.getRateios();
+        for (LancamentoRateio rateio : rateios) {    
+            if(rateiosLancamento == null || rateiosLancamento.isEmpty() || !rateiosLancamento.contains(rateio)) {
+                lancamentoRateioService.delete(rateio.getIdLancamentoRateio());
+            } 
         }
-        return rateiosLista;
     }
     
     private void removerLancamentoTransferencia(Lancamento lancamento) throws Exception {

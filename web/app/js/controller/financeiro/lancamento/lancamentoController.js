@@ -320,7 +320,7 @@ app.controller('LancamentoController',
                     if(lancamento.lancamentoProgramado) {
                         excluirLancamentoProgramado(conta, lancamento);
                     } else {
-                        excluirLancamento(conta, lancamento.idLancamento);
+                        excluirLancamento(conta, lancamento);
                     }  
                 })
                 .catch(function(e) {
@@ -541,17 +541,21 @@ app.controller('LancamentoController',
         var ajustarDadosConciliado = function(conta, data) {                 
             var lancamentoConciliado = { 
                 idLancamentoConciliado: data.idLancamentoConciliado || null,
-                lancamento: getLancamento(conta, data.planoConta, data.centroCusto, data.tipo, $scope.modelos[5], data, null),          
-                conta: { idConta: conta.idConta },  
-                planoConta: { idPlanoConta: data.planoConta.idPlanoConta },
-                centroCusto: { idCentroCusto: data.centroCusto.idCentroCusto },
-                tipo: data.tipo.id,
+                lancamento: getLancamento(conta, data.planoConta, data.centroCusto, data.tipo, $scope.modelos[5], data, null),  
+                conta: null,
+                planoConta: null,
+                centroCusto: null,
+                tipo: null,
                 dataCompetencia: data.dataCompetencia,
                 dataEmissao: data.dataEmissao || moment(),
                 dataLancamento: data.dataLancamento || moment(),
                 valor: data.valor,
                 historico: data.historico
             };     
+            if(conta) { lancamentoConciliado.conta = { idConta: conta.idConta }; }
+            if(data.planoConta) { lancamentoConciliado.planoConta = { idPlanoConta: data.planoConta.idPlanoConta }; }
+            if(data.centroCusto) { lancamentoConciliado.centroCusto = { idCentroCusto: data.centroCusto.idCentroCusto }; }
+            if(data.tipo) { lancamentoConciliado.tipo = data.tipo.id; }
             return lancamentoConciliado;
         }
         

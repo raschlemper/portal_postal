@@ -146,55 +146,68 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
         
         $scope.ratear = function(form, lancamento) {
             if(!validaConta(lancamento.conta)) return;
-            if (!validarForm(form, lancamento)) return;  
             ratear(lancamento);
         };
         
         var ratear = function(lancamento) {       
             goToRatear();
-            $scope.lancamento.rateios = [];
-            setRateioDefault();            
+            lancamento.rateios = lancamento.rateios || [];
+            criarRateiosLista(lancamento.rateios);
+            setRateioDefault(lancamento, null);            
         }
         
         $scope.cancelarRatear = function() {
             goToEditar();
-            $scope.lancamento.rateios = null;
+            $scope.lancamento.rateios = [];
         };
         
-        $scope.salvarRateio = function(rateio) {
+        $scope.salvarRateio = function(lancamento, rateio) {
             if(!$scope.validarPlanoConta(rateio.planoConta)) return;
             if(!$scope.validarCentroCusto(rateio.centroCusto)) return;
-            var saldo = saldoRateio();
-            if(saldo + rateio.valor > $scope.lancamento.valor) {
+            var saldo = saldoRateio(lancamento);
+            if(saldo + rateio.valor > lancamento.valor) {
                 modalMessage(MESSAGES.lancamento.ratear.validacao.SALDO_INCORRETO);
                 return;
             }
             $scope.lancamento.rateios.push(rateio);
-            setRateioDefault();
+            setRateioDefault(lancamento, rateio);
         };
         
-        $scope.editarRateio = function(rateio, index) {
+        $scope.editarRateio = function(lancamento, rateio, index) {
             $scope.rateio = rateio;
             $scope.removerRateio(index);
+            setRateioDefault(lancamento, rateio);
         };
         
-        $scope.removerRateio = function(index) {     
+        $scope.removerRateio = function(lancamento, rateio, index) {     
             $scope.lancamento.rateios.splice(index, 1); 
-            setRateioDefault();   
+            setRateioDefault(lancamento, rateio);
         };
         
-        var setRateioDefault = function() {
+        var setRateioDefault = function(lancamento, rateio) {
             $scope.rateio = {};
-            $scope.rateio.planoConta = $scope.planoContas[0];
-            $scope.rateio.valor = $scope.lancamento.valor - saldoRateio();
+            $scope.rateio.planoConta = (rateio && rateio.planoConta) || $scope.planoContas[0];
+            $scope.rateio.centroCusto = (rateio && rateio.centroCusto) || null;
+            $scope.rateio.valor = lancamento.valor - saldoRateio(lancamento);
         };
         
-        var saldoRateio = function() {            
+        var saldoRateio = function(lancamento) {            
             var saldo = 0;
-            _.map($scope.lancamento.rateios, function(rateio) {
+            _.map(lancamento.rateios, function(rateio) {
                 saldo += rateio.valor;
             });
             return saldo;
+        };
+        
+        var criarRateiosLista = function(rateios) {
+            return _.map(rateios, function(rateio) {                 
+                if(rateio.planoConta && rateio.planoConta.idPlanoConta) { 
+                    rateio.planoConta = ListaService.getPlanoContaValue($scope.planoContas, rateio.planoConta.idPlanoConta); 
+                }                 
+                if(rateio.centroCusto && rateio.centroCusto.idCentroCusto) { 
+                    rateio.centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, rateio.centroCusto.idCentroCusto); 
+                } 
+            })
         };
                 
         // ***** ANEXAR ***** //  
@@ -280,7 +293,7 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
         
         var validarRateio = function(lancamento) {
             if (!lancamento.rateios || !lancamento.rateios.length) return true;
-            var saldo = saldoRateio();
+            var saldo = saldoRateio(lancamento);
             if(saldo !== lancamento.valor) {
                 alert(MESSAGES.lancamento.ratear.validacao.SALDO_INCORRETO);
                 return false;                    

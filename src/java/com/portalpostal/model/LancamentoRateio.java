@@ -1,5 +1,7 @@
 package com.portalpostal.model;
 
+import java.util.Objects;
+
 public class LancamentoRateio {
     
     private Integer idLancamentoRateio;
@@ -55,6 +57,28 @@ public class LancamentoRateio {
 
     public void setObservacao(String observacao) {
         this.observacao = observacao;
+    }   
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 23 * hash + Objects.hashCode(this.idLancamentoRateio);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final LancamentoRateio other = (LancamentoRateio) obj;
+        if (!Objects.equals(this.idLancamentoRateio, other.idLancamentoRateio)) {
+            return false;
+        }
+        return true;
     }
     
     

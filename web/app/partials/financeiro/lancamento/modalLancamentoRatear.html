@@ -85,7 +85,7 @@
                                 <label class="small">Valor</label>
                                 <div class="input-group">
                                     <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
-                                    <input type="text" autocomplete="off" name="valor" class="form-control text-right" ng-disabled="lancamento.rateios && !lancamento.rateios.length"
+                                    <input type="text" autocomplete="off" name="valor" class="form-control text-right" ng-disabled="lancamento.rateios && lancamento.rateios.length"
                                            ui-number-mask="2" placeholder="Valor do lançamento" ng-model="lancamento.valor" ng-required="true"/>
                                 </div>
                             </div> 
@@ -126,7 +126,7 @@
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-1 col-lg-1">
                                 <div class="input-group" style="margin-top: 23px;">
-                                    <button type="button" class="btn btn-primary" ng-disabled="(rateio.valor <= 0)" ng-click="salvarRateio(rateio)">
+                                    <button type="button" class="btn btn-primary" ng-disabled="(rateio.valor <= 0)" ng-click="salvarRateio(lancamento, rateio)">
                                         <i class="fa fa-lg fa-plus-circle"></i>
                                     </button>
                                 </div>
@@ -151,10 +151,10 @@
                                             <td>{{rateio.observacao}}</td>
                                             <td>{{rateio.valor | currency : 'R$ '}}</td>
                                             <td class="text-center">
-                                                <button type="button" class="btn btn-xs btn-warning" ng-click="editarRateio(rateio, $index)">
+                                                <button type="button" class="btn btn-xs btn-warning" ng-click="editarRateio(lancamento, rateio, $index)">
                                                     <i class="fa fa-sm fa-pencil"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-xs btn-danger" ng-click="removerRateio($index)">
+                                                <button type="button" class="btn btn-xs btn-danger" ng-click="removerRateio(lancamento, rateio, $index)">
                                                     <i class="fa fa-sm fa-trash"></i>
                                                 </button>
                                             </td>
