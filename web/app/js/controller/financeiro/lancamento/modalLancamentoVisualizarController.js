@@ -15,7 +15,7 @@ app.controller('ModalLancamentoVisualizarController', ['$scope', '$modalInstance
         };
         
         $scope.editar = function() {
-            $modalInstance.close(lancamento.idLancamento);
+            $modalInstance.close(lancamento);
         };
         
         $scope.cancel = function () {

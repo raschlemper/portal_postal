@@ -18,6 +18,7 @@ public class LancamentoService {
     private LancamentoDAO lancamentoDAO;
     private LancamentoProgramadoService lancamentoProgramadoService;
     private LancamentoTransferenciaService lancamentoTransferenciaService;
+    private LancamentoConciliadoService lancamentoConciliadoService;
     private LancamentoRateioService lancamentoRateioService;
 
     public LancamentoService(String nomeBD) {
@@ -28,6 +29,7 @@ public class LancamentoService {
         lancamentoDAO = new LancamentoDAO(nomeBD);
         lancamentoProgramadoService = new LancamentoProgramadoService(nomeBD);
         lancamentoTransferenciaService = new LancamentoTransferenciaService(nomeBD);
+        lancamentoConciliadoService = new LancamentoConciliadoService(nomeBD);
         lancamentoRateioService = new LancamentoRateioService(nomeBD);
     }
     
@@ -125,7 +127,7 @@ public class LancamentoService {
     public Lancamento findByNumeroParcela(Integer idLancamentoProgramado, Integer numeroParcela) throws Exception {
         init();
         Lancamento lancamento = lancamentoDAO.findByNumeroParcela(idLancamentoProgramado, numeroParcela);
-        lancamento = setRateios(lancamento);
+        if(lancamento != null) { lancamento = setRateios(lancamento); }
         return lancamento;
     } 
     
@@ -232,6 +234,9 @@ public class LancamentoService {
     
     private void removerLancamentoConciliado(Lancamento lancamento) throws Exception {
         lancamentoDAO.removeNumeroLoteConciliado(lancamento.getDataLancamento());
+        if(lancamento.getModelo() == TipoModeloLancamento.CONCILIADO) {
+            lancamentoConciliadoService.deleteByLancamento(lancamento.getIdLancamento());
+        }
     }
     
     private void removerLancamentoRateio(Lancamento lancamento) throws Exception {

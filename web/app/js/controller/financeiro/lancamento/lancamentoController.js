@@ -73,7 +73,7 @@ app.controller('LancamentoController',
                         
                     },
                     view: function(lancamento) {
-                        $scope.visualizar($scope.conta, lancamento.idLancamento);
+                        $scope.visualizar($scope.conta, lancamento);
                     },
                     compensar: function(lancamento) {
                         $scope.compensar($scope.conta, lancamento, true);
@@ -609,7 +609,7 @@ app.controller('LancamentoController',
         };
         
         var modalSalvar = function(conta, lancamento, tipo, anexo) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamento.html', 'ModalLancamentoEditarController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamento.html', 'ModalLancamentoController', 'lg',
                 {
                     lancamento: function() {
                         return lancamento;

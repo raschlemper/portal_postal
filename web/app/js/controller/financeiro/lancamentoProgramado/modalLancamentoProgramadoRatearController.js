@@ -1,10 +1,10 @@
 'use strict';
 
-app.controller('ModalLancamentoRatearController', ['$scope', 'ListaService', 'MESSAGES',
+app.controller('ModalLancamentoProgramadoRatearController', ['$scope', 'ListaService', 'MESSAGES',
     function ($scope, ListaService, MESSAGES) {
 
         var init = function () {  
-            $scope.lancamento.rateios = ($scope.lancamento && $scope.lancamento.rateios) || [];
+            $scope.lancamento = $scope.getLancamento($scope.lancamentoProgramado, null, $scope.modelos[2]);
             getTitle();
             ratear($scope.lancamento);  
         };
@@ -77,11 +77,11 @@ app.controller('ModalLancamentoRatearController', ['$scope', 'ListaService', 'ME
             })
         };        
 
-        $scope.okRatear = function (form, lancamento) {
+        $scope.lancarRatear = function (form, lancamentoProgramado, lancamento) {
             if(!validarRateio(lancamento)) {
                 return false;
             }
-            $scope.ok(form, lancamento);
+            $scope.lancar(form, lancamentoProgramado, lancamento);
         }
                 
         // ***** AJUSTAR ***** // 

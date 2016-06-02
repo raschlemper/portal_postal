@@ -59,6 +59,11 @@ public class LancamentoConciliadoService {
         return lancamentoConciliadoDAO.remove(idLancamentoConciliado);
     }   
     
+    public void deleteByLancamento(Integer idLancamento) throws Exception {
+        init();
+        lancamentoConciliadoDAO.removeByLancamento(idLancamento);
+    }   
+    
     public LancamentoConciliado createLancamento(LancamentoConciliado lancamentoConciliado) throws Exception {
         init();
         Lancamento lancamentoConciliacao = lancamentoService.save(lancamentoConciliado.getLancamento());

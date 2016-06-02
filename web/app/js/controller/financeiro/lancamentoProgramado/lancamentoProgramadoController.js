@@ -37,13 +37,13 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
                 },
                 events: { 
                     edit: function(lancamentoProgramado) {
-                        $scope.editar($scope.conta, lancamentoProgramado.tipo, lancamentoProgramado.idLancamentoProgramado);
+                        $scope.editar($scope.conta, lancamentoProgramado);
                     },
                     remove: function(lancamentoProgramado) {
-                        $scope.excluir($scope.conta, lancamentoProgramado.idLancamentoProgramado);
+                        $scope.excluir($scope.conta, lancamentoProgramado);
                     },
                     view: function(lancamentoProgramado) {
-                        $scope.visualizar($scope.conta, lancamentoProgramado.idLancamentoProgramado);
+                        $scope.visualizar($scope.conta, lancamentoProgramado);
                     }
                 }
             };
@@ -175,7 +175,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         $scope.editar = function(conta, lancamentoProgramado) {
             LancamentoProgramadoService.get(lancamentoProgramado.idLancamentoProgramado)
                 .then(function(result) {
-                     editarLancamento(conta, lancamentoProgramado);
+                     editarLancamento(conta, result);
                 })
                 .catch(function(e) {
                     modalMessage(e.error);
@@ -253,16 +253,14 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         };
         
         var excluir = function(conta, lancamentoProgramado) {
-            modalExcluir().then(function() {
-                LancamentoProgramadoService.delete(lancamentoProgramado.idLancamentoProgramado)
-                    .then(function(data) { 
-                        modalMessage(MESSAGES.lancamento.programar.sucesso.REMOVIDO_SUCESSO);
-                        todos(conta);                        
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            });
+            LancamentoProgramadoService.delete(lancamentoProgramado.idLancamentoProgramado)
+                .then(function(data) { 
+                    modalMessage(MESSAGES.lancamento.programar.sucesso.REMOVIDO_SUCESSO);
+                    todos(conta);                        
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
         }; 
         
         // ***** TRANSFERIR ***** //

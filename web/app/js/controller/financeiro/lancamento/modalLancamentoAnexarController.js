@@ -95,7 +95,15 @@ app.controller('ModalLancamentoAnexarController', ['$scope', '$modalInstance', '
                 return false;
             }   
             return true;
-        };
+        }; 
+
+//        var validarFormAnexo = function (form) {
+//            if (form.file.$error.required) {
+//                alert(MESSAGES.lancamento.anexar.validacao.ARQUIVO_REQUERIDA);
+//                return false;
+//            }   
+//            return true;
+//        }; 
                 
         // ***** MODAL ***** //
         

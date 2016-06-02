@@ -117,4 +117,11 @@ public class LancamentoConciliadoDAO extends GenericDAO {
         remove(sql, params, lancamentoConciliadoHandler);
         return lancamentoConciliado;
     }
+
+    public void removeByLancamento(Integer idLancamento) throws Exception { 
+        String sql = "DELETE FROM lancamento_conciliado WHERE idLancamento = :idLancamento ";
+        Map<String, Object> params = new HashMap<String, Object>();        
+        params.put("idLancamento", idLancamento);
+        remove(sql, params, lancamentoConciliadoHandler);
+    }
 }

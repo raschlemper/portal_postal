@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', 'conta', 'lancamento', 'tipo', 'anexo', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'LancamentoAnexoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS', 'MESSAGES',
-    function ($scope, $modalInstance, conta, lancamento, tipo, anexo, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, LancamentoAnexoService, ModalService, DatePickerService, ListaService, LISTAS, MESSAGES) {
+app.controller('ModalLancamentoEditarController', ['$scope', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'LancamentoAnexoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS', 'MESSAGES',
+    function ($scope, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, LancamentoAnexoService, ModalService, DatePickerService, ListaService, LISTAS, MESSAGES) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
@@ -9,19 +9,19 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
             $scope.modelos = LISTAS.modeloLancamento;
             $scope.situacoes = LISTAS.situacaoLancamento;
             $scope.statusConta = LISTAS.statusConta;
-            $scope.lancamento = lancamento || {};
-            $scope.lancamento.rateios = (lancamento && lancamento.rateios) || [];
-            $scope.lancamento.tipo = (lancamento && lancamento.tipo) || tipo;
-            $scope.lancamento.situacao = (lancamento && lancamento.situacao) || $scope.situacoes[0];
-            $scope.lancamento.modelo = (lancamento && lancamento.modelo) || $scope.modelos[0];
-            getTitle(tipo);
+//            $scope.lancamento = lancamento || {};
+            $scope.lancamento.rateios = ($scope.lancamento && $scope.lancamento.rateios) || [];
+            $scope.lancamento.tipo = ($scope.lancamento && $scope.lancamento.tipo) || $scope.tipo;
+            $scope.lancamento.situacao = ($scope.lancamento && $scope.lancamento.situacao) || $scope.situacoes[0];
+            $scope.lancamento.modelo = ($scope.lancamento && $scope.lancamento.modelo) || $scope.modelos[0];
+            getTitle($scope.lancamento, $scope.lancamento.tipo);
             contas();
         };
                 
         // ***** NAVEGAR ***** //  
                 
         var initStep = function(lancamento) {      
-//            if(anexo){                
+//            if($scope.anexo){                
 //                $scope.anexar(lancamento);
 //            } else {
                 if(existRateio(lancamento)) { $scope.goToRatear(); }
@@ -51,7 +51,7 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
                 
         // ***** CONTROLLER ***** //  
         
-        var getTitle = function(tipo) {
+        var getTitle = function(lancamento, tipo) {
             if(lancamento && lancamento.idLancamento) { 
                 $scope.title = MESSAGES.lancamento.title.EDITAR + " " + tipo.descricao; 
             } else { 
@@ -64,7 +64,7 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
             ContaService.getAll()
                 .then(function (data) {
                     $scope.contas = data;
-                    $scope.lancamento.conta = conta || $scope.lancamento.conta || $scope.contas[0];                    
+                    $scope.lancamento.conta = $scope.conta || $scope.lancamento.conta || $scope.contas[0];                    
                     planoContas($scope.lancamento.tipo);
                 })
                 .catch(function (e) {
@@ -122,6 +122,7 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
         
         $scope.ratear = function(form, lancamento) {
             if(!validaConta(lancamento.conta)) return;
+            if(!validarForm(form, lancamento)) return;    
             $scope.goToRatear();
         };
         
@@ -217,15 +218,7 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
                 return false;
             }
             return true;
-        };  
-
-//        var validarFormAnexo = function (form) {
-//            if (form.file.$error.required) {
-//                alert(MESSAGES.lancamento.anexar.validacao.ARQUIVO_REQUERIDA);
-//                return false;
-//            }   
-//            return true;
-//        }; 
+        }; 
                 
         // ***** MODAL ***** //  
         
