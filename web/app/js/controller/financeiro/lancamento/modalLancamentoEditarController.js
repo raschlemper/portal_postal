@@ -16,8 +16,6 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
             $scope.lancamento.modelo = (lancamento && lancamento.modelo) || $scope.modelos[0];
             getTitle(tipo);
             contas();
-            centroCustos();
-            planoContas($scope.lancamento.tipo);  
         };
                 
         // ***** NAVEGAR ***** //  
@@ -26,8 +24,8 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
 //            if(anexo){                
 //                $scope.anexar(lancamento);
 //            } else {
-                if(existRateio(lancamento)) { ratear(lancamento); }
-                else { goToEditar(); }
+                if(existRateio(lancamento)) { $scope.goToRatear(); }
+                else { $scope.goToEditar(); }
 //            }
         };
         
@@ -35,17 +33,17 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
             return lancamento && lancamento.rateios && lancamento.rateios.length;
         };
         
-        var goToEditar = function() {
+        $scope.goToEditar = function() {
             $scope.stepFrom = angular.copy($scope.stepTo);
             $scope.stepTo = 'editar';             
         };
         
-        var goToRatear = function() {
+        $scope.goToRatear = function() {
             $scope.stepFrom = angular.copy($scope.stepTo); 
             $scope.stepTo = 'ratear'; 
         };
         
-        var goToAnexar = function() {
+        $scope.goToAnexar = function() {
             $scope.stepFrom = angular.copy($scope.stepTo); 
             $scope.stepTo = 'anexar'; 
             //anexos(lancamento.idLancamento);
@@ -66,7 +64,8 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
             ContaService.getAll()
                 .then(function (data) {
                     $scope.contas = data;
-                    $scope.lancamento.conta = conta || $scope.lancamento.conta || $scope.contas[0];
+                    $scope.lancamento.conta = conta || $scope.lancamento.conta || $scope.contas[0];                    
+                    planoContas($scope.lancamento.tipo);
                 })
                 .catch(function (e) {
                     console.log(e);
@@ -84,8 +83,8 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
                         $scope.lancamento.planoConta = ListaService.getPlanoContaValue($scope.planoContas, $scope.lancamento.planoConta.idPlanoConta) || $scope.planoContas[0];
                     } else {
                          $scope.lancamento.planoConta  = $scope.planoContas[0];
-                    }      
-                    initStep($scope.lancamento);
+                    }   
+                    centroCustos();   
                 })
                 .catch(function (e) {
                     console.log(e);
@@ -102,6 +101,7 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
                     if($scope.lancamento.centroCusto && $scope.lancamento.centroCusto.idCentroCusto) {
                         $scope.lancamento.centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, $scope.lancamento.centroCusto.idCentroCusto) || $scope.centroCustos[0];
                     } 
+                    initStep($scope.lancamento);  
                 })
                 .catch(function (e) {
                     console.log(e);
@@ -118,6 +118,11 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
             return _.filter(data, function(centroCusto) { 
                 return !centroCusto.ehGrupo;
             });            
+        };
+        
+        $scope.ratear = function(form, lancamento) {
+            if(!validaConta(lancamento.conta)) return;
+            $scope.goToRatear();
         };
         
         $scope.ok = function(form, lancamento) {
@@ -141,119 +146,6 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
-                
-        // ***** RATEAR ***** //  
-        
-        $scope.ratear = function(form, lancamento) {
-            if(!validaConta(lancamento.conta)) return;
-            ratear(lancamento);
-        };
-        
-        var ratear = function(lancamento) {       
-            goToRatear();
-            lancamento.rateios = lancamento.rateios || [];
-            criarRateiosLista(lancamento.rateios);
-            setRateioDefault(lancamento, null);            
-        }
-        
-        $scope.cancelarRatear = function() {
-            goToEditar();
-            $scope.lancamento.rateios = [];
-        };
-        
-        $scope.salvarRateio = function(lancamento, rateio) {
-            if(!$scope.validarPlanoConta(rateio.planoConta)) return;
-            if(!$scope.validarCentroCusto(rateio.centroCusto)) return;
-            var saldo = saldoRateio(lancamento);
-            if(saldo + rateio.valor > lancamento.valor) {
-                modalMessage(MESSAGES.lancamento.ratear.validacao.SALDO_INCORRETO);
-                return;
-            }
-            $scope.lancamento.rateios.push(rateio);
-            setRateioDefault(lancamento, rateio);
-        };
-        
-        $scope.editarRateio = function(lancamento, rateio, index) {
-            $scope.rateio = rateio;
-            $scope.removerRateio(index);
-            setRateioDefault(lancamento, rateio);
-        };
-        
-        $scope.removerRateio = function(lancamento, rateio, index) {     
-            $scope.lancamento.rateios.splice(index, 1); 
-            setRateioDefault(lancamento, rateio);
-        };
-        
-        var setRateioDefault = function(lancamento, rateio) {
-            $scope.rateio = {};
-            $scope.rateio.planoConta = (rateio && rateio.planoConta) || $scope.planoContas[0];
-            $scope.rateio.centroCusto = (rateio && rateio.centroCusto) || null;
-            $scope.rateio.valor = lancamento.valor - saldoRateio(lancamento);
-        };
-        
-        var saldoRateio = function(lancamento) {            
-            var saldo = 0;
-            _.map(lancamento.rateios, function(rateio) {
-                saldo += rateio.valor;
-            });
-            return saldo;
-        };
-        
-        var criarRateiosLista = function(rateios) {
-            return _.map(rateios, function(rateio) {                 
-                if(rateio.planoConta && rateio.planoConta.idPlanoConta) { 
-                    rateio.planoConta = ListaService.getPlanoContaValue($scope.planoContas, rateio.planoConta.idPlanoConta); 
-                }                 
-                if(rateio.centroCusto && rateio.centroCusto.idCentroCusto) { 
-                    rateio.centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, rateio.centroCusto.idCentroCusto); 
-                } 
-            })
-        };
-                
-        // ***** ANEXAR ***** //  
-
-//        $scope.anexar = function(form, lancamento) {
-//            if(!validaConta(lancamento.conta)) return;
-//            if (!validarForm(form)) return;         
-//            $scope.stepFrom = 'editar'; 
-//            $scope.stepTo = 'anexar'; 
-//            anexos(lancamento.idLancamento);
-//        };
-        
-//        $scope.setAnexo = function(lancamento, anexo) {            
-//            LancamentoAnexoService.upload(lancamento.idLancamento, anexo[0])
-//                .done(function (data) {
-//                    $scope.anexoFile = null;
-//                    anexos(lancamento.idLancamento);
-//                }).fail(function (e) {
-//                    console.log(e);
-//                });
-//            anexos(lancamento.idLancamento);           
-//        };
-        
-//        $scope.removeAnexo = function(anexo) {            
-//            LancamentoAnexoService.delete(anexo.idLancamentoAnexo);      
-//            anexos(lancamento.idLancamento);      
-//        };
-        
-//        $scope.visualizarAnexo = function(anexo) {
-//            $scope.contentFile = anexo.anexo;            
-//        }
-        
-//        $scope.voltar = function() {
-//            $scope.stepFrom = 'anexar'; 
-//            $scope.stepTo = 'editar';             
-//        }
-        
-//        var anexos = function(idLancamento) {
-//            LancamentoAnexoService.getLancamento(idLancamento)
-//                .then(function (data) {
-//                    $scope.anexos = data;
-//                })
-//                .catch(function (e) {
-//                    modalMessage(e);
-//                });
-//        }
                 
         // ***** AJUSTAR ***** // 
         
@@ -290,29 +182,8 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
             }
             return true;
         };
-        
-        var validarRateio = function(lancamento) {
-            if (!lancamento.rateios || !lancamento.rateios.length) return true;
-            var saldo = saldoRateio(lancamento);
-            if(saldo !== lancamento.valor) {
-                alert(MESSAGES.lancamento.ratear.validacao.SALDO_INCORRETO);
-                return false;                    
-            }
-            _.map(lancamento.rateios, function(rateio) {
-                if($scope.validarPlanoConta(rateio.planoConta)) {
-                    return false;
-                }
-                if(!$scope.validarCentroCusto(rateio.centroCusto)) {
-                    return false;
-                }
-            });  
-            return true;
-        };
 
         var validarForm = function (form, lancamento) {
-            if(!validarRateio(lancamento)) {
-                return false;
-            }
             if(!lancamento.rateios || !lancamento.rateios.length) {
                 if(!$scope.validarPlanoConta(lancamento.planoConta)) {
                     return false;
@@ -348,13 +219,13 @@ app.controller('ModalLancamentoEditarController', ['$scope', '$modalInstance', '
             return true;
         };  
 
-        var validarFormAnexo = function (form) {
-            if (form.file.$error.required) {
-                alert(MESSAGES.lancamento.anexar.validacao.ARQUIVO_REQUERIDA);
-                return false;
-            }   
-            return true;
-        }; 
+//        var validarFormAnexo = function (form) {
+//            if (form.file.$error.required) {
+//                alert(MESSAGES.lancamento.anexar.validacao.ARQUIVO_REQUERIDA);
+//                return false;
+//            }   
+//            return true;
+//        }; 
                 
         // ***** MODAL ***** //  
         

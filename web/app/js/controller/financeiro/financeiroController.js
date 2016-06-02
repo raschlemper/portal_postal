@@ -150,8 +150,10 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
         // Despesas /////    
         
         var initChartDespesa = function() {
-            var mesAtual = ListaService.getValue($scope.meses, $scope.mesAtual + 7);
-            $scope.mesesDespesa = getPeriodo(mesAtual, $scope.anoAtual - 1);  
+            var dataMonth = moment().add(7, 'months');     
+            var dataYear = dataMonth.subtract(1, 'year');         
+            var mesAtual = ListaService.getValue($scope.meses, dataMonth.month());
+            $scope.mesesDespesa = getPeriodo(mesAtual, dataYear.year());  
             $scope.mesDespesaSelected = $scope.mesesDespesa[5];
             $scope.changeMesDespesas($scope.mesDespesaSelected);
         };
@@ -399,11 +401,16 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
         var initSaldoProgramado = function() {
             LancamentoProgramadoService.getAllAtivo()
                .then(function(data) {
+                    var dataAtual = moment().format('YYYY-MM-DD');
+                    var dataUmMes = moment().add(1, "M").format('YYYY-MM-DD');
+                    var dataDoisMes = moment().add(2, "M").format('YYYY-MM-DD');
+                    var dataTresMes = moment().add(3, "M").format('YYYY-MM-DD');
+                    $scope.lancamentosVencido = getValoresReceitaDespesa([]);
+                    $scope.lancamentosHoje = getValoresReceitaDespesa([]);
+                    $scope.lancamentosUmMes = getValoresReceitaDespesa([]);
+                    $scope.lancamentosDoisMeses = getValoresReceitaDespesa([]);
+                    $scope.lancamentosTresMeses = getValoresReceitaDespesa([]);
                     _.map(data, function(programado) {
-                        var dataAtual = moment().format('YYYY-MM-DD');
-                        var dataUmMes = moment().add(1, "M").format('YYYY-MM-DD');
-                        var dataDoisMes = moment().add(2, "M").format('YYYY-MM-DD');
-                        var dataTresMes = moment().add(3, "M").format('YYYY-MM-DD');
                         $scope.lancamentosVencido = getValoresReceitaDespesa(LancamentoProgramadoService.lancamentoProgramadoVencido(angular.copy(programado), dataAtual));
                         $scope.lancamentosHoje = getValoresReceitaDespesa(LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataAtual, dataAtual));
                         $scope.lancamentosUmMes = getValoresReceitaDespesa(LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataAtual, dataUmMes));

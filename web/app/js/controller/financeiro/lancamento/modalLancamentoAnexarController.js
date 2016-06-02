@@ -40,7 +40,52 @@ app.controller('ModalLancamentoAnexarController', ['$scope', '$modalInstance', '
             if (!validarForm(form)) return;
             modalSalvar(conta, lancamento);
             $modalInstance.close($scope.lancamentoAnexo);            
-        };
+        };       
+                
+        // ***** ANEXAR ***** //  
+
+//        $scope.anexar = function(form, lancamento) {
+//            if(!validaConta(lancamento.conta)) return;
+//            if (!validarForm(form)) return;         
+//            $scope.stepFrom = 'editar'; 
+//            $scope.stepTo = 'anexar'; 
+//            anexos(lancamento.idLancamento);
+//        };
+        
+//        $scope.setAnexo = function(lancamento, anexo) {            
+//            LancamentoAnexoService.upload(lancamento.idLancamento, anexo[0])
+//                .done(function (data) {
+//                    $scope.anexoFile = null;
+//                    anexos(lancamento.idLancamento);
+//                }).fail(function (e) {
+//                    console.log(e);
+//                });
+//            anexos(lancamento.idLancamento);           
+//        };
+        
+//        $scope.removeAnexo = function(anexo) {            
+//            LancamentoAnexoService.delete(anexo.idLancamentoAnexo);      
+//            anexos(lancamento.idLancamento);      
+//        };
+        
+//        $scope.visualizarAnexo = function(anexo) {
+//            $scope.contentFile = anexo.anexo;            
+//        }
+        
+//        $scope.voltar = function() {
+//            $scope.stepFrom = 'anexar'; 
+//            $scope.stepTo = 'editar';             
+//        }
+        
+//        var anexos = function(idLancamento) {
+//            LancamentoAnexoService.getLancamento(idLancamento)
+//                .then(function (data) {
+//                    $scope.anexos = data;
+//                })
+//                .catch(function (e) {
+//                    modalMessage(e);
+//                });
+//        }
                 
         // ***** VALIDAR ***** //
 
