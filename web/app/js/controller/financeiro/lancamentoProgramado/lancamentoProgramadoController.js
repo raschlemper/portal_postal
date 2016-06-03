@@ -346,7 +346,7 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         };
         
         var modalSalvar = function(conta, tipo, lancamentoProgramado) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamentoProgramado/modalLancamentoProgramado.html', 'ModalLancamentoProgramadoEditarController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamentoProgramado/modalLancamentoProgramado.html', 'ModalLancamentoProgramadoController', 'lg',
                 {
                     lancamentoProgramado: function() {
                         return lancamentoProgramado;

@@ -21,6 +21,16 @@ app.controller('ModalLancamentoController', ['$scope', '$modalInstance', 'conta'
             $scope.stepFrom = angular.copy($scope.stepTo);
             $scope.stepTo = 'editar';             
         };
+        
+        $scope.goToRatear = function() {
+            $scope.stepFrom = angular.copy($scope.stepTo); 
+            $scope.stepTo = 'ratear'; 
+        };
+        
+        $scope.goToAnexar = function() {
+            $scope.stepFrom = angular.copy($scope.stepTo); 
+            $scope.stepTo = 'anexar'; 
+        };
                 
         // ***** CONTROLLER ***** //  
         

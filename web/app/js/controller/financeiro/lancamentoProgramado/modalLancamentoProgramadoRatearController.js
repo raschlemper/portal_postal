@@ -24,8 +24,8 @@ app.controller('ModalLancamentoProgramadoRatearController', ['$scope', 'ListaSer
         }
         
         $scope.cancelarRatear = function() {
-            $scope.goToEditar();
             $scope.lancamento.rateios = [];
+            $scope.goToEditar();
         };
         
         $scope.salvarRateio = function(lancamento, rateio) {
@@ -77,11 +77,9 @@ app.controller('ModalLancamentoProgramadoRatearController', ['$scope', 'ListaSer
             })
         };        
 
-        $scope.lancarRatear = function (form, lancamentoProgramado, lancamento) {
-            if(!validarRateio(lancamento)) {
-                return false;
-            }
-            $scope.lancar(form, lancamentoProgramado, lancamento);
+        $scope.lancarRatear = function (form, lancamento) {
+            if(!validarRateio(lancamento)) { return false; }
+            $scope.ok(form, lancamento);
         }
                 
         // ***** AJUSTAR ***** // 
@@ -96,12 +94,8 @@ app.controller('ModalLancamentoProgramadoRatearController', ['$scope', 'ListaSer
                 return false;                    
             }
             _.map(lancamento.rateios, function(rateio) {
-                if($scope.validarPlanoConta(rateio.planoConta)) {
-                    return false;
-                }
-                if(!$scope.validarCentroCusto(rateio.centroCusto)) {
-                    return false;
-                }
+                if($scope.validarPlanoConta(rateio.planoConta)) { return false; }
+                if(!$scope.validarCentroCusto(rateio.centroCusto)) { return false; }
             });  
             return true;
         };

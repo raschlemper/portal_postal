@@ -16,9 +16,9 @@ app.controller('ModalLancamentoProgramadoParcelarController', ['$scope', 'Freque
         
         $scope.lancarParcela = function(form, lancamentoProgramado, parcela) {
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;
-            if(!$scope.validarForm(form, lancamentoProgramado)) return;     
+            if(!$scope.validarForm(form, lancamentoProgramado)) return;   
+            $scope.lancamento = $scope.getLancamento($scope.lancamentoProgramado, parcela, $scope.modelos[4]);  
             $scope.goToLancar();
-            $scope.lancamento = $scope.getLancamento($scope.lancamentoProgramado, parcela, $scope.modelos[4]);
         };
         
         $scope.createParcelas = function(lancamentoProgramado) {       
@@ -40,6 +40,11 @@ app.controller('ModalLancamentoProgramadoParcelarController', ['$scope', 'Freque
             return _.find(lancamentos, function(lancamento) { 
                 return lancamento.numeroParcela == numeroParcela; 
             });
+        };
+        
+        $scope.cancelarParcelar = function() {
+            $scope.lancamentoProgramado.quantidadeParcela = null;
+            $scope.goToEditar();
         };
         
         $scope.okParcelar = function(form, lancamentoProgramado) {

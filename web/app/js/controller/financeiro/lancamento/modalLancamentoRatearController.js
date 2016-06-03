@@ -24,8 +24,8 @@ app.controller('ModalLancamentoRatearController', ['$scope', 'ListaService', 'ME
         }
         
         $scope.cancelarRatear = function() {
-            $scope.goToEditar();
             $scope.lancamento.rateios = [];
+            $scope.goToEditar();
         };
         
         $scope.salvarRateio = function(lancamento, rateio) {
@@ -78,9 +78,7 @@ app.controller('ModalLancamentoRatearController', ['$scope', 'ListaService', 'ME
         };        
 
         $scope.okRatear = function (form, lancamento) {
-            if(!validarRateio(lancamento)) {
-                return false;
-            }
+            if(!validarRateio(lancamento)) { return false; }
             $scope.ok(form, lancamento);
         }
                 
@@ -96,12 +94,8 @@ app.controller('ModalLancamentoRatearController', ['$scope', 'ListaService', 'ME
                 return false;                    
             }
             _.map(lancamento.rateios, function(rateio) {
-                if($scope.validarPlanoConta(rateio.planoConta)) {
-                    return false;
-                }
-                if(!$scope.validarCentroCusto(rateio.centroCusto)) {
-                    return false;
-                }
+                if($scope.validarPlanoConta(rateio.planoConta)) { return false; }
+                if(!$scope.validarCentroCusto(rateio.centroCusto)) { return false; }
             });  
             return true;
         };

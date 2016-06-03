@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalLancamentoProgramadoEditarController', ['$scope', '$modalInstance', 'conta', 'tipo', 'lancamentoProgramado', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'FrequenciaLancamentoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS', 'MESSAGES',
-    function ($scope, $modalInstance, conta, tipo, lancamentoProgramado, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, TipoDocumentoService, TipoFormaPagamentoService, FrequenciaLancamentoService, ModalService, DatePickerService, ListaService, LISTAS, MESSAGES) {
+app.controller('ModalLancamentoProgramadoEditarController', ['$scope', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS', 'MESSAGES',
+    function ($scope, ContaService, PlanoContaService, CentroCustoService, TipoDocumentoService, TipoFormaPagamentoService, ModalService, DatePickerService, ListaService, LISTAS, MESSAGES) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
@@ -13,13 +13,13 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', '$modalIn
             $scope.situacoesLancamento = LISTAS.situacaoLancamento;
             $scope.modelos = LISTAS.modeloLancamento;
             $scope.statusConta = LISTAS.statusConta;
-            $scope.lancamentoProgramado = lancamentoProgramado || {}; 
-            $scope.lancamentoProgramado.tipo = (lancamentoProgramado && lancamentoProgramado.tipo) || tipo;
-            $scope.lancamentoProgramado.frequencia = (lancamentoProgramado && lancamentoProgramado.frequencia) || $scope.frequencias[0];
-            $scope.lancamentoProgramado.situacao = (lancamentoProgramado && lancamentoProgramado.situacao) || $scope.situacoes[0];
-            $scope.lancamentoProgramado.numeroParcela = getNumeroParcela(lancamentoProgramado); 
+            $scope.lancamentoProgramado = $scope.lancamentoProgramado || {}; 
+            $scope.lancamentoProgramado.tipo = ($scope.lancamentoProgramado && $scope.lancamentoProgramado.tipo) || tipo;
+            $scope.lancamentoProgramado.frequencia = ($scope.lancamentoProgramado && $scope.lancamentoProgramado.frequencia) || $scope.frequencias[0];
+            $scope.lancamentoProgramado.situacao = ($scope.lancamentoProgramado && $scope.lancamentoProgramado.situacao) || $scope.situacoes[0];
+            $scope.lancamentoProgramado.numeroParcela = getNumeroParcela($scope.lancamentoProgramado); 
             $scope.lancamento = $scope.getLancamento($scope.lancamentoProgramado, null, $scope.modelos[2]);
-            getTitle($scope.lancamentoProgramado.tipo);
+            getTitle($scope.lancamentoProgramado);
             contas();
         };
         
@@ -27,46 +27,19 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', '$modalIn
         
         var initStep = function(lancamentoProgramado) {
             if(lancamentoProgramado && lancamentoProgramado.quantidadeParcela) {
-                parcelarLancamento(lancamentoProgramado);
+                $scope.goToParcelar();
             } else {            
                 $scope.goToEditar(); 
             }
         };
         
-        $scope.goToEditar = function() {
-            $scope.stepFrom = angular.copy($scope.stepTo);
-            $scope.stepTo = 'editar';             
-        };
-        
-        $scope.goToLancar = function() {
-            $scope.stepFrom = angular.copy($scope.stepTo);
-            $scope.stepTo = 'lancar';             
-        };
-        
-        $scope.goToParcelar = function() {
-            $scope.stepFrom = angular.copy($scope.stepTo);
-            $scope.stepTo = 'parcelar';             
-        };
-        
-        $scope.voltar = function() {
-            if($scope.stepFrom === 'lancar') {
-                $scope.goToLancar();                   
-            } else if($scope.stepFrom === 'parcelar') {
-                $scope.goToParcelar();                      
-//            } else if($scope.stepFrom === 'ratear') {
-//                $scope.goToRatear();            
-            } else {
-                $scope.goToEditar();
-            }
-        }
-        
         // ***** CONTROLLER ***** //
         
-        var getTitle = function(tipo) {
+        var getTitle = function(lancamentoProgramado) {
             if(lancamentoProgramado && lancamentoProgramado.idLancamentoProgramado) { 
-                $scope.title = MESSAGES.lancamento.programar.title.EDITAR + " " + tipo.descricao; 
+                $scope.title = MESSAGES.lancamento.programar.title.EDITAR + " " + lancamentoProgramado.tipo.descricao; 
             } else { 
-                $scope.title = MESSAGES.lancamento.programar.title.INSERIR + " " + tipo.descricao;
+                $scope.title = MESSAGES.lancamento.programar.title.INSERIR + " " + lancamentoProgramado.tipo.descricao;
             } 
         };
         
@@ -77,10 +50,6 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', '$modalIn
             });
             if(lancamento.numeroParcela) return lancamento.numeroParcela + 1;
             return 1;
-        }
-        
-        $scope.editConta = function() {
-            return (lancamentoProgramado && lancamentoProgramado.idLancamentoProgramado);
         }
         
         var contas = function() {
@@ -167,18 +136,6 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', '$modalIn
                 });
         };
         
-        $scope.lancarProgramado = function(form, lancamentoProgramado) {
-            if(!$scope.validaConta(lancamentoProgramado.conta)) return;
-            if(!$scope.validarForm(form, lancamentoProgramado)) return;         
-            $scope.goToLancar();
-        };
-        
-        $scope.parcelar = function(form, lancamentoProgramado) {
-            if(!$scope.validaConta(lancamentoProgramado.conta)) return;
-            if(!$scope.validarForm(form, lancamentoProgramado)) return;           
-            $scope.goToParcelar();
-        };
-        
         $scope.ok = function(form, lancamentoProgramado) {
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;
             if(!$scope.validarForm(form, lancamentoProgramado)) return;
@@ -188,12 +145,8 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', '$modalIn
             $scope.close(lancamentoProgramado);
         };
         
-        $scope.close = function(lancamentoProgramado) {            
-            $modalInstance.close(lancamentoProgramado);    
-        }
-        
         $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
+            $scope.cancel();
         };
         
         // ***** AJUSTAR ***** //
@@ -289,7 +242,7 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', '$modalIn
         
         // ***** MODAL ***** //
                 
-        $scope.modalMessage = function(message) {
+        var modalMessage = function(message) {
             ModalService.modalMessage(message);
         }; 
 

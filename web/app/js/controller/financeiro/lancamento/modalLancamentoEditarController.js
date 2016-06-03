@@ -28,25 +28,9 @@ app.controller('ModalLancamentoEditarController', ['$scope', 'ContaService', 'Pl
                 else { $scope.goToEditar(); }
 //            }
         };
-        
+                
         var existRateio = function(lancamento) {
             return lancamento && lancamento.rateios && lancamento.rateios.length;
-        };
-        
-        $scope.goToEditar = function() {
-            $scope.stepFrom = angular.copy($scope.stepTo);
-            $scope.stepTo = 'editar';             
-        };
-        
-        $scope.goToRatear = function() {
-            $scope.stepFrom = angular.copy($scope.stepTo); 
-            $scope.stepTo = 'ratear'; 
-        };
-        
-        $scope.goToAnexar = function() {
-            $scope.stepFrom = angular.copy($scope.stepTo); 
-            $scope.stepTo = 'anexar'; 
-            //anexos(lancamento.idLancamento);
         };
                 
         // ***** CONTROLLER ***** //  
@@ -57,7 +41,6 @@ app.controller('ModalLancamentoEditarController', ['$scope', 'ContaService', 'Pl
             } else { 
                 $scope.title = MESSAGES.lancamento.title.INSERIR + " " + tipo.descricao; 
             }
-            $scope.titleRatear = MESSAGES.lancamento.ratear.title.INSERIR;
         };
         
         var contas = function() {
@@ -120,12 +103,6 @@ app.controller('ModalLancamentoEditarController', ['$scope', 'ContaService', 'Pl
             });            
         };
         
-        $scope.ratear = function(form, lancamento) {
-            if(!validaConta(lancamento.conta)) return;
-            if(!validarForm(form, lancamento)) return;    
-            $scope.goToRatear();
-        };
-        
         $scope.ok = function(form, lancamento) {
             if(!validaConta(lancamento.conta)) return;
             if (!validarForm(form, lancamento)) return;
@@ -135,9 +112,9 @@ app.controller('ModalLancamentoEditarController', ['$scope', 'ContaService', 'Pl
                 .then(function(data) {  
                     if(data.length) {
                         modalConfirmarConciliado().then(function() {
-                            $modalInstance.close(lancamento);
+                            $scope.close(lancamento);
                         });
-                    } else { $modalInstance.close(lancamento); }
+                    } else { $scope.close(lancamento); }
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -145,7 +122,7 @@ app.controller('ModalLancamentoEditarController', ['$scope', 'ContaService', 'Pl
         };
         
         $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
+            $scope.cancel();
         };
                 
         // ***** AJUSTAR ***** // 

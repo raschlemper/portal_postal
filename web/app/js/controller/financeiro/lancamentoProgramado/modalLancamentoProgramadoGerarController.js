@@ -14,11 +14,6 @@ app.controller('ModalLancamentoProgramadoGerarController', ['$scope', 'Lancament
             $scope.titleGerar = $scope.title + " - " + MESSAGES.lancamento.title.GERAR; 
         };
         
-        $scope.goToRatear = function() {
-            $scope.stepFrom = angular.copy($scope.stepTo);
-            $scope.stepTo = 'ratear';             
-        };
-        
         $scope.lancar = function(form, lancamentoProgramado, lancamento) {
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;
             if(!$scope.validarForm(form, lancamentoProgramado)) return;     

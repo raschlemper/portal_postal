@@ -179,8 +179,8 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-warning" ng-click="voltar()" ng-if="!lancamentoProgramado.lancamentos.length && !lancamentoProgramado.quantidadeParcela">
-            <i class="fa fa-lg fa-arrow-circle-left fa-spc"></i> VOLTAR
+        <button type="button" class="btn btn-default" ng-click="cancelarParcelar()" ng-if="!lancamentoProgramado.lancamentos.length && !lancamentoProgramado.quantidadeParcela">
+            <i class="fa fa-lg fa-arrow-circle-left fa-spc"></i> CANCELAR PARCELAMENTO
         </button>
         <button type="button" class="btn btn-default" ng-click="cancel()">
             <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR

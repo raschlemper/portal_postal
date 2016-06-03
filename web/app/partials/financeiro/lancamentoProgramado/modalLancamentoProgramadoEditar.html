@@ -144,10 +144,10 @@
         <button type="button" class="btn btn-default" ng-click="cancel()">
             <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR
         </button>
-        <button type="button" class="btn btn-primary" ng-click="lancarProgramado(this.lancamentoProgramadoForm, lancamentoProgramado)" ng-show="lancamentoProgramado.situacao.codigo === 'ativo'">
+        <button type="button" class="btn btn-primary" ng-click="goToLancar()" ng-show="lancamentoProgramado.situacao.codigo === 'ativo'">
             <i class="fa fa-lg fa-check fa-spc"></i> GERAR LANÇAMENTO
         </button>
-        <button type="button" class="btn btn-danger" ng-click="parcelar(this.lancamentoProgramadoForm, lancamentoProgramado)" ng-show="lancamentoProgramado.situacao.codigo === 'ativo'" ng-if="!lancamentoProgramado.lancamentos.length">
+        <button type="button" class="btn btn-danger" ng-click="goToParcelar()" ng-show="lancamentoProgramado.situacao.codigo === 'ativo'" ng-if="!lancamentoProgramado.lancamentos.length">
             <i class="fa fa-lg fa-check fa-spc"></i> GERAR PARCELAS
         </button>
         <button type="button" class="btn btn-success" ng-click="ok(this.lancamentoProgramadoForm, lancamentoProgramado)">
