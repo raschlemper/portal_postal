@@ -120,10 +120,6 @@ app.controller('ModalLancamentoEditarController', ['$scope', 'ContaService', 'Pl
                     modalMessage(e);
                 });             
         };
-        
-        $scope.cancel = function () {
-            $scope.cancel();
-        };
                 
         // ***** AJUSTAR ***** // 
         

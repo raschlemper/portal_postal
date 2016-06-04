@@ -18,7 +18,7 @@ app.controller('ModalLancamentoProgramadoParcelarController', ['$scope', 'Freque
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;
             if(!$scope.validarForm(form, lancamentoProgramado)) return;   
             $scope.lancamento = $scope.getLancamento($scope.lancamentoProgramado, parcela, $scope.modelos[4]);  
-            $scope.goToLancar();
+            $scope.goToLancarParcelar();
         };
         
         $scope.createParcelas = function(lancamentoProgramado) {       
@@ -29,7 +29,7 @@ app.controller('ModalLancamentoProgramadoParcelarController', ['$scope', 'Freque
             for(var i=0; i<lancamentoProgramado.quantidadeParcela; i++) {
                 var numeroParcela = (i + 1);
                 var lancamento = findParcelaBaixada(lancamentoProgramado.lancamentos, numeroParcela);
-                var parcela = getParcela(lancamentoProgramado, lancamento, numeroParcela);
+                var parcela = getParcela(lancamentoProgramado, lancamento, numeroParcela, dataCompetencia, dataVencimento);
                 $scope.lancamentoProgramado.parcelas.push(parcela);
                 dataCompetencia = FrequenciaLancamentoService.addData(frequencia, dataCompetencia);
                 dataVencimento = FrequenciaLancamentoService.addData(frequencia, dataVencimento);
@@ -53,12 +53,12 @@ app.controller('ModalLancamentoProgramadoParcelarController', ['$scope', 'Freque
         
         // ***** AJUSTAR ***** //
         
-        var getParcela = function(lancamentoProgramado, lancamento, numeroParcela) {
+        var getParcela = function(lancamentoProgramado, lancamento, numeroParcela, dataCompetencia, dataVencimento) {
             return {
                 numero: lancamentoProgramado.numero,
                 numeroParcela: numeroParcela,
-                dataCompetencia: lancamentoProgramado.dataCompetencia,
-                dataVencimento: lancamentoProgramado.dataVencimento,
+                dataCompetencia: dataCompetencia,
+                dataVencimento: dataVencimento,
                 valor: lancamentoProgramado.valor / lancamentoProgramado.quantidadeParcela,
                 lancamento: lancamento
             };

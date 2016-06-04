@@ -299,7 +299,8 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
             data.dataEmissao = data.dataEmissao || moment();
             data.dataVencimento = data.dataVencimento || data.dataLancamento || moment();
             data.frequencia = data.frequencia.id;
-            data.situacao = data.situacao.id;   
+            data.situacao = data.situacao.id;               
+            ajustarDadosRateio(data);
             return data;
         } 
         
@@ -328,6 +329,20 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
 //                conta: { idConta: conta.idConta }
 //            }
 //        }
+        
+        var ajustarDadosRateio = function(data) {
+            _.map(data.lancamentos, function(lancamento) { 
+                if(!lancamento.rateios) return null;
+                _.map(lancamento.rateios, function(rateio) { 
+                    if(rateio.planoConta) {     
+                        rateio.planoConta = { idPlanoConta: rateio.planoConta.idPlanoConta }; 
+                    }
+                    if(rateio.centroCusto) {
+                        rateio.centroCusto = { idCentroCusto: rateio.centroCusto.idCentroCusto };
+                    }   
+                });
+            });
+        }
         
         // ***** MODAL ***** //
         

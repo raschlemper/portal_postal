@@ -136,7 +136,7 @@
                                 <div class="input-group">
                                     <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
                                     <input type="text" autocomplete="off" name="valor" class="form-control text-right" ng-change="createParcelas(lancamentoProgramado)"
-                                           ui-number-mask="2" placeholder="Valor do lançamento" ng-model="lancamentoProgramado.valor" ng-required="true"/>
+                                           ui-number-mask="2" placeholder="Valor do lançamento" ng-model="lancamentoProgramado.valor" ng-required="true" ng-disabled="(lancamentoProgramado.lancamentos.length)"/>
                                 </div>
                             </div>
                         </div>

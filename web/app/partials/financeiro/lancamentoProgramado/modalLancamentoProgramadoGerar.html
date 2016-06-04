@@ -140,9 +140,6 @@
                                            ui-number-mask="2" placeholder="Valor do lançamento" ng-model="lancamento.valor" ng-required="true"/>
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 divider-horizontal-top" style="margin-top: 15px; padding-top: 8px;">
-                                <strong>Total</strong><i class="pull-right">{{getTotal(lancamento) | currency : 'R$ '}}</i>
-                            </div>
                         </div>
                     </div>
                 </li>
@@ -153,7 +150,7 @@
         <button type="button" class="btn btn-warning" ng-click="voltar()">
             <i class="fa fa-lg fa-arrow-circle-left fa-spc"></i> VOLTAR
         </button>
-        <button type="button" class="btn btn-default" ng-click="ratear(this.lancamentoForm, lancamentoProgramado)" ng-disabled="!lancamento.valor">
+        <button type="button" class="btn btn-default" ng-click="goToRatear()" ng-disabled="!lancamento.valor">
             <i class="fa fa-lg fa-check fa-spc"></i> RATEAR
         </button>
         <button type="button" class="btn btn-default" ng-click="cancel()">

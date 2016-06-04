@@ -14,7 +14,7 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', 'ContaSer
             $scope.modelos = LISTAS.modeloLancamento;
             $scope.statusConta = LISTAS.statusConta;
             $scope.lancamentoProgramado = $scope.lancamentoProgramado || {}; 
-            $scope.lancamentoProgramado.tipo = ($scope.lancamentoProgramado && $scope.lancamentoProgramado.tipo) || tipo;
+            $scope.lancamentoProgramado.tipo = ($scope.lancamentoProgramado && $scope.lancamentoProgramado.tipo) || $scope.tipo;
             $scope.lancamentoProgramado.frequencia = ($scope.lancamentoProgramado && $scope.lancamentoProgramado.frequencia) || $scope.frequencias[0];
             $scope.lancamentoProgramado.situacao = ($scope.lancamentoProgramado && $scope.lancamentoProgramado.situacao) || $scope.situacoes[0];
             $scope.lancamentoProgramado.numeroParcela = getNumeroParcela($scope.lancamentoProgramado); 
@@ -24,14 +24,6 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', 'ContaSer
         };
         
         // ***** NAVEGAR ***** //
-        
-        var initStep = function(lancamentoProgramado) {
-            if(lancamentoProgramado && lancamentoProgramado.quantidadeParcela) {
-                $scope.goToParcelar();
-            } else {            
-                $scope.goToEditar(); 
-            }
-        };
         
         // ***** CONTROLLER ***** //
         
@@ -56,7 +48,7 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', 'ContaSer
             ContaService.getAll()
                 .then(function (data) {
                     $scope.contas = data;
-                    $scope.lancamentoProgramado.conta = $scope.lancamentoProgramado.conta || conta || $scope.contas[0];
+                    $scope.lancamentoProgramado.conta = $scope.lancamentoProgramado.conta || $scope.conta || $scope.contas[0];
                     planoContas($scope.lancamentoProgramado.tipo);
                 })
                 .catch(function (e) {
@@ -129,11 +121,17 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', 'ContaSer
                 .then(function (data) {
                     $scope.formaPagamentos = data;
                     $scope.lancamentoProgramado.formaPagamento = $scope.lancamentoProgramado.formaPagamento || $scope.formaPagamentos[1];
-                    initStep($scope.lancamentoProgramado);  
                 })
                 .catch(function (e) {
                     console.log(e);
                 });
+        };
+        
+        $scope.lancar = function(form, lancamentoProgramado) {
+            if(!$scope.validaConta(lancamentoProgramado.conta)) return;
+            if(!$scope.validarForm(form, lancamentoProgramado)) return;   
+            $scope.lancamento = $scope.getLancamento($scope.lancamentoProgramado, null, $scope.modelos[2]);  
+            $scope.goToLancarParcelar();
         };
         
         $scope.ok = function(form, lancamentoProgramado) {
@@ -143,10 +141,6 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', 'ContaSer
             delete lancamentoProgramado.lancamentos;
             lancamentoProgramado.gerarLancamento = false;     
             $scope.close(lancamentoProgramado);
-        };
-        
-        $scope.cancel = function () {
-            $scope.cancel();
         };
         
         // ***** AJUSTAR ***** //
@@ -166,9 +160,6 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', 'ContaSer
                 dataLancamento: null,
                 dataCompensacao: null,
                 valor: (parcela && parcela.valor) || lancamentoProgramado.valor,
-                valorDesconto: 0,
-                valorJuros: 0,
-                valorMulta: 0,
                 situacao: $scope.situacoesLancamento[0],
                 modelo: modelo,
                 historico: '(' + modelo.descricao + ') ' + lancamentoProgramado.historico,

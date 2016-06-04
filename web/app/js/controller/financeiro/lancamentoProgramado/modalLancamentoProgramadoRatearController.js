@@ -4,7 +4,7 @@ app.controller('ModalLancamentoProgramadoRatearController', ['$scope', 'ListaSer
     function ($scope, ListaService, MESSAGES) {
 
         var init = function () {  
-            $scope.lancamento = $scope.getLancamento($scope.lancamentoProgramado, null, $scope.modelos[2]);
+            $scope.lancamento = $scope.lancamento || $scope.getLancamento($scope.lancamentoProgramado, null, $scope.modelos[2]);
             getTitle();
             ratear($scope.lancamento);  
         };
@@ -25,7 +25,7 @@ app.controller('ModalLancamentoProgramadoRatearController', ['$scope', 'ListaSer
         
         $scope.cancelarRatear = function() {
             $scope.lancamento.rateios = [];
-            $scope.goToEditar();
+            $scope.voltar();
         };
         
         $scope.salvarRateio = function(lancamento, rateio) {
@@ -77,9 +77,9 @@ app.controller('ModalLancamentoProgramadoRatearController', ['$scope', 'ListaSer
             })
         };        
 
-        $scope.lancarRatear = function (form, lancamento) {
+        $scope.lancarRatear = function (form, lancamentoProgramado, lancamento) {
             if(!validarRateio(lancamento)) { return false; }
-            $scope.ok(form, lancamento);
+            $scope.lancar(form, lancamentoProgramado, lancamento);
         }
                 
         // ***** AJUSTAR ***** // 
