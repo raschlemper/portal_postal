@@ -242,7 +242,7 @@ app.controller('LancamentoController',
             _.map(lancamentos, function(lancamento) {
                 if(!lancamento.selected) return;
                 if(callback) { lancamento = callback(conta, lancamento); }
-                lancamentosSelecionados.push(lancamento);
+                lancamentosSelecionados.push(angular.copy(lancamento));
             });
             return lancamentosSelecionados;
         }
@@ -325,10 +325,10 @@ app.controller('LancamentoController',
 
         $scope.excluirTodos = function(conta, lancamentos) {
             if(!validaConta(conta)) return;
-            lancamentos = getLancamentoSelecionados(conta, lancamentos, ajustarDadosExcluir);  
-            var lancamentosValidos = getLancamentosProgramado(lancamentos);
+            var lancamentoSelecionados = getLancamentoSelecionados(conta, lancamentos, ajustarDadosExcluir);  
+            var lancamentosValidos = getLancamentosProgramado(lancamentoSelecionados);
             var msg = MESSAGES.lancamento.info.CONFIRMAR_EXCLUIR_TODOS;
-            if(lancamentosValidos.length !== lancamentos.length) { 
+            if(lancamentosValidos.length !== lancamentoSelecionados.length) { 
                 msg = MESSAGES.lancamento.info.CONFIRMAR_EXCLUIR_PROGRAMADOS_TODOS;
             }
             excluirLancamentos(conta, lancamentosValidos, msg);
@@ -353,23 +353,25 @@ app.controller('LancamentoController',
         var getLancamentosProgramado = function(lancamentos) {               
             var lancamentosSelecionados = [];
             _.map(lancamentos, function(lancamento) {        
-                if(!existeLancamentoProgramadoPosterior(lancamento)) {                
+                if(!existeLancamentoProgramadoParceladoPosterior(lancamento)) {                
                     lancamentosSelecionados.push(lancamento);
                 }                 
             });
             return lancamentosSelecionados;
         };
         
-        var excluirLancamentoProgramado = function(conta, lancamento) {            
-            if(existeLancamentoProgramadoPosterior(lancamento)) {                
+        var excluirLancamentoProgramado = function(conta, lancamento) {    
+            if(existeLancamentoProgramadoParceladoPosterior(lancamento)) {                
                 modalMessage(MESSAGES.lancamento.info.EXCLUIR_POSTERIOR);
             } else {
-                excluirLancamento(conta, lancamento.idLancamento);
+                excluirLancamento(conta, lancamento);
             } 
         };
         
-        var existeLancamentoProgramadoPosterior = function(lancamento) {            
-            if(lancamento.lancamentoProgramado && lancamento.numeroParcela < lancamento.lancamentoProgramado.numeroParcela) {                
+        var existeLancamentoProgramadoParceladoPosterior = function(lancamento) {   
+            if(lancamento.modelo.id !== $scope.modelos[4].id) return false;         
+            if(lancamento.lancamentoProgramado 
+                    && lancamento.numeroParcela < lancamento.lancamentoProgramado.numeroParcela) {                
                 return true;
             } 
             return false;
@@ -401,6 +403,9 @@ app.controller('LancamentoController',
         }
         
         var excluirAll = function(conta, lancamentos) {
+            _.map(lancamentos, function(lancamento) {
+                lancamento = ajustarDados(lancamento);
+            });
             LancamentoService.deleteAll(lancamentos)
                 .then(function(data) { 
                     modalMessage(MESSAGES.lancamento.sucesso.REMOVIDO_SUCESSO_TODOS);
@@ -485,40 +490,25 @@ app.controller('LancamentoController',
 
         $scope.compensarTodos = function(conta, lancamentos) {
             modalConfirmarCompensado().then(function() {
-                compensarTodos(conta, getLancamentoSelecionados(conta, lancamentos, compensar));
+                compensarTodos(conta, getLancamentoSelecionados(conta, angular.copy(lancamentos), ajustarDadosCompensar));
             });
         };
 
         $scope.compensar = function(conta, lancamento) {
-//            modalConfirmarCompensado().then(function() {
-                var lancamentosCompletos = [];
-                lancamentosCompletos.push(compensar(conta, lancamento));
-                compensarTodos(conta, lancamentosCompletos);
-//            });
+            var lancamentosCompletos = [];
+            lancamentosCompletos.push(ajustarDadosCompensar(conta, lancamento));
+            compensarTodos(conta, lancamentosCompletos);
         };
         
         var compensarTodos = function(conta, lancamentos) {
             LancamentoService.updateSituacao(lancamentos)
-                .then(function (data) {  
-//                    modalMessage(MESSAGES.lancamento.compensar.sucesso.INSERIDO_SUCESSO);
+                .then(function (data) { 
                     todos(conta);
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         }
-
-        var compensar = function(conta, lancamento) {
-            var lancamentoCompleto = ListaService.getLancamentoValue($scope.lancamentos, lancamento.idLancamento);
-            lancamentoCompleto.conta = conta;
-            if(lancamentoCompleto.situacao.id === $scope.situacoes[2].id) { 
-                lancamentoCompleto.situacao = $scope.situacoes[0]; 
-            } else {
-                lancamentoCompleto.situacao = $scope.situacoes[2];                 
-            }
-            lancamentoCompleto = ajustarDados(lancamentoCompleto);
-            return lancamentoCompleto;
-        };
                 
         // ***** VALIDAR ***** //
         
@@ -537,11 +527,6 @@ app.controller('LancamentoController',
         }
                 
         // ***** AJUSTAR ***** //
-        
-        var ajustarDadosExcluir = function(conta, data) { 
-            data.conta = conta;
-            ajustarDados(data);
-        }
         
         var ajustarDados = function(data) {                 
             data.conta = { idConta: data.conta.idConta };  
@@ -567,7 +552,14 @@ app.controller('LancamentoController',
             if(data.situacao === $scope.situacoes[2].id) { data.dataCompensacao = moment(); }
             ajustarDadosRateio(data);
             return data;
-        }
+        };
+        
+        var ajustarDadosExcluir = function(conta, lancamento) { 
+            var lancamentoCompleto = ListaService.getLancamentoValue($scope.lancamentos, lancamento.idLancamento);
+            lancamentoCompleto.conta = conta;
+//            lancamentoCompleto = ajustarDados(lancamentoCompleto);
+            return lancamentoCompleto;
+        };
         
         var ajustarDadosTransferencia = function(data) {
             var modelo = $scope.modelos[1];
@@ -584,7 +576,19 @@ app.controller('LancamentoController',
                 observacao: data.observacao
             };    
             return lancamentoTransferencia;
-        }
+        };
+
+        var ajustarDadosCompensar = function(conta, lancamento) {
+            var lancamentoCompleto = ListaService.getLancamentoValue($scope.lancamentos, lancamento.idLancamento);
+            lancamentoCompleto.conta = conta;
+            if(lancamentoCompleto.situacao.id === $scope.situacoes[2].id) { 
+                lancamentoCompleto.situacao = $scope.situacoes[0]; 
+            } else {
+                lancamentoCompleto.situacao = $scope.situacoes[2];                 
+            }
+            lancamentoCompleto = ajustarDados(lancamentoCompleto);
+            return lancamentoCompleto;
+        };
         
         var ajustarDadosRateio = function(data) {
             if(!data.rateios) return null;
@@ -596,7 +600,7 @@ app.controller('LancamentoController',
                     rateio.centroCusto = { idCentroCusto: rateio.centroCusto.idCentroCusto };
                 }   
             });
-        }
+        };
         
         var ajustarDadosConciliado = function(conta, data) {                 
             var lancamentoConciliado = { 
@@ -617,7 +621,7 @@ app.controller('LancamentoController',
             if(data.centroCusto) { lancamentoConciliado.centroCusto = { idCentroCusto: data.centroCusto.idCentroCusto }; }
             if(data.tipo) { lancamentoConciliado.tipo = data.tipo.id; }
             return lancamentoConciliado;
-        }
+        };
         
         var getLancamento = function(conta, planoConta, centroCusto, tipo, modelo, data, lancamentoOriginal) {
             var lancamento = {

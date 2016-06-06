@@ -40,7 +40,7 @@ app.constant('MESSAGES', {
             ALERT_EXCLUIR: "Excluir Lançamento?",
             CONFIRMAR_EXCLUIR: "Deseja realmente excluir este lançamento?",
             CONFIRMAR_EXCLUIR_TODOS: "Deseja realmente excluir estes lançamentos?",
-            CONFIRMAR_EXCLUIR_PROGRAMADOS_TODOS: "Deseja realmente excluir estes lançamentos? <br/> Existem lançamentos que não podem ser excluídos. É necessário excluir todos os lançamentos posteriores!",
+            CONFIRMAR_EXCLUIR_PROGRAMADOS_TODOS: "Deseja realmente excluir estes lançamentos? <br/> Alguns lançamentos parcelados não poderão ser excluídos. É necessário excluir todos os lançamentos posteriores!",
             EXCLUIR_POSTERIOR: "Este lançamento não pode ser excluído. É necessário excluir todos os lançamentos posteriores!"
         },
         validacao: {

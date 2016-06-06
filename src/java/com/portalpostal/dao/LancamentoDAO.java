@@ -25,6 +25,9 @@ public class LancamentoDAO extends GenericDAO {
                    + "FROM conta, lancamento "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento.idPlanoConta = plano_conta.idPlanoConta) "
                    + "LEFT OUTER JOIN centro_custo ON(lancamento.idCentroCusto = centro_custo.idCentroCusto) "
+                   + "LEFT OUTER JOIN lancamento_transferencia ON(lancamento.idLancamento = lancamento_transferencia.idLancamentoOrigem OR "
+                                                               + "lancamento.idLancamento = lancamento_transferencia.idLancamentoDestino) "
+                   + "LEFT OUTER JOIN lancamento_programado ON(lancamento.idLancamentoProgramado = lancamento_programado.idLancamentoProgramado) "
                    + "WHERE lancamento.idConta = conta.idConta "
                    + "ORDER BY lancamento.dataLancamento";        
         return findAll(sql, null, lancamentoHandler);
@@ -36,6 +39,7 @@ public class LancamentoDAO extends GenericDAO {
                    + "LEFT OUTER JOIN centro_custo ON(lancamento.idCentroCusto = centro_custo.idCentroCusto) "
                    + "LEFT OUTER JOIN lancamento_transferencia ON(lancamento.idLancamento = lancamento_transferencia.idLancamentoOrigem OR "
                                                                + "lancamento.idLancamento = lancamento_transferencia.idLancamentoDestino) "
+                   + "LEFT OUTER JOIN lancamento_programado ON(lancamento.idLancamentoProgramado = lancamento_programado.idLancamentoProgramado) "
                    + "WHERE lancamento.idConta = conta.idConta "
                    + "AND lancamento.idLancamento = :idLancamento";
         Map<String, Object> params = new HashMap<String, Object>();
@@ -52,13 +56,14 @@ public class LancamentoDAO extends GenericDAO {
     }
 
     public List<Lancamento> findByConta(Integer idConta) throws Exception {
-        String sql = "SELECT lancamento.*, plano_conta.*, centro_custo.*, lancamento_transferencia.*, "
+        String sql = "SELECT lancamento.*, plano_conta.*, centro_custo.*, lancamento_transferencia.*, lancamento_programado.*, "
                    + "(SELECT count(1) FROM lancamento_anexo WHERE lancamento.idLancamento = lancamento_anexo.idLancamento) as anexos "
                    + "FROM conta, lancamento "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento.idPlanoConta = plano_conta.idPlanoConta) "
                    + "LEFT OUTER JOIN centro_custo ON(lancamento.idCentroCusto = centro_custo.idCentroCusto) "
                    + "LEFT OUTER JOIN lancamento_transferencia ON(lancamento.idLancamento = lancamento_transferencia.idLancamentoOrigem OR "
                                                                + "lancamento.idLancamento = lancamento_transferencia.idLancamentoDestino) "
+                   + "LEFT OUTER JOIN lancamento_programado ON(lancamento.idLancamentoProgramado = lancamento_programado.idLancamentoProgramado) "
                    + "WHERE conta.idConta = lancamento.idConta "
                    + "AND conta.idConta = :idConta "
                    + "ORDER BY lancamento.dataLancamento";        

@@ -34,8 +34,9 @@ app.controller('ModalLancamentoProgramadoGerarController', ['$scope', 'Lancament
         };
         
         var lancar = function(lancamentoProgramado, lancamento) {  
+            var isParcela = ($scope.lancamentoProgramado.parcelas && $scope.lancamentoProgramado.parcelas.length);
             delete $scope.lancamentoProgramado.parcelas;
-            lancamentoProgramado = ajustarLancamentoProgramado(lancamentoProgramado);
+            lancamentoProgramado = ajustarLancamentoProgramado(lancamentoProgramado, isParcela);
             lancamentoProgramado.gerarLancamento = true;
             lancamentoProgramado.lancamentos = [];
             lancamentoProgramado.lancamentos.push(lancamento);
@@ -54,9 +55,11 @@ app.controller('ModalLancamentoProgramadoGerarController', ['$scope', 'Lancament
         
         // ***** AJUSTAR ***** //
         
-        var ajustarLancamentoProgramado = function(lancamentoProgramado) { 
-            lancamentoProgramado.dataCompetencia = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataCompetencia) || moment();
-            lancamentoProgramado.dataVencimento = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataVencimento) || moment();
+        var ajustarLancamentoProgramado = function(lancamentoProgramado, isParcelas) {             
+            if(!isParcelas) {
+                lancamentoProgramado.dataCompetencia = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataCompetencia) || moment();
+                lancamentoProgramado.dataVencimento = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataVencimento) || moment();
+            }
             return lancamentoProgramado;
         };
         
