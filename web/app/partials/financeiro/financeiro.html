@@ -4,15 +4,32 @@
             <div class="row">   
                 <div class="col-lg-3">
                     <div class="panel panel-default">
-                        <div class="panel-heading">Contas</div>    
+                        <div class="panel-heading">Saldo de Contas</div>    
                         <!--<div class="panel-body">-->
-                            <ul class="list-group list-group-overflow">
+                        <!-- <ul class="list-group list-group-overflow">
                                 <li class="list-group-item" ng-repeat="conta in contas track by conta.idConta">
                                     <strong>{{conta.nome}}</strong> </br>
                                     <span>Saldo <i class="pull-right" ng-class="{'text-danger': conta.saldo < 0}">
                                             {{conta.saldo | currency : 'R$ '}}</i></span>
                                 </li>
-                            </ul>  
+                            </ul> -->
+                            <ul class="list-group list-group-overflow">
+                                <li class="list-group-item" ng-repeat="conta in contas | orderBy: 'tipo' track by conta.idConta">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <strong>{{conta.nome}}</strong>
+                                            <i class="pull-right" ng-class="{'text-danger': conta.saldo < 0}" style="padding-left: 6px;">
+                                                    {{conta.saldo | currency : 'R$ '}}
+                                            </i>
+                                        </div>       
+                                    </div>
+                                    <div class="row" ng-show="conta.banco && conta.agencia && conta.contaCorrente">
+                                        <div class="col-lg-12">
+                                            {{conta.banco}} / {{conta.agencia}} / {{conta.contaCorrente}}
+                                        </div>      
+                                    </div>
+                                </li>
+                            </ul>
                         <!--</div>-->
                         <div class="panel-footer">
                             <strong>Total</strong>

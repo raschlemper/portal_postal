@@ -185,9 +185,9 @@ var colt2 = [<%=horarios%>];
             <div id="chartdiv" style="height: 300px; width: 100%;"></div> 
         </div>
         <div class="col-md-5">
-            <ul class="list-unstyled">
+            <ul class="list-unstyled" style="overflow-y: scroll; height: 40vH;">
                 <li class="list-group-item list-group-condensed list-group-heading">
-                    <labeL> Últimas coletas baixadas</labeL>
+                    <labeL> Últimas coletas realizadas</labeL>
                 </li>
                 <%
                     for (Coleta c : listaUltimas) {

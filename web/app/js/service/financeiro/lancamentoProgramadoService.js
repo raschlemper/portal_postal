@@ -20,8 +20,8 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
         var dataVencimento = moment(lancamento.dataVencimento);
         if(dataVencimento.isBefore(data)) { 
             lista.push(lancamento); 
-            return;  
-        }
+        } 
+        if(dataVencimento.isAfter(data)) return;
         lancamentoProgramadoVencido(lista, FrequenciaLancamentoService.execute(lancamento), data);        
     }
     

@@ -23,16 +23,21 @@
                             
                             <div class="row">
                                 <div class="col-md-12 pull-right">
-                                    <div class="form-inline pull-right">     
-                                        <label>Com Valores
-                                            <input type="checkbox" ng-model="withValues" style="margin-right: 10px;">
+                                    <div class="form-inline pull-left">     
+                                        <label style="margin-right: 10px;">
+                                            <input type="checkbox" ng-model="withValues">
+                                            Com Valores
                                         </label>   
-                                        <label>Por Competência
-                                            <input type="checkbox" ng-model="byCompetencia" ng-change="pesquisar(byCompetencia, byCentroCusto, dataInicio, dataFim)" style="margin-right: 10px;">
+                                        <label style="margin-right: 10px;">
+                                            <input type="checkbox" ng-model="byCompetencia" ng-change="pesquisar(byCompetencia, byCentroCusto, dataInicio, dataFim)">
+                                            Por Competência
                                         </label> 
-                                        <label>Por Centro de Custo
-                                            <input type="checkbox" ng-model="byCentroCusto" ng-change="pesquisar(byCompetencia, byCentroCusto, dataInicio, dataFim)" style="margin-right: 10px;">
+                                        <label style="margin-right: 10px;">
+                                            <input type="checkbox" ng-model="byCentroCusto" ng-change="pesquisar(byCompetencia, byCentroCusto, dataInicio, dataFim)">
+                                            Por Centro de Custo
                                         </label>
+                                    </div>
+                                    <div class="form-inline pull-right">    
                                         <label>Mês:</label>
                                         <select class="form-control" ng-model="mesSelected" ng-change="setData(mesSelected, anoSelected)" style="margin-right: 10px;"
                                             ng-options="mes.descricao for mes in meses track by mes.id">    

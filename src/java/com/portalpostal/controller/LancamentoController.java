@@ -219,8 +219,23 @@ public class LancamentoController {
     } 
     
     @PUT
+    @Path("/situacao")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void updateSituacao(List<Lancamento> lancamentos) {
+        try {
+            init();
+            for (Lancamento lancamento : lancamentos) {                 
+                validation(lancamento);
+                lancamento.setUsuario(usuario);
+                lancamentoService.updateSituacao(lancamento);
+            }
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    } 
+    
+    @PUT
     @Path("/")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public void updateAll(List<Lancamento> lancamentos) {
         try {
@@ -243,6 +258,20 @@ public class LancamentoController {
         try {
             init();
             return lancamentoService.delete(idLancamento);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    } 
+    
+    @POST
+    @Path("/delete")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void deleteAll(List<Lancamento> lancamentos) {
+        try {
+            init();
+            for (Lancamento lancamento : lancamentos) {   
+                lancamentoService.delete(lancamento.getIdLancamento());
+            }
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }

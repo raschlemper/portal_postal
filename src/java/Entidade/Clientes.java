@@ -58,6 +58,58 @@ public class Clientes {
     private int idGrupoFaturamento;
     private int ativo;
     private int separar_destinatarios;
+    
+    private float fat_mes;
+
+    public Clientes(int codigo, String nome, String endereco, String telefone, String bairro, String cidade, String uf, int cep, String email, String cnpj, String nomeFantasia, String complemento, String senha, String numero, String url_logo, int temContrato, String numContrato, int anoContrato, String ufContrato, String nomeContrato, int usaEtiquetador, double latitude, double longitude, String cartaoPostagem, int envio_email, String login_correio, String senha_correio, String codAdministrativo, Date dtVigenciaFimContrato, int codDiretoria, int statusCartaoPostagem, String nomeClienteSara, int nome_etq, int erro_atualizacao, Timestamp dataHoraAtualizacao, String login_reversa, String senha_reversa, String cartao_reversa, String login_sigep, String senha_sigep, int idGrupoFaturamento, int ativo, int separar_destinatarios, float fat_mes) {
+        this.codigo = codigo;
+        this.nome = nome;
+        this.endereco = endereco;
+        this.telefone = telefone;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.uf = uf;
+        this.cep = cep;
+        this.email = email;
+        this.cnpj = cnpj;
+        this.nomeFantasia = nomeFantasia;
+        this.complemento = complemento;
+        this.senha = senha;
+        this.numero = numero;
+        this.url_logo = url_logo;
+        this.temContrato = temContrato;
+        this.numContrato = numContrato;
+        this.anoContrato = anoContrato;
+        this.ufContrato = ufContrato;
+        this.nomeContrato = nomeContrato;
+        this.usaEtiquetador = usaEtiquetador;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.cartaoPostagem = cartaoPostagem;
+        this.envio_email = envio_email;
+        this.login_correio = login_correio;
+        this.senha_correio = senha_correio;
+        this.codAdministrativo = codAdministrativo;
+        this.dtVigenciaFimContrato = dtVigenciaFimContrato;
+        this.codDiretoria = codDiretoria;
+        this.statusCartaoPostagem = statusCartaoPostagem;
+        this.nomeClienteSara = nomeClienteSara;
+        this.nome_etq = nome_etq;
+        this.erro_atualizacao = erro_atualizacao;
+        this.dataHoraAtualizacao = dataHoraAtualizacao;
+        this.login_reversa = login_reversa;
+        this.senha_reversa = senha_reversa;
+        this.cartao_reversa = cartao_reversa;
+        this.login_sigep = login_sigep;
+        this.senha_sigep = senha_sigep;
+        this.idGrupoFaturamento = idGrupoFaturamento;
+        this.ativo = ativo;
+        this.separar_destinatarios = separar_destinatarios;
+        this.fat_mes = fat_mes;
+    }
+    
+    
+    
 
     public Clientes(ResultSet result) throws SQLException {
 
@@ -102,10 +154,21 @@ public class Clientes {
         this.senha_sigep = result.getString("senha_sigep");
         this.idGrupoFaturamento = result.getInt("idGrupoFaturamento");
         this.ativo = result.getInt("ativo");
-        this.separar_destinatarios = result.getInt("separar_destinatarios");
+        this.separar_destinatarios = result.getInt("separar_destinatarios");              
 
     }
+   
 
+    public float getFat_mes() {
+        return fat_mes;
+    }
+
+    public void setFat_mes(float fat_mes) {
+        this.fat_mes = fat_mes;
+    }
+
+    
+    
     public Clientes(int codigo, String nome) {
         this.codigo = codigo;
         this.nome = nome;

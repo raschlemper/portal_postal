@@ -117,12 +117,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
                 controller: 'DemonstrativoController',
                 resolve: {}
             })
-            .state('app.financeiro.banco', {
-                url: '/banco',
-                templateUrl: 'partials/financeiro/banco/banco.html',
-                controller: 'BancoController',
-                resolve: {}
-            })
+//            .state('app.financeiro.banco', {
+//                url: '/banco',
+//                templateUrl: 'partials/financeiro/banco/banco.html',
+//                controller: 'BancoController',
+//                resolve: {}
+//            })
             .state('app.financeiro.contacorrente', {
                 url: '/contacorrente',
                 templateUrl: 'partials/financeiro/contaCorrente/contaCorrente.html',

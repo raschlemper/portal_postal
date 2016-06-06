@@ -1,0 +1,91 @@
+<form name="contaForm" novalidate>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
+        <h4 class="modal-title">{{title}}</h4>
+    </div>
+    <div class="modal-body">
+        <div class="bootbox-body">
+            <ul class="list-unstyled">
+                <li class="list-group-item">
+                    <div class="row form-horizontal">
+                        <input type="hidden" name="idConta" ng-model="conta.idConta"/>
+                        <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8">
+                            <label class="small">Nome</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                <input type="text" autocomplete="off" name="nome" class="form-control" ng-model="conta.nome" 
+                                       ng-required="true" placeholder="Nome da conta"/>                                    
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Tipo</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                <select class="form-control" name="tipo" ng-change="changeTipo(conta.tipo)"
+                                        ng-options="tipo.descricao for tipo in tipos track by tipo.id" ng-model="conta.tipo"></select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Situação</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                <select class="form-control" name="status"
+                                        ng-options="stat.descricao for stat in status track by stat.id" ng-model="conta.status"></select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Saldo Abertura</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
+                                <input type="text" autocomplete="off" name="valorSaldoAbertura" class="form-control"
+                                       ui-number-mask="2" placeholder="Saldo de abertura da conta" ng-model="conta.valorSaldoAbertura" ng-required="true"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Data</label>
+                            <div class="input-group">
+                                <input type="text" autocomplete="off" name="dataAbertura" class="form-control" ng-model="conta.dataAbertura" 
+                                       datepicker-popup="{{datepicker.format}}" is-open="datepicker.opened" ng-required="true"
+                                       current-text="{{datepicker.today}}" clear-text="{{datepicker.clear}}" close-text="{{datepicker.close}}"
+                                       placeholder="Data de abertura da conta"/>
+                                <span class="input-group-addon" ng-click="datepicker.open($event)"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" ng-show="conta.tipo.codigo !== 'dinheiro' && conta.tipo.codigo !== 'cartaocredito'">
+                            <label class="small">Conta Corrente</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-car"></i></span>
+                                <select class="form-control" name="contaCorrente" ng-model="conta.contaCorrente"
+                                        ng-options="contaCorrente.nome for contaCorrente in contaCorrenteLista track by contaCorrente.idContaCorrente"></select>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-lg btn-primary" type="button" ng-click="openContaCorrente()"><i class="fa fa-plus-circle"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" ng-show="conta.tipo.codigo === 'cartaocredito'">
+                            <label class="small">Cartão Crédito</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-car"></i></span>
+                                <select class="form-control" name="cartaoCredito" ng-model="conta.cartaoCredito"
+                                        ng-options="cartaoCredito.nome for cartaoCredito in cartaoCreditoLista track by cartaoCredito.idCartaoCredito"></select>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-lg btn-primary" type="button" ng-click="openCartaoCredito()"><i class="fa fa-plus-circle"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>     
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">
+            <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR
+        </button>
+        <button type="button" class="btn btn-success" ng-click="ok(this.contaForm)">
+            <i class="fa fa-lg fa-save fa-spc"></i> SALVAR
+        </button>
+    </div>
+</form>    
+
+  

@@ -55,6 +55,17 @@
 
 
         <script type="text/javascript" charset="utf-8">
+            
+               function chamaDivProtecao() {
+                var classe = document.getElementById("divProtecao").className;
+                if (classe === 'esconder') {
+                    document.getElementById("divProtecao").className = "mostrar";
+                    document.getElementById("divInteracao").className = "mostrar";
+                } else {
+                    document.getElementById("divProtecao").className = "esconder";
+                    document.getElementById("divInteracao").className = "esconder";
+                }
+            }
 
             $(document).ready(function () {
                 pesquisaSintetica('<%=numCliente%>', '<%=nomeBD%>');
@@ -164,8 +175,8 @@
 
     </head>
     <body>
-        <div id="divInteracao" class="esconder" align="center"><input id="textointeracao" /></div>
-        <div id="divProtecao" class="esconder"></div>
+       <div id="divInteracao" class="esconder" style="top:10%; left:10%; right:10%; bottom:10%;" align="center"><input id="textointeracao" /></div>
+       <div id="divProtecao" class="esconder"></div>
 
         <%@ include file="../../Includes/telaMsg.jsp" %>
         <%@ include file="../../Includes/menu_cliente.jsp" %>

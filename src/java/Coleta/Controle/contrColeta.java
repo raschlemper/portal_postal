@@ -247,7 +247,8 @@ public class contrColeta {
 
     public static ArrayList<Coleta> consultaUltimasColetas(String nomeBD, String data) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "SELECT * FROM coleta WHERE DATE(dataHoraColeta)='" + data + "' and status > 2 ORDER BY dataHoraBaixa DESC LIMIT 10;";
+       // String sql = "SELECT * FROM coleta WHERE DATE(dataHoraColeta)='" + data + "' and status > 2 ORDER BY dataHoraBaixa DESC LIMIT 10;";
+        String sql = "SELECT * FROM coleta WHERE DATE(dataHoraColeta)='" + data + "' and status > 2 ORDER BY dataHoraBaixa DESC;";
 
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
@@ -589,7 +590,7 @@ public class contrColeta {
 
     public static ArrayList<Coleta> consultaTodasColetasDoColetador(int idColetador, String data, String ordem, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "SELECT * FROM coleta WHERE idColetador=? and DATE(dataHoraColeta)=? and status > 1 ORDER BY " + ordem;
+        String sql = "SELECT * FROM coleta WHERE idColetador=? and DATE(dataHoraColeta)=? and status IN (2,4,5,6,7) ORDER BY " + ordem;
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setInt(1, idColetador);
@@ -626,7 +627,7 @@ public class contrColeta {
 
     public static ArrayList<Coleta> consultaTodasFinalizadas(int idColetador, String data, String ordem, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "SELECT * FROM coleta WHERE idColetador=? and DATE(dataHoraColeta)=? and status > 2 and status <> 6 ORDER BY " + ordem;
+        String sql = "SELECT * FROM coleta WHERE idColetador=? and DATE(dataHoraColeta)=? and status IN (4,5,7) ORDER BY " + ordem;
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setInt(1, idColetador);

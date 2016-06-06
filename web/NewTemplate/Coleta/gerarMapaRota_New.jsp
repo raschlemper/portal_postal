@@ -423,8 +423,8 @@
 
                                                         var result = (hours < 10 ? "0" + hours : hours) + "h " + (minutes < 10 ? "0" + minutes : minutes) + "min";
 
-                                                        summaryPanel.innerHTML += '<br/><span style="color: red;"><b>DISTÂNCIA TOTAL: ' + (total / 1000).toFixed(1) + ' km</b></span>';
-                                                        summaryPanel.innerHTML += '<br><span style="color: red;"><b>TEMPO ESTIMADO TOTAL : ' + result;// + ' / (' + totalTime + ' min)</b></span>';
+                                                        summaryPanel.innerHTML += '<br/><hr><span style="color: red;  font-size: 14px;"><b>DISTÂNCIA TOTAL : ' + (total / 1000).toFixed(1) + ' km</b></span>';
+                                                        summaryPanel.innerHTML += '<br><hr><span style="color: red;  font-size: 14px;"><b>TEMPO ESTIMADO TOTAL : ' + result;// + ' / (' + totalTime + ' min)</b></span>';
 
                                                     }
 

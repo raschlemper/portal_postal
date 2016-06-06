@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="Entidade.empresas"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -16,12 +17,13 @@
         //pega os parametros passados para a pagina
         String dataAtual = request.getParameter("dataPesquisa");
         String vIdColet = request.getParameter("idColetador");
-        
+
         //cria uma data atual
         Date dataPesquisa = new Date();
         //declara os simple date format
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
+
         //verifica se a data passada pelo parametro nao eh nula nem vazia
         if (dataAtual == null || dataAtual.equals("")) {
             dataAtual = sdf1.format(dataPesquisa);
@@ -47,6 +49,7 @@
 
 
         <script type="text/javascript" src="../../plugins/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="../../javascript/mascara.js"></script>
         <style>
             #right-panel {
                 font-family: 'Roboto','sans-serif';
@@ -153,56 +156,63 @@
                 <select multiple id="waypoints" size='8' style="font-size: 12px;">
                     <option value="<%=agf.getLatitude()%>@<%=agf.getLongitude()%>@<%=agf.getFantasia()%>@<%=endAgf%>@48ffa0" id="inicio" selected><%=agf.getFantasia()%></option>
                     <%
-                //contador de itens na tabela da coleta fixa
-                int cont = Integer.parseInt(request.getParameter("contador"));
+                        //contador de itens na tabela da coleta fixa
+                        int cont = Integer.parseInt(request.getParameter("contador"));
+                        float totalRota = 0;
+                        //for que percorre a quantidade de itens que contem na tabela da coleta fixa
+                        for (int i = 0; i < cont; i++) {
+                            String vIdCliente = request.getParameter("cliente" + i);
+                            if (vIdCliente != null && !vIdCliente.equals("")) {
+                                int idCliente = Integer.parseInt(vIdCliente);
+                                int idTipo = Integer.parseInt(request.getParameter("select" + i));
+                                int fixo = Integer.parseInt(request.getParameter("fixo" + i));
+                                String hora = request.getParameter("hora" + i);
 
+                                Entidade.Clientes cli = Controle.contrCliente.consultaClienteFaturamentoById(idCliente, nomeBD);
 
-                //for que percorre a quantidade de itens que contem na tabela da coleta fixa
-                for (int i = 0; i < cont; i++) {
-                    String vIdCliente = request.getParameter("cliente" + i);
-                    if (vIdCliente != null && !vIdCliente.equals("")) {
-                        int idCliente = Integer.parseInt(vIdCliente);
-                        int idTipo = Integer.parseInt(request.getParameter("select" + i));
-                        int fixo = Integer.parseInt(request.getParameter("fixo" + i));
-                        String hora = request.getParameter("hora" + i);
-                                               
-                        Entidade.Clientes cli = Controle.contrCliente.consultaClienteById(idCliente, nomeBD);
-                        
-                        if(cli!=null){
-                              
-                            String nomeCliente = cli.getNomeFantasia();
+                                if (cli != null) {
 
-                            //Usar DEPOIS NO googleMarker
-                            String cidade = cli.getCidade().trim();
-                            String uf = cli.getUf().trim();
-                            String endereco = cli.getEndereco().trim();
-                            String end = endereco + " , " + cli.getNumero() + " - " + cidade + " - " + uf;
-                            String complemento = cli.getComplemento().trim();
-                            
-                            String lat = cli.getLatitude() + "";
-                            String longi = cli.getLongitude() + "";
-                            geoLoc = lat + "@" + longi;
-                        
-                            String corMarker = "ffa348";
-                            if (fixo == 1) {
-                                corMarker = "48a4ff";
-                            }
+                                    String nomeCliente = cli.getNomeFantasia();
+
+                                    Float fatu = cli.getFat_mes();
+                                    totalRota += fatu;
+                                    String fat = Util.FormatarDecimal.formatarFloat(fatu);
+                                    //Usar DEPOIS NO googleMarker
+                                    String cidade = cli.getCidade().trim();
+                                    String uf = cli.getUf().trim();
+                                    String endereco = cli.getEndereco().trim();
+                                    String end = endereco + " , " + cli.getNumero() + " - " + cidade + " - " + uf;
+                                    // String complemento = cli.getComplemento().trim();
+
+                                    String lat = cli.getLatitude() + "";
+                                    String longi = cli.getLongitude() + "";
+                                    geoLoc = lat + "@" + longi;
+
+                                    String corMarker = "ffa348";
+                                    if (fixo == 1) {
+                                        corMarker = "48a4ff";
+                                    }
                     %>                    
-                    <option value="<%=geoLoc%>@<%=nomeCliente%>@<%=end%>@<%=corMarker%>" selected><%=nomeCliente%></option>
-                    <%}}}%>
+                    <option value="<%=geoLoc%>@<%=nomeCliente%>@<%=end%>@<%=corMarker%>" data-foo="<%=fatu%>" selected><%=nomeCliente%></option>
+                    <%}
+                            }
+                        }%>
                     <option value="<%=agf.getLatitude()%>@<%=agf.getLongitude()%>@<%=agf.getFantasia()%>@<%=endAgf%>@48ffa0" id="fim" selected><%=agf.getFantasia()%></option>
 
                 </select>
             </div>
             <div>
-                <label style="color: white">Tempo espera estimado : </label>
+                <label style="color: white">Espera estimado : </label>
                 <input type="number" id="espera" value="10" style="margin-top: 10px;" size="4" min="1" max="120"/>
                 <span style="color: white"> minutos</span>   
             </div>
+
             <div>
                 <input type="button" class="btn" onclick="initMap();"id="submit" value="VISUALIZAR ROTA">
             </div>
-
+            <div>
+                <label style="color: #FFEE77">Rentabilidade : R$ <%= Util.FormatarDecimal.formatarFloat(totalRota)%><span style="font-size: 9px;">&nbsp;&nbsp;(~ 2 últ. meses)</span></label>
+            </div>
 
             <div id="directions-panel"></div>
             <br>
@@ -211,19 +221,22 @@
                 <b> Corrija o endereço dos clientes abaixo:</b>
 
                 <% //for que percorre a quantidade de itens que contem na tabela da coleta fixa
-                for (int j = 0; j < cont; j++) {
-                    String vIdCliente2 = request.getParameter("cliente" + j);
-                    if (vIdCliente2 != null && !vIdCliente2.equals("")) {
-                        int idCliente = Integer.parseInt(vIdCliente2);                                               
-                        Entidade.Clientes cli = Controle.contrCliente.consultaClienteById(idCliente, nomeBD);
-                        if(cli!=null){                            
-                        String nomeCliente = cli.getNomeFantasia();
-                        String lat = cli.getLatitude() + "";
-                        String longi = cli.getLongitude() + "";
-                        geoLoc = lat + "," + longi;
-                        if (lat.equals("0.0")) {%>                    
+                    for (int j = 0; j < cont; j++) {
+                        String vIdCliente2 = request.getParameter("cliente" + j);
+                        if (vIdCliente2 != null && !vIdCliente2.equals("")) {
+                            int idCliente = Integer.parseInt(vIdCliente2);
+                            Entidade.Clientes cli = Controle.contrCliente.consultaClienteById(idCliente, nomeBD);
+                            if (cli != null) {
+                                String nomeCliente = cli.getNomeFantasia();
+                                String lat = cli.getLatitude() + "";
+                                String longi = cli.getLongitude() + "";
+                                geoLoc = lat + "," + longi;
+                                if (lat.equals("0.0")) {%>                    
                 <br><a href="../Cadastros/cliente_cadastro_b.jsp?idCliente=<%=cli.getCodigo()%>" target="_blank"><%=nomeCliente%></a>
-                <%}}}}%>
+                <%}
+                            }
+                        }
+                    }%>
             </div>
         </div>
         <script>
@@ -263,6 +276,7 @@
                         var selected = [];
                         var selectedAdress = [];
                         var markColors = [];
+                        var fatMensal = [];
 
 
                         var checkboxArray = document.getElementById('waypoints');
@@ -275,6 +289,7 @@
                                 selected.push(aux[2]);
                                 selectedAdress.push(aux[3]);
                                 markColors.push(aux[4]);
+                                fatMensal.push(checkboxArray[i].getAttribute('data-foo'));
                                 stops.push({
                                     "Geometry": {
                                         "Latitude": lat,
@@ -406,6 +421,7 @@
                                                         // For each route, display summary information.
                                                         var total = 0;
                                                         var totalTime = 0;
+                                                        var totalFat = 0;
                                                         var espera = parseInt($('#espera').val());
                                                         for (var i = 0; i < route.legs.length; i++) {
                                                             var routeSegment = i + 1;
@@ -415,11 +431,15 @@
                                                             summaryPanel.innerHTML += route.legs[i].distance.text + ' - ' + route.legs[i].duration.text + '<br>';
                                                             total += route.legs[i].distance.value;
                                                             totalTime += (route.legs[i].duration.value) + espera * 60;
-
+                                                            console.log(" F >"+fatMensal[i])
+                                                            if(fatMensal[i] !== null){
+                                                                totalFat += parseFloat(fatMensal[i]);
+                                                            }
+                                                            
                                                             // console.log('LATITUDE : ' + route.legs[i].start_location.lat());
 
                                                             var myLatlng = new google.maps.LatLng(route.legs[i].start_location.lat(), route.legs[i].start_location.lng());
-                                                            criarmarkers(map, myLatlng, selectedAdress[i], selected[i], markColors[i]);
+                                                            criarmarkers(map, myLatlng, selectedAdress[i], selected[i], markColors[i], fatMensal[i]);
 
                                                         }
 
@@ -429,9 +449,11 @@
                                                         var seconds = totalTime % 60;
 
                                                         var result = (hours < 10 ? "0" + hours : hours) + "h " + (minutes < 10 ? "0" + minutes : minutes) + "min";
-
-                                                        summaryPanel.innerHTML += '<span style="color: red;"><b>TOTAL KM: ' + (total / 1000).toFixed(1) + ' km</b></span>';
-                                                        summaryPanel.innerHTML += '<br><span style="color: red;"><b>TEMPO ESTIMADO TOTAL : ' + result;// + ' / (' + totalTime + ' min)</b></span>';
+                                                        var vlr = numeroParaMoeda(totalFat,2,',','.');
+                                                        summaryPanel.innerHTML += '<br><hr><span style="color: red; font-size: 14px;"><b>DISTÂNCIA TOTAL : ' + (total / 1000).toFixed(1) + ' km</b></span>';
+                                                        summaryPanel.innerHTML += '<br><hr><span style="color: red;  font-size: 14px;"><b>TEMPO ESTIMADO TOTAL : ' + result;// + ' / (' + totalTime + ' min)</b></span>';
+                                                        summaryPanel.innerHTML += '<br><hr><span style="color: red;  font-size: 14px;">'+
+                                                                                    '<b>FAT. (MÉDIA ÚLT. 2 MÊSES) : R$ ' + vlr;
 
                                                     }
 
@@ -446,25 +468,26 @@
                             };
                     }
 
-                    function criarmarkers(map, myLatlng, adress, title, pinColor) {
+                    function criarmarkers(map, myLatlng, adress, title, pinColor, fat) {
 
                         var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
-                            new google.maps.Size(21, 34),
-                            new google.maps.Point(0,0),
-                            new google.maps.Point(10, 34));
+                                new google.maps.Size(21, 34),
+                                new google.maps.Point(0, 0),
+                                new google.maps.Point(10, 34));
                         var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
-                            new google.maps.Size(40, 37),
-                            new google.maps.Point(0, 0),
-                            new google.maps.Point(12, 35));        
+                                new google.maps.Size(40, 37),
+                                new google.maps.Point(0, 0),
+                                new google.maps.Point(12, 35));
                         var contentString = '<div id="content">' +
                                 '<div id="siteNotice">' +
                                 '</div>' +
                                 '<h1 id="firstHeading" class="firstHeading">' + title + '</h1>' +
+                                'Faturamento médio últimos 2 meses<h1 id="firstHeading" class="firstHeading">R$' + fat + '</h1>' +
                                 '<div id="bodyContent">' +
                                 '<p><b>Endreço :</b><br>' + adress + '</p>' +
                                 '</div>' +
                                 '</div>';
-                        
+
                         var infowindow = new google.maps.InfoWindow({
                             content: contentString
                         });

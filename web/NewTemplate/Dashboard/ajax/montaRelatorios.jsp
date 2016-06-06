@@ -90,7 +90,7 @@
                         + " LEFT JOIN cliente ON codCliente = codigo"
                         + " WHERE dataPostagem >= '" + dataIni + "' "
                         + " AND dataPostagem <= '" + dataFim + "' "
-                        + " AND contratoEct = '' "
+                        + " AND contratoEct = '' OR contratoEct = 0 "
                         + " GROUP BY codCliente "
                         + " ORDER BY $TOTAL; ";
                 break;
@@ -101,7 +101,7 @@
                         + " LEFT JOIN cliente ON codCliente = codigo"
                         + " WHERE dataPostagem >= '" + dataIni + "' "
                         + " AND dataPostagem <= '" + dataFim + "' "
-                        + " AND contratoEct <> '' "
+                        + " AND contratoEct <> '' AND contratoEct <> 0 "
                         + " GROUP BY codCliente "
                         + " ORDER BY $TOTAL; ";
                 break;

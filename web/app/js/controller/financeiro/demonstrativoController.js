@@ -7,7 +7,7 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
             $scope.meses = LISTAS.meses;
             $scope.mesSelected = $scope.meses[0];
             $scope.estruturasLista = [];
-            $scope.withValues = false;
+            $scope.withValues = true;
             $scope.byCompetencia = false;  
             $scope.tipos = LISTAS.lancamento;
             anos();

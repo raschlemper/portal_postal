@@ -39,7 +39,7 @@
 
         String sql = "SELECT id, descServico, peso, quantidade, valorServico, dataPostagem, codStatus,"
                 + " movimentacao.numObjeto, destinatario, cep, departamento, status, dataEntrega, notaFiscal, numVenda, numCaixa,"
-                + " last_status_date, last_status_name, last_status_code, last_status_type, prazo_estimado, prazo_cumprido"
+                + " last_status_date, last_status_name, last_status_code, last_status_type, prazo_estimado, prazo_cumprido, idPre_venda"
                 + " FROM movimentacao"
                 + " LEFT JOIN movimentacao_tracking AS mt ON movimentacao.numObjeto = mt.numObjeto"
                 + " WHERE codCliente = " + idCliente;
@@ -47,7 +47,7 @@
             sql += " AND (dataPostagem BETWEEN '" + vDataInicio + "' AND '" + vDataFinal + "')";
         }
         if (!situacao.equals("")) {
-                //if (!situacao.equals("0")) {
+            //if (!situacao.equals("0")) {
             //sql += " AND status LIKE '" + situacao + "'"; //TROCAR DEPOIS PARA COD_STATUS
             sql += situacao; //TROCAR DEPOIS PARA COD_STATUS
         }
@@ -103,7 +103,17 @@
 
         if (movimentacao.size() >= 1) {
 %>
+<%if (acessosUs.contains(8)) {%>
+<div class="mostar" id="alertWrap">            
+    <div class="warningBox">
+        <span class="closebtn" onclick=" document.getElementById('alertWrap').className = 'esconder';">&times;</span> 
+        <div id="alertMsg">
+            Caso a data estimada de entrega <b>(PRAZO EST.)</b> caia em algum sábado, domingo ou feriado, deve-se considerar como prazo o proximo dia útil.  
+        </div>
+    </div>
+</div>
 
+<%}%>
 
 <div style="padding:8px 5px; background: white;">
     <%--<a href="../AjaxPages/print_sintetico.jsp?sql=<%= sql%>"><img class="link_img" src="../../imagensNew/printer.png" /> IMPRIMIR</a>
@@ -189,7 +199,7 @@
                     String pz_estimado = "---";
                     String pz_cumprido = "---";
                     String atrasado = "";
-                    if(acessosUs.contains(8)){
+                    if (acessosUs.contains(8)) {
                         if (mov.getPrazo_estimado() != null && mov.getPrazo_cumprido_date() != null) {
                             pz_estimado = sdf.format(mov.getPrazo_estimado());
                             pz_cumprido = sdf.format(mov.getPrazo_cumprido_date());
@@ -256,7 +266,7 @@
                 <%if (acessosUs.contains(3)) {%>
                 <td nowrap align='left'>R$ <%= vValor%></td>
                 <% }%>
-                <td style="font-size: 10px;"><%= destinatario%></td>
+                <td style="font-size: 10px;"><a onclick="verVenda(<%= mov.getIdPre_venda()%>);" style="cursor:pointer;" ><%= destinatario%></a></td>
                 <td><%= cepDestino%></td>
                 <td><%= status%></td>
                 <td><%= notaFiscal%></td>

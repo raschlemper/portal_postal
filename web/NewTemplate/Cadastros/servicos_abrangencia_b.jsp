@@ -27,6 +27,9 @@
         ArrayList<ServicoAbrangencia> listaSedex12 = Controle.ContrServicoAbrangencia.consultaTodosByServico("SEDEX12", nomeBD);
         ArrayList<ServicoAbrangencia> listaSedexHJ = Controle.ContrServicoAbrangencia.consultaTodosByServico("SEDEXHJ", nomeBD);
         ArrayList<ServicoAbrangencia> listaPax = Controle.ContrServicoAbrangencia.consultaTodosByServico("PAX", nomeBD);
+        ArrayList<ServicoAbrangencia> listaMdpbL = Controle.ContrServicoAbrangencia.consultaTodosByServico("MDPB_L", nomeBD);
+        ArrayList<ServicoAbrangencia> listaMdpbE = Controle.ContrServicoAbrangencia.consultaTodosByServico("MDPB_E", nomeBD);
+        ArrayList<ServicoAbrangencia> listaMdpbN = Controle.ContrServicoAbrangencia.consultaTodosByServico("MDPB_N", nomeBD);
 
         int sus_esedex = 0;
         if (listaEsedex != null && listaEsedex.size() > 0) {
@@ -47,6 +50,18 @@
         int sus_pax = 0;
         if (listaPax != null && listaPax.size() > 0) {
             sus_pax = listaPax.get(0).getServico_suspenso();
+        }
+        int sus_mdpbL = 0;
+        if (listaMdpbL != null && listaMdpbL.size() > 0) {
+            sus_mdpbL = listaMdpbL.get(0).getServico_suspenso();
+        }
+        int sus_mdpbE = 0;
+        if (listaMdpbE != null && listaMdpbE.size() > 0) {
+            sus_mdpbE = listaMdpbE.get(0).getServico_suspenso();
+        }
+        int sus_mdpbN = 0;
+        if (listaMdpbN != null && listaMdpbN.size() > 0) {
+            sus_mdpbN = listaMdpbN.get(0).getServico_suspenso();
         }
         // Clocar um combobox igua da pagina prefixos de etiqueta e trocar no onchange com jquery o style display none>> block dependo do serviço
 
@@ -421,6 +436,203 @@
                                             </li>        
                                         </ul>
                                     </div>  
+                                    <div style="display: none;" class="col-xs-12 col-sm-12 col-md-7 col-lg-6" id="mdpbl">
+                                        <ul class="list-unstyled">                                                        
+                                            <li class="list-group-item list-group-heading">
+                                                <label>MDPB LOCAL:</label>
+                                                <%if (sus_mdpbL == 1) {%>
+                                                <span style="font-size: 16px;" class="text-danger"><strong>ESTE SERVIÇO ESTÁ SUSPENSO !!!</strong></span>
+                                                <%}%>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <img src="../../imagensNew/carta.png" height="" />
+                                                <%if (sus_mdpbL == 0) {%>
+                                                <button type="button" class="btn btn-danger pull-right" onclick="suspender_serv('MDPB_L');"><i class="fa fa-lg fa-spc fa-pause"></i> SUSPENDER SERVIÇO</button>
+                                                <%} else {%>
+                                                <button type="button" class="btn btn-success pull-right" onclick="suspender_serv('MDPB_L');"><i class="fa fa-lg fa-spc fa-refresh"></i> REATIVAR SERVIÇO</button>
+                                                <%}%>
+                                            </li>
+                                            <li class="list-group-item">
+
+                                                <div class="buttons">
+                                                    <input type="hidden" name="mdpbl_contador" id="mdpbl_contador" value="<%= listaMdpbL.size()%>" />
+                                                    <button type="button" class="btn btn-primary center-block" onclick="addRow('MDPB_L', 'mdpbl_')"><i class="fa fa-lg fa-spc fa-plus"></i> ADICIONAR FAIXA DE CEP</button>
+                                                </div>
+
+                                            </li>
+                                            <li class="list-group-item">
+
+                                                <table class="table table-striped table-bordered table-hover table-condensed" id="mdpbl_table" name="mdpbl_table">
+                                                    <tr>
+                                                        <th align="center" colspan="2"><b>CEP Inicial</b></th>
+                                                        <th align="center" colspan="2"><b>CEP Final</b></th>
+                                                        <th align="center" ><b>REM.</b></th>
+                                                        <th align="center" ><b>SUS.</b></th>
+                                                    </tr>
+                                                    <%
+                                                        for (int i = 0; i < listaMdpbL.size(); i++) {
+                                                            ServicoAbrangencia cob = listaMdpbL.get(i);
+                                                            String cepInicial = Util.FormataString.formataCep(cob.getCep_inicial() + "");
+                                                            String cepFinal = Util.FormataString.formataCep(cob.getCep_final() + "");
+                                                            int fs = cob.getFaixa_suspensa();
+                                                            String img = "fa fa-lg fa-pause";
+                                                            if (fs == 1) {
+                                                                img = "fa fa-lg fa-refresh";
+                                                            }
+                                                            sus_mdpbL = cob.getServico_suspenso();
+                                                    %>
+                                                    <tr <%if (fs == 1) {%>style="background: khaki;"<%}%> class="faixas">
+                                                        <td>De</td>
+                                                        <td><input class="form-control" type="input" id="mdpbl_cepIni<%= i + 1%>" name="mdpbl_cepIni<%= i + 1%>" value="<%= cepInicial%>" size="7" maxlength="9" onkeypress="mascara(this, maskCep)" /></td>
+                                                        <td>Até</td>
+                                                        <td>                                                            
+                                                            <input class="form-control" type="input" id="mdpbl_cepFim<%= i + 1%>" name="mdpbl_cepFim<%= i + 1%>" value="<%= cepFinal%>" size="7" maxlength="9" onkeypress="mascara(this, maskCep)" />
+                                                            <input type="hidden" name="mdpbl_suspenso_<%= i + 1%>" id="mdpbl_suspenso_<%= i + 1%>" value="<%= fs%>" />
+                                                        </td>                                                
+                                                        <td align="center">
+                                                            <button type="button" class="btn btn-sm btn-danger" onclick="delRow(this, 'mdpbl_');"><i class="fa fa-lg fa-trash"></i></button>
+                                                        </td>
+                                                        <td align="center">
+                                                            <button type="button" class="btn btn-sm btn-info" onclick='suspender("mdpbl_", <%= i + 1%>);'><i id="mdpbl_img_sus_<%= i + 1%>" class="<%= img%>"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                    <%}%>
+                                                </table>
+                                            </li>        
+                                        </ul>
+                                    </div>
+                                     <div style="display: none;" class="col-xs-12 col-sm-12 col-md-7 col-lg-6" id="mdpbe">
+                                        <ul class="list-unstyled">                                                        
+                                            <li class="list-group-item list-group-heading">
+                                                <label>MDPB Estadual:</label>
+                                                <%if (sus_mdpbE == 1) {%>
+                                                <span style="font-size: 16px;" class="text-danger"><strong>ESTE SERVIÇO ESTÁ SUSPENSO !!!</strong></span>
+                                                <%}%>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <img src="../../imagensNew/carta.png" height="" />
+                                                <%if (sus_mdpbE == 0) {%>
+                                                <button type="button" class="btn btn-danger pull-right" onclick="suspender_serv('MDPB_E');"><i class="fa fa-lg fa-spc fa-pause"></i> SUSPENDER SERVIÇO</button>
+                                                <%} else {%>
+                                                <button type="button" class="btn btn-success pull-right" onclick="suspender_serv('MDPB_E');"><i class="fa fa-lg fa-spc fa-refresh"></i> REATIVAR SERVIÇO</button>
+                                                <%}%>
+                                            </li>
+                                            <li class="list-group-item">
+
+                                                <div class="buttons">
+                                                    <input type="hidden" name="mdpbe_contador" id="mdpbe_contador" value="<%= listaMdpbE.size()%>" />
+                                                    <button type="button" class="btn btn-primary center-block" onclick="addRow('MDPB_E', 'mdpbe_')"><i class="fa fa-lg fa-spc fa-plus"></i> ADICIONAR FAIXA DE CEP</button>
+                                                </div>
+
+                                            </li>
+                                            <li class="list-group-item">
+
+                                                <table class="table table-striped table-bordered table-hover table-condensed" id="mdpbe_table" name="mdpbe_table">
+                                                    <tr>
+                                                        <th align="center" colspan="2"><b>CEP Inicial</b></th>
+                                                        <th align="center" colspan="2"><b>CEP Final</b></th>
+                                                        <th align="center" ><b>REM.</b></th>
+                                                        <th align="center" ><b>SUS.</b></th>
+                                                    </tr>
+                                                    <%
+                                                        for (int i = 0; i < listaMdpbE.size(); i++) {
+                                                            ServicoAbrangencia cob = listaMdpbE.get(i);
+                                                            String cepInicial = Util.FormataString.formataCep(cob.getCep_inicial() + "");
+                                                            String cepFinal = Util.FormataString.formataCep(cob.getCep_final() + "");
+                                                            int fs = cob.getFaixa_suspensa();
+                                                            String img = "fa fa-lg fa-pause";
+                                                            if (fs == 1) {
+                                                                img = "fa fa-lg fa-refresh";
+                                                            }
+                                                            sus_mdpbE = cob.getServico_suspenso();
+                                                    %>
+                                                    <tr <%if (fs == 1) {%>style="background: khaki;"<%}%> class="faixas">
+                                                        <td>De</td>
+                                                        <td><input class="form-control" type="input" id="mdpbe_cepIni<%= i + 1%>" name="mdpbe_cepIni<%= i + 1%>" value="<%= cepInicial%>" size="7" maxlength="9" onkeypress="mascara(this, maskCep)" /></td>
+                                                        <td>Até</td>
+                                                        <td>                                                            
+                                                            <input class="form-control" type="input" id="mdpbe_cepFim<%= i + 1%>" name="mdpbe_cepFim<%= i + 1%>" value="<%= cepFinal%>" size="7" maxlength="9" onkeypress="mascara(this, maskCep)" />
+                                                            <input type="hidden" name="mdpbe_suspenso_<%= i + 1%>" id="mdpbe_suspenso_<%= i + 1%>" value="<%= fs%>" />
+                                                        </td>                                                
+                                                        <td align="center">
+                                                            <button type="button" class="btn btn-sm btn-danger" onclick="delRow(this, 'mdpbe_');"><i class="fa fa-lg fa-trash"></i></button>
+                                                        </td>
+                                                        <td align="center">
+                                                            <button type="button" class="btn btn-sm btn-info" onclick='suspender("mdpbe_", <%= i + 1%>);'><i id="mdpbe_img_sus_<%= i + 1%>" class="<%= img%>"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                    <%}%>
+                                                </table>
+                                            </li>        
+                                        </ul>
+                                    </div>                   
+                                     <div style="display: none;" class="col-xs-12 col-sm-12 col-md-7 col-lg-6" id="mdpbn">
+                                        <ul class="list-unstyled">                                                        
+                                            <li class="list-group-item list-group-heading">
+                                                <label>MDPB NACIONAL:</label>
+                                                <%if (sus_mdpbN == 1) {%>
+                                                <span style="font-size: 16px;" class="text-danger"><strong>ESTE SERVIÇO ESTÁ SUSPENSO !!!</strong></span>
+                                                <%}%>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <img src="../../imagensNew/carta.png" height="" />
+                                                <%if (sus_mdpbN == 0) {%>
+                                                <button type="button" class="btn btn-danger pull-right" onclick="suspender_serv('MDPB_N');"><i class="fa fa-lg fa-spc fa-pause"></i> SUSPENDER SERVIÇO</button>
+                                                <%} else {%>
+                                                <button type="button" class="btn btn-success pull-right" onclick="suspender_serv('MDPB_N');"><i class="fa fa-lg fa-spc fa-refresh"></i> REATIVAR SERVIÇO</button>
+                                                <%}%>
+                                            </li>
+                                            <li class="list-group-item">
+
+                                                <div class="buttons">
+                                                    <input type="hidden" name="mdpbn_contador" id="mdpbn_contador" value="<%= listaMdpbN.size()%>" />
+                                                    <button type="button" class="btn btn-primary center-block" onclick="addRow('MDPB_N', 'mdpbn_')"><i class="fa fa-lg fa-spc fa-plus"></i> ADICIONAR FAIXA DE CEP</button>
+                                                </div>
+
+                                            </li>
+                                            <li class="list-group-item">
+
+                                                <table class="table table-striped table-bordered table-hover table-condensed" id="mdpbn_table" name="mdpbn_table">
+                                                    <tr>
+                                                        <th align="center" colspan="2"><b>CEP Inicial</b></th>
+                                                        <th align="center" colspan="2"><b>CEP Final</b></th>
+                                                        <th align="center" ><b>REM.</b></th>
+                                                        <th align="center" ><b>SUS.</b></th>
+                                                    </tr>
+                                                    <%
+                                                        for (int i = 0; i < listaMdpbN.size(); i++) {
+                                                            ServicoAbrangencia cob = listaMdpbN.get(i);
+                                                            String cepInicial = Util.FormataString.formataCep(cob.getCep_inicial() + "");
+                                                            String cepFinal = Util.FormataString.formataCep(cob.getCep_final() + "");
+                                                            int fs = cob.getFaixa_suspensa();
+                                                            String img = "fa fa-lg fa-pause";
+                                                            if (fs == 1) {
+                                                                img = "fa fa-lg fa-refresh";
+                                                            }
+                                                            sus_mdpbN = cob.getServico_suspenso();
+                                                    %>
+                                                    <tr <%if (fs == 1) {%>style="background: khaki;"<%}%> class="faixas">
+                                                        <td>De</td>
+                                                        <td><input class="form-control" type="input" id="mdpbn_cepIni<%= i + 1%>" name="mdpbn_cepIni<%= i + 1%>" value="<%= cepInicial%>" size="7" maxlength="9" onkeypress="mascara(this, maskCep)" /></td>
+                                                        <td>Até</td>
+                                                        <td>                                                            
+                                                            <input class="form-control" type="input" id="mdpbn_cepFim<%= i + 1%>" name="mdpbn_cepFim<%= i + 1%>" value="<%= cepFinal%>" size="7" maxlength="9" onkeypress="mascara(this, maskCep)" />
+                                                            <input type="hidden" name="mdpbn_suspenso_<%= i + 1%>" id="mdpbl_suspenso_<%= i + 1%>" value="<%= fs%>" />
+                                                        </td>                                                
+                                                        <td align="center">
+                                                            <button type="button" class="btn btn-sm btn-danger" onclick="delRow(this, 'mdpbn_');"><i class="fa fa-lg fa-trash"></i></button>
+                                                        </td>
+                                                        <td align="center">
+                                                            <button type="button" class="btn btn-sm btn-info" onclick='suspender("mdpbn_", <%= i + 1%>);'><i id="mdpbn_img_sus_<%= i + 1%>" class="<%= img%>"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                    <%}%>
+                                                </table>
+                                            </li>        
+                                        </ul>
+                                    </div>                   
+                                                
+                                                
                                 </form>
                                 <form action="../../ServSuspenderServico" method="post" name="formSusServico" id="formSusServico">
                                     <input type="hidden" name="nomeBD" id="nomeBD" value="<%= nomeBD%>" />
@@ -430,6 +642,9 @@
                                     <input type="hidden" name="sus_sedex12" id="sus_sedex12" value="<%= sus_sedex12%>" />
                                     <input type="hidden" name="sus_sedexhj" id="sus_sedexhj" value="<%= sus_sedexHJ%>" />
                                     <input type="hidden" name="sus_pax" id="sus_pax" value="<%= sus_pax%>" />
+                                    <input type="hidden" name="sus_mdpbl" id="sus_mdpbl" value="<%= sus_mdpbL%>" />
+                                    <input type="hidden" name="sus_mdpbe" id="sus_mdpbl" value="<%= sus_mdpbE%>" />
+                                    <input type="hidden" name="sus_mdpbn" id="sus_mdpbl" value="<%= sus_mdpbN%>" />
                                 </form>
 
                             </div>
@@ -469,6 +684,21 @@
                     value: "sedexhj",
                     selected: false,
                     imageSrc: "../../imagensNew/sedexhj.png"
+                },
+                {
+                    value: "mdpbl",
+                    selected: false,
+                    imageSrc: "../../imagensNew/carta.png"
+                },
+                {
+                    value: "mdpbe",
+                    selected: false,
+                    imageSrc: "../../imagensNew/carta.png"
+                },
+                {
+                    value: "mdpbn",
+                    selected: false,
+                    imageSrc: "../../imagensNew/carta.png"
                 }
             ];
 
@@ -489,6 +719,9 @@
                 $('#sedex12').hide();
                 $('#sedexhj').hide();
                 $('#pax').hide();
+                $('#mdpbl').hide();
+                $('#mdpbe').hide();
+                $('#mdpbn').hide();
                 $('#salvar_abragencia').hide();
             }
 

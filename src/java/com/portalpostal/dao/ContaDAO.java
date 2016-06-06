@@ -68,8 +68,10 @@ public class ContaDAO extends GenericDAO {
 
     public List<Conta> findSaldo() throws Exception {
         String sql = "SELECT *, (SELECT sum(if(lancamento.tipo = 0, lancamento.valor, lancamento.valor * -1)) " 
-                                + "FROM lancamento WHERE conta.idConta = lancamento.idConta) as saldo "
-                   + "FROM conta";        
+                              + "FROM lancamento WHERE conta.idConta = lancamento.idConta) as saldo "
+                   + "FROM conta "
+                   + "LEFT OUTER JOIN conta_corrente ON(conta.idContaCorrente = conta_corrente.idContaCorrente) "
+                   + "LEFT OUTER JOIN banco ON(conta_corrente.idBanco = banco.idBanco) ";     
         return findAll(sql, null, contaHandler);
     }
 

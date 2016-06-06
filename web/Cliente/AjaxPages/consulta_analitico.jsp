@@ -111,6 +111,16 @@
 
         if (movimentacao.size() >= 1) {
 %>
+<%if (acessosUs.contains(8)) {%>
+<div class="mostar" id="alertWrap">            
+    <div class="warningBox">
+        <span class="closebtn" onclick=" document.getElementById('alertWrap').className = 'esconder';">&times;</span> 
+        <div id="alertMsg">
+            Caso a data estimada de entrega <b>(PRAZO EST.)</b> caia em algum sábado, domingo ou feriado, deve-se considerar como prazo o proximo dia útil.  
+        </div>
+    </div>
+</div>
+<%}%>
 
 <div style="padding:8px 5px; background: white;">
     <%--<a href="../AjaxPages/print_sintetico.jsp?sql=<%= sql%>"><img class="link_img" src="../../imagensNew/printer.png" /> IMPRIMIR</a>
@@ -155,9 +165,9 @@
         <th width='100'><h3>OBJETO</h3></th>
         <th><h3>SERVIÇO</h3></th>
         <th width='30'><h3>PESO</h3></th>
-        <th width='120'><h3>DIMENSÕES</h3></th>
         <th width='30'><h3>QTD</h3></th>
         <th width='50'><h3>POSTAGEM</h3></th>
+        <th width='120'><h3>DIMENSÕES</h3></th>
         <%if (acessosUs.contains(3)) {%>
         <th width='50'><h3>VALOR</h3></th>
         <th width='50'><h3>DECLARADO</h3></th>
@@ -288,16 +298,16 @@
                     <a href='#' onclick="document.getElementById('frm<%= numeroRegistro%>').submit();"><%= numeroRegistro%></a>
                 </td>
                 <td align='left'><a href='visulizaTicket.jsp?idmov=<%=mov.getId()%>' target='_blank'><%= servico2%></a></td>
-                <td><%= peso%>g</td>
-                <td><%= dimensoes%></td>
+                <td><%= peso%>g</td>                
                 <td><%= qtd%></td>
                 <td><%= vData%></td>
+                <td><%= dimensoes%></td>
                 <% if (acessosUs.contains(3)) {%>
                 <td nowrap align='left'>R$ <%= vValor%></td>
                 <td nowrap align='left'>R$ <%= vValorDec%></td>
                 <td nowrap align='left'>R$ <%= vValorCob%></td>
                 <%}%>
-                <td style="font-size: 10px;"><%= destinatario%></td>
+                <td style="font-size: 10px;"><a onclick="verVenda(<%= mov.getIdPre_venda()%>);" style="cursor:pointer;" ><%= destinatario%></a></td>
                 <td><%= cepDestino%></td>
                 <td><%= status%></td>
                 <td><%= dtSit%></td>

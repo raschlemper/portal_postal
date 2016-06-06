@@ -125,7 +125,7 @@ public class Movimentacao {
         this.codStatus = codStatus;
     }
 
-    public Movimentacao(String id, Date dataPostagem, String descServico, String numObjeto, String destinatario, float peso, String cep, float valorServico, float quantidade, String departamento, String status, Date dataEntrega, String notaFiscal, String numVenda, String numCaixa, int codStatus, Date last_status_date, int last_status_code, String last_status_type, String last_status_name, Date prazo_estimado, Timestamp prazo_cumprido) {
+    public Movimentacao(String id, Date dataPostagem, String descServico, String numObjeto, String destinatario, float peso, String cep, float valorServico, float quantidade, String departamento, String status, Date dataEntrega, String notaFiscal, String numVenda, String numCaixa, int codStatus, Date last_status_date, int last_status_code, String last_status_type, String last_status_name, Date prazo_estimado, Timestamp prazo_cumprido, int idPre_venda) {
         this.id = id;
         this.dataPostagem = dataPostagem;
         this.descServico = descServico;
@@ -148,6 +148,7 @@ public class Movimentacao {
         this.last_status_name = last_status_name;
         this.prazo_estimado = prazo_estimado;
         this.prazo_cumprido = prazo_cumprido;
+        this.idPre_venda = idPre_venda;
     }
     public Movimentacao(String id, Date dataPostagem, String descServico, String numObjeto, String destinatario, float peso, String cep, float valorServico, float quantidade, String departamento, String status, Date dataEntrega, String notaFiscal, String numVenda, String numCaixa) {
         this.id = id;

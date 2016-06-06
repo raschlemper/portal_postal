@@ -53,7 +53,7 @@ function handleHttpResponseBootStrap() {
             }
 
         } else {
-            alert(http.status + " - Not able to retrieve name");
+            alert("Erro: "+http.status + " <br> Informa&ccedil;&atilde;o n&atilde;o dispon&iacute;vel em nosso banco de dados.");
         }
     }
 }
@@ -72,7 +72,7 @@ function handleHttpResponse() {
             }
 
         } else {
-            alert(http.status + " - Not able to retrieve name");
+           alert("Erro: "+http.status + " <br><br>Informa&ccedil;&atilde;o n&atilde;o dispon&iacute;vel em nosso banco de dados.<br><br> Verifique com a sua Ag&ecirc;ncia!");
         }
     }
 }

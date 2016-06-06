@@ -72,6 +72,11 @@ app.factory('LancamentoService', function($http, PromiseService) {
                     $http.put(_contextPath + "/api/financeiro/lancamento/" + idLancamento, data));
         },
 
+        updateSituacao: function(data) {
+            return PromiseService.execute(
+                    $http.put(_contextPath + "/api/financeiro/lancamento/situacao", data));
+        },
+
         updateAll: function(data) {
             return PromiseService.execute(
                     $http.put(_contextPath + "/api/financeiro/lancamento/", data));
@@ -80,6 +85,11 @@ app.factory('LancamentoService', function($http, PromiseService) {
         delete: function(idLancamento) {
             return PromiseService.execute(
                     $http.delete(_contextPath + "/api/financeiro/lancamento/" + idLancamento));
+        },
+
+        deleteAll: function(data) {
+            return PromiseService.execute(
+                    $http.post(_contextPath + "/api/financeiro/lancamento/delete", data));
         },
         
         lancamentoFromRateio: function(lancamento) {

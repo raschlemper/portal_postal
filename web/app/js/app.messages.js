@@ -27,17 +27,20 @@ app.constant('MESSAGES', {
             VISUALIZAR: "Visualizar Lançamento",
             GERAR: "Gerar Lançamento",
             PARCELAR: "Parcelar Lançamento",
-            LISTA: "Lista com todos os lançamentos"
+            LISTA: "LANÇAMENTOS"
         },
         sucesso: {
             INSERIDO_SUCESSO: "Lançamento Inserido com sucesso!",
             ALTERADO_SUCESSO: "Lançamento Alterado com sucesso!",
-            REMOVIDO_SUCESSO: "Lançamento Removido com sucesso!"
+            REMOVIDO_SUCESSO: "Lançamento Removido com sucesso!",
+            REMOVIDO_SUCESSO_TODOS: "Lançamentos Removidos com sucesso!"
         },
         info: {
             ALERT: "Alerta Lançamento",
             ALERT_EXCLUIR: "Excluir Lançamento?",
             CONFIRMAR_EXCLUIR: "Deseja realmente excluir este lançamento?",
+            CONFIRMAR_EXCLUIR_TODOS: "Deseja realmente excluir estes lançamentos?",
+            CONFIRMAR_EXCLUIR_PROGRAMADOS_TODOS: "Deseja realmente excluir estes lançamentos? <br/> Existem lançamentos que não podem ser excluídos. É necessário excluir todos os lançamentos posteriores!",
             EXCLUIR_POSTERIOR: "Este lançamento não pode ser excluído. É necessário excluir todos os lançamentos posteriores!"
         },
         validacao: {
@@ -54,7 +57,7 @@ app.constant('MESSAGES', {
                 INSERIR: "Inserir Lançamento Programado",
                 EDITAR: "Editar Lançamento Programado",
                 VISUALIZAR: "Visualizar Lançamento Programado",
-                LISTA: "Lista com todos os lançamentos"
+                LISTA: "PROGRAMAÇÕES"
             },
             sucesso: {
                 INSERIDO_SUCESSO: "Lançamento Programado Inserido com sucesso!",

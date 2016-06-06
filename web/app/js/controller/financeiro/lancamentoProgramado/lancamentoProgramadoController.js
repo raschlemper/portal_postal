@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state', 'LancamentoProgramadoService', 'ContaService', 'ModalService', 'DatePickerService', 'LISTAS', 'MESSAGES',
-    function ($scope, $filter, $state, LancamentoProgramadoService, ContaService, ModalService, DatePickerService, LISTAS, MESSAGES) {
+app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state', 'LancamentoProgramadoService', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS', 'MESSAGES',
+    function ($scope, $filter, $state, LancamentoProgramadoService, ContaService, PlanoContaService, CentroCustoService, ModalService, DatePickerService, ListaService, LISTAS, MESSAGES) {
 
         var init = function () {
             $scope.lancamentoProgramados = [];
@@ -13,7 +13,6 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
             $scope.lancSearch = {};
             getTitle();
             contas();
-            todos();  
             initTable(); 
         };  
         
@@ -24,7 +23,9 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
                 {label: '', column: 'tipo', headerClass: 'no-sort', dataClass:'text-center col-tipo', filter: {name: 'tipoLancamento', args: ''}},       
                 {label: 'Conta', column: 'conta.nome', filter: {name: 'date', args: 'dd/MM/yyyy'}},                      
                 {label: 'Vencimento', column: 'dataVencimento', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
-                {label: 'Número', column: 'numeroParcela'},               
+                {label: 'Número', column: 'numeroParcela'},         
+                {label: 'Plano Conta', column: 'planoConta'},   
+                {label: 'Centro Custo', column: 'centroCusto', showColumn: true, selected: false},             
                 {label: 'Favorecido', column: 'favorecido'},  
                 {label: 'Valor', column: 'valor', headerClass: 'no-sort', filter: {name: 'currency', args: ''}},              
                 {label: 'Situação', column: 'situacao'},  
@@ -94,6 +95,33 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
                 .then(function (data) {
                     $scope.contas = data;
                     if($state.params.id) { $scope.editar($scope.conta, $state.params.id); }
+                    planoContas();
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+        
+        var planoContas = function() {
+            PlanoContaService.getStructure()
+                .then(function (data) {
+                    $scope.planoContas = data;
+                    PlanoContaService.estrutura($scope.planoContas);
+                    $scope.planoContas = PlanoContaService.flatten($scope.planoContas);                 
+                    centroCustos();
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+        
+        var centroCustos = function() {
+            CentroCustoService.getStructure()
+                .then(function (data) {
+                    $scope.centroCustos = data;
+                    CentroCustoService.estrutura($scope.centroCustos);
+                    $scope.centroCustos = CentroCustoService.flatten($scope.centroCustos);                 
+                    todos();
                 })
                 .catch(function (e) {
                     console.log(e);
@@ -127,7 +155,21 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
                 lancamentoProgramado.numeroParcela = lancamentoProgramado.numero;
                 lancamentoProgramado.tipo.modelo = $scope.modelos;
                 
-                return _.pick(lancamentoProgramado, 'idLancamentoProgramado', 'conta', 'tipo', 'dataVencimento', 'numeroParcela', 'favorecido', 'valor', 'situacao', 'frequencia');
+                if(lancamentoProgramado.planoConta && lancamentoProgramado.planoConta.idPlanoConta) { 
+                    var planoConta = ListaService.getPlanoContaValue($scope.planoContas, lancamentoProgramado.planoConta.idPlanoConta); 
+                    lancamentoProgramado.planoConta = planoConta.descricao;                    
+                } else {
+                    lancamentoProgramado.planoConta = null;
+                }
+                
+                if(lancamentoProgramado.centroCusto && lancamentoProgramado.centroCusto.idCentroCusto) { 
+                    var centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, lancamentoProgramado.centroCusto.idCentroCusto); 
+                    lancamentoProgramado.centroCusto = centroCusto.descricao;                    
+                } else {
+                    lancamentoProgramado.centroCusto = null;
+                }
+                
+                return _.pick(lancamentoProgramado, 'idLancamentoProgramado', 'conta', 'tipo', 'dataVencimento', 'numeroParcela', 'planoConta', 'centroCusto', 'favorecido', 'valor', 'situacao', 'frequencia');
             })
         };
         

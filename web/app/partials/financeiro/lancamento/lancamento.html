@@ -6,11 +6,16 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" >
                             <div class="row" style="padding-bottom: 10px;">
-                                <div class="col-md-12">{{title}}</div>
+                                <div class="col-md-12 text-center">
+                                    <h4><strong>{{title}}</strong></h4>
+                                </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="pull-left">                                  
+                                <div class="col-md-12">
+                                    <div class="pull-left">                                     
+                                        <button class="btn btn-sm btn-default spc-right" ng-click="excluirTodos(conta, events.list())">
+                                            <i class="fa fa-lg fa-arrow-circle-o-down fa-spc"></i> EXCLUIR 
+                                        </button>                                            
                                         <button class="btn btn-sm btn-default spc-right" ng-click="compensarTodos(conta, events.list())">
                                             <i class="fa fa-lg fa-arrow-circle-o-down fa-spc"></i> COMPENSAR 
                                         </button>                                
@@ -21,8 +26,6 @@
                                             <i class="fa fa-lg fa-clock-o fa-spc"></i> PROGRAMAÇÃO 
                                         </button>      
                                     </div>
-                                </div>
-                                <div class="col-md-6">
                                     <div class="pull-right">  
                                         <button class="btn btn-sm btn-primary spc-right" ng-click="salvar(conta, tipos[0])">
                                             <i class="fa fa-lg fa-plus-circle fa-spc"></i> RECEITA
@@ -87,13 +90,18 @@
                                         </div>
                                     </filter-content>   
                                     
-                                     <title-content>
-                                         <div class="margin-top">
-                                             <div class="title-table">
-                                                 <strong><i>{{conta.nome}} ({{conta.status.descricao}}) </i></strong>
-                                             </div>
-                                         </div>
-                                     </title-content>>
+                                    <title-content>
+                                        <div class="margin-top">
+                                            <div class="title-table">
+                                                <strong><i>{{conta.nome}} 
+                                                   <span ng-show="conta.contaCorrente && conta.contaCorrente.banco && conta.contaCorrente.agencia && conta.contaCorrente.contaCorrente"> 
+                                                       - ({{conta.contaCorrente.banco.numero}} / {{conta.contaCorrente.agencia}}-{{conta.contaCorrente.agenciaDv}} / {{conta.contaCorrente.contaCorrente}}-{{conta.contaCorrente.contaCorrenteDv}})
+                                                   </span>
+                                                        <span ng-show="false">/ ({{conta.status.descricao}})</span>
+                                                </i></strong>
+                                            </div>
+                                        </div>
+                                    </title-content>>
                                     
                                      <rodape-content>
                                          

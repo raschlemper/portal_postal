@@ -6,14 +6,16 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" >
                             <div class="row">
-                                <div class="col-md-6">{{title}}</div>
-                                <div class="col-md-6">
+                                <div class="col-md-12 text-center">
+                                    <h4><strong>{{title}}</strong></h4>
+                                </div>
+                                <div class="col-md-12">
                                     <div class="pull-right">  
                                         <button class="btn btn-sm btn-primary spc-right" ng-click="salvar(conta, tipos[0])">
-                                            <i class="fa fa-lg fa-plus-circle fa-spc"></i> RECEITA
+                                            <i class="fa fa-lg fa-plus-circle fa-spc"></i> CONTAS A RECEBER
                                         </button>     
                                         <button class="btn btn-sm btn-danger spc-right" ng-click="salvar(conta, tipos[1])">
-                                            <i class="fa fa-lg fa-minus-circle fa-spc"></i> DESPESA
+                                            <i class="fa fa-lg fa-minus-circle fa-spc"></i> CONTAS A PAGAR
                                         </button>   
 <!--                                        <button class="btn btn-sm btn-success" ng-click="transferir(conta)">
                                             <i class="fa fa-lg fa-exchange fa-spc"></i> TRANSFERÊNCIA
@@ -30,7 +32,9 @@
                                             filter="filter" 
                                             search="lancSearch" 
                                             default-filter="true" 
-                                            order-by-column="data">
+                                            order-by-column="data"
+                                            show-menu="true"
+                                            show-column-menu="true">
                                     
                                     <filter-content>
                                         <div class="form-inline pull-left">

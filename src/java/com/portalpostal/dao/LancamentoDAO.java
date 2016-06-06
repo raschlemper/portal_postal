@@ -307,6 +307,17 @@ public class LancamentoDAO extends GenericDAO {
         update(sql, params, lancamentoHandler);
     }
 
+    public Lancamento updateSituacao(Lancamento lancamento) throws Exception {
+        String sql = "UPDATE lancamento SET situacao = :situacao, usuario = :usuario "
+                   + "WHERE idLancamento = :idLancamento ";        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idLancamento", lancamento.getIdLancamento());  
+        params.put("situacao", lancamento.getSituacao().ordinal());           
+        params.put("usuario", lancamento.getUsuario()); 
+        update(sql, params, lancamentoHandler);
+        return lancamento;  
+    }
+
     public Lancamento remove(Integer idLancamento) throws Exception { 
         String sql = "DELETE FROM lancamento WHERE idLancamento = :idLancamento ";
         Lancamento lancamento = find(idLancamento);
