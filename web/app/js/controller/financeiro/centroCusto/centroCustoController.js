@@ -65,7 +65,7 @@ app.controller('CentroCustoController', ['$scope', '$q', 'CentroCustoService', '
                 .then(function(centroCusto) {                  
                     modalSalvar(centroCusto, 'save')
                     .then(function(result) {     
-                        var grupo = centroCusto.grupo || result.grupo;
+                        var grupo = centroCusto || result;
                         CentroCustoService.getByGrupoCodigo(grupo.idCentroCusto, result.codigo)
                         .then(function(data) {
                             if(data) { modalMessage("Este Centro de Custo já existe!"); } 
@@ -94,7 +94,7 @@ app.controller('CentroCustoController', ['$scope', '$q', 'CentroCustoService', '
                 .then(function(centroCusto) {
                      modalSalvar(centroCusto, 'edit')
                      .then(function(result) {                    
-                        var grupo = result.grupo || centroCusto.grupo;      
+                        var grupo = result || centroCusto;      
                         if(grupo) {
                             CentroCustoService.getByGrupoCodigo(grupo.idCentroCusto, result.codigo)
                             .then(function(data) {

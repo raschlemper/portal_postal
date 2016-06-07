@@ -398,8 +398,10 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
         };
         
         var addSaldoContas = function(saldoContas, saldos) {
+            var saldoAcumulado = saldoContas;
             return _.map(saldos, function(saldo) {
-                return saldo + saldoContas;
+                saldoAcumulado += saldo;
+                return saldoAcumulado;
             })
         }
         // Saldos Programados /////

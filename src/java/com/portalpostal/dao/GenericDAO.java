@@ -125,7 +125,7 @@ public class GenericDAO {
             query.executeUpdate().getKey(Integer.class); 
             connection.commit(true);
         } catch (Exception e) {
-            ContrErroLog.inserir("HOITO - " + clazz.getSimpleName(), "SQLException", sql, e.toString());
+                ContrErroLog.inserir("HOITO - " + clazz.getSimpleName(), "SQLException", sql, e.toString());
             connection.rollback();
         } finally {
             connection.close();

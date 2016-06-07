@@ -50,7 +50,7 @@
                                                 <label>Tipo:</label>
                                                 <select class="form-control spc-right" ng-model="lancSearch.tipo">
                                                     <option value=""> Todos </option> 
-                                                    <option value="{{tipo}}" ng-repeat="tipo in tipos track by $index"> {{tipo.descricao}} </option>        
+                                                    <option value="{{tipo.codigo}}" ng-repeat="tipo in tiposLancamento track by $index"> {{tipo.descricao}} </option>        
                                                 </select>
                                                 
                                                 <label>Data:</label>

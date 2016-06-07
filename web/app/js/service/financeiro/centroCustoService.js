@@ -45,21 +45,6 @@ app.factory('CentroCustoService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/centrocusto/structure"));
         },
 
-//        getByTipo: function(tipo) {
-//            return PromiseService.execute(
-//                    $http.get(_contextPath + "/api/financeiro/centrocusto/tipo/" + tipo));
-//        },
-        
-//        findContaResultadoByTipo: function(tipo) {
-//            return PromiseService.execute(
-//                    $http.get(_contextPath + "/api/financeiro/centrocusto/tipo/" + tipo + "/resultado"));
-//        },
-
-//        getStructureByTipo: function(tipo) {
-//            return PromiseService.execute(
-//                    $http.get(_contextPath + "/api/financeiro/centrocusto/tipo/" + tipo + "/structure"));
-//        },
-
         getByGrupoCodigo: function(grupo, codigo) {
             return PromiseService.execute(
                     $http.get(_contextPath + "/api/financeiro/centrocusto/grupo/" + grupo + "/codigo/" + codigo));

@@ -85,6 +85,8 @@
                         },
                         {
                             extend: 'pdfHtml5',
+                            orientation: 'landscape',
+                            pageSize: 'LEGAL',
                             text: '<i class="fa fa-spc fa-file-pdf-o"></i> PDF',
                             titleAttr: 'PDF'
                         }

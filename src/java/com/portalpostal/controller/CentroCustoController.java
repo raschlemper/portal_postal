@@ -62,42 +62,6 @@ public class CentroCustoController {
         }
     }  
     
-//    @GET
-//    @Path("/tipo/{tipo}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<CentroCusto> findByTipo(@PathParam("tipo") Integer tipo) {
-//        try {
-//            init();    
-//            return centroCustoService.findByTipo(tipo);
-//        } catch (Exception ex) {
-//            throw new WebApplicationException(getMessageError(ex.getMessage()));
-//        }
-//    }   
-    
-//    @GET
-//    @Path("/tipo/{tipo}/resultado")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<CentroCusto> findContaResultadoByTipo(@PathParam("tipo") Integer tipo) {
-//        try {
-//            init();    
-//            return centroCustoService.findContaResultadoByTipo(tipo);
-//        } catch (Exception ex) {
-//            throw new WebApplicationException(getMessageError(ex.getMessage()));
-//        }
-//    }   
-    
-//    @GET
-//    @Path("/tipo/{tipo}/structure")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<CentroCusto> findStructureByTipo(@PathParam("tipo") Integer tipo) {
-//        try {
-//            init();    
-//            return centroCustoService.findStructureByTipo(tipo);
-//        } catch (Exception ex) {
-//            throw new WebApplicationException(getMessageError(ex.getMessage()));
-//        }
-//    }  
-    
     @GET
     @Path("/grupo/{grupo}/codigo/{codigo}")
     @Produces(MediaType.APPLICATION_JSON)

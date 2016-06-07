@@ -8,10 +8,12 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
             $scope.lancamentoProgramadosLista = [];
             $scope.tipos = LISTAS.lancamento;
             $scope.modelos = LISTAS.modeloLancamento;
+            $scope.tiposLancamento = [];
             $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
             $scope.datepickerDataFim = angular.copy(DatePickerService.default);    
             $scope.lancSearch = {};
             getTitle();
+            createListTipoLancamento();
             contas();
             initTable(); 
         };  
@@ -68,9 +70,8 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         
         var filterTipo = function(lista, search) {          
             if(!search.tipo) return lista;
-            var tipo = JSON.parse(search.tipo); 
             lista = _.filter(lista, function(item) {
-                return item.tipo.id === tipo.id;
+                return item.tipoLancamento === search.tipo;
             });
             return lista;
         }
@@ -89,6 +90,12 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         var getTitle = function() {
             $scope.title = MESSAGES.lancamento.programar.title.LISTA; 
         };
+        
+        var createListTipoLancamento = function() {
+            $scope.tiposLancamento.push( { codigo: $scope.tipos[0].codigo, descricao: 'Contas a Receber' });
+            $scope.tiposLancamento.push( { codigo: $scope.tipos[1].codigo, descricao: 'Contas a Pagar' });
+//            $scope.tiposLancamento.push( { codigo: $scope.modelos[3].codigo, descricao: 'Transf. Programada' });
+        }
         
         var contas = function() {
             ContaService.getAll()
@@ -148,12 +155,11 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
                 if(lancamentoProgramado.quantidadeParcela) { 
                     complementoDescricaoFrequencia = ' - ' + lancamentoProgramado.quantidadeParcela + 'x (' + $filter('currency')(lancamentoProgramado.valor, 'R$ ') + ')';
                     lancamentoProgramado.tipo.modelo = $scope.modelos[4];
-                }
+                }                
                 
-                lancamentoProgramado.situacao = lancamentoProgramado.situacao.descricao;
-                lancamentoProgramado.frequencia = lancamentoProgramado.frequencia.descricao + complementoDescricaoFrequencia;
-                lancamentoProgramado.numeroParcela = lancamentoProgramado.numero;
-                lancamentoProgramado.tipo.modelo = $scope.modelos;
+                if(lancamentoProgramado.tipo.modelo.id === $scope.modelos[3].id) { lancamentoProgramado.tipoLancamento = $scope.modelos[3].codigo; }
+                else if(lancamentoProgramado.tipo.id === $scope.tipos[0].id) { lancamentoProgramado.tipoLancamento = lancamentoProgramado.tipo.codigo; }
+                else if(lancamentoProgramado.tipo.id === $scope.tipos[1].id) { lancamentoProgramado.tipoLancamento = lancamentoProgramado.tipo.codigo; }
                 
                 if(lancamentoProgramado.planoConta && lancamentoProgramado.planoConta.idPlanoConta) { 
                     var planoConta = ListaService.getPlanoContaValue($scope.planoContas, lancamentoProgramado.planoConta.idPlanoConta); 
@@ -169,7 +175,12 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
                     lancamentoProgramado.centroCusto = null;
                 }
                 
-                return _.pick(lancamentoProgramado, 'idLancamentoProgramado', 'conta', 'tipo', 'dataVencimento', 'numeroParcela', 'planoConta', 'centroCusto', 'favorecido', 'valor', 'situacao', 'frequencia');
+                lancamentoProgramado.situacao = lancamentoProgramado.situacao.descricao;
+                lancamentoProgramado.frequencia = lancamentoProgramado.frequencia.descricao + complementoDescricaoFrequencia;
+                lancamentoProgramado.numeroParcela = lancamentoProgramado.numero;
+                lancamentoProgramado.tipo.modelo = $scope.modelos;
+                
+                return _.pick(lancamentoProgramado, 'idLancamentoProgramado', 'conta', 'tipo', 'tipoLancamento', 'dataVencimento', 'numeroParcela', 'planoConta', 'centroCusto', 'favorecido', 'valor', 'situacao', 'frequencia');
             })
         };
         
