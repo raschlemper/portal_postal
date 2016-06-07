@@ -1,7 +1,5 @@
 package com.portalpostal.validation;
 
-import com.portalpostal.model.LancamentoProgramado;
-import com.portalpostal.model.LancamentoTransferencia;
 import com.portalpostal.model.LancamentoTransferenciaProgramado;
 
 public class LancamentoTransferenciaProgramadoValidation extends Validation<LancamentoTransferenciaProgramado>{

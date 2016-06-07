@@ -108,7 +108,7 @@
                                     <input type="text" autocomplete="off" name="dataLancamento" class="form-control" ng-model="lancamento.dataLancamento" 
                                            datepicker-popup="{{datepickerLancamento.format}}" is-open="datepickerLancamento.opened" ng-required="true"
                                            current-text="{{datepickerLancamento.today}}" clear-text="{{datepickerLancamento.clear}}" close-text="{{datepickerLancamento.close}}"
-                                           placeholder="Data do lançamento"/>
+                                           placeholder="Data do lançamento" ng-blur="setDataCompetencia(lancamento)" ng-model-options="{debounce: {'blur': 0}}"/>
                                     <span class="input-group-addon" ng-click="datepickerLancamento.open($event)"><i class="fa fa-calendar"></i></span>
                                 </div>
                             </div> 

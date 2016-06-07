@@ -42,7 +42,9 @@ public class LancamentoRateioHandler extends GenericHandler implements ResultSet
     private Lancamento getLancamento(ResultSet result) throws SQLException {
         if(!existColumn(result, "lancamento.idLancamento")) return null;
         if(!existFKValue(result, "lancamento.idLancamento")) return null;
-        return new LancamentoHandler().handle(result); 
+        Lancamento lancamento = new Lancamento();
+        lancamento.setIdLancamento(getInt(result, "idLancamentoRateio", "lancamento"));
+        return lancamento; 
     }
     
 }

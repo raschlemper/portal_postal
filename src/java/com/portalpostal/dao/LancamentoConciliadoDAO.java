@@ -17,11 +17,11 @@ public class LancamentoConciliadoDAO extends GenericDAO {
     } 
 
     public List<LancamentoConciliado> findAll() throws Exception {
-        String sql = "SELECT * FROM conta, plano_conta, lancamento, lancamento_conciliado " 
+        String sql = "SELECT * FROM conta, lancamento_conciliado " 
+                   + "LEFT OUTER JOIN lancamento ON(lancamento_conciliado.idLancamento = lancamento.idLancamento) "
+                   + "LEFT OUTER JOIN plano_conta ON(lancamento_conciliado.idPlanoConta = plano_conta.idPlanoConta) "
                    + "LEFT OUTER JOIN centro_custo ON(lancamento_conciliado.idCentroCusto = centro_custo.idCentroCusto) "
                    + "WHERE lancamento_conciliado.idConta = conta.idConta "
-                   + "AND lancamento_conciliado.idPlanoConta = plano_conta.idPlanoConta "
-                   + "AND lancamento_conciliado.idLancamento = lancamento.idLancamento "
                    + "ORDER BY lancamento_conciliado.dataLancamento";        
         return findAll(sql, null, lancamentoConciliadoHandler);
     }
@@ -38,11 +38,11 @@ public class LancamentoConciliadoDAO extends GenericDAO {
     }
 
     public LancamentoConciliado find(Integer idLancamentoConciliado) throws Exception {
-        String sql = "SELECT * FROM conta, plano_conta, lancamento, lancamento_conciliado "
+        String sql = "SELECT * FROM conta, lancamento_conciliado "
+                   + "LEFT OUTER JOIN lancamento ON(lancamento_conciliado.idLancamento = lancamento.idLancamento) "
+                   + "LEFT OUTER JOIN plano_conta ON(lancamento_conciliado.idPlanoConta = plano_conta.idPlanoConta) "
                    + "LEFT OUTER JOIN centro_custo ON(lancamento_conciliado.idCentroCusto = centro_custo.idCentroCusto) "
                    + "WHERE lancamento_conciliado.idConta = conta.idConta "
-                   + "AND lancamento_conciliado.idPlanoConta = plano_conta.idPlanoConta "
-                   + "AND lancamento_conciliado.idLancamento = lancamento.idLancamento "
                    + "AND lancamento_conciliado.idLancamentoConciliado = :idLancamentoConciliado";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamentoConciliado", idLancamentoConciliado);
@@ -72,7 +72,7 @@ public class LancamentoConciliadoDAO extends GenericDAO {
         params.put("idConta", lancamentoConciliado.getConta().getIdConta());
         params.put("idPlanoConta", (lancamentoConciliado.getPlanoConta() == null ? null : lancamentoConciliado.getPlanoConta().getIdPlanoConta()));
         params.put("idCentroCusto", (lancamentoConciliado.getCentroCusto() == null ? null : lancamentoConciliado.getCentroCusto().getIdCentroCusto()));
-        params.put("idLancamento", lancamentoConciliado.getLancamento().getIdLancamento());
+        params.put("idLancamento", (lancamentoConciliado.getLancamento() == null ? null : lancamentoConciliado.getLancamento().getIdLancamento()));
         params.put("tipo", lancamentoConciliado.getTipo().ordinal()); 
         params.put("numeroLote", lancamentoConciliado.getNumeroLote()); 
         params.put("dataCompetencia", lancamentoConciliado.getDataCompetencia());       

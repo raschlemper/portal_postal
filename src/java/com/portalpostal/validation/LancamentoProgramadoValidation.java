@@ -6,8 +6,7 @@ public class LancamentoProgramadoValidation extends Validation<LancamentoProgram
 
     @Override
     public boolean validar(LancamentoProgramado lancamentoProgramado) {
-        if(!validarConta(lancamentoProgramado)) return false;   
-        if(!validarPlanoConta(lancamentoProgramado)) return false; 
+        if(!validarConta(lancamentoProgramado)) return false;  
         if(!validarTipo(lancamentoProgramado)) return false;  
         if(!validarDocumento(lancamentoProgramado)) return false;   
         if(!validarFormaPagamento(lancamentoProgramado)) return false;   
@@ -25,13 +24,7 @@ public class LancamentoProgramadoValidation extends Validation<LancamentoProgram
         if(campoNotNull(lancamentoProgramado.getConta())) return true; 
         setMsg("Preencha a conta do lançamento programado!");
         return false;        
-    }    
-
-    public boolean validarPlanoConta(LancamentoProgramado lancamentoProgramado) {          
-        if(campoNotNull(lancamentoProgramado.getPlanoConta())) return true; 
-        setMsg("Preencha o plano de contas do lançamento programado!");
-        return false;        
-    }    
+    }     
 
     public boolean validarTipo(LancamentoProgramado lancamentoProgramado) {        
         if(campoNotNull(lancamentoProgramado.getTipo())) return true; 

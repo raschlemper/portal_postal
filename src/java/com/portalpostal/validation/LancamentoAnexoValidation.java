@@ -1,6 +1,5 @@
 package com.portalpostal.validation;
 
-import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoAnexo;
 
 public class LancamentoAnexoValidation extends Validation<LancamentoAnexo>{

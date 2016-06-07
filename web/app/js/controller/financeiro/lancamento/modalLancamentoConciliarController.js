@@ -29,7 +29,7 @@ app.controller('ModalLancamentoConciliarController',
                         $scope.lancamentoConciliado.planoConta = ListaService.getPlanoContaValue(
                                 $scope.planoContas, $scope.lancamentoConciliado.planoConta.idPlanoConta) || $scope.planoContas[0];
                     } else {
-                         $scope.lancamentoConciliado.planoConta  = $scope.planoContas[0];
+                         $scope.lancamentoConciliado.planoConta  = null;
                     }
                 })
                 .catch(function (e) {
@@ -64,8 +64,7 @@ app.controller('ModalLancamentoConciliarController',
                 .then(function (data) {
                     if(!data) return;
                     $scope.saldo = calcularSaldo(data.saldo, saldoReconciliacao);
-                    if($scope.saldo.diferenca > 0) { $scope.lancamentoConciliado.tipo = $scope.tipos[0]; } 
-                    else { $scope.lancamentoConciliado.tipo = $scope.tipos[1]; }
+                    setValoresLancamentoConciliado($scope.saldo, $scope.lancamentoConciliado);
                     planoContas($scope.lancamentoConciliado.tipo);
                     centroCustos();
                 })
@@ -73,6 +72,17 @@ app.controller('ModalLancamentoConciliarController',
                     console.log(e);
                 });
         };
+        
+        var setValoresLancamentoConciliado = function(saldo, lancamentoConciliado) {
+            if($scope.saldo.diferenca > 0) { $scope.lancamentoConciliado.tipo = $scope.tipos[0]; } 
+            else { $scope.lancamentoConciliado.tipo = $scope.tipos[1]; }
+            if(saldo.diferenca === 0) {
+                lancamentoConciliado.planoConta = null;
+                lancamentoConciliado.centroCusto = null;
+                lancamentoConciliado.tipo = $scope.tipos[0];
+                lancamentoConciliado.historico = "Lançamento sem valor";
+            }            
+        }
         
         var calcularSaldo = function(saldoAtual, saldoReconciliacao) {
             return {
@@ -84,7 +94,7 @@ app.controller('ModalLancamentoConciliarController',
         
         $scope.ok = function(form, lancamentoConciliado) {
             if (!validarForm(form)) return;
-            $scope.lancamentoConciliado = ajustarDados($scope.saldo, lancamentoConciliado);
+            lancamentoConciliado = ajustarDados($scope.saldo, lancamentoConciliado);
             $modalInstance.close(lancamentoConciliado);            
         };
         

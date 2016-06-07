@@ -6,8 +6,7 @@ public class LancamentoConciliadoValidation extends Validation<LancamentoConcili
 
     @Override
     public boolean validar(LancamentoConciliado lancamentoConciliado) {
-        if(!validarConta(lancamentoConciliado)) return false;   
-        if(!validarPlanoConta(lancamentoConciliado)) return false;         
+        if(!validarConta(lancamentoConciliado)) return false;        
         if(!validarLancamento(lancamentoConciliado)) return false; 
         if(!validarTipo(lancamentoConciliado)) return false;  
         if(!validarDataCompetencia(lancamentoConciliado)) return false;   
@@ -22,13 +21,7 @@ public class LancamentoConciliadoValidation extends Validation<LancamentoConcili
         if(campoNotNull(lancamentoConciliado.getConta())) return true; 
         setMsg("Preencha a conta da conciliação!");
         return false;        
-    }    
-
-    public boolean validarPlanoConta(LancamentoConciliado lancamentoConciliado) {          
-        if(campoNotNull(lancamentoConciliado.getPlanoConta())) return true; 
-        setMsg("Preencha o plano de contas da conciliação!");
-        return false;        
-    }    
+    }   
 
     public boolean validarLancamento(LancamentoConciliado lancamentoConciliado) {          
         if(campoNotNull(lancamentoConciliado.getLancamento())) return true; 

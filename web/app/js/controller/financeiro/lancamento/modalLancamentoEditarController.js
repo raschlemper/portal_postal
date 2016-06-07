@@ -103,6 +103,11 @@ app.controller('ModalLancamentoEditarController', ['$scope', 'ContaService', 'Pl
             });            
         };
         
+        $scope.setDataCompetencia = function(lancamento) {
+            if(lancamento.dataCompetencia) return;
+            lancamento.dataCompetencia = lancamento.dataLancamento;
+        };
+        
         $scope.ok = function(form, lancamento) {
             if(!validaConta(lancamento.conta)) return;
             if (!validarForm(form, lancamento)) return;

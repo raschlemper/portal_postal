@@ -190,7 +190,7 @@ public class LancamentoService {
         if(lancamento.getRateios() == null) return rateiosLista;
         for (LancamentoRateio rateio : lancamento.getRateios()) {
 //            rateio.setLancamento(createLancamentoToRateio(lancamento));
-            rateio.setLancamento(lancamento);
+            rateio.setLancamento(getLancamentoToRateio(lancamento));
             if(rateio.getIdLancamentoRateio() != null) {
                 rateiosLista.add(lancamentoRateioService.update(rateio));
             } else {
@@ -198,6 +198,12 @@ public class LancamentoService {
             }
         }
         return rateiosLista;
+    }
+    
+    private Lancamento getLancamentoToRateio(Lancamento lancamento) {
+        Lancamento rateio = new Lancamento();
+        rateio.setIdLancamento(lancamento.getIdLancamento());
+        return rateio;
     }
     
     private Lancamento ajustaLancamentoRateio(Lancamento lancamento) {

@@ -66,8 +66,11 @@ public class LancamentoConciliadoService {
     
     public LancamentoConciliado createLancamento(LancamentoConciliado lancamentoConciliado) throws Exception {
         init();
-        Lancamento lancamentoConciliacao = lancamentoService.save(lancamentoConciliado.getLancamento());
-        lancamentoConciliado.setLancamento(lancamentoConciliacao);
+        Lancamento lancamento = null;
+        if(lancamentoConciliado.getValor() != 0) {
+            lancamento = lancamentoService.save(lancamentoConciliado.getLancamento());
+        }
+        lancamentoConciliado.setLancamento(lancamento);
         lancamentoConciliado.setNumeroLote(getLastLote());
         lancamentoConciliado = save(lancamentoConciliado);
         lancamentoService.updateNumeroLoteConciliado(lancamentoConciliado.getDataLancamento(), lancamentoConciliado.getNumeroLote());

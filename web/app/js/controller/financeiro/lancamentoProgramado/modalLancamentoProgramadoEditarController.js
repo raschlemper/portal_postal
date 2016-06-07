@@ -134,6 +134,11 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', 'ContaSer
             $scope.goToLancarParcelar();
         };
         
+        $scope.setDataCompetencia = function(lancamentoTransferencia) {
+            if(lancamentoTransferencia.dataCompetencia) return;
+            lancamentoTransferencia.dataCompetencia = lancamentoTransferencia.dataLancamento;
+        };
+        
         $scope.ok = function(form, lancamentoProgramado) {
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;
             if(!$scope.validarForm(form, lancamentoProgramado)) return;

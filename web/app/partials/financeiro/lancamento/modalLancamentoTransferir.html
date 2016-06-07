@@ -34,6 +34,16 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Data</label>
+                            <div class="input-group">
+                                <input type="text" autocomplete="off" name="dataLancamento" class="form-control" ng-model="lancamentoTransferencia.dataLancamento" 
+                                       datepicker-popup="{{datepickerLancamento.format}}" is-open="datepickerLancamento.opened" ng-required="true"
+                                       current-text="{{datepickerLancamento.today}}" clear-text="{{datepickerLancamento.clear}}" close-text="{{datepickerLancamento.close}}"
+                                       placeholder="Data do lançamento" ng-blur="setDataCompetencia(lancamentoTransferencia)" ng-model-options="{debounce: {'blur': 0}}"/>
+                                <span class="input-group-addon" ng-click="datepickerLancamento.open($event)"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div> 
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                             <label class="small">Data Competência</label>
                             <div class="input-group">
                                 <input type="text" autocomplete="off" name="dataCompetencia" class="form-control" ng-model="lancamentoTransferencia.dataCompetencia" 
@@ -41,16 +51,6 @@
                                        current-text="{{datepickerCompetencia.today}}" clear-text="{{datepickerCompetencia.clear}}" close-text="{{datepickerCompetencia.close}}"
                                        placeholder="Competência do lançamento"/>
                                 <span class="input-group-addon" ng-click="datepickerCompetencia.open($event)"><i class="fa fa-calendar"></i></span>
-                            </div>
-                        </div> 
-                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                            <label class="small">Data</label>
-                            <div class="input-group">
-                                <input type="text" autocomplete="off" name="dataLancamento" class="form-control" ng-model="lancamentoTransferencia.dataLancamento" 
-                                       datepicker-popup="{{datepickerLancamento.format}}" is-open="datepickerLancamento.opened" ng-required="true"
-                                       current-text="{{datepickerLancamento.today}}" clear-text="{{datepickerLancamento.clear}}" close-text="{{datepickerLancamento.close}}"
-                                       placeholder="Data do lançamento"/>
-                                <span class="input-group-addon" ng-click="datepickerLancamento.open($event)"><i class="fa fa-calendar"></i></span>
                             </div>
                         </div>   
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">

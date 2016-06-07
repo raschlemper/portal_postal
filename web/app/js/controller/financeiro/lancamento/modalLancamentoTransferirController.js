@@ -34,6 +34,11 @@ app.controller('ModalLancamentoTransferirController', ['$scope', '$modalInstance
                 });
         };
         
+        $scope.setDataCompetencia = function(lancamentoTransferencia) {
+            if(lancamentoTransferencia.dataCompetencia) return;
+            lancamentoTransferencia.dataCompetencia = lancamentoTransferencia.dataLancamento;
+        };
+        
         $scope.ok = function(form, lancamentoTransferencia) {
             if (!validarForm(form)) return;
             $modalInstance.close(lancamentoTransferencia);            

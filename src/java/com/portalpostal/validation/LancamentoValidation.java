@@ -7,7 +7,6 @@ public class LancamentoValidation extends Validation<Lancamento>{
     @Override
     public boolean validar(Lancamento lancamento) {
         if(!validarConta(lancamento)) return false;   
-        if(!validarPlanoConta(lancamento)) return false; 
         if(!validarTipo(lancamento)) return false;  
         if(!validarDataCompetencia(lancamento)) return false;   
         if(!validarDataEmissao(lancamento)) return false;   
@@ -23,13 +22,7 @@ public class LancamentoValidation extends Validation<Lancamento>{
         if(campoNotNull(lancamento.getConta())) return true; 
         setMsg("Preencha a conta do lançamento!");
         return false;        
-    }    
-
-    public boolean validarPlanoConta(Lancamento lancamento) {          
-        if(campoNotNull(lancamento.getPlanoConta())) return true; 
-        setMsg("Preencha o plano de contas do lançamento!");
-        return false;        
-    }    
+    }   
 
     public boolean validarTipo(Lancamento lancamento) {        
         if(campoNotNull(lancamento.getTipo())) return true; 
