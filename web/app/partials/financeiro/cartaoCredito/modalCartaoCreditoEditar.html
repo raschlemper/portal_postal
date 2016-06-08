@@ -18,7 +18,7 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                            <label class="small">Conta Corrente</label>
+                            <label class="small">Conta Padrão de Pagamento</label>
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-money"></i></span>
                                 <select class="form-control" name="contaCorrente" ng-model="cartaoCredito.contaCorrente"
@@ -28,6 +28,30 @@
                                 <span class="input-group-btn">
                                     <button class="btn btn-lg btn-primary" type="button" ng-click="openContaCorrente()"><i class="fa fa-plus-circle"></i></button>
                                 </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Número do Cartão de Crédito</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                <input type="text" autocomplete="off" name="numero" class="form-control" ng-model="cartaoCredito.numero" 
+                                       ui-mask="9999.9999.9999.9999" ui-mask-placeholder-char="_" ui-mask-placeholder ng-required="true" placeholder="Número do cartão de crédito"/>                                    
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                            <label class="small">Código de Segurança</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                <input type="text" autocomplete="off" name="codigoSeguranca" class="form-control" ng-model="cartaoCredito.codigoSeguranca" 
+                                       ng-required="true" placeholder="Código de Segurança"/>                                    
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5">
+                            <label class="small">Nome no Cartão</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                <input type="text" autocomplete="off" name="nomeTitular" class="form-control" ng-model="cartaoCredito.nomeTitular" 
+                                       ng-required="true" placeholder="Nome do títular do cartão de crédito"/>                                    
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
@@ -55,7 +79,7 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                            <label class="small">Valor</label>
+                            <label class="small">Limite de Crédito</label>
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
                                 <input type="text" autocomplete="off" name="valorLimiteCredito" class="form-control" ng-model="cartaoCredito.valorLimiteCredito"

@@ -20,6 +20,9 @@ public class CartaoCreditoHandler extends GenericHandler implements ResultSetHan
         CartaoCredito cartaoCredito = new CartaoCredito();
         cartaoCredito.setIdCartaoCredito(getInt(result, "idCartaoCredito"));
         cartaoCredito.setNome(getString(result, "nome"));
+        cartaoCredito.setNomeTitular(getString(result, "nomeTitular"));
+        cartaoCredito.setNumero(getString(result, "numero"));
+        cartaoCredito.setCodigoSeguranca(getString(result, "codigoSeguranca"));
         cartaoCredito.setBandeira(getString(result, "bandeira"));
         cartaoCredito.setDiaFechamento(getInt(result, "diaFechamento"));
         cartaoCredito.setDiaVencimento(getInt(result, "diaVencimento"));

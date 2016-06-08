@@ -70,10 +70,14 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                     conta.agencia = conta.contaCorrente.agencia + '-' + conta.contaCorrente.agenciaDv;
                     conta.contaCorrente = conta.contaCorrente.contaCorrente + '-' + conta.contaCorrente.contaCorrenteDv;
                 }
+                if(conta.cartaoCredito) {
+                    conta.bandeira = conta.cartaoCredito.bandeira;
+                    conta.numeroCartaoCredito = conta.cartaoCredito.numeroFinal;
+                }
                 conta.tipo = conta.tipo.id;
                 conta.saldo += conta.valorSaldoAbertura;
                 $scope.saldoTotal += conta.saldo;
-                return _.pick(conta, 'idConta', 'tipo', 'nome', 'banco', 'agencia', 'contaCorrente', 'saldo');
+                return _.pick(conta, 'idConta', 'tipo', 'nome', 'banco', 'agencia', 'bandeira', 'numeroCartaoCredito', 'contaCorrente', 'saldo');
             })
         }
         
@@ -85,7 +89,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
             chartSaldoByTipo(getLastThreeMonths(), dataInicio, dataFim);             
         }
         
-        var configChartReceitaDespesa = function(meses, receitas, despesas) {        
+        var configChartReceitaDespesa = function(meses, receitas, despesas, lucro) {        
             $scope.configChartReceitaDespesa.push({ 
                 title: " ",
                 options: { 
@@ -100,7 +104,8 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                     title: {text: ' '}
                 },
                 series: [{name: $scope.tipos[0].descricao, data: receitas, color: '#90ed7d'},
-                         {name: $scope.tipos[1].descricao, data: despesas, color: '#f45b5b'}],
+                         {name: $scope.tipos[1].descricao, data: despesas, color: '#f45b5b'},
+                         {name: 'Lucro', data: lucro, color: '#7CB5EC'}],
                 size: {
                     height: $scope.sizeChart
                 },
@@ -130,7 +135,8 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                     SaldoService.saldoTipoLancamento($scope.tipos, saldos, meses);
                     var receitas = getDataChartTipoLancamento($scope.tipos[0]);
                     var despesas = getDataChartTipoLancamento($scope.tipos[1]);  
-                    configChartReceitaDespesa(meses, receitas, despesas);
+                    var lucro = getLucro(receitas, despesas);
+                    configChartReceitaDespesa(meses, receitas, despesas, lucro);
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -151,6 +157,12 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
             var saldo = _.filter($scope.tipos, function(item) { return item.id === tipo.id; });
             var tipos = _.pluck(saldo, 'saldos');
             return _.values(tipos[0])
+        };
+        
+        var getLucro = function(receitas, despesas) {
+            return _.map(receitas, function(receita, index) {
+                return receita - despesas[index];
+            });  
         };
         
         // Despesas /////    
@@ -333,11 +345,13 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
         };
         
         var getSaldo = function(saldos, lancamentos) {
-            _.map(lancamentos, function(lancamento) {        
+            _.map(lancamentos, function(lancamento) { 
+                var valor = lancamento.valor;
+                if(lancamento.tipo.id === $scope.tipos[1].id) { valor = valor * -1; }
                 var dataVencimento = moment(lancamento.dataVencimento);            
                 saldos.push({id: lancamento.idLancamentoProgramado,
                              data: dataVencimento.format('YYYY-MM-DD'),
-                             valor: lancamento.valor}); 
+                             valor: valor}); 
             });
         }
         

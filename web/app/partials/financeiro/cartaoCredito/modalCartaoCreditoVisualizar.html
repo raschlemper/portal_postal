@@ -13,6 +13,24 @@
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">
+                    <label>Número Cartão de Crédito:</label>
+                </div>
+                <div class="col-md-8">{{cartaoCredito.numeroFinal | numeroCartaoCredito}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Código Segurança:</label>
+                </div>
+                <div class="col-md-8">{{cartaoCredito.codigoSeguranca}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Nome Títular:</label>
+                </div>
+                <div class="col-md-8">{{cartaoCredito.nomeTitular}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
                     <label>Bandeira:</label>
                 </div>
                 <div class="col-md-8">{{cartaoCredito.bandeira | uppercase}}</div>

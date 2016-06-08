@@ -45,11 +45,16 @@ public class CartaoCreditoDAO extends GenericDAO {
     }
 
     public CartaoCredito save(CartaoCredito cartaoCredito) throws Exception {  
-        String sql = "INSERT INTO cartao_credito (idContaCorrente, nome, bandeira, diaFechamento, diaVencimento, valorLimiteCredito) "
-                   + "VALUES(:idContaCorrente, :nome, :bandeira, :diaFechamento, :diaVencimento, :valorLimiteCredito)";        
+        String sql = "INSERT INTO cartao_credito (idContaCorrente, nome, nomeTitular, numero, codigoSeguranca, bandeira, diaFechamento, "
+                   + "diaVencimento, valorLimiteCredito) "
+                   + "VALUES(:idContaCorrente, :nome, :nomeTitular, :numero, :codigoSeguranca, :bandeira, :diaFechamento, :diaVencimento, "
+                   + ":valorLimiteCredito)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idContaCorrente", (cartaoCredito.getContaCorrente() == null ? null : cartaoCredito.getContaCorrente().getIdContaCorrente()));
         params.put("nome", cartaoCredito.getNome());
+        params.put("nomeTitular", cartaoCredito.getNomeTitular());
+        params.put("numero", cartaoCredito.getNumero());
+        params.put("codigoSeguranca", cartaoCredito.getCodigoSeguranca());
         params.put("bandeira", cartaoCredito.getBandeira());
         params.put("diaFechamento", cartaoCredito.getDiaFechamento());      
         params.put("diaVencimento", cartaoCredito.getDiaVencimento());
@@ -60,13 +65,17 @@ public class CartaoCreditoDAO extends GenericDAO {
 
     public CartaoCredito update(CartaoCredito cartaoCredito) throws Exception {
         String sql = "UPDATE cartao_credito "
-                   + "SET idContaCorrente = :idContaCorrente, nome = :nome, bandeira = :bandeira, diaFechamento = :diaFechamento, "
+                   + "SET idContaCorrente = :idContaCorrente, nome = :nome, nomeTitular = :nomeTitular, "
+                   + "numero = :numero, codigoSeguranca = :codigoSeguranca, bandeira = :bandeira, diaFechamento = :diaFechamento, "
                    + "diaVencimento = :diaVencimento, valorLimiteCredito = :valorLimiteCredito "
                    + "WHERE idCartaoCredito = :idCartaoCredito ";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idCartaoCredito", cartaoCredito.getIdCartaoCredito());
         params.put("idContaCorrente", (cartaoCredito.getContaCorrente() == null ? null : cartaoCredito.getContaCorrente().getIdContaCorrente()));
         params.put("nome", cartaoCredito.getNome());
+        params.put("nomeTitular", cartaoCredito.getNomeTitular());
+        params.put("numero", cartaoCredito.getNumero());
+        params.put("codigoSeguranca", cartaoCredito.getCodigoSeguranca());
         params.put("bandeira", cartaoCredito.getBandeira());
         params.put("diaFechamento", cartaoCredito.getDiaFechamento());      
         params.put("diaVencimento", cartaoCredito.getDiaVencimento());

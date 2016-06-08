@@ -71,7 +71,8 @@ public class ContaDAO extends GenericDAO {
                               + "FROM lancamento WHERE conta.idConta = lancamento.idConta) as saldo "
                    + "FROM conta "
                    + "LEFT OUTER JOIN conta_corrente ON(conta.idContaCorrente = conta_corrente.idContaCorrente) "
-                   + "LEFT OUTER JOIN banco ON(conta_corrente.idBanco = banco.idBanco) ";     
+                   + "LEFT OUTER JOIN banco ON(conta_corrente.idBanco = banco.idBanco) "
+                   + "LEFT OUTER JOIN cartao_credito ON(conta.idCartaoCredito = cartao_credito.idCartaoCredito)";     
         return findAll(sql, null, contaHandler);
     }
 

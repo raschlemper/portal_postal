@@ -6,6 +6,10 @@ public class CartaoCredito {
     
     private Integer idCartaoCredito;
     private String nome;
+    private String nomeTitular;
+    private String numero;
+    private String numeroFinal;
+    private String codigoSeguranca;
     private String bandeira;
     private Integer diaFechamento;
     private Integer diaVencimento;
@@ -27,6 +31,47 @@ public class CartaoCredito {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getNomeTitular() {
+        return nomeTitular;
+    }
+
+    public void setNomeTitular(String nomeTitular) {
+        this.nomeTitular = nomeTitular;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        if(numero != null) {
+            String fim = numero.substring(numero.length() - 4); 
+            setNumeroFinal(fim);
+        }
+        this.numero = numero;
+    }
+
+    public String getNumeroFinal() {
+        String numero = getNumero();
+        if(numero != null) {
+            String fim = getNumero().substring(getNumero().length() - 4); 
+            setNumeroFinal(fim);
+        }
+        return numeroFinal;
+    }
+
+    public void setNumeroFinal(String numeroFinal) {
+        this.numeroFinal = numeroFinal;
+    }
+
+    public String getCodigoSeguranca() {
+        return codigoSeguranca;
+    }
+
+    public void setCodigoSeguranca(String codigoSeguranca) {
+        this.codigoSeguranca = codigoSeguranca;
     }
 
     public String getBandeira() {
