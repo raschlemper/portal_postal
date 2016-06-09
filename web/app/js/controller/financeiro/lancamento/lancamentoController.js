@@ -1,8 +1,12 @@
 'use strict';
 
 app.controller('LancamentoController', 
-    ['$scope', 'LancamentoService', 'LancamentoProgramadoService', 'LancamentoTransferenciaService', 'LancamentoConciliadoService', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS', 'MESSAGES',
-    function ($scope, LancamentoService, LancamentoProgramadoService, LancamentoTransferenciaService, LancamentoConciliadoService, ContaService, PlanoContaService, CentroCustoService, ModalService, DatePickerService, ListaService, LISTAS, MESSAGES) {
+    ['$scope', 'LancamentoService', 'LancamentoTransferenciaService', 'LancamentoConciliadoService', 'ContaService', 'PlanoContaService', 
+        'CentroCustoService', 'ModalService', 'DatePickerService', 'ListaService', 'LancamentoHandler', 'LancamentoRateioHandler', 'LancamentoTransferenciaHandler', 
+        'LancamentoConciliadoHandler', 'LISTAS', 'MESSAGES',
+    function ($scope, LancamentoService, LancamentoTransferenciaService, LancamentoConciliadoService, ContaService, PlanoContaService, 
+        CentroCustoService, ModalService, DatePickerService, ListaService, LancamentoHandler, LancamentoRateioHandler, LancamentoTransferenciaHandler, 
+        LancamentoConciliadoHandler, LISTAS, MESSAGES) {
 
         var init = function () {
             $scope.lancamentos = [];
@@ -529,54 +533,11 @@ app.controller('LancamentoController',
                 
         // ***** AJUSTAR ***** //
         
-        var ajustarDados = function(data) {                 
-            data.conta = { idConta: data.conta.idConta };  
-            if(data.planoConta) {     
-                data.planoConta = { idPlanoConta: data.planoConta.idPlanoConta }; 
-            }
-            if(data.centroCusto) {
-                data.centroCusto = { idCentroCusto: data.centroCusto.idCentroCusto };
-            }
-            if(data.lancamentoProgramado) {
-                data.lancamentoProgramado = { idLancamentoProgramado: data.lancamentoProgramado.idLancamentoProgramado }; 
-            }
-            data.tipo = data.tipo.id; 
-            data.dataEmissao = data.dataEmissao || moment();
-            data.dataVencimento = data.dataVencimento || data.dataLancamento || moment();
-            data.dataLancamento = data.dataLancamento || moment();
-            data.dataCompensacao = null;
-            data.situacao = data.situacao.id;
-            data.modelo = data.modelo.id; 
-            data.valorDesconto = data.valorDesconto || 0;
-            data.valorJuros = data.valorJuros || 0;
-            data.valorMulta = data.valorMulta || 0;
-            if(data.situacao === $scope.situacoes[2].id) { data.dataCompensacao = moment(); }
-            ajustarDadosRateio(data);
-            return data;
-        };
-        
         var ajustarDadosExcluir = function(conta, lancamento) { 
             var lancamentoCompleto = ListaService.getLancamentoValue($scope.lancamentos, lancamento.idLancamento);
             lancamentoCompleto.conta = conta;
 //            lancamentoCompleto = ajustarDados(lancamentoCompleto);
             return lancamentoCompleto;
-        };
-        
-        var ajustarDadosTransferencia = function(data) {
-            var modelo = $scope.modelos[1];
-            var lancamentoTransferencia = { 
-                idLancamentoTransferencia: data.idLancamentoTransferencia || null,
-                lancamentoOrigem: getLancamento(data.contaOrigem, null, null, $scope.tipos[1], modelo, data, data.lancamentoOrigem),
-                lancamentoDestino: getLancamento(data.contaDestino, null, null,  $scope.tipos[0], modelo, data, data.lancamentoDestino),
-                numero: data.numero,
-                dataCompetencia: data.dataCompetencia,
-                dataEmissao: data.dataEmissao || moment(),
-                dataLancamento: data.dataLancamento || moment(),
-                valor: data.valor,
-                historico: data.historico,
-                observacao: data.observacao
-            };    
-            return lancamentoTransferencia;
         };
 
         var ajustarDadosCompensar = function(conta, lancamento) {
@@ -591,70 +552,129 @@ app.controller('LancamentoController',
             return lancamentoCompleto;
         };
         
-        var ajustarDadosRateio = function(data) {
-            if(!data.rateios) return null;
-            _.map(data.rateios, function(rateio) { 
-                if(rateio.planoConta) {     
-                    rateio.planoConta = { idPlanoConta: rateio.planoConta.idPlanoConta }; 
-                }
-                if(rateio.centroCusto) {
-                    rateio.centroCusto = { idCentroCusto: rateio.centroCusto.idCentroCusto };
-                }   
-            });
+        var ajustarDados = function(data) {                 
+//            data.conta = { idConta: data.conta.idConta };  
+//            if(data.planoConta) {     
+//                data.planoConta = { idPlanoConta: data.planoConta.idPlanoConta }; 
+//            }
+//            if(data.centroCusto) {
+//                data.centroCusto = { idCentroCusto: data.centroCusto.idCentroCusto };
+//            }
+//            if(data.lancamentoProgramado) {
+//                data.lancamentoProgramado = { idLancamentoProgramado: data.lancamentoProgramado.idLancamentoProgramado }; 
+//            }
+//            data.tipo = data.tipo.id; 
+//            data.dataEmissao = data.dataEmissao || moment();
+//            data.dataVencimento = data.dataVencimento || data.dataLancamento || moment();
+//            data.dataLancamento = data.dataLancamento || moment();
+//            data.dataCompensacao = null;
+//            data.situacao = data.situacao.id;
+//            data.modelo = data.modelo.id; 
+//            data.valorDesconto = data.valorDesconto || 0;
+//            data.valorJuros = data.valorJuros || 0;
+//            data.valorMulta = data.valorMulta || 0;
+//            if(data.situacao === $scope.situacoes[2].id) { data.dataCompensacao = moment(); }
+//            ajustarDadosRateio(data);
+            var lancamento = LancamentoHandler.handle(data);
+            lancamento.rateios = LancamentoRateioHandler.handleList(data.rateios);
+            return lancamento;
         };
         
+        var ajustarDadosTransferencia = function(data) {
+//            var modelo = $scope.modelos[1];
+//            var lancamentoTransferencia = { 
+//                idLancamentoTransferencia: data.idLancamentoTransferencia || null,
+//                lancamentoOrigem: getLancamento(data.contaOrigem, null, null, $scope.tipos[1], modelo, data, data.lancamentoOrigem),
+//                lancamentoDestino: getLancamento(data.contaDestino, null, null,  $scope.tipos[0], modelo, data, data.lancamentoDestino),
+//                numero: data.numero,
+//                dataCompetencia: data.dataCompetencia,
+//                dataEmissao: data.dataEmissao || moment(),
+//                dataLancamento: data.dataLancamento || moment(),
+//                valor: data.valor,
+//                historico: data.historico,
+//                observacao: data.observacao
+//            };                
+            var modelo = $scope.modelos[1];
+            data.lancamentoOrigem = getLancamento(data.contaOrigem, null, null, $scope.tipos[1], modelo, data, data.lancamentoOrigem);
+            data.lancamentoDestino = getLancamento(data.contaDestino, null, null,  $scope.tipos[0], modelo, data, data.lancamentoDestino);
+            var lancamentoTransferencia = LancamentoTransferenciaHandler(data);
+            return lancamentoTransferencia;
+        };
+        
+//        var ajustarDadosRateio = function(data) {
+//            if(!data.rateios) return null;
+//            _.map(data.rateios, function(rateio) { 
+//                if(rateio.planoConta) {     
+//                    rateio.planoConta = { idPlanoConta: rateio.planoConta.idPlanoConta }; 
+//                }
+//                if(rateio.centroCusto) {
+//                    rateio.centroCusto = { idCentroCusto: rateio.centroCusto.idCentroCusto };
+//                }   
+//            });
+//        };
+        
         var ajustarDadosConciliado = function(conta, data) {                 
-            var lancamentoConciliado = { 
-                idLancamentoConciliado: data.idLancamentoConciliado || null,
-                lancamento: getLancamento(conta, data.planoConta, data.centroCusto, data.tipo, $scope.modelos[5], data, null),  
-                conta: null,
-                planoConta: null,
-                centroCusto: null,
-                tipo: null,
-                dataCompetencia: data.dataCompetencia,
-                dataEmissao: data.dataEmissao || moment(),
-                dataLancamento: data.dataLancamento || moment(),
-                valor: data.valor,
-                historico: data.historico
-            };     
-            if(conta) { lancamentoConciliado.conta = { idConta: conta.idConta }; }
-            if(data.planoConta) { lancamentoConciliado.planoConta = { idPlanoConta: data.planoConta.idPlanoConta }; }
-            if(data.centroCusto) { lancamentoConciliado.centroCusto = { idCentroCusto: data.centroCusto.idCentroCusto }; }
-            if(data.tipo) { lancamentoConciliado.tipo = data.tipo.id; }
+//            var lancamentoConciliado = { 
+//                idLancamentoConciliado: data.idLancamentoConciliado || null,
+//                lancamento: getLancamento(conta, data.planoConta, data.centroCusto, data.tipo, $scope.modelos[5], data, null),  
+//                conta: null,
+//                planoConta: null,
+//                centroCusto: null,
+//                tipo: null,
+//                dataCompetencia: data.dataCompetencia,
+//                dataEmissao: data.dataEmissao || moment(),
+//                dataLancamento: data.dataLancamento || moment(),
+//                valor: data.valor,
+//                historico: data.historico
+//            };     
+//            if(conta) { lancamentoConciliado.conta = { idConta: conta.idConta }; }
+//            if(data.planoConta) { lancamentoConciliado.planoConta = { idPlanoConta: data.planoConta.idPlanoConta }; }
+//            if(data.centroCusto) { lancamentoConciliado.centroCusto = { idCentroCusto: data.centroCusto.idCentroCusto }; }
+//            if(data.tipo) { lancamentoConciliado.tipo = data.tipo.id; }
+            
+            var lancamento = getLancamento(conta, data.planoConta, data.centroCusto, data.tipo, $scope.modelos[5], data, null);
+            var lancamentoConciliado = LancamentoConciliadoHandler.handle(data);
+            lancamentoConciliado.lancamento = lancamento;
             return lancamentoConciliado;
         };
         
         var getLancamento = function(conta, planoConta, centroCusto, tipo, modelo, data, lancamentoOriginal) {
-            var lancamento = {
-                idLancamento: (lancamentoOriginal && lancamentoOriginal.idLancamento) || null,
-                conta: null,
-                planoConta: null,
-                centroCusto: null,
-                tipo: null,
-                favorecido: null,
-                numero: data.numero,
-                numeroParcela: 0,
-                dataCompetencia: data.dataCompetencia,
-                dataEmissao: data.dataEmissao || moment(),
-                dataVencimento: data.dataLancamento || moment(),
-                dataLancamento: data.dataLancamento || moment(),
-                dataCompensacao: null,
-                valor: data.valor,      
-                valorDesconto: 0,       
-                valorJuros: 0,       
-                valorMulta: 0,        
-                situacao: (data && data.situacao) || $scope.situacoes[0],  
-                modelo: modelo.id,
-                historico: data.historico,
-                observacao: data.observacao,
-                lancamentoProgramado: null
-            }
-            if(conta) { lancamento.conta = { idConta: conta.idConta }; }
-            if(planoConta) { lancamento.planoConta = { idPlanoConta: planoConta.idPlanoConta }; }
-            if(centroCusto) { lancamento.centroCusto = { idCentroCusto: centroCusto.idCentroCusto }; }
-            if(tipo) { lancamento.tipo = tipo.id; }
-            lancamento.situacao = lancamento.situacao.id;
-            return lancamento;
+//            var lancamento = {
+//                idLancamento: (lancamentoOriginal && lancamentoOriginal.idLancamento) || null,
+//                conta: null,
+//                planoConta: null,
+//                centroCusto: null,
+//                tipo: null,
+//                favorecido: null,
+//                numero: data.numero,
+//                numeroParcela: 0,
+//                dataCompetencia: data.dataCompetencia,
+//                dataEmissao: data.dataEmissao || moment(),
+//                dataVencimento: data.dataLancamento || moment(),
+//                dataLancamento: data.dataLancamento || moment(),
+//                dataCompensacao: null,
+//                valor: data.valor,      
+//                valorDesconto: 0,       
+//                valorJuros: 0,       
+//                valorMulta: 0,        
+//                situacao: (data && data.situacao) || $scope.situacoes[0],  
+//                modelo: modelo.id,
+//                historico: data.historico,
+//                observacao: data.observacao,
+//                lancamentoProgramado: null
+//            }
+//            if(conta) { lancamento.conta = { idConta: conta.idConta }; }
+//            if(planoConta) { lancamento.planoConta = { idPlanoConta: planoConta.idPlanoConta }; }
+//            if(centroCusto) { lancamento.centroCusto = { idCentroCusto: centroCusto.idCentroCusto }; }
+//            if(tipo) { lancamento.tipo = tipo.id; }
+//            lancamento.situacao = lancamento.situacao.id;
+            data.idLancamento = (lancamentoOriginal && lancamentoOriginal.idLancamento) || null;
+            data.conta = conta;
+            data.planoConta = planoConta;
+            data.centroCusto = centroCusto;
+            data.tipo = tipo;
+            data.modelo = modelo;
+            return LancamentoHandler.handle(data);
         }
                 
         // ***** MODAL ***** //
