@@ -650,6 +650,14 @@
         <servlet-name>ServImportaVpne</servlet-name>
         <servlet-class>Emporium.Servlet.ServImportaVpne</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ServInserirVendedor</servlet-name>
+        <servlet-class>Vendedor.Servlet.ServInserirVendedor</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServInserirClientesVendedor</servlet-name>
+        <servlet-class>Vendedor.Servlet.ServInserirClientesVendedor</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ServLogin</servlet-name>
         <url-pattern>/ServLogin</url-pattern>
@@ -1270,6 +1278,14 @@
     <servlet-mapping>
         <servlet-name>ServImportaVpne</servlet-name>
         <url-pattern>/ServImportaVpne</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServInserirVendedor</servlet-name>
+        <url-pattern>/ServInserirVendedor</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServInserirClientesVendedor</servlet-name>
+        <url-pattern>/ServInserirClientesVendedor</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

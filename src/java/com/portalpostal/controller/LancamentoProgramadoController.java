@@ -176,6 +176,20 @@ public class LancamentoProgramadoController {
         }
     } 
     
+    @POST
+    @Path("/delete")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void deleteAll(List<LancamentoProgramado> lancamentosProgramados) {
+        try {
+            init();
+            for (LancamentoProgramado lancamentoProgramado : lancamentosProgramados) {   
+                lancamentoProgramadoService.delete(lancamentoProgramado.getIdLancamentoProgramado());
+            }
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    } 
+    
     private void validation(LancamentoProgramado lancamentoProgramado) throws Exception {  
         Validation validacao = new LancamentoProgramadoValidation();
         if(!validacao.validar(lancamentoProgramado)) {

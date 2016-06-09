@@ -23,7 +23,12 @@ public class LancamentoProgramadoService {
     
     public List<LancamentoProgramado> findAll() throws Exception {
         init();
-        return lancamentoProgramadoDAO.findAll();
+        List<LancamentoProgramado> lancamentoProgramados = lancamentoProgramadoDAO.findAll();
+        for (LancamentoProgramado lancamentoProgramado : lancamentoProgramados) {
+        List<Lancamento> lancamentos = lancamentoService.findByLancamentoProgramado(lancamentoProgramado.getIdLancamentoProgramado());
+            lancamentoProgramado.setLancamentos(lancamentos);
+        }
+        return lancamentoProgramados;
     }  
     
     public LancamentoProgramado find(Integer idLancamentoProgramado) throws Exception {
@@ -78,7 +83,7 @@ public class LancamentoProgramadoService {
     
     public LancamentoProgramado delete(Integer idLancamentoProgramado) throws Exception {
         init();
-        if(!podeExcluir(idLancamentoProgramado)) throw new Exception("Esta conta não pode ser excluída!"); 
+        if(!podeExcluir(idLancamentoProgramado)) throw new Exception("Este lançamento não pode ser excluída!"); 
         return lancamentoProgramadoDAO.remove(idLancamentoProgramado);
     }   
     

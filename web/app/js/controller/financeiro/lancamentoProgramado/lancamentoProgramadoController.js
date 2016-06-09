@@ -179,10 +179,22 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
                 lancamentoProgramado.frequencia = lancamentoProgramado.frequencia.descricao + complementoDescricaoFrequencia;
                 lancamentoProgramado.numeroParcela = lancamentoProgramado.numero;
                 lancamentoProgramado.tipo.modelo = $scope.modelos;
+                if(lancamentoProgramado.lancamentos && lancamentoProgramado.lancamentos.length) {
+                    lancamentoProgramado.lancamentos = lancamentoProgramado.lancamentos.length;
+                }
                 
-                return _.pick(lancamentoProgramado, 'idLancamentoProgramado', 'conta', 'tipo', 'tipoLancamento', 'dataVencimento', 'numeroParcela', 'planoConta', 'centroCusto', 'favorecido', 'valor', 'situacao', 'frequencia');
+                return _.pick(lancamentoProgramado, 'idLancamentoProgramado', 'lancamentos', 'conta', 'tipo', 'tipoLancamento', 'dataVencimento', 'numeroParcela', 'planoConta', 'centroCusto', 'favorecido', 'valor', 'situacao', 'frequencia');
             })
         };
+        
+        var getLancamentoProgramadosSelecionados = function(lancamentosProgramados) {            
+            var lancamentosProgramadosSelecionados = [];
+            _.map(lancamentosProgramados, function(lancamentoProgramado) {
+                if(!lancamentoProgramado.selected) return;
+                lancamentosProgramadosSelecionados.push(angular.copy(lancamentoProgramado));
+            });
+            return lancamentosProgramadosSelecionados;
+        }
         
         // ***** VISUALIZAR ***** //
 
@@ -287,19 +299,32 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         
         // ***** EXCLUIR ***** //
         
+        var existeLancamentoVinculado = function(lancamentoProgramado) {   
+            if(lancamentoProgramado.lancamentos && lancamentoProgramado.lancamentos > 0) return true; 
+            return false;
+        }
+        
         $scope.excluir = function(conta, lancamentoProgramado) {            
             LancamentoProgramadoService.getLancamento(lancamentoProgramado.idLancamentoProgramado)
                 .then(function(data) {   
-                    if(data.lancamentos.length) {
-                        modalMessage(MESSAGES.lancamento.programar.info.LANCAMENTO_VINCULADOS);
+                    if(data.lancamentos) {
+                        excluirLancamentos(conta, data);                        
                     } else {
-                        excluirLancamento(conta, lancamentoProgramado);
+                        excluirLancamentoProgramado(conta, data);
                     }
                 });
         };
         
-        var excluirLancamento = function(conta, lancamentoProgramado) {
-            modalExcluir()
+        var excluirLancamentos = function(conta, lancamentoProgramado) {    
+            if(existeLancamentoVinculado(lancamentoProgramado)) {                
+                modalMessage(MESSAGES.lancamento.programar.info.LANCAMENTO_VINCULADOS);
+            } else {
+                excluirLancamentoProgramado(conta, lancamentoProgramado);
+            } 
+        };
+        
+        var excluirLancamentoProgramado = function(conta, lancamentoProgramado) {
+            modalExcluir(MESSAGES.lancamento.programar.info.CONFIRMAR_EXCLUIR)
                 .then(function() {
                     excluir(conta, lancamentoProgramado);
                 });
@@ -315,6 +340,49 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
                     modalMessage(e);
                 });
         }; 
+        
+        // ***** TODOS ***** //
+
+        $scope.excluirTodos = function(conta, lancamentos) {
+            var lancamentoSelecionados = getLancamentoProgramadosSelecionados(lancamentos);  
+            var lancamentosValidos = getLancamentos(lancamentoSelecionados);
+            var msg = MESSAGES.lancamento.programar.info.CONFIRMAR_EXCLUIR_TODOS;
+            if(lancamentosValidos.length !== lancamentoSelecionados.length) { 
+                msg = MESSAGES.lancamento.programar.info.CONFIRMAR_EXCLUIR_LANCAMENTOS_TODOS;
+            }
+            excluirLancamentosProgramados(conta, lancamentosValidos, msg);
+        }; 
+        
+        var getLancamentos = function(lancamentosProgramados) {               
+            var lancamentosProgramadosSelecionados = [];
+            _.map(lancamentosProgramados, function(lancamentoProgramado) {        
+                if(!existeLancamentoVinculado(lancamentoProgramado)) {                
+                    lancamentosProgramadosSelecionados.push(lancamentoProgramado);
+                }                 
+            });
+            return lancamentosProgramadosSelecionados;
+        };
+        
+        var excluirLancamentosProgramados = function(conta, lancamentos, message) {
+            modalExcluir(message)
+                .then(function() {
+                    excluirAll(conta, lancamentos);
+                });
+        };
+        
+        var excluirAll = function(conta, lancamentosProgramados) {
+            _.map(lancamentosProgramados, function(lancamentoProgramado) {
+                lancamentoProgramado = ajustarDados(lancamentoProgramado);
+            });
+            LancamentoProgramadoService.deleteAll(lancamentosProgramados)
+                .then(function(data) { 
+                    modalMessage(MESSAGES.lancamento.programar.sucesso.REMOVIDO_SUCESSO_TODOS);
+                    todos(conta);                        
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });            
+        }
         
         // ***** TRANSFERIR ***** //
 
@@ -336,8 +404,11 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         
         // ***** AJUSTAR ***** //
         
-        var ajustarDados = function(data) {       
+        var ajustarDados = function(data) {   
+            delete data.lancamentos;    
             delete data.gerarLancamento;
+            delete data.tipoLancamento;
+            delete data.selected;
             data.conta = { idConta: data.conta.idConta };       
             data.planoConta = { idPlanoConta: data.planoConta.idPlanoConta };    
             if(data.centroCusto) {
@@ -346,8 +417,12 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
 //            if(data.lancamentoParcelado) {
 //                data.lancamentoParcelado = { idLancamentoParcelado: data.lancamentoParcelado.idLancamentoParcelado }; 
 //            }
-            data.documento = { idTipoDocumento: data.documento.idTipoDocumento }; 
-            data.formaPagamento = { idTipoFormaPagamento: data.formaPagamento.idTipoFormaPagamento }; 
+            if(data.documento) {
+                data.documento = { idTipoDocumento: data.documento.idTipoDocumento }; 
+            }
+            if(data.formaPagamento) {
+                data.formaPagamento = { idTipoFormaPagamento: data.formaPagamento.idTipoFormaPagamento }; 
+            }
             data.tipo = data.tipo.id;
             data.dataEmissao = data.dataEmissao || moment();
             data.dataVencimento = data.dataVencimento || data.dataLancamento || moment();
@@ -434,8 +509,8 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
 //            return modalInstance.result;
 //        };
         
-        var modalExcluir = function() {
-            var modalInstance = ModalService.modalExcluir(MESSAGES.lancamento.programar.info.ALERT_EXCLUIR, MESSAGES.lancamento.programar.info.CONFIRMAR_EXCLUIR);
+        var modalExcluir = function(message) {
+            var modalInstance = ModalService.modalExcluir(MESSAGES.lancamento.programar.info.ALERT_EXCLUIR, message);
             return modalInstance.result;
         };
         

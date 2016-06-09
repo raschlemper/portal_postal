@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <meta name="description" content=""/>
 <meta name="author" content=""/>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-8">
 
 <!--[if IE]><link rel="shortcut icon" href="${pageContext.request.contextPath}/imagensNew/favicon.ico" /><![endif]-->
 <link rel="icon" href="${pageContext.request.contextPath}/imagensNew/favicon.ico" />
@@ -67,6 +67,8 @@
 <!-- Bootstrap Core JavaScript -->
 <script src="${pageContext.request.contextPath}/plugins/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
 
+<!-- JQUERY NUMERIC }); -->
+<script src="${pageContext.request.contextPath}/javascript/jquery/js/jquery.numeric.min.js" type="text/javascript"></script>
  <!--- X -editable -->
         <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
         <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>

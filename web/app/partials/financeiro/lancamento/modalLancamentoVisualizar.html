@@ -12,13 +12,13 @@
                 </div>
                 <div class="col-md-8">{{lancamento.conta.nome}}</div>
             </div>
-            <div class="row" ng-hide="lancamento.rateios">
+            <div class="row" ng-hide="lancamento.rateios && lancamento.rateios.length">
                 <div class="col-md-4 text-right">
                     <label>Plano de Conta:</label>
                 </div>
-                <div class="col-md-8">{{lancamento.planoConta.nome}}</div>
+                <div class="col-md-8">{{lancamento.planoConta}}</div>
             </div>
-            <div class="row" ng-hide="lancamento.rateios">
+            <div class="row" ng-hide="lancamento.rateios && lancamento.rateios.length">
                 <div class="col-md-4 text-right">
                     <label>Centro de Custo:</label>
                 </div>
@@ -96,7 +96,7 @@
                 </div>
                 <div class="col-md-8">{{lancamento.autenticacao}}</div>
             </div>
-            <div class="row" ng-hide="lancamento.rateios">
+            <div class="row" ng-hide="lancamento.rateios && lancamento.rateios.length">
                 <div class="col-md-4 text-right">
                     <label>Observação:</label>
                 </div>

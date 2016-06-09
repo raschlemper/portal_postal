@@ -62,12 +62,15 @@ app.constant('MESSAGES', {
             sucesso: {
                 INSERIDO_SUCESSO: "Lançamento Programado Inserido com sucesso!",
                 ALTERADO_SUCESSO: "Lançamento Programado Alterado com sucesso!",
-                REMOVIDO_SUCESSO: "Lançamento Programado Removido com sucesso!"
+                REMOVIDO_SUCESSO: "Lançamento Programado Removido com sucesso!",
+                REMOVIDO_SUCESSO_TODOS: "Lançamentos Programados Removidos com sucesso!"
             },
             info: {
                 ALERT_EXCLUIR: "Excluir Lançamento Programado?",
                 CONFIRMAR_EXCLUIR: "Deseja realmente excluir este lançamento programado?",
                 LANCAMENTO_VINCULADOS: "Este lançamento programado não pode ser excluído! <br/> Existem Lançamentos vinculados a este lançamento programado.",
+                CONFIRMAR_EXCLUIR_TODOS: "Deseja realmente excluir estes lançamentos programados?",
+                CONFIRMAR_EXCLUIR_LANCAMENTOS_TODOS: "Deseja realmente excluir estes lançamentos programados? <br/> Alguns lançamentos programados não poderão ser excluídos. É necessário excluir todos os lançamentos vínculados!",
                 PARCELA_EXISTENTE: "Este lançamento não pode ser inserido, pois esta parcela já existe!"               
             },
             validacao: {

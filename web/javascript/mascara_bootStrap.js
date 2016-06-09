@@ -74,6 +74,7 @@ function maskKilo(v){
     return v
 }
 
+
 function maskTelefone(v){
     if(v.length < 15){
         v=v.replace(/\D/g,"")                 //Remove tudo o que nao e digito

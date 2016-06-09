@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.apache.wink.json4j.JSONArray;
+import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
 import org.apache.wink.json4j.OrderedJSONObject;
 
@@ -24,7 +25,7 @@ public class contrRelatorios {
   
     private static final DecimalFormat df = new DecimalFormat("0.00");
     
-    public static String montaJson(String sql, SimpleDateFormat sdf, String nomeBd) throws SQLException, org.apache.wink.json4j.JSONException {
+    public static String montaJson(String sql, SimpleDateFormat sdf, String nomeBd) throws SQLException, JSONException {
         Connection conn = Conexao.conectar(nomeBd);      
         PreparedStatement valores = conn.prepareStatement(sql);
         ResultSet rs = (ResultSet) valores.executeQuery();

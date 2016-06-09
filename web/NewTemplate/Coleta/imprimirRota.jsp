@@ -55,7 +55,7 @@
         <div style="margin-top:20px;">
             <div style="font-weight:bold;font-size:medium;padding-bottom:10px;">
                 Coletador: <%= coletador%> - Rota das Coletas, gerado em <%= sdf2.format(new Date())%><br/><br/>
-                * HORÁRIO DE CHEGADA NA AGF ATÉ ÀS ____:____ hs SEM FALTA!
+                * HORÁRIO DE CHEGADA NA AGF ATÉ ÀS ____:____ h SEM FALTA!
             </div>
             <table border="1" style="border: 1px solid black;" width="100%" cellspacing="0">
                 <tr>
@@ -81,8 +81,11 @@
                                     Entidade.Clientes cli = Controle.contrCliente.consultaClienteById(idCliente, nomeBD);
                                     String cliente = "Cliente não encontrado!", rua = "", complemento = "", nomeFantasia = "";
                                     if (cli != null) {
-                                        cliente = cli.getNome();
+                                        cliente = cli.getNome();                                        
                                         rua = cli.getEndereco();
+                                        if(cli.getNumero() != null && !cli.getNumero().equals("null")){
+                                            rua += ", " + cli.getNumero();
+                                        }
                                         complemento = cli.getComplemento();
                                         nomeFantasia = cli.getNomeFantasia().trim();
                                         if (nomeFantasia.equals("")) {

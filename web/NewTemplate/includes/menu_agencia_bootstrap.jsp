@@ -84,6 +84,7 @@
                     <%if (usrMenu.getListaAcessosPortalPostal().contains(405)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Cadastros/cliente_lista_b.jsp">Clientes</a></li><%}%>
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(407)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Cadastros/grupo_faturamento_lista_b.jsp">Grupos de Faturamento</a></li><%}%>
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(406)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Cadastros/cliente_log_contrato_b.jsp">Verificação de Contratos</a></li><%}%>
+                <li><a href="${pageContext.request.contextPath}/NewTemplate/Cadastros/vendedor_lista_b.jsp">Vendedores</a></li>
             </ul>
         </li>
         <%}%>

@@ -322,43 +322,30 @@ app.controller('LancamentoController',
         }
 
         // ***** EXCLUIR ***** //
-
-        $scope.excluirTodos = function(conta, lancamentos) {
-            if(!validaConta(conta)) return;
-            var lancamentoSelecionados = getLancamentoSelecionados(conta, lancamentos, ajustarDadosExcluir);  
-            var lancamentosValidos = getLancamentosProgramado(lancamentoSelecionados);
-            var msg = MESSAGES.lancamento.info.CONFIRMAR_EXCLUIR_TODOS;
-            if(lancamentosValidos.length !== lancamentoSelecionados.length) { 
-                msg = MESSAGES.lancamento.info.CONFIRMAR_EXCLUIR_PROGRAMADOS_TODOS;
-            }
-            excluirLancamentos(conta, lancamentosValidos, msg);
-        }; 
+        
+        var existeLancamentoProgramadoParceladoPosterior = function(lancamento) {   
+            if(lancamento.modelo.id !== $scope.modelos[4].id) return false;         
+            if(lancamento.lancamentoProgramado 
+                    && lancamento.numeroParcela < lancamento.lancamentoProgramado.numeroParcela) {                
+                return true;
+            } 
+            return false;
+        };
 
         $scope.excluir = function(conta, lancamento) {
             if(!validaConta(conta)) return;
             LancamentoService.get(lancamento.idLancamento)
-                .then(function(lancamento) {
-                    if(lancamento.lancamentoProgramado) {
-                        excluirLancamentoProgramado(conta, lancamento);
+                .then(function(data) {
+                    if(data.lancamentoProgramado) {
+                        excluirLancamentoProgramado(conta, data);
                     } else {
-                        excluirLancamento(conta, lancamento);
+                        excluirLancamento(conta, data);
                     }  
                 })
                 .catch(function(e) {
                     modalMessage(e);
-                });
-            
+                });            
         }; 
-        
-        var getLancamentosProgramado = function(lancamentos) {               
-            var lancamentosSelecionados = [];
-            _.map(lancamentos, function(lancamento) {        
-                if(!existeLancamentoProgramadoParceladoPosterior(lancamento)) {                
-                    lancamentosSelecionados.push(lancamento);
-                }                 
-            });
-            return lancamentosSelecionados;
-        };
         
         var excluirLancamentoProgramado = function(conta, lancamento) {    
             if(existeLancamentoProgramadoParceladoPosterior(lancamento)) {                
@@ -368,26 +355,10 @@ app.controller('LancamentoController',
             } 
         };
         
-        var existeLancamentoProgramadoParceladoPosterior = function(lancamento) {   
-            if(lancamento.modelo.id !== $scope.modelos[4].id) return false;         
-            if(lancamento.lancamentoProgramado 
-                    && lancamento.numeroParcela < lancamento.lancamentoProgramado.numeroParcela) {                
-                return true;
-            } 
-            return false;
-        }
-        
         var excluirLancamento = function(conta, lancamento) {
             modalExcluir(MESSAGES.lancamento.info.CONFIRMAR_EXCLUIR)
                 .then(function() {
                     excluir(conta, lancamento);
-                });
-        };
-        
-        var excluirLancamentos = function(conta, lancamentos, message) {
-            modalExcluir(message)
-                .then(function() {
-                    excluirAll(conta, lancamentos);
                 });
         };
         
@@ -400,7 +371,37 @@ app.controller('LancamentoController',
                 .catch(function(e) {
                     modalMessage(e);
                 });            
-        }
+        };
+
+        // ***** TODOS ***** //
+
+        $scope.excluirTodos = function(conta, lancamentos) {
+            if(!validaConta(conta)) return;
+            var lancamentoSelecionados = getLancamentoSelecionados(conta, lancamentos, ajustarDadosExcluir);  
+            var lancamentosValidos = getLancamentosProgramado(lancamentoSelecionados);
+            var msg = MESSAGES.lancamento.info.CONFIRMAR_EXCLUIR_TODOS;
+            if(lancamentosValidos.length !== lancamentoSelecionados.length) { 
+                msg = MESSAGES.lancamento.info.CONFIRMAR_EXCLUIR_PROGRAMADOS_TODOS;
+            }
+            excluirLancamentos(conta, lancamentosValidos, msg);
+        }; 
+        
+        var getLancamentosProgramado = function(lancamentos) {               
+            var lancamentosSelecionados = [];
+            _.map(lancamentos, function(lancamento) {        
+                if(!existeLancamentoProgramadoParceladoPosterior(lancamento)) {                
+                    lancamentosSelecionados.push(lancamento);
+                }                 
+            });
+            return lancamentosSelecionados;
+        };
+        
+        var excluirLancamentos = function(conta, lancamentos, message) {
+            modalExcluir(message)
+                .then(function() {
+                    excluirAll(conta, lancamentos);
+                });
+        };
         
         var excluirAll = function(conta, lancamentos) {
             _.map(lancamentos, function(lancamento) {
@@ -414,7 +415,7 @@ app.controller('LancamentoController',
                 .catch(function(e) {
                     modalMessage(e);
                 });            
-        }
+        };
 
         // ***** TRANSFERIR ***** //
 

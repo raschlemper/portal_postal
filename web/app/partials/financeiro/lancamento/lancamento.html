@@ -14,7 +14,7 @@
                                 <div class="col-md-12">
                                     <div class="pull-left">                                     
                                         <button class="btn btn-sm btn-default spc-right" ng-click="excluirTodos(conta, events.list())">
-                                            <i class="fa fa-lg fa-arrow-circle-o-down fa-spc"></i> EXCLUIR 
+                                            <i class="fa fa-lg fa-times fa-spc"></i> EXCLUIR 
                                         </button>                                            
                                         <button class="btn btn-sm btn-default spc-right" ng-click="compensarTodos(conta, events.list())">
                                             <i class="fa fa-lg fa-arrow-circle-o-down fa-spc"></i> COMPENSAR 
@@ -94,8 +94,8 @@
                                         <div class="margin-top">
                                             <div class="title-table">
                                                 <strong><i>{{conta.nome}} 
-                                                   <span ng-show="conta.contaCorrente && conta.contaCorrente.banco && conta.contaCorrente.agencia && conta.contaCorrente.contaCorrente"> 
-                                                       - ({{conta.contaCorrente.banco.numero}} / {{conta.contaCorrente.agencia}}-{{conta.contaCorrente.agenciaDv}} / {{conta.contaCorrente.contaCorrente}}-{{conta.contaCorrente.contaCorrenteDv}})
+                                                        <span style="font-size: 11pt;" ng-show="conta.contaCorrente && conta.contaCorrente.banco && conta.contaCorrente.agencia && conta.contaCorrente.contaCorrente"> 
+                                                       - (Banco: {{conta.contaCorrente.banco.nome}} / Agência: {{conta.contaCorrente.agencia}}-{{conta.contaCorrente.agenciaDv}} / Conta: {{conta.contaCorrente.contaCorrente}}-{{conta.contaCorrente.contaCorrenteDv}})
                                                    </span>
                                                         <span ng-show="false">/ ({{conta.status.descricao}})</span>
                                                 </i></strong>

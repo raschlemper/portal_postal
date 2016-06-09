@@ -10,6 +10,11 @@
                                     <h4><strong>{{title}}</strong></h4>
                                 </div>
                                 <div class="col-md-12">
+                                    <div class="pull-left">                                     
+                                        <button class="btn btn-sm btn-default spc-right" ng-click="excluirTodos(conta, events.list())">
+                                            <i class="fa fa-lg fa-times fa-spc"></i> EXCLUIR 
+                                        </button>   
+                                    </div>
                                     <div class="pull-right">  
                                         <button class="btn btn-sm btn-primary spc-right" ng-click="salvar(conta, tipos[0])">
                                             <i class="fa fa-lg fa-plus-circle fa-spc"></i> CONTAS A RECEBER
@@ -29,10 +34,12 @@
                                  <app-table lista="lancamentoProgramadosLista" 
                                             colunas="colunas" 
                                             linha="linha" 
+                                            events="events" 
                                             filter="filter" 
                                             search="lancSearch" 
                                             default-filter="true" 
                                             order-by-column="data"
+                                            show-checkbox="true"
                                             show-menu="true"
                                             show-column-menu="true">
                                     

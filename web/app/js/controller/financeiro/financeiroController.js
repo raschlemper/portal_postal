@@ -65,12 +65,12 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
         
         var createContasSaldosLista = function(contas) {    
             return _.map(contas, function(conta) {  
-                if(conta.contaCorrente) {
+                if(conta.contaCorrente && conta.contaCorrente.idContaCorrente) {
                     conta.banco = conta.contaCorrente.banco.numero;
                     conta.agencia = conta.contaCorrente.agencia + '-' + conta.contaCorrente.agenciaDv;
                     conta.contaCorrente = conta.contaCorrente.contaCorrente + '-' + conta.contaCorrente.contaCorrenteDv;
                 }
-                if(conta.cartaoCredito) {
+                if(conta.cartaoCredito && conta.cartaoCredito.idCartaoCredito) {
                     conta.bandeira = conta.cartaoCredito.bandeira;
                     conta.numeroCartaoCredito = conta.cartaoCredito.numeroFinal;
                 }
@@ -451,8 +451,10 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
         
         var getValoresReceitaDespesa = function(valores, lancamentos) {
             _.map(lancamentos, function(lancamento) {
-               if(lancamento.tipo.id === $scope.tipos[0].id) { valores.receita += lancamento.valor; }
-               if(lancamento.tipo.id === $scope.tipos[1].id) { valores.despesa -= lancamento.valor; }
+                var valor = lancamento.valor;
+                if(lancamento.quantidadeParcela) { valor = lancamento.valor / lancamento.quantidadeParcela; }
+                if(lancamento.tipo.id === $scope.tipos[0].id) { valores.receita += valor; }
+                if(lancamento.tipo.id === $scope.tipos[1].id) { valores.despesa -= valor; }
             });
         }
         

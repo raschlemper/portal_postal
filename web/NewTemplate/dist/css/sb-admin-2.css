@@ -3179,9 +3179,19 @@ table.table-condensed tbody tr td.cel-menu {
     margin: 10px 0 10px 0; 
     border-right: 1px solid #CCC; 
     color: #666;
-    width: 20%;
+    width: 18%;
     float: left;
     position: relative;
+}
+
+.content-programacao-title {
+    width: 10%;
+    border-right: none; 
+}
+
+.content-programacao-title .title {
+    margin-top: 30px;
+    border-bottom: none !important;
 }
 
 .content-programacao:first-child {
@@ -3190,6 +3200,7 @@ table.table-condensed tbody tr td.cel-menu {
 
 .content-programacao:last-child {
     padding: 0 30px 0 15px; 
+    border-right: none; 
 }
 
 .content-programacao .title {

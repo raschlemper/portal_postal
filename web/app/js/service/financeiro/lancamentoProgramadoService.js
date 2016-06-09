@@ -82,6 +82,11 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
             return PromiseService.execute(
                     $http.delete(_contextPath + "/api/financeiro/lancamento/programado/" + idLancamentoProgramado));
         },
+
+        deleteAll: function(data) {
+            return PromiseService.execute(
+                    $http.post(_contextPath + "/api/financeiro/lancamento/programado/delete", data));
+        },
         
         lancamentoProgramado: function(lancamento, dataInicio, dataFim) {
             var lista = [];
