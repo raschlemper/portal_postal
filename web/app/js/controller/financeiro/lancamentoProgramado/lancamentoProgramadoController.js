@@ -1,7 +1,10 @@
 'use strict';
 
-app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state', 'LancamentoProgramadoService', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS', 'MESSAGES',
-    function ($scope, $filter, $state, LancamentoProgramadoService, ContaService, PlanoContaService, CentroCustoService, ModalService, DatePickerService, ListaService, LISTAS, MESSAGES) {
+app.controller('LancamentoProgramadoController', 
+    ['$scope', '$filter', '$state', 'LancamentoProgramadoService', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'ModalService', 
+     'DatePickerService', 'LancamentoProgramadoHandler', 'ListaService', 'LISTAS', 'MESSAGES',
+    function ($scope, $filter, $state, LancamentoProgramadoService, ContaService, PlanoContaService, CentroCustoService, ModalService, 
+        DatePickerService, LancamentoProgramadoHandler, ListaService, LISTAS, MESSAGES) {
 
         var init = function () {
             $scope.lancamentoProgramados = [];
@@ -405,31 +408,8 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
         // ***** AJUSTAR ***** //
         
         var ajustarDados = function(data) {   
-            delete data.lancamentos;    
-            delete data.gerarLancamento;
-            delete data.tipoLancamento;
-            delete data.selected;
-            data.conta = { idConta: data.conta.idConta };       
-            data.planoConta = { idPlanoConta: data.planoConta.idPlanoConta };    
-            if(data.centroCusto) {
-                data.centroCusto = { idCentroCusto: data.centroCusto.idCentroCusto }; 
-            }
-//            if(data.lancamentoParcelado) {
-//                data.lancamentoParcelado = { idLancamentoParcelado: data.lancamentoParcelado.idLancamentoParcelado }; 
-//            }
-            if(data.documento) {
-                data.documento = { idTipoDocumento: data.documento.idTipoDocumento }; 
-            }
-            if(data.formaPagamento) {
-                data.formaPagamento = { idTipoFormaPagamento: data.formaPagamento.idTipoFormaPagamento }; 
-            }
-            data.tipo = data.tipo.id;
-            data.dataEmissao = data.dataEmissao || moment();
-            data.dataVencimento = data.dataVencimento || data.dataLancamento || moment();
-            data.frequencia = data.frequencia.id;
-            data.situacao = data.situacao.id;               
-            ajustarDadosRateio(data);
-            return data;
+            var LancamentoProgramado = LancamentoProgramadoHandler.handle(data);
+            return LancamentoProgramado;
         } 
         
 //        var ajustarDadosTransferencia = function(data) {                 
@@ -457,20 +437,6 @@ app.controller('LancamentoProgramadoController', ['$scope', '$filter', '$state',
 //                conta: { idConta: conta.idConta }
 //            }
 //        }
-        
-        var ajustarDadosRateio = function(data) {
-            _.map(data.lancamentos, function(lancamento) { 
-                if(!lancamento.rateios) return null;
-                _.map(lancamento.rateios, function(rateio) { 
-                    if(rateio.planoConta) {     
-                        rateio.planoConta = { idPlanoConta: rateio.planoConta.idPlanoConta }; 
-                    }
-                    if(rateio.centroCusto) {
-                        rateio.centroCusto = { idCentroCusto: rateio.centroCusto.idCentroCusto };
-                    }   
-                });
-            });
-        }
         
         // ***** MODAL ***** //
         

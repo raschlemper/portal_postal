@@ -1,7 +1,12 @@
 'use strict';
 
-app.controller('ModalLancamentoProgramadoLancarController', ['$scope', '$modalInstance', 'conta', 'tipo', 'lancamentoProgramado', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'FrequenciaLancamentoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS', 'MESSAGES',
-    function ($scope, $modalInstance, conta, tipo, lancamentoProgramado, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, TipoDocumentoService, TipoFormaPagamentoService, FrequenciaLancamentoService, ModalService, DatePickerService, ListaService, LISTAS, MESSAGES) {
+app.controller('ModalLancamentoProgramadoLancarController', 
+    ['$scope', '$modalInstance', 'conta', 'tipo', 'lancamentoProgramado', 'ContaService', 'PlanoContaService', 'CentroCustoService', 
+     'LancamentoConciliadoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'FrequenciaLancamentoService', 'ModalService', 
+     'DatePickerService', 'ListaService', 'LancamentoHandler', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
+    function ($scope, $modalInstance, conta, tipo, lancamentoProgramado, ContaService, PlanoContaService, CentroCustoService, 
+        LancamentoConciliadoService, TipoDocumentoService, TipoFormaPagamentoService, FrequenciaLancamentoService, ModalService, 
+        DatePickerService, ListaService, LancamentoHandler, FinanceiroValidation, LISTAS, MESSAGES) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
@@ -358,93 +363,61 @@ app.controller('ModalLancamentoProgramadoLancarController', ['$scope', '$modalIn
         
         // ***** AJUSTAR ***** //
                 
-        var getLancamento = function(lancamentoProgramado, parcela, modelo) {
-            var lancamento = {
-                conta: lancamentoProgramado.conta,
-                planoConta: lancamentoProgramado.planoConta,
-                centroCusto: lancamentoProgramado.centroCusto,
-                tipo: lancamentoProgramado.tipo,
-                favorecido: lancamentoProgramado.favorecido,
-                numero: (parcela && parcela.numero) || lancamentoProgramado.numero,
-                numeroParcela: (parcela && parcela.numeroParcela) || lancamentoProgramado.numeroParcela,
-                dataCompetencia: (parcela && parcela.dataCompetencia) || lancamentoProgramado.dataCompetencia,
-                dataEmissao: lancamentoProgramado.dataEmissao || moment(),
-                dataVencimento: (parcela && parcela.dataVencimento) || lancamentoProgramado.dataVencimento,
-                dataLancamento: null,
-                dataCompensacao: null,
-                valor: (parcela && parcela.valor) || lancamentoProgramado.valor,
-                valorDesconto: 0,
-                valorJuros: 0,
-                valorMulta: 0,
-                situacao: $scope.situacoesLancamento[0],
-                modelo: modelo,
-                historico: '(' + modelo.descricao + ') ' + lancamentoProgramado.historico,
-                observacao: null
-            }  
-            return lancamento;
+        var getLancamento = function(lancamentoProgramado, parcela, modelo) {            
+            lancamentoProgramado.numero = (parcela && parcela.numero) || lancamentoProgramado.numero;
+            lancamentoProgramado.numeroParcela = (parcela && parcela.numeroParcela) || lancamentoProgramado.numeroParcela;
+            lancamentoProgramado.dataCompetencia = (parcela && parcela.dataCompetencia) || lancamentoProgramado.dataCompetencia;
+            lancamentoProgramado.dataVencimento = (parcela && parcela.dataVencimento) || lancamentoProgramado.dataVencimento;
+            lancamentoProgramado.valor = (parcela && parcela.valor) || lancamentoProgramado.valor;
+            lancamentoProgramado.situacao = (lancamentoProgramado && lancamentoProgramado.situacao) || $scope.situacoes[0];
+            lancamentoProgramado.historico = '(' + modelo.descricao + ') ' + lancamentoProgramado.historico;
+            return LancamentoHandler.handle(lancamentoProgramado);
         };
         
         var ajustarLancamento = function(lancamento) { 
-            lancamento.conta = { idConta: lancamento.conta.idConta };
-            lancamento.planoConta = { idPlanoConta: lancamento.planoConta.idPlanoConta };
-            if(lancamento.centroCusto) {
-                lancamento.centroCusto = { idCentroCusto: lancamento.centroCusto.idCentroCusto };
-            }
-            lancamento.tipo = lancamento.tipo.id;
-            lancamento.dataCompetencia = lancamento.dataCompetencia || moment();
-            lancamento.dataEmissao = lancamento.dataEmissao || moment();
-            lancamento.dataVencimento = lancamento.dataVencimento || moment();
-            lancamento.dataLancamento = lancamento.dataLancamento || moment();
-            lancamento.situacao = lancamento.situacao.id;
-            lancamento.modelo = lancamento.modelo.id;
-            return lancamento;
+//            lancamento.conta = { idConta: lancamento.conta.idConta };
+//            lancamento.planoConta = { idPlanoConta: lancamento.planoConta.idPlanoConta };
+//            if(lancamento.centroCusto) {
+//                lancamento.centroCusto = { idCentroCusto: lancamento.centroCusto.idCentroCusto };
+//            }
+//            lancamento.tipo = lancamento.tipo.id;
+//            lancamento.dataCompetencia = lancamento.dataCompetencia || moment();
+//            lancamento.dataEmissao = lancamento.dataEmissao || moment();
+//            lancamento.dataVencimento = lancamento.dataVencimento || moment();
+//            lancamento.dataLancamento = lancamento.dataLancamento || moment();
+//            lancamento.situacao = lancamento.situacao.id;
+//            lancamento.modelo = lancamento.modelo.id;
+            return LancamentoHandler.handle(lancamento);
         };
         
         // ***** VALIDAR ***** //
         
         var validaConta = function(conta) {
-            if(conta.status.id === $scope.statusConta[1].id) {
-                modalMessage(MESSAGES.conta.info.CONTA_ENCERRADO);
-                return false;
-            };
-            return true;
+            return FinanceiroValidation.contaEncerrada(conta);
         };
         
         $scope.validarPlanoConta = function(planoConta) {
-            if(!planoConta) return true;
-            if(planoConta.ehGrupo) {
-                alert(MESSAGES.planoConta.info.NAO_PERMITE_GRUPO);
-                return false;
-            }
-            return true;
+            return FinanceiroValidation.planoContaResultado(planoConta);
         }
         
         $scope.validarCentroCusto = function(centroCusto) {
-            if(!centroCusto) return true;
-            if(centroCusto.ehGrupo) {
-                alert(MESSAGES.centroCusto.info.NAO_PERMITE_GRUPO);
-                return false;
-            }
-            return true;
+            return FinanceiroValidation.centroCustoResultado(centroCusto);
         }
         
-        var validarRateio = function(lancamento) {
-            if (!lancamento.rateios || !lancamento.rateios.length) return true;
-            var saldo = saldoRateio();
-            if(saldo !== lancamento.valor) {
-                alert(MESSAGES.lancamento.ratear.validacao.SALDO_INCORRETO);
-                return false;                    
-            }
-            _.map(lancamento.rateios, function(rateio) {
-                if($scope.validarPlanoConta(rateio.planoConta)) {
-                    return false;
-                }
-                if(!$scope.validarCentroCusto(rateio.centroCusto)) {
-                    return false;
-                }
-            });  
-            return true;
-        };
+//        var validarRateio = function(lancamento) {
+//            if (!lancamento.rateios || !lancamento.rateios.length) return true;
+//            var saldo = saldoRateio();
+//            if(!FinanceiroValidation.rateioSaldo(lancamento, saldo)) return false;
+//            _.map(lancamento.rateios, function(rateio) {
+//                if($scope.validarPlanoConta(rateio.planoConta)) {
+//                    return false;
+//                }
+//                if(!$scope.validarCentroCusto(rateio.centroCusto)) {
+//                    return false;
+//                }
+//            });  
+//            return true;
+//        };
         
         var validarForm = function (form, lancamentoProgramado) {  
             if(!$scope.validarPlanoConta(lancamentoProgramado.planoConta)) {

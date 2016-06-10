@@ -1,7 +1,10 @@
 'use strict';
 
-app.controller('ModalLancamentoProgramadoEditarController', ['$scope', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS', 'MESSAGES',
-    function ($scope, ContaService, PlanoContaService, CentroCustoService, TipoDocumentoService, TipoFormaPagamentoService, ModalService, DatePickerService, ListaService, LISTAS, MESSAGES) {
+app.controller('ModalLancamentoProgramadoEditarController', 
+    ['$scope', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'ModalService', 
+     'DatePickerService', 'LancamentoHandler', 'ListaService', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
+    function ($scope, ContaService, PlanoContaService, CentroCustoService, TipoDocumentoService, TipoFormaPagamentoService, ModalService, 
+        DatePickerService, LancamentoHandler, ListaService, FinanceiroValidation, LISTAS, MESSAGES) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
@@ -151,55 +154,49 @@ app.controller('ModalLancamentoProgramadoEditarController', ['$scope', 'ContaSer
         // ***** AJUSTAR ***** //
                 
         $scope.getLancamento = function(lancamentoProgramado, parcela, modelo) {
-            var lancamento = {
-                conta: lancamentoProgramado.conta,
-                planoConta: lancamentoProgramado.planoConta,
-                centroCusto: lancamentoProgramado.centroCusto,
-                tipo: lancamentoProgramado.tipo,
-                favorecido: lancamentoProgramado.favorecido,
-                numero: (parcela && parcela.numero) || lancamentoProgramado.numero,
-                numeroParcela: (parcela && parcela.numeroParcela) || lancamentoProgramado.numeroParcela,
-                dataCompetencia: (parcela && parcela.dataCompetencia) || lancamentoProgramado.dataCompetencia,
-                dataEmissao: lancamentoProgramado.dataEmissao || moment(),
-                dataVencimento: (parcela && parcela.dataVencimento) || lancamentoProgramado.dataVencimento,
-                dataLancamento: null,
-                dataCompensacao: null,
-                valor: (parcela && parcela.valor) || lancamentoProgramado.valor,
-                situacao: $scope.situacoesLancamento[0],
-                modelo: modelo,
-                historico: '(' + modelo.descricao + ') ' + lancamentoProgramado.historico,
-                observacao: null,
-                rateios: []
-            }  
-            return lancamento;
+//            var lancamento = {
+//                conta: lancamentoProgramado.conta,
+//                planoConta: lancamentoProgramado.planoConta,
+//                centroCusto: lancamentoProgramado.centroCusto,
+//                tipo: lancamentoProgramado.tipo,
+//                favorecido: lancamentoProgramado.favorecido,
+//                numero: (parcela && parcela.numero) || lancamentoProgramado.numero,
+//                numeroParcela: (parcela && parcela.numeroParcela) || lancamentoProgramado.numeroParcela,
+//                dataCompetencia: (parcela && parcela.dataCompetencia) || lancamentoProgramado.dataCompetencia,
+//                dataEmissao: lancamentoProgramado.dataEmissao || moment(),
+//                dataVencimento: (parcela && parcela.dataVencimento) || lancamentoProgramado.dataVencimento,
+//                dataLancamento: null,
+//                dataCompensacao: null,
+//                valor: (parcela && parcela.valor) || lancamentoProgramado.valor,
+//                situacao: $scope.situacoesLancamento[0],
+//                modelo: modelo,
+//                historico: '(' + modelo.descricao + ') ' + lancamentoProgramado.historico,
+//                observacao: null,
+//                rateios: []
+//            }  
+            
+            lancamentoProgramado.numero = (parcela && parcela.numero) || lancamentoProgramado.numero;
+            lancamentoProgramado.numeroParcela = (parcela && parcela.numeroParcela) || lancamentoProgramado.numeroParcela;
+            lancamentoProgramado.dataCompetencia = (parcela && parcela.dataCompetencia) || lancamentoProgramado.dataCompetencia;
+            lancamentoProgramado.dataVencimento = (parcela && parcela.dataVencimento) || lancamentoProgramado.dataVencimento;
+            lancamentoProgramado.valor = (parcela && parcela.valor) || lancamentoProgramado.valor;
+            lancamentoProgramado.situacao = (lancamentoProgramado && lancamentoProgramado.situacao) || $scope.situacoes[0];
+            lancamentoProgramado.historico = '(' + modelo.descricao + ') ' + lancamentoProgramado.historico;
+            return LancamentoHandler.handle(lancamentoProgramado);
         };
         
         // ***** VALIDAR ***** //
         
         $scope.validaConta = function(conta) {
-            if(conta.status.id === $scope.statusConta[1].id) {
-                modalMessage(MESSAGES.conta.info.CONTA_ENCERRADO);
-                return false;
-            };
-            return true;
+            return FinanceiroValidation.contaEncerrada(conta);
         };
         
         $scope.validarPlanoConta = function(planoConta) {
-            if(!planoConta) return true;
-            if(planoConta.ehGrupo) {
-                alert(MESSAGES.planoConta.info.NAO_PERMITE_GRUPO);
-                return false;
-            }
-            return true;
+            return FinanceiroValidation.planoContaResultado(planoConta);
         };
         
         $scope.validarCentroCusto = function(centroCusto) {
-            if(!centroCusto) return true;
-            if(centroCusto.ehGrupo) {
-                alert(MESSAGES.centroCusto.info.NAO_PERMITE_GRUPO);
-                return false;
-            }
-            return true;
+            return FinanceiroValidation.centroCustoResultado(centroCusto);
         };
         
         $scope.validarForm = function (form, lancamentoProgramado) {  

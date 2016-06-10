@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalLancamentoRatearController', ['$scope', 'ListaService', 'MESSAGES',
-    function ($scope, ListaService, MESSAGES) {
+app.controller('ModalLancamentoRatearController', ['$scope', 'ListaService', 'FinanceiroValidation', 'MESSAGES',
+    function ($scope, ListaService, FinanceiroValidation, MESSAGES) {
 
         var init = function () {  
             $scope.lancamento.rateios = ($scope.lancamento && $scope.lancamento.rateios) || [];
@@ -89,10 +89,7 @@ app.controller('ModalLancamentoRatearController', ['$scope', 'ListaService', 'ME
         var validarRateio = function(lancamento) {
             if (!lancamento.rateios || !lancamento.rateios.length) return true;
             var saldo = saldoRateio(lancamento);
-            if(saldo !== lancamento.valor) {
-                alert(MESSAGES.lancamento.ratear.validacao.SALDO_INCORRETO);
-                return false;                    
-            }
+            if(!FinanceiroValidation.rateioSaldo(lancamento, saldo)) return false;
             _.map(lancamento.rateios, function(rateio) {
                 if($scope.validarPlanoConta(rateio.planoConta)) { return false; }
                 if(!$scope.validarCentroCusto(rateio.centroCusto)) { return false; }

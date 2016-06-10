@@ -1,8 +1,10 @@
 'use strict';
 
 app.controller('ModalLancamentoConciliarController', 
-    ['$scope', '$modalInstance', 'conta', 'PlanoContaService', 'CentroCustoService', 'ContaService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS', "MESSAGES",
-    function ($scope, $modalInstance, conta, PlanoContaService, CentroCustoService, ContaService, ModalService, DatePickerService, ListaService, LISTAS, MESSAGES) {
+    ['$scope', '$modalInstance', 'conta', 'PlanoContaService', 'CentroCustoService', 'ContaService', 'DatePickerService', 'ListaService', 
+     'FinanceiroValidation', 'LISTAS', "MESSAGES",
+    function ($scope, $modalInstance, conta, PlanoContaService, CentroCustoService, ContaService, DatePickerService, ListaService, 
+        FinanceiroValidation, LISTAS, MESSAGES) {
 
         var init = function () {  
             $scope.conta = conta;
@@ -55,8 +57,6 @@ app.controller('ModalLancamentoConciliarController',
                     console.log(e);
                 });
         };
-                
-        // ***** CONCILIAR ***** // 
         
         $scope.calcularSaldo = function(conta, dataLancamento, saldoReconciliacao) {
             dataLancamento = moment(dataLancamento).format('YYYY-MM-DD HH:mm:ss');
@@ -115,15 +115,11 @@ app.controller('ModalLancamentoConciliarController',
         // ***** VALIDAR ***** //  
         
         $scope.validarPlanoConta = function(planoConta) {
-            if(planoConta.ehGrupo) {
-                modalMessage(MESSAGES.planoConta.info.NAO_PERMITE_GRUPO);
-            }
+            FinanceiroValidation.planoContaResultado(planoConta);
         };
         
         $scope.validarCentroCusto = function(centroCusto) {
-            if(centroCusto.ehGrupo) {
-                modalMessage(MESSAGES.centroCusto.info.NAO_PERMITE_GRUPO);
-            }
+            FinanceiroValidation.centroCustoResultado(centroCusto);
         };
 
         var validarForm = function (form) {
@@ -149,12 +145,6 @@ app.controller('ModalLancamentoConciliarController',
             }
             return true;
         };
-                
-        // ***** MODAL ***** //  
-        
-        var modalMessage = function(message) {
-            ModalService.modalMessage(message);
-        };  
 
         init();
 

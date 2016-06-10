@@ -1,7 +1,8 @@
 'use strict';
 
-app.controller('ModalLancamentoProgramadoGerarController', ['$scope', 'LancamentoConciliadoService', 'FrequenciaLancamentoService', 'ModalService', 'MESSAGES',
-    function ($scope, LancamentoConciliadoService, FrequenciaLancamentoService, ModalService, MESSAGES) {
+app.controller('ModalLancamentoProgramadoGerarController', 
+    ['$scope', 'LancamentoConciliadoService', 'FrequenciaLancamentoService', 'ModalService', 'LancamentoHandler', 'MESSAGES',
+    function ($scope, LancamentoConciliadoService, FrequenciaLancamentoService, ModalService, LancamentoHandler, MESSAGES) {
 
         var init = function () {  
             getTitle();
@@ -64,19 +65,19 @@ app.controller('ModalLancamentoProgramadoGerarController', ['$scope', 'Lancament
         };
         
         var ajustarLancamento = function(lancamento) { 
-            lancamento.conta = { idConta: lancamento.conta.idConta };
-            lancamento.planoConta = { idPlanoConta: lancamento.planoConta.idPlanoConta };
-            if(lancamento.centroCusto) {
-                lancamento.centroCusto = { idCentroCusto: lancamento.centroCusto.idCentroCusto };
-            }
-            lancamento.tipo = lancamento.tipo.id;
-            lancamento.dataCompetencia = lancamento.dataCompetencia || moment();
-            lancamento.dataEmissao = lancamento.dataEmissao || moment();
-            lancamento.dataVencimento = lancamento.dataVencimento || moment();
-            lancamento.dataLancamento = lancamento.dataLancamento || moment();
-            lancamento.situacao = lancamento.situacao.id;
-            lancamento.modelo = lancamento.modelo.id;
-            return lancamento;
+//            lancamento.conta = { idConta: lancamento.conta.idConta };
+//            lancamento.planoConta = { idPlanoConta: lancamento.planoConta.idPlanoConta };
+//            if(lancamento.centroCusto) {
+//                lancamento.centroCusto = { idCentroCusto: lancamento.centroCusto.idCentroCusto };
+//            }
+//            lancamento.tipo = lancamento.tipo.id;
+//            lancamento.dataCompetencia = lancamento.dataCompetencia || moment();
+//            lancamento.dataEmissao = lancamento.dataEmissao || moment();
+//            lancamento.dataVencimento = lancamento.dataVencimento || moment();
+//            lancamento.dataLancamento = lancamento.dataLancamento || moment();
+//            lancamento.situacao = lancamento.situacao.id;
+//            lancamento.modelo = lancamento.modelo.id;
+            return LancamentoHandler.handle(lancamento);
         };
         
         // ***** VALIDAR ***** //

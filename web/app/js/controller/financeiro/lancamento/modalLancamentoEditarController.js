@@ -1,7 +1,10 @@
 'use strict';
 
-app.controller('ModalLancamentoEditarController', ['$scope', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'LancamentoAnexoService', 'ModalService', 'DatePickerService', 'ListaService', 'LISTAS', 'MESSAGES',
-    function ($scope, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, LancamentoAnexoService, ModalService, DatePickerService, ListaService, LISTAS, MESSAGES) {
+app.controller('ModalLancamentoEditarController', 
+    ['$scope', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'LancamentoAnexoService', 'ModalService', 
+     'DatePickerService', 'ListaService', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
+    function ($scope, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, LancamentoAnexoService, ModalService, 
+        DatePickerService, ListaService, FinanceiroValidation, LISTAS, MESSAGES) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
@@ -137,29 +140,15 @@ app.controller('ModalLancamentoEditarController', ['$scope', 'ContaService', 'Pl
         // ***** VALIDAR ***** //  
         
         var validaConta = function(conta) {
-            if(conta.status.id === $scope.statusConta[1].id) {
-                modalMessage(MESSAGES.conta.info.CONTA_ENCERRADO);
-                return false;
-            };
-            return true;
+            return FinanceiroValidation.contaEncerrada(conta);
         };
         
         $scope.validarPlanoConta = function(planoConta) {
-            if(!planoConta) return true;
-            if(planoConta.ehGrupo) {
-                alert(MESSAGES.planoConta.info.NAO_PERMITE_GRUPO);
-                return false;
-            }
-            return true;
+            return FinanceiroValidation.planoContaResultado(planoConta);
         };
         
         $scope.validarCentroCusto = function(centroCusto) {
-            if(!centroCusto) return true;
-            if(centroCusto.ehGrupo) {
-                alert(MESSAGES.centroCusto.info.NAO_PERMITE_GRUPO);
-                return false;
-            }
-            return true;
+            return FinanceiroValidation.centroCustoResultado(centroCusto);
         };
 
         var validarForm = function (form, lancamento) {

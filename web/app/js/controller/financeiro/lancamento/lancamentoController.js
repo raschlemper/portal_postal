@@ -3,10 +3,10 @@
 app.controller('LancamentoController', 
     ['$scope', 'LancamentoService', 'LancamentoTransferenciaService', 'LancamentoConciliadoService', 'ContaService', 'PlanoContaService', 
         'CentroCustoService', 'ModalService', 'DatePickerService', 'ListaService', 'LancamentoHandler', 'LancamentoRateioHandler', 'LancamentoTransferenciaHandler', 
-        'LancamentoConciliadoHandler', 'LISTAS', 'MESSAGES',
+        'LancamentoConciliadoHandler', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
     function ($scope, LancamentoService, LancamentoTransferenciaService, LancamentoConciliadoService, ContaService, PlanoContaService, 
         CentroCustoService, ModalService, DatePickerService, ListaService, LancamentoHandler, LancamentoRateioHandler, LancamentoTransferenciaHandler, 
-        LancamentoConciliadoHandler, LISTAS, MESSAGES) {
+        LancamentoConciliadoHandler, FinanceiroValidation, LISTAS, MESSAGES) {
 
         var init = function () {
             $scope.lancamentos = [];
@@ -518,11 +518,7 @@ app.controller('LancamentoController',
         // ***** VALIDAR ***** //
         
         var validaConta = function(conta) {
-            if(conta.status.id === $scope.statusConta[1].id) {
-                modalMessage(MESSAGES.conta.info.CONTA_ENCERRADO);
-                return false;
-            };
-            return true;
+            return FinanceiroValidation.contaEncerrada(conta);
         }
         
         var validaConciliado = function(idLancamento) {
@@ -579,7 +575,7 @@ app.controller('LancamentoController',
             data.centroCusto = centroCusto;
             data.tipo = tipo;
             data.modelo = modelo;
-            data.situacao = (data && data.situacao) || $scope.situacoes[0]
+            data.situacao = (data && data.situacao) || $scope.situacoes[0];
             return LancamentoHandler.handle(data);
         }
                 
