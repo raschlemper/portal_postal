@@ -44,6 +44,10 @@ app.factory('LancamentoHandler', function(LISTAS) {
         return lancamentoHandle;
     };
     
+    var getId = function(lancamento) {
+        return lancamento.idLancamento || null;
+    };
+    
     var getConta = function(lancamento) {
         if(!lancamento.conta) return lancamento.conta;
         return { idConta: lancamento.conta.idConta };

@@ -26,6 +26,10 @@ app.factory('LancamentoConciliadoHandler', function() {
         return lancamentoConciliadoHandle;
     };
     
+    var getId = function(lancamentoConciliado) {
+        return lancamentoConciliado.idLancamentoConciliado || null;
+    };
+    
     var getConta = function(lancamentoConciliado) {
         if(!lancamentoConciliado.conta) return lancamentoConciliado.conta;
         return { idConta: lancamentoConciliado.conta.idConta };

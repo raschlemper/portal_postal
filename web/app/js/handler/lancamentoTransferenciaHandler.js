@@ -24,14 +24,18 @@ app.factory('LancamentoTransferenciaHandler', function() {
         return lancamentoTransferenciaHandle;
     };
     
+    var getId = function(lancamentoTransferencia) {
+        return lancamentoTransferencia.idLancamentoTransferencia || null;
+    };
+    
     var getLancamentoOrigem = function(lancamentoTransferencia) {
         if(!lancamentoTransferencia.lancamentoOrigem) return lancamentoTransferencia.lancamentoOrigem;
-        return { idLancamentoOrigem: lancamentoTransferencia.lancamentoOrigem.idLancamentoOrigem }; 
+        return { idLancamento: lancamentoTransferencia.lancamentoOrigem.idLancamento }; 
     };
     
     var getLancamentoDestino = function(lancamentoTransferencia) {
         if(!lancamentoTransferencia.lancamentoDestino) return lancamentoTransferencia.lancamentoDestino;
-        return { idLancamentoDestino: lancamentoTransferencia.lancamentoDestino.idLancamentoDestino }; 
+        return { idLancamento: lancamentoTransferencia.lancamentoDestino.idLancamento }; 
     };
     
     var getNumero = function(lancamentoTransferencia) {
