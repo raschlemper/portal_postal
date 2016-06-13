@@ -1,17 +1,48 @@
 'use strict';
 
-app.controller('ModalLancamentoProgramadoVisualizarController', ['$scope', '$modalInstance', 'lancamentoProgramado', 'MESSAGES', 
-    function ($scope, $modalInstance, lancamentoProgramado, MESSAGES) {
+app.controller('ModalLancamentoProgramadoVisualizarController', 
+    ['$scope', '$modalInstance', 'lancamentoProgramado', 'PlanoContaService', 'CentroCustoService', 'ListaService', 'MESSAGES', 
+    function ($scope, $modalInstance, lancamentoProgramado, PlanoContaService, CentroCustoService, ListaService, MESSAGES) {
 
         var init = function () { 
             $scope.lancamentoProgramado = lancamentoProgramado;
             getTitle();
+            planoContas();              
+            centroCustos();
         };    
                 
         // ***** CONTROLLER ***** //    
         
         var getTitle = function() {
             $scope.title = MESSAGES.lancamento.programar.title.VISUALIZAR; 
+        };
+        
+        var planoContas = function() {
+            PlanoContaService.getStructure()
+                .then(function (data) {
+                    var planoContas = data;
+                    PlanoContaService.estrutura(planoContas);
+                    planoContas = PlanoContaService.flatten(planoContas);   
+                    var planoConta = ListaService.getPlanoContaValue(planoContas, lancamentoProgramado.planoConta.idPlanoConta);                     
+                    if(planoConta) { lancamentoProgramado.planoConta = planoConta.descricao; }
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+        
+        var centroCustos = function() {
+            CentroCustoService.getStructure()
+                .then(function (data) {
+                    var centroCustos = data;
+                    CentroCustoService.estrutura(centroCustos);
+                    centroCustos = CentroCustoService.flatten(centroCustos); 
+                    var centroCusto = ListaService.getCentroCustoValue(centroCustos, lancamentoProgramado.centroCusto.idCentroCusto); 
+                    if(centroCusto) { lancamentoProgramado.centroCusto = centroCusto.descricao; }
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
         };
         
         $scope.editar = function() {

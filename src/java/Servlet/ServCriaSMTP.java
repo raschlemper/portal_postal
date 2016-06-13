@@ -81,7 +81,7 @@ public class ServCriaSMTP extends HttpServlet {
         } else {
 
             try {
-                String nomeBD = (String) sessao.getAttribute("empresa");
+                /*String nomeBD = (String) sessao.getAttribute("empresa");
                 int idCliente = Integer.parseInt(request.getParameter("idCliente"));
 
                 String idDepartamento;
@@ -151,9 +151,22 @@ public class ServCriaSMTP extends HttpServlet {
                 }
 
                 ClienteSMTP clSMTP = new ClienteSMTP(idCliente, idDepartamento, tipo_servidor, envia_remetente, envia_destinatario, smtp, porta, is_secure, tipo_seguranca, porta_ssl, user, senha);
-                System.out.println("toString - " + clSMTP.toString());
-                Controle.ContrClienteSMTP.insereClienteSMTP(clSMTP, nomeBD);
-                sessao.setAttribute("msg", "Cadastro Inserido com Sucesso!");
+                System.out.println("toString - " + clSMTP.toString());  
+                Controle.ContrClienteSMTP.insereClienteSMTP(clSMTP, nomeBD);*/
+                
+                String nomeBD = (String) sessao.getAttribute("empresa");
+                int idCliente = Integer.parseInt(request.getParameter("idCliente"));
+                int envia_destinatario = Integer.parseInt(request.getParameter("is_destinatario"));
+                String cancelar = request.getParameter("cancelar");
+                if(cancelar != null && cancelar.equals("1")){
+                    Controle.ContrClienteSMTP.excluirClienteSMTP(idCliente, nomeBD);
+                    sessao.setAttribute("msg", "Cadastro de envios CANCELADO!");
+                }else{                
+                    ClienteSMTP clSMTP = new ClienteSMTP(idCliente, "", 0, "", envia_destinatario, "", 0, 0, "", 0, "", "");               
+                    Controle.ContrClienteSMTP.insereClienteSMTP(clSMTP, nomeBD);
+                    sessao.setAttribute("msg", "Cadastrado com Sucesso!");
+                }
+                
                 response.sendRedirect(request.getHeader("referer"));
 
             } catch (Exception ex) {

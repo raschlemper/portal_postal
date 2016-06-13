@@ -14,7 +14,7 @@ app.factory('LancamentoRateioHandler', function() {
         lancamentoRateioHandle.idLancamentoRateio = getId(lancamentoRateio);
         lancamentoRateioHandle.planoConta = getPlanoConta(lancamentoRateio); 
         lancamentoRateioHandle.centroCusto = getCentroCusto(lancamentoRateio);
-        lancamentoRateioHandle.lancamentos = null;
+        lancamentoRateioHandle.lancamento = null;
         lancamentoRateioHandle.valor = getValor(lancamentoRateio);
         lancamentoRateioHandle.observacao = getObservacao(lancamentoRateio);
         return lancamentoRateioHandle;

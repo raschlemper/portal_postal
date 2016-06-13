@@ -13,7 +13,7 @@ public class ContrClienteSMTP {
 
     public static void insereClienteSMTP(ClienteSMTP clSMTP, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "INSERT INTO cliente_smtp (idCliente, idDepartamento, tipo_servidor, envia_remetente, envia_destinatario, smtp, porta, is_secure, tipo_seguranca, porta_ssl,  user,  senha) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "REPLACE INTO cliente_smtp (idCliente, idDepartamento, tipo_servidor, envia_remetente, envia_destinatario, smtp, porta, is_secure, tipo_seguranca, porta_ssl,  user,  senha) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
         System.out.println(sql);
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
@@ -42,19 +42,20 @@ public class ContrClienteSMTP {
         }
     }
 
-    public static ArrayList<ClienteSMTP> consultaCadastroSMTP(int idCliente, String nomeBD) {
+    public static ClienteSMTP consultaCadastroSMTP(int idCliente, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "SELECT *FROM cliente_smtp WHERE idCliente = " + idCliente + ";";
+        ClienteSMTP ls = null;
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();
-            ArrayList<ClienteSMTP> lista = new ArrayList<ClienteSMTP>();
-            while (result.next()) {
-                ClienteSMTP ls = new ClienteSMTP(result);
-                lista.add(ls);
+           
+            if (result.next()) {
+                 ls = new ClienteSMTP(result);
+                
             }
             valores.close();
-            return lista;
+            return ls;
         } catch (SQLException e) {
             ContrErroLog.inserir("consultaCadastroSMTP", "SQLException", sql, e.toString());
             return null;
@@ -65,7 +66,7 @@ public class ContrClienteSMTP {
     
     public static void excluirClienteSMTP(int id, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "DELETE FROM cliente_smtp WHERE id = ? ";
+        String sql = "DELETE FROM cliente_smtp WHERE idCliente = ? ";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setInt(1, id);

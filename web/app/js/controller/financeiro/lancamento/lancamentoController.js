@@ -2,8 +2,8 @@
 
 app.controller('LancamentoController', 
     ['$scope', 'LancamentoService', 'LancamentoTransferenciaService', 'LancamentoConciliadoService', 'ContaService', 'PlanoContaService', 
-        'CentroCustoService', 'ModalService', 'DatePickerService', 'ListaService', 'LancamentoHandler', 'LancamentoRateioHandler', 'LancamentoTransferenciaHandler', 
-        'LancamentoConciliadoHandler', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
+    'CentroCustoService', 'ModalService', 'DatePickerService', 'ListaService', 'LancamentoHandler', 'LancamentoRateioHandler', 'LancamentoTransferenciaHandler', 
+    'LancamentoConciliadoHandler', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
     function ($scope, LancamentoService, LancamentoTransferenciaService, LancamentoConciliadoService, ContaService, PlanoContaService, 
         CentroCustoService, ModalService, DatePickerService, ListaService, LancamentoHandler, LancamentoRateioHandler, LancamentoTransferenciaHandler, 
         LancamentoConciliadoHandler, FinanceiroValidation, LISTAS, MESSAGES) {
@@ -21,23 +21,23 @@ app.controller('LancamentoController',
             $scope.lancSearch = {};
             getTitle();
             contas();
-//            initTipos();
+    //            initTipos();
             initTable();
         };  
-        
-//        var initTipos = function() {       
-//            var modelo = angular.copy($scope.modelos[1]);
-//            var maxTipo = _.max($scope.tipos, function(tipo){ return tipo.id; });
-//            modelo.id = maxTipo.id + 1;
-//            $scope.tipos.push(modelo);
-//        }
-        
+
+    //        var initTipos = function() {       
+    //            var modelo = angular.copy($scope.modelos[1]);
+    //            var maxTipo = _.max($scope.tipos, function(tipo){ return tipo.id; });
+    //            modelo.id = maxTipo.id + 1;
+    //            $scope.tipos.push(modelo);
+    //        }
+
         // ***** TABLE ***** //
-        
+
         var initTable = function() {            
             $scope.colunas = [              
                 {label: '', column: 'tipo', headerClass: 'no-sort', dataClass:'text-center col-tipo', filter: {name: 'tipoLancamento', args: ''}},               
-//                {label: '', column: 'anexos', headerClass: 'no-sort', dataClass:'text-center col-defualt', filter: {name: 'anexo', args: '', callback: 'linha.events.anexar(item)'}},           
+    //                {label: '', column: 'anexos', headerClass: 'no-sort', dataClass:'text-center col-defualt', filter: {name: 'anexo', args: '', callback: 'linha.events.anexar(item)'}},           
                 {label: '', column: 'situacao.descricao', headerClass: 'no-sort', dataClass:'text-center col-compensado', filter: {name: 'situacaoLancamento', args: '', callback: 'linha.events.compensar(item)'}}, 
                 {label: '', column: 'numeroLoteConciliado', headerClass: 'no-sort', dataClass:'text-center col-reconciliado', filter: {name: 'conciliadoLancamento', args: ''}},         
                 {label: 'Data', column: 'dataLancamento', dataClass: 'text-center cel-data', filter: {name: 'date', args: 'dd/MM/yy'}},                
@@ -74,7 +74,7 @@ app.controller('LancamentoController',
                         } else {
                             $scope.excluir($scope.conta, lancamento);
                         }
-                        
+
                     },
                     view: function(lancamento) {
                         $scope.visualizar($scope.conta, lancamento);
@@ -93,7 +93,7 @@ app.controller('LancamentoController',
                 }
             }
         };
-        
+
         $scope.filter = function(lista, search) { 
             lista = _.filter(lista, function(item) {
                 return filterByData(item, search);
@@ -101,7 +101,7 @@ app.controller('LancamentoController',
             lista = filterTipo(lista, search);
             return lista;
         };
-        
+
         var filterByData = function(item, search) {
             var dataInicio = moment(search.dataInicio);
             var dataFim = moment(search.dataFim);
@@ -110,7 +110,7 @@ app.controller('LancamentoController',
             return (data.isBefore(search.dataFim) && data.isAfter(search.dataInicio) 
                     || (data.isSame(search.dataInicio) || data.isSame(search.dataFim)));
         };  
-        
+
         var filterTipo = function(lista, search) {          
             if(!search.tipo) return lista;
             var tipo = JSON.parse(search.tipo); 
@@ -119,13 +119,13 @@ app.controller('LancamentoController',
             });
             return lista;
         }
-                
+
         // ***** CONTROLLER ***** //
-        
+
         var getTitle = function() {
             $scope.title = MESSAGES.lancamento.title.LISTA; 
         };
-        
+
         var contas = function() {
             ContaService.getAll()
                 .then(function (data) {
@@ -137,12 +137,12 @@ app.controller('LancamentoController',
                     console.log(e);
                 });
         };
-        
+
         $scope.changeConta = function(conta) {
             $scope.conta = conta;
             todos(conta);
         }
-        
+
         var planoContas = function() {
             PlanoContaService.getStructure()
                 .then(function (data) {
@@ -155,7 +155,7 @@ app.controller('LancamentoController',
                     console.log(e);
                 });
         };
-        
+
         var centroCustos = function() {
             CentroCustoService.getStructure()
                 .then(function (data) {
@@ -179,10 +179,10 @@ app.controller('LancamentoController',
                     console.log(e);
                 });
         };
-        
+
         var criarLancamentosLista = function(data) {
             return _.map(data.lancamentos, function(lancamento) { 
-                
+
                 if(lancamento.tipo.id === $scope.tipos[1].id) { 
                     lancamento.pagamento = lancamento.valor * -1;
                     lancamento.deposito = null;
@@ -191,40 +191,40 @@ app.controller('LancamentoController',
                     lancamento.deposito = lancamento.valor; 
                     lancamento.pagamento = null;
                 }  
-                
+
                 if(lancamento.numeroParcela) { lancamento.numero = lancamento.numero + '-' + lancamento.numeroParcela; }
-                
+
                 if(lancamento.planoConta && lancamento.planoConta.idPlanoConta) { 
                     var planoConta = ListaService.getPlanoContaValue($scope.planoContas, lancamento.planoConta.idPlanoConta); 
                     lancamento.planoConta = planoConta.descricao;                    
                 } else {
                     lancamento.planoConta = null;
                 }
-                
+
                 if(lancamento.centroCusto && lancamento.centroCusto.idCentroCusto) { 
                     var centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, lancamento.centroCusto.idCentroCusto); 
                     lancamento.centroCusto = centroCusto.descricao;                    
                 } else {
                     lancamento.centroCusto = null;
                 }
-                
+
                 if(lancamento.modelo.id === $scope.modelos[1].id) { 
-//                    var modeloTransferencia = $scope.tipos[$scope.tipos.length - 1];
-//                    lancamento.tipo = modeloTransferencia;
+    //                    var modeloTransferencia = $scope.tipos[$scope.tipos.length - 1];
+    //                    lancamento.tipo = modeloTransferencia;
                     lancamento.planoConta = $scope.modelos[1].descricao;
                 }
-                
+
                 lancamento.tipo.modelo = lancamento.modelo;
-                
+
                 if(lancamento.rateios && lancamento.rateios.length) {
                     lancamento.planoConta = "Diversos";
                     lancamento.centroCusto = "Diversos";
                 }
-                
+
                 return _.pick(lancamento, 'idLancamento', 'tipo', 'anexos', 'dataLancamento', 'numero', 'planoConta', 'centroCusto', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico', 'situacao', 'numeroLoteConciliado');
             })
         };
-        
+
         var calculateSaldo = function(lancamentos) {
             var saldo = 0;
             $scope.saldoTotal = 0;
@@ -240,7 +240,7 @@ app.controller('LancamentoController',
                 lancamento.saldo = saldo;
             });
         };
-        
+
         var getLancamentoSelecionados = function(conta, lancamentos, callback) {            
             var lancamentosSelecionados = [];
             _.map(lancamentos, function(lancamento) {
@@ -252,7 +252,7 @@ app.controller('LancamentoController',
         }
 
         // ***** VISUALIZAR ***** //
-        
+
         $scope.visualizar = function(conta, lancamento) {
             LancamentoService.get(lancamento.idLancamento)
                 .then(function(result) {
@@ -275,7 +275,7 @@ app.controller('LancamentoController',
                 salvar(conta, result);
             });
         };
-        
+
         var salvar = function(conta, lancamento) {
             LancamentoService.save(lancamento)
                 .then(function(data) {  
@@ -285,7 +285,7 @@ app.controller('LancamentoController',
                 .catch(function(e) {
                     modalMessage(e);
                 });
-            
+
         }
 
         // ***** EDITAR ***** //
@@ -303,9 +303,9 @@ app.controller('LancamentoController',
                 .catch(function(e) {
                     modalMessage(e.error);
                 });
-           
+
         };
-        
+
         var editarLancamento = function(conta, lancamento, goToAnexo) {                   
             modalSalvar(conta, lancamento, lancamento.tipo, goToAnexo)
                 .then(function(result) {
@@ -313,7 +313,7 @@ app.controller('LancamentoController',
                     editar(conta, result);
                 });            
         }
-        
+
         var editar = function(conta, lancamento) {
             LancamentoService.update(lancamento.idLancamento, lancamento)
                 .then(function (data) {  
@@ -326,7 +326,7 @@ app.controller('LancamentoController',
         }
 
         // ***** EXCLUIR ***** //
-        
+
         var existeLancamentoProgramadoParceladoPosterior = function(lancamento) {   
             if(lancamento.modelo.id !== $scope.modelos[4].id) return false;         
             if(lancamento.lancamentoProgramado 
@@ -350,7 +350,7 @@ app.controller('LancamentoController',
                     modalMessage(e);
                 });            
         }; 
-        
+
         var excluirLancamentoProgramado = function(conta, lancamento) {    
             if(existeLancamentoProgramadoParceladoPosterior(lancamento)) {                
                 modalMessage(MESSAGES.lancamento.info.EXCLUIR_POSTERIOR);
@@ -358,14 +358,14 @@ app.controller('LancamentoController',
                 excluirLancamento(conta, lancamento);
             } 
         };
-        
+
         var excluirLancamento = function(conta, lancamento) {
             modalExcluir(MESSAGES.lancamento.info.CONFIRMAR_EXCLUIR)
                 .then(function() {
                     excluir(conta, lancamento);
                 });
         };
-        
+
         var excluir = function(conta, lancamento) {
             LancamentoService.delete(lancamento.idLancamento)
                 .then(function(data) { 
@@ -382,6 +382,7 @@ app.controller('LancamentoController',
         $scope.excluirTodos = function(conta, lancamentos) {
             if(!validaConta(conta)) return;
             var lancamentoSelecionados = getLancamentoSelecionados(conta, lancamentos, ajustarDadosExcluir);  
+            if(!existeLancamentoSelecionado(lancamentoSelecionados)) return;
             var lancamentosValidos = getLancamentosProgramado(lancamentoSelecionados);
             var msg = MESSAGES.lancamento.info.CONFIRMAR_EXCLUIR_TODOS;
             if(lancamentosValidos.length !== lancamentoSelecionados.length) { 
@@ -389,7 +390,7 @@ app.controller('LancamentoController',
             }
             excluirLancamentos(conta, lancamentosValidos, msg);
         }; 
-        
+
         var getLancamentosProgramado = function(lancamentos) {               
             var lancamentosSelecionados = [];
             _.map(lancamentos, function(lancamento) {        
@@ -399,14 +400,14 @@ app.controller('LancamentoController',
             });
             return lancamentosSelecionados;
         };
-        
+
         var excluirLancamentos = function(conta, lancamentos, message) {
             modalExcluir(message)
                 .then(function() {
                     excluirAll(conta, lancamentos);
                 });
         };
-        
+
         var excluirAll = function(conta, lancamentos) {
             _.map(lancamentos, function(lancamento) {
                 lancamento = ajustarDados(lancamento);
@@ -448,7 +449,7 @@ app.controller('LancamentoController',
                 }
             });
         }
-        
+
         var saveTransferencia = function(conta, lancamentoTransferencia) {
             LancamentoTransferenciaService.save(lancamentoTransferencia)
                 .then(function(data) {  
@@ -459,7 +460,7 @@ app.controller('LancamentoController',
                     modalMessage(e);
                 });        
         }
-        
+
         var updateTransferencia = function(conta, lancamentoTransferencia) {
             LancamentoTransferenciaService.update(lancamentoTransferencia.idLancamentoTransferencia, lancamentoTransferencia)
                 .then(function(data) {  
@@ -494,8 +495,10 @@ app.controller('LancamentoController',
         // ***** COMPENSAR ***** //
 
         $scope.compensarTodos = function(conta, lancamentos) {
+            var lancamentoSelecionados = getLancamentoSelecionados(conta, angular.copy(lancamentos), ajustarDadosCompensar)
+            if(!existeLancamentoSelecionado(lancamentoSelecionados)) return;
             modalConfirmarCompensado().then(function() {
-                compensarTodos(conta, getLancamentoSelecionados(conta, angular.copy(lancamentos), ajustarDadosCompensar));
+                compensarTodos(conta, lancamentoSelecionados);
             });
         };
 
@@ -504,7 +507,7 @@ app.controller('LancamentoController',
             lancamentosCompletos.push(ajustarDadosCompensar(conta, lancamento));
             compensarTodos(conta, lancamentosCompletos);
         };
-        
+
         var compensarTodos = function(conta, lancamentos) {
             LancamentoService.updateSituacao(lancamentos)
                 .then(function (data) { 
@@ -514,21 +517,27 @@ app.controller('LancamentoController',
                     modalMessage(e);
                 });
         }
-                
+
         // ***** VALIDAR ***** //
-        
+
         var validaConta = function(conta) {
             return FinanceiroValidation.contaEncerrada(conta);
-        }
-        
+        };
+
         var validaConciliado = function(idLancamento) {
             var lancamento = ListaService.getLancamentoValue($scope.lancamentos, idLancamento);
             if(lancamento.numeroLoteConciliado) { return true; }
             return false
-        }
-                
+        };
+
+        var existeLancamentoSelecionado = function(lancamentosSelecionados) {
+            if(lancamentosSelecionados && lancamentosSelecionados.length) return true;
+            modalMessage(MESSAGES.lancamento.programar.info.SEM_LANCAMENTO_SELECIONADO);
+            return false;
+        };
+
         // ***** AJUSTAR ***** //
-        
+
         var ajustarDadosExcluir = function(conta, lancamento) { 
             var lancamentoCompleto = ListaService.getLancamentoValue($scope.lancamentos, lancamento.idLancamento);
             lancamentoCompleto.conta = conta;
@@ -546,13 +555,13 @@ app.controller('LancamentoController',
             lancamentoCompleto = ajustarDados(lancamentoCompleto);
             return lancamentoCompleto;
         };
-        
+
         var ajustarDados = function(data) {  
             var lancamento = LancamentoHandler.handle(data);
             lancamento.rateios = LancamentoRateioHandler.handleList(data.rateios);
             return lancamento;
         };
-        
+
         var ajustarDadosTransferencia = function(data) { 
             var modelo = $scope.modelos[1];
             var lancamentoTransferencia = LancamentoTransferenciaHandler.handle(data);
@@ -560,14 +569,14 @@ app.controller('LancamentoController',
             lancamentoTransferencia.lancamentoDestino = getLancamento(data.contaDestino, null, null,  $scope.tipos[0], modelo, data, data.lancamentoDestino);
             return lancamentoTransferencia;
         };
-        
+
         var ajustarDadosConciliado = function(conta, data) {    
             var lancamento = getLancamento(conta, data.planoConta, data.centroCusto, data.tipo, $scope.modelos[5], data, null);
             var lancamentoConciliado = LancamentoConciliadoHandler.handle(data);
             lancamentoConciliado.lancamento = lancamento;
             return lancamentoConciliado;
         };
-        
+
         var getLancamento = function(conta, planoConta, centroCusto, tipo, modelo, data, lancamentoOriginal) {
             data.idLancamento = (lancamentoOriginal && lancamentoOriginal.idLancamento) || null;
             data.conta = conta;
@@ -578,13 +587,13 @@ app.controller('LancamentoController',
             data.situacao = (data && data.situacao) || $scope.situacoes[0];
             return LancamentoHandler.handle(data);
         }
-                
+
         // ***** MODAL ***** //
-        
+
         var modalMessage = function(message) {
             ModalService.modalMessage(message);
         };
-        
+
         var modalVisualizar = function(lancamento) {
             var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamentoVisualizar.html', 'ModalLancamentoVisualizarController', 'lg',
                 {
@@ -594,7 +603,7 @@ app.controller('LancamentoController',
                 });
             return modalInstance.result;
         };
-        
+
         var modalSalvar = function(conta, lancamento, tipo, anexo) {
             var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamento.html', 'ModalLancamentoController', 'lg',
                 {
@@ -613,7 +622,7 @@ app.controller('LancamentoController',
                 });
             return modalInstance.result;
         };
-        
+
         var modalTransferir = function(lancamentoTransferencia) {
             var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamentoTransferir.html', 'ModalLancamentoTransferirController', 'lg',
                 {
@@ -623,7 +632,7 @@ app.controller('LancamentoController',
                 });
             return modalInstance.result;
         };
-        
+
         var modalConciliar = function(conta) {
             var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamentoConciliar.html', 'ModalLancamentoConciliarController', 'lg',
                 {
@@ -633,22 +642,22 @@ app.controller('LancamentoController',
                 });
             return modalInstance.result;
         };
-        
+
         var modalConfirmarConciliado = function() {
             var modalInstance = ModalService.modalConfirmar(MESSAGES.lancamento.info.ALERT, MESSAGES.lancamento.conciliar.info.CONFIRMAR_ALTERAR);
             return modalInstance.result;
         };
-        
+
         var modalConfirmarCompensado = function() {
             var modalInstance = ModalService.modalConfirmar(MESSAGES.lancamento.info.ALERT, MESSAGES.lancamento.compensar.info.CONFIRMAR_TODOS);
             return modalInstance.result;
         };
-        
+
         var modalExcluir = function(message) {
             var modalInstance = ModalService.modalExcluir(MESSAGES.lancamento.info.ALERT_EXCLUIR, message);
             return modalInstance.result;
         };
-        
+
         init();
 
     }]);

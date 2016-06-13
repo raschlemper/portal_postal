@@ -56,7 +56,7 @@
        <link href="../../NewTemplate/dist/css/jquery.dataTables.css" rel="stylesheet"/>
         <script>
 
-            function callTableJs() {
+            function callTableJs(titulo) {
                 $('#excelDataTable').DataTable({
                     "language": {
                         "lengthMenu": "Exibir _MENU_ por pagina",
@@ -88,7 +88,8 @@
                             orientation: 'landscape',
                             pageSize: 'LEGAL',
                             text: '<i class="fa fa-spc fa-file-pdf-o"></i> PDF',
-                            titleAttr: 'PDF'
+                            titleAttr: 'PDF',
+                            title: titulo
                         }
                     ],
                     aaSorting: [[0, 'asc']]
@@ -102,6 +103,7 @@
                     $('#tipoRel').focus();
                     return false;
                 }
+                var titulo = $('#tipoRel option:selected').html();
                 var sqlT = $('#tipoRel').val();
                 var dataIni = $('#data').val();
                 var dataFim = $('#data2').val();
@@ -123,7 +125,7 @@
                                                         "</th> </thead></table></div>");
                             } else {
                                 buildHtmlTable(ret);
-                                callTableJs();
+                                callTableJs("RELATORIO "+titulo + " - "+ dataIni+ " - "+ dataFim);
                                 fechaMsg();
                             }
                             $('.dt-button').switchClass('dt-button', 'btn btn-default pad pull-left');

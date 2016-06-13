@@ -41,7 +41,8 @@ app.constant('MESSAGES', {
             CONFIRMAR_EXCLUIR: "Deseja realmente excluir este lançamento?",
             CONFIRMAR_EXCLUIR_TODOS: "Deseja realmente excluir estes lançamentos?",
             CONFIRMAR_EXCLUIR_PROGRAMADOS_TODOS: "Deseja realmente excluir estes lançamentos? <br/> Alguns lançamentos parcelados não poderão ser excluídos. É necessário excluir todos os lançamentos posteriores!",
-            EXCLUIR_POSTERIOR: "Este lançamento não pode ser excluído. É necessário excluir todos os lançamentos posteriores!"
+            EXCLUIR_POSTERIOR: "Este lançamento não pode ser excluído. É necessário excluir todos os lançamentos posteriores!",
+            SEM_LANCAMENTO_SELECIONADO: "Nenhum lançamento foi selecionado!"
         },
         validacao: {
             DATA_LANCAMENTO_REQUERIDA: "Preencha a data do lançamento!",
@@ -71,7 +72,8 @@ app.constant('MESSAGES', {
                 LANCAMENTO_VINCULADOS: "Este lançamento programado não pode ser excluído! <br/> Existem Lançamentos vinculados a este lançamento programado.",
                 CONFIRMAR_EXCLUIR_TODOS: "Deseja realmente excluir estes lançamentos programados?",
                 CONFIRMAR_EXCLUIR_LANCAMENTOS_TODOS: "Deseja realmente excluir estes lançamentos programados? <br/> Alguns lançamentos programados não poderão ser excluídos. É necessário excluir todos os lançamentos vínculados!",
-                PARCELA_EXISTENTE: "Este lançamento não pode ser inserido, pois esta parcela já existe!"               
+                PARCELA_EXISTENTE: "Este lançamento não pode ser inserido, pois esta parcela já existe!",
+                SEM_LANCAMENTO_SELECIONADO: "Nenhum lançamento foi selecionado!"     
             },
             validacao: {
                 DATA_LANCAMENTO_REQUERIDA: "Preencha a data do lançamento programado!",

@@ -348,7 +348,8 @@ app.controller('LancamentoProgramadoController',
         // ***** TODOS ***** //
 
         $scope.excluirTodos = function(conta, lancamentos) {
-            var lancamentoSelecionados = getLancamentoProgramadosSelecionados(lancamentos);  
+            var lancamentoSelecionados = getLancamentoProgramadosSelecionados(lancamentos);   
+            if(!existeLancamentoSelecionado(lancamentoSelecionados)) return;
             var lancamentosValidos = getLancamentos(lancamentoSelecionados);
             var msg = MESSAGES.lancamento.programar.info.CONFIRMAR_EXCLUIR_TODOS;
             if(lancamentosValidos.length !== lancamentoSelecionados.length) { 
@@ -405,6 +406,12 @@ app.controller('LancamentoProgramadoController',
 //        };
                 
         // ***** VALIDAR ***** //
+        
+        var existeLancamentoSelecionado = function(lancamentosSelecionados) {
+            if(lancamentosSelecionados && lancamentosSelecionados.length) return true;
+            modalMessage(MESSAGES.lancamento.programar.info.SEM_LANCAMENTO_SELECIONADO);
+            return false;
+        };
         
         // ***** AJUSTAR ***** //
         
