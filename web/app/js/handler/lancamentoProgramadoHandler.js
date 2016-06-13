@@ -53,7 +53,7 @@ app.factory('LancamentoProgramadoHandler', function() {
     };
     
     var getTipo = function(lancamentoProgramado) {
-        if(!lancamentoProgramado.tipo) return lancamentoProgramado.tipo;
+        if(!lancamentoProgramado.tipo) return lancamentoProgramado.tipo.id;
         return lancamentoProgramado.tipo.id; 
     };
     
@@ -62,30 +62,30 @@ app.factory('LancamentoProgramadoHandler', function() {
     };
     
     var getNumero = function(lancamentoProgramado) {
-        return lancamentoProgramado.numero || null;
+        return lancamentoProgramado.numero;
     };
     
     var getDocumento = function(lancamentoProgramado) {
-        if(!lancamentoProgramado.documento) return lancamentoProgramado.documento;
+        if(!lancamentoProgramado.documento) return lancamentoProgramado.documento.idTipoDocumento;
         return { idTipoDocumento: lancamentoProgramado.documento.idTipoDocumento };
     };
     
     var getFormaPagamento = function(lancamentoProgramado) {
-        if(!lancamentoProgramado.formaPagamento) return lancamentoProgramado.formaPagamento;
+        if(!lancamentoProgramado.formaPagamento) return lancamentoProgramado.formaPagamento.idTipoFormaPagamento;
         return { idTipoFormaPagamento: lancamentoProgramado.formaPagamento.idTipoFormaPagamento };
     };
     
     var getFrequencia = function(lancamentoProgramado) {
-        if(!lancamentoProgramado.frequencia) return lancamentoProgramado.frequencia;
-        return lancamentoProgramado.frequencia.id || null;
+        if(!lancamentoProgramado.frequencia) return lancamentoProgramado.frequencia.id;
+        return lancamentoProgramado.frequencia.id;
     };
     
     var getQuantidadeParcela = function(lancamentoProgramado) {
-        return lancamentoProgramado.quantidadeParcela || null;
+        return lancamentoProgramado.quantidadeParcela;
     };
     
     var getNumeroParcela = function(lancamentoProgramado) {
-        return lancamentoProgramado.numeroParcela || null;
+        return lancamentoProgramado.numeroParcela;
     };
     
     var getDataCompetencia = function(lancamentoProgramado) {
@@ -105,7 +105,7 @@ app.factory('LancamentoProgramadoHandler', function() {
     };
     
     var getSituacao = function(lancamentoProgramado) {
-        if(!lancamentoProgramado.situacao) return lancamentoProgramado.situacao;
+        if(!lancamentoProgramado.situacao) return lancamentoProgramado.situacao.id;
         return lancamentoProgramado.situacao.id; 
     };
     

@@ -1,12 +1,13 @@
 'use strict';
 
 app.controller('ModalLancamentoProgramadoGerarController', 
-    ['$scope', 'LancamentoConciliadoService', 'FrequenciaLancamentoService', 'ModalService', 'LancamentoHandler', 'MESSAGES',
-    function ($scope, LancamentoConciliadoService, FrequenciaLancamentoService, ModalService, LancamentoHandler, MESSAGES) {
+    ['$scope', 'LancamentoConciliadoService', 'FrequenciaLancamentoService', 'ListaService', 'ModalService', 'LancamentoHandler', 'LISTAS', 'MESSAGES',
+    function ($scope, LancamentoConciliadoService, FrequenciaLancamentoService, ListaService, ModalService, LancamentoHandler, LISTAS, MESSAGES) {
 
         var init = function () {  
             getTitle();
             $scope.lancamento = $scope.lancamento || $scope.getLancamento($scope.lancamentoProgramado, null, $scope.modelos[2]);
+            setLists($scope.lancamento);
         };
         
         // ***** CONTROLLER ***** //
@@ -14,6 +15,10 @@ app.controller('ModalLancamentoProgramadoGerarController',
         var getTitle = function() {
             $scope.titleGerar = $scope.title + " - " + MESSAGES.lancamento.title.GERAR; 
         };
+        
+        var setLists = function(lancamento) {
+            lancamento.situacao = ListaService.getValue(LISTAS.situacaoLancamentoProgramado, lancamento.situacao);
+        }
         
         $scope.lancar = function(form, lancamentoProgramado, lancamento) {
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;
@@ -36,7 +41,7 @@ app.controller('ModalLancamentoProgramadoGerarController',
         
         var lancar = function(lancamentoProgramado, lancamento) {  
             var isParcela = ($scope.lancamentoProgramado.parcelas && $scope.lancamentoProgramado.parcelas.length);
-            delete $scope.lancamentoProgramado.parcelas;
+//            delete lancamentoProgramado.parcelas;
             lancamentoProgramado = ajustarLancamentoProgramado(lancamentoProgramado, isParcela);
             lancamentoProgramado.gerarLancamento = true;
             lancamentoProgramado.lancamentos = [];
@@ -77,6 +82,7 @@ app.controller('ModalLancamentoProgramadoGerarController',
 //            lancamento.dataLancamento = lancamento.dataLancamento || moment();
 //            lancamento.situacao = lancamento.situacao.id;
 //            lancamento.modelo = lancamento.modelo.id;
+            lancamento.historico = '(' + lancamento.modelo.descricao + ') ' + lancamento.historico || "";
             return LancamentoHandler.handle(lancamento);
         };
         

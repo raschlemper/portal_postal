@@ -1,6 +1,6 @@
 'use strict';
 
-app.factory('FinanceiroValidation', function(LISTAS, MESSAGES) {    
+app.factory('FinanceiroValidation', function(ModalService, LISTAS, MESSAGES) {    
     
     var statusConta = LISTAS.statusConta;
         
@@ -38,6 +38,11 @@ app.factory('FinanceiroValidation', function(LISTAS, MESSAGES) {
         }
         return true;
     };
+        
+    var modalMessage = function(message) {
+        ModalService.modalMessage(message);
+    };
+        
 
     return {
         contaEncerrada: contaEncerrada,

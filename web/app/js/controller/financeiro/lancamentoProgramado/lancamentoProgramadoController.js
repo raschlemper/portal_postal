@@ -2,9 +2,9 @@
 
 app.controller('LancamentoProgramadoController', 
     ['$scope', '$filter', '$state', 'LancamentoProgramadoService', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'ModalService', 
-     'DatePickerService', 'LancamentoProgramadoHandler', 'ListaService', 'LISTAS', 'MESSAGES',
+     'DatePickerService', 'LancamentoProgramadoHandler', 'LancamentoHandler', 'ListaService', 'LISTAS', 'MESSAGES',
     function ($scope, $filter, $state, LancamentoProgramadoService, ContaService, PlanoContaService, CentroCustoService, ModalService, 
-        DatePickerService, LancamentoProgramadoHandler, ListaService, LISTAS, MESSAGES) {
+        DatePickerService, LancamentoProgramadoHandler, LancamentoHandler, ListaService, LISTAS, MESSAGES) {
 
         var init = function () {
             $scope.lancamentoProgramados = [];
@@ -97,7 +97,7 @@ app.controller('LancamentoProgramadoController',
         var createListTipoLancamento = function() {
             $scope.tiposLancamento.push( { codigo: $scope.tipos[0].codigo, descricao: 'Contas a Receber' });
             $scope.tiposLancamento.push( { codigo: $scope.tipos[1].codigo, descricao: 'Contas a Pagar' });
-//            $scope.tiposLancamento.push( { codigo: $scope.modelos[3].codigo, descricao: 'Transf. Programada' });
+            $scope.tiposLancamento.push( { codigo: $scope.modelos[3].codigo, descricao: 'Transf. Programada' });
         }
         
         var contas = function() {
@@ -158,6 +158,7 @@ app.controller('LancamentoProgramadoController',
                 if(lancamentoProgramado.quantidadeParcela) { 
                     complementoDescricaoFrequencia = ' - ' + lancamentoProgramado.quantidadeParcela + 'x (' + $filter('currency')(lancamentoProgramado.valor, 'R$ ') + ')';
                     lancamentoProgramado.tipo.modelo = $scope.modelos[4];
+                    lancamentoProgramado.valor = lancamentoProgramado.valor / lancamentoProgramado.quantidadeParcela;
                 }                
                 
                 if(lancamentoProgramado.tipo.modelo.id === $scope.modelos[3].id) { lancamentoProgramado.tipoLancamento = $scope.modelos[3].codigo; }
@@ -408,9 +409,19 @@ app.controller('LancamentoProgramadoController',
         // ***** AJUSTAR ***** //
         
         var ajustarDados = function(data) {   
-            var LancamentoProgramado = LancamentoProgramadoHandler.handle(data);
-            return LancamentoProgramado;
+            var lancamentos = ajustarDadosLancamentos(data.lancamentos);
+            var lancamentoProgramado = LancamentoProgramadoHandler.handle(data);
+            lancamentoProgramado.lancamentos = lancamentos;
+            return lancamentoProgramado;
         } 
+        
+        var ajustarDadosLancamentos = function(lancamentos) {
+            var lancamentoList = [];
+            _.map(lancamentos, function(lancamento) {
+                lancamentoList.push(LancamentoHandler.handle(lancamento));
+            });
+            return lancamentoList;
+        }
         
 //        var ajustarDadosTransferencia = function(data) {                 
 //            var lancamentoProgramadoTransferencia = { 

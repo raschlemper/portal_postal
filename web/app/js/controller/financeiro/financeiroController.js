@@ -103,9 +103,9 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                     min: 0,
                     title: {text: ' '}
                 },
-                series: [{name: $scope.tipos[0].descricao, data: receitas, color: '#90ed7d'},
-                         {name: $scope.tipos[1].descricao, data: despesas, color: '#f45b5b'},
-                         {name: 'Lucro', data: lucro, color: '#7CB5EC'}],
+                series: [{type: 'column', name: $scope.tipos[0].descricao, data: receitas, color: '#90ed7d'},
+                         {type: 'column', name: $scope.tipos[1].descricao, data: despesas, color: '#f45b5b'},
+                         {type: 'spline', name: 'Lucro',                   data: lucro,    color: '#7CB5EC'}],
                 size: {
                     height: $scope.sizeChart
                 },

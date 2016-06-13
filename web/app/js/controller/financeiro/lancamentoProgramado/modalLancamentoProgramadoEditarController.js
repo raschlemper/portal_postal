@@ -134,7 +134,7 @@ app.controller('ModalLancamentoProgramadoEditarController',
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;
             if(!$scope.validarForm(form, lancamentoProgramado)) return;   
             $scope.lancamento = $scope.getLancamento($scope.lancamentoProgramado, null, $scope.modelos[2]);  
-            $scope.goToLancarParcelar();
+            $scope.goToLancar();
         };
         
         $scope.setDataCompetencia = function(lancamentoTransferencia) {
@@ -181,7 +181,6 @@ app.controller('ModalLancamentoProgramadoEditarController',
             lancamentoProgramado.dataVencimento = (parcela && parcela.dataVencimento) || lancamentoProgramado.dataVencimento;
             lancamentoProgramado.valor = (parcela && parcela.valor) || lancamentoProgramado.valor;
             lancamentoProgramado.situacao = (lancamentoProgramado && lancamentoProgramado.situacao) || $scope.situacoes[0];
-            lancamentoProgramado.historico = '(' + modelo.descricao + ') ' + lancamentoProgramado.historico;
             return LancamentoHandler.handle(lancamentoProgramado);
         };
         

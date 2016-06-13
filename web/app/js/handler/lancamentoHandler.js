@@ -74,7 +74,7 @@ app.factory('LancamentoHandler', function(LISTAS) {
     };
     
     var getTipo = function(lancamento) {
-        if(!lancamento.tipo) return lancamento.tipo;
+        if(!lancamento.tipo) return lancamento.tipo.id;
         return lancamento.tipo.id; 
     };
     
@@ -91,12 +91,12 @@ app.factory('LancamentoHandler', function(LISTAS) {
     };
     
     var getSituacao = function(lancamento) {
-        if(!lancamento.situacao) return lancamento.situacao;
+        if(!lancamento.situacao) return lancamento.situacao.id;
         return lancamento.situacao.id; 
     };
     
     var getModelo = function(lancamento) {
-        if(!lancamento.modelo) return modelos[0];
+        if(!lancamento.modelo) return modelos[0].id;
         return lancamento.modelo.id; 
     };
     
@@ -113,7 +113,8 @@ app.factory('LancamentoHandler', function(LISTAS) {
     };
     
     var getDataLancamento = function(lancamento) {
-        return lancamento.dataLancamento || moment(); 
+//        return lancamento.dataLancamento || moment(); 
+        return lancamento.dataLancamento; 
     };
     
     var getDataCompensacao = function(lancamento) {
@@ -160,6 +161,10 @@ app.factory('LancamentoHandler', function(LISTAS) {
     var getAnexos = function(lancamento) {
         return lancamento.anexos || false;
     };
+    
+    var getDate = function() {
+        return moment().format("DD/MM/YYYY")
+    }
 
     return {
         handle: handle,
