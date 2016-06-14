@@ -1,6 +1,7 @@
 'use strict';
 
-app.controller('ModalCentroCustoEditarController', ['$scope', '$modalInstance', '$filter', 'centroCusto', 'action', 'CentroCustoService', 'ListaService', 'LISTAS',
+app.controller('ModalCentroCustoEditarController', 
+    ['$scope', '$modalInstance', '$filter', 'centroCusto', 'action', 'CentroCustoService', 'ListaService', 'LISTAS',
     function ($scope, $modalInstance, $filter, centroCusto, action, CentroCustoService, ListaService, LISTAS) {
 
         var init = function () {  
@@ -10,9 +11,16 @@ app.controller('ModalCentroCustoEditarController', ['$scope', '$modalInstance', 
             $scope.isGroup = isGroup();
             $scope.centroCusto = angular.copy(centroCusto) || {};
             if(action === 'save') { create(); }
-            todos();
-            getTitle();            
-        };         
+            getTitle();  
+            todos();          
+        };    
+                
+        // ***** CONTROLLER ***** //   
+        
+        var getTitle = function() {
+            if(action && action === 'edit') { $scope.title = "Editar Centro Custo"; }
+            else { $scope.title = "Inserir Centro Custo"; }
+        }    
         
         var isGroup = function() {
             if(action === 'save') return false;
@@ -45,11 +53,6 @@ app.controller('ModalCentroCustoEditarController', ['$scope', '$modalInstance', 
                 });
         };
         
-        var getTitle = function() {
-            if(action && action === 'edit') { $scope.title = "Editar Centro Custo"; }
-            else { $scope.title = "Inserir Centro Custo"; }
-        }
-        
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
             $modalInstance.close($scope.centroCusto);
@@ -58,6 +61,8 @@ app.controller('ModalCentroCustoEditarController', ['$scope', '$modalInstance', 
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
+                
+        // ***** VALIDAR ***** //  
 
         var validarForm = function (form) {
             if (form.nome.$error.required) {

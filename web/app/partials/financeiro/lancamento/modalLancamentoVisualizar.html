@@ -22,7 +22,7 @@
                 <div class="col-md-4 text-right">
                     <label>Centro de Custo:</label>
                 </div>
-                <div class="col-md-8">{{lancamento.centroCusto.nome}}</div>
+                <div class="col-md-8">{{lancamento.centroCusto}}</div>
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">
@@ -133,9 +133,9 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-success" ng-click="programacao()" ng-if="lancamento.lancamentoProgramado.idLancamentoProgramado">
+<!--        <button type="button" class="btn btn-success" ng-click="programacao()" ng-if="lancamento.lancamentoProgramado.idLancamentoProgramado">
             <i class="fa fa-lg fa-clock-o fa-spc"></i> PROGRAMAÇÃO
-        </button>
+        </button>-->
         <button type="button" class="btn btn-warning" ng-click="editar()">
             <i class="fa fa-lg fa-pencil fa-spc"></i> EDITAR
         </button>

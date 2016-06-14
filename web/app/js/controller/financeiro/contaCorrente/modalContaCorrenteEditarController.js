@@ -1,7 +1,8 @@
 'use strict';
 
-app.controller('ModalContaCorrenteEditarController', ['$scope', '$modalInstance', 'contaCorrente', 'ContaCorrenteService', 'BancoService', 'ModalService',
-    function ($scope, $modalInstance, contaCorrente, ContaCorrenteService, BancoService, ModalService) {
+app.controller('ModalContaCorrenteEditarController', 
+    ['$scope', '$modalInstance', 'contaCorrente', 'ContaCorrenteService', 'BancoService', 'ModalService', 'MESSAGES',
+    function ($scope, $modalInstance, contaCorrente, ContaCorrenteService, BancoService, ModalService, MESSAGES) {
 
         var init = function () {  
             $scope.maxValue = 31;
@@ -11,6 +12,8 @@ app.controller('ModalContaCorrenteEditarController', ['$scope', '$modalInstance'
             getTitle();
             bancos();
         };
+                
+        // ***** CONTROLLER ***** //  
         
         var getTitle = function() {
             if(contaCorrente && contaCorrente.idContaCorrente) { $scope.title = "Editar Conta Corrente"; }
@@ -68,10 +71,10 @@ app.controller('ModalContaCorrenteEditarController', ['$scope', '$modalInstance'
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
-        
-        var modalMessage = function(message) {
-            ModalService.modalMessage(message);
-        };
+                
+        // ***** AJUSTAR ***** //
+                
+        // ***** VALIDAR ***** //  
 
         var validarForm = function (form) {
             if (form.nome.$error.required) {
@@ -103,7 +106,13 @@ app.controller('ModalContaCorrenteEditarController', ['$scope', '$modalInstance'
                 return false;
             }
             return true;
-        }     
+        };
+                
+        // ***** MODAL ***** //  
+        
+        var modalMessage = function(message) {
+            ModalService.modalMessage(message);
+        };
 
         init();
 

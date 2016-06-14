@@ -1,13 +1,20 @@
 'use strict';
 
-app.controller('PlanoContaController', ['$scope', '$q', 'PlanoContaService', 'ModalService', 'LISTAS',
-    function ($scope, $q, PlanoContaService, ModalService, LISTAS) {
+app.controller('PlanoContaController', 
+    ['$scope', '$q', 'PlanoContaService', 'ModalService', 'PlanoContaHandler', 'StringService', 'LISTAS', 'MESSAGES',
+    function ($scope, $q, PlanoContaService, ModalService, PlanoContaHandler, StringService, LISTAS, MESSAGES) {
 
         var init = function () {
             $scope.planoContas = [];
             $scope.planoContasLista = [];
             $scope.tipos = LISTAS.planoConta;
-            
+            initTree();
+            todos();
+        };  
+
+        // ***** TREE ***** //
+
+        var initTree = function() {            
             $scope.events = { 
                 add: function(idPlanoConta) {
                     $scope.salvar(idPlanoConta);
@@ -18,8 +25,10 @@ app.controller('PlanoContaController', ['$scope', '$q', 'PlanoContaService', 'Mo
                 remove: function(idPlanoConta) {
                     $scope.excluir(idPlanoConta);
                 }
-            }         
-        };  
+            };            
+        };
+
+        // ***** CONTROLLER ***** //
 
         var todos = function() {
             var planos = [];
@@ -39,12 +48,14 @@ app.controller('PlanoContaController', ['$scope', '$q', 'PlanoContaService', 'Mo
                 });
         };
 
+        // ***** SALVAR ***** //
+
         $scope.salvar = function(idPlanoConta) {            
             $q.all([PlanoContaService.getLancamento(idPlanoConta),
                     PlanoContaService.getLancamentoProgramado(idPlanoConta)])
                 .then(function(values) {    
                     if(values[0].lancamentos.length || values[1].lancamentosProgramados.length) {
-                        modalMessage("Não é permitido adicionar contas a um plano de conta que possua lançamentos vinculados.");
+                        modalMessage(MESSAGES.planoConta.info.NAO_PERMITE_ADD_GRUPO);
                     } else {
                         salvar(idPlanoConta);
                     }
@@ -55,57 +66,71 @@ app.controller('PlanoContaController', ['$scope', '$q', 'PlanoContaService', 'Mo
             PlanoContaService.get(idPlanoConta)
                 .then(function(planoConta) {                  
                     modalSalvar(planoConta, 'save')
-                    .then(function(result) {                                     
-                        PlanoContaService.getByTipoGrupoCodigo(result.tipo.id, planoConta.grupo.idPlanoConta, result.codigo)
-                        .then(function(data) {
-                            if(data) { modalMessage("Este Plano de Conta já existe!"); } 
-                            else { return result; }
-                        }).then(function(result) {   
-                            if(!result) return;
-                            result = ajustarDados(result, result.grupo);
-                            PlanoContaService.save(result)
-                            .then(function(data) {  
-                                modalMessage("Plano de Conta " + data.nome +  " Inserido com sucesso!");
-                                todos();
-                            })
-                            .catch(function(e) {
-                                modalMessage(e);
-                            });
+                        .then(function(result) {      
+                            save(planoConta, result);
                         });
-                     });
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         }
+        
+        var save = function(planoConta, result) {
+            var grupo = planoConta || result.grupo;
+            PlanoContaService.getByTipoGrupoCodigo(result.tipo.id, grupo.idPlanoConta, result.codigo)
+                .then(function(data) {
+                    if(data) { modalMessage(MESSAGES.planoConta.info.NAO_PERMITE_ADD_GRUPO); } 
+                    else { return result; }
+                }).then(function(result) {   
+                    if(!result) return;
+                    result = ajustarDados(result, result.grupo);
+                    PlanoContaService.save(result)
+                        .then(function(data) {  
+                            modalMessage(StringService.format(MESSAGES.planoConta.sucesso.INSERIDO_SUCESSO, data.nome));
+                            todos();
+                        })
+                        .catch(function(e) {
+                            modalMessage(e);
+                        });
+                });
+        };
+
+        // ***** EDITAR ***** //
 
         $scope.editar = function(idPlanoConta) {
             PlanoContaService.get(idPlanoConta)
                 .then(function(planoConta) {
-                     modalSalvar(planoConta, 'edit')
-                     .then(function(result) {                                   
-                        PlanoContaService.getByTipoGrupoCodigo(result.tipo.id, result.grupo.idPlanoConta, result.codigo)
-                        .then(function(data) {
-                            if(data && data.idPlanoConta != result.idPlanoConta) { modalMessage("Este Plano de Conta já existe!"); } 
-                            else { return result; }
-                        }).then(function(result) {    
-                            if(!result) return;
-                            result = ajustarDados(result, result.grupo);
-                            PlanoContaService.update(idPlanoConta, result)
-                            .then(function (data) {  
-                                modalMessage("Plano de Conta " + data.nome + " Alterado com sucesso!");
-                                todos();
-                            })
-                            .catch(function(e) {
-                                modalMessage(e);
-                            });
+                    modalSalvar(planoConta, 'edit')
+                        .then(function(result) {    
+                            editar(planoConta, result);
                         });
-                    });
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });           
         };
+        
+        var editar = function(planoConta, result) {                           
+            var grupo = result.grupo || planoConta;                                   
+            PlanoContaService.getByTipoGrupoCodigo(result.tipo.id, grupo.idPlanoConta, result.codigo)
+                .then(function(data) {
+                    if(data && data.idPlanoConta !== result.idPlanoConta) { modalMessage("Este Plano de Conta já existe!"); } 
+                    else { return result; }
+                }).then(function(result) {    
+                    if(!result) return;
+                    result = ajustarDados(result, result.grupo);
+                    PlanoContaService.update(planoConta.idPlanoConta, result)
+                        .then(function (data) {  
+                            modalMessage("Plano de Conta " + data.nome + " Alterado com sucesso!");
+                            todos();
+                        })
+                        .catch(function(e) {
+                            modalMessage(e);
+                        });
+                });
+        };
+
+        // ***** EXCLUIR ***** //
 
         $scope.excluir = function(idPlanoConta) {
             $q.all([PlanoContaService.getLancamento(idPlanoConta),
@@ -130,16 +155,18 @@ app.controller('PlanoContaController', ['$scope', '$q', 'PlanoContaService', 'Mo
                         modalMessage(e);
                     });
             });
-        }
+        };
+
+        // ***** VALIDAR ***** //
+
+        // ***** AJUSTAR ***** //
         
         var ajustarDados = function(data, grupo) { 
-            delete data.contas;
-            data.tipo = data.tipo.id; 
-            data.grupo = {
-                idPlanoConta: grupo.idPlanoConta
-            }
-            return data;
+            data.grupo = grupo;
+            return PlanoContaHandler.handle(data);
         }
+
+        // ***** MODAL ***** //
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);
@@ -162,8 +189,7 @@ app.controller('PlanoContaController', ['$scope', '$q', 'PlanoContaService', 'Mo
             var modalInstance = ModalService.modalExcluir('Excluir PlanoConta?', 'Deseja realmente excluir este planoConta?');
             return modalInstance.result;
         };
-
-        todos();
+        
         init();
 
     }]);

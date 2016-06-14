@@ -25,6 +25,7 @@ app.controller('ModalLancamentoVisualizarController',
                     planoContas = PlanoContaService.flatten(planoContas);   
                     var planoConta = ListaService.getPlanoContaValue(planoContas, lancamento.planoConta.idPlanoConta);                                    
                     if(planoConta) { lancamento.planoConta = planoConta.descricao; }
+                    else { lancamento.planoConta = null; }
                 })
                 .catch(function (e) {
                     console.log(e);
@@ -38,7 +39,8 @@ app.controller('ModalLancamentoVisualizarController',
                     CentroCustoService.estrutura(centroCustos);
                     centroCustos = CentroCustoService.flatten(centroCustos); 
                     var centroCusto = ListaService.getCentroCustoValue(centroCustos, lancamento.centroCusto.idCentroCusto);                     
-                    if(centroCusto) { lancamento.centroCusto = centroCusto.descricao; }                  
+                    if(centroCusto) { lancamento.centroCusto = centroCusto.descricao; } 
+                    else { lancamento.centroCusto = null; }                 
                 })
                 .catch(function (e) {
                     console.log(e);

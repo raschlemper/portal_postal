@@ -100,7 +100,6 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                     title: {text: ' '} 
                 },
                 yAxis: {
-                    min: 0,
                     title: {text: ' '}
                 },
                 series: [{type: 'column', name: $scope.tipos[0].descricao, data: receitas, color: '#90ed7d'},
@@ -284,7 +283,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                 },
                 yAxis: {
                     title: { text: ' ' },
-                    min: limitConta,
+                    //min: limitConta,
                     plotLines: [{
                         label: {
                             text: 'Limite Conta Corrente',

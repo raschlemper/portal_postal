@@ -1,6 +1,7 @@
 'use strict';
 
-app.controller('ModalPlanoContaEditarController', ['$scope', '$modalInstance', '$filter', 'planoConta', 'action', 'PlanoContaService', 'ListaService', 'LISTAS',
+app.controller('ModalPlanoContaEditarController', 
+    ['$scope', '$modalInstance', '$filter', 'planoConta', 'action', 'PlanoContaService', 'ListaService', 'LISTAS',
     function ($scope, $modalInstance, $filter, planoConta, action, PlanoContaService, ListaService, LISTAS) {
 
         var init = function () {  
@@ -12,9 +13,16 @@ app.controller('ModalPlanoContaEditarController', ['$scope', '$modalInstance', '
             $scope.planoConta = angular.copy(planoConta) || {};
             $scope.planoConta.tipo = (planoConta && planoConta.tipo) || $scope.tipos[0]; 
             if(action === 'save') { create(); }
-            todos();
-            getTitle();            
-        };         
+            getTitle();      
+            todos();      
+        };      
+                
+        // ***** CONTROLLER ***** //  
+        
+        var getTitle = function() {
+            if(action && action === 'edit') { $scope.title = "Editar Plano Conta"; }
+            else { $scope.title = "Inserir Plano Conta"; }
+        }   
         
         var isGroup = function() {
             if(action === 'save') return false;
@@ -43,11 +51,6 @@ app.controller('ModalPlanoContaEditarController', ['$scope', '$modalInstance', '
                 });
         };
         
-        var getTitle = function() {
-            if(action && action === 'edit') { $scope.title = "Editar Plano Conta"; }
-            else { $scope.title = "Inserir Plano Conta"; }
-        }
-        
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
             $modalInstance.close($scope.planoConta);
@@ -56,6 +59,8 @@ app.controller('ModalPlanoContaEditarController', ['$scope', '$modalInstance', '
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
+                
+        // ***** VALIDAR ***** //  
 
         var validarForm = function (form) {
             if (form.nome.$error.required) {

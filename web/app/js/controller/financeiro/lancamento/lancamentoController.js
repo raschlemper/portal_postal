@@ -286,7 +286,7 @@ app.controller('LancamentoController',
                     modalMessage(e);
                 });
 
-        }
+        };
 
         // ***** EDITAR ***** //
 
@@ -516,7 +516,7 @@ app.controller('LancamentoController',
                 .catch(function(e) {
                     modalMessage(e);
                 });
-        }
+        };
 
         // ***** VALIDAR ***** //
 
@@ -586,7 +586,7 @@ app.controller('LancamentoController',
             data.modelo = modelo;
             data.situacao = (data && data.situacao) || $scope.situacoes[0];
             return LancamentoHandler.handle(data);
-        }
+        };
 
         // ***** MODAL ***** //
 

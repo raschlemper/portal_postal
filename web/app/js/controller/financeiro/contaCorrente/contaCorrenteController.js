@@ -1,13 +1,16 @@
 'use strict';
 
-app.controller('ContaCorrenteController', ['$scope', '$filter', '$q', 'ContaCorrenteService', 'ModalService',
-    function ($scope, $filter, $q, ContaCorrenteService, ModalService) {
+app.controller('ContaCorrenteController', 
+    ['$scope', '$filter', '$q', 'ContaCorrenteService', 'ModalService', 'ContaCorrenteHandler', 'MESSAGES',
+    function ($scope, $filter, $q, ContaCorrenteService, ModalService, ContaCorrenteHandler, MESSAGES) {
 
         var init = function () {
             $scope.contaCorrentes = [];
             $scope.contaCorrentesLista = [];
             initTable();      
         };  
+
+        // ***** TABLE ***** //   
         
         var initTable = function() {            
             $scope.colunas = [
@@ -29,7 +32,9 @@ app.controller('ContaCorrenteController', ['$scope', '$filter', '$q', 'ContaCorr
                     }
                 }
             }             
-        }
+        };
+
+        // ***** CONTROLLER ***** //
 
         var todos = function() {
             ContaCorrenteService.getAll()
@@ -51,6 +56,8 @@ app.controller('ContaCorrenteController', ['$scope', '$filter', '$q', 'ContaCorr
             })
         };
 
+        // ***** VISUALIZAR ***** //
+
         $scope.visualizar = function(idContaCorrente) {
             ContaCorrenteService.get(idContaCorrente)
                 .then(function(contaCorrente) {
@@ -63,40 +70,55 @@ app.controller('ContaCorrenteController', ['$scope', '$filter', '$q', 'ContaCorr
                 });
         };
 
+        // ***** SALVAR ***** //
+
         $scope.salvar = function() {
             modalSalvar().then(function(result) {
                 result = ajustarDados(result);
-                ContaCorrenteService.save(result)
-                    .then(function(data) {  
-                        modalMessage("Conta Corrente " + data.nome +  " Inserida com sucesso!");
-                        todos();
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
+                salvar(result);
             });
         };
+        
+        var salvar = function(contaCorrente) {
+            ContaCorrenteService.save(contaCorrente)
+                .then(function(data) {  
+                    modalMessage("Conta Corrente " + data.nome +  " Inserida com sucesso!");
+                    todos();
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+            
+        };
+
+        // ***** EDITAR ***** //
 
         $scope.editar = function(idContaCorrente) {
             ContaCorrenteService.get(idContaCorrente)
                 .then(function(contaCorrente) {
-                     modalSalvar(contaCorrente).then(function(result) {
-                        result = ajustarDados(result);
-                        ContaCorrenteService.update(idContaCorrente, result)
-                            .then(function (data) {  
-                                modalMessage("Conta Corrente " + data.nome + " Alterada com sucesso!");
-                                todos();
-                            })
-                            .catch(function(e) {
-                                modalMessage(e);
-                            });
-                    });
+                    editar(contaCorrente);
                 })
                 .catch(function(e) {
                     modalMessage(e.error);
                 });
            
         };
+        
+        var editar = function(contaCorrente) {
+            modalSalvar(contaCorrente).then(function(result) {
+                result = ajustarDados(result);
+                ContaCorrenteService.update(contaCorrente.idContaCorrente, result)
+                .then(function (data) {  
+                    modalMessage("Conta Corrente " + data.nome + " Alterada com sucesso!");
+                    todos();
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+            });            
+        };
+
+        // ***** EXCLUIR ***** //
 
         $scope.excluir = function(idContaCorrente) {
             $q.all([ContaCorrenteService.getCartaoCredito(idContaCorrente),
@@ -127,11 +149,16 @@ app.controller('ContaCorrenteController', ['$scope', '$filter', '$q', 'ContaCorr
                     });
             });            
         };
+
+        // ***** VALIDAR ***** //
+
+        // ***** AJUSTAR ***** //
         
-        var ajustarDados = function(data) {   
-            data.limite = data.limite || 0;
-            return data;
-        }
+        var ajustarDados = function(data) {  
+            return ContaCorrenteHandler.handle(data);
+        };
+
+        // ***** MODAL ***** //
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);

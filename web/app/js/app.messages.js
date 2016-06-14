@@ -9,7 +9,12 @@ app.constant('MESSAGES', {
     },
 
     planoConta: { 
+        sucesso: {
+            INSERIDO_SUCESSO: "Plano de Conta {0} Inserido com sucesso!"
+        },
         info: {
+            PLANO_CONTA_EXISTENTE: "Este Plano de Conta já existe!",
+            NAO_PERMITE_ADD_GRUPO: "Não é permitido adicionar contas a um plano de conta que possua lançamentos vinculados.",
             NAO_PERMITE_GRUPO: "Só é permitido realizar lançamentos em plano de conta que não possuam planos de conta vinculados!"
         }
     },

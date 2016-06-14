@@ -1,12 +1,19 @@
 'use strict';
 
-app.controller('CentroCustoController', ['$scope', '$q', 'CentroCustoService', 'ModalService',
-    function ($scope, $q, CentroCustoService, ModalService) {
+app.controller('CentroCustoController', 
+    ['$scope', '$q', 'CentroCustoService', 'ModalService', 'CentroCustoHandler', 'MESSAGES',
+    function ($scope, $q, CentroCustoService, ModalService, CentroCustoHandler, MESSAGES) {
 
         var init = function () {
             $scope.centroCustos = [];
             $scope.centroCustosLista = [];
-            
+            initTree();
+            todos();
+        };  
+
+        // ***** TREE ***** //
+
+        var initTree = function() { 
             $scope.events = { 
                 add: function(idCentroCusto) {
                     $scope.salvar(idCentroCusto);
@@ -17,8 +24,10 @@ app.controller('CentroCustoController', ['$scope', '$q', 'CentroCustoService', '
                 remove: function(idCentroCusto) {
                     $scope.excluir(idCentroCusto);
                 }
-            }         
-        };  
+            };         
+        };
+
+        // ***** CONTROLLER ***** //
 
         var todos = function() {
             CentroCustoService.getStructure()
@@ -48,6 +57,8 @@ app.controller('CentroCustoController', ['$scope', '$q', 'CentroCustoService', '
             });
         }
 
+        // ***** SALVAR ***** //
+
         $scope.salvar = function(idCentroCusto) {            
             $q.all([CentroCustoService.getLancamento(idCentroCusto),
                     CentroCustoService.getLancamentoProgramado(idCentroCusto)])
@@ -64,53 +75,64 @@ app.controller('CentroCustoController', ['$scope', '$q', 'CentroCustoService', '
             CentroCustoService.get(idCentroCusto)
                 .then(function(centroCusto) {                  
                     modalSalvar(centroCusto, 'save')
-                    .then(function(result) {     
-                        var grupo = centroCusto || result;
-                        CentroCustoService.getByGrupoCodigo(grupo.idCentroCusto, result.codigo)
-                        .then(function(data) {
-                            if(data) { modalMessage("Este Centro de Custo já existe!"); } 
-                            else { return result; }
-                        }).then(function(result) {   
-                            if(!result) return;
-                            result = ajustarDados(result, result.grupo);
-                            CentroCustoService.save(result)
-                            .then(function(data) {  
-                                modalMessage("Centro de Custo " + data.nome +  " Inserido com sucesso!");
-                                todos();
-                            })
-                            .catch(function(e) {
-                                modalMessage(e);
-                            });
-                        });
-                     });
+                        .then(function(result) { 
+                            save(centroCusto, result);
+                         });
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
-        }
+        };
+        
+        var save = function(centroCusto, result) {    
+            var grupo = centroCusto || result.grupo;
+            CentroCustoService.getByGrupoCodigo(grupo.idCentroCusto, result.codigo)
+                .then(function(data) {
+                    if(data) { modalMessage("Este Centro de Custo já existe!"); } 
+                    else { return result; }
+                }).then(function(result) {   
+                    if(!result) return;
+                    result = ajustarDados(result, result.grupo);
+                    CentroCustoService.save(result)
+                    .then(function(data) {  
+                        modalMessage("Centro de Custo " + data.nome +  " Inserido com sucesso!");
+                        todos();
+                    })
+                    .catch(function(e) {
+                        modalMessage(e);
+                    });
+                });            
+        };
+
+        // ***** EDITAR ***** //
 
         $scope.editar = function(idCentroCusto) {
             CentroCustoService.get(idCentroCusto)
                 .then(function(centroCusto) {
-                     modalSalvar(centroCusto, 'edit')
-                     .then(function(result) {                    
-                        var grupo = result || centroCusto;      
-                        if(grupo) {
-                            CentroCustoService.getByGrupoCodigo(grupo.idCentroCusto, result.codigo)
-                            .then(function(data) {
-                                if(data && data.idCentroCusto != result.idCentroCusto) { modalMessage("Este Centro de Custo já existe!"); } 
-                                else { return result; }
-                            }).then(function(result) {    
-                                update(idCentroCusto, result);
-                            });
-                        } else {
-                            update(idCentroCusto, result);
-                        }
-                    });
+                    modalSalvar(centroCusto, 'edit')
+                        .then(function(result) {  
+                            editar(centroCusto, result);
+                        });
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });           
+        };
+        
+        var editar = function(centroCusto, result) {                  
+            var grupo = result.grupo || centroCusto;      
+            if(grupo) {
+                CentroCustoService.getByGrupoCodigo(grupo.idCentroCusto, result.codigo)
+                .then(function(data) {
+                    if(data && data.idCentroCusto != result.idCentroCusto) { modalMessage("Este Centro de Custo já existe!"); } 
+                    else { return result; }
+                }).then(function(result) {    
+                    update(centroCusto.idCentroCusto, result);
+                });
+            } else {
+                update(centroCusto.idCentroCusto, result);
+            }
+            
         };
         
         var update = function(idCentroCusto, result) {
@@ -124,7 +146,9 @@ app.controller('CentroCustoController', ['$scope', '$q', 'CentroCustoService', '
             .catch(function(e) {
                 modalMessage(e);
             });
-        }
+        };
+
+        // ***** EXCLUIR ***** //
 
         $scope.excluir = function(idCentroCusto) {
             $q.all([CentroCustoService.getLancamento(idCentroCusto),
@@ -149,7 +173,11 @@ app.controller('CentroCustoController', ['$scope', '$q', 'CentroCustoService', '
                         modalMessage(e);
                     });
             });
-        }
+        };
+
+        // ***** VALIDAR ***** //
+
+        // ***** AJUSTAR ***** //
         
         var ajustarDados = function(data, grupo) { 
             delete data.contas;
@@ -159,8 +187,10 @@ app.controller('CentroCustoController', ['$scope', '$q', 'CentroCustoService', '
                     idCentroCusto: grupo.idCentroCusto
                 }
             }
-            return data;
-        }
+            return CentroCustoHandler.handle(data);
+        };
+
+        // ***** MODAL ***** //
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);
@@ -183,8 +213,7 @@ app.controller('CentroCustoController', ['$scope', '$q', 'CentroCustoService', '
             var modalInstance = ModalService.modalExcluir('Excluir CentroCusto?', 'Deseja realmente excluir este centroCusto?');
             return modalInstance.result;
         };
-
-        todos();
+        
         init();
 
     }]);
