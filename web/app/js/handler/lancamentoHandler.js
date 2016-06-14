@@ -40,7 +40,6 @@ app.factory('LancamentoHandler', function(LISTAS) {
         lancamentoHandle.observacao = getObservacao(lancamento);
         lancamentoHandle.usuario = getUsuario(lancamento);
         lancamentoHandle.anexos = getAnexos(lancamento);
-        lancamentoHandle.rateios = null;
         return lancamentoHandle;
     };
     

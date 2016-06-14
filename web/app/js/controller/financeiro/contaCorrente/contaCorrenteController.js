@@ -7,7 +7,8 @@ app.controller('ContaCorrenteController',
         var init = function () {
             $scope.contaCorrentes = [];
             $scope.contaCorrentesLista = [];
-            initTable();      
+            initTable(); 
+            todos();
         };  
 
         // ***** TABLE ***** //   
@@ -61,22 +62,27 @@ app.controller('ContaCorrenteController',
         $scope.visualizar = function(idContaCorrente) {
             ContaCorrenteService.get(idContaCorrente)
                 .then(function(contaCorrente) {
-                     modalVisualizar(contaCorrente).then(function(result) {
-                         $scope.editar(result);
-                     })          
+                    visualizar(contaCorrente);
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         };
 
+        var visualizar = function(contaCorrente) {
+            modalVisualizar(contaCorrente).then(function(result) {
+                $scope.editar(result);
+            });
+        };
+
         // ***** SALVAR ***** //
 
         $scope.salvar = function() {
-            modalSalvar().then(function(result) {
-                result = ajustarDados(result);
-                salvar(result);
-            });
+            modalSalvar()
+                .then(function(result) {
+                    result = ajustarDados(result);
+                    salvar(result);
+                });
         };
         
         var salvar = function(contaCorrente) {
@@ -107,15 +113,19 @@ app.controller('ContaCorrenteController',
         var editar = function(contaCorrente) {
             modalSalvar(contaCorrente).then(function(result) {
                 result = ajustarDados(result);
-                ContaCorrenteService.update(contaCorrente.idContaCorrente, result)
+                update(contaCorrente);
+            });            
+        };
+        
+        var update = function(contaCorrente) {
+            ContaCorrenteService.update(contaCorrente.idContaCorrente, contaCorrente)
                 .then(function (data) {  
                     modalMessage("Conta Corrente " + data.nome + " Alterada com sucesso!");
                     todos();
                 })
                 .catch(function(e) {
                     modalMessage(e);
-                });
-            });            
+                });  
         };
 
         // ***** EXCLUIR ***** //
@@ -138,19 +148,22 @@ app.controller('ContaCorrenteController',
         }; 
         
         var excluir = function(idContaCorrente) {
-            modalExcluir().then(function() {
-                ContaCorrenteService.delete(idContaCorrente)
-                    .then(function(data) { 
-                        modalMessage("Conta Corrente " + data.nome + " Removida com sucesso!");
-                        todos();                        
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            });            
+            modalExcluir()
+                .then(function() {
+                    remove(idContaCorrente);
+                });            
         };
-
-        // ***** VALIDAR ***** //
+        
+        var remove = function(idContaCorrente) {
+            ContaCorrenteService.delete(idContaCorrente)
+                .then(function(data) { 
+                    modalMessage("Conta Corrente " + data.nome + " Removida com sucesso!");
+                    todos();                        
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });  
+        };
 
         // ***** AJUSTAR ***** //
         
@@ -188,8 +201,7 @@ app.controller('ContaCorrenteController',
             var modalInstance = ModalService.modalExcluir('Excluir Conta Corrente?', 'Deseja realmente excluir este Conta Corrente?');
             return modalInstance.result;
         };
-
-        todos();
+        
         init();
 
     }]);

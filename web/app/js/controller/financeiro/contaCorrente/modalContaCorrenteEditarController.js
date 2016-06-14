@@ -71,9 +71,7 @@ app.controller('ModalContaCorrenteEditarController',
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
-                
-        // ***** AJUSTAR ***** //
-                
+        
         // ***** VALIDAR ***** //  
 
         var validarForm = function (form) {

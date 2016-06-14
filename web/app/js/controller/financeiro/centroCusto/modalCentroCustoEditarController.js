@@ -12,7 +12,7 @@ app.controller('ModalCentroCustoEditarController',
             $scope.centroCusto = angular.copy(centroCusto) || {};
             if(action === 'save') { create(); }
             getTitle();  
-            todos();          
+            centroCusto();          
         };    
                 
         // ***** CONTROLLER ***** //   
@@ -37,7 +37,7 @@ app.controller('ModalCentroCustoEditarController',
             $scope.centroCusto.grupo = centroCusto;            
         }
 
-        var todos = function() {
+        var centroCusto = function() {
             CentroCustoService.getStructure()
                 .then(function(data) {
                     $scope.grupos = data;

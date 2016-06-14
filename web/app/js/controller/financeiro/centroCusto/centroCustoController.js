@@ -55,7 +55,7 @@ app.controller('CentroCustoController',
                     modalMessage(e);
                 });
             });
-        }
+        };
 
         // ***** SALVAR ***** //
 

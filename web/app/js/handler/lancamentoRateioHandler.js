@@ -14,7 +14,7 @@ app.factory('LancamentoRateioHandler', function() {
         lancamentoRateioHandle.idLancamentoRateio = getId(lancamentoRateio);
         lancamentoRateioHandle.planoConta = getPlanoConta(lancamentoRateio); 
         lancamentoRateioHandle.centroCusto = getCentroCusto(lancamentoRateio);
-        lancamentoRateioHandle.lancamento = null;
+        lancamentoRateioHandle.lancamento = getLancamento(lancamentoRateio);;
         lancamentoRateioHandle.valor = getValor(lancamentoRateio);
         lancamentoRateioHandle.observacao = getObservacao(lancamentoRateio);
         return lancamentoRateioHandle;
@@ -32,6 +32,11 @@ app.factory('LancamentoRateioHandler', function() {
     var getCentroCusto = function(lancamentoRateio) {
         if(!lancamentoRateio.centroCusto) return lancamentoRateio.centroCusto;    
         return { idCentroCusto: lancamentoRateio.centroCusto.idCentroCusto }; 
+    };
+    
+    var getLancamento = function(lancamentoRateio) {
+        if(!lancamentoRateio.lancamento) return lancamentoRateio.lancamento;
+        return { idLancamentoProgramado: lancamentoRateio.lancamento.idLancamento }; 
     };
     
     var getValor = function(lancamentoRateio) {

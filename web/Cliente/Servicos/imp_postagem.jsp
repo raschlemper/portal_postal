@@ -65,7 +65,7 @@
             function validaForm(){       
                 abrirTelaEspera();
                 var form = document.form1;
-                if(form.arquivo.value == ""){
+                if(form.arquivo.value === ""){
                     fecharTelaEspera();
                     alert("Escolha o arquivo a ser importado!");
                     return false;
@@ -78,17 +78,21 @@
                     var indexB = form.arquivo.value.length;
                     var ext = form.arquivo.value.substring(indexA, indexB).toUpperCase();
                     var tipo = document.getElementById('tipo').value;
-                    if((tipo == 'CSV' || tipo == 'INTERLOGIC' || tipo == 'TRAY' || tipo == 'LINX' || tipo === 'PS') && ext != ".CSV") {
+                    if((tipo === 'CSV' || tipo === 'INTERLOGIC' || tipo === 'TRAY' || tipo === 'LINX') && ext !== ".CSV") {
                         fecharTelaEspera();
                         alert("O arquivo a ser importado deve ser '.CSV' !");
                         return false;
-                    } else if((tipo == 'XML' || tipo == 'NFE'|| tipo == 'PLP') && ext != ".XML") {
+                    } else if((tipo === 'XML' || tipo === 'NFE'|| tipo === 'PLP') && ext !== ".XML") {
                         fecharTelaEspera();
                         alert("O arquivo a ser importado deve ser '.XML' !");
                         return false;
-                    } else if((tipo == 'LADOAVESSO' || tipo == 'EDI') && ext != ".TXT") {                
+                    } else if((tipo === 'LADOAVESSO' || tipo === 'EDI') && ext !== ".TXT") {                
                         fecharTelaEspera();
                         alert("O arquivo a ser importado deve ser '.XML' ou '.CSV' !");
+                        return false;
+                    } else if((tipo === 'PS') && ext !== ".XLS") {                
+                        fecharTelaEspera();
+                        alert("O arquivo a ser importado deve ser '.XLS' !");
                         return false;
                     }
                 }
@@ -139,6 +143,13 @@
                     document.getElementById('dd_ar').className = 'esconder';  
                     document.getElementById('form1').action = '../../ServPreVendaImportar';  
                     $('#tipo_serv option[value="ARQUIVO"]').text("DEFINIDO NO ARQUIVO");
+                }else if (tipo == 'PS'){
+                    document.getElementById('arquivo').accept = '.xls'; 
+                    document.getElementById('arquivo').multiple = false;               
+                    document.getElementById('dd_vd').className = 'esconder';  
+                    document.getElementById('dd_ar').className = 'esconder';  
+                    document.getElementById('form1').action = '../../ServPreVendaImportar';  
+                    $('#tipo_serv option[value="ARQUIVO"]').text("DEFINIDO NO ARQUIVO");
                 }
             }
         </script>
@@ -177,7 +188,7 @@
                                         <option value="EDI">ARQUIVO EDI</option>
                                         <option value="LINX">ARQUIVO LINX</option>
                                         <option value="WEBVENDAS">ARQUIVO WEBVENDAS</option>
-                                        <option value="PS">ARQUIVO PS SERVICE</option>
+                                        <option value="PS">ARQUIVO PS SERVICE EXCELL</option>
                                         <option value="PSN">ARQUIVO PS SERVICE NOVO</option>
                                         <%if(idEmp == 236505){%><option value="LADOAVESSO">ARQUIVO LADOAVESSO</option><%}%>
                                         <%if(idEmp == 236505){%><option value="INTERLOGIC">ARQUIVO INTERLOGIC</option><%}%>

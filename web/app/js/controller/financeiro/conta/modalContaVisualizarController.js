@@ -6,6 +6,8 @@ app.controller('ModalContaVisualizarController', ['$scope', '$modalInstance', 'c
         var init = function () { 
             $scope.conta = conta;
         };
+                
+        // ***** CONTROLLER ***** //  
         
         $scope.editar = function() {
             $modalInstance.close(conta.idConta);

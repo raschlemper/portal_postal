@@ -1,7 +1,8 @@
 'use strict';
 
-app.controller('ContaController', ['$scope', '$q', 'ContaService', 'ModalService', 'LISTAS',
-    function ($scope, $q, ContaService, ModalService, LISTAS) {
+app.controller('ContaController', 
+    ['$scope', '$q', 'ContaService', 'ModalService', 'ContaHandler', 'LISTAS', 'MESSAGES',
+    function ($scope, $q, ContaService, ModalService, ContaHandler, LISTAS, MESSAGES) {
 
         var init = function () {
             $scope.tipos = LISTAS.tipoConta;
@@ -9,7 +10,10 @@ app.controller('ContaController', ['$scope', '$q', 'ContaService', 'ModalService
             $scope.contasLista = [];
             $scope.collapsed = [];
             initTable();
+            todos();
         };  
+
+        // ***** TABLE ***** //
         
         var initTable = function() {            
             $scope.colunas = [
@@ -30,6 +34,8 @@ app.controller('ContaController', ['$scope', '$q', 'ContaService', 'ModalService
             }             
         };
 
+        // ***** CONTROLLER ***** //
+
         var todos = function() {
             ContaService.getAll()
                 .then(function (data) {
@@ -47,52 +53,83 @@ app.controller('ContaController', ['$scope', '$q', 'ContaService', 'ModalService
             })
         };
 
+        // ***** VISUALIZAR ***** //
+
         $scope.visualizar = function(idConta) {
             ContaService.get(idConta)
                 .then(function(conta) {
-                     modalVisualizar(conta).then(function(result) {
-                         $scope.editar(result);
-                     })          
+                     visualizar(conta);
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         };
+
+        var visualizar = function(conta) {
+            modalVisualizar(conta)
+                .then(function(result) {
+                    $scope.editar(result);
+                });
+        };
+
+        // ***** SALVAR ***** //
         
         $scope.salvar = function() {
-            modalSalvar().then(function(result) {
-                result = ajustarDados(result);
-                ContaService.save(result)
-                    .then(function(data) {  
-                        modalMessage("Conta " + data.nome +  " Inserida com sucesso!");
-                        todos();
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            });
+            salvar();
         };
+        
+        var salvar = function() {
+            modalSalvar()
+                .then(function(result) {
+                    result = ajustarDados(result);
+                    save(result);
+                });
+        };
+        
+        var save = function(conta) {
+            ContaService.save(conta)
+                .then(function(data) {  
+                    modalMessage("Conta " + data.nome +  " Inserida com sucesso!");
+                    todos();
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        // ***** EDITAR ***** //
 
         $scope.editar = function(idConta) {
             ContaService.get(idConta)
                 .then(function(conta) {
-                     modalSalvar(conta).then(function(result) {
-                        result = ajustarDados(result);
-                        ContaService.update(idConta, result)
-                            .then(function (data) {  
-                                modalMessage("Conta " + data.nome + " Alterada com sucesso!");
-                                todos();
-                            })
-                            .catch(function(e) {
-                                modalMessage(e);
-                            });
-                    });
+                    editar(conta);
                 })
                 .catch(function(e) {
                     modalMessage(e.error);
                 });
            
         };
+
+        var editar = function(conta) {
+            modalSalvar(conta)
+                .then(function(result) {
+                    result = ajustarDados(result);
+                    update(result);
+                });           
+        };
+
+        var update = function(conta) {
+            ContaService.update(conta.idConta, conta)
+               .then(function (data) {  
+                   modalMessage("Conta " + data.nome + " Alterada com sucesso!");
+                   todos();
+               })
+               .catch(function(e) {
+                   modalMessage(e);
+               });      
+        };
+
+        // ***** EXCLUIR ***** //
 
         $scope.excluir = function(idConta) {
             $q.all([ContaService.getLancamento(idConta),
@@ -107,23 +144,30 @@ app.controller('ContaController', ['$scope', '$q', 'ContaService', 'ModalService
         }; 
         
         var excluir = function(idConta) {
-            modalExcluir().then(function() {
-                ContaService.delete(idConta)
-                    .then(function(data) { 
-                        modalMessage("Conta " + data.nome + " Removida com sucesso!");
-                        todos();                        
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            });
-        }
+            modalExcluir()
+                .then(function() {
+                    remove(idConta);
+                });
+        };
         
-        var ajustarDados = function(data) {            
-            data.tipo = data.tipo.id;
-            data.status = data.status.id;
-            return data;
-        }
+        var remove = function(idConta) {
+            ContaService.delete(idConta)
+                .then(function(data) { 
+                    modalMessage("Conta " + data.nome + " Removida com sucesso!");
+                    todos();                        
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        // ***** AJUSTAR ***** //
+        
+        var ajustarDados = function(data) {  
+            return ContaHandler.handle(data);
+        };
+
+        // ***** MODAL ***** //
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);
@@ -153,8 +197,7 @@ app.controller('ContaController', ['$scope', '$q', 'ContaService', 'ModalService
             var modalInstance = ModalService.modalExcluir('Excluir Conta?', 'Deseja realmente excluir este conta?');
             return modalInstance.result;
         };
-
-        todos();
+        
         init();
 
     }]);

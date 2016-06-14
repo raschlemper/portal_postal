@@ -97,7 +97,7 @@ public class ServInserirClientesVendedor extends HttpServlet {
                     }
                 }
 
-                sessao.setAttribute("msg", "Lista cleintes salva com sucesso!");
+                sessao.setAttribute("msg", "Lista clientes salva com sucesso!");
                 //response.sendRedirect("Agencia/Coleta/coletador_lista.jsp");
                 response.sendRedirect(request.getHeader("referer"));
 

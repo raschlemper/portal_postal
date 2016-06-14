@@ -1,11 +1,14 @@
 'use strict';
 
-app.controller('ModalCarteiraCobrancaVisualizarController', ['$scope', '$modalInstance', '$filter', 'carteiraCobranca', 
-    function ($scope, $modalInstance, $filter, carteiraCobranca) {
+app.controller('ModalCarteiraCobrancaVisualizarController', 
+    ['$scope', '$modalInstance', '$filter', 'carteiraCobranca', 'MESSAGES', 
+    function ($scope, $modalInstance, $filter, carteiraCobranca, MESSAGES) {
 
         var init = function () { 
             $scope.carteiraCobranca = criarCarteiraCobranca(carteiraCobranca);
-        };       
+        };     
+                
+        // ***** CONTROLLER ***** //   
         
         var criarCarteiraCobranca = function(carteiraCobranca) {
             carteiraCobranca.codigoBeneficiario = $filter('number')(carteiraCobranca.codigoBeneficiario) + '-' + carteiraCobranca.codigoBeneficiarioDv;            

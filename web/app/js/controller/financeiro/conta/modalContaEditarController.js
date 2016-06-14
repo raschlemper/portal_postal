@@ -1,7 +1,8 @@
 'use strict';
 
-app.controller('ModalContaEditarController', ['$scope', '$modalInstance', 'conta', 'ContaCorrenteService', 'CartaoCreditoService', 'DatePickerService', 'ModalService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, conta, ContaCorrenteService, CartaoCreditoService,  DatePickerService, ModalService, ListaService, LISTAS) {
+app.controller('ModalContaEditarController', 
+    ['$scope', '$modalInstance', 'conta', 'ContaCorrenteService', 'CartaoCreditoService', 'DatePickerService', 'ModalService', 'ListaService', 'LISTAS', 'MESSAGES',
+    function ($scope, $modalInstance, conta, ContaCorrenteService, CartaoCreditoService,  DatePickerService, ModalService, ListaService, LISTAS, MESSAGES) {
 
         var init = function () {  
             $scope.tipos = LISTAS.tipoConta;
@@ -14,6 +15,8 @@ app.controller('ModalContaEditarController', ['$scope', '$modalInstance', 'conta
             contaCorrente();
             cartaoCredito();
         };
+                
+        // ***** CONTROLLER ***** //  
         
         var getTitle = function() {
             if(conta && conta.idConta) { $scope.title = "Editar Conta"; }
@@ -106,28 +109,7 @@ app.controller('ModalContaEditarController', ['$scope', '$modalInstance', 'conta
                         modalMessage(e);
                     });
             });
-        }
-        
-        var modalSalvarContaCorrente = function(contaCorrente) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/contaCorrente/modalContaCorrenteEditar.html', 'ModalContaCorrenteEditarController', 'lg',
-                {
-                    contaCorrente: function() {
-                        return contaCorrente;
-                    }
-                });
-            return modalInstance.result;
-        };
-        
-        var modalSalvarCartaoCredito = function(cartaoCredito) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/cartaoCredito/modalCartaoCreditoEditar.html', 'ModalCartaoCreditoEditarController', 'lg',
-                {
-                    cartaoCredito: function() {
-                        return cartaoCredito;
-                    }
-                });
-            return modalInstance.result;
-        };
-        
+        };        
         
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
@@ -138,9 +120,7 @@ app.controller('ModalContaEditarController', ['$scope', '$modalInstance', 'conta
             $modalInstance.dismiss('cancel');
         };
         
-        var modalMessage = function(message) {
-            ModalService.modalMessage(message);
-        };
+        // ***** VALIDAR ***** // 
 
         var validarForm = function (form) {
             if (form.nome.$error.required) {
@@ -169,7 +149,33 @@ app.controller('ModalContaEditarController', ['$scope', '$modalInstance', 'conta
                 return false;
             }       
             return true;
-        }     
+        };
+                
+        // ***** MODAL ***** //   
+        
+        var modalSalvarContaCorrente = function(contaCorrente) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/contaCorrente/modalContaCorrenteEditar.html', 'ModalContaCorrenteEditarController', 'lg',
+                {
+                    contaCorrente: function() {
+                        return contaCorrente;
+                    }
+                });
+            return modalInstance.result;
+        };
+        
+        var modalSalvarCartaoCredito = function(cartaoCredito) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/cartaoCredito/modalCartaoCreditoEditar.html', 'ModalCartaoCreditoEditarController', 'lg',
+                {
+                    cartaoCredito: function() {
+                        return cartaoCredito;
+                    }
+                });
+            return modalInstance.result;
+        };
+        
+        var modalMessage = function(message) {
+            ModalService.modalMessage(message);
+        };   
 
         init();
 

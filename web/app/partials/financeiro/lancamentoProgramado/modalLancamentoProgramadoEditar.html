@@ -142,6 +142,9 @@
         <button type="button" class="btn btn-danger" ng-click="goToParcelar()" ng-show="lancamentoProgramado.situacao.codigo === 'ativo'" ng-if="!lancamentoProgramado.lancamentos.length">
             <i class="fa fa-lg fa-check fa-spc"></i> GERAR PARCELAS
         </button>
+        <button type="button" class="btn btn-default" ng-click="goToRatear()" ng-disabled="!lancamento.valor">
+            <i class="fa fa-lg fa-check fa-spc"></i> RATEAR
+        </button>
         <button type="button" class="btn btn-success" ng-click="ok(this.lancamentoProgramadoForm, lancamentoProgramado)">
             <i class="fa fa-lg fa-save fa-spc"></i> SALVAR
         </button>

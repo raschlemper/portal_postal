@@ -1,13 +1,17 @@
 'use strict';
 
-app.controller('BancoController', ['$scope', 'BancoService', 'ModalService',
-    function ($scope, BancoService, ModalService) {
+app.controller('BancoController', 
+    ['$scope', 'BancoService', 'ModalService', 'MESSAGES',
+    function ($scope, BancoService, ModalService, MESSAGES) {
 
         var init = function () {
             $scope.bancos = [];
             $scope.bancosLista = [];
             initTable();      
+            todos();
         };  
+
+        // ***** TABLE ***** //
         
         var initTable = function() {            
             $scope.colunas = [
@@ -25,7 +29,9 @@ app.controller('BancoController', ['$scope', 'BancoService', 'ModalService',
                     }
                 }   
             }          
-        }
+        };
+
+        // ***** CONTROLLER ***** //
 
         var todos = function() {
             BancoService.getAll()
@@ -42,40 +48,64 @@ app.controller('BancoController', ['$scope', 'BancoService', 'ModalService',
             return _.map(bancos, function(banco) {
                 return _.pick(banco, 'idBanco', 'numero', 'nome', 'website');
             })
-        }
+        };
+
+        // ***** SALVAR ***** //
 
         $scope.salvar = function() {
-            modalSalvar().then(function(result) {
-                BancoService.save(result)
-                    .then(function(data) {  
-                        modalMessage("Banco " + data.nome +  " Inserido com sucesso!");
-                        todos();
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            });
+            salvar();
         };
+        
+        var salvar = function() {
+            modalSalvar()
+                .then(function(result) {
+                    save(result);
+                });        
+        };
+        
+        var save = function(banco) {
+            BancoService.save(banco)
+                .then(function(data) {  
+                    modalMessage("Banco " + data.nome +  " Inserido com sucesso!");
+                    todos();
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });            
+        };
+
+        // ***** EDITAR ***** //
 
         $scope.editar = function(idBanco) {
             BancoService.get(idBanco)
                 .then(function(banco) {
-                     modalSalvar(banco).then(function(result) {
-                        BancoService.update(idBanco, result)
-                            .then(function (data) {  
-                                modalMessage("Banco " + data.nome + " Alterado com sucesso!");
-                                todos();
-                            })
-                            .catch(function(e) {
-                                modalMessage(e);
-                            });
-                    });
+                    editar(banco);
                 })
                 .catch(function(e) {
                     modalMessage(e.error);
                 });
            
         };
+
+        var editar = function(banco) {
+            modalSalvar(banco)
+                .then(function(result) {
+                    update(result);
+                });            
+        };
+        
+        var update = function(banco) {
+            BancoService.update(banco.idBanco, result)
+                .then(function (data) {  
+                    modalMessage("Banco " + data.nome + " Alterado com sucesso!");
+                    todos();
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });            
+        };
+
+        // ***** EXCLUIR ***** //
 
         $scope.excluir = function(idBanco) {
             BancoService.getContaCorrente(idBanco)
@@ -92,17 +122,24 @@ app.controller('BancoController', ['$scope', 'BancoService', 'ModalService',
         }; 
         
         var excluir = function(idBanco) {
-            modalExcluir().then(function() {
-                BancoService.delete(idBanco)
-                    .then(function(data) { 
-                        modalMessage("Banco " + data.nome + " Removido com sucesso!");
-                        todos();                        
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
+            modalExcluir()
+                .then(function() {
+                    remove(idBanco);
                 });
-        }
+        };
+        
+        var remove = function(idBanco) {
+            BancoService.delete(idBanco)
+                .then(function(data) { 
+                    modalMessage("Banco " + data.nome + " Removido com sucesso!");
+                    todos();                        
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        // ***** MODAL ***** //
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);
@@ -121,9 +158,8 @@ app.controller('BancoController', ['$scope', 'BancoService', 'ModalService',
         var modalExcluir = function() {
             var modalInstance = ModalService.modalExcluir('Excluir Banco?', 'Deseja realmente excluir este banco?');
             return modalInstance.result;
-        };
-
-        todos();
+        }; 
+        
         init();
 
     }]);

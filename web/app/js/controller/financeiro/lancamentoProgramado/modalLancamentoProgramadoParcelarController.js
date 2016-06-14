@@ -1,6 +1,7 @@
 'use strict';
 
-app.controller('ModalLancamentoProgramadoParcelarController', ['$scope', 'FrequenciaLancamentoService', 'MESSAGES',
+app.controller('ModalLancamentoProgramadoParcelarController', 
+    ['$scope', 'FrequenciaLancamentoService', 'MESSAGES',
     function ($scope, FrequenciaLancamentoService, MESSAGES) {
 
         var init = function () {  
@@ -38,7 +39,7 @@ app.controller('ModalLancamentoProgramadoParcelarController', ['$scope', 'Freque
         
         var findParcelaBaixada = function(lancamentos, numeroParcela) {
             return _.find(lancamentos, function(lancamento) { 
-                return lancamento.numeroParcela == numeroParcela; 
+                return lancamento.numeroParcela === numeroParcela; 
             });
         };
         
@@ -63,10 +64,6 @@ app.controller('ModalLancamentoProgramadoParcelarController', ['$scope', 'Freque
                 lancamento: lancamento
             };
         };
-        
-        // ***** VALIDAR ***** //
-        
-        // ***** MODAL ***** //
 
         init();
 

@@ -1,7 +1,8 @@
 'use strict';
 
-app.controller('ModalCarteiraCobrancaEditarController', ['$scope', '$modalInstance', 'carteiraCobranca', 'CarteiraCobrancaService', 'ContaCorrenteService', 'CepService', 'ModalService',
-    function ($scope, $modalInstance, carteiraCobranca, CarteiraCobrancaService, ContaCorrenteService, CepService, ModalService) {
+app.controller('ModalCarteiraCobrancaEditarController', 
+    ['$scope', '$modalInstance', 'carteiraCobranca', 'CarteiraCobrancaService', 'ContaCorrenteService', 'CepService', 'ModalService', 'MESSAGES',
+    function ($scope, $modalInstance, carteiraCobranca, CarteiraCobrancaService, ContaCorrenteService, CepService, ModalService, MESSAGES) {
 
         var init = function () {  
             $scope.carteiraCobranca = carteiraCobranca || {};
@@ -12,6 +13,8 @@ app.controller('ModalCarteiraCobrancaEditarController', ['$scope', '$modalInstan
             getTitle();
             contaCorrente();
         };
+
+        // ***** CONTROLLER ***** //
         
         var getTitle = function() {
             if(carteiraCobranca && carteiraCobranca.idCarteiraCobranca) { $scope.title = "Editar Carteira de Cobrança"; }
@@ -29,24 +32,6 @@ app.controller('ModalCarteiraCobrancaEditarController', ['$scope', '$modalInstan
                 });
         };
         
-        $scope.ok = function(form) {
-            if (!validarForm(form)) return;
-            CarteiraCobrancaService.getByCarteiraCobranca($scope.carteiraCobranca.contaCorrente.idContaCorrente,
-                $scope.carteiraCobranca.codigoBeneficiario, $scope.carteiraCobranca.codigoBeneficiarioDv, $scope.carteiraCobranca.codigoCarteira)
-                .then(function(carteiraCobranca) {
-                    if(!carteiraCobranca) { $modalInstance.close($scope.carteiraCobranca); }
-                    else if(carteiraCobranca.idCarteiraCobranca == $scope.carteiraCobranca.idCarteiraCobranca) { $modalInstance.close($scope.carteiraCobranca); }
-                    else { modalMessage("Esta carteira de cobrança já está cadastrada"); } 
-                })
-                .catch(function(e) {
-                    modalMessage(e);
-                });
-        };
-        
-        $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
-        };
-        
         $scope.pesquisarCep = function(cep) {
             CepService.cep(cep)
                 .then(function (data) {
@@ -62,6 +47,26 @@ app.controller('ModalCarteiraCobrancaEditarController', ['$scope', '$modalInstan
                     $scope.carteiraCobranca.beneficiarioUf = '';
                 });
         };
+        
+        $scope.ok = function(form) {
+            if (!validarForm(form)) return;
+            CarteiraCobrancaService.getByCarteiraCobranca($scope.carteiraCobranca.contaCorrente.idContaCorrente,
+                $scope.carteiraCobranca.codigoBeneficiario, $scope.carteiraCobranca.codigoBeneficiarioDv, $scope.carteiraCobranca.codigoCarteira)
+                .then(function(carteiraCobranca) {
+                    if(!carteiraCobranca) { $modalInstance.close($scope.carteiraCobranca); }
+                    else if(carteiraCobranca.idCarteiraCobranca === $scope.carteiraCobranca.idCarteiraCobranca) { $modalInstance.close($scope.carteiraCobranca); }
+                    else { modalMessage("Esta carteira de cobrança já está cadastrada"); } 
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+        
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+
+        // ***** MODAL ***** //
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);

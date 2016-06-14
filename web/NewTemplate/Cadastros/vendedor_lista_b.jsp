@@ -161,58 +161,13 @@
                 }
                 form.submit();
             }
-
-            function ajaxEditarColetador(idColetador) {
-                $.ajax({
-                    method: "POST",
-                    url: "coletador_editar_b.jsp",
-                    data: {idColetador: idColetador},
-                    dataType: 'html'
-                }).done(function(retorno) {
-                    editarColetador(retorno);
-                });
-            }            
-            
-            function editarColetador(retorno) {
-                bootbox.dialog({
-                    title: "Editar Coletador",
-                    message: retorno,
-                    animate: true,
-                    onEscape: true,
-                    buttons: {
-                        "Cancelar": {
-                            label:"<i class='fa fa-lg fa-times fa-spc'></i>CANCELAR",
-                            className: "btn btn-default",
-                            callback: function() {
-                                bootbox.hideAll();
-                            }
-                        },
-                        success: {
-                            label: "<i class='fa fa-lg fa-save fa-spc'></i>SALVAR",
-                            className: "btn btn-success",
-                            callback: function() {
-                                var form = document.form5;
-                                if (form.nome.value == '') {
-                                    alert('Preencha o Nome do Coletador!');
-                                    return false;
-                                }
-                                if (form.telefone.value == '') {
-                                    alert('Preencha o Celular do Coletador!');
-                                    return false;
-                                }
-                                waitMsg();
-                                form.submit();
-                            }
-                        }
-                    }
-                }
-                );
-            }
+                    
+          
             
             function confirmExcluir(button) {                
                 bootbox.confirm({
-                    title: 'Excluir Coletador?',
-                    message: 'Ao excluir o coletador a rota será perdida!<br/><br/>Deseja realmente excluir este coletador?',
+                    title: 'Excluir Vendedor?',
+                    message: 'Ao excluir o vendedor a lista será perdida!<br/><br/>Deseja realmente excluir este vendedor?',
                     buttons: {
                         'cancel': {
                             label: '<i class="fa fa-lg fa-times fa-spc"></i> CANCELAR',

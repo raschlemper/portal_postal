@@ -1,13 +1,17 @@
 'use strict';
 
-app.controller('CarteiraCobrancaController', ['$scope', '$filter', 'CarteiraCobrancaService', 'ModalService',
-    function ($scope, $filter, CarteiraCobrancaService, ModalService) {
+app.controller('CarteiraCobrancaController', 
+    ['$scope', '$filter', 'CarteiraCobrancaService', 'ModalService', 'MESSAGES',
+    function ($scope, $filter, CarteiraCobrancaService, ModalService, MESSAGES) {
 
         var init = function () {
             $scope.carteiraCobrancas = [];
             $scope.carteiraCobrancasLista = [];
             initTable();      
+            todos();
         };  
+
+        // ***** TABLE ***** //
         
         var initTable = function() {            
             $scope.colunas = [
@@ -30,7 +34,9 @@ app.controller('CarteiraCobrancaController', ['$scope', '$filter', 'CarteiraCobr
                     }
                 }
             }             
-        }
+        };
+
+        // ***** CONTROLLER ***** //
 
         var todos = function() {
             CarteiraCobrancaService.getAll()
@@ -50,6 +56,8 @@ app.controller('CarteiraCobrancaController', ['$scope', '$filter', 'CarteiraCobr
             })
         };
 
+        // ***** VISUALIZAR ***** //
+
         $scope.visualizar = function(idCarteiraCobranca) {
             CarteiraCobrancaService.get(idCarteiraCobranca)
                 .then(function(carteiraCobranca) {
@@ -62,38 +70,61 @@ app.controller('CarteiraCobrancaController', ['$scope', '$filter', 'CarteiraCobr
                 });
         };
 
+        // ***** SALVAR ***** //
+
         $scope.salvar = function() {
-            modalSalvar().then(function(result) {
-                CarteiraCobrancaService.save(result)
-                    .then(function(data) {  
-                        modalMessage("Carteira de Cobrança " + data.nome +  " Inserida com sucesso!");
-                        todos();
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            });
+            salvar();
         };
+
+        var salvar = function() {
+            modalSalvar()
+                .then(function(result) {
+                    save(result);
+                });
+        };
+
+        var save = function(carteiraCobranca) {
+            CarteiraCobrancaService.save(carteiraCobranca)
+                .then(function(data) {  
+                    modalMessage("Carteira de Cobrança " + data.nome +  " Inserida com sucesso!");
+                    todos();
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        // ***** EDITAR ***** //
 
         $scope.editar = function(idCarteiraCobranca) {
             CarteiraCobrancaService.get(idCarteiraCobranca)
                 .then(function(carteiraCobranca) {
-                     modalSalvar(carteiraCobranca).then(function(result) {
-                        CarteiraCobrancaService.update(idCarteiraCobranca, result)
-                            .then(function (data) {  
-                                modalMessage("Carteira de Cobrança " + data.nome + " Alterada com sucesso!");
-                                todos();
-                            })
-                            .catch(function(e) {
-                                modalMessage(e);
-                            });
-                    });
+                     editar(carteiraCobranca);
                 })
                 .catch(function(e) {
                     modalMessage(e.error);
-                });
-           
+                });           
         };
+
+        var editar = function(carteiraCobranca) {
+            modalSalvar(carteiraCobranca)
+                .then(function(result) {
+                    update(result);
+                });
+        };
+
+        var update = function(carteiraCobranca) {
+            CarteiraCobrancaService.update(carteiraCobranca.idCarteiraCobranca, carteiraCobranca)
+                .then(function (data) {  
+                    modalMessage("Carteira de Cobrança " + data.nome + " Alterada com sucesso!");
+                    todos();
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        // ***** EXCLUIR ***** //
 
         $scope.excluir = function(idCarteiraCobranca) {
             CarteiraCobrancaService.getConta(idCarteiraCobranca)
@@ -110,17 +141,24 @@ app.controller('CarteiraCobrancaController', ['$scope', '$filter', 'CarteiraCobr
         }; 
         
         var excluir = function(idCarteiraCobranca) {
-            modalExcluir().then(function() {
-                CarteiraCobrancaService.delete(idCarteiraCobranca)
-                    .then(function(data) { 
-                        modalMessage("Carteira de Cobrança " + data.nome + " Removida com sucesso!");
-                        todos();                        
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            });
-        }
+            modalExcluir()
+                .then(function() {
+                    remove(idCarteiraCobranca);
+                });
+        };
+        
+        var remove = function(idCarteiraCobranca) {
+            CarteiraCobrancaService.delete(idCarteiraCobranca)
+                .then(function(data) { 
+                    modalMessage("Carteira de Cobrança " + data.nome + " Removida com sucesso!");
+                    todos();                        
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        // ***** MODAL ***** //
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);
@@ -150,8 +188,7 @@ app.controller('CarteiraCobrancaController', ['$scope', '$filter', 'CarteiraCobr
             var modalInstance = ModalService.modalExcluir('Excluir Carteira de Cobrança?', 'Deseja realmente excluir esta Carteira de Cobrança?');
             return modalInstance.result;
         };
-
-        todos();
+        
         init();
 
     }]);

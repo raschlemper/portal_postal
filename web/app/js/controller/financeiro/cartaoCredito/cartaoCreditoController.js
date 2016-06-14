@@ -1,13 +1,17 @@
 'use strict';
 
-app.controller('CartaoCreditoController', ['$scope', 'CartaoCreditoService', 'ModalService',
-    function ($scope, CartaoCreditoService, ModalService) {
+app.controller('CartaoCreditoController', 
+    ['$scope', 'CartaoCreditoService', 'ModalService', 'MESSAGES',
+    function ($scope, CartaoCreditoService, ModalService, MESSAGES) {
 
         var init = function () {
             $scope.cartaoCreditos = [];
             $scope.cartaoCreditosLista = [];
             initTable();      
+            todos();
         };  
+
+        // ***** TABLE ***** //
         
         var initTable = function() {            
             $scope.colunas = [
@@ -28,7 +32,9 @@ app.controller('CartaoCreditoController', ['$scope', 'CartaoCreditoService', 'Mo
                     }
                 }
             }             
-        }
+        };
+
+        // ***** CONTROLLER ***** //
 
         var todos = function() {
             CartaoCreditoService.getAll()
@@ -47,50 +53,80 @@ app.controller('CartaoCreditoController', ['$scope', 'CartaoCreditoService', 'Mo
             })
         };
 
+        // ***** VISUALIZAR ***** //
+
         $scope.visualizar = function(idCartaoCredito) {
             CartaoCreditoService.get(idCartaoCredito)
                 .then(function(cartaoCredito) {
-                     modalVisualizar(cartaoCredito).then(function(result) {
-                         $scope.editar(result);
-                     })          
+                     visualizar(cartaoCredito);        
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         };
 
-        $scope.salvar = function() {
-            modalSalvar().then(function(result) {
-                CartaoCreditoService.save(result)
-                    .then(function(data) {  
-                        modalMessage("Cartão de Crédito " + data.nome +  " Inserido com sucesso!");
-                        todos();
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            });
+        var visualizar = function(cartaoCredito) {
+            modalVisualizar(cartaoCredito)
+                .then(function(result) {
+                    $scope.editar(result);
+                });
         };
+
+        // ***** SALVAR ***** //
+
+        $scope.salvar = function() {
+            salvar();
+        };
+
+        var salvar = function() {
+            modalSalvar()
+                .then(function(result) {
+                    save(result);
+                });
+        };
+        
+        var save = function(cartaoCredito) {
+            CartaoCreditoService.save(cartaoCredito)
+                .then(function(data) {  
+                    modalMessage("Cartão de Crédito " + data.nome +  " Inserido com sucesso!");
+                    todos();
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });            
+        };
+
+        // ***** EDITAR ***** //
 
         $scope.editar = function(idCartaoCredito) {
             CartaoCreditoService.get(idCartaoCredito)
                 .then(function(cartaoCredito) {
-                     modalSalvar(cartaoCredito).then(function(result) {
-                        CartaoCreditoService.update(idCartaoCredito, result)
-                            .then(function (data) {  
-                                modalMessage("Cartão de Crédito " + data.nome + " Alterado com sucesso!");
-                                todos();
-                            })
-                            .catch(function(e) {
-                                modalMessage(e);
-                            });
-                    });
+                    editar(cartaoCredito);
                 })
                 .catch(function(e) {
                     modalMessage(e.error);
-                });
-           
+                });           
         };
+
+        var editar = function(cartaoCredito) {
+            modalSalvar(cartaoCredito)
+                .then(function(result) {
+                    update(result);
+                });           
+        };
+
+        var update = function(cartaoCredito) {
+            CartaoCreditoService.update(cartaoCredito.idCartaoCredito, cartaoCredito)
+                .then(function (data) {  
+                    modalMessage("Cartão de Crédito " + data.nome + " Alterado com sucesso!");
+                    todos();
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        // ***** EXCLUIR ***** //
 
         $scope.excluir = function(idCartaoCredito) {
             CartaoCreditoService.getConta(idCartaoCredito)
@@ -107,17 +143,24 @@ app.controller('CartaoCreditoController', ['$scope', 'CartaoCreditoService', 'Mo
         }; 
         
         var excluir = function(idCartaoCredito) {
-            modalExcluir().then(function() {
-                CartaoCreditoService.delete(idCartaoCredito)
-                    .then(function(data) { 
-                        modalMessage("Cartão de Crédito " + data.nome + " Removido com sucesso!");
-                        todos();                        
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            });            
-        }
+            modalExcluir()
+                .then(function() {
+                    remove(idCartaoCredito);
+                });            
+        };
+        
+        var remove = function(idCartaoCredito) {
+            CartaoCreditoService.delete(idCartaoCredito)
+                .then(function(data) { 
+                    modalMessage("Cartão de Crédito " + data.nome + " Removido com sucesso!");
+                    todos();                        
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        // ***** MODAL ***** //
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);
@@ -148,7 +191,6 @@ app.controller('CartaoCreditoController', ['$scope', 'CartaoCreditoService', 'Mo
             return modalInstance.result;
         };
 
-        todos();
         init();
 
     }]);

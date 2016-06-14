@@ -26,8 +26,6 @@ app.controller('ModalLancamentoProgramadoEditarController',
             contas();
         };
         
-        // ***** NAVEGAR ***** //
-        
         // ***** CONTROLLER ***** //
         
         var getTitle = function(lancamentoProgramado) {

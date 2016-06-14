@@ -29,7 +29,6 @@ app.factory('LancamentoProgramadoHandler', function() {
         lancamentoProgramadoHandle.situacao = getSituacao(lancamentoProgramado);
         lancamentoProgramadoHandle.historico = getHistorico(lancamentoProgramado);
         lancamentoProgramadoHandle.usuario = getUsuario(lancamentoProgramado);
-        lancamentoProgramadoHandle.lancamentos = null;
         return lancamentoProgramadoHandle;
     };
     
