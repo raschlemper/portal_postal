@@ -55,14 +55,21 @@ app.controller('ModalLancamentoProgramadoParcelarController',
         // ***** AJUSTAR ***** //
         
         var getParcela = function(lancamentoProgramado, lancamento, numeroParcela, dataCompetencia, dataVencimento) {
-            return {
+            var parcela = {
                 numero: lancamentoProgramado.numero,
                 numeroParcela: numeroParcela,
+                planoConta: lancamentoProgramado.planoConta,
+                centroCusto: lancamentoProgramado.centroCusto,
                 dataCompetencia: dataCompetencia,
                 dataVencimento: dataVencimento,
                 valor: lancamentoProgramado.valor / lancamentoProgramado.quantidadeParcela,
                 lancamento: lancamento
             };
+            if(lancamentoProgramado.rateios && lancamentoProgramado.rateios.length) {
+                parcela.planoConta = { 'descricao': 'Diversos' }
+                parcela.centroCusto = { 'descricao': 'Diversos' }
+            }
+            return parcela;
         };
 
         init();

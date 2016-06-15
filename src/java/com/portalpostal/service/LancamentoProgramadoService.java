@@ -22,6 +22,7 @@ public class LancamentoProgramadoService {
     public void init() {
         lancamentoProgramadoDAO = new LancamentoProgramadoDAO(nomeBD);
         lancamentoService = new LancamentoService(nomeBD);
+        lancamentoProgramadoRateioService = new LancamentoProgramadoRateioService(nomeBD);
     }
     
     public List<LancamentoProgramado> findAll() throws Exception {
@@ -75,8 +76,8 @@ public class LancamentoProgramadoService {
     public LancamentoProgramado save(LancamentoProgramado lancamentoProgramado) throws Exception {
         init();
         LancamentoProgramado lancamentoProgramadoResult = lancamentoProgramadoDAO.save(ajustaLancamentoRateio(lancamentoProgramado));
-//        lancamentoProgramadoResult.setRateios(lancamentoProgramado.getRateios());
-        lancamentoProgramadoResult.setRateios(saveOrUpdateRateio(lancamentoProgramado));
+        lancamentoProgramadoResult.setRateios(lancamentoProgramado.getRateios());
+        lancamentoProgramadoResult.setRateios(saveOrUpdateRateio(lancamentoProgramadoResult));
         return lancamentoProgramadoResult;
     } 
     

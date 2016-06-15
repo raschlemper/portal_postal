@@ -1,13 +1,22 @@
 'use strict';
 
 app.controller('ModalLancamentoProgramadoGerarController', 
-    ['$scope', 'LancamentoConciliadoService', 'FrequenciaLancamentoService', 'ListaService', 'ModalService', 'LancamentoHandler', 'LISTAS', 'MESSAGES',
-    function ($scope, LancamentoConciliadoService, FrequenciaLancamentoService, ListaService, ModalService, LancamentoHandler, LISTAS, MESSAGES) {
+    ['$scope', 'LancamentoConciliadoService', 'FrequenciaLancamentoService', 'ListaService', 'ModalService', 'LancamentoHandler', 'LancamentoRateioHandler', 'LISTAS', 'MESSAGES',
+    function ($scope, LancamentoConciliadoService, FrequenciaLancamentoService, ListaService, ModalService, LancamentoHandler, LancamentoRateioHandler, LISTAS, MESSAGES) {
 
         var init = function () {  
             getTitle();
             $scope.lancamento = $scope.lancamento || $scope.getLancamento($scope.lancamentoProgramado, null, $scope.modelos[2]);
             setLists($scope.lancamento);
+            initStep($scope.lancamento);
+        };
+        
+        // ***** NAVEGAR ***** //
+        
+        var initStep = function(lancamento) {
+            if(lancamento && lancamento.rateios && lancamento.rateios.length) {
+                $scope.goToLancarRatear();    
+            } 
         };
         
         // ***** CONTROLLER ***** //
@@ -83,7 +92,9 @@ app.controller('ModalLancamentoProgramadoGerarController',
 //            lancamento.situacao = lancamento.situacao.id;
 //            lancamento.modelo = lancamento.modelo.id;
             lancamento.historico = '(' + lancamento.modelo.descricao + ') ' + lancamento.historico || "";
-            return LancamentoHandler.handle(lancamento);
+            var lancamentoHandle = LancamentoHandler.handle(lancamento);
+            lancamentoHandle.rateios = LancamentoRateioHandler.handleList(lancamento.rateios);
+            return lancamentoHandle;
         };
         
         // ***** VALIDAR ***** //

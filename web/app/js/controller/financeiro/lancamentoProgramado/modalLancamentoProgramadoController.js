@@ -13,17 +13,7 @@ app.controller('ModalLancamentoProgramadoController', ['$scope', '$modalInstance
         // ***** NAVEGAR ***** //
         
         var initStep = function(lancamentoProgramado) {
-            if(lancamentoProgramado && lancamentoProgramado.rateios && lancamentoProgramado.rateios.length) {
-                if(lancamentoProgramado && lancamentoProgramado.quantidadeParcela) {
-                    $scope.goToParcelar();
-                } else {
-                    $scope.goToRatear();                
-                }
-            } else if(lancamentoProgramado && lancamentoProgramado.quantidadeParcela) {
-                $scope.goToParcelar();
-            } else {            
-                $scope.goToEditar(); 
-            }
+            $scope.goToEditar(); 
         };
         
         $scope.goToEditar = function() {
@@ -38,7 +28,7 @@ app.controller('ModalLancamentoProgramadoController', ['$scope', '$modalInstance
         
         $scope.goToLancarParcelar = function() {
             $scope.stepFrom = 'parcelar';
-            $scope.stepTo = 'lancarParcelar';             
+            $scope.stepTo = 'lancar';             
         };
         
         $scope.goToLancarRatear = function() {
@@ -58,9 +48,7 @@ app.controller('ModalLancamentoProgramadoController', ['$scope', '$modalInstance
         
         $scope.voltar = function() {
             if($scope.stepFrom === 'lancar') {
-                $scope.goToLancar();       
-            } else if($scope.stepFrom === 'lancarParcelar') {
-                $scope.goToLancarParcelar();   
+                $scope.goToGerar();  
             } else if($scope.stepFrom === 'lancarRatear') {
                 $scope.goToLancarRatear();                                  
             } else if($scope.stepFrom === 'parcelar') {

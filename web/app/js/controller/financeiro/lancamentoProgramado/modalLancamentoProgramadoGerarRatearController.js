@@ -12,7 +12,7 @@ app.controller('ModalLancamentoProgramadoGerarRatearController', ['$scope', 'Lis
         // ***** CONTROLLER ***** //  
         
         var getTitle = function() {
-            $scope.titleRatear = MESSAGES.lancamento.ratear.title.INSERIR;
+            $scope.titleGerarRatear =  $scope.title + " - " + MESSAGES.lancamento.ratear.title.INSERIR;
         };
                 
         // ***** RATEAR ***** //  

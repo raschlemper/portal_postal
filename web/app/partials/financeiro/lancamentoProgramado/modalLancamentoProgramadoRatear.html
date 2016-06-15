@@ -1,6 +1,6 @@
-<form name="lancamentoForm" novalidate>
-    <div class="modal-header" ng-class="{'bg-modal-primary': lancamento.tipo.codigo === 'receita', 
-                                         'bg-modal-danger': lancamento.tipo.codigo === 'despesa'}">
+<form name="lancamentoProgramadoForm" novalidate>
+    <div class="modal-header" ng-class="{'bg-modal-primary': lancamentoProgramado.tipo.codigo === 'receita', 
+                                         'bg-modal-danger': lancamentoProgramado.tipo.codigo === 'despesa'}">
         <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
         <h4 class="modal-title">{{titleRatear}}</h4>
     </div>
@@ -194,13 +194,13 @@
         <button type="button" class="btn btn-default" ng-click="cancelarRatear()">
             <i class="fa fa-lg fa-check fa-spc"></i> CANCELAR RATEIO
         </button>
-        <button type="button" class="btn btn-primary" ng-click="lancar(this.lancamentoProgramadoForm, lancamentoProgramado)" ng-show="lancamentoProgramado.situacao.codigo === 'ativo'">
+        <button type="button" class="btn btn-primary" ng-click="gerarRatear(this.lancamentoProgramadoForm, lancamentoProgramado)" ng-show="lancamentoProgramado.situacao.codigo === 'ativo'">
             <i class="fa fa-lg fa-check fa-spc"></i> GERAR LANÇAMENTO
         </button>
         <button type="button" class="btn btn-danger" ng-click="goToParcelar()" ng-show="lancamentoProgramado.situacao.codigo === 'ativo'">
             <i class="fa fa-lg fa-check fa-spc"></i> GERAR PARCELAS
         </button>
-        <button type="button" class="btn btn-success" ng-click="ok(this.lancamentoProgramadoForm, lancamentoProgramado)">
+        <button type="button" class="btn btn-success" ng-click="okRatear(this.lancamentoProgramadoForm, lancamentoProgramado)">
             <i class="fa fa-lg fa-save fa-spc"></i> SALVAR
         </button>
     </div>

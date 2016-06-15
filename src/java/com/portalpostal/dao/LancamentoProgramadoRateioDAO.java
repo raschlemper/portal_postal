@@ -33,13 +33,13 @@ public class LancamentoProgramadoRateioDAO extends GenericDAO {
         return (LancamentoProgramadoRateio) find(sql, params, lancamentoProgramadoRateioHandler);
     }
 
-    public List<LancamentoProgramadoRateio> findByLancamentoProgramado(Integer idLancamento) throws Exception {
+    public List<LancamentoProgramadoRateio> findByLancamentoProgramado(Integer idLancamentoProgramado) throws Exception {
         String sql = "SELECT * FROM lancamento_programado_rateio "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento_programado_rateio.idPlanoConta = plano_conta.idPlanoConta) "
                    + "LEFT OUTER JOIN centro_custo ON(lancamento_programado_rateio.idCentroCusto = centro_custo.idCentroCusto) "
-                   + "WHERE lancamento_programado_rateio.idLancamento = :idLancamento";
+                   + "WHERE lancamento_programado_rateio.idLancamentoProgramado = :idLancamentoProgramado";
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("idLancamento", idLancamento);
+        params.put("idLancamentoProgramado", idLancamentoProgramado);
         return findAll(sql, params, lancamentoProgramadoRateioHandler);
     }
 

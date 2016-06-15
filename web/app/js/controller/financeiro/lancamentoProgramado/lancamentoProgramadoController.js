@@ -2,9 +2,9 @@
 
 app.controller('LancamentoProgramadoController', 
     ['$scope', '$filter', '$state', 'LancamentoProgramadoService', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'ModalService', 
-     'DatePickerService', 'LancamentoProgramadoHandler', 'LancamentoHandler', 'ListaService', 'LISTAS', 'MESSAGES',
+     'DatePickerService', 'LancamentoProgramadoHandler', 'LancamentoProgramadoRateioHandler', 'ListaService', 'LISTAS', 'MESSAGES',
     function ($scope, $filter, $state, LancamentoProgramadoService, ContaService, PlanoContaService, CentroCustoService, ModalService, 
-        DatePickerService, LancamentoProgramadoHandler, LancamentoHandler, ListaService, LISTAS, MESSAGES) {
+        DatePickerService, LancamentoProgramadoHandler, LancamentoProgramadoRateioHandler, ListaService, LISTAS, MESSAGES) {
 
         var init = function () {
             $scope.lancamentoProgramados = [];
@@ -185,6 +185,11 @@ app.controller('LancamentoProgramadoController',
                 lancamentoProgramado.tipo.modelo = $scope.modelos;
                 if(lancamentoProgramado.lancamentos && lancamentoProgramado.lancamentos.length) {
                     lancamentoProgramado.lancamentos = lancamentoProgramado.lancamentos.length;
+                }
+
+                if(lancamentoProgramado.rateios && lancamentoProgramado.rateios.length) {
+                    lancamentoProgramado.planoConta = "Diversos";
+                    lancamentoProgramado.centroCusto = "Diversos";
                 }
                 
                 return _.pick(lancamentoProgramado, 'idLancamentoProgramado', 'lancamentos', 'conta', 'tipo', 'tipoLancamento', 'dataVencimento', 'numeroParcela', 'planoConta', 'centroCusto', 'favorecido', 'valor', 'situacao', 'frequencia');
@@ -419,13 +424,14 @@ app.controller('LancamentoProgramadoController',
             var lancamentos = ajustarDadosLancamentos(data.lancamentos);
             var lancamentoProgramado = LancamentoProgramadoHandler.handle(data);
             lancamentoProgramado.lancamentos = lancamentos;
+            lancamentoProgramado.rateios = LancamentoProgramadoRateioHandler.handleList(data.rateios);
             return lancamentoProgramado;
         } 
         
         var ajustarDadosLancamentos = function(lancamentos) {
             var lancamentoList = [];
             _.map(lancamentos, function(lancamento) {
-                lancamentoList.push(LancamentoHandler.handle(lancamento));
+                lancamentoList.push(lancamento);
             });
             return lancamentoList;
         }

@@ -28,6 +28,7 @@ app.factory('LancamentoProgramadoHandler', function() {
         lancamentoProgramadoHandle.valor = getValor(lancamentoProgramado);
         lancamentoProgramadoHandle.situacao = getSituacao(lancamentoProgramado);
         lancamentoProgramadoHandle.historico = getHistorico(lancamentoProgramado);
+        lancamentoProgramadoHandle.observacao = getObservacao(lancamentoProgramado);
         lancamentoProgramadoHandle.usuario = getUsuario(lancamentoProgramado);
         return lancamentoProgramadoHandle;
     };
@@ -110,6 +111,10 @@ app.factory('LancamentoProgramadoHandler', function() {
     
     var getHistorico = function(lancamentoProgramado) {
         return lancamentoProgramado.historico || null;
+    };
+    
+    var getObservacao = function(lancamento) {
+        return lancamento.observacao || null;
     };
     
     var getUsuario = function(lancamentoProgramado) {

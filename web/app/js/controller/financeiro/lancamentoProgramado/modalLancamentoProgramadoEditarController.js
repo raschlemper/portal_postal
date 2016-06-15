@@ -26,6 +26,20 @@ app.controller('ModalLancamentoProgramadoEditarController',
             contas();
         };
         
+        // ***** NAVEGAR ***** //
+        
+        var initStep = function(lancamentoProgramado) {
+            if(lancamentoProgramado && lancamentoProgramado.rateios && lancamentoProgramado.rateios.length) {
+                if(lancamentoProgramado && lancamentoProgramado.quantidadeParcela) {
+                    $scope.goToParcelar();
+                } else {
+                    $scope.goToRatear();                
+                }
+            } else if(lancamentoProgramado && lancamentoProgramado.quantidadeParcela) {
+                $scope.goToParcelar();
+            } 
+        };
+        
         // ***** CONTROLLER ***** //
         
         var getTitle = function(lancamentoProgramado) {
@@ -65,10 +79,8 @@ app.controller('ModalLancamentoProgramadoEditarController',
                     $scope.planoContas = PlanoContaService.flatten($scope.planoContas);
 //                    $scope.planoContas = criarPlanoContasLista($scope.planoContas);
                     if($scope.lancamentoProgramado.planoConta) {
-                        $scope.lancamentoProgramado.planoConta = ListaService.getPlanoContaValue($scope.planoContas, $scope.lancamentoProgramado.planoConta.idPlanoConta) || $scope.planoContas[0];
-                    } else {
-                         $scope.lancamentoProgramado.planoConta  = $scope.planoContas[0];
-                    }
+                        $scope.lancamentoProgramado.planoConta = ListaService.getPlanoContaValue($scope.planoContas, $scope.lancamentoProgramado.planoConta.idPlanoConta);
+                    } 
                     centroCustos();
                 })
                 .catch(function (e) {
@@ -84,7 +96,7 @@ app.controller('ModalLancamentoProgramadoEditarController',
                     $scope.centroCustos = CentroCustoService.flatten($scope.centroCustos);
 //                    $scope.centroCustos = criarCentroCustosLista($scope.centroCustos);
                     if($scope.lancamentoProgramado.centroCusto && $scope.lancamentoProgramado.centroCusto.idCentroCusto) {
-                        $scope.lancamentoProgramado.centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, $scope.lancamentoProgramado.centroCusto.idCentroCusto) || $scope.centroCustos[0];
+                        $scope.lancamentoProgramado.centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, $scope.lancamentoProgramado.centroCusto.idCentroCusto);
                     } 
                     tipoDocumento();
                 })
@@ -122,13 +134,14 @@ app.controller('ModalLancamentoProgramadoEditarController',
                 .then(function (data) {
                     $scope.formaPagamentos = data;
                     $scope.lancamentoProgramado.formaPagamento = $scope.lancamentoProgramado.formaPagamento || $scope.formaPagamentos[1];
+                    initStep($scope.lancamentoProgramado);
                 })
                 .catch(function (e) {
                     console.log(e);
                 });
         };
         
-        $scope.lancar = function(form, lancamentoProgramado) {
+        $scope.gerar = function(form, lancamentoProgramado) {
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;
             if(!$scope.validarForm(form, lancamentoProgramado)) return;   
             $scope.lancamento = $scope.getLancamento($scope.lancamentoProgramado, null, $scope.modelos[2]);  
@@ -172,14 +185,18 @@ app.controller('ModalLancamentoProgramadoEditarController',
 //                observacao: null,
 //                rateios: []
 //            }  
-            
-            lancamentoProgramado.numero = (parcela && parcela.numero) || lancamentoProgramado.numero;
-            lancamentoProgramado.numeroParcela = (parcela && parcela.numeroParcela) || lancamentoProgramado.numeroParcela;
-            lancamentoProgramado.dataCompetencia = (parcela && parcela.dataCompetencia) || lancamentoProgramado.dataCompetencia;
-            lancamentoProgramado.dataVencimento = (parcela && parcela.dataVencimento) || lancamentoProgramado.dataVencimento;
-            lancamentoProgramado.valor = (parcela && parcela.valor) || lancamentoProgramado.valor;
-            lancamentoProgramado.situacao = (lancamentoProgramado && lancamentoProgramado.situacao) || $scope.situacoes[0];
-            return LancamentoHandler.handle(lancamentoProgramado);
+            var lancamento = LancamentoHandler.handle(lancamentoProgramado);
+            lancamento.planoConta = lancamentoProgramado.planoConta;
+            lancamento.centroCusto = lancamentoProgramado.centroCusto;
+            lancamento.tipo = lancamentoProgramado.tipo;
+            lancamento.numero = (parcela && parcela.numero) || lancamentoProgramado.numero;
+            lancamento.numeroParcela = (parcela && parcela.numeroParcela) || lancamentoProgramado.numeroParcela;
+            lancamento.dataCompetencia = (parcela && parcela.dataCompetencia) || lancamentoProgramado.dataCompetencia;
+            lancamento.dataVencimento = (parcela && parcela.dataVencimento) || lancamentoProgramado.dataVencimento;
+            lancamento.valor = (parcela && parcela.valor) || lancamentoProgramado.valor;
+            lancamento.situacao = (lancamentoProgramado && lancamentoProgramado.situacao) || $scope.situacoes[0]; 
+            lancamento.rateios = lancamentoProgramado.rateios;
+            return lancamento;
         };
         
         // ***** VALIDAR ***** //
@@ -197,12 +214,14 @@ app.controller('ModalLancamentoProgramadoEditarController',
         };
         
         $scope.validarForm = function (form, lancamentoProgramado) {  
-            if(!$scope.validarPlanoConta(lancamentoProgramado.planoConta)) {
-                return false;
-            }
-            if(!$scope.validarCentroCusto(lancamentoProgramado.centroCusto)) {
-                return false;
-            }
+            if(!lancamentoProgramado.rateios || !lancamentoProgramado.rateios.length) {
+                if(!$scope.validarPlanoConta(lancamentoProgramado.planoConta)) {
+                    return false;
+                }
+                if(!$scope.validarCentroCusto(lancamentoProgramado.centroCusto)) {
+                    return false;
+                }
+            } 
             if (form.dataCompetencia.$error.required) {
                 alert(MESSAGES.lancamento.programar.validacao.DATA_COMPETENCIA_REQUERIDA);
                 return false;

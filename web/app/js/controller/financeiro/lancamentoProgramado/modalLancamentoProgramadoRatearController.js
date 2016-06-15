@@ -12,7 +12,7 @@ app.controller('ModalLancamentoProgramadoRatearController', ['$scope', 'ListaSer
         // ***** CONTROLLER ***** //  
         
         var getTitle = function() {
-            $scope.titleRatear = MESSAGES.lancamento.ratear.title.INSERIR;
+            $scope.titleRatear = $scope.title + " - " + MESSAGES.lancamento.ratear.title.INSERIR; // Ajustear mensagem para programação
         };
                 
         // ***** RATEAR ***** //  
@@ -53,8 +53,8 @@ app.controller('ModalLancamentoProgramadoRatearController', ['$scope', 'ListaSer
         
         var setRateioDefault = function(lancamentoProgramado, rateio) {
             $scope.rateio = {};
-            $scope.rateio.planoConta = (rateio && rateio.planoConta) || $scope.planoContas[0];
-            $scope.rateio.centroCusto = (rateio && rateio.centroCusto) || null;
+            $scope.rateio.planoConta = (rateio && rateio.planoConta) || lancamentoProgramado.planoConta || null;
+            $scope.rateio.centroCusto = (rateio && rateio.centroCusto) || lancamentoProgramado.centroCusto || null;
             $scope.rateio.valor = lancamentoProgramado.valor - saldoRateio(lancamentoProgramado);
         };
         
@@ -77,9 +77,13 @@ app.controller('ModalLancamentoProgramadoRatearController', ['$scope', 'ListaSer
             })
         };        
 
-        $scope.lancarRatear = function (form, lancamentoProgramado, lancamento) {
-            if(!validarRateio(lancamento)) { return false; }
-            $scope.lancar(form, lancamentoProgramado, lancamento);
+        $scope.gerarRatear = function (form, lancamentoProgramado, lancamento) {
+            if(!validarRateio(lancamentoProgramado)) { return false; }
+            $scope.gerar(form, lancamentoProgramado, lancamento);
+        };
+        
+        $scope.okRatear = function(form, lancamentoProgramado) {
+            $scope.ok(form, lancamentoProgramado);   
         };
                 
         // ***** VALIDAR ***** //  
