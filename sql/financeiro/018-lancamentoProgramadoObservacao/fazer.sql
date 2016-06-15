@@ -1,0 +1,1 @@
+ALTER TABLE lancamento_programado ADD `observacao` LONGTEXT DEFAULT NULL;

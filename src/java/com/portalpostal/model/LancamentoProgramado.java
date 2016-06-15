@@ -26,8 +26,10 @@ public class LancamentoProgramado {
     private Double valor;
     private TipoSituacaoLancamentoProgramado situacao;
     private String historico;
+    private String observacao;
     private String usuario;
     private List<Lancamento> lancamentos;
+    private List<LancamentoProgramadoRateio> rateios;
 
     public Integer getIdLancamentoProgramado() {
         return idLancamentoProgramado;
@@ -173,6 +175,14 @@ public class LancamentoProgramado {
         this.historico = historico;
     }
 
+    public String getObservacao() {
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
+    }
+
     public String getUsuario() {
         return usuario;
     }
@@ -187,6 +197,14 @@ public class LancamentoProgramado {
 
     public void setLancamentos(List<Lancamento> lancamentos) {
         this.lancamentos = lancamentos;
+    }
+
+    public List<LancamentoProgramadoRateio> getRateios() {
+        return rateios;
+    }
+
+    public void setRateios(List<LancamentoProgramadoRateio> rateios) {
+        this.rateios = rateios;
     }
     
 }

@@ -43,7 +43,7 @@ public class LancamentoService {
     public Lancamento find(Integer idLancamento) throws Exception {
         init();
         Lancamento lancamento = lancamentoDAO.find(idLancamento);
-        lancamento = setRateios(lancamento);
+        lancamento = setRateio(lancamento);
         return lancamento;
     }  
 
@@ -120,14 +120,14 @@ public class LancamentoService {
     public Lancamento findLastByLancamentoProgramado(Integer idLancamentoProgramado) throws Exception {
         init();
         Lancamento lancamento = lancamentoDAO.findLastByLancamentoProgramado(idLancamentoProgramado);
-        lancamento = setRateios(lancamento);
+        lancamento = setRateio(lancamento);
         return lancamento;
     }
     
     public Lancamento findByNumeroParcela(Integer idLancamentoProgramado, Integer numeroParcela) throws Exception {
         init();
         Lancamento lancamento = lancamentoDAO.findByNumeroParcela(idLancamentoProgramado, numeroParcela);
-        if(lancamento != null) { lancamento = setRateios(lancamento); }
+        if(lancamento != null) { lancamento = setRateio(lancamento); }
         return lancamento;
     } 
     
@@ -170,12 +170,12 @@ public class LancamentoService {
     
     private List<Lancamento> setRateios(List<Lancamento> lancamentos) throws Exception {
         for (Lancamento lancamento : lancamentos) {
-            setRateios(lancamento);
+            setRateio(lancamento);
         }
         return lancamentos;
     }
     
-    private Lancamento setRateios(Lancamento lancamento) throws Exception {
+    private Lancamento setRateio(Lancamento lancamento) throws Exception {
         lancamento.setRateios(getRateios(lancamento.getIdLancamento()));
         return lancamento;
     }

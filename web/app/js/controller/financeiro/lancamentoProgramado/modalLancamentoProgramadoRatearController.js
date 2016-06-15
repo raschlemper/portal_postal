@@ -4,9 +4,9 @@ app.controller('ModalLancamentoProgramadoRatearController', ['$scope', 'ListaSer
     function ($scope, ListaService, FinanceiroValidation, MESSAGES) {
 
         var init = function () {  
-            $scope.lancamento = $scope.lancamento || $scope.getLancamento($scope.lancamentoProgramado, null, $scope.modelos[2]);
+//            $scope.lancamento = $scope.lancamento || $scope.getLancamento($scope.lancamentoProgramado, null, $scope.modelos[2]);
             getTitle();
-            ratear($scope.lancamento);  
+            ratear($scope.lancamentoProgramado);  
         };
                 
         // ***** CONTROLLER ***** //  
@@ -17,50 +17,50 @@ app.controller('ModalLancamentoProgramadoRatearController', ['$scope', 'ListaSer
                 
         // ***** RATEAR ***** //  
         
-        var ratear = function(lancamento) {  
-            lancamento.rateios = lancamento.rateios || [];
-            criarRateiosLista(lancamento.rateios);
-            setRateioDefault(lancamento, null);            
+        var ratear = function(lancamentoProgramado) {  
+            lancamentoProgramado.rateios = lancamentoProgramado.rateios || [];
+            criarRateiosLista(lancamentoProgramado.rateios);
+            setRateioDefault(lancamentoProgramado, null);            
         }
         
         $scope.cancelarRatear = function() {
-            $scope.lancamento.rateios = [];
+            $scope.lancamentoProgramado.rateios = [];
             $scope.voltar();
         };
         
-        $scope.salvarRateio = function(lancamento, rateio) {
+        $scope.salvarRateio = function(lancamentoProgramado, rateio) {
             if(!$scope.validarPlanoConta(rateio.planoConta)) return;
             if(!$scope.validarCentroCusto(rateio.centroCusto)) return;
-            var saldo = saldoRateio(lancamento);
-            if(saldo + rateio.valor > lancamento.valor) {
+            var saldo = saldoRateio(lancamentoProgramado);
+            if(saldo + rateio.valor > lancamentoProgramado.valor) {
                 modalMessage(MESSAGES.lancamento.ratear.validacao.SALDO_INCORRETO);
                 return;
             }
-            $scope.lancamento.rateios.push(rateio);
-            setRateioDefault(lancamento, rateio);
+            $scope.lancamentoProgramado.rateios.push(rateio);
+            setRateioDefault(lancamentoProgramado, rateio);
         };
         
-        $scope.editarRateio = function(lancamento, rateio, index) {
+        $scope.editarRateio = function(lancamentoProgramado, rateio, index) {
             $scope.rateio = rateio;
             $scope.removerRateio(index);
-            setRateioDefault(lancamento, rateio);
+            setRateioDefault(lancamentoProgramado, rateio);
         };
         
-        $scope.removerRateio = function(lancamento, rateio, index) {     
-            $scope.lancamento.rateios.splice(index, 1); 
-            setRateioDefault(lancamento, rateio);
+        $scope.removerRateio = function(lancamentoProgramado, rateio, index) {     
+            $scope.lancamentoProgramado.rateios.splice(index, 1); 
+            setRateioDefault(lancamentoProgramado, rateio);
         };
         
-        var setRateioDefault = function(lancamento, rateio) {
+        var setRateioDefault = function(lancamentoProgramado, rateio) {
             $scope.rateio = {};
             $scope.rateio.planoConta = (rateio && rateio.planoConta) || $scope.planoContas[0];
             $scope.rateio.centroCusto = (rateio && rateio.centroCusto) || null;
-            $scope.rateio.valor = lancamento.valor - saldoRateio(lancamento);
+            $scope.rateio.valor = lancamentoProgramado.valor - saldoRateio(lancamentoProgramado);
         };
         
-        var saldoRateio = function(lancamento) {            
+        var saldoRateio = function(lancamentoProgramado) {            
             var saldo = 0;
-            _.map(lancamento.rateios, function(rateio) {
+            _.map(lancamentoProgramado.rateios, function(rateio) {
                 saldo += rateio.valor;
             });
             return saldo;
@@ -80,24 +80,20 @@ app.controller('ModalLancamentoProgramadoRatearController', ['$scope', 'ListaSer
         $scope.lancarRatear = function (form, lancamentoProgramado, lancamento) {
             if(!validarRateio(lancamento)) { return false; }
             $scope.lancar(form, lancamentoProgramado, lancamento);
-        }
-                
-        // ***** AJUSTAR ***** // 
+        };
                 
         // ***** VALIDAR ***** //  
         
-        var validarRateio = function(lancamento) {
-            if (!lancamento.rateios || !lancamento.rateios.length) return true;
-            var saldo = saldoRateio(lancamento);
-            if(!FinanceiroValidation.rateioSaldo(lancamento, saldo)) return false;
-            _.map(lancamento.rateios, function(rateio) {
+        var validarRateio = function(lancamentoProgramado) {
+            if (!lancamentoProgramado.rateios || !lancamentoProgramado.rateios.length) return true;
+            var saldo = saldoRateio(lancamentoProgramado);
+            if(!FinanceiroValidation.rateioSaldo(lancamentoProgramado, saldo)) return false;
+            _.map(lancamentoProgramado.rateios, function(rateio) {
                 if($scope.validarPlanoConta(rateio.planoConta)) { return false; }
                 if(!$scope.validarCentroCusto(rateio.centroCusto)) { return false; }
             });  
             return true;
-        };
-                
-        // ***** MODAL ***** //  
+        };                
 
         init();
 

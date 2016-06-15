@@ -43,6 +43,7 @@ public class LancamentoProgramadoHandler extends GenericHandler implements Resul
         lancamentoProgramado.setValor(getDouble(result, "valor"));
         lancamentoProgramado.setSituacao(TipoSituacaoLancamentoProgramado.values()[getInt(result, "situacao")]);
         lancamentoProgramado.setHistorico(getString(result, "historico"));
+        lancamentoProgramado.setObservacao(getString(result, "observacao"));
         lancamentoProgramado.setUsuario(getString(result, "usuario"));
         return lancamentoProgramado;
     }
