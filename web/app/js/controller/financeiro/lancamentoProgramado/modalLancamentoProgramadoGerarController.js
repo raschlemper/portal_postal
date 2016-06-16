@@ -6,18 +6,17 @@ app.controller('ModalLancamentoProgramadoGerarController',
 
         var init = function () {  
             getTitle();
-            $scope.lancamento = $scope.lancamento || $scope.getLancamento($scope.lancamentoProgramado, null, $scope.modelos[2]);
-            setLists($scope.lancamento);
-            initStep($scope.lancamento);
+//            setLists($scope.lancamento);
+//            initStep($scope.lancamento);
         };
         
         // ***** NAVEGAR ***** //
         
-        var initStep = function(lancamento) {
-            if(lancamento && lancamento.rateios && lancamento.rateios.length) {
-                $scope.goToLancarRatear();    
-            } 
-        };
+//        var initStep = function(lancamento) {
+//            if(lancamento && lancamento.rateios && lancamento.rateios.length) {
+//                $scope.goToLancarRatear();    
+//            } 
+//        };
         
         // ***** CONTROLLER ***** //
         
@@ -25,9 +24,9 @@ app.controller('ModalLancamentoProgramadoGerarController',
             $scope.titleGerar = $scope.title + " - " + MESSAGES.lancamento.title.GERAR; 
         };
         
-        var setLists = function(lancamento) {
-            lancamento.situacao = ListaService.getValue(LISTAS.situacaoLancamentoProgramado, lancamento.situacao);
-        }
+//        var setLists = function(lancamento) {
+//            lancamento.situacao = ListaService.getValue(LISTAS.situacaoLancamentoProgramado, lancamento.situacao);
+//        }
         
         $scope.lancar = function(form, lancamentoProgramado, lancamento) {
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;

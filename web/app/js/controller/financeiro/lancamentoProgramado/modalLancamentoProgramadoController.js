@@ -7,54 +7,34 @@ app.controller('ModalLancamentoProgramadoController', ['$scope', '$modalInstance
             $scope.conta = conta;
             $scope.lancamentoProgramado = lancamentoProgramado || {};
             $scope.tipo = tipo;
-            initStep($scope.lancamentoProgramado);
+            initStep();
         };
         
         // ***** NAVEGAR ***** //
         
-        var initStep = function(lancamentoProgramado) {
+        var initStep = function() {
             $scope.goToEditar(); 
         };
         
         $scope.goToEditar = function() {
+            if($scope.lancamentoProgramado && $scope.lancamentoProgramado.rateios && $scope.lancamentoProgramado.rateios.length) {
+                $scope.showRatear = true;
+            } 
+            if($scope.lancamentoProgramado && $scope.lancamentoProgramado.quantidadeParcela) {
+                $scope.showParcelar = true;
+            } 
             $scope.stepFrom = null;
             $scope.stepTo = 'editar';             
         };
         
         $scope.goToLancar = function() {
-            $scope.stepFrom = 'editar';
-            $scope.stepTo = 'lancar';             
-        };
-        
-        $scope.goToLancarParcelar = function() {
-            $scope.stepFrom = 'parcelar';
-            $scope.stepTo = 'lancar';             
-        };
-        
-        $scope.goToLancarRatear = function() {
             $scope.stepFrom = angular.copy($scope.stepTo);
-            $scope.stepTo = 'lancarRatear';             
-        };
-        
-        $scope.goToParcelar = function() {
-            $scope.stepFrom = 'editar';
-            $scope.stepTo = 'parcelar';             
-        };
-        
-        $scope.goToRatear = function() {
-            $scope.stepFrom = angular.copy($scope.stepTo);
-            $scope.stepTo = 'ratear';             
+            $scope.stepTo = 'lancar';             
         };
         
         $scope.voltar = function() {
             if($scope.stepFrom === 'lancar') {
                 $scope.goToGerar();  
-            } else if($scope.stepFrom === 'lancarRatear') {
-                $scope.goToLancarRatear();                                  
-            } else if($scope.stepFrom === 'parcelar') {
-                $scope.goToParcelar();                      
-            } else if($scope.stepFrom === 'ratear') {
-                $scope.goToRatear();            
             } else {
                 $scope.goToEditar();
             }

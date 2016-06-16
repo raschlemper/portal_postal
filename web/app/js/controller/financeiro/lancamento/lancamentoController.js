@@ -409,10 +409,11 @@ app.controller('LancamentoController',
         };
 
         var excluirAll = function(conta, lancamentos) {
+            var lancamentoList = [];
             _.map(lancamentos, function(lancamento) {
-                lancamento = ajustarDados(lancamento);
+                lancamentoList.push(ajustarDados(lancamento));
             });
-            LancamentoService.deleteAll(lancamentos)
+            LancamentoService.deleteAll(lancamentoList)
                 .then(function(data) { 
                     modalMessage(MESSAGES.lancamento.sucesso.REMOVIDO_SUCESSO_TODOS);
                     todos(conta);                        

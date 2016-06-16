@@ -26,20 +26,6 @@ app.controller('ModalLancamentoProgramadoEditarController',
             contas();
         };
         
-        // ***** NAVEGAR ***** //
-        
-        var initStep = function(lancamentoProgramado) {
-            if(lancamentoProgramado && lancamentoProgramado.rateios && lancamentoProgramado.rateios.length) {
-                if(lancamentoProgramado && lancamentoProgramado.quantidadeParcela) {
-                    $scope.goToParcelar();
-                } else {
-                    $scope.goToRatear();                
-                }
-            } else if(lancamentoProgramado && lancamentoProgramado.quantidadeParcela) {
-                $scope.goToParcelar();
-            } 
-        };
-        
         // ***** CONTROLLER ***** //
         
         var getTitle = function(lancamentoProgramado) {
@@ -134,11 +120,15 @@ app.controller('ModalLancamentoProgramadoEditarController',
                 .then(function (data) {
                     $scope.formaPagamentos = data;
                     $scope.lancamentoProgramado.formaPagamento = $scope.lancamentoProgramado.formaPagamento || $scope.formaPagamentos[1];
-                    initStep($scope.lancamentoProgramado);
                 })
                 .catch(function (e) {
                     console.log(e);
                 });
+        };
+        
+        $scope.setDataCompetencia = function(lancamentoTransferencia) {
+            if(lancamentoTransferencia.dataCompetencia) return;
+            lancamentoTransferencia.dataCompetencia = lancamentoTransferencia.dataLancamento;
         };
         
         $scope.gerar = function(form, lancamentoProgramado) {
@@ -148,9 +138,11 @@ app.controller('ModalLancamentoProgramadoEditarController',
             $scope.goToLancar();
         };
         
-        $scope.setDataCompetencia = function(lancamentoTransferencia) {
-            if(lancamentoTransferencia.dataCompetencia) return;
-            lancamentoTransferencia.dataCompetencia = lancamentoTransferencia.dataLancamento;
+        $scope.gerarParcela = function(form, lancamentoProgramado, parcela) {
+            if(!$scope.validaConta(lancamentoProgramado.conta)) return;
+            if(!$scope.validarForm(form, lancamentoProgramado)) return;   
+            $scope.lancamento = $scope.getLancamento($scope.lancamentoProgramado, parcela, $scope.modelos[4]);  
+            $scope.goToLancar();
         };
         
         $scope.ok = function(form, lancamentoProgramado) {
@@ -195,6 +187,7 @@ app.controller('ModalLancamentoProgramadoEditarController',
             lancamento.dataVencimento = (parcela && parcela.dataVencimento) || lancamentoProgramado.dataVencimento;
             lancamento.valor = (parcela && parcela.valor) || lancamentoProgramado.valor;
             lancamento.situacao = (lancamentoProgramado && lancamentoProgramado.situacao) || $scope.situacoes[0]; 
+            lancamento.modelo = modelo;
             lancamento.rateios = lancamentoProgramado.rateios;
             return lancamento;
         };

@@ -1,0 +1,127 @@
+app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES) {
+    
+    return {
+        restrict: 'E',
+        templateUrl: 'js/directive/html/appRatear.html',
+        scope: {
+            planoContas: '=',
+            centroCustos: '=',
+            lancamentoRatear: '=',
+            show: '='
+        },
+        link: function($scope, element, attr, controller, transclude) {            
+                        
+            var init = function () {  
+                $scope.ratear($scope.lancamentoRatear);  
+            };
+
+            // ***** CONTROLLER ***** //  
+
+            $scope.ratear = function(lancamentoRatear) {  
+                lancamentoRatear.rateios = lancamentoRatear.rateios || [];
+                criarRateiosLista(lancamentoRatear.rateios);
+                setRateioDefault(lancamentoRatear, null);            
+            }
+
+            $scope.cancelarRatear = function(lancamentoRatear) {
+                lancamentoRatear.rateios = null;
+            };
+
+            $scope.salvarRateio = function(lancamentoRatear, rateio) {
+                if(!$scope.validarPlanoConta(rateio.planoConta)) return;
+                if(!$scope.validarCentroCusto(rateio.centroCusto)) return;
+                var saldo = saldoRateio(lancamentoRatear);
+                if(saldo + rateio.valor > lancamentoRatear.valor) {
+                    modalMessage(MESSAGES.lancamento.ratear.validacao.SALDO_INCORRETO);
+                    return;
+                }
+                rateio.percentual = rateio.valor / lancamentoRatear.valor;
+                $scope.lancamentoRatear.rateios.push(rateio);
+                setRateioDefault(lancamentoRatear, rateio);
+            };
+
+            $scope.editarRateio = function(lancamentoRatear, rateio, index) {
+                $scope.rateio = rateio;
+                $scope.removerRateio(lancamentoRatear, rateio, index);
+                setRateioDefault(lancamentoRatear, rateio);
+            };
+
+            $scope.removerRateio = function(lancamentoRatear, rateio, index) {     
+                lancamentoRatear.rateios.splice(index, 1); 
+                setRateioDefault(lancamentoRatear, rateio);
+            };
+
+            var setRateioDefault = function(lancamentoRatear, rateio) {
+                $scope.rateio = {};
+                $scope.rateio.planoConta = (rateio && rateio.planoConta) || lancamentoRatear.planoConta || null;
+                $scope.rateio.centroCusto = (rateio && rateio.centroCusto) || lancamentoRatear.centroCusto || null;
+                $scope.rateio.valor = lancamentoRatear.valor - saldoRateio(lancamentoRatear);
+            };
+
+            var saldoRateio = function(lancamentoRatear) {            
+                var saldo = 0;
+                _.map(lancamentoRatear.rateios, function(rateio) {
+                    saldo += rateio.valor;
+                });
+                return saldo;
+            };
+
+            var criarRateiosLista = function(rateios) {
+                return _.map(rateios, function(rateio) {                 
+                    if(rateio.planoConta && rateio.planoConta.idPlanoConta) { 
+                        rateio.planoConta = ListaService.getPlanoContaValue($scope.planoContas, rateio.planoConta.idPlanoConta); 
+                    }                 
+                    if(rateio.centroCusto && rateio.centroCusto.idCentroCusto) { 
+                        rateio.centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, rateio.centroCusto.idCentroCusto); 
+                    } 
+                })
+            };      
+            
+            $scope.$watchCollection("lancamentoRatear.quantidadeParcela", function(newValue, oldValue) {
+                if(!newValue) return;
+                if(newValue === oldValue) return;
+                updateValueRateio(newValue, $scope.lancamentoRatear);
+            });
+            
+            var updateValueRateio = function(quantidade, lancamentoRatear) {
+                var valor = lancamentoRatear.valor / quantidade;
+                return _.map(lancamentoRatear.rateios, function(rateio) { 
+                    rateio.valor =  rateio.percentual * valor;
+                });
+            }
+
+//            $scope.gerarRatear = function (form, lancamentoRatear, lancamento) {
+//                if(!validarRateio(lancamentoRatear)) { return false; }
+//                $scope.gerar(form, lancamentoRatear, lancamento);
+//            };
+
+//            $scope.okRatear = function(form, lancamentoRatear) {
+//                $scope.ok(form, lancamentoRatear);   
+//            };
+
+            // ***** VALIDAR ***** //  
+
+            var validarRateio = function(lancamentoRatear) {
+                if (!lancamentoRatear.rateios || !lancamentoRatear.rateios.length) return true;
+                var saldo = saldoRateio(lancamentoRatear);
+                if(!FinanceiroValidation.rateioSaldo(lancamentoRatear, saldo)) return false;
+                _.map(lancamentoRatear.rateios, function(rateio) {
+                    if($scope.validarPlanoConta(rateio.planoConta)) { return false; }
+                    if(!$scope.validarCentroCusto(rateio.centroCusto)) { return false; }
+                });  
+                return true;
+            };   
+        
+            $scope.validarPlanoConta = function(planoConta) {
+                return FinanceiroValidation.planoContaResultado(planoConta);
+            };
+
+            $scope.validarCentroCusto = function(centroCusto) {
+                return FinanceiroValidation.centroCustoResultado(centroCusto);
+            };             
+
+            init();
+            
+        }
+    }
+});

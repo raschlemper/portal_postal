@@ -3227,3 +3227,9 @@ table.table-condensed tbody tr td.cel-menu {
 .text-danger {
     color: #a94442 !important;
 }
+
+.subtitle-modal {
+    background-color: #F8F8F8;
+    margin-top: -10px;
+    border-bottom: 1px solid #DDD;
+}
