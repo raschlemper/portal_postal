@@ -13,7 +13,10 @@ app.controller('ModalLancamentoController', ['$scope', '$modalInstance', 'conta'
                 
         // ***** NAVEGAR ***** //  
                 
-        var initStep = function() {             
+        var initStep = function() {  
+            if(lancamento && lancamento.rateios && lancamento.rateios.length) {
+                $scope.showRatear = true;    
+            }              
             $scope.goToEditar();
         };
         
@@ -22,10 +25,10 @@ app.controller('ModalLancamentoController', ['$scope', '$modalInstance', 'conta'
             $scope.stepTo = 'editar';             
         };
         
-        $scope.goToRatear = function() {
-            $scope.stepFrom = angular.copy($scope.stepTo); 
-            $scope.stepTo = 'ratear'; 
-        };
+//        $scope.goToRatear = function() {
+//            $scope.stepFrom = angular.copy($scope.stepTo); 
+//            $scope.stepTo = 'ratear'; 
+//        };
         
         $scope.goToAnexar = function() {
             $scope.stepFrom = angular.copy($scope.stepTo); 

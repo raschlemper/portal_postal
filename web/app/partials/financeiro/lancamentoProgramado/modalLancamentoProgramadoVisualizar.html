@@ -108,6 +108,12 @@
                 </div>
                 <div class="col-md-8 angular-with-newlines">{{lancamentoProgramado.usuario | uppercase}}</div>
             </div>
+            <br />
+            <app-parcelar lancamento-parcelar="lancamentoProgramado" only-view="true" show="true"
+                         ng-show="lancamentoProgramado.parcelas && lancamentoProgramado.parcelas.length"></app-parcelar>
+            <br />
+            <app-ratear plano-contas="planoContas" centro-custos="centroCustos" lancamento-ratear="lancamentoProgramado" only-view="true" show="true"
+                         ng-show="lancamentoProgramado.rateios && lancamentoProgramado.rateios.length"></app-ratear>
         </div>
     </div>
     <div class="modal-footer">

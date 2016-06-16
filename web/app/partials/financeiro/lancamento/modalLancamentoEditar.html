@@ -114,6 +114,9 @@
                         </div>
                     </div>
                 </li>
+                <li class="list-group-item">
+                    <app-ratear plano-contas="planoContas" centro-custos="centroCustos" lancamento-ratear="lancamento" show="showRatear"></app-ratear>
+                </li>
             </ul>     
         </div>
     </div>
@@ -121,9 +124,9 @@
 <!--        <button type="button" class="btn btn-default" ng-click="anexar(lancamento)"  ng-if="lancamento.idLancamento">
             <i class="fa fa-lg fa-paperclip fa-spc"></i> ANEXAR
         </button>-->
-        <button type="button" class="btn btn-default" ng-click="goToRatear()" ng-disabled="!lancamento.valor">
+<!--        <button type="button" class="btn btn-default" ng-click="goToRatear()" ng-disabled="!lancamento.valor">
             <i class="fa fa-lg fa-check fa-spc"></i> RATEAR
-        </button>
+        </button>-->
         <button type="button" class="btn btn-default" ng-click="cancel()">
             <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR
         </button>

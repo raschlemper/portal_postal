@@ -469,7 +469,7 @@ app.controller('LancamentoProgramadoController',
         };
         
         var modalVisualizar = function(lancamentoProgramado) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamentoProgramado/modalLancamentoProgramadoVisualizar.html', 'ModalLancamentoProgramadoVisualizarController', 'md',
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamentoProgramado/modalLancamentoProgramadoVisualizar.html', 'ModalLancamentoProgramadoVisualizarController', 'lg',
                 {
                     lancamentoProgramado: function() {
                         return lancamentoProgramado;

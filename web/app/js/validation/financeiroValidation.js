@@ -30,13 +30,22 @@ app.factory('FinanceiroValidation', function(ModalService, LISTAS, MESSAGES) {
         return true;
     };
 
-    var rateioSaldo = function(lancamento, saldo) {
-        if(!lancamento || !lancamento.valor || !saldo) return true;
-        if(saldo !== lancamento.valor) {
+    var rateioSaldo = function(valor, rateios) {
+        var saldo = saldoRateio(rateios)
+        if(!valor || !saldo) return true;
+        if(saldo !== valor) {
             alert(MESSAGES.lancamento.ratear.validacao.SALDO_INCORRETO);
             return false;                    
         }
         return true;
+    };    
+
+    var saldoRateio = function(rateios) {            
+        var saldo = 0;
+        _.map(rateios, function(rateio) {
+            saldo += rateio.valor;
+        });
+        return saldo;
     };
         
     var modalMessage = function(message) {

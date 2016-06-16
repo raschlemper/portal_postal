@@ -7,16 +7,16 @@ app.controller('ModalLancamentoProgramadoGerarController',
         var init = function () {  
             getTitle();
 //            setLists($scope.lancamento);
-//            initStep($scope.lancamento);
+            initStep($scope.lancamento);
         };
         
         // ***** NAVEGAR ***** //
         
-//        var initStep = function(lancamento) {
-//            if(lancamento && lancamento.rateios && lancamento.rateios.length) {
-//                $scope.goToLancarRatear();    
-//            } 
-//        };
+        var initStep = function(lancamento) {
+            if(lancamento && lancamento.rateios && lancamento.rateios.length) {
+                $scope.showRatear = true;    
+            } 
+        };
         
         // ***** CONTROLLER ***** //
         
@@ -30,6 +30,7 @@ app.controller('ModalLancamentoProgramadoGerarController',
         
         $scope.lancar = function(form, lancamentoProgramado, lancamento) {
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;
+            if(!$scope.validarRateio(lancamentoProgramado)) return;  
             if(!$scope.validarForm(form, lancamentoProgramado)) return;   
             if(!validarForm(form, lancamento)) return;     
             lancamento = ajustarLancamento(lancamento);  

@@ -1,9 +1,9 @@
 'use strict';
 
 app.controller('ModalLancamentoProgramadoEditarController', 
-    ['$scope', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'ModalService', 
+    ['$scope', '$filter', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'ModalService', 
      'DatePickerService', 'LancamentoHandler', 'ListaService', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
-    function ($scope, ContaService, PlanoContaService, CentroCustoService, TipoDocumentoService, TipoFormaPagamentoService, ModalService, 
+    function ($scope, $filter, ContaService, PlanoContaService, CentroCustoService, TipoDocumentoService, TipoFormaPagamentoService, ModalService, 
         DatePickerService, LancamentoHandler, ListaService, FinanceiroValidation, LISTAS, MESSAGES) {
 
         var init = function () {  
@@ -133,6 +133,7 @@ app.controller('ModalLancamentoProgramadoEditarController',
         
         $scope.gerar = function(form, lancamentoProgramado) {
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;
+            if(!$scope.validarRateio(lancamentoProgramado)) return;  
             if(!$scope.validarForm(form, lancamentoProgramado)) return;   
             $scope.lancamento = $scope.getLancamento($scope.lancamentoProgramado, null, $scope.modelos[2]);  
             $scope.goToLancar();
@@ -140,6 +141,7 @@ app.controller('ModalLancamentoProgramadoEditarController',
         
         $scope.gerarParcela = function(form, lancamentoProgramado, parcela) {
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;
+            if(!$scope.validarRateio(lancamentoProgramado)) return;  
             if(!$scope.validarForm(form, lancamentoProgramado)) return;   
             $scope.lancamento = $scope.getLancamento($scope.lancamentoProgramado, parcela, $scope.modelos[4]);  
             $scope.goToLancar();
@@ -147,6 +149,7 @@ app.controller('ModalLancamentoProgramadoEditarController',
         
         $scope.ok = function(form, lancamentoProgramado) {
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;
+            if(!$scope.validarRateio(lancamentoProgramado)) return;  
             if(!$scope.validarForm(form, lancamentoProgramado)) return;
             delete lancamentoProgramado.parcelas;
             delete lancamentoProgramado.lancamentos;
@@ -204,7 +207,22 @@ app.controller('ModalLancamentoProgramadoEditarController',
         
         $scope.validarCentroCusto = function(centroCusto) {
             return FinanceiroValidation.centroCustoResultado(centroCusto);
-        };
+        };  
+
+        $scope.validarRateio = function(lancamentoProgramado) {
+            if (!lancamentoProgramado.rateios || !lancamentoProgramado.rateios.length) return true;
+            var valor = lancamentoProgramado.valor; 
+            if(lancamentoProgramado.quantidadeParcela) { 
+                valor = lancamentoProgramado.valor / lancamentoProgramado.quantidadeParcela; 
+                valor = parseFloat(valor.toFixed(2));
+            }
+            if(!FinanceiroValidation.rateioSaldo(valor, lancamentoProgramado.rateios)) return false;
+            _.map(lancamentoProgramado.rateios, function(rateio) {
+                if(!$scope.validarPlanoConta(rateio.planoConta)) { return false; }
+                if(!$scope.validarCentroCusto(rateio.centroCusto)) { return false; }
+            });  
+            return true;
+        };   
         
         $scope.validarForm = function (form, lancamentoProgramado) {  
             if(!lancamentoProgramado.rateios || !lancamentoProgramado.rateios.length) {

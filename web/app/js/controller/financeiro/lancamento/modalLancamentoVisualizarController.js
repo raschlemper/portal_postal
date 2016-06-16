@@ -20,10 +20,10 @@ app.controller('ModalLancamentoVisualizarController',
         var planoContas = function() {
             PlanoContaService.getStructure()
                 .then(function (data) {
-                    var planoContas = data;
-                    PlanoContaService.estrutura(planoContas);
-                    planoContas = PlanoContaService.flatten(planoContas);   
-                    var planoConta = ListaService.getPlanoContaValue(planoContas, lancamento.planoConta.idPlanoConta);                                    
+                    $scope.planoContas = data;
+                    PlanoContaService.estrutura($scope.planoContas);
+                    $scope.planoContas = PlanoContaService.flatten($scope.planoContas);   
+                    var planoConta = ListaService.getPlanoContaValue($scope.planoContas, lancamento.planoConta.idPlanoConta);                                    
                     if(planoConta) { lancamento.planoConta = planoConta.descricao; }
                     else { lancamento.planoConta = null; }
                 })
@@ -35,10 +35,10 @@ app.controller('ModalLancamentoVisualizarController',
         var centroCustos = function() {
             CentroCustoService.getStructure()
                 .then(function (data) {
-                    var centroCustos = data;
-                    CentroCustoService.estrutura(centroCustos);
-                    centroCustos = CentroCustoService.flatten(centroCustos); 
-                    var centroCusto = ListaService.getCentroCustoValue(centroCustos, lancamento.centroCusto.idCentroCusto);                     
+                    $scope.centroCustos = data;
+                    CentroCustoService.estrutura($scope.centroCustos);
+                    $scope.centroCustos = CentroCustoService.flatten($scope.centroCustos); 
+                    var centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, lancamento.centroCusto.idCentroCusto);                     
                     if(centroCusto) { lancamento.centroCusto = centroCusto.descricao; } 
                     else { lancamento.centroCusto = null; }                 
                 })

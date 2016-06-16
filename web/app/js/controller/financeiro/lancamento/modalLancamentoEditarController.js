@@ -113,6 +113,7 @@ app.controller('ModalLancamentoEditarController',
         
         $scope.ok = function(form, lancamento) {
             if(!validaConta(lancamento.conta)) return;
+            if(!validarRateio(lancamento)) return;  
             if (!validarForm(form, lancamento)) return;
             var lancamento = ajustarDados(lancamento);
             var data = moment(lancamento.dataLancamento).format('YYYY-MM-DD HH:mm:ss');
@@ -149,7 +150,17 @@ app.controller('ModalLancamentoEditarController',
         
         $scope.validarCentroCusto = function(centroCusto) {
             return FinanceiroValidation.centroCustoResultado(centroCusto);
-        };
+        }; 
+
+        $scope.validarRateio = function(lancamento) {
+            if (!lancamento.rateios || !lancamento.rateios.length) return true;
+            if(!FinanceiroValidation.rateioSaldo(lancamento.valor, lancamento.rateios)) return false;
+            _.map(lancamento.rateios, function(rateio) {
+                if(!$scope.validarPlanoConta(rateio.planoConta)) { return false; }
+                if(!$scope.validarCentroCusto(rateio.centroCusto)) { return false; }
+            });  
+            return true;
+        }; 
 
         var validarForm = function (form, lancamento) {
             if(!lancamento.rateios || !lancamento.rateios.length) {

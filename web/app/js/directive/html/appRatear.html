@@ -2,7 +2,7 @@
     <div class="col-lg-9">           
         <div style="font-size: 14pt; margin-top: 5px;"><strong>Rateios</strong></div>
     </div>  
-    <div class="col-lg-3"> 
+    <div class="col-lg-3" ng-if="!onlyView"> 
         <button type="button" class="btn btn-default pull-right" ng-click="show = !show; ratear(lancamentoRatear)" ng-hide="show" ng-disabled="!lancamentoRatear.valor">
             <i class="fa fa-lg fa-plus fa-spc"></i> RATEAR
         </button>      
@@ -12,7 +12,7 @@
     </div>
 </div>
 <div class="row" ng-show="show">  
-    <div class="col-md-12" style="margin-bottom: 10px;">
+    <div class="col-md-12" style="margin-bottom: 10px;" ng-if="!onlyView">
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
             <label class="small">Plano de Conta</label>
             <div class="input-group">
@@ -52,7 +52,7 @@
         </div>
     </div>  
     
-    <hr/>
+    <hr ng-if="!onlyView"/>
     
     <div class="table-responsive container-fluid">
         <table class="table table-striped table-hover table-condensed">
@@ -62,7 +62,7 @@
                     <th class="col-md-3">Centro Custo</th>
                     <th class="col-md-2">Observação</th>
                     <th class="col-md-2">Valor</th>
-                    <th class="col-md-2 text-center"></th>
+                    <th class="col-md-2 text-center" ng-if="!onlyView"></th>
                 </tr>
             </thead>     
             <tbody>
@@ -71,7 +71,7 @@
                     <td>{{rateio.centroCusto.descricao}}</td>
                     <td>{{rateio.observacao}}</td>
                     <td>{{rateio.valor | currency : 'R$ '}}</td>
-                    <td class="text-center">
+                    <td class="text-center" ng-if="!onlyView">
                         <button type="button" class="btn btn-xs btn-warning" ng-click="editarRateio(lancamentoRatear, rateio, $index)">
                             <i class="fa fa-sm fa-pencil"></i>
                         </button>

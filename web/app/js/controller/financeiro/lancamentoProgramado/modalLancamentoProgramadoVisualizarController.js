@@ -20,10 +20,10 @@ app.controller('ModalLancamentoProgramadoVisualizarController',
         var planoContas = function() {
             PlanoContaService.getStructure()
                 .then(function (data) {
-                    var planoContas = data;
-                    PlanoContaService.estrutura(planoContas);
-                    planoContas = PlanoContaService.flatten(planoContas);   
-                    var planoConta = ListaService.getPlanoContaValue(planoContas, lancamentoProgramado.planoConta.idPlanoConta);                     
+                    $scope.planoContas = data;
+                    PlanoContaService.estrutura($scope.planoContas);
+                    $scope.planoContas = PlanoContaService.flatten($scope.planoContas);   
+                    var planoConta = ListaService.getPlanoContaValue($scope.planoContas, lancamentoProgramado.planoConta.idPlanoConta);                     
                     if(planoConta) { lancamentoProgramado.planoConta = planoConta.descricao; }
                     else { lancamentoProgramado.planoConta = null; }
                 })
@@ -35,10 +35,10 @@ app.controller('ModalLancamentoProgramadoVisualizarController',
         var centroCustos = function() {
             CentroCustoService.getStructure()
                 .then(function (data) {
-                    var centroCustos = data;
-                    CentroCustoService.estrutura(centroCustos);
-                    centroCustos = CentroCustoService.flatten(centroCustos); 
-                    var centroCusto = ListaService.getCentroCustoValue(centroCustos, lancamentoProgramado.centroCusto.idCentroCusto); 
+                    $scope.centroCustos = data;
+                    CentroCustoService.estrutura($scope.centroCustos);
+                    $scope.centroCustos = CentroCustoService.flatten($scope.centroCustos); 
+                    var centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, lancamentoProgramado.centroCusto.idCentroCusto); 
                     if(centroCusto) { lancamentoProgramado.centroCusto = centroCusto.descricao; }
                     else { lancamentoProgramado.centroCusto = null; }
                 })

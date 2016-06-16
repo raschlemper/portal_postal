@@ -28,6 +28,9 @@ app.controller('ModalLancamentoProgramadoController', ['$scope', '$modalInstance
         };
         
         $scope.goToLancar = function() {
+            if($scope.lancamentoProgramado && $scope.lancamentoProgramado.rateios && $scope.lancamentoProgramado.rateios.length) {
+                $scope.showRatear = true;
+            } 
             $scope.stepFrom = angular.copy($scope.stepTo);
             $scope.stepTo = 'lancar';             
         };
