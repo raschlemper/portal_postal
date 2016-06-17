@@ -12,23 +12,25 @@ app.directive('appParcelar', function(FrequenciaLancamentoService) {
         },
         link: function($scope, element, attr, controller, transclude) {            
                         
-            var init = function () {  
-                $scope.parcelar($scope.lancamentoParcelar);
+            var init = function (lancamentoParcelar) { 
+                $scope.createParcelas(lancamentoParcelar);
             };
 
             // ***** CONTROLLER ***** //
 
-            $scope.parcelar = function(lancamentoParcelar) {       
-                lancamentoParcelar.parcelas = [];
-                $scope.createParcelas(lancamentoParcelar);
+            $scope.parcelar = function(lancamentoParcelar) {     
+                $scope.show = !$scope.show;  
+                init(lancamentoParcelar);           
             }
 
             $scope.cancelarParcelar = function(lancamentoParcelar) {
+                $scope.show = !$scope.show;
                 lancamentoParcelar.parcelas = null;
                 lancamentoParcelar.quantidadeParcela = null;
             };
 
             $scope.createParcelas = function(lancamentoParcelar) {     
+                lancamentoParcelar.parcelas = []; 
                 var frequencia = lancamentoParcelar.frequencia;
                 var dataCompetencia = lancamentoParcelar.dataCompetencia;
                 var dataVencimento = lancamentoParcelar.dataVencimento;
@@ -50,37 +52,33 @@ app.directive('appParcelar', function(FrequenciaLancamentoService) {
             
             $scope.$watchCollection("lancamentoParcelar.numero", function(newValue, oldValue) {
                 if(newValue === oldValue) return;
-                init();
+                init($scope.lancamentoParcelar);
             });  
             
             $scope.$watchCollection("lancamentoParcelar.planoConta", function(newValue, oldValue) {
                 if(newValue === oldValue) return;
-                init();
+                init($scope.lancamentoParcelar);
             });
             
             $scope.$watchCollection("lancamentoParcelar.centroCusto", function(newValue, oldValue) {
                 if(newValue === oldValue) return;
-                init();
+                init($scope.lancamentoParcelar);
             });
             
             $scope.$watchCollection("lancamentoParcelar.vencimento", function(newValue, oldValue) {
                 if(newValue === oldValue) return;
-                init();
+                init($scope.lancamentoParcelar);
             });
             
             $scope.$watchCollection("lancamentoParcelar.valor", function(newValue, oldValue) {
                 if(newValue === oldValue) return;
-                init();
+                init($scope.lancamentoParcelar);
             });
             
             $scope.$watchCollection("lancamentoParcelar.rateios", function(newValue, oldValue) {
                 if(newValue === oldValue) return;
-                init();
+                init($scope.lancamentoParcelar);
             });
-
-//            $scope.okParcelar = function(form, lancamentoProgramado) {
-//                $scope.ok(form, lancamentoProgramado);   
-//            };
 
             // ***** AJUSTAR ***** //
 
@@ -101,8 +99,6 @@ app.directive('appParcelar', function(FrequenciaLancamentoService) {
                 }
                 return parcela;
             };
-
-            init();
             
         }
     }

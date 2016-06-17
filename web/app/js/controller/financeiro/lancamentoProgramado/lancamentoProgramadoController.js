@@ -203,34 +203,52 @@ app.controller('LancamentoProgramadoController',
                 lancamentosProgramadosSelecionados.push(angular.copy(lancamentoProgramado));
             });
             return lancamentosProgramadosSelecionados;
-        }
+        };
+        
+        var getLancamentos = function(lancamentosProgramados) {               
+            var lancamentosProgramadosSelecionados = [];
+            _.map(lancamentosProgramados, function(lancamentoProgramado) {        
+                if(!existeLancamentoVinculado(lancamentoProgramado)) {                
+                    lancamentosProgramadosSelecionados.push(lancamentoProgramado);
+                }                 
+            });
+            return lancamentosProgramadosSelecionados;
+        };
         
         // ***** VISUALIZAR ***** //
 
         $scope.visualizar = function(conta, lancamentoProgramado) {
             LancamentoProgramadoService.get(lancamentoProgramado.idLancamentoProgramado)
                 .then(function(result) {
-                     modalVisualizar(result)
-                        .then(function(lancamentoProgramadoEditar) {
-                            $scope.editar(conta, lancamentoProgramadoEditar, result);
-                        })          
+                     visualizar(conta, result);         
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         };
+
+        var visualizar = function(conta, lancamentoProgramado) {
+            modalVisualizar(lancamentoProgramado)
+               .then(function(lancamentoProgramadoEditar) {
+                   $scope.editar(conta, lancamentoProgramadoEditar, lancamentoProgramado);
+               });
+        };
         
         // ***** SALVAR ***** //
 
         $scope.salvar = function(conta, tipo) {
+            salvar(conta, tipo);
+        };
+        
+        var salvar = function(conta, tipo) {
             modalSalvar(conta, tipo, null).then(function(result) {
                 var gerarLancamento = result.gerarLancamento;
                 result = ajustarDados(result);
-                salvar(conta, result, gerarLancamento);
+                save(conta, result, gerarLancamento);
             });
         };
         
-        var salvar = function(conta, lancamentoProgramado, gerarLancamento) {
+        var save = function(conta, lancamentoProgramado, gerarLancamento) {
             if(gerarLancamento) { criarLancamento(conta, lancamentoProgramado); } 
             else { 
                 LancamentoProgramadoService.save(lancamentoProgramado)
@@ -241,32 +259,32 @@ app.controller('LancamentoProgramadoController',
                     .catch(function(e) {
                         modalMessage(e);
                     });
-            }            
-        }
+            };            
+        };
         
         // ***** EDITAR ***** //
 
         $scope.editar = function(conta, lancamentoProgramado) {
             LancamentoProgramadoService.get(lancamentoProgramado.idLancamentoProgramado)
                 .then(function(result) {
-                     editarLancamento(conta, result);
+                     editar(conta, result);
                 })
                 .catch(function(e) {
                     modalMessage(e.error);
                 });           
         };
         
-        var editarLancamento = function(conta, lancamentoProgramado) {                   
+        var editar = function(conta, lancamentoProgramado) {                   
             modalSalvar(conta, lancamentoProgramado.tipo, lancamentoProgramado)
                 .then(function(result) {
                     var gerarLancamento = result.gerarLancamento;
                     result = ajustarDados(result);
                     if(gerarLancamento) { criarLancamento(conta, result); } 
-                    else { editar(conta, result); }
+                    else { update(conta, result); }
                 });            
         };
         
-        var editar = function(conta, lancamentoProgramado) {
+        var update = function(conta, lancamentoProgramado) {
             LancamentoProgramadoService.update(lancamentoProgramado.idLancamentoProgramado, lancamentoProgramado)
                 .then(function (data) {  
                     modalMessage(MESSAGES.lancamento.programar.sucesso.ALTERADO_SUCESSO);
@@ -276,6 +294,8 @@ app.controller('LancamentoProgramadoController',
                     modalMessage(e);
                 });
         };
+        
+        // ***** CREATE ***** //
         
         var criarLancamento = function(conta, lancamentoProgramado) { 
             if(lancamentoProgramado.idLancamentoProgramado) {
@@ -308,18 +328,13 @@ app.controller('LancamentoProgramadoController',
         
         // ***** EXCLUIR ***** //
         
-        var existeLancamentoVinculado = function(lancamentoProgramado) {   
-            if(lancamentoProgramado.lancamentos && lancamentoProgramado.lancamentos > 0) return true; 
-            return false;
-        }
-        
         $scope.excluir = function(conta, lancamentoProgramado) {            
             LancamentoProgramadoService.getLancamento(lancamentoProgramado.idLancamentoProgramado)
                 .then(function(data) {   
                     if(data.lancamentos) {
                         excluirLancamentos(conta, data);                        
                     } else {
-                        excluirLancamentoProgramado(conta, data);
+                        excluir(conta, data);
                     }
                 });
         };
@@ -328,18 +343,18 @@ app.controller('LancamentoProgramadoController',
             if(existeLancamentoVinculado(lancamentoProgramado)) {                
                 modalMessage(MESSAGES.lancamento.programar.info.LANCAMENTO_VINCULADOS);
             } else {
-                excluirLancamentoProgramado(conta, lancamentoProgramado);
+                excluir(conta, lancamentoProgramado);
             } 
         };
         
-        var excluirLancamentoProgramado = function(conta, lancamentoProgramado) {
+        var excluir = function(conta, lancamentoProgramado) {
             modalExcluir(MESSAGES.lancamento.programar.info.CONFIRMAR_EXCLUIR)
                 .then(function() {
-                    excluir(conta, lancamentoProgramado);
+                    remover(conta, lancamentoProgramado);
                 });
         };
         
-        var excluir = function(conta, lancamentoProgramado) {
+        var remover = function(conta, lancamentoProgramado) {
             LancamentoProgramadoService.delete(lancamentoProgramado.idLancamentoProgramado)
                 .then(function(data) { 
                     modalMessage(MESSAGES.lancamento.programar.sucesso.REMOVIDO_SUCESSO);
@@ -350,7 +365,7 @@ app.controller('LancamentoProgramadoController',
                 });
         }; 
         
-        // ***** TODOS ***** //
+        // ***** EXCLUIR TODOS ***** //
 
         $scope.excluirTodos = function(conta, lancamentos) {
             var lancamentoSelecionados = getLancamentoProgramadosSelecionados(lancamentos);   
@@ -360,27 +375,17 @@ app.controller('LancamentoProgramadoController',
             if(lancamentosValidos.length !== lancamentoSelecionados.length) { 
                 msg = MESSAGES.lancamento.programar.info.CONFIRMAR_EXCLUIR_LANCAMENTOS_TODOS;
             }
-            excluirLancamentosProgramados(conta, lancamentosValidos, msg);
+            excluirTodos(conta, lancamentosValidos, msg);
         }; 
         
-        var getLancamentos = function(lancamentosProgramados) {               
-            var lancamentosProgramadosSelecionados = [];
-            _.map(lancamentosProgramados, function(lancamentoProgramado) {        
-                if(!existeLancamentoVinculado(lancamentoProgramado)) {                
-                    lancamentosProgramadosSelecionados.push(lancamentoProgramado);
-                }                 
-            });
-            return lancamentosProgramadosSelecionados;
-        };
-        
-        var excluirLancamentosProgramados = function(conta, lancamentos, message) {
+        var excluirTodos = function(conta, lancamentos, message) {
             modalExcluir(message)
                 .then(function() {
-                    excluirAll(conta, lancamentos);
+                    removeAll(conta, lancamentos);
                 });
         };
         
-        var excluirAll = function(conta, lancamentosProgramados) {
+        var removeAll = function(conta, lancamentosProgramados) {
             _.map(lancamentosProgramados, function(lancamentoProgramado) {
                 lancamentoProgramado = ajustarDados(lancamentoProgramado);
             });
@@ -415,6 +420,11 @@ app.controller('LancamentoProgramadoController',
         var existeLancamentoSelecionado = function(lancamentosSelecionados) {
             if(lancamentosSelecionados && lancamentosSelecionados.length) return true;
             modalMessage(MESSAGES.lancamento.programar.info.SEM_LANCAMENTO_SELECIONADO);
+            return false;
+        };
+        
+        var existeLancamentoVinculado = function(lancamentoProgramado) {   
+            if(lancamentoProgramado.lancamentos && lancamentoProgramado.lancamentos > 0) return true; 
             return false;
         };
         

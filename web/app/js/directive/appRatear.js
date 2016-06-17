@@ -120,28 +120,8 @@ app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES
                 init($scope.lancamentoRatear);
             }); 
 
-//            $scope.gerarRatear = function (form, lancamentoRatear, lancamento) {
-//                if(!validarRateio(lancamentoRatear)) { return false; }
-//                $scope.gerar(form, lancamentoRatear, lancamento);
-//            };
-
-//            $scope.okRatear = function(form, lancamentoRatear) {
-//                $scope.ok(form, lancamentoRatear);   
-//            };
-
             // ***** VALIDAR ***** //  
-
-//            var validarRateio = function(lancamentoRatear) {
-//                if (!lancamentoRatear.rateios || !lancamentoRatear.rateios.length) return true;
-//                var saldo = saldoRateio(lancamentoRatear);
-//                if(!FinanceiroValidation.rateioSaldo(lancamentoRatear, saldo)) return false;
-//                _.map(lancamentoRatear.rateios, function(rateio) {
-//                    if($scope.validarPlanoConta(rateio.planoConta)) { return false; }
-//                    if(!$scope.validarCentroCusto(rateio.centroCusto)) { return false; }
-//                });  
-//                return true;
-//            };   
-//        
+            
             $scope.validarPlanoConta = function(planoConta) {
                 return FinanceiroValidation.planoContaResultado(planoConta);
             };

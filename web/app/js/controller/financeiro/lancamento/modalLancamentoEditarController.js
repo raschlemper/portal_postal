@@ -12,28 +12,12 @@ app.controller('ModalLancamentoEditarController',
             $scope.modelos = LISTAS.modeloLancamento;
             $scope.situacoes = LISTAS.situacaoLancamento;
             $scope.statusConta = LISTAS.statusConta;
-//            $scope.lancamento = lancamento || {};
             $scope.lancamento.rateios = ($scope.lancamento && $scope.lancamento.rateios) || [];
             $scope.lancamento.tipo = ($scope.lancamento && $scope.lancamento.tipo) || $scope.tipo;
             $scope.lancamento.situacao = ($scope.lancamento && $scope.lancamento.situacao) || $scope.situacoes[0];
             $scope.lancamento.modelo = ($scope.lancamento && $scope.lancamento.modelo) || $scope.modelos[0];
             getTitle($scope.lancamento, $scope.lancamento.tipo);
             contas();
-        };
-                
-        // ***** NAVEGAR ***** //  
-                
-        var initStep = function(lancamento) {      
-//            if($scope.anexo){                
-//                $scope.anexar(lancamento);
-//            } else {
-//                if(existRateio(lancamento)) { $scope.goToRatear(); }
-//                else { $scope.goToEditar(); }
-//            }
-        };
-                
-        var existRateio = function(lancamento) {
-            return lancamento && lancamento.rateios && lancamento.rateios.length;
         };
                 
         // ***** CONTROLLER ***** //  
@@ -66,9 +50,7 @@ app.controller('ModalLancamentoEditarController',
                     $scope.planoContas = PlanoContaService.flatten($scope.planoContas);   
 //                    $scope.planoContas = criarPlanoContasLista($scope.planoContas);
                     if($scope.lancamento.planoConta) {
-                        $scope.lancamento.planoConta = ListaService.getPlanoContaValue($scope.planoContas, $scope.lancamento.planoConta.idPlanoConta) || $scope.planoContas[0];
-                    } else {
-                         $scope.lancamento.planoConta  = $scope.planoContas[0];
+                        $scope.lancamento.planoConta = ListaService.getPlanoContaValue($scope.planoContas, $scope.lancamento.planoConta.idPlanoConta);
                     }   
                     centroCustos();   
                 })
@@ -85,9 +67,8 @@ app.controller('ModalLancamentoEditarController',
                     $scope.centroCustos = CentroCustoService.flatten($scope.centroCustos);
 //                    $scope.centroCustos = criarCentroCustosLista($scope.centroCustos);
                     if($scope.lancamento.centroCusto && $scope.lancamento.centroCusto.idCentroCusto) {
-                        $scope.lancamento.centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, $scope.lancamento.centroCusto.idCentroCusto) || $scope.centroCustos[0];
+                        $scope.lancamento.centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, $scope.lancamento.centroCusto.idCentroCusto);
                     } 
-                    initStep($scope.lancamento);  
                 })
                 .catch(function (e) {
                     console.log(e);

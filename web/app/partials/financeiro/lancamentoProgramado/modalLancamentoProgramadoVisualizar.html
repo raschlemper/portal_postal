@@ -12,13 +12,13 @@
                 </div>
                 <div class="col-md-8">{{lancamentoProgramado.conta.nome}}</div>
             </div>
-            <div class="row">
+            <div class="row" ng-hide="lancamentoProgramado.rateios && lancamentoProgramado.rateios.length">
                 <div class="col-md-4 text-right">
                     <label>Plano de Conta:</label>
                 </div>
                 <div class="col-md-8">{{lancamentoProgramado.planoConta}}</div>
             </div>
-            <div class="row">
+            <div class="row" ng-hide="lancamentoProgramado.rateios && lancamentoProgramado.rateios.length">
                 <div class="col-md-4 text-right">
                     <label>Centro de Custo:</label>
                 </div>
@@ -101,6 +101,12 @@
                     <label>Histórico:</label>
                 </div>
                 <div class="col-md-8">{{lancamentoProgramado.historico}}</div>
+            </div>
+            <div class="row" ng-hide="lancamentoProgramado.rateios && lancamentoProgramado.rateios.length">
+                <div class="col-md-4 text-right">
+                    <label>Observação:</label>
+                </div>
+                <div class="col-md-8 angular-with-newlines">{{lancamentoProgramado.observacao}}</div>
             </div>
             <div class="row">
                 <div class="col-md-4 text-right">

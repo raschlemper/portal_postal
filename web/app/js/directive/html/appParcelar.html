@@ -3,11 +3,11 @@
         <div style="font-size: 14pt; margin-top: 5px;"><strong>Parcelas</strong></div>
     </div>  
     <div class="col-lg-3" ng-if="!onlyView"> 
-        <button type="button" class="btn btn-default pull-right" ng-click="show = !show; parcelar(lancamentoParcelar)" ng-hide="show" 
+        <button type="button" class="btn btn-default pull-right" ng-click="parcelar(lancamentoParcelar)" ng-hide="show" 
                 ng-disabled="(lancamentoParcelar.lancamentos.length || !lancamentoParcelar.valor)">
             <i class="fa fa-lg fa-plus fa-spc"></i> PARCELAR
         </button>      
-        <button type="button" class="btn btn-default pull-right" ng-click="show = !show; cancelarParcelar(lancamentoParcelar);" ng-show="show" 
+        <button type="button" class="btn btn-default pull-right" ng-click="cancelarParcelar(lancamentoParcelar);" ng-show="show" 
                 ng-disabled="(lancamentoParcelar.lancamentos.length || !lancamentoParcelar.valor)">
             <i class="fa fa-lg fa-minus fa-spc"></i> CANCELAR PARCELAR
         </button>      
@@ -18,7 +18,7 @@
     <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 form-inline" ng-if="!onlyView">
         <label class="small">Selecione a quantidade de parcelas</label>
         <div class="input-group" for="quantidadeParcela">
-            <input class="form-control" type="text" id="quantidadeParcela" name="quantidadeParcela" ng-model="lancamentoParcelar.quantidadeParcela" ng-change="parcelar(lancamentoParcelar)"
+            <input class="form-control" type="text" id="quantidadeParcela" name="quantidadeParcela" ng-model="lancamentoParcelar.quantidadeParcela" ng-change="createParcelas(lancamentoParcelar)"
                    placeholder="Quantidade de parcelas" ng-disabled="(lancamentoParcelar.lancamentos.length)"/>  
         </div>
     </div> 

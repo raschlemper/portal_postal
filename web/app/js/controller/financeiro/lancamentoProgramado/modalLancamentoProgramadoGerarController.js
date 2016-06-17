@@ -6,7 +6,6 @@ app.controller('ModalLancamentoProgramadoGerarController',
 
         var init = function () {  
             getTitle();
-//            setLists($scope.lancamento);
             initStep($scope.lancamento);
         };
         
@@ -23,10 +22,6 @@ app.controller('ModalLancamentoProgramadoGerarController',
         var getTitle = function() {
             $scope.titleGerar = $scope.title + " - " + MESSAGES.lancamento.title.GERAR; 
         };
-        
-//        var setLists = function(lancamento) {
-//            lancamento.situacao = ListaService.getValue(LISTAS.situacaoLancamentoProgramado, lancamento.situacao);
-//        }
         
         $scope.lancar = function(form, lancamentoProgramado, lancamento) {
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;
@@ -50,7 +45,6 @@ app.controller('ModalLancamentoProgramadoGerarController',
         
         var lancar = function(lancamentoProgramado, lancamento) {  
             var isParcela = ($scope.lancamentoProgramado.parcelas && $scope.lancamentoProgramado.parcelas.length);
-//            delete lancamentoProgramado.parcelas;
             lancamentoProgramado = ajustarLancamentoProgramado(lancamentoProgramado, isParcela);
             lancamentoProgramado.gerarLancamento = true;
             lancamentoProgramado.lancamentos = [];
@@ -79,18 +73,6 @@ app.controller('ModalLancamentoProgramadoGerarController',
         };
         
         var ajustarLancamento = function(lancamento) { 
-//            lancamento.conta = { idConta: lancamento.conta.idConta };
-//            lancamento.planoConta = { idPlanoConta: lancamento.planoConta.idPlanoConta };
-//            if(lancamento.centroCusto) {
-//                lancamento.centroCusto = { idCentroCusto: lancamento.centroCusto.idCentroCusto };
-//            }
-//            lancamento.tipo = lancamento.tipo.id;
-//            lancamento.dataCompetencia = lancamento.dataCompetencia || moment();
-//            lancamento.dataEmissao = lancamento.dataEmissao || moment();
-//            lancamento.dataVencimento = lancamento.dataVencimento || moment();
-//            lancamento.dataLancamento = lancamento.dataLancamento || moment();
-//            lancamento.situacao = lancamento.situacao.id;
-//            lancamento.modelo = lancamento.modelo.id;
             lancamento.historico = '(' + lancamento.modelo.descricao + ') ' + lancamento.historico || "";
             var lancamentoHandle = LancamentoHandler.handle(lancamento);
             lancamentoHandle.rateios = LancamentoRateioHandler.handleList(lancamento.rateios);

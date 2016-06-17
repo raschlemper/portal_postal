@@ -160,26 +160,6 @@ app.controller('ModalLancamentoProgramadoEditarController',
         // ***** AJUSTAR ***** //
                 
         $scope.getLancamento = function(lancamentoProgramado, parcela, modelo) {
-//            var lancamento = {
-//                conta: lancamentoProgramado.conta,
-//                planoConta: lancamentoProgramado.planoConta,
-//                centroCusto: lancamentoProgramado.centroCusto,
-//                tipo: lancamentoProgramado.tipo,
-//                favorecido: lancamentoProgramado.favorecido,
-//                numero: (parcela && parcela.numero) || lancamentoProgramado.numero,
-//                numeroParcela: (parcela && parcela.numeroParcela) || lancamentoProgramado.numeroParcela,
-//                dataCompetencia: (parcela && parcela.dataCompetencia) || lancamentoProgramado.dataCompetencia,
-//                dataEmissao: lancamentoProgramado.dataEmissao || moment(),
-//                dataVencimento: (parcela && parcela.dataVencimento) || lancamentoProgramado.dataVencimento,
-//                dataLancamento: null,
-//                dataCompensacao: null,
-//                valor: (parcela && parcela.valor) || lancamentoProgramado.valor,
-//                situacao: $scope.situacoesLancamento[0],
-//                modelo: modelo,
-//                historico: '(' + modelo.descricao + ') ' + lancamentoProgramado.historico,
-//                observacao: null,
-//                rateios: []
-//            }  
             var lancamento = LancamentoHandler.handle(lancamentoProgramado);
             lancamento.planoConta = lancamentoProgramado.planoConta;
             lancamento.centroCusto = lancamentoProgramado.centroCusto;
