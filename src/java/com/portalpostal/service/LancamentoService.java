@@ -41,6 +41,11 @@ public class LancamentoService {
         return lancamentos;
     }  
     
+    public List<String> findFavorecido() throws Exception {
+        init();
+        return lancamentoDAO.findFavorecido();
+    }  
+    
     public Lancamento find(Integer idLancamento) throws Exception {
         init();
         Lancamento lancamento = lancamentoDAO.find(idLancamento);

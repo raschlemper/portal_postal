@@ -1,10 +1,10 @@
 'use strict';
 
 app.controller('ModalLancamentoEditarController', 
-    ['$scope', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'LancamentoAnexoService', 'ModalService', 
-     'DatePickerService', 'ListaService', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
-    function ($scope, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, LancamentoAnexoService, ModalService, 
-        DatePickerService, ListaService, FinanceiroValidation, LISTAS, MESSAGES) {
+    ['$scope', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoService', 'LancamentoConciliadoService', 'LancamentoAnexoService', 
+     'ModalService', 'DatePickerService', 'ListaService', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
+    function ($scope, ContaService, PlanoContaService, CentroCustoService, LancamentoService, LancamentoConciliadoService, LancamentoAnexoService, 
+        ModalService, DatePickerService, ListaService, FinanceiroValidation, LISTAS, MESSAGES) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
@@ -20,7 +20,9 @@ app.controller('ModalLancamentoEditarController',
             contas();
         };
                 
-        // ***** CONTROLLER ***** //  
+        // ***** CONTROLLER ***** // 
+        
+	$scope.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
         
         var getTitle = function(lancamento, tipo) {
             if(lancamento && lancamento.idLancamento) { 
@@ -69,6 +71,17 @@ app.controller('ModalLancamentoEditarController',
                     if($scope.lancamento.centroCusto && $scope.lancamento.centroCusto.idCentroCusto) {
                         $scope.lancamento.centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, $scope.lancamento.centroCusto.idCentroCusto);
                     } 
+                    favorecidos();
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+        
+        var favorecidos = function() {
+            LancamentoService.getFavorecidos()
+                .then(function (data) {
+                    $scope.favorecidos = data;
                 })
                 .catch(function (e) {
                     console.log(e);

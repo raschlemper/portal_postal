@@ -66,6 +66,18 @@ public class LancamentoController {
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
+    } 
+    
+    @GET
+    @Path("/favorecido")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<String> findFavorecido() {
+        try {
+            init();    
+            return lancamentoService.findFavorecido();
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
     }  
     
     @GET

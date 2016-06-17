@@ -33,6 +33,15 @@ public class LancamentoDAO extends GenericDAO {
         return findAll(sql, null, lancamentoHandler);
     }
 
+    public List<String> findFavorecido() throws Exception {
+        String sql = "SELECT favorecido "
+                   + "FROM lancamento "
+                   + "WHERE lancamento.favorecido IS NOT NULL "
+                   + "GROUP BY lancamento.favorecido "
+                   + "ORDER BY lancamento.favorecido";        
+        return findAll(sql, null, String.class);
+    }
+
     public Lancamento find(Integer idLancamento) throws Exception {
         String sql = "SELECT * FROM conta, lancamento "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento.idPlanoConta = plano_conta.idPlanoConta) "

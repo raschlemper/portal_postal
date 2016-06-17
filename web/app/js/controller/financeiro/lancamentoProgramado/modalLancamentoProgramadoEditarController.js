@@ -1,10 +1,10 @@
 'use strict';
 
 app.controller('ModalLancamentoProgramadoEditarController', 
-    ['$scope', '$filter', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'ModalService', 
-     'DatePickerService', 'LancamentoHandler', 'ListaService', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
-    function ($scope, $filter, ContaService, PlanoContaService, CentroCustoService, TipoDocumentoService, TipoFormaPagamentoService, ModalService, 
-        DatePickerService, LancamentoHandler, ListaService, FinanceiroValidation, LISTAS, MESSAGES) {
+    ['$scope', '$filter', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'LancamentoService', 
+     'ModalService', 'DatePickerService', 'LancamentoHandler', 'ListaService', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
+    function ($scope, $filter, ContaService, PlanoContaService, CentroCustoService, TipoDocumentoService, TipoFormaPagamentoService, LancamentoService, 
+        ModalService, DatePickerService, LancamentoHandler, ListaService, FinanceiroValidation, LISTAS, MESSAGES) {
 
         var init = function () {  
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
@@ -120,6 +120,17 @@ app.controller('ModalLancamentoProgramadoEditarController',
                 .then(function (data) {
                     $scope.formaPagamentos = data;
                     $scope.lancamentoProgramado.formaPagamento = $scope.lancamentoProgramado.formaPagamento || $scope.formaPagamentos[1];
+                    favorecidos();
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+        
+        var favorecidos = function() {
+            LancamentoService.getFavorecidos()
+                .then(function (data) {
+                    $scope.favorecidos = data;
                 })
                 .catch(function (e) {
                     console.log(e);

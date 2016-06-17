@@ -47,8 +47,10 @@
                                 <label class="small">Favorecido</label>
                                 <div class="input-group">
                                     <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                    <input class="form-control" type="text" name="favorecido" ng-model="lancamentoProgramado.favorecido" 
-                                           placeholder="Favorecido do lançamento"/>  
+                                    <!--<input class="form-control" type="text" name="favorecido" ng-model="lancamentoProgramado.favorecido" 
+                                           placeholder="Favorecido do lançamento"/>  -->
+                                    <input class="form-control" type="text" name="favorecido" ng-model="lancamentoProgramado.favorecido" placeholder="Favorecido do lançamento"
+                                            autocomplete="off" typeahead="favorecido for favorecido in favorecidos | filter:$viewValue | limitTo:8">
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
