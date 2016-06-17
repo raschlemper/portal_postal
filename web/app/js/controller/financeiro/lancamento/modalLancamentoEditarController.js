@@ -27,8 +27,8 @@ app.controller('ModalLancamentoEditarController',
 //            if($scope.anexo){                
 //                $scope.anexar(lancamento);
 //            } else {
-                if(existRateio(lancamento)) { $scope.goToRatear(); }
-                else { $scope.goToEditar(); }
+//                if(existRateio(lancamento)) { $scope.goToRatear(); }
+//                else { $scope.goToEditar(); }
 //            }
         };
                 
@@ -152,7 +152,7 @@ app.controller('ModalLancamentoEditarController',
             return FinanceiroValidation.centroCustoResultado(centroCusto);
         }; 
 
-        $scope.validarRateio = function(lancamento) {
+        var validarRateio = function(lancamento) {
             if (!lancamento.rateios || !lancamento.rateios.length) return true;
             if(!FinanceiroValidation.rateioSaldo(lancamento.valor, lancamento.rateios)) return false;
             _.map(lancamento.rateios, function(rateio) {

@@ -159,6 +159,17 @@ public class LancamentoProgramadoDAO extends GenericDAO {
         return lancamentoProgramado;  
     }
 
+    public LancamentoProgramado updateSituacao(LancamentoProgramado lancamentoProgramado) throws Exception {
+        String sql = "UPDATE lancamento_programado "
+                   + "SET situacao = :situacao "
+                   + "WHERE idLancamentoProgramado = :idLancamentoProgramado ";        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idLancamentoProgramado", lancamentoProgramado.getIdLancamentoProgramado());        
+        params.put("situacao", lancamentoProgramado.getSituacao().ordinal());  
+        update(sql, params, lancamentoProgramadoHandler);
+        return lancamentoProgramado;  
+    }
+
     public LancamentoProgramado remove(Integer idLancamentoProgramado) throws Exception { 
         String sql = "DELETE FROM lancamento_programado WHERE idLancamentoProgramado = :idLancamentoProgramado ";
         LancamentoProgramado lancamentoProgramado = find(idLancamentoProgramado);

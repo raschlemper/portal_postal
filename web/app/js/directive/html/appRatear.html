@@ -3,10 +3,10 @@
         <div style="font-size: 14pt; margin-top: 5px;"><strong>Rateios</strong></div>
     </div>  
     <div class="col-lg-3" ng-if="!onlyView"> 
-        <button type="button" class="btn btn-default pull-right" ng-click="show = !show; ratear(lancamentoRatear)" ng-hide="show" ng-disabled="!lancamentoRatear.valor">
+        <button type="button" class="btn btn-default pull-right" ng-click="ratear(lancamentoRatear)" ng-hide="show" ng-disabled="!lancamentoRatear.valor">
             <i class="fa fa-lg fa-plus fa-spc"></i> RATEAR
         </button>      
-        <button type="button" class="btn btn-default pull-right" ng-click="show = !show; cancelarRatear(lancamentoRatear);" ng-show="show" ng-disabled="!lancamentoRatear.valor">
+        <button type="button" class="btn btn-default pull-right" ng-click="cancelarRatear(lancamentoRatear);" ng-show="show" ng-disabled="!lancamentoRatear.valor">
             <i class="fa fa-lg fa-minus fa-spc"></i> CANCELAR RATEAR
         </button>      
     </div>

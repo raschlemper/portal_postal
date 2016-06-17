@@ -14,13 +14,13 @@ app.controller('ModalLancamentoController', ['$scope', '$modalInstance', 'conta'
         // ***** NAVEGAR ***** //  
                 
         var initStep = function() {  
-            if(lancamento && lancamento.rateios && lancamento.rateios.length) {
-                $scope.showRatear = true;    
-            }              
             $scope.goToEditar();
         };
         
         $scope.goToEditar = function() {
+            if(lancamento && lancamento.rateios && lancamento.rateios.length) {
+                $scope.showRatear = true;    
+            }              
             $scope.stepFrom = angular.copy($scope.stepTo);
             $scope.stepTo = 'editar';             
         };

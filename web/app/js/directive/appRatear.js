@@ -12,19 +12,21 @@ app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES
         },
         link: function($scope, element, attr, controller, transclude) {            
                         
-            var init = function () {  
-                $scope.ratear($scope.lancamentoRatear);  
+            var init = function (lancamentoRatear) {  
+                lancamentoRatear.rateios = lancamentoRatear.rateios || [];
+                criarRateiosLista(lancamentoRatear);
+                setRateioDefault(lancamentoRatear, null);
             };
 
             // ***** CONTROLLER ***** //  
 
             $scope.ratear = function(lancamentoRatear) {  
-                lancamentoRatear.rateios = lancamentoRatear.rateios || [];
-                criarRateiosLista(lancamentoRatear);
-                setRateioDefault(lancamentoRatear, null);            
+                $scope.show = !$scope.show;
+                init(lancamentoRatear);                              
             }
 
             $scope.cancelarRatear = function(lancamentoRatear) {
+                $scope.show = !$scope.show;
                 lancamentoRatear.rateios = null;
             };
 
@@ -56,7 +58,7 @@ app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES
                 $scope.rateio = {};
                 $scope.rateio.planoConta = (rateio && rateio.planoConta) || lancamentoRatear.planoConta || null;
                 $scope.rateio.centroCusto = (rateio && rateio.centroCusto) || lancamentoRatear.centroCusto || null;
-                $scope.rateio.valor = (lancamentoRatear.valor / lancamentoRatear.quantidadeParcela) - saldoRateio(lancamentoRatear);
+                $scope.rateio.valor = (lancamentoRatear.valor / getQuantidadeParcela(lancamentoRatear.quantidadeParcela)) - saldoRateio(lancamentoRatear);
             };
 
             var saldoRateio = function(lancamentoRatear) {            
@@ -80,8 +82,13 @@ app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES
             };  
             
             var calculatePercentual = function(lancamentoRatear, rateio) {
-                return rateio.valor / (lancamentoRatear.valor / lancamentoRatear.quantidadeParcela);
+                return rateio.valor / (lancamentoRatear.valor / getQuantidadeParcela(lancamentoRatear.quantidadeParcela));
             }; 
+            
+            var getQuantidadeParcela = function(quantidadeParcela) {
+                if(quantidadeParcela) return quantidadeParcela;
+                return 1;
+            }
             
             var updateValueRateio = function(quantidade, valor, rateios) {
                 var valorParcelado = valor / quantidade;
@@ -104,13 +111,13 @@ app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES
             $scope.$watchCollection("planoContas", function(newValue, oldValue) {
                 if(!newValue) return;
                 if(!$scope.planoContas || !$scope.centroCustos) return;
-                init();
+                init($scope.lancamentoRatear);
             });   
             
             $scope.$watchCollection("centroCustos", function(newValue, oldValue) {
                 if(!newValue) return;
                 if(!$scope.planoContas || !$scope.centroCustos) return;
-                init();
+                init($scope.lancamentoRatear);
             }); 
 
 //            $scope.gerarRatear = function (form, lancamentoRatear, lancamento) {
@@ -135,13 +142,13 @@ app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES
 //                return true;
 //            };   
 //        
-//            $scope.validarPlanoConta = function(planoConta) {
-//                return FinanceiroValidation.planoContaResultado(planoConta);
-//            };
-//
-//            $scope.validarCentroCusto = function(centroCusto) {
-//                return FinanceiroValidation.centroCustoResultado(centroCusto);
-//            };   
+            $scope.validarPlanoConta = function(planoConta) {
+                return FinanceiroValidation.planoContaResultado(planoConta);
+            };
+
+            $scope.validarCentroCusto = function(centroCusto) {
+                return FinanceiroValidation.centroCustoResultado(centroCusto);
+            };   
             
         }
     }

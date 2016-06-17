@@ -7,6 +7,7 @@ import com.portalpostal.model.LancamentoRateio;
 import com.portalpostal.model.LancamentoTransferencia;
 import com.portalpostal.model.Saldo;
 import com.portalpostal.model.dd.TipoModeloLancamento;
+import com.portalpostal.model.dd.TipoSituacaoLancamentoProgramado;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -239,8 +240,16 @@ public class LancamentoService {
         if(lancamentoProgamado != null) {
             Integer numeroParcela = lancamento.getNumeroParcela() - 1;
             lancamentoProgamado.setNumeroParcela(numeroParcela);
+            updateSituacaoLancamentoProgramadoEncerrado(lancamentoProgamado);    
             lancamentoProgramadoService.updateNumeroParcela(lancamentoProgamado);            
         }
+    }
+    
+    private void updateSituacaoLancamentoProgramadoEncerrado(LancamentoProgramado lancamentoProgamado) throws Exception {        
+        if(lancamentoProgamado.getSituacao() == TipoSituacaoLancamentoProgramado.ENCERRADO) {
+            lancamentoProgamado.setSituacao(TipoSituacaoLancamentoProgramado.ATIVO);
+        }
+        lancamentoProgramadoService.updateSituacao(lancamentoProgamado);     
     }
     
     private void removerLancamentoConciliado(Lancamento lancamento) throws Exception {

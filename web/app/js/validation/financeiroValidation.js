@@ -33,6 +33,8 @@ app.factory('FinanceiroValidation', function(ModalService, LISTAS, MESSAGES) {
     var rateioSaldo = function(valor, rateios) {
         var saldo = saldoRateio(rateios)
         if(!valor || !saldo) return true;
+        saldo = parseFloat(saldo.toFixed(2));
+        valor = parseFloat(valor.toFixed(2));
         if(saldo !== valor) {
             alert(MESSAGES.lancamento.ratear.validacao.SALDO_INCORRETO);
             return false;                    

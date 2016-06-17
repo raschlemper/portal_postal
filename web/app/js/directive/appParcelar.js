@@ -7,6 +7,7 @@ app.directive('appParcelar', function(FrequenciaLancamentoService) {
             lancamentoParcelar: '=',
             lancar: '=?',
             form: '=',
+            onlyView: '=',
             show: '='
         },
         link: function($scope, element, attr, controller, transclude) {            

@@ -92,6 +92,11 @@ public class LancamentoProgramadoService {
         init();
         return lancamentoProgramadoDAO.updateNumeroParcela(lancamentoProgramado);
     }
+
+    public LancamentoProgramado updateSituacao(LancamentoProgramado lancamentoProgramado) throws Exception {
+        init();
+        return lancamentoProgramadoDAO.updateSituacao(lancamentoProgramado);
+    }
     
     public LancamentoProgramado delete(Integer idLancamentoProgramado) throws Exception {
         init();
