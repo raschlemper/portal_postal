@@ -16,14 +16,14 @@
     } else {
 
         String vDataAtual = sdf.format(new Date());
-        if(request.getParameter("data") != null){
+        if (request.getParameter("data") != null) {
             vDataAtual = request.getParameter("data");
         }
         String vData2 = sdf.format(new Date());
-        if(request.getParameter("data2") != null){
+        if (request.getParameter("data2") != null) {
             vData2 = request.getParameter("data2");
         }
-        
+
         String dataBD = Util.FormatarData.DateToBD(vDataAtual);
         String dataBD2 = Util.FormatarData.DateToBD(vData2);
 %>
@@ -64,20 +64,24 @@
         <script type="text/javascript" charset="utf-8">
             $(function () {
                 $("#data").datepicker({
-                    maxDate: '<%= vDataAtual %>',
+                    maxDate: '<%= vDataAtual%>',
                     showOn: "button",
                     buttonImage: "../../imagensNew/calendario.png",
                     buttonImageOnly: true,
                     showAnim: "slideDown"
                 });
                 $("#data2").datepicker({
-                    maxDate: '<%= vDataAtual %>',
+                    maxDate: '<%= vDataAtual%>',
                     showOn: "button",
                     buttonImage: "../../imagensNew/calendario.png",
                     buttonImageOnly: true,
                     showAnim: "slideDown"
                 });
-            });            
+            });
+            function pesqSro(param) {
+                $('#objetos').val(param);
+                $('#frmSRO').submit();
+            }
         </script>
     </head>
     <body>
@@ -86,6 +90,10 @@
 
         <%@ include file="../../Includes/telaMsg.jsp" %>
         <%@ include file="../../Includes/menu_agencia.jsp" %>
+
+        <form name="frmSRO" id="frmSRO" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
+            <input type="hidden" name="objetos" id="objetos" value="" />
+        </form>
 
         <div id="divPrincipal" align="center">
             <div id="container">
@@ -113,9 +121,9 @@
                                 <dd>
                                     <label>Periodo de Data:</label>
                                     de
-                                    <input type="text" name="data" id="data" style="width:60px;" value="<%= vDataAtual %>" maxlength="10" onKeyPress="mascara(this, maskData)" />
+                                    <input type="text" name="data" id="data" style="width:60px;" value="<%= vDataAtual%>" maxlength="10" onKeyPress="mascara(this, maskData)" />
                                     até
-                                    <input type="text" name="data2" id="data2" style="width:60px;" value="<%= vData2 %>" maxlength="10" onKeyPress="mascara(this, maskData)" />
+                                    <input type="text" name="data2" id="data2" style="width:60px;" value="<%= vData2%>" maxlength="10" onKeyPress="mascara(this, maskData)" />
                                 </dd>
                                 <dd style="width: 100%;">
                                     <div class="buttons">
@@ -128,7 +136,7 @@
                     <img width="100%" src="../../imagensNew/linha.jpg"/>
 
                     <div id="titulo1">Resultado da Pesquisa</div>
-                    <%                                
+                    <%
                         ArrayList<TelegramaPostal> lista = ContrTelegramaPostal.consultaEnviados(dataBD, dataBD2, nomeBD);
                         for (TelegramaPostal t : lista) {
                             Endereco ed = t.getEnderecoDes();
@@ -167,14 +175,16 @@
                             <tr>
                                 <td colspan="2">
                                     <b>Solicitado Em:</b> <%= sdf2.format(t.getDataHora())%><br/>
-                                    <b>Agendado Para:</b> <%= sdf2.format(t.getDataHoraAgendado())%> por <%= t.getUserAgendado() %><br/>
-                                    <b>Enviado Em:</b> <%= sdf2.format(t.getDataHoraEnviado())%> por <%= t.getUserEnviado() %><br/><br/>
-                                    <b>N° do Telegrama:</b> <a style="font-weight: bold; color: blue;" href='http://websro.correios.com.br/sro_bin/txect01$.QueryList?P_LINGUA=001&P_TIPO=001&P_COD_UNI=<%= t.getSro()%>' target=_blank><%= t.getSro() %></a><br/><br/>
+                                    <b>Agendado Para:</b> <%= sdf2.format(t.getDataHoraAgendado())%> por <%= t.getUserAgendado()%><br/>
+                                    <b>Enviado Em:</b> <%= sdf2.format(t.getDataHoraEnviado())%> por <%= t.getUserEnviado()%><br/><br/>
+                                    <b>N° do Telegrama:</b>                                    
+                                    <a href='#' onclick="pesqSro('<%= t.getSro()%>');"><%= t.getSro()%></a> 
+                                    <br/><br/>
                                     <b>Adicionais:</b> <%= adicionais%><br/><br/>
                                     <b>Mensagem:</b><br/>
                                     <%= t.getMensagem()%>                                    
                                     <div class="buttons"> 
-                                        <button type="button" onclick="window.open('telegrama_impressao.jsp?id=<%= t.getId()%>','_blank');" class="regular" ><img src="../../imagensNew/printer.png" /> IMPRIMIR TELEGRAMA</button>
+                                        <button type="button" onclick="window.open('telegrama_impressao.jsp?id=<%= t.getId()%>', '_blank');" class="regular" ><img src="../../imagensNew/printer.png" /> IMPRIMIR TELEGRAMA</button>
                                     </div>
                                 </td>
                             </tr>

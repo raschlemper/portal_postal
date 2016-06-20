@@ -52,8 +52,8 @@
 
 
 
-       <!-- data table css fix -->
-       <link href="../../NewTemplate/dist/css/jquery.dataTables.css" rel="stylesheet"/>
+        <!-- data table css fix -->
+        <link href="../../NewTemplate/dist/css/jquery.dataTables.css" rel="stylesheet"/>
         <script>
 
             function callTableJs(titulo) {
@@ -119,18 +119,18 @@
                         .done(function (ret) {
 
                             if (jQuery.isEmptyObject(ret)) {
-                                $("#tbWrapper").html(" <div class='dataTable_wrapper no-padding'> <table id='excelDataTable' class='display compact'>"+
-                                                        "<thead id='excelDataTableThead'> <th>"+
-                                                        "<div class='alert alert-danger'>  <strong>OPS!</strong> NÃO HOUVERAM RESULTADOS PARA A PESQUISA</div>"+
-                                                        "</th> </thead></table></div>");
+                                $("#tbWrapper").html(" <div class='dataTable_wrapper no-padding'> <table id='excelDataTable' class='display compact'>" +
+                                        "<thead id='excelDataTableThead'> <th>" +
+                                        "<div class='alert alert-danger'>  <strong>OPS!</strong> NÃO HOUVERAM RESULTADOS PARA A PESQUISA</div>" +
+                                        "</th> </thead></table></div>");
                             } else {
                                 buildHtmlTable(ret);
-                                callTableJs("RELATORIO "+titulo + " - "+ dataIni+ " - "+ dataFim);
+                                callTableJs("RELATORIO " + titulo + " - " + dataIni + " - " + dataFim);
                                 fechaMsg();
                             }
                             $('.dt-button').switchClass('dt-button', 'btn btn-default pad pull-left');
                             // $('#excelDataTable_filter').find('input').addClass('form-control');
-                            
+
                         });
 
             }
@@ -179,6 +179,12 @@
                 $("#excelDataTableThead").append(headerTr$);
                 return columnSet;
             }
+
+            function pesqSro(param) {
+                $('#objetos').val(param);
+                $('#frmSRO').submit();
+            }
+
         </script>
 
         <style>
@@ -197,6 +203,10 @@
         <jsp:include page="../includes/navBarTop.jsp"></jsp:include>
             <div id="wrapper">
             <%@ include file="../includes/menu_agencia_bootstrap.jsp" %>
+
+            <form name="frmSRO" id="frmSRO" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
+                <input type="hidden" name="objetos" id="objetos" value="" />
+            </form> 
 
             <div id="page-content-wrapper">
                 <div class="container-fluid">

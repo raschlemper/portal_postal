@@ -445,7 +445,7 @@
                                                 <%}%>
                                             </li>
                                             <li class="list-group-item">
-                                                <img src="../../imagensNew/carta.png" height="" />
+                                                <img src="../../imagensNew/chancelas/MDPB_L.png" height="" />
                                                 <%if (sus_mdpbL == 0) {%>
                                                 <button type="button" class="btn btn-danger pull-right" onclick="suspender_serv('MDPB_L');"><i class="fa fa-lg fa-spc fa-pause"></i> SUSPENDER SERVIÇO</button>
                                                 <%} else {%>
@@ -510,7 +510,7 @@
                                                 <%}%>
                                             </li>
                                             <li class="list-group-item">
-                                                <img src="../../imagensNew/carta.png" height="" />
+                                                <img src="../../imagensNew/chancelas/MDPB_E.png" height="" />
                                                 <%if (sus_mdpbE == 0) {%>
                                                 <button type="button" class="btn btn-danger pull-right" onclick="suspender_serv('MDPB_E');"><i class="fa fa-lg fa-spc fa-pause"></i> SUSPENDER SERVIÇO</button>
                                                 <%} else {%>
@@ -575,7 +575,7 @@
                                                 <%}%>
                                             </li>
                                             <li class="list-group-item">
-                                                <img src="../../imagensNew/carta.png" height="" />
+                                                <img src="../../imagensNew/chancelas/MDPB_N.png" height="" />
                                                 <%if (sus_mdpbN == 0) {%>
                                                 <button type="button" class="btn btn-danger pull-right" onclick="suspender_serv('MDPB_N');"><i class="fa fa-lg fa-spc fa-pause"></i> SUSPENDER SERVIÇO</button>
                                                 <%} else {%>
@@ -688,17 +688,17 @@
                 {
                     value: "mdpbl",
                     selected: false,
-                    imageSrc: "../../imagensNew/carta.png"
+                    imageSrc: "../../imagensNew/chancelas/MDPB_L.png"
                 },
                 {
                     value: "mdpbe",
                     selected: false,
-                    imageSrc: "../../imagensNew/carta.png"
+                    imageSrc: "../../imagensNew/chancelas/MDPB_E.png"
                 },
                 {
                     value: "mdpbn",
                     selected: false,
-                    imageSrc: "../../imagensNew/carta.png"
+                    imageSrc: "../../imagensNew/chancelas/MDPB_N.png"
                 }
             ];
 

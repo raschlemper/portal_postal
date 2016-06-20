@@ -62,6 +62,7 @@
                 <b>VD:</b> R$ <%= pv.getValor_declarado() %>
                 <b style='margin:0 20px 0 20px;'>|</b> <b>AR:</b> <% if(pv.getAviso_recebimento() == 1){ %> <img width="12" src="../../imagensNew/tick_circle.png" /> <%}else{%> <img width="12" src="../../imagensNew/cross_circle.png" /> <%}%>
                 <b style='margin:0 20px 0 20px;'>|</b> <b>MP:</b> <% if(pv.getMao_propria() == 1){ %> <img width="12" src="../../imagensNew/tick_circle.png" /> <%}else{%> <img width="12" src="../../imagensNew/cross_circle.png" /> <%}%>
+                <% if(!pv.getNomeServico().trim().equals("SIMPLES")){ %><b style='margin:0 20px 0 20px;'>|</b> <b>REGISTRO:</b> <% if(pv.getRegistro_modico() == 1){ %> REG. MÓDICO <%}else{%> REG. NORMAL <%}}%>
             </dd>
         </li>        
         <li><dd class="titulo">Dados do Remetente</dd></li>

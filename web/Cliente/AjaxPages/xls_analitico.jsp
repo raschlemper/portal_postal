@@ -91,7 +91,7 @@
 
         %>
         <tr align='center' style="font-size: 10px;">
-            <td><a href='http://websro.correios.com.br/sro_bin/txect01$.inexistente?p_itemcode=&amp;p_lingua=001&amp;p_teste=&amp;p_tipo=003&amp;z_action=&amp;p_cod_lis=<%= numeroRegistro%>' target=_blank><%= numeroRegistro%></a></td>
+            <td> <%= numeroRegistro%> </td>
             <td align='left'><%= servico2%></td>
             <td><%= peso%>g</td>
             <td><%= qtd%></td>

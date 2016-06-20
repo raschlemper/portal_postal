@@ -15,11 +15,14 @@ import Util.CalculoEtiqueta;
 import Util.Conexao;
 import Util.FormatarDecimal;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.StringReader;
@@ -30,6 +33,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -42,6 +46,10 @@ import org.dom4j.Node;
 import org.dom4j.XPath;
 import org.dom4j.io.SAXReader;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 
 /**
  *
@@ -368,12 +376,67 @@ public class ContrPreVendaImporta {
 
     //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
     public static String importaPedidoPS(FileItem item, int idCliente, int idDepartamento, String departamento, String contrato, String cartaoPostagem, String servicoEscolhido, String nomeBD) {
-
+        System.out.println("importa pedidos");
         try {
             //CONTADOR DE LINHA
             int qtdLinha = 1;
             ArrayList<ArquivoImportacao> listaAi = new ArrayList<ArquivoImportacao>();
-            BufferedReader le = new BufferedReader(new InputStreamReader(item.getInputStream(), "ISO-8859-1"));
+             //LER EXCELL
+
+            // For storing data into CSV files
+            StringBuffer data = new StringBuffer();
+            try {
+
+                // Get the workbook object for XLS file        
+                HSSFWorkbook workbook = new HSSFWorkbook(item.getInputStream());
+                // Get first sheet from the workbook
+                HSSFSheet sheet = workbook.getSheetAt(0);
+                Cell cell;
+                Row row;
+
+                // Iterate through each rows from first sheet
+                Iterator<Row> rowIterator = sheet.iterator();
+                while (rowIterator.hasNext()) {
+                    row = rowIterator.next();
+                    // For each row, iterate through each columns
+                    Iterator<Cell> cellIterator = row.cellIterator();
+                    while (cellIterator.hasNext()) {
+                        cell = cellIterator.next();
+                        
+                        switch (cell.getCellType()) {
+                            case Cell.CELL_TYPE_BOOLEAN:
+                                data.append(cell.getBooleanCellValue()).append(";");
+                                break;
+
+                            case Cell.CELL_TYPE_NUMERIC:
+                                data.append(cell.getNumericCellValue()).append(";");
+                                break;
+
+                            case Cell.CELL_TYPE_STRING:
+                                data.append(cell.getStringCellValue()).append(";");
+                                break;
+
+                            case Cell.CELL_TYPE_BLANK:
+                                data.append("" + ";");
+                                break;
+
+                            default:
+                                data.append(cell).append(";");
+                        }
+
+                        data.append('\n');
+                    }
+                }
+                System.out.println(data.toString());
+            } catch (FileNotFoundException e) {
+                System.out.println(e);
+            } catch (IOException e) {
+                  System.out.println(e);
+            }
+
+            InputStream is = new ByteArrayInputStream(data.toString().getBytes());
+            BufferedReader le = new BufferedReader(new InputStreamReader(is));
+
             // LE UMA LINHA DO ARQUIVO PARA PULAR O CABEÇALHO
             le.readLine();
             while (le.ready()) {
@@ -464,6 +527,7 @@ public class ContrPreVendaImporta {
         }
 
     }
+
     public static String importaPedidoPSN(FileItem item, int idCliente, int idDepartamento, String departamento, String contrato, String cartaoPostagem, String servicoEscolhido, String nomeBD) {
 
         try {
@@ -475,7 +539,7 @@ public class ContrPreVendaImporta {
             // LE UMA LINHA DO ARQUIVO PARA PULAR O CABEÇALHO
             le.readLine();
             while (le.ready()) {
-                System.out.println("linha "+ qtdLinha);
+                System.out.println("linha " + qtdLinha);
                 //LE UMA LINHA DO ARQUIVO E DIVIDE A LINHA POR PONTO E VIRGULA
                 String[] aux = le.readLine().replace(";", " ; ").split(";");
                 //ADICIONA CONTADOR DE LINHA
@@ -494,7 +558,7 @@ public class ContrPreVendaImporta {
                     ai.setCodECT(0);
                     ai.setNrLinha(qtdLinha + "");
                     ai.setNrObjeto(aux[9].trim());
-                     System.out.println("linha "+ qtdLinha+" sro "+ aux[9].trim());
+                    System.out.println("linha " + qtdLinha + " sro " + aux[9].trim());
                     ai.setNome(aux[1].trim());
                     ai.setEmpresa("");
                     ai.setCpf("");
@@ -510,10 +574,10 @@ public class ContrPreVendaImporta {
                     ai.setAosCuidados("");
                     ai.setNotaFiscal(aux[11].trim());
                     String serv = aux[10].trim().toUpperCase();
-                    if(serv.equals("109819")){
+                    if (serv.equals("109819")) {
                         serv = "PAC";
-                    }else if(serv.equals("109810")){
-                         serv = "SEDEX";
+                    } else if (serv.equals("109810")) {
+                        serv = "SEDEX";
                     }
                     ai.setServico(serv);
 

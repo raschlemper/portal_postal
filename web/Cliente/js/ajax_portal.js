@@ -379,6 +379,10 @@ function pesquisaAr(idCliente, nomeBD) {
     http.onreadystatechange = handleHttpResponsePesquisaCustomizadaObjetos;
     http.send(null);
 }
+function pesqSro(param) {
+		$('#objetos').val(param);
+		$('#frmSRO').submit();
+	}
 
 function pesquisaAnalitica(idCliente, nomeBD) {
     abrirTelaEspera();
@@ -562,23 +566,23 @@ function darBaixaAr2() {
 
 
 function handleHttpResponseAbrangenciaServ() {
-    if (http.readyState == 4) {
-        if (http.status == 200) {
+    if (http.readyState === 4) {
+        if (http.status === 200) {
             //alert("handleHTTPResponse");
             var resultado = http.responseText;
-            if (resultado.toString() == "sessaoexpirada") {
+            if (resultado.toString() === "sessaoexpirada") {
                 window.location = "../../index.jsp?msgLog=3";
             } else {
-                if (resultado == 'aceita') {
+                if (resultado === 'aceita') {
                     chamaDivProtecao2();
-                } else if (resultado == 'ESEDEX') {
+                } else if (resultado === 'ESEDEX') {
                     alert('Nao existe o ESEDEX para este CEP!');
-                } else if (resultado == 'SEDEX10') {
+                } else if (resultado === 'SEDEX10') {
                     alert('Nao existe o SEDEX 10 para este CEP!');
-                } else if (resultado == 'SEDEX12') {
+                } else if (resultado === 'SEDEX12') {
                     alert('Nao existe o SEDEX 12 para este CEP!');
-                } else if (resultado == 'PAX') {
-                    alert('Nao existe o PAX para este CEP!');
+                } else if (resultado === 'PAX') {
+                    alert('Nao existe o PAX para este CEP!');                
                 }
             }
         } else {

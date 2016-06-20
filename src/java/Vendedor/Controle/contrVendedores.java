@@ -133,7 +133,7 @@ public class contrVendedores {
                 int idCliente = result.getInt("idCliente");
                 String perc = result.getString("percentual");
                 float percent = 0;
-                if(perc != null || !perc.equals("")){
+                if(perc != null && !perc.trim().equals("") && !perc.trim().toLowerCase().equals("null")){
                    percent = Float.parseFloat(result.getString("percentual"));
                 }
                 Clientes cf = new Clientes(idCliente, nome, percent);

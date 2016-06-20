@@ -114,7 +114,7 @@
                                             </div>
                                             <input type="hidden" style="width:100px;" name="obj" />
                                             <button type="submit" class="btn btn-sm btn-primary form-control" onclick="waitMsg();
-                                            document.form2.submit();"><i class="fa fa-lg fa-search"></i></button>
+                                                    document.form2.submit();"><i class="fa fa-lg fa-search"></i></button>
                                         </div>
                                     </div>
                                 </form>
@@ -149,19 +149,19 @@
                                                         </tr>
                                                     </thead>                          
                                                     <tbody>
-                                                    <%
-                                                        for (PreVenda pv : listaPV) {
-                                                            String adicionais = "";
-                                                            if (pv.getAviso_recebimento() == 1) {
-                                                                adicionais += "AR";
-                                                            }
-                                                            if (pv.getMao_propria() == 1) {
-                                                                adicionais += " / MP";
-                                                            }
-                                                            if (pv.getValor_declarado() > 0) {
-                                                                adicionais += " / VD R$ " + pv.getValor_declarado();
-                                                            }
-                                                    %>      
+                                                        <%
+                                                            for (PreVenda pv : listaPV) {
+                                                                String adicionais = "";
+                                                                if (pv.getAviso_recebimento() == 1) {
+                                                                    adicionais += "AR";
+                                                                }
+                                                                if (pv.getMao_propria() == 1) {
+                                                                    adicionais += " / MP";
+                                                                }
+                                                                if (pv.getValor_declarado() > 0) {
+                                                                    adicionais += " / VD R$ " + pv.getValor_declarado();
+                                                                }
+                                                        %>      
                                                         <tr>
                                                             <td><a href="painel_etiquetas_pesq_b.jsp?obj=<%= pv.getNumObjeto()%>"><i class="fa fa-search fa-fw text-info"></i><strong> <%= pv.getNumObjeto()%></strong></a></td>
                                                             <td><%= pv.getNomeDes()%></td>
@@ -170,7 +170,7 @@
                                                             <td><%= pv.getNomeServico()%></td>
                                                             <td><%= adicionais%></td>
                                                         </tr>
-                                                    <%}%>
+                                                        <%}%>
                                                     </tbody>
                                                 </table>
 
@@ -220,7 +220,7 @@
                                                                     <ul class="list-unstyled">
                                                                         <li>
                                                                             <label>Nº do Objeto:</label>
-                                                                            <a href='http://websro.correios.com.br/sro_bin/txect01$.QueryList?P_LINGUA=001&P_TIPO=001&P_COD_UNI=<%= nrObj%>' target=_blank><strong><%= nrObj%></strong></a>
+                                                                            <a href='#' onclick="pesqSro('<%= nrObj%>');"><%= nrObj%></a>
                                                                         </li>
                                                                         <li>
                                                                             <label>Serviço:</label>
@@ -386,10 +386,10 @@
                                                                         </li>
                                                                         <div style="border-bottom: 1px solid silver;width: 100%;clear: both;"> </div>
                                                                         <%}
-                                                                } else {%>
+                                                                        } else {%>
                                                                         <div class="alert alert-danger">Nenhum registro encontrado nos Correios.</div>
                                                                         <%}
-                                                                } catch (Exception ex) {%>
+                                                                        } catch (Exception ex) {%>
                                                                         <div class="alert alert-danger"><%= ex.getMessage()%></div>
                                                                         <%}%>
                                                                     </ul>    
@@ -417,6 +417,9 @@
                     </div>
                 </div>
             </div>
+            <form name="frmSRO" id="frmSRO" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
+                <input type="hidden" name="objetos" id="objetos" value="" />
+            </form>                                 
 
             <script type="text/javascript">
 
@@ -426,13 +429,13 @@
                 }
                 function AllTables() {
                     StartDataTable('dataTables-etqPend');
-                    LoadSelect2Script(MakeSelectDataTable('dataTables-etqPend'));                   
+                    LoadSelect2Script(MakeSelectDataTable('dataTables-etqPend'));
                 }
 
                 $(document).ajaxStop(function () {
-                    fechaMsg();                    
+                    fechaMsg();
                 });
-                
+
                 $(document).ready(function () {
                     LoadSelect2Script(selectCliente);
                     $("#data").datepicker({
@@ -450,7 +453,7 @@
                         onClose: function (selectedDate) {
                             $("#data").datepicker("option", "maxDate", selectedDate);
                         }
-                    });                 
+                    });
 
                     $('[id^=detail-]').hide();
                     $('#detail-1').show();
@@ -459,9 +462,9 @@
                         $target = $('#' + $input.attr('data-toggle'));
                         $target.slideToggle();
                     });
-                    
-                    LoadDataTablesScripts(AllTables);    
-                    
+
+                    LoadDataTablesScripts(AllTables);
+
                 });
 
                 function validaForm() {
@@ -517,6 +520,10 @@
 
 
                     form.submit();
+                }
+                function pesqSro(param) {
+                    $('#objetos').val(param);
+                    $('#frmSRO').submit();
                 }
             </script>
 

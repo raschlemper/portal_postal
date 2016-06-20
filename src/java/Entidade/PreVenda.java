@@ -33,6 +33,10 @@ public class PreVenda {
     private float valor_declarado;
     private int mao_propria;
     private int aviso_recebimento;
+    
+    private int posta_restante;
+    private int registro_modico;
+    
     private String nomeDes;
     private String empresaDes;
     private String cpfDes;
@@ -67,7 +71,7 @@ public class PreVenda {
     public PreVenda() {
     }    
 
-    public PreVenda(int id, String numObjeto, int idCliente, int idRemetente, int idDestinatario, int codECT, String nomeServico, String contrato, String departamento, String aos_cuidados, String observacoes, String conteudo, String siglaAmarracao, int peso, int altura, int largura, int comprimento, float valor_declarado, int mao_propria, int aviso_recebimento, String nomeDes, String empresaDes, String cpfDes, String enderecoDes, String numeroDes, String complementoDes, String cidadeDes, String ufDes, String cepDes, String bairroDes, String notaFiscal, float valorCobrar, int userPreVenda, Timestamp dataPreVenda, Timestamp dataImpresso, Timestamp dataConsolidado, Timestamp dataVenda, int userImpresso, int userConsolidado, int userVenda, String nomePreVenda, String nomeImpresso, String nomeConsolidado, String nomeVenda, String responsavel, String email_destinatario, int idOs, String celularDes, String cartaoPostagem, String metodo_insercao) {
+    public PreVenda(int id, String numObjeto, int idCliente, int idRemetente, int idDestinatario, int codECT, String nomeServico, String contrato, String departamento, String aos_cuidados, String observacoes, String conteudo, String siglaAmarracao, int peso, int altura, int largura, int comprimento, float valor_declarado, int mao_propria, int aviso_recebimento, String nomeDes, String empresaDes, String cpfDes, String enderecoDes, String numeroDes, String complementoDes, String cidadeDes, String ufDes, String cepDes, String bairroDes, String notaFiscal, float valorCobrar, int userPreVenda, Timestamp dataPreVenda, Timestamp dataImpresso, Timestamp dataConsolidado, Timestamp dataVenda, int userImpresso, int userConsolidado, int userVenda, String nomePreVenda, String nomeImpresso, String nomeConsolidado, String nomeVenda, String responsavel, String email_destinatario, int idOs, String celularDes, String cartaoPostagem, String metodo_insercao, int posta_restante, int registro_modico) {
         this.id = id;
         this.numObjeto = numObjeto;
         this.idCliente = idCliente;
@@ -118,6 +122,24 @@ public class PreVenda {
         this.celularDes = celularDes;
         this.cartaoPostagem = cartaoPostagem;
         this.metodo_insercao = metodo_insercao;
+        this.posta_restante = posta_restante;
+        this.registro_modico = registro_modico;
+    }
+
+    public int getPosta_restante() {
+        return posta_restante;
+    }
+
+    public void setPosta_restante(int posta_restante) {
+        this.posta_restante = posta_restante;
+    }
+
+    public int getRegistro_modico() {
+        return registro_modico;
+    }
+
+    public void setRegistro_modico(int registro_modico) {
+        this.registro_modico = registro_modico;
     }
     
 

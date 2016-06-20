@@ -45,6 +45,7 @@ public class empresas {
     //private int coleta;
     private String latitude;
     private String longitude;
+    private String cpf_cnpj;
 
     /*public empresas(int idEmpresa, String empresa, String endereco, String telefone, String bairro, String cidade, String uf, String cep, String email, String cnpj, String fantasia, String complemento, String status, int chamada, int coleta, String login_ws_sigep, String senha_ws_sigep, String tipo_agencia) {
         this.idEmpresa = idEmpresa;
@@ -86,7 +87,17 @@ public class empresas {
         this.latitude = result.getString("latitude");
         this.longitude = result.getString("longitude");
         this.tipoEscolhaColeta = result.getInt("tipoEscolhaColeta");
+        this.cpf_cnpj = result.getString("cpf_cnpj");
     }
+
+    public String getCpf_cnpj() {
+        return cpf_cnpj;
+    }
+
+    public void setCpf_cnpj(String cpf_cnpj) {
+        this.cpf_cnpj = cpf_cnpj;
+    }
+        
 
     public String getLatitude() {
         return latitude;

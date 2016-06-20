@@ -46,7 +46,7 @@
         %>
         <tr align='center'>
             <td nowrap align='left'><%= vData%></td>
-            <td nowrap align='left'><a href='http://websro.correios.com.br/sro_bin/txect01$.inexistente?p_itemcode=&amp;p_lingua=001&amp;p_teste=&amp;p_tipo=003&amp;z_action=&amp;p_cod_lis=<%= numeroRegistro%>' target=_blank><%= numeroRegistro%></a></td>
+            <td nowrap align='left'><%= numeroRegistro%></td>
             <td nowrap align='left'><%= status%></td>
             <td nowrap align='left'><%= cep%></td>
             <td nowrap align='left'><%= destinatario%></td>
