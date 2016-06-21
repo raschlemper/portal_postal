@@ -2,6 +2,7 @@ package com.portalpostal.dao;
 
 import com.portalpostal.dao.handler.ColaboradorHandler;
 import com.portalpostal.model.Colaborador;
+import com.portalpostal.model.Endereco;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,14 +17,27 @@ public class ColaboradorDAO extends GenericDAO {
     } 
 
     public List<Colaborador> findAll() throws Exception {
-        String sql = "SELECT * FROM colaborador ORDER BY idColaborador";        
+        String sql = "SELECT * FROM colaborador, informacao_profissional, informacao_bancaria "
+                   + "WHERE colaborador.idColaborador = informacao_profissional.idColaborador "
+                   + "AND colaborador.idColaborador = informacao_bancaria.idColaborador "
+                   + "ORDER BY idColaborador";        
         return findAll(sql, null, colaboradorHandler);
     }
 
     public Colaborador find(Integer idColaborador) throws Exception {
-        String sql = "SELECT * FROM colaborador WHERE idColaborador = :idColaborador";
+        String sql = "SELECT * FROM colaborador "
+                   + "WHERE colaborador.idColaborador = informacao_profissional.idColaborador "
+                   + "AND colaborador.idColaborador = informacao_bancaria.idColaborador "
+                   + "AND colaborador.idColaborador = :idColaborador";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idColaborador", idColaborador);
+        return (Colaborador) find(sql, params, colaboradorHandler);
+    }
+
+    public Colaborador findByCpf(String cpf) throws Exception {
+        String sql = "SELECT * FROM colaborador WHERE colaborador.cpf = :cpf";
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cpf", cpf);
         return (Colaborador) find(sql, params, colaboradorHandler);
     }
 

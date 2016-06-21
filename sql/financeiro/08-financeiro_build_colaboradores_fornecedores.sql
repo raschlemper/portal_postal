@@ -9,7 +9,7 @@ DROP TABLE informacao_bancaria;
 CREATE TABLE `colaborador` (
   `idColaborador`        INT NOT NULL AUTO_INCREMENT,
   `nome`                 VARCHAR(254) NOT NULL,
-  `status`               INT DEFAULT NOT NULL,
+  `status`               INT NOT NULL,
   `cpf`                  VARCHAR(14) NULL,
   `rg`                   VARCHAR(50) NULL,
   `sexo`                 INT DEFAULT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE `colaborador` (
   `quantidadeDependente` INT DEFAULT NULL,
   `nomePai`              VARCHAR(254) NULL,
   `nomeMae`              VARCHAR(254) NULL,
-  `observacao`           VARCHAR(254) NULL
+  `observacao`           VARCHAR(254) NULL,
   PRIMARY KEY (`idColaborador`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -38,7 +38,7 @@ CREATE TABLE `endereco` (
   `numero`      INT NOT NULL,
   `bairro`      VARCHAR(254) NOT NULL,
   `cidade`      VARCHAR(254) NOT NULL,
-  `estado`      VARCHAR(2) NOT NULL
+  `estado`      VARCHAR(2) NOT NULL,
   PRIMARY KEY (`idEndereco`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -46,7 +46,7 @@ CREATE TABLE `informacao_profissional` (
   `idInformacaoProfissional` INT NOT NULL AUTO_INCREMENT,
   `idColaborador`            INT NOT NULL,
   `cargoFuncao`              VARCHAR(254) NOT NULL,
-  `salario`                  DECIMAL(13,2) NOT DEFAULT 0,
+  `salario`                  DECIMAL(13,2) NOT NULL DEFAULT 0,
   `dataAdmissao`             DATETIME NULL,
   `dataDemissao`             DATETIME NULL,
   `pisPasep`                 VARCHAR(11) NULL,
@@ -57,7 +57,7 @@ CREATE TABLE `informacao_profissional` (
   `horarioSaida`             TIME NULL,
   `intervaloDe`              TIME NULL,
   `intervaloAte`             TIME NULL,
-  `observacao`               VARCHAR(254) NULL
+  `observacao`               VARCHAR(254) NULL,
   PRIMARY KEY (`idInformacaoProfissional`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -77,9 +77,9 @@ CREATE TABLE `informacao_bancaria` (
   `tipoConta`            INT NOT NULL,
   `idBanco`              INT NOT NULL,
   `agencia`              INT NOT NULL,
-  `agencia_dv`           TINYINT (2) DEFAULT 0;
+  `agencia_dv`           TINYINT (2) DEFAULT 0,
   `contaCorrente`        INT NOT NULL,
-  `contaCorrente_dv`     TINYINT (2) DEFAULT 0
+  `contaCorrente_dv`     TINYINT (2) DEFAULT 0,
   PRIMARY KEY (`idInformacaoBancaria`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -95,8 +95,8 @@ ADD CONSTRAINT `fk_informacaobancaria_colaborador`
 
 CREATE TABLE `colaborador_endereco` (
   `idColaboradorEndereco` INT NOT NULL AUTO_INCREMENT,
-  `idColaborador`         INT DEFAULT NOT NULL,
-  `idEndereco`            INT DEFAULT NOT NULL
+  `idColaborador`         INT NOT NULL,
+  `idEndereco`            INT NOT NULL,
   PRIMARY KEY (`idColaboradorEndereco`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -117,5 +117,24 @@ ALTER TABLE `colaborador_endereco`
 ADD CONSTRAINT `fk_colaboradorendereco_endereco`
   FOREIGN KEY (`idEndereco`)
   REFERENCES `endereco` (`idEndereco`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+CREATE TABLE `favorecido` (
+  `idFavorecido`  INT NOT NULL AUTO_INCREMENT,
+  `tipo`          INT NOT NULL,
+  `idColaborador` INT NULL,
+  `idFornecedor`  INT NULL,
+  `idCliente`     INT NULL,
+  PRIMARY KEY (`idFavorecido`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `favorecido` 
+ADD INDEX `i_favorecido_colaborador` (`idColaborador` ASC);
+
+ALTER TABLE `favorecido` 
+ADD CONSTRAINT `fk_favorecido_colaborador`
+  FOREIGN KEY (`idColaborador`)
+  REFERENCES `colaborador` (`idColaborador`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;

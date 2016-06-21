@@ -1,6 +1,9 @@
 package com.portalpostal.dao.handler;
 
 import com.portalpostal.model.Colaborador;
+import com.portalpostal.model.Endereco;
+import com.portalpostal.model.InformacaoBancaria;
+import com.portalpostal.model.InformacaoProfissional;
 import com.portalpostal.model.dd.TipoEstadoCivil;
 import com.portalpostal.model.dd.TipoSexo;
 import com.portalpostal.model.dd.TipoStatusColaborador;
@@ -40,7 +43,25 @@ public class ColaboradorHandler extends GenericHandler implements ResultSetHandl
         colaborador.setNomePai(getString(result, "nomePai"));
         colaborador.setNomeMae(getString(result, "nomeMae"));
         colaborador.setObservacao(getString(result, "observacao"));
+        colaborador.setEndereco(getEndereco(result));
+        colaborador.setInformacaoProfissional(getInformacaoProfissional(result));
+        colaborador.setInformacaoBancaria(getInformacaoBancaria(result));
         return colaborador;
+    }
+    
+    private Endereco getEndereco(ResultSet result) throws SQLException {
+        if(!existColumn(result, "endereco.idEndereco")) return null;
+        return new EnderecoHandler().handle(result);         
+    }
+    
+    private InformacaoProfissional getInformacaoProfissional(ResultSet result) throws SQLException {
+        if(!existColumn(result, "informacao_profissional.idInformacaoProfissional")) return null;
+        return new InformacaoProfissionalHandler().handle(result);         
+    }
+    
+    private InformacaoBancaria getInformacaoBancaria(ResultSet result) throws SQLException {
+        if(!existColumn(result, "informacao_bancaria.idInformacaoBancaria")) return null;
+        return new InformacaoBancariaHandler().handle(result);         
     }
     
 }
