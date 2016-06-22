@@ -71,6 +71,11 @@ public class LancamentoProgramadoService {
     public List<LancamentoProgramado> findAllAtivo() throws Exception {
         init();
         return lancamentoProgramadoDAO.findAllAtivo();
+    }  
+    
+    public List<LancamentoProgramado> findByFavorecido(Integer idFavorecido) throws Exception {
+        init();
+        return lancamentoProgramadoDAO.findByFavorecido(idFavorecido);
     } 
     
     public LancamentoProgramado save(LancamentoProgramado lancamentoProgramado) throws Exception {

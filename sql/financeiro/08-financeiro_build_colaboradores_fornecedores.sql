@@ -126,6 +126,7 @@ CREATE TABLE `favorecido` (
   `idColaborador` INT NULL,
   `idFornecedor`  INT NULL,
   `idCliente`     INT NULL,
+  `nome`          VARCHAR(254) NOT NULL,
   PRIMARY KEY (`idFavorecido`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -136,5 +137,15 @@ ALTER TABLE `favorecido`
 ADD CONSTRAINT `fk_favorecido_colaborador`
   FOREIGN KEY (`idColaborador`)
   REFERENCES `colaborador` (`idColaborador`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `favorecido` 
+ADD INDEX `i_favorecido_cliente` (`idCliente` ASC);
+
+ALTER TABLE `favorecido` 
+ADD CONSTRAINT `fk_favorecido_cliente`
+  FOREIGN KEY (`idCliente`)
+  REFERENCES `cliente` (`codigo`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;

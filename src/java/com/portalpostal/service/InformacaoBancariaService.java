@@ -1,6 +1,7 @@
 package com.portalpostal.service;
 
 import com.portalpostal.dao.InformacaoBancariaDAO;
+import com.portalpostal.model.Colaborador;
 import com.portalpostal.model.InformacaoBancaria;
 import java.util.List;
 
@@ -45,7 +46,15 @@ public class InformacaoBancariaService {
     
     public InformacaoBancaria delete(Integer idInformacaoBancaria) throws Exception {
         init();
+        if(!podeExcluir(idInformacaoBancaria)) throw new Exception("Esta informação não pode ser excluída!"); 
         return informacaoBancariaDAO.remove(idInformacaoBancaria);
-    }    
+    }       
+    
+    public boolean podeExcluir(Integer idInformacaoBancaria) throws Exception {
+        init();
+        InformacaoBancaria informacaoBancaria = informacaoBancariaDAO.find(idInformacaoBancaria);
+        if(informacaoBancaria != null && informacaoBancaria.getColaborador() != null) return false;
+        return true;                
+    } 
     
 }

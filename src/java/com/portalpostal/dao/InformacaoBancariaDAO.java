@@ -33,6 +33,14 @@ public class InformacaoBancariaDAO extends GenericDAO {
         return (InformacaoBancaria) find(sql, params, informacaoBancariaHandler);
     }
 
+    public InformacaoBancaria findByColaborador(Integer idColaborador) throws Exception {
+        String sql = "SELECT * FROM informacao_bancaria "
+                   + "WHERE informacao_bancaria.idColaborador = :idColaborador";
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idColaborador", idColaborador);
+        return (InformacaoBancaria) find(sql, params, informacaoBancariaHandler);
+    }
+
     public InformacaoBancaria save(InformacaoBancaria informacaoBancaria) throws Exception {  
         String sql = "INSERT INTO informacao_bancaria (idColaborador, idBanco, tipoConta, agencia, agencia_dv, contaCorrente, contaCorrente_dv) "
                    + "VALUES(:idColaborador, :idBanco, :tipoConta, :agencia, :agencia_dv, :contaCorrente, :contaCorrente_dv)";        

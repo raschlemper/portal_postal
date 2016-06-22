@@ -1,6 +1,7 @@
 package com.portalpostal.dao;
 
 import com.portalpostal.dao.handler.LancamentoProgramadoHandler;
+import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoProgramado;
 import java.util.HashMap;
 import java.util.List;
@@ -81,6 +82,14 @@ public class LancamentoProgramadoDAO extends GenericDAO {
                    + "ORDER BY lancamento_programado.dataVencimento";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idCentroCusto", idCentroCusto);       
+        return findAll(sql, params, lancamentoProgramadoHandler);
+    }
+
+    public List<LancamentoProgramado> findByFavorecido(Integer idFavorecido) throws Exception {
+        String sql = "SELECT * FROM lancamento_programado "
+                   + "WHERE lancamento_programado.idFavorecido = :idFavorecido";
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idFavorecido", idFavorecido);
         return findAll(sql, params, lancamentoProgramadoHandler);
     }
 

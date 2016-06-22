@@ -2,7 +2,6 @@ package com.portalpostal.service;
 
 import com.portalpostal.dao.EnderecoDAO;
 import com.portalpostal.model.Endereco;
-import com.portalpostal.model.ContaCorrente;
 import java.util.List;
 
 public class EnderecoService {
@@ -10,7 +9,6 @@ public class EnderecoService {
     private final String nomeBD;   
     
     private EnderecoDAO enderecoDAO;  
-    private ColaboradorService colaboradorService;  
 
     public EnderecoService(String nomeBD) {
         this.nomeBD = nomeBD;
@@ -18,7 +16,6 @@ public class EnderecoService {
 
     public void init() {
         enderecoDAO = new EnderecoDAO(nomeBD);
-        colaboradorService = new ColaboradorService(nomeBD);
     }
     
     public List<Endereco> findAll() throws Exception {
@@ -55,7 +52,7 @@ public class EnderecoService {
     public boolean podeExcluir(Integer idEndereco) throws Exception {
         init();
         Endereco enderecos = enderecoDAO.findVinculoColaborador(idEndereco);
-        if(enderecos == null) return false;
+        if(enderecos != null) return false;
         return true;                
     } 
     

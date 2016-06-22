@@ -2,7 +2,6 @@ package com.portalpostal.dao;
 
 import com.portalpostal.dao.handler.ColaboradorHandler;
 import com.portalpostal.model.Colaborador;
-import com.portalpostal.model.Endereco;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
