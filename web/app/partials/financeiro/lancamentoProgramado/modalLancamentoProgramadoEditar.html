@@ -110,7 +110,7 @@
                                     <input type="text" autocomplete="off" name="dataVencimento" class="form-control" ng-model="lancamentoProgramado.dataVencimento" 
                                            datepicker-popup="{{datepickerVencimento.format}}" is-open="datepickerVencimento.opened" ng-required="true"
                                            current-text="{{datepickerVencimento.today}}" clear-text="{{datepickerVencimento.clear}}" close-text="{{datepickerVencimento.close}}"
-                                           placeholder="Data do vencimento"/>
+                                           placeholder="Data do vencimento" ng-blur="setDataCompetencia(lancamentoProgramado)"/>
                                     <span class="input-group-addon" ng-click="datepickerVencimento.open($event)"><i class="fa fa-calendar"></i></span>
                                 </div>
                             </div>
@@ -136,10 +136,10 @@
                     </div>
                 </li>
                 <li class="list-group-item">
-                    <app-parcelar lancamento-parcelar="lancamentoProgramado" lancar="gerarParcela" form="this.lancamentoProgramadoForm" show="showParcelar"></app-parcelar>
+                    <app-ratear plano-contas="planoContas" centro-custos="centroCustos" lancamento-ratear="lancamentoProgramado" show="showRatear"></app-ratear>
                 </li>
                 <li class="list-group-item">
-                    <app-ratear plano-contas="planoContas" centro-custos="centroCustos" lancamento-ratear="lancamentoProgramado" show="showRatear"></app-ratear>
+                    <app-parcelar lancamento-parcelar="lancamentoProgramado" lancar="gerarParcela" form="this.lancamentoProgramadoForm" show="showParcelar"></app-parcelar>
                 </li>
             </ul>     
         </div>

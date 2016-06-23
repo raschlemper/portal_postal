@@ -346,6 +346,9 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
         var getSaldo = function(saldos, lancamentos) {
             _.map(lancamentos, function(lancamento) { 
                 var valor = lancamento.valor;
+                if(lancamento.quantidadeParcela) { 
+                    valor = valor / lancamento.quantidadeParcela;
+                }
                 if(lancamento.tipo.id === $scope.tipos[1].id) { valor = valor * -1; }
                 var dataVencimento = moment(lancamento.dataVencimento);            
                 saldos.push({id: lancamento.idLancamentoProgramado,
@@ -422,10 +425,10 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
         var initSaldoProgramado = function() {
             LancamentoProgramadoService.getAllAtivo()
                .then(function(data) {
-                    var dataAtual = moment();
-                    var dataUmMes = moment().add(1, "M");
-                    var dataDoisMes = moment().add(2, "M");
-                    var dataTresMes = moment().add(3, "M");
+                    var dataAtual = moment().format('YYYY-MM-DD');
+                    var dataUmMes = moment().add(1, "M").format('YYYY-MM-DD');
+                    var dataDoisMes = moment().add(2, "M").format('YYYY-MM-DD');
+                    var dataTresMes = moment().add(3, "M").format('YYYY-MM-DD');
                     $scope.lancamentosVencido = getValoresReceitaDespesaDefault();
                     $scope.lancamentosHoje = getValoresReceitaDespesaDefault();
                     $scope.lancamentosUmMes = getValoresReceitaDespesaDefault();
