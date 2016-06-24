@@ -58,7 +58,7 @@ app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES
                 $scope.rateio = {};
                 $scope.rateio.planoConta = (rateio && rateio.planoConta) || lancamentoRatear.planoConta || null;
                 $scope.rateio.centroCusto = (rateio && rateio.centroCusto) || lancamentoRatear.centroCusto || null;
-                $scope.rateio.valor = (lancamentoRatear.valor / getQuantidadeParcela(lancamentoRatear.quantidadeParcela)) - saldoRateio(lancamentoRatear);
+                $scope.rateio.valor = lancamentoRatear.valor - saldoRateio(lancamentoRatear); //(lancamentoRatear.valor / getQuantidadeParcela(lancamentoRatear.quantidadeParcela)) - saldoRateio(lancamentoRatear);
             };
 
             var saldoRateio = function(lancamentoRatear) {            

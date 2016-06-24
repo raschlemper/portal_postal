@@ -48,7 +48,12 @@ app.directive('appParcelar', function(FrequenciaLancamentoService) {
                 return _.find(lancamentos, function(lancamento) { 
                     return lancamento.numeroParcela === numeroParcela; 
                 });
-            };   
+            };       
+            
+            $scope.$watchCollection("lancamentoParcelar.quantidadeParcela", function(newValue, oldValue) {
+                if(!newValue) return;
+                init($scope.lancamentoParcelar);
+            });  
             
             $scope.$watchCollection("lancamentoParcelar.numero", function(newValue, oldValue) {
                 if(newValue === oldValue) return;

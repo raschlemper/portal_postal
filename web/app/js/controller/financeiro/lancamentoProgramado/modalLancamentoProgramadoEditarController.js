@@ -137,9 +137,9 @@ app.controller('ModalLancamentoProgramadoEditarController',
                 });
         };
         
-        $scope.setDataCompetencia = function(lancamentoTransferencia) {
-            if(lancamentoTransferencia.dataCompetencia) return;
-            lancamentoTransferencia.dataCompetencia = lancamentoTransferencia.dataLancamento;
+        $scope.setDataCompetencia = function(lancamentoProgramado) {
+            if(lancamentoProgramado.dataCompetencia) return;
+            lancamentoProgramado.dataCompetencia = lancamentoProgramado.dataLancamento || lancamentoProgramado.dataVencimento;
         };
         
         $scope.gerar = function(form, lancamentoProgramado) {
@@ -203,10 +203,10 @@ app.controller('ModalLancamentoProgramadoEditarController',
         $scope.validarRateio = function(lancamentoProgramado) {
             if (!lancamentoProgramado.rateios || !lancamentoProgramado.rateios.length) return true;
             var valor = lancamentoProgramado.valor; 
-            if(lancamentoProgramado.quantidadeParcela) { 
-                valor = lancamentoProgramado.valor / lancamentoProgramado.quantidadeParcela; 
-                valor = parseFloat(valor.toFixed(2));
-            }
+//            if(lancamentoProgramado.quantidadeParcela) { 
+//                valor = lancamentoProgramado.valor / lancamentoProgramado.quantidadeParcela; 
+//                valor = parseFloat(valor.toFixed(2));
+//            }
             if(!FinanceiroValidation.rateioSaldo(valor, lancamentoProgramado.rateios)) return false;
             _.map(lancamentoProgramado.rateios, function(rateio) {
                 if(!$scope.validarPlanoConta(rateio.planoConta)) { return false; }
