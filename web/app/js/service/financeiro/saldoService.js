@@ -2,6 +2,10 @@
 
 app.factory('SaldoService', function($filter) {   
         
+    var toFixe = function(value, fixe) {
+        return parseFloat(value.toFixed(fixe));
+    } 
+        
     // SALDOS /////
     
     var setSaldo = function(datas, saldos, meses, id) {
@@ -29,7 +33,7 @@ app.factory('SaldoService', function($filter) {
     var getSaldo = function(data, mes, saldos, id) {
         angular.forEach(saldos, function(saldo) {
             if(data[id] === saldo[id] && mes.id === saldo.mes - 1) {
-                data.saldos[mes.order] = saldo.valor;
+                data.saldos[mes.order] = toFixe(saldo.valor, 2);
             }
         });
     };    
@@ -61,7 +65,7 @@ app.factory('SaldoService', function($filter) {
 
     var sumSaldo = function(estrutura, saldos) {
         angular.forEach(saldos, function(saldo, index) {
-            estrutura.saldos[index] += saldo;
+            estrutura.saldos[index] += toFixe(saldo, 2);
         })
     };
     
@@ -89,10 +93,10 @@ app.factory('SaldoService', function($filter) {
         angular.forEach(meses, function(mes) {               
             if(!totais[mes.order]) { totais[mes.order] = 0; }
             if(estrutura.tipo) {
-                if(estrutura.tipo.codigo === 'receita') { totais[mes.order] += estrutura.saldos[mes.order]; }
-                else if(estrutura.tipo.codigo === 'despesa') { totais[mes.order] -= estrutura.saldos[mes.order]; }
+                if(estrutura.tipo.codigo === 'receita') { totais[mes.order] += toFixe(estrutura.saldos[mes.order], 2); }
+                else if(estrutura.tipo.codigo === 'despesa') { totais[mes.order] -= toFixe(estrutura.saldos[mes.order], 2); }
             } else {
-                totais[mes.order] += estrutura.saldos[mes.order];
+                totais[mes.order] += toFixe(estrutura.saldos[mes.order], 2);;
             }    
         });
     };  
