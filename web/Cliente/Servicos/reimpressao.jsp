@@ -308,7 +308,8 @@
                                 <dd>
                                     <label>Tamanho da impressão:</label>
                                     <select style="width: 220px;" name="formato" id="formato">
-                                        <option value="A4">Folha A4</option> 
+                                        <option value="A4">Folha A4 - 4 por folha</option> 
+                                        <option value="A4_6">Folha A4 - 6 por folha</option> 
                                         <option disabled>----------------</option>
                                         <option value="ETQ_16x10">Etiqueta Adesiva - 16cm x 10cm</option> 
                                         <option value="ETQ_10x10">Etiqueta Adesiva - 10cm x 10cm</option> 

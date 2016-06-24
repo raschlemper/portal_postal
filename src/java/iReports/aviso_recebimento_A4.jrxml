@@ -177,7 +177,7 @@
 				<text><![CDATA[ENDEREÇO PARA DEVOLUÇÃO DO OBJETO:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="89" y="119" width="188" height="9" uuid="9ea93906-acfd-462c-85ac-22091a7713cd"/>
+				<reportElement x="95" y="119" width="182" height="9" uuid="9ea93906-acfd-462c-85ac-22091a7713cd"/>
 				<textElement verticalAlignment="Middle">
 					<font size="6" isBold="false"/>
 				</textElement>
@@ -205,11 +205,11 @@
 				<textFieldExpression><![CDATA[$F{remetente_cep}+" - "+$F{remetente_cidade}+" / "+$F{remetente_uf}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="42" y="25" width="235" height="9" uuid="4e0f004d-b3f6-4f9d-acb5-96f44200f1aa"/>
+				<reportElement x="38" y="25" width="239" height="9" uuid="4e0f004d-b3f6-4f9d-acb5-96f44200f1aa"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7" isBold="true" isUnderline="false"/>
 				</textElement>
-				<text><![CDATA[DESTINATÁRIO:]]></text>
+				<text><![CDATA[ DESTINATÁRIO:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="42" y="35" width="235" height="9" uuid="d4c61859-a097-4cc1-a315-b2d80cd84bf9"/>
@@ -268,7 +268,7 @@
 				<textElement textAlignment="Center">
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[CARIMBO UNIDADE DE POSTAGEM]]></text>
+				<text><![CDATA[CARIMBO UNIDADE DE ENTREGA]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="42" y="167" width="235" height="9" uuid="d98f5ebf-cd02-455a-b59e-221ba98399f5"/>
@@ -322,23 +322,23 @@
 			<staticText>
 				<reportElement x="283" y="44" width="143" height="10" uuid="c2854086-0c09-4a14-ab1a-f073907da164"/>
 				<textElement>
-					<font size="7"/>
+					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[1ª _____/_____/_________    _____:_____h]]></text>
+				<text><![CDATA[1ª _____/_____/_______    ____:____h]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="283" y="64" width="143" height="10" uuid="a314539c-7726-4608-bc37-0e367fb9f082"/>
 				<textElement>
-					<font size="7"/>
+					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[2ª _____/_____/_________    _____:_____h]]></text>
+				<text><![CDATA[2ª _____/_____/_______    ____:____h]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="283" y="84" width="143" height="10" uuid="a13939d2-f758-47ec-8034-e54515d04ba9"/>
 				<textElement>
-					<font size="7"/>
+					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[3ª _____/_____/_________    _____:_____h]]></text>
+				<text><![CDATA[3ª _____/_____/_______    ____:____h]]></text>
 			</staticText>
 			<image onErrorType="Blank">
 				<reportElement x="42" y="2" width="230" height="18" uuid="c7a146ed-0234-4757-aef2-4ae5229151ea"/>
@@ -359,7 +359,7 @@
 				<reportElement x="277" y="0" width="45" height="20" uuid="eb8e4010-1b21-4d3c-ada7-bcf12df7f278">
 					<printWhenExpression><![CDATA[$F{mp} == 1]]></printWhenExpression>
 				</reportElement>
-				<textElement>
+				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["MP"]]></textFieldExpression>
@@ -373,7 +373,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="42" y="175" width="235" height="32" uuid="da800b69-7ebf-46ef-829d-7059c46cf956"/>
 				<textElement>
-					<font size="7"/>
+					<font size="6"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{conteudo}]]></textFieldExpression>
 			</textField>
@@ -400,11 +400,11 @@
 				<reportElement x="430" y="23" width="1" height="227" uuid="e85bafab-e5af-43d8-a4cb-35708abf5334"/>
 			</line>
 			<staticText>
-				<reportElement x="42" y="119" width="47" height="9" uuid="24d68ffc-8a15-4566-8743-28c122f182fc"/>
+				<reportElement x="38" y="119" width="57" height="9" uuid="24d68ffc-8a15-4566-8743-28c122f182fc"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7" isBold="true" isUnderline="false"/>
 				</textElement>
-				<text><![CDATA[REMETENTE:]]></text>
+				<text><![CDATA[ REMETENTE:]]></text>
 			</staticText>
 			<componentElement>
 				<reportElement x="48" y="78" width="224" height="40" uuid="6a5854e7-b600-4a7e-9c41-4862706c86d4">

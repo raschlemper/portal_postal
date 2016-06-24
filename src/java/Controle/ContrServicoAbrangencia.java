@@ -135,4 +135,27 @@ public class ContrServicoAbrangencia {
             Conexao.desconectar(con);
         }
     }
+    public static String verificaMDPBxCep(int cep,String nomeBD) {
+        Connection con = Conexao.conectar(nomeBD);
+        String sql = "SELECT servico FROM servicos_abrangencia WHERE servico IN ('MDPB_L','MDPB_E','MDPB_N') AND faixa_suspensa = 0 AND servico_suspenso = 0 AND cep_inicial <= " + cep + " AND cep_final >= " + cep;
+       String ret ="erro";
+        try {
+            PreparedStatement valores = con.prepareStatement(sql);            
+            ResultSet result = (ResultSet) valores.executeQuery();
+            if (result.next()) {
+               ret = result.getString("servico");                
+            }
+            if(ret.trim().equals("")){
+                ret ="erro";
+            }
+            
+            return ret;
+            
+        } catch (SQLException e) {
+            Logger.getLogger(ContrAmarracaoCep.class.getName()).log(Level.WARNING, e.getMessage(), e);
+            return ret;
+        } finally {
+            Conexao.desconectar(con);
+        }
+    }
 }

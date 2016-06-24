@@ -19,8 +19,7 @@ import java.util.Map;
  * @author RICARDINHO
  */
 public class ContrClienteContrato {
-    
-    
+
     public static void insereContrato(int idCliente, int codECT, String grupo, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "INSERT INTO cliente_contrato (idCliente, codECT, grupoServico) VALUES(?,?,?)";
@@ -38,7 +37,7 @@ public class ContrClienteContrato {
             Conexao.desconectar(conn);
         }
     }
-    
+
     public static boolean limparContrato(int idCliente, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "DELETE FROM cliente_contrato WHERE idCliente = ? ";
@@ -55,10 +54,10 @@ public class ContrClienteContrato {
             Conexao.desconectar(conn);
         }
     }
-    
+
     public static boolean limparContratoByServ(int idCliente, String servicos, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "DELETE FROM cliente_contrato WHERE idCliente = ? AND grupoServico IN ("+servicos+") ";
+        String sql = "DELETE FROM cliente_contrato WHERE idCliente = ? AND grupoServico IN (" + servicos + ") ";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setInt(1, idCliente);
@@ -72,8 +71,8 @@ public class ContrClienteContrato {
             Conexao.desconectar(conn);
         }
     }
-    
-    public static boolean alterarTemContrato( int temContrato, String nomeContrato, String numContrato, int anoContrato, String ufContrato, int idCliente, String cartaoPostagem, String codAdm, Date dtVigencia, int codDir, int statusCartao, String nomeCliSara, String loginCorreio, String senhaCorreio, String nomeBD) {
+
+    public static boolean alterarTemContrato(int temContrato, String nomeContrato, String numContrato, int anoContrato, String ufContrato, int idCliente, String cartaoPostagem, String codAdm, Date dtVigencia, int codDir, int statusCartao, String nomeCliSara, String loginCorreio, String senhaCorreio, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "UPDATE cliente"
                 + " SET temContrato = ?, nomeContrato = ?, numContrato = ?, anoContrato = ?, ufContrato = ?, cartaoPostagem = ?, codAdministrativo = ?, dtVigenciaFimContrato = ?,"
@@ -106,8 +105,7 @@ public class ContrClienteContrato {
             Conexao.desconectar(conn);
         }
     }
-    
-    
+
     public static boolean alterarLoginSigep(int idCliente, String login_sigep, String senha_sigep, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "UPDATE cliente SET login_sigep = ?, senha_sigep = ? WHERE codigo = ? ";
@@ -127,7 +125,7 @@ public class ContrClienteContrato {
             Conexao.desconectar(conn);
         }
     }
-    
+
     public static boolean alterarStatusCartao(int idCliente, int statusCartao, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "UPDATE cliente SET statusCartaoPostagem = ?, erro_atualizacao = 0, dataHoraAtualizacao = NOW() WHERE codigo = ? ";
@@ -145,7 +143,7 @@ public class ContrClienteContrato {
             Conexao.desconectar(conn);
         }
     }
-    
+
     public static boolean alterarErroAtualizacao(int idCliente, int erro, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "UPDATE cliente SET erro_atualizacao = ? WHERE codigo = ? ";
@@ -163,7 +161,7 @@ public class ContrClienteContrato {
             Conexao.desconectar(conn);
         }
     }
-    
+
     public static ArrayList<Integer> consultaContratoCliente(int idCliente, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "SELECT codECT FROM cliente_contrato WHERE idCliente = " + idCliente + " AND (SELECT temContrato FROM cliente WHERE codigo = " + idCliente + ") = 1";
@@ -184,7 +182,7 @@ public class ContrClienteContrato {
             Conexao.desconectar(conn);
         }
     }
-        
+
     public static ArrayList<Integer> consultaContratoClienteGroupByServico(int idCliente, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "SELECT codECT FROM cliente_contrato WHERE idCliente = " + idCliente + " GROUP BY grupoServico";
@@ -205,11 +203,11 @@ public class ContrClienteContrato {
             Conexao.desconectar(conn);
         }
     }
-    
+
     public static int consultaContratoClienteGrupoServ(int idCliente, String grupoServ, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "SELECT codECT FROM cliente_contrato WHERE idCliente = " + idCliente + " AND grupoServico = '" + grupoServ + "' ;";
-        String sql2 = "SELECT codigo FROM cliente WHERE codigo = "+idCliente+" AND (statusCartaoPostagem = 0 OR  dtVigenciaFimContrato < DATE(NOW()) OR temContrato = 0)";
+        String sql2 = "SELECT codigo FROM cliente WHERE codigo = " + idCliente + " AND (statusCartaoPostagem = 0 OR  dtVigenciaFimContrato < DATE(NOW()) OR temContrato = 0)";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();
@@ -217,10 +215,10 @@ public class ContrClienteContrato {
             for (int i = 0; result.next(); i++) {
                 codECT = result.getInt("codECT");
             }
-            
+
             valores = conn.prepareStatement(sql2);
             result = (ResultSet) valores.executeQuery();
-            if(result.next()){
+            if (result.next()) {
                 codECT = 0;
             }
             valores.close();
@@ -233,7 +231,29 @@ public class ContrClienteContrato {
             Conexao.desconectar(conn);
         }
     }
-    
+
+    public static int consultaContratoClienteGruposServicos(int idCliente, String grupoServ, String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "SELECT codECT FROM cliente_contrato LEFT JOIN cliente ON codigo = idCliente WHERE idCliente = " + idCliente + " AND grupoServico IN ( " + grupoServ + " ) "
+                + "AND (statusCartaoPostagem <> 0 OR  dtVigenciaFimContrato > DATE(NOW()) OR temContrato <> 0);";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            int codECT = 0;
+            if (result.next()) {
+                codECT = result.getInt("codECT");
+            }
+            valores.close();
+            return codECT;
+        } catch (SQLException e) {
+            System.out.println(e);
+            //ContrErroLog.inserir("HOITO - contrNivel", "SQLException", sql, e.toString());
+            return 0;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+
     public static Map<String, Integer> consultaMapContratoClienteByIdCliente(int idCliente, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "SELECT codECT, grupoServico FROM cliente_contrato WHERE idCliente = " + idCliente + " ;";
@@ -256,15 +276,15 @@ public class ContrClienteContrato {
             Conexao.desconectar(conn);
         }
     }
-    
+
     public static boolean consultaStatusContrato(int idCliente, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql2 = "SELECT codigo FROM cliente WHERE codigo = "+idCliente+" AND (statusCartaoPostagem = 0 OR  dtVigenciaFimContrato < DATE(NOW())) AND temContrato = 1;";
+        String sql2 = "SELECT codigo FROM cliente WHERE codigo = " + idCliente + " AND (statusCartaoPostagem = 0 OR  dtVigenciaFimContrato < DATE(NOW())) AND temContrato = 1;";
         try {
             PreparedStatement valores = conn.prepareStatement(sql2);
             ResultSet result = (ResultSet) valores.executeQuery();
             boolean flag = true;
-            if(result.next()){
+            if (result.next()) {
                 flag = false;
             }
             valores.close();
@@ -277,12 +297,10 @@ public class ContrClienteContrato {
             Conexao.desconectar(conn);
         }
     }
-    
+
     /*
-    ***************************************************************************    
-    */
-    
-    
+     ***************************************************************************    
+     */
     public static ArrayList<Integer> consultaOutrosServicosCliente(int idCliente, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "SELECT codECT FROM cliente_outros_servicos WHERE idCliente = " + idCliente + ";";
@@ -303,6 +321,7 @@ public class ContrClienteContrato {
             Conexao.desconectar(conn);
         }
     }
+
     public static void insereOutrosServicos(int idCliente, int codECT, String grupo, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "INSERT INTO cliente_outros_servicos (idCliente, codECT, grupoServico) VALUES(?,?,?)";
@@ -320,7 +339,7 @@ public class ContrClienteContrato {
             Conexao.desconectar(conn);
         }
     }
-    
+
     public static boolean limparOutrosServicos(int idCliente, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "DELETE FROM cliente_outros_servicos WHERE idCliente = ? ";
@@ -337,6 +356,5 @@ public class ContrClienteContrato {
             Conexao.desconectar(conn);
         }
     }
-    
-    
+
 }

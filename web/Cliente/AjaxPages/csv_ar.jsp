@@ -10,8 +10,25 @@
     String departamento = request.getParameter("departamento");
 
     int ar = Integer.parseInt(request.getParameter("ar"));
+    
+    String sql = "";
+    if (!departamento.equals("0")) {
+        sql += " AND m.departamento LIKE '" + departamento + "'";
+    }else{
+        ArrayList<Integer> dptosSessaoUsuario = (ArrayList<Integer>) session.getAttribute("departamentos");
+        if (dptosSessaoUsuario != null && dptosSessaoUsuario.size() > 0) {
+            String idsDepto = "";
+            for (Integer idDep : dptosSessaoUsuario) {
+                idsDepto += idDep + ",";
+            }
+            if (!idsDepto.equals("")) {
+                idsDepto = idsDepto.substring(0, idsDepto.lastIndexOf(","));
+                sql += " AND m.idDepartamento IN (" + idsDepto + ") ";
+            }
+        }
+    }
 
-    ArrayList movimentacao = Controle.contrMovimentacao.getMovimentacaoAR(dataInicio, dataFinal, idCliente, ar, departamento, nomeBD);
+    ArrayList movimentacao = Controle.contrMovimentacao.getMovimentacaoAR(dataInicio, dataFinal, idCliente, ar, sql, nomeBD);
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     out.println("DATA DA POSTAGEM;OBJETO;STATUS;CEP;DESTINATÁRIO;NOME DO RECEBEDOR;DATA RECEBIMENTO");

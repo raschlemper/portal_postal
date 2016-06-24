@@ -223,8 +223,8 @@
 				<textFieldExpression><![CDATA[$F{remetente_cep}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="146" width="81" height="13" uuid="e5d7481b-6daa-477e-ac2a-4477ff1813dd"/>
-				<textElement>
+				<reportElement x="11" y="146" width="87" height="13" uuid="e5d7481b-6daa-477e-ac2a-4477ff1813dd"/>
+				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[DESTINATÁRIO:]]></text>
@@ -371,10 +371,10 @@
 				</jr:barbecue>
 			</componentElement>
 			<textField>
-				<reportElement x="92" y="148" width="164" height="11" uuid="89e7a17f-fd03-4755-b2ba-1dac3888c17c">
+				<reportElement x="98" y="146" width="158" height="13" uuid="89e7a17f-fd03-4755-b2ba-1dac3888c17c">
 					<printWhenExpression><![CDATA[$F{destinatario_documento} != null && !$F{destinatario_documento}.equals("")]]></printWhenExpression>
 				</reportElement>
-				<textElement>
+				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA["CPF/CNPJ: " + $F{destinatario_documento}]]></textFieldExpression>

@@ -234,9 +234,18 @@ public class ServPreVenda extends HttpServlet {
                 }
                 //VERIFICA A EXISTENCIA DE COMBO PARA O SERVIÇO
                 //codECT = ContrServicoCombo.consultaCodCombo(codECT, ar, mp, vd);
-
-                //INSERE PRE VENDA      
-                ContrPreVenda.inserir(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD);
+                
+                //INSERE PRE VENDA  
+                int posta_restante = 0;
+                int registro_modico = 0;
+                if(servico.startsWith("MDPB")){
+                    String val = request.getParameter("tipoRg");
+                    System.out.println("tipoRg >"+val);
+                    if(val != null && val.trim().equals("1")){                        
+                    registro_modico = 1;
+                    }
+                }                
+                ContrPreVenda.inserir(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD,posta_restante,registro_modico);
 
             } else {
                 //response.sendRedirect("Cliente/Servicos/pre_postagem.jsp?Falha ao inserir o destinatario!");                

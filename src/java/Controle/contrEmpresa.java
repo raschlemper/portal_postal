@@ -62,7 +62,7 @@ public class contrEmpresa {
 
     public static ArrayList<empresas> listaAGF() {
         Connection con = Conexao.conectarGeral();
-        String sql = "SELECT * FROM empresas;";       
+        String sql = "SELECT * FROM empresas ORDER BY empresa;";       
         ArrayList<empresas> lsEmp = new ArrayList<empresas>();
         try {            
             PreparedStatement valores = con.prepareStatement(sql);

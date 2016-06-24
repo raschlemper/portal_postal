@@ -123,7 +123,7 @@
                                 <%                                
                                     ArrayList<ClienteLogEtiqueta> lista = Controle.ContrClienteEtiquetas.consultaQtdEtiquetasRestantes(200, nomeBD);
                                    int listaTele = ContrTelegramaPostal.consultaQtdNaoEnviados(nomeBD);
-                                    ArrayList<Clientes> listaContr = contrCliente.getClientesComContratoVencendo(30, nomeBD);
+                                    ArrayList<Clientes> listaContr = contrCliente.getClientesComContratoVencendo(90, nomeBD);
                                     if(lista.size() > 0){
                                 %>
                                 <div class="alert alert-danger no-margin">
@@ -140,7 +140,7 @@
                                 <%if(listaContr.size()>0){%>
                                 <div class="alert alert-danger no-margin">
                                     <a href="#" class="close" data-dismiss="alert">&times;</a>
-                                    <strong>ATENÇÃO!</strong> Existem clientes com o contrato a vencer em menos de 30 Dias:<br/>
+                                    <strong>ATENÇÃO!</strong> Existem clientes com o contrato a vencer em menos de 90 Dias:<br/>
                                     <%
                                         for(int i=0; i<listaContr.size(); i++){
                                             Clientes cli = listaContr.get(i);

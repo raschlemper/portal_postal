@@ -164,35 +164,35 @@
 				</graphicElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="10" y="134" width="196" height="9" uuid="24d68ffc-8a15-4566-8743-28c122f182fc"/>
+				<reportElement x="10" y="125" width="196" height="9" uuid="24d68ffc-8a15-4566-8743-28c122f182fc"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7" isBold="true" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[ENDEREÇO PARA DEVOLUÇÃO DO OBJETO:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="57" y="123" width="149" height="9" uuid="9ea93906-acfd-462c-85ac-22091a7713cd"/>
+				<reportElement x="57" y="114" width="149" height="9" uuid="9ea93906-acfd-462c-85ac-22091a7713cd"/>
 				<textElement verticalAlignment="Middle">
 					<font size="6" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{remetente_nome} + " - " + $F{remetente_departamento}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="10" y="144" width="196" height="9" uuid="8b1ef65e-37a8-4a1d-b4f6-13f3332616a6"/>
+				<reportElement x="10" y="135" width="196" height="9" uuid="8b1ef65e-37a8-4a1d-b4f6-13f3332616a6"/>
 				<textElement>
 					<font size="6"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{remetente_logradouro}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="10" y="152" width="196" height="9" uuid="5e9c090b-d9ad-49b3-8d73-ecc5286d1eba"/>
+				<reportElement x="10" y="143" width="196" height="9" uuid="5e9c090b-d9ad-49b3-8d73-ecc5286d1eba"/>
 				<textElement>
 					<font size="6"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{remetente_bairro}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="10" y="160" width="196" height="9" uuid="58264ed7-4e8f-4664-8471-65fa63362557"/>
+				<reportElement x="10" y="151" width="196" height="9" uuid="58264ed7-4e8f-4664-8471-65fa63362557"/>
 				<textElement>
 					<font size="6"/>
 				</textElement>
@@ -237,7 +237,7 @@
 				<reportElement x="6" y="25" width="426" height="1" uuid="d21791fb-ec46-4d08-ab16-6d57feb5c16e"/>
 			</line>
 			<line>
-				<reportElement x="6" y="170" width="199" height="1" uuid="1a203e22-bc1e-4cd7-9b56-8e12d128ae07"/>
+				<reportElement x="6" y="161" width="199" height="1" uuid="1a203e22-bc1e-4cd7-9b56-8e12d128ae07"/>
 			</line>
 			<line>
 				<reportElement x="6" y="199" width="338" height="1" uuid="aab4fc6f-997e-44ad-8196-46d1cbd0d17f"/>
@@ -260,10 +260,10 @@
 					<font size="6"/>
 				</textElement>
 				<text><![CDATA[CARIMBO
-UNIDADE DE POSTAGEM]]></text>
+UNIDADE DE ENTREGA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="10" y="171" width="195" height="9" uuid="d98f5ebf-cd02-455a-b59e-221ba98399f5"/>
+				<reportElement x="10" y="162" width="195" height="9" uuid="d98f5ebf-cd02-455a-b59e-221ba98399f5"/>
 				<textElement>
 					<font size="6"/>
 				</textElement>
@@ -350,9 +350,9 @@ UNIDADE DE POSTAGEM]]></text>
 				<textFieldExpression><![CDATA["MP"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="10" y="179" width="195" height="32" uuid="da800b69-7ebf-46ef-829d-7059c46cf956"/>
+				<reportElement x="10" y="171" width="195" height="28" uuid="da800b69-7ebf-46ef-829d-7059c46cf956"/>
 				<textElement>
-					<font size="7"/>
+					<font size="6"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{conteudo}]]></textFieldExpression>
 			</textField>
@@ -366,10 +366,10 @@ UNIDADE DE POSTAGEM]]></text>
 				<text><![CDATA[Nº DE REGISTRO DO OBJETO]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement x="10" y="86" width="193" height="36" uuid="6a5854e7-b600-4a7e-9c41-4862706c86d4">
+				<reportElement x="10" y="86" width="193" height="26" uuid="6a5854e7-b600-4a7e-9c41-4862706c86d4">
 					<printWhenExpression><![CDATA[!$F{sro}.equals("")]]></printWhenExpression>
 				</reportElement>
-				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barHeight="60">
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barHeight="45">
 					<jr:codeExpression><![CDATA[$F{sro}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
@@ -380,7 +380,7 @@ UNIDADE DE POSTAGEM]]></text>
 				<reportElement x="344" y="25" width="1" height="216" uuid="e85bafab-e5af-43d8-a4cb-35708abf5334"/>
 			</line>
 			<staticText>
-				<reportElement x="10" y="123" width="47" height="9" uuid="24d68ffc-8a15-4566-8743-28c122f182fc"/>
+				<reportElement x="10" y="114" width="47" height="9" uuid="24d68ffc-8a15-4566-8743-28c122f182fc"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7" isBold="true" isUnderline="false"/>
 				</textElement>

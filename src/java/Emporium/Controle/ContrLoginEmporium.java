@@ -64,12 +64,22 @@ public class ContrLoginEmporium {
                 String nomAgencia = result.getString("nomeAGF");
                 String cnpj = result.getString("cnpj");
                 int idEmpresa = result.getInt("idEmpresa");
-
-                ls.add(new Usuario(nomAgencia, cnpj, idEmpresa));
+                
+                Connection con2 = Conexao.conectar(cnpj);
+                PreparedStatement valores2 = con2.prepareStatement("SELECT senha, nome FROM cliente_usuarios LEFT JOIN cliente ON cliente_usuarios.codigo = cliente.codigo WHERE login = ?;");
+                valores2.setString(1, login);            
+                ResultSet result2 = (ResultSet) valores2.executeQuery();
+                while (result2.next()) {
+                    String senha = result2.getString("senha");
+                    String nomeCli = result2.getString("nome");
+                    ls.add(new Usuario(nomAgencia, cnpj, idEmpresa, senha, nomeCli));
+                }
+                Conexao.desconectar(con2);
             }
 
             return ls;
         } catch (SQLException e) {
+                    System.out.println(e);
             ContrErroLog.inserir("HOITO - contrLoginEmporium", "SQLException", sql, e.toString());
             return null;
         } finally {

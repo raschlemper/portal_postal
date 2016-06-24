@@ -232,7 +232,7 @@
 				<textFieldExpression><![CDATA[$F{remetente_cep}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="2" y="147" width="79" height="13" uuid="e5d7481b-6daa-477e-ac2a-4477ff1813dd"/>
+				<reportElement x="2" y="147" width="91" height="13" uuid="e5d7481b-6daa-477e-ac2a-4477ff1813dd"/>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
@@ -352,7 +352,7 @@
 				</jr:barbecue>
 			</componentElement>
 			<textField>
-				<reportElement x="81" y="149" width="166" height="11" uuid="89e7a17f-fd03-4755-b2ba-1dac3888c17c">
+				<reportElement x="93" y="149" width="154" height="11" uuid="89e7a17f-fd03-4755-b2ba-1dac3888c17c">
 					<printWhenExpression><![CDATA[$F{destinatario_documento} != null && !$F{destinatario_documento}.equals("")]]></printWhenExpression>
 				</reportElement>
 				<textElement>

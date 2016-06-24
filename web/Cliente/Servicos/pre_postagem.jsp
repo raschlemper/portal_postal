@@ -102,7 +102,6 @@
                     }, 20);
                 });
             });
-
             function habilitaMedidas() {
 
                 if ($('#listPeso').hasClass('esconder')) {
@@ -118,7 +117,6 @@
                 $('#coShj').html('');
                 $('#coEsx').html('');
                 $('#coPac').html('');
-
                 var cep = $('#cep').val();
                 var peso = $('#peso').val();
                 var compr = $('#comprimento').val();
@@ -161,36 +159,28 @@
                         $('#coShj').html('</br>não aceita');
                         $('#coEsx').html('</br>não aceita');
                         $('#coPac').html('</br>não aceita');
-
                         var myData = JSON.parse(response);
                         $.each(myData, function () {
                             if (this.tag === 'coSdx') {
                                 $('#coSdx').html('</br>R$' + (this.valorTotal).toFixed(2) + ' <br> ' + this.prazo + ' dias');
-
                             } else if (this.tag === 'coS10') {
 
                                 $('#coS10').html('</br>R$' + (this.valorTotal).toFixed(2) + ' <br> ' + this.prazo + ' dias');
-
                             } else if (this.tag === 'coS12') {
 
                                 $('#coS12').html('</br>R$' + (this.valorTotal).toFixed(2) + ' <br> ' + this.prazo + ' dias');
-
                             } else if (this.tag === 'coShj') {
 
                                 $('#coShj').html('</br>R$' + (this.valorTotal).toFixed(2) + ' <br> ' + this.prazo + ' dias');
-
                             } else if (this.tag === 'coEsx') {
 
                                 $('#coEsx').html('</br>R$' + (this.valorTotal).toFixed(2) + ' <br> ' + this.prazo + ' dias');
-
                             } else if (this.tag === 'coPac') {
 
                                 $('#coPac').html('</br>R$' + (this.valorTotal).toFixed(2) + ' <br> ' + this.prazo + ' dias');
                             }
 
                         });
-
-
                     },
                     error: function () {
                         $('#coSdx').html('</br>erro na consulta');
@@ -201,7 +191,6 @@
                         $('#coPac').html('</br>erro na consulta');
                     }
                 });
-
                 // $('#coPac').html('R$ 159,00<br> 5 dias');
                 //$('#coSdx').html('R$ 159,00<br> 5 dias');
             }
@@ -228,16 +217,15 @@
 
             function preencherCampos() {
                 var form = document.form1;
-
                 if (form.nome.value === '') {
                     alert('Preencha o NOME do destinatário!');
                     return false;
-                } else if(form.nome.value.length > 70){
+                } else if (form.nome.value.length > 70) {
                     alert('Tamanho máximo de 70 caracteres para o NOME do destinatário!');
                     return false;
                 }
-                
-                if(form.aoscuidados.value.length > 25){
+
+                if (form.aoscuidados.value.length > 25) {
                     alert('Tamanho máximo de 25 caracteres para o campo Aos Cuidados!');
                     return false;
                 }
@@ -247,7 +235,7 @@
                     if (form.cep.value === '' || form.cep.value.length !== 9) {
                         alert('Preencha um CEP válido do destinatário!');
                         return false;
-                    } else if(form.cep.value.length > 9){
+                    } else if (form.cep.value.length > 9) {
                         alert('Tamanho máximo de 9 caracteres para o CEP do destinatário!');
                         return false;
                     }
@@ -260,25 +248,25 @@
                 if (form.endereco.value === '') {
                     alert('Preencha o ENDEREÇO do destinatário!');
                     return false;
-                } else if(form.nome.value.length > 80){
+                } else if (form.nome.value.length > 80) {
                     alert('Tamanho máximo de 80 caracteres para o ENDEREÇO do destinatário!');
                     return false;
                 }
                 if (form.numero.value === '') {
                     alert('Preencha o NÚMERO do destinatário!');
                     return false;
-                } else if(form.numero.value.length > 8){
+                } else if (form.numero.value.length > 8) {
                     alert('Tamanho máximo de 8 caracteres para o NÚMERO do destinatário!');
                     return false;
                 }
-                if(form.complemento.value.length > 50){
+                if (form.complemento.value.length > 50) {
                     alert('Tamanho máximo de 50 caracteres para o COMPLEMENTO do destinatário!');
                     return false;
                 }
                 if (form.bairro.value === "") {
                     alert('Preencha o BAIRRO do destinatário!');
                     return false;
-                } else if(form.bairro.value.length > 50){
+                } else if (form.bairro.value.length > 50) {
                     alert('Tamanho máximo de 50 caracteres para o BAIRRO do destinatário!');
                     return false;
                 }
@@ -286,19 +274,19 @@
                     alert('Preencha a CIDADE do destinatário!');
                     return false;
                 }
-                
-                
-                if(form.obs.value.length > 100){
+
+
+                if (form.obs.value.length > 100) {
                     alert('Tamanho máximo de 100 caracteres para a Observação!');
                     return false;
                 }
-                
-                if(form.conteudo.value.length > 200){
+
+                if (form.conteudo.value.length > 200) {
                     alert('Tamanho máximo de 200 caracteres para o Conteúdo!');
                     return false;
                 }
-                
-                if(form.notaFiscal.value.length > 40){
+
+                if (form.notaFiscal.value.length > 40) {
                     alert('Tamanho máximo de 40 caracteres para a Nota Fiscal!');
                     return false;
                 }
@@ -307,6 +295,7 @@
                     alert('Escolha o Departamento/Centro de Custo para a Postagem!\n\nCaso não exista o departameto desejado,\npeça para a agência incluir no cadastro!');
                     return false;
                 }
+                
                 if (form.servico.value === 'CARTA' && form.tipoCarta.value === '') {
                     alert('Escolha o Tipo da Carta a ser Postado!');
                     return false;
@@ -325,6 +314,10 @@
                         alert('Valor máximo a cobrar permitido é de R$ 3.500,00!');
                         return false;
                     }
+                }
+                if (form.servico.value === 'MDPB' && form.tipoRg.value === '') {
+                    alert('Escolha o Tipo de Registro!');
+                    return false;
                 }
 
                 if (form.servico.value === 'OUTROS') {
@@ -365,7 +358,6 @@
                 document.getElementById("v_remetente").innerHTML = form.nomeCli.value;
                 var aux = form.departamento.value.split(';');
                 document.getElementById("v_departamento").innerHTML = aux[1];
-
                 if (form.servico.value === 'SEDEXC' || form.servico.value === 'PAC_COB') {
                     document.getElementById("v_vc").innerHTML = "<b>Valor a COBRAR:</b> R$ " + form.valor_cobrar.value + " <b style='margin:0 20px 0 20px;'>|</b> ";
                 } else {
@@ -387,19 +379,18 @@
                 document.getElementById("v_servico").innerHTML = "<img src='../../imagensNew/chancelas/" + form.servico.value + ".png' />";
                 if (form.tipoCarta.value === '0') {
                     document.getElementById("v_servico").innerHTML = "<img src='../../imagensNew/chancelas/SIMPLES.png' />";
-                }
-
-
+                     $("#mostraReg").hide();
+                }else{
+                     $("#mostraReg").show();
+                }  
                 document.getElementById("v_tipo").innerHTML = "PACOTE";
                 if (form.tipo.value === 'ENV') {
                     document.getElementById("v_tipo").innerHTML = "ENVELOPE";
                 }
-
-                //cpf
-                //obs
-                //conteudo
-                //nf
-
+                if (form.tipoRg.value === '1') {
+                    document.getElementById("v_regis").innerHTML = "REG. MÓDICO";
+                }
+                
                 //VERIFICA ABRANGENCIA DE SERVIÇOS
                 if (form.servico.value === 'ESEDEX') {
                     verPesquisarAbrangenciaServ(form.cep.value, 'ESEDEX');
@@ -407,13 +398,38 @@
                     verPesquisarAbrangenciaServ(form.cep.value, 'SEDEX10');
                 } else if (form.servico.value === 'SEDEX12') {
                     verPesquisarAbrangenciaServ(form.cep.value, 'SEDEX12');
+                } else if (form.servico.value === 'SEDEXHJ') {
+                    verPesquisarAbrangenciaServ(form.cep.value, 'SEDEXHJ');
                 } else if (form.servico.value === 'PAX') {
                     verPesquisarAbrangenciaServ(form.cep.value, 'PAX');
+                } else if (form.servico.value === 'MDPB') {
+                    var ret = verPesquisarAbrangenciaMDPB(form.cep.value);                    
+                    if (ret.trim() === 'erro') {
+                        alert('Nao existe MDPB para este CEP!');
+                        return false;
+                    } else {
+                        form.servico.value = ret.trim();
+                    }
                 } else {
                     chamaDivProtecao2();
                 }
-
             }
+
+
+            function verPesquisarAbrangenciaMDPB(cep) {
+                // strUrl is whatever URL you need to call
+                var strUrl = "../AjaxPages/consulta_abrangencia_mdpb.jsp?cep=" + cep;
+                var strReturn = "erro";
+                jQuery.ajax({
+                    url: strUrl,
+                    success: function (html) {
+                        strReturn = html;
+                    },
+                    async: false
+                });
+                return strReturn;
+            }
+
 
             function chamaDivProtecao() {
                 var classe = document.getElementById("divProtecao").className;
@@ -461,7 +477,6 @@
 
                 document.getElementById('form_aviso').className = "esconder";
                 document.getElementById('form_etiqueta').className = "mostrar";
-
                 document.getElementById('PAC').className = "";
                 document.getElementById('PAX').className = "";
                 document.getElementById('SEDEX').className = "";
@@ -472,6 +487,7 @@
                 document.getElementById('CARTA').className = "";
                 document.getElementById('PAC_COB').className = "";
                 document.getElementById('OUTROS').className = "";
+                document.getElementById('MDPB').className = "";
                 document.getElementById(serv).className = "ativo";
                 document.getElementById("servico").value = serv;
                 document.getElementById("tipoCarta").selectedIndex = 0;
@@ -481,7 +497,6 @@
                 document.getElementById("maoProp").className = 'mostrar';
                 document.getElementById("avisoRec").className = 'mostrar';
                 document.getElementById('labelObs').innerHTML = "Observações<span style='color:red;'>(APARECE SOMENTE NA ETIQUETA)</span>";
-
                 document.getElementById("cidade").readOnly = true;
                 document.getElementById("paisDest").className = 'esconder';
                 document.getElementById("ddUf").className = 'mostrar';
@@ -489,7 +504,6 @@
                 $('#cep').attr('onkeypress', 'mascara(this, maskCep);handleEnter();');
                 $('#cep').attr('onblur', 'verPesquisarCepDest(this.value);');
                 $('#cep').attr('onchange', 'mascara(this, maskCep);');
-
                 if (serv === 'CARTA') {
                     document.getElementById("tipoPacote").className = 'esconder';
                     document.getElementById("vlrDecl").className = 'esconder';
@@ -530,6 +544,15 @@
                     document.getElementById("vlrCobrar").className = 'esconder';
                     document.getElementById("outros_servicos").className = 'mostrar';
                     alteraOutroServ(document.getElementById("servico_1").value);
+                } else if (serv === 'MDPB') {
+                    document.getElementById("tipoPacote").className = 'esconder';
+                    document.getElementById("vlrDecl").className = 'mostrar';
+                    document.getElementById("maoProp").className = 'mostrar';
+                    document.getElementById("avisoRec").className = 'mostrar';
+                    document.getElementById("tipoRegis").className = 'mostrar';
+                    document.getElementById("tipoCt").className = 'esconder';
+                    document.getElementById("tipo").selectedIndex = 1;
+                    document.getElementById("tipoCarta").selectedIndex = 1;
                 } else {
                     document.getElementById("vlrCobrar").className = 'esconder';
                     document.getElementById("cpf_obg").className = 'esconder';
@@ -547,7 +570,6 @@
                      * se não for pega o evento Which (Firefox)
                      */
                     var tecla = (e.keyCode ? e.keyCode : e.which);
-
                     /* verifica se a tecla pressionada foi o ENTER */
                     if (tecla === 13) {
                         verPesquisarCepDest($('#cep').val());
@@ -557,7 +579,6 @@
                     //return false;
                 });
             });
-
             function Check200(nomeCheck, checado) {  //JS_PORTAL_POSTAL
                 var count = 0;
                 $("[name='" + nomeCheck + "']").each(function () {
@@ -582,7 +603,6 @@
                     qtdSelecionada++;
                     flag = false;
                 });
-
                 if (qtdSelecionada > 200) {
                     alert("Quantidade máxima de impressão de 200 etiquetas de cada vez!");
                     return false;
@@ -645,7 +665,6 @@
 
             function somarQtd(campo, min, max, escala, mult) {
                 var qtd = document.getElementById(campo).value;
-
                 if (qtd > min && mult < 0) {
                     qtd = parseInt(qtd) + (escala * mult);
                 } else if (qtd < max && mult > 0) {
@@ -700,7 +719,6 @@
                         $("#complemento").val(ui.item.complemento);
                         $("#bairro").val(ui.item.bairro);
                         $("#cidade").val(ui.item.cidade);
-
                         if (ui.item.destino === 'NAC') {
                             $("#uf").val(ui.item.uf);
                             $("#uf2").find("option").filter(function () {
@@ -726,10 +744,7 @@
                             "<div style='clear:both;'>" +
                             "</div>").appendTo(ul);
                 };
-
-
             });
-
             function limparContato() {
                 $("#idDestinatario").val('0');
                 $("#endereco").val('');
@@ -752,7 +767,6 @@
                 var codECT = aux[0];
                 var grupoServ = aux[1];
                 var tipoPostagem = aux[2];
-
                 if (grupoServ === 'PPI') {
                     document.getElementById('labelObs').innerHTML = "Nº do Processo<span style='color:red;'>(APARECE SOMENTE NA ETIQUETA)</span>";
                 } else {
@@ -815,6 +829,7 @@
                             <b>VD:</b> <span id="v_vd"></span>
                             <b style='margin:0 20px 0 20px;'>|</b> <b>AR:</b> <span id="v_ar"></span>
                             <b style='margin:0 20px 0 20px;'>|</b> <b>MP:</b> <span id="v_mp"><img width="12" src="../../imagensNew/cross_circle.png" /></span>
+                            <span id="mostraReg" class="esconder"><b style='margin:0 20px 0 20px;'>|</b><b>REGISTRO:</b> <span id="v_regis"> REG. NORMAL</span></span>
                         </dd>
                     </li>        
                     <li><dd class="titulo">Dados do Remetente</dd></li>
@@ -892,7 +907,7 @@
                                 <%--<dl style='width:105px; border-left: 1px solid #CCC;' id="PAC" <%if (acs.contains(1)) {%> onclick="alteraServ('PAC');" <%} else {%> onclick="alert('Este usuário não tem permisão para utilizar este serviço!');" <%}%>>
                                     <dd><b class='serv'>PAC</b><br/>&nbsp;--<img src="../../imagensNew/pac.png" border="0" />--</dd>                                    --%>
                                 <%
-                                    String tabSize = "84px";
+                                    String tabSize = "75px";
                                     //CONSULTA SE TEM CONTRATO PAC
                                     int codPac = ContrClienteContrato.consultaContratoClienteGrupoServ(idCli, "PAC", nomeBD);
                                     int qtdPac = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ("PAC", 0, idCli, nomeBD);
@@ -1181,25 +1196,42 @@
                                         out.println("<dl style='width:" + tabSize + "; color:gray;' id='PAC_COB' onclick=\"alert('Este usuário não tem permisão para utilizar este serviço!');\" >");
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>A COBRAR");//<img src="../../imagensNew/sedex_cobrar.png" border="0" />
                                         out.println("<dd><p><b style='color:gray;'>BLOQUEADO</b></p></dd>");
-                                        out.println("<input type='hidden' name='cod_sedexc' value='" + codPacCob + "' />");
+                                        out.println("<input type='hidden' name='cod_pacc' value='" + codPacCob + "' />");
                                         out.println("</dl>");
-                                    } else if (codSedexc != 0 && qtdSedexc > 0) {
+                                    } else if (codPacCob != 0 && qtdPacCob > 0) {
                                         out.println("<dl style='width:" + tabSize + ";' id='PAC_COB' onclick=\"alteraServ('PAC_COB',1);\" >");
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>A COBRAR");//<img src="../../imagensNew/sedex_cobrar.png" border="0" />
                                         out.println("<dd><p>QTD.: <b>" + qtdPacCob + "</b></p></dd>");
-                                        out.println("<input type='hidden' name='cod_sedexc' value='" + codPacCob + "' />");
+                                        out.println("<input type='hidden' name='cod_pacc' value='" + codPacCob + "' />");
                                         out.println("</dl>");
-                                    } else if (codSedexc != 0) {
+                                    } else if (codPacCob != 0) {
                                         out.println("<dl style='width:" + tabSize + ";' id='PAC_COB' onclick=\"alteraServ('PAC_COB',1);\" >");
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>A COBRAR");//<img src="../../imagensNew/sedex_cobrar.png" border="0" />
                                         out.println("<dd><p><b>S/ ETIQUETA</b></p></dd>");
-                                        out.println("<input type='hidden' name='cod_sedexc' value='" + codPacCob + "' />");
+                                        out.println("<input type='hidden' name='cod_pacc' value='" + codPacCob + "' />");
                                         out.println("</dl>");
                                     } else {
                                         out.println("<dl style='width:" + tabSize + ";' id='PAC_COB' onclick=\"alteraServ('PAC_COB',0);\" >");
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>A COBRAR");//<img src="../../imagensNew/sedex_cobrar.png" border="0" />
                                         out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
-                                        out.println("<input type='hidden' name='cod_sedexc' value='' />");
+                                        out.println("<input type='hidden' name='cod_pacc' value='' />");
+                                        out.println("</dl>");
+                                    }
+
+                                    //CONSULTA SE TEM CONTRATO MDPB
+                                    int codMDPB = ContrClienteContrato.consultaContratoClienteGruposServicos(idCli, "'MDPB_L' , 'MDPB_E', 'MDPB_N'", nomeBD);
+                                    //  if (acs.contains(3) && codMDPB != 0) {
+                                    if (codMDPB != 0) {
+                                        out.println("<dl style='width:" + tabSize + ";' id='MDPB' onclick=\"alteraServ('MDPB',1);\" >");
+                                        out.println("<dd><b class='servSmall'>MDPB</b>");
+                                        out.println("<dd><p><b>REGISTRADA</b></p></dd>");
+                                        out.println("<input type='hidden' name='cod_mdpb' value='MDPB' />");
+                                        out.println("</dl>");
+                                    } else {
+                                        out.println("<dl style='width:" + tabSize + "; color:gray;' id='MDPB' onclick=\"alert('Este serviço não esta habilitado!');\" >");
+                                        out.println("<dd><b class='servSmall'>MDPB</b>");
+                                        out.println("<dd><p><b style='color:gray;'>BLOQUEADO</b></p></dd>");
+                                        out.println("<input type='hidden' name='cod_mdpb' value='MDPB' />");
                                         out.println("</dl>");
                                     }
 
@@ -1283,12 +1315,13 @@
                                                 if (listaDep != null && listaDep.size() > 0) {
 
                                                     if (dps.size() != 1) {
-                                                    if (listaDep.size() > 1 || dps.size() == 0) {
+                                                        if (listaDep.size() > 1 || dps.size() == 0) {
 
 
                                             %>
                                             <option value="-1">-- SELECIONE UM DEPARTAMENTO --</option>                                    
-                                            <%                                                }}
+                                            <%                                                }
+                                                }
                                                 for (int i = 0; i < listaDep.size(); i++) {
                                                     ClientesDeptos cd = listaDep.get(i);
                                                     String cartao = "0";
@@ -1446,7 +1479,11 @@
                                     </dd>
                                     <dd>
                                         <label>Nº PEDIDO / NOTA FISCAL</label>
-                                        <input type="text" name="notaFiscal" id="notaFiscal" maxlength="40" value="" />
+                                        <%if(nomeUser.equals("SLVMASTER")){%>
+                                            <input type="text" name="notaFiscal" id="notaFiscal" maxlength="40" value="Corporate" />
+                                        <%}else{%>
+                                            <input type="text" name="notaFiscal" id="notaFiscal" maxlength="40" value="" />
+                                        <%}%>
                                     </dd>
                                     <%--<dd>
                                         <label>Peso<span style="color:red;">(gr)</span></label>
@@ -1468,6 +1505,14 @@
                                             <option value="0">SIMPLES</option>
                                         </select>
                                     </dd>
+                                    <dd id="tipoRegis" class="esconder" >
+                                        <label>Tipo do Registro<b class="obg">*</b></label>
+                                        <select style="width: 115px;" name="tipoRg" id="tipoRg">
+                                            <option value=""> - - - </option>
+                                            <option value="0">NORMAL</option>
+                                            <option value="1">MÓDICO</option>
+                                        </select>
+                                    </dd>
                                     <%--<dd>
                                         <label>Alt.<span style="color:red;">(cm)</span></label>
                                         <input type="text" name="altura" id="altura" size="5" maxlength="3" onkeypress="mascara(this, maskNumero)" />
@@ -1482,11 +1527,11 @@
                                     </dd>--%>
                                     <dd id="vlrCobrar" class="esconder">
                                         <label>Valor a Cobrar<span style="color:red;">(R$)</span></label>
-                                        <input type="text" name="valor_cobrar" id="valor_cobrar" value="0.00"  onkeypress="mascara(this, maskReal)" />
+                                        <input type="text" name="valor_cobrar" id="valor_cobrar" value="0.00"  onkeypress="mascara(this, maskReal);" />
                                     </dd>
                                     <dd id="vlrDecl">
                                         <label>Valor Declarado<span style="color:red;">(R$)</span></label>
-                                        <input type="text" name="vd" id="vd" value="0.00" onkeypress="mascara(this, maskReal)" />
+                                        <input type="text" name="vd" id="vd" value="0.00" onkeypress="mascara(this, maskReal);" />
                                     </dd>
                                     <dd id="maoProp">
                                         <label>M.P.</label>
@@ -1618,7 +1663,6 @@
                                 sortdir: 1,
                                 init: true
                             });
-
                             var sorterDes = new TINY.table.sorter('sorterDes', 'tableDes', {
                                 headclass: 'head',
                                 ascclass: 'asc',
@@ -1641,9 +1685,8 @@
                                 sortcolumn: 2,
                                 sortdir: 1,
                                 init: false
-                            });
-                        </script>
-                        <%if (lista.size() > 0) {%>
+                            });</script>
+                            <%if (lista.size() > 0) {%>
                         <ul class="ul_formulario" style="padding: 10px 0; margin: 0;width: 1136px;"  >
                             <li>
                                 <dd>
@@ -1661,7 +1704,8 @@
                                 <dd>
                                     <label>Tamanho da impressão:</label>
                                     <select style="width: 220px;" name="formato" id="formato">
-                                        <option value="A4">Folha A4</option> 
+                                        <option value="A4">Folha A4 - 4 por folha</option> 
+                                        <option value="A4_6">Folha A4 - 6 por folha</option> 
                                         <option disabled>----------------</option>
                                         <option value="ETQ_16x10">Etiqueta Adesiva - 16cm x 10cm</option> 
                                         <option value="ETQ_10x10">Etiqueta Adesiva - 10cm x 10cm</option> 

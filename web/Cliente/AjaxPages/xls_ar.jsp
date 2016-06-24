@@ -12,9 +12,26 @@
     String dataFinal = request.getParameter("final");
     String departamento = request.getParameter("departamento");
     
+        String sql = "";
+        if (!departamento.equals("0")) {
+            sql += " AND m.departamento LIKE '" + departamento + "'";
+        }else{
+            ArrayList<Integer> dptosSessaoUsuario = (ArrayList<Integer>) session.getAttribute("departamentos");
+            if (dptosSessaoUsuario != null && dptosSessaoUsuario.size() > 0) {
+                String idsDepto = "";
+                for (Integer idDep : dptosSessaoUsuario) {
+                    idsDepto += idDep + ",";
+                }
+                if (!idsDepto.equals("")) {
+                    idsDepto = idsDepto.substring(0, idsDepto.lastIndexOf(","));
+                    sql += " AND m.idDepartamento IN (" + idsDepto + ") ";
+                }
+            }
+        }
+    
     int ar = Integer.parseInt(request.getParameter("ar"));
 
-    ArrayList movimentacao = Controle.contrMovimentacao.getMovimentacaoAR(dataInicio, dataFinal, idCliente, ar, departamento, nomeBD);
+    ArrayList movimentacao = Controle.contrMovimentacao.getMovimentacaoAR(dataInicio, dataFinal, idCliente, ar, sql, nomeBD);
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 %>
 <table width='120%' align='center' cellspacing='1'> 
@@ -46,7 +63,7 @@
         %>
         <tr align='center'>
             <td nowrap align='left'><%= vData%></td>
-            <td nowrap align='left'><a href='http://websro.correios.com.br/sro_bin/txect01$.inexistente?p_itemcode=&amp;p_lingua=001&amp;p_teste=&amp;p_tipo=003&amp;z_action=&amp;p_cod_lis=<%= numeroRegistro%>' target=_blank><%= numeroRegistro%></a></td>
+            <td nowrap align='left'><%= numeroRegistro%></td>
             <td nowrap align='left'><%= status%></td>
             <td nowrap align='left'><%= cep%></td>
             <td nowrap align='left'><%= destinatario%></td>

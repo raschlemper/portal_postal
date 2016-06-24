@@ -83,16 +83,20 @@ public class ServInserirClientesVendedor extends HttpServlet {
                 //contador de itens na tabela da clientes
                 int cont = Integer.parseInt(request.getParameter("contador"));
                 //id do vendedor
-                int idVendedor = Integer.parseInt(request.getParameter("idVendedor"));
+                int idVendedor = Integer.parseInt(request.getParameter("idVendedor")); 
+               // Deleta as lista antiga 
+                contrVendedores.deletarListaCliente(idVendedor,nomeBD); 
                 //for que percorre a quantidade de itens que contem na tabela da clientes
-                       contrVendedores.deletarListaCliente(idVendedor,nomeBD); 
+                      
                 for (int i = 0; i < cont; i++) {
                     String vIdCliente = request.getParameter("cliente" + i);
                     if (vIdCliente != null && !vIdCliente.equals("")) {
                         int idCliente = Integer.parseInt(vIdCliente);                     
                         String percentual = request.getParameter("percent" + i);
-                        System.out.println("percent"+i + " - val :"+percentual);
-                        //Deleta as lista antiga e insere a atual                       
+                        if(percentual.trim().equals("")){
+                            percentual = "0";
+                        }                       
+                        //Insere lista atual                       
                        contrVendedores.inserirClientesLista(idVendedor,idCliente, percentual, nomeBD);
                     }
                 }

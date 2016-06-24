@@ -11,14 +11,12 @@
     response.setHeader("Pragma", "no-cache"); //HTTP 1.0
     response.setDateHeader("Expires", 0); //prevent caching at the proxy server
 
-    if (session.getAttribute("usuario") == null) {
-        response.sendRedirect("../index.jsp?msgLog=3");
+    Usuario usrSessao = (Usuario) session.getAttribute("agf_usuario");
+    if (usrSessao == null) {
+        response.sendRedirect("../../index.jsp?msgLog=3");
+    } else if (usrSessao.getListaAcessosPortalPostal().contains("405")) {
+        response.sendRedirect("../../NewTemplate/Dashboard/index.jsp?msg=Usuario sem permissao!");
     } else {
-
-        int idNivelDoUsuario = (Integer) session.getAttribute("nivel");
-        if (idNivelDoUsuario == 3) {
-            response.sendRedirect("../Importacao/imp_movimento.jsp?msg=Acesso Negado!");
-        }
 
         String nomeBD = (String) session.getAttribute("empresa");
         empresas emp = (empresas) session.getAttribute("emp");

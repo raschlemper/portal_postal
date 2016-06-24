@@ -8,7 +8,6 @@ import Controle.contrCliente;
 import Entidade.Clientes;
 import Entidade.DadosEtiqueta;
 import Util.Conexao;
-import static iReports.ServEtiquetas.urlExist;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -28,9 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.design.JRDesignQuery;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 /**
  *
@@ -66,6 +62,8 @@ public class ServEtiquetasReimp extends HttpServlet {
             String url_jrxml = "etiqueta_A4_4_por_folha.jasper";   
             if(formato.equals("A4") || formato.equals("PIMACO_6288_1")){
                 url_jrxml = "etiqueta_A4_4_por_folha.jasper";
+            } else if (formato.equals("A4_6")) {
+                url_jrxml = "etiqueta_A4_6_por_folha.jasper";
             } else if (formato.equals("ENV_DL")) {
                 url_jrxml = "etiqueta_envelope_DL.jasper";
             } else if (formato.equals("ENV_DL_ESQ")) {

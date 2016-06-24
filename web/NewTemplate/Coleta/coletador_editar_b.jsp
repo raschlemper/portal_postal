@@ -1,11 +1,17 @@
+<%@page import="Entidade.Usuario"%>
 <%@ page import = "java.util.ArrayList,java.sql.Timestamp, java.util.Date, java.text.SimpleDateFormat"%>
 <%
     /*AJAX*/
     response.setContentType("text/xml");
     response.setHeader("Cache-Control", "no-cache");
-
-    String nomeBD = (String) session.getAttribute("empresa");
-    if (nomeBD != null) {
+    Usuario usrSessao = (Usuario) session.getAttribute("agf_usuario");
+    if (usrSessao == null) {
+        response.sendRedirect("../../index.jsp?msgLog=3");
+    } else if (usrSessao.getListaAcessosPortalPostal().contains("203")) {
+        response.sendRedirect("../../NewTemplate/Dashboard/index.jsp?msg=Usuario sem permissao!");
+    } else {
+        
+        String nomeBD = (String) session.getAttribute("empresa");
 
         int idColetador = Integer.parseInt(request.getParameter("idColetador"));
         Coleta.Entidade.Coletador col = Coleta.Controle.contrColetador.consultaColetadoresById(idColetador, nomeBD);

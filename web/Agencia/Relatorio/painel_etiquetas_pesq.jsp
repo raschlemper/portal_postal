@@ -49,7 +49,7 @@
         <!-- TableSorter -->
         <script type="text/javascript" src="../../javascript/plugins/autocomplete/js/simpleAutoComplete.js"></script>
         <link rel="stylesheet" type="text/css" href="../../javascript/plugins/autocomplete/css/simpleAutoComplete.css" />
-        
+
         <link rel="stylesheet" href="../../javascript/plugins/dropdown/css/style.css" type="text/css" media="screen, projection"/>
         <!--[if lte IE 7]>
         <link rel="stylesheet" type="text/css" href="../../javascript/plugins/dropdown/css/ie.css" media="screen" />
@@ -152,6 +152,11 @@
                 document.getElementById("idCliente").value = par[0];
                 //montaComboContato(par[0]);
             }
+
+            function pesqSro(param) {
+                $('#objetos').val(param);
+                $('#frmSRO').submit();
+            }
         </script>
         <title>Portal Postal | Importação dos Clientes</title>
     </head>
@@ -210,7 +215,8 @@
                                 <dd>
                                     <div class="buttons">
                                         <input type="hidden" style="width:100px;" name="obj" id="obj" />
-                                        <button type="button" onclick="abrirTelaEspera();document.form2.submit();" class="regular"><img src="../../imagensNew/lupa.png"/> PESQUISAR</button>
+                                        <button type="button" onclick="abrirTelaEspera();
+                                                document.form2.submit();" class="regular"><img src="../../imagensNew/lupa.png"/> PESQUISAR</button>
                                     </div>
                                 </dd>
                             </li>
@@ -219,64 +225,64 @@
 
                     <div style="width: 100%;">
                         <div id="titulo2">Resultado da Pesquisa: <%= numObj%></div>
-                        <%            
-                        if(numObj.equals("") && request.getParameter("idCliente") != null){
-                            int idCliente = Integer.parseInt(request.getParameter("idCliente"));
-                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                            String vDataAtual = sdf.format(new Date());
-                            if(request.getParameter("data") != null){
-                                vDataAtual = request.getParameter("data");
-                            }
-                            String vData2 = sdf.format(new Date());
-                            if(request.getParameter("data2") != null){
-                                vData2 = request.getParameter("data2");
-                            }
+                        <%
+                            if (numObj.equals("") && request.getParameter("idCliente") != null) {
+                                int idCliente = Integer.parseInt(request.getParameter("idCliente"));
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                String vDataAtual = sdf.format(new Date());
+                                if (request.getParameter("data") != null) {
+                                    vDataAtual = request.getParameter("data");
+                                }
+                                String vData2 = sdf.format(new Date());
+                                if (request.getParameter("data2") != null) {
+                                    vData2 = request.getParameter("data2");
+                                }
 
-                            String dataIni = Util.FormatarData.DateToBD(vDataAtual);
-                            String dataFim = Util.FormatarData.DateToBD(vData2);
-                            ArrayList<PreVenda> listaPV = ContrPreVenda.consultaPreVendasByClientePeriodo(idCliente, dataIni, dataFim, nomeBD);
-                            %>
-                            
-                            <table cellpadding="0" cellspacing="0" border="0" class="tinytable">
-                                <thead>
-                                    <tr>
-                                        <th><h3>Nº do Objeto</h3></th>
-                                        <th><h3>Destinatario</h3></th>
-                                        <th><h3>Cep Destino</h3></th>
-                                        <th><h3>Cidade/UF</h3></th>
-                                        <th><h3>Servico</h3></th>
-                                        <th><h3>Adicionais</h3></th>
-                                    </tr>
-                                </thead>
-                                <%
-                            for(PreVenda pv : listaPV){
-                                String adicionais = "";
-                                if(pv.getAviso_recebimento()==1){
-                                    adicionais += "AR";
-                                }
-                                if(pv.getMao_propria()==1){
-                                    adicionais += " / MP";                                    
-                                }
-                                if(pv.getValor_declarado()>0){
-                                    adicionais += " / VD R$ " + pv.getValor_declarado(); 
-                                }
-                                %>                                
-                                <tbody>
-                                    <tr>
-                                        <td><a href="painel_etiquetas_pesq.jsp?obj=<%= pv.getNumObjeto() %>"><%= pv.getNumObjeto() %></a></td>
-                                        <td><%= pv.getNomeDes() %></td>
-                                        <td><%= pv.getCepDes() %></td>
-                                        <td><%= pv.getCidadeDes()+"/"+pv.getUfDes() %></td>
-                                        <td><%= pv.getNomeServico() %></td>
-                                        <td><%= adicionais %></td>
-                                    </tr>
-                                </tbody>
-                                <%}%>
-                            </table>
-                            
-                            
+                                String dataIni = Util.FormatarData.DateToBD(vDataAtual);
+                                String dataFim = Util.FormatarData.DateToBD(vData2);
+                                ArrayList<PreVenda> listaPV = ContrPreVenda.consultaPreVendasByClientePeriodo(idCliente, dataIni, dataFim, nomeBD);
+                        %>
+
+                        <table cellpadding="0" cellspacing="0" border="0" class="tinytable">
+                            <thead>
+                                <tr>
+                                    <th><h3>Nº do Objeto</h3></th>
+                                    <th><h3>Destinatario</h3></th>
+                                    <th><h3>Cep Destino</h3></th>
+                                    <th><h3>Cidade/UF</h3></th>
+                                    <th><h3>Servico</h3></th>
+                                    <th><h3>Adicionais</h3></th>
+                                </tr>
+                            </thead>
                             <%
-                        }else if(!numObj.equals("")){
+                                for (PreVenda pv : listaPV) {
+                                    String adicionais = "";
+                                    if (pv.getAviso_recebimento() == 1) {
+                                        adicionais += "AR";
+                                    }
+                                    if (pv.getMao_propria() == 1) {
+                                        adicionais += " / MP";
+                                    }
+                                    if (pv.getValor_declarado() > 0) {
+                                        adicionais += " / VD R$ " + pv.getValor_declarado();
+                                    }
+                            %>                                
+                            <tbody>
+                                <tr>
+                                    <td><a href="painel_etiquetas_pesq.jsp?obj=<%= pv.getNumObjeto()%>"><%= pv.getNumObjeto()%></a></td>
+                                    <td><%= pv.getNomeDes()%></td>
+                                    <td><%= pv.getCepDes()%></td>
+                                    <td><%= pv.getCidadeDes() + "/" + pv.getUfDes()%></td>
+                                    <td><%= pv.getNomeServico()%></td>
+                                    <td><%= adicionais%></td>
+                                </tr>
+                            </tbody>
+                            <%}%>
+                        </table>
+
+
+                        <%
+                        } else if (!numObj.equals("")) {
                             PreVenda pv = ContrPreVenda.consultaVendaBySRO(numObj, nomeBD);
                             if (pv != null) {
 
@@ -311,7 +317,7 @@
                             <li>
                                 <dd style="width: 200px;">
                                     <label>Nº do Objeto</label>
-                                    <a href='http://websro.correios.com.br/sro_bin/txect01$.QueryList?P_LINGUA=001&P_TIPO=001&P_COD_UNI=<%= nrObj%>' target=_blank><%= nrObj%></a>
+                                     <a href='#' onclick="pesqSro('<%= nrObj%>');"><%= nrObj%></a>
                                 </dd>
                                 <dd style="width: 200px;">
                                     <label>Serviço</label>
@@ -450,12 +456,16 @@
                         <div style="width: 100%; clear: both;"></div>
                         <%} else if (!numObj.equals("")) {%>
                         <div style="width: 100%;text-align: center;vertical-align: middle;padding: 50px 0px;background: #ff5555;color: white; font-size: 22px;font-weight: bold;">Etiqueta <%= numObj%> Não Encontrada!</div>
-                        <%}}%>
+                        <%}
+                            }%>
                     </div>
 
                 </div>
             </div>
         </div>
+        <form name="frmSRO" id="frmSRO" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
+            <input type="hidden" name="objetos" id="objetos" value="" />
+        </form> 
     </body>
 </html>
 <%}%>

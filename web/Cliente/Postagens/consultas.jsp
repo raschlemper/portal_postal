@@ -15,7 +15,7 @@
             if (nomeBD == null) {
                 response.sendRedirect("../../index.jsp?msg=Sua sessao expirou! Para voltar ao Portal faça seu login novamente!");
             } else {
-
+                 ArrayList<Integer> acessosUs = (ArrayList<Integer>) session.getAttribute("acessos");
                 String numCliente = String.valueOf(session.getAttribute("idCliente"));
                 int idCliente = (Integer) session.getAttribute("idCliente");
                 int nivel = (Integer) session.getAttribute("nivelUsuarioEmp");
@@ -337,6 +337,16 @@
                                     <option value=" AND contratoEct = ''">FATURADO AGF</option> 
                                 </select>
                             </dd>
+                             <%if (acessosUs.contains(8)) {%>
+                            <dd>
+                                <br/>
+                                <input style="position : relative ; top:3px;" name="atrasado" id="atrasado" value="1" type="checkbox" /><b> SOMENTE COM ATRASO
+                               
+                            </dd>
+                            <%}else{%>
+                            <input style="display: none;" name="atrasado" id="atrasado" value="0" type="checkbox" />
+                               
+                            <%}%>
                         </li>
                         <li>
                             <dd style="width: 500px;">

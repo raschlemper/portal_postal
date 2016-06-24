@@ -67,14 +67,14 @@
         <script type="text/javascript" charset="utf-8">
             function validaForm() {
                 var form = document.form1;
-                if (form.arquivo.value == "") {
+                if (form.arquivo.value === "") {
                     alert("Escolha o arquivo de clientes a ser importado!\nGeralmente encontrado em 'C:/clientes.txt'.");
                     return false;
                 } else {
                     var indexA = form.arquivo.value.lastIndexOf(".");
                     var indexB = form.arquivo.value.length;
                     var ext = form.arquivo.value.substring(indexA, indexB).toUpperCase();
-                    if (ext != ".TXT") {
+                    if (ext !== ".TXT") {
                         alert("O arquivo a ser importado deve ser '.TXT' !");
                         return false;
                     }
@@ -85,7 +85,7 @@
 
             function chamaDivProtecao() {
                 var classe = document.getElementById("divProtecao").className;
-                if (classe == "esconder") {
+                if (classe === "esconder") {
                     document.getElementById("divProtecao").className = "mostrar";
                     document.getElementById("divInteracao").className = "mostrar";
                 } else {
@@ -104,7 +104,7 @@
                 }
             }
 
-            $(function() {
+            $(function () {
                 $("#dataIni").datepicker({
                     maxDate: '<%= vDataAtual%>',
                     showOn: "button",
@@ -120,6 +120,10 @@
                     showAnim: "slideDown"
                 });
             });
+            function pesqSro(param) {
+                $('#objetos').val(param);
+                $('#frmSRO').submit();
+            }
         </script>
         <title>Portal Postal | Etiquetas Pendentes</title>
     </head>
@@ -130,6 +134,9 @@
         <%@ include file="../../Includes/telaMsg.jsp" %>
         <%@ include file="../../Includes/menu_agencia.jsp" %>
 
+        <form name="frmSRO" id="frmSRO" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
+            <input type="hidden" name="objetos" id="objetos" value="" />
+        </form> 
         <div id="divPrincipal" align="center">
             <div id="container">
                 <div id="conteudo">
@@ -148,12 +155,9 @@
                                             <input type="hidden" name="nomeBD" value="<%= nomeBD%>" />
                                             <button type="submit" onclick="abrirTelaEspera();" class="regular"><img src="../../imagensNew/refresh.png"/> ATUALIZAR ETIQUETAS POSTADAS</button>
                                         </form>  
-                                            <br/>
-                                            <b>* Ao atualizar as etiquetas impressas a mais de 15 Dias serão marcadas como inutilizadas.</b>
-                                        <%--<form name='formObs' action='../../ServEnviaEmailEtqPendentes' method='post'>
-                                            <input type="hidden" name="nomeBD" value="<%= nomeBD%>" />
-                                            <button type="submit" onclick="abrirTelaEspera();" class="regular"><img src="../../imagensNew/mail_send.png"/> ENVIAR E-MAIL DE ATERTA</button>
-                                        </form>--%>
+                                        <br/>
+                                        <b>* Ao atualizar as etiquetas impressas a mais de 15 Dias serão marcadas como inutilizadas.</b>
+                                        
                                     </div>
                                 </dd>
                             </li>
@@ -182,7 +186,7 @@
 
                         <form action="../../ServPreVendaInutilizar" method="post" name="formDel">
                             <div id="titulo2" style="margin-top: 50px;">Lista de Etiquetas Geradas e NÃO CONSOLIDADAS</div>
-                            
+
                             <table id="barraAtendimento" border="0">
                                 <tr>
                                     <td align="left" style="font-weight:bold;font-size:12px;">
@@ -243,7 +247,9 @@
                                     %>
                                     <tr style="cursor:default;">
                                         <td align="center"><input type="checkbox" name="ids" value="<%= des.getId()%>" /></td>
-                                        <td align="center"><a href='http://websro.correios.com.br/sro_bin/txect01$.QueryList?P_LINGUA=001&P_TIPO=001&P_COD_UNI=<%= numObj %>' target=_blank><%= numObj%></a></td>
+                                        <td align="center"> 
+                                             <a href='#' onclick="pesqSro('<%= numObj %>');"><%= numObj%></a> 
+                                        </td>
                                         <td><%= des.getNomeServico()%></td>
                                         <td><%= nomeCli%></td>
                                         <td><%= des.getNomeDes()%></td>
@@ -260,56 +266,57 @@
                                     <%}%>
                                 </tbody>
                             </table>
-                        <div id="tablefooter" align='center'>
-                            <div align="left" style='float:left; width:20%;'>
-                                <select onchange="sorter3.size(this.value)">
-                                    <option value="5">5</option>
-                                    <option value="10" selected="selected">10</option>
-                                    <option value="20">20</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
-                                </select>
-                                <span>Linhas por Página</span>
-                            </div>
-                            <div id="tablenav3" class="tablenav">
-                                <div>
-                                    <img src="../../javascript/plugins/TableSorter/images/left_end.png" width="20" height="20" alt="First Page" onclick="sorter3.move(-1,true)" />
-                                    <img src="../../javascript/plugins/TableSorter/images/left.png" width="20" height="20" alt="First Page" onclick="sorter3.move(-1)" />
-                                    <img src="../../javascript/plugins/TableSorter/images/right.png" width="20" height="20" alt="First Page" onclick="sorter3.move(1)" />
-                                    <img src="../../javascript/plugins/TableSorter/images/right_end.png" width="20" height="20" alt="Last Page" onclick="sorter3.move(1,true)" />
-                                    <select style="margin-left:5px;" id="pagedropdown3"></select>
-                                    <a style="margin-left:10px;" href="javascript:sorter3.showall()">Ver Tudo</a>
+                            <div id="tablefooter" align='center'>
+                                <div align="left" style='float:left; width:20%;'>
+                                    <select onchange="sorter3.size(this.value)">
+                                        <option value="5">5</option>
+                                        <option value="10" selected="selected">10</option>
+                                        <option value="20">20</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                    <span>Linhas por Página</span>
+                                </div>
+                                <div id="tablenav3" class="tablenav">
+                                    <div>
+                                        <img src="../../javascript/plugins/TableSorter/images/left_end.png" width="20" height="20" alt="First Page" onclick="sorter3.move(-1, true)" />
+                                        <img src="../../javascript/plugins/TableSorter/images/left.png" width="20" height="20" alt="First Page" onclick="sorter3.move(-1)" />
+                                        <img src="../../javascript/plugins/TableSorter/images/right.png" width="20" height="20" alt="First Page" onclick="sorter3.move(1)" />
+                                        <img src="../../javascript/plugins/TableSorter/images/right_end.png" width="20" height="20" alt="Last Page" onclick="sorter3.move(1, true)" />
+                                        <select style="margin-left:5px;" id="pagedropdown3"></select>
+                                        <a style="margin-left:10px;" href="javascript:sorter3.showall()">Ver Tudo</a>
+                                    </div>
+                                </div>
+                                <div id="tablelocation">
+                                    <div class="page">Página <span id="currentpage3"></span> de <span id="totalpages3"></span></div>
                                 </div>
                             </div>
-                            <div id="tablelocation">
-                                <div class="page">Página <span id="currentpage3"></span> de <span id="totalpages3"></span></div>
-                            </div>
-                        </div>
-                        <script type="text/javascript">
-                            var sorter3 = new TINY.table.sorter('sorter3','table3',{
-                                headclass:'head',
-                                ascclass:'asc',
-                                descclass:'desc',
-                                evenclass:'evenrow',
-                                oddclass:'oddrow',
-                                evenselclass:'evenselected',
-                                oddselclass:'oddselected',
-                                paginate:true,
-                                size:10,
-                                colddid:'columns3',
-                                currentid:'currentpage3',
-                                totalid:'totalpages3',
-                                startingrecid:'startrecord3',
-                                endingrecid:'endrecord3',
-                                totalrecid:'totalrecords3',
-                                hoverid:'selectedrowPointer',
-                                pageddid:'pagedropdown3',
-                                navid:'tablenav3',
-                                sortcolumn:6,
-                                sortdir:1,
-                                init:true
-                            });
-                        </script>
+
+                            <script type="text/javascript">
+                                var sorter3 = new TINY.table.sorter('sorter3', 'table3', {
+                                    headclass: 'head',
+                                    ascclass: 'asc',
+                                    descclass: 'desc',
+                                    evenclass: 'evenrow',
+                                    oddclass: 'oddrow',
+                                    evenselclass: 'evenselected',
+                                    oddselclass: 'oddselected',
+                                    paginate: true,
+                                    size: 10,
+                                    colddid: 'columns3',
+                                    currentid: 'currentpage3',
+                                    totalid: 'totalpages3',
+                                    startingrecid: 'startrecord3',
+                                    endingrecid: 'endrecord3',
+                                    totalrecid: 'totalrecords3',
+                                    hoverid: 'selectedrowPointer',
+                                    pageddid: 'pagedropdown3',
+                                    navid: 'tablenav3',
+                                    sortcolumn: 6,
+                                    sortdir: 1,
+                                    init: true
+                                });
+                            </script>
                             <input type="hidden" name="nomeBD" value="<%= nomeBD%>" />
                             <input type="hidden" name="idVenda" id="idVendaDel" value="" />
                             <input type="hidden" name="numObjeto" id="numObjetoDel" value="" />

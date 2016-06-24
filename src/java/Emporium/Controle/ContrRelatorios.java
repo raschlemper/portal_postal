@@ -35,18 +35,20 @@ public class ContrRelatorios {
         data1 = sdf.format(vdata1);
         data2 = sdf.format(vdata2);
 
-        String strQuery = "SELECT DATEDIFF(dataEntrega, dataPostagem) AS conta"
-                + " FROM movimentacao WHERE (dataPostagem BETWEEN '" + data1 + "' AND '" + data2 + "')"
+        String strQuery = "SELECT DATEDIFF(t.last_status_date, dataPostagem) AS conta"
+                + " FROM movimentacao"
+                + " LEFT JOIN movimentacao_tracking AS t ON movimentacao.numObjeto = t.numObjeto"
+                + " WHERE (dataPostagem BETWEEN '" + data1 + "' AND '" + data2 + "')"
                 + " AND codCliente = " + idCliente + ""
-                + " AND status LIKE '%Entregue%' ";
+                + " AND t.last_status_name LIKE '%entregue%' ";
 
         if (!servico.equals("0")) {
             //strQuery += " AND descServico LIKE '%" + servico + "%' ";
             strQuery += FormataString.montaWhereServicos(servico);
         }
-        if (!departamento.equals("0")) {
-            strQuery += " AND departamento LIKE '%" + departamento + "%'";
-        }
+        
+        strQuery += departamento;
+        
 
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         try {
@@ -67,7 +69,7 @@ public class ContrRelatorios {
             return total;
 
         } catch (SQLException ex) {
-            Logger.getLogger(ContrRelatorios.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex);
             return 0;
         } finally {
             Conexao.desconectar(conn);
@@ -85,18 +87,17 @@ public class ContrRelatorios {
 
         String clausulaWhere = " WHERE (dataPostagem BETWEEN '" + data1 + "' AND '" + data2 + "')"
                 + " AND codCliente = " + idCliente + ""
-                + " AND status LIKE '%Entregue%'"
-                + " AND numObjeto <> '-' ";
+                + " AND t.last_status_name LIKE '%entregue%'"
+                + " AND movimentacao.numObjeto <> '-' ";
 
         if (!servico.equals("0")) {
             //clausulaWhere += " AND descServico LIKE '%" + servico + "%'";
             clausulaWhere += FormataString.montaWhereServicos(servico);
         }
-        if (!departamento.equals("0")) {
-            clausulaWhere += " AND departamento LIKE '%" + departamento + "%'";
-        }
+        
+        clausulaWhere += departamento;
 
-        String strQuery = "SELECT COUNT(cep) AS qtdObjetos, SUM(DATEDIFF(dataEntrega, dataPostagem))/COUNT(*) AS prazoMedioDeEntrega, "
+        String strQuery = "SELECT COUNT(cep) AS qtdObjetos, SUM(DATEDIFF(DATE(t.last_status_date), dataPostagem))/COUNT(*) AS prazoMedioDeEntrega, "
                 + " CASE "
                 + " WHEN (cep=0) THEN 'INT' "
                 + " WHEN (cep>0 AND cep<=19999999) THEN 'SP' "
@@ -130,9 +131,11 @@ public class ContrRelatorios {
                 + " WHEN (cep>=90000000 AND cep<=99999999) THEN 'RS' "
                 + " ELSE '--' "
                 + " END AS estado "
-                + " FROM movimentacao " + clausulaWhere
+                + " FROM movimentacao "
+                + " LEFT JOIN movimentacao_tracking AS t ON movimentacao.numObjeto = t.numObjeto"
+                + clausulaWhere
                 + " GROUP BY estado;";
-
+        
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         try {
             PreparedStatement valores = conn.prepareStatement(strQuery);
@@ -179,18 +182,18 @@ public class ContrRelatorios {
 
         String clausulaWhere = "WHERE (dataPostagem BETWEEN '" + data1 + "' AND '" + data2 + "')"
                 + " AND codCliente = " + idCliente
-                + " AND numObjeto <> '-' ";
+                + " AND movimentacao.numObjeto <> '-' ";
         if (!servico.equals("0")) {
             //clausulaWhere += " AND descServico LIKE '%" + servico + "%'";
             clausulaWhere += FormataString.montaWhereServicos(servico);
         }
-        if (!departamento.equals("0")) {
-            clausulaWhere += " AND departamento LIKE '%" + departamento + "%'";
-        }
+        clausulaWhere += departamento;
 
 
-        String strQuery = "SELECT COUNT(codStatus) AS qtdObjetos, COUNT(IF(codStatus=99,1,NULL)) AS QtdEntregues, " + group + "(dataPostagem) AS agrupamento"
-                + " FROM movimentacao " + clausulaWhere
+        String strQuery = "SELECT COUNT(*) AS qtdObjetos, COUNT(IF(t.last_status_name LIKE '%entregue%',1,NULL)) AS QtdEntregues, " + group + "(dataPostagem) AS agrupamento"
+                + " FROM movimentacao "
+                + " LEFT JOIN movimentacao_tracking AS t ON movimentacao.numObjeto = t.numObjeto "
+                + clausulaWhere                
                 + " GROUP BY agrupamento"
                 + " ORDER BY dataPostagem;";
 
@@ -221,6 +224,7 @@ public class ContrRelatorios {
             return lista;
 
         } catch (SQLException e) {
+            System.out.println(e);
             ContrErroLog.inserir("HOITO - contrRelatorios", "SQLException", strQuery, e.toString());
             return null;
         } finally {
@@ -286,20 +290,22 @@ public class ContrRelatorios {
         data1 = sdf.format(vdata1);
         data2 = sdf.format(vdata2);
 
-        String strQuery = "SELECT status, codStatus"
+        String strQuery = "SELECT t.last_status_name, t.last_status_code, t.last_status_type"
                 + " FROM movimentacao"
+                + " LEFT JOIN movimentacao_tracking AS t ON movimentacao.numObjeto = t.numObjeto"
                 + " WHERE (dataPostagem BETWEEN '" + data1 + "' AND '" + data2 + "')"
                 + " AND codCliente = " + idCliente + ""
-                + " AND numObjeto <> '-'";
+                + " AND movimentacao.numObjeto <> '-'";
 
         if (!servico.equals("0")) {
             //strQuery += " AND descServico LIKE '%" + servico + "%'";
             strQuery += FormataString.montaWhereServicos(servico);
         }
-        if (!departamento.equals("0")) {
-            strQuery += " AND departamento LIKE '%" + departamento + "%'";
-        }
+        
+        strQuery += departamento;
 
+        //System.out.println(strQuery);
+        
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         try {
             PreparedStatement valores = conn.prepareStatement(strQuery);
@@ -307,9 +313,10 @@ public class ContrRelatorios {
 
             int qtdEnc = 0, qtdPos = 0, qtdEnt = 0, qtdDev = 0, qtdExt = 0;
             for (int i = 0; result.next(); i++) {
-                String codStatus = result.getString("codStatus");
-                String status = result.getString("status");
-                String grupoStatus = Util.Situacao.consultaGrupoStatus(codStatus, status);
+                int codStatus = result.getInt("t.last_status_code");
+                String codStatusType = result.getString("t.last_status_type");
+                String status = result.getString("t.last_status_name");
+                String grupoStatus = Util.Situacao.consultaGrupoStatusNovo(codStatus, codStatusType, status);
                 if (grupoStatus.equals("POSTADO")) {
                     qtdPos++;
                 } else if (grupoStatus.equals("ENTREGUE")) {

@@ -123,7 +123,8 @@
                     break;
 
                 case "7":
-                    sql = "SELECT CONCAT('<a href=\"http://websro.correios.com.br/sro_bin/txect01$.QueryList?P_LINGUA=001&P_TIPO=001&P_COD_UNI=',numObjeto, '\" target=\"_blank\">', numObjeto, '</a>') AS SRO, "
+                    sql = "SELECT CONCAT('<a href=\"#\" onclick= pesqSro(\"',numObjeto,'\");>', numObjeto, '</a>') "
+                            + "AS SRO, "
                             + " nome AS CLIENTE, "
                             + " cep_destino AS CEP, "
                             + " data_postagem AS DATA_POSTAGEM, "

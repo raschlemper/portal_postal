@@ -47,6 +47,10 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
             }
         }
         
+        var toFixe = function(value, fixe) {
+            return parseFloat(value.toFixed(fixe));
+        } 
+        
         // Contas /////
         
         var initContas = function() {
@@ -160,7 +164,8 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
         
         var getLucro = function(receitas, despesas) {
             return _.map(receitas, function(receita, index) {
-                return receita - despesas[index];
+                var lucro = receita - despesas[index];
+                return toFixe(lucro, 2);
             });  
         };
         
@@ -366,7 +371,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                 _.map(saldo, function(item) {
                     total += item.valor
                 });
-                saldoGroup.push(getDataSaldo(data, total));
+                saldoGroup.push(getDataSaldo(data, toFixe(total, 2)));
             })
             return formatSaldo(saldoGroup);            
         };
@@ -455,6 +460,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
             _.map(lancamentos, function(lancamento) {
                 var valor = lancamento.valor;
                 if(lancamento.quantidadeParcela) { valor = lancamento.valor / lancamento.quantidadeParcela; }
+                valor = toFixe(valor, 2);
                 if(lancamento.tipo.id === $scope.tipos[0].id) { valores.receita += valor; }
                 if(lancamento.tipo.id === $scope.tipos[1].id) { valores.despesa -= valor; }
             });

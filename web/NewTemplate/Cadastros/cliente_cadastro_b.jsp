@@ -14,16 +14,16 @@
     response.setHeader("Pragma", "no-cache"); //HTTP 1.0
     response.setDateHeader("Expires", 0); //prevent caching at the proxy server
 
-    if (session.getAttribute("agf_empresa") == null) {
-        response.sendRedirect("../index.jsp?msgLog=3");
+
+    Usuario usrSessao = (Usuario) session.getAttribute("agf_usuario");
+    if (usrSessao == null) {
+        response.sendRedirect("../../index.jsp?msgLog=3");
+    } else if (usrSessao.getListaAcessosPortalPostal().contains("405")) {
+        response.sendRedirect("../../NewTemplate/Dashboard/index.jsp?msg=Usuario sem permissao!");
     } else {
 
-        Usuario agf_usuario = (Usuario) session.getAttribute("agf_usuario");
         empresas agf_empresa = (empresas) session.getAttribute("agf_empresa");
-        if (agf_usuario.getIdNivel() == 3) {
-            response.sendRedirect("../Importacao/imp_movimento.jsp?msg=Acesso Negado!");
-        }
-
+        
         int idClienteInc = Integer.parseInt(request.getParameter("idCliente"));
         
         ClienteSMTP cliSmtp = Controle.ContrClienteSMTP.consultaCadastroSMTP(idClienteInc, agf_empresa.getCnpj());

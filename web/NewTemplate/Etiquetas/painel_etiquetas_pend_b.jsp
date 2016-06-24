@@ -9,14 +9,12 @@
 
 
 <%
-    if (session.getAttribute("usuario") == null) {
-        response.sendRedirect("../index.jsp?msgLog=3");
+  Usuario usrSessao = (Usuario) session.getAttribute("agf_usuario");
+    if (usrSessao == null) {
+        response.sendRedirect("../../index.jsp?msgLog=3");
+    } else if (usrSessao.getListaAcessosPortalPostal().contains("104")) {
+        response.sendRedirect("../../NewTemplate/Dashboard/index.jsp?msg=Usuario sem permissao!");
     } else {
-
-        int idNivelDoUsuario = (Integer) session.getAttribute("nivel");
-        if (idNivelDoUsuario > 2) {
-            response.sendRedirect("../jsp/imp_movimento.jsp?msg=Acesso Negado!");
-        }
 
         SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         int idUsuario = (Integer) session.getAttribute("idUsuario");
@@ -112,8 +110,8 @@
                                                 <table class="table table-striped table-bordered table-hover" id="dataTables-etqPend">
                                                     <thead>
                                                         <tr>
-                                                            <th class="no-sort">
-                                                                <input type=checkbox checked onClick="CheckAll('ids', this.checked);" title="Marcar/Desmarcar Todos" />
+                                                            <th>
+                                                                <input type="checkbox" checked onClick="CheckAll('ids', this.checked);" title="Marcar/Desmarcar Todos" />
                                                             </th>
                                                             <th>Nº do Objeto</th>
                                                             <th style="min-width: 90px;">Serviço</th>
@@ -124,7 +122,7 @@
                                                             <th style="min-width: 110px;">Impressa</th>
                                                             <th style="min-width: 60px;">AR </th>
                                                             <th style="min-width: 110px;">Inserção </th>
-                                                            <th class="no-sort" style="min-width: 70px;">VER</th>
+                                                            <th style="min-width: 70px;">VER</th>
 
                                                         </tr>
                                                     </thead>
@@ -150,10 +148,12 @@
                                                                     dtImpresso = sdf2.format(des.getDataImpresso());
                                                                 }
                                                                 String nomeCli = contrCliente.consultaNomeById(des.getIdCliente(), nomeBD);
-                                                        %>
+                                                        %> 
                                                         <tr style="cursor:default;">
                                                             <td align="center"><input type="checkbox" name="ids" value="<%= des.getId()%>" /></td>
-                                                            <td align="center"><a href='http://websro.correios.com.br/sro_bin/txect01$.QueryList?P_LINGUA=001&P_TIPO=001&P_COD_UNI=<%= numObj%>' target=_blank><%= numObj%></a></td>
+                                                            <td align="center">
+                                                             <a href='#' onclick="pesqSro('<%= numObj %>');"><%= numObj%></a>   
+                                                            </td>
                                                             <td><%= des.getNomeServico()%></td>
                                                             <td><%= nomeCli%></td>
                                                             <td><%= des.getNomeDes()%></td>
@@ -163,7 +163,6 @@
                                                             <td><%= ar%></td>
                                                             <td><%= des.getMetodo_insercao()%></td>
                                                             <td align="center"><a onclick="verVendaBootStrap(<%= des.getId()%>, <%= des.getIdCliente()%>);" style="cursor:pointer;" ><i class="fa fa-search"></i></a></td>
-
                                                         </tr>
                                                         <%}%>
                                                     </tbody>
@@ -182,22 +181,25 @@
                 </div>
             </div>
         </div>
+        <form name="frmSRO" id="frmSRO" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
+            <input type="hidden" name="objetos" id="objetos" value="" />
+        </form>  
 
         <!-- /#page-wrapper -->
 
         <!-- /#wrapper -->
         <script type="text/javascript">
             function AllTables() {
-                StartDataTable('dataTables-etqPend');
-                LoadSelect2Script(MakeSelectDataTable('dataTables-etqPend'));
+                // StartDataTable('dataTables-etqPend');
+                // LoadSelect2Script(MakeSelectDataTable('dataTables-etqPend'));
             }
-            $(document).ready(function() {
-                LoadDataTablesScripts(AllTables);
+            $(document).ready(function () {
+                //  LoadDataTablesScripts(AllTables);
                 $("#dataIni").datepicker({
                     showAnim: 'slideDown',
                     maxDate: new Date(),
                     numberOfMonths: 3,
-                    onClose: function(selectedDate) {
+                    onClose: function (selectedDate) {
                         $("#dataFim").datepicker("option", "minDate", selectedDate);
                     }
                 });
@@ -205,11 +207,15 @@
                     showAnim: 'slideDown',
                     maxDate: new Date(),
                     numberOfMonths: 3,
-                    onClose: function(selectedDate) {
+                    onClose: function (selectedDate) {
                         $("#dataIni").datepicker("option", "maxDate", selectedDate);
                     }
                 });
             });
+            function pesqSro(param) {
+                $('#objetos').val(param);
+                $('#frmSRO').submit();
+            }
         </script>
 
     </body>

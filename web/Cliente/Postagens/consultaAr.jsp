@@ -261,12 +261,14 @@
                                         <option selected value="0">Todos os Departamentos</option>
                                         <%
                                             ArrayList<ClientesDeptos> listaDep = ContrClienteDeptos.consultaDeptos(idCliente, nomeBD);
+                                            ArrayList<Integer> dpsUser = (ArrayList<Integer>) session.getAttribute("departamentos");
                                             for (int i = 0; i < listaDep.size(); i++) {
                                                 ClientesDeptos cd = listaDep.get(i);
                                                 String depto = FormataString.removeAccentsToUpper(cd.getNomeDepartamento());
+                                                if(dpsUser.contains(cd.getIdDepartamento())){                                                    
                                         %>
                                         <option value="<%=depto%>"><%= cd.getNomeDepartamento()%></option>
-                                        <%}%>
+                                        <%}}%>
                                     </select>
                                 </dd>
                             </li>

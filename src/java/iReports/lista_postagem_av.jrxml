@@ -405,7 +405,7 @@ WHERE qtdTotal > 0;]]>
 							<staticText>
 								<reportElement x="0" y="0" width="45" height="15" uuid="d7adaf78-485f-468e-996d-e83e416867e6"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle"/>
-								<text><![CDATA[VD (R$)]]></text>
+								<text><![CDATA[VC (R$)]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell height="19" rowSpan="1">

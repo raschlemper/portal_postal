@@ -102,7 +102,7 @@ public class ServAlterarStatusColeta extends HttpServlet {
                     }
                 } else { // caso seja uma unica coleta
                     int idColeta = Integer.parseInt(idsColetas);
-                    Controle.ContrLogColeta.inserir(idColeta, idUsuario, nomeUsuario, "Alterado o Coletador da Coleta para " + nomeStatus, nomeBD);
+                    Controle.ContrLogColeta.inserir(idColeta, idUsuario, nomeUsuario, "Alterado o Status da Coleta para " + nomeStatus, nomeBD);
 
                 }
                 PrintWriter out = response.getWriter();

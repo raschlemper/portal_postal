@@ -131,26 +131,26 @@
             <div id="container">
                 <div id="conteudo">
 
-                    <div id="titulo1">TROCA DE SENHA - <%=senhaUser%></div>
+                    <div id="titulo1">PRIMEIRO ACESSO - TROQUE A SUA SENHA</div>
 
                     <form name="form1" action="../../ServTrocaSenhaPortal" method="post">
                         <ul class="ul_formulario">
                             <li class="titulo">
-                                <dd><span>No primeiro acesso é necessario alterar sua senha</span></dd>
+                                <dd><span>No primeiro acesso é necessario alterar a sua senha.</span></dd>
                             </li>
                             <li>                             
                                 <dd>
-                                    <label>Senha atual</label>
+                                    <label>Senha Atual:</label>
                                     <input style='width:200px;' type="password" name="senhaOld" id="senhaOld" />
                                 </dd>                                                        
                             </li>
                             <li>                             
                                 <dd>
-                                    <label>Nova Senha</label>
+                                    <label>Nova Senha:</label>
                                     <input style='width:200px;' type="password" name="senha" id="senha"/>
                                 </dd>
                                 <dd>
-                                    <label>Repita a nova Senha</label>
+                                    <label>Repita a nova Senha:</label>
                                     <input style='width:200px;' type="password" name="senha2" id="senha2"/>
                                 </dd>                            
                             </li>

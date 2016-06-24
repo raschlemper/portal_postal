@@ -3,8 +3,7 @@
 <%@page import="java.util.ArrayList"%>
 <%
     String usMenu = (String) session.getAttribute("nomeUser");
-    String senhaOp = (String) session.getAttribute("senhaUser");
-
+    String senhaMenu = (String) session.getAttribute("senhaUser");
     String empMenu = (String) session.getAttribute("nomeEmpresa");
     int idAgM = (Integer) session.getAttribute("idEmpresa");
     int nvMenu = (Integer) session.getAttribute("nivelUsuarioEmp");
@@ -15,20 +14,22 @@
 %>
 <script>
     function getval(sel) {
-        $('#agenciaHoito').val(sel.value);
+        var aux = sel.value.split(';');
+        $('#agenciaHoito').val(aux[0]);
+        $('#senhaHoito').val(aux[1]);
         $('#logar').submit();
     }
 </script>
 <div align="center" style=" width:100%; min-width:1200px; height:125px; margin: 0 auto; z-index: -1;">
     <div align="center" style="height: 85px; width: 1200px;">
-        <form action="http://www.portalpostal.com.br/ServLoginEmporium" method="post" id="logar">
+        <form action="../../ServLoginEmporium" method="post" id="logar">
             <table width="100%" style="height: 85px;">
                 <tr>           
                     <td valign="middle" style="font-size: 16px; text-align: left;">
                         <% if (lsNomesBd != null && !lsNomesBd.isEmpty()) {%>
                         <select style="font-size: 24px; font-weight: bold;" onchange="getval(this);">
                             <% for (int j = 0; j < lsNomesBd.size(); j++) {%>
-                            <option value="<%= lsNomesBd.get(j).getIdEmpresa()%>" <%if (lsNomesBd.get(j).getIdEmpresa() == idAgM) { %>selected="true"<%}%> ><%= lsNomesBd.get(j).getNome()%></option>
+                            <option value="<%= lsNomesBd.get(j).getIdEmpresa()%>;<%= lsNomesBd.get(j).getSenha() %>" <%if (lsNomesBd.get(j).getIdEmpresa() == idAgM && senhaMenu.equals(lsNomesBd.get(j).getSenha()) ) { %>selected="true"<%}%> ><%= lsNomesBd.get(j).getNome()%> - <%= lsNomesBd.get(j).getLogin()%></option>
                             <%}%>
                         </select>
                         <br>
@@ -44,7 +45,7 @@
                 </tr>
             </table>
             <input type="hidden" id="agenciaHoito" name="agenciaHoito" value="" />
-            <input type="hidden" name="senhaHoito" value="<%= senhaOp%>" />
+            <input type="hidden" id="senhaHoito" name="senhaHoito" value="<%= senhaMenu%>" />
             <input type="hidden" name="loginHoito" value="<%= usMenu%>" />
             <input type="hidden" name="caminho" value="" />
         </form>
@@ -116,7 +117,7 @@
             <li><a href="#">Cadastros</a>
                 <ul class="sub_menu">
                     <%if (acessosMn.contains(6)) {%><li><a href="../../Cliente/Cadastros/cadastro.jsp">Dados da Empresa</a></li><%}%>
-                    <%if (nvMenu == 1) {%><li><a href="../../Cliente/Cadastros/usuario_lista.jsp">Usuários</a></li><%}%>
+                    <%if (nvMenu == 1 || nvMenu == 100) {%><li><a href="../../Cliente/Cadastros/usuario_lista.jsp">Usuários</a></li><%}%>
                     <%if (acessosMn.contains(7)) {%><li><a href="../../Cliente/Cadastros/destinatario_lista.jsp">Destinatários</a></li><%}%>
                 </ul>
             </li>            

@@ -213,9 +213,10 @@ public class ServPreVendaMulti extends HttpServlet {
 
                 //VERIFICA A EXISTENCIA DE COMBO PARA O SERVIÇO
                 //codECT = ContrServicoCombo.consultaCodCombo(codECT, ar, mp, vd);
-                
+                int resgistro_modico = 0;
+                int posta_restante = 0;
                 //INSERE PRE VENDA         
-                ContrPreVenda.inserir(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD);
+                ContrPreVenda.inserir(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD,posta_restante, resgistro_modico);
             }
         }
 

@@ -87,9 +87,9 @@ public class ServPreVendaImportar extends HttpServlet {
                             }
                         }
                     }
-
+                    System.out.println("chegou aqui");
                    
-                    if (fileItem == null || (!fileItem.getName().toUpperCase().endsWith(".CSV") && !fileItem.getName().toUpperCase().endsWith(".XML") && !fileItem.getName().toUpperCase().endsWith(".TXT"))) {
+                    if (fileItem == null || (!fileItem.getName().toUpperCase().endsWith(".CSV") && !fileItem.getName().toUpperCase().endsWith(".XML") && !fileItem.getName().toUpperCase().endsWith(".TXT") && !fileItem.getName().toUpperCase().endsWith(".XLS"))) {
                         response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=Escolha um arquivo para importacao !");
                     } else {
                         //DELETA IMPORTACOES NAO CONCLUIDAS
@@ -143,7 +143,8 @@ public class ServPreVendaImportar extends HttpServlet {
                             } else if (tipo.equals("WEBVENDAS")) { // ARQUIVO TIPO .CSV -> SISTEMA PORTAL POSTAL                            
                                 String condicao = ContrPreVendaImporta.importaPedidoWebVendas(fileItem, idCliente, idDepartamento, departamento, contrato, cartaoPostagem, servico, nomeBD);
                                 response.sendRedirect("Cliente/Servicos/imp_confirma.jsp?msg=" + condicao);
-                            } else if (tipo.equals("PS")) { // ARQUIVO TIPO .CSV -> SISTEMA PORTAL POSTAL                            
+                            } else if (tipo.equals("PS")) { // ARQUIVO TIPO .XLS -> SISTEMA PORTAL POSTAL   
+                                System.out.println("FOI PS");
                                 String condicao = ContrPreVendaImporta.importaPedidoPS(fileItem, idCliente, idDepartamento, departamento, contrato, cartaoPostagem, servico, nomeBD);
                                 response.sendRedirect("Cliente/Servicos/imp_confirma.jsp?msg=" + condicao);
                             }else if (tipo.equals("PSN")) { // ARQUIVO TIPO .CSV -> SISTEMA PORTAL POSTAL                            

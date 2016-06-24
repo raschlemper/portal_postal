@@ -5,14 +5,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <%
-    if (session.getAttribute("usuario") == null) {
-        response.sendRedirect("../index.jsp?msgLog=3");
+    Usuario usrSessao = (Usuario) session.getAttribute("agf_usuario");
+    if (usrSessao == null) {
+        response.sendRedirect("../../index.jsp?msgLog=3");
+    } else if (usrSessao.getListaAcessosPortalPostal().contains("405")) {
+        response.sendRedirect("../../NewTemplate/Dashboard/index.jsp?msg=Usuario sem permissao!");
     } else {
-
-        int idNivelDoUsuario = (Integer) session.getAttribute("nivel");
-        if (idNivelDoUsuario == 3) {
-            response.sendRedirect("../Importacao/imp_movimento.jsp?msg=Acesso Negado!");
-        }
 
         String nomeBD = (String) session.getAttribute("empresa");
         int idEmpresa = (Integer) session.getAttribute("idEmpresa");
@@ -24,7 +22,7 @@
     <head>
         <title>Portal Postal</title>
         <%@ include file="../includes/Css_js.jsp" %>
-    </head>        
+    </head>
     <body onload="fechaMsg();">   
         <script>
             waitMsg();
@@ -43,8 +41,7 @@
                             <jsp:param name="idClienteTab" value="<%= idClienteInc%>" />
                             <jsp:param name="temContratoTab" value="<%= cliInc.getTemContrato()%>" />
                             <jsp:param name="nomeClienteTab" value="<%= cliInc.getNomeFantasia()%>" />
-                        </jsp:include>    
-
+                        </jsp:include>
 
                         <div class="row">
                             <div class="col-md-12">   
