@@ -1,5 +1,5 @@
 <%@ include file="../includes/telaMsg.jsp" %>
-<nav style="z-index: 2000;" class="navbar navbar-default navbar-fixed-top">
+<nav style="z-index: 1000;" class="navbar navbar-default navbar-fixed-top">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header fixed-brand">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"  id="menu-toggle" onclick="mtoggle()">

@@ -12,9 +12,26 @@
     String dataFinal = request.getParameter("final");
     String departamento = request.getParameter("departamento");
     
+        String sql = "";
+        if (!departamento.equals("0")) {
+            sql += " AND m.departamento LIKE '" + departamento + "'";
+        }else{
+            ArrayList<Integer> dptosSessaoUsuario = (ArrayList<Integer>) session.getAttribute("departamentos");
+            if (dptosSessaoUsuario != null && dptosSessaoUsuario.size() > 0) {
+                String idsDepto = "";
+                for (Integer idDep : dptosSessaoUsuario) {
+                    idsDepto += idDep + ",";
+                }
+                if (!idsDepto.equals("")) {
+                    idsDepto = idsDepto.substring(0, idsDepto.lastIndexOf(","));
+                    sql += " AND m.idDepartamento IN (" + idsDepto + ") ";
+                }
+            }
+        }
+    
     int ar = Integer.parseInt(request.getParameter("ar"));
 
-    ArrayList movimentacao = Controle.contrMovimentacao.getMovimentacaoAR(dataInicio, dataFinal, idCliente, ar, departamento, nomeBD);
+    ArrayList movimentacao = Controle.contrMovimentacao.getMovimentacaoAR(dataInicio, dataFinal, idCliente, ar, sql, nomeBD);
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 %>
 <table width='120%' align='center' cellspacing='1'> 

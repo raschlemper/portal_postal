@@ -225,9 +225,9 @@ public class contrMovimentacao {
         if (ar == 0) {
             sql += " AND a.nomeRecebAr IS NULL";
         }
-        if (!departamentoPesq.equals("0")) {
-            sql += " AND m.departamento LIKE '" + departamentoPesq + "'";
-        }
+        //if (!departamentoPesq.equals("0")) {
+            sql += departamentoPesq;
+        //}
 
         try {
             PreparedStatement valores = conn.prepareStatement(sql);

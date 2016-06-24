@@ -29,9 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.design.JRDesignQuery;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 /**
  *
@@ -69,6 +66,8 @@ public class ServEtiquetas extends HttpServlet {
             String url_jrxml = "etiqueta_A4_4_por_folha.jasper";
             if (formato.equals("A4")) {
                 url_jrxml = "etiqueta_A4_4_por_folha.jasper";
+            } else if (formato.equals("A4_6")) {
+                url_jrxml = "etiqueta_A4_6_por_folha.jasper";
             } else if (formato.equals("ENV_DL")) {
                 url_jrxml = "etiqueta_envelope_DL.jasper";
             } else if (formato.equals("ENV_DL_ESQ")) {

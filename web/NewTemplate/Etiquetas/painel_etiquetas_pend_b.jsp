@@ -9,14 +9,12 @@
 
 
 <%
-    if (session.getAttribute("usuario") == null) {
-        response.sendRedirect("../index.jsp?msgLog=3");
+  Usuario usrSessao = (Usuario) session.getAttribute("agf_usuario");
+    if (usrSessao == null) {
+        response.sendRedirect("../../index.jsp?msgLog=3");
+    } else if (usrSessao.getListaAcessosPortalPostal().contains("104")) {
+        response.sendRedirect("../../NewTemplate/Dashboard/index.jsp?msg=Usuario sem permissao!");
     } else {
-
-        int idNivelDoUsuario = (Integer) session.getAttribute("nivel");
-        if (idNivelDoUsuario > 2) {
-            response.sendRedirect("../jsp/imp_movimento.jsp?msg=Acesso Negado!");
-        }
 
         SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         int idUsuario = (Integer) session.getAttribute("idUsuario");
@@ -112,8 +110,8 @@
                                                 <table class="table table-striped table-bordered table-hover" id="dataTables-etqPend">
                                                     <thead>
                                                         <tr>
-                                                            <th class="no-sort">
-                                                                <input type=checkbox checked onClick="CheckAll('ids', this.checked);" title="Marcar/Desmarcar Todos" />
+                                                            <th>
+                                                                <input type="checkbox" checked onClick="CheckAll('ids', this.checked);" title="Marcar/Desmarcar Todos" />
                                                             </th>
                                                             <th>Nº do Objeto</th>
                                                             <th style="min-width: 90px;">Serviço</th>
@@ -124,7 +122,7 @@
                                                             <th style="min-width: 110px;">Impressa</th>
                                                             <th style="min-width: 60px;">AR </th>
                                                             <th style="min-width: 110px;">Inserção </th>
-                                                            <th class="no-sort" style="min-width: 70px;">VER</th>
+                                                            <th style="min-width: 70px;">VER</th>
 
                                                         </tr>
                                                     </thead>

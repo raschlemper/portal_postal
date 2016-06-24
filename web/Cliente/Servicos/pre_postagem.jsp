@@ -295,6 +295,7 @@
                     alert('Escolha o Departamento/Centro de Custo para a Postagem!\n\nCaso não exista o departameto desejado,\npeça para a agência incluir no cadastro!');
                     return false;
                 }
+                
                 if (form.servico.value === 'CARTA' && form.tipoCarta.value === '') {
                     alert('Escolha o Tipo da Carta a ser Postado!');
                     return false;
@@ -389,6 +390,7 @@
                 if (form.tipoRg.value === '1') {
                     document.getElementById("v_regis").innerHTML = "REG. MÓDICO";
                 }
+                
                 //VERIFICA ABRANGENCIA DE SERVIÇOS
                 if (form.servico.value === 'ESEDEX') {
                     verPesquisarAbrangenciaServ(form.cep.value, 'ESEDEX');
@@ -396,6 +398,8 @@
                     verPesquisarAbrangenciaServ(form.cep.value, 'SEDEX10');
                 } else if (form.servico.value === 'SEDEX12') {
                     verPesquisarAbrangenciaServ(form.cep.value, 'SEDEX12');
+                } else if (form.servico.value === 'SEDEXHJ') {
+                    verPesquisarAbrangenciaServ(form.cep.value, 'SEDEXHJ');
                 } else if (form.servico.value === 'PAX') {
                     verPesquisarAbrangenciaServ(form.cep.value, 'PAX');
                 } else if (form.servico.value === 'MDPB') {
@@ -1475,7 +1479,11 @@
                                     </dd>
                                     <dd>
                                         <label>Nº PEDIDO / NOTA FISCAL</label>
-                                        <input type="text" name="notaFiscal" id="notaFiscal" maxlength="40" value="" />
+                                        <%if(nomeUser.equals("SLVMASTER")){%>
+                                            <input type="text" name="notaFiscal" id="notaFiscal" maxlength="40" value="Corporate" />
+                                        <%}else{%>
+                                            <input type="text" name="notaFiscal" id="notaFiscal" maxlength="40" value="" />
+                                        <%}%>
                                     </dd>
                                     <%--<dd>
                                         <label>Peso<span style="color:red;">(gr)</span></label>
@@ -1696,7 +1704,8 @@
                                 <dd>
                                     <label>Tamanho da impressão:</label>
                                     <select style="width: 220px;" name="formato" id="formato">
-                                        <option value="A4">Folha A4</option> 
+                                        <option value="A4">Folha A4 - 4 por folha</option> 
+                                        <option value="A4_6">Folha A4 - 6 por folha</option> 
                                         <option disabled>----------------</option>
                                         <option value="ETQ_16x10">Etiqueta Adesiva - 16cm x 10cm</option> 
                                         <option value="ETQ_10x10">Etiqueta Adesiva - 10cm x 10cm</option> 

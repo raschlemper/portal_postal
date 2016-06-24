@@ -18,33 +18,50 @@
             } else {
 
                 String numCliente = String.valueOf(session.getAttribute("idCliente"));
-                        int idCliente = (Integer) session.getAttribute("idCliente");
+                int idCliente = (Integer) session.getAttribute("idCliente");
 
                 Date dataAtual = new Date();
                 String dataInicioCalendario = Util.SomaData.SomarDiasDatas(dataAtual, -60); // diminui 2 meses
                 String vDataAtual = sdf.format(dataAtual);
-                
+
                 String dataFim = vDataAtual;
-                if(request.getParameter("dataFim") != null){
+                if (request.getParameter("dataFim") != null) {
                     dataFim = request.getParameter("dataFim");
                 }
                 String dataIni = Util.SomaData.SomarDiasDatas(dataAtual, -15);
-                if(request.getParameter("dataIni") != null){
+                if (request.getParameter("dataIni") != null) {
                     dataIni = request.getParameter("dataIni");
                 }
                 String servico = "0";
-                if(request.getParameter("servico") != null){
+                if (request.getParameter("servico") != null) {
                     servico = request.getParameter("servico");
                 }
+                
+                ArrayList<Integer> dptosSessaoUsuario = (ArrayList<Integer>) session.getAttribute("departamentos");
                 String departamento = "0";
-                if(request.getParameter("departamento") != null){
+                String sqlDepto = "";
+                if (request.getParameter("departamento") != null) {
                     departamento = request.getParameter("departamento");
                 }
-                
-                String graf2 = Emporium.Controle.ContrRelatorios.pesquisaSituacaoDoClientePorServico(nomeBD, numCliente, servico, dataIni, dataFim, departamento);
-                float prz_medio = Emporium.Controle.ContrRelatorios.pesquisaPrazoEntregaPorServico(nomeBD, numCliente, servico, dataIni, dataFim, departamento);
-                ArrayList lista = Emporium.Controle.ContrRelatorios.pesquisaPrazoEntregaPorEstado(nomeBD, numCliente, servico, dataIni, dataFim, departamento);
-                ArrayList lista2 = Emporium.Controle.ContrRelatorios.pesquisaEntregaPorPeriodo(nomeBD, numCliente, servico, dataIni, dataFim, departamento);
+                if (departamento.equals("0")) {
+                    if (dptosSessaoUsuario != null && dptosSessaoUsuario.size() > 0) {
+                        String idsDepto = "";
+                        for (Integer idDep : dptosSessaoUsuario) {
+                            idsDepto += idDep + ",";
+                        }
+                        if (!idsDepto.equals("")) {
+                            idsDepto = idsDepto.substring(0, idsDepto.lastIndexOf(","));
+                            sqlDepto += " AND movimentacao.idDepartamento IN (" + idsDepto + ") ";
+                        }
+                    }
+                } else {
+                    sqlDepto = " AND movimentacao.idDepartamento = " + departamento;
+                }
+
+                String graf2 = Emporium.Controle.ContrRelatorios.pesquisaSituacaoDoClientePorServico(nomeBD, numCliente, servico, dataIni, dataFim, sqlDepto);
+                ArrayList lista2 = Emporium.Controle.ContrRelatorios.pesquisaEntregaPorPeriodo(nomeBD, numCliente, servico, dataIni, dataFim, sqlDepto);
+                float prz_medio = Emporium.Controle.ContrRelatorios.pesquisaPrazoEntregaPorServico(nomeBD, numCliente, servico, dataIni, dataFim, sqlDepto);
+                ArrayList lista = Emporium.Controle.ContrRelatorios.pesquisaPrazoEntregaPorEstado(nomeBD, numCliente, servico, dataIni, dataFim, sqlDepto);
                 String lista_uf = "", lista_prz = "", lista_med = "", lista_qtd = "";
                 for (int i = 0; i < lista.size(); i++) {
 
@@ -60,7 +77,7 @@
                     lista_qtd += "" + conta + ", ";
 
                 }
-                
+
                 String lista_dt = "", lista_qtdp = "", lista_qtde = "";
                 for (int i = 0; i < lista2.size(); i++) {
 
@@ -106,18 +123,18 @@
 
         <script type="text/javascript" charset="utf-8">
 
-            $(function() {
+            $(function () {
                 $("#dataIni").datepicker({
-                    minDate:'<%=dataInicioCalendario%>',
-                    maxDate:'<%= vDataAtual%>',
+                    minDate: '<%=dataInicioCalendario%>',
+                    maxDate: '<%= vDataAtual%>',
                     showOn: "button",
                     buttonImage: "../../imagensNew/calendario.png",
                     buttonImageOnly: true,
                     showAnim: "slideDown"
                 });
                 $("#dataFim").datepicker({
-                    minDate:'<%=dataInicioCalendario%>',
-                    maxDate:'<%= vDataAtual%>',
+                    minDate: '<%=dataInicioCalendario%>',
+                    maxDate: '<%= vDataAtual%>',
                     showOn: "button",
                     buttonImage: "../../imagensNew/calendario.png",
                     buttonImageOnly: true,
@@ -126,10 +143,10 @@
             });
 
 
-            
-            
-            jQuery(function() {
-            
+
+
+            jQuery(function () {
+
                 var chart1 = new Highcharts.Chart({
                     chart: {
                         renderTo: 'chart1'
@@ -143,7 +160,7 @@
                     xAxis: [{
                             categories: [<%= lista_uf%>]
                         }],
-                    yAxis: [{ // Primary yAxis
+                    yAxis: [{// Primary yAxis
                             labels: {
                                 align: 'left',
                                 x: 0,
@@ -153,20 +170,20 @@
                             title: {
                                 text: ''
                             }
-                        }, { // Secondary yAxis
+                        }, {// Secondary yAxis
                             labels: {
                                 style: {
                                     color: '#ed561b'
                                 }
-                            },title: {
+                            }, title: {
                                 text: 'QUANTIDADE',
                                 style: {
                                     color: '#ed561b'
                                 }
-                            }, 
+                            },
                             showFirstLabel: false,
                             opposite: true
-                        }, { // Secondary yAxis
+                        }, {// Secondary yAxis
                             labels: {
                                 style: {
                                     color: '#058dc7'
@@ -180,23 +197,23 @@
                             showFirstLabel: false
                         }],
                     tooltip: {
-                        formatter: function() {
-                            return ''+ this.x +': '+ this.y + (this.series.name === 'Quantidade de Obj. Entregues' ? ' Objetos' : ' Dias');
+                        formatter: function () {
+                            return '' + this.x + ': ' + this.y + (this.series.name === 'Quantidade de Obj. Entregues' ? ' Objetos' : ' Dias');
                         }
                     },
-                    series: [ {
+                    series: [{
                             name: 'Quantidade de Obj. Entregues',
                             color: '#ed561b',
                             type: 'column',
                             yAxis: 1,
                             data: [<%= lista_qtd%>]
-                        },{
+                        }, {
                             name: 'Média em Dias da Entrega',
                             color: '#058dc7',
                             type: 'column',
                             yAxis: 2,
-                            data: [<%= lista_prz%>]      
-      
+                            data: [<%= lista_prz%>]
+
                         }, {
                             name: 'Média Geral em Dias',
                             color: '#50b432',
@@ -204,8 +221,8 @@
                             yAxis: 2,
                             data: [<%= lista_med%>]
                         }]
-                }); 
-            
+                });
+
                 var chart2 = new Highcharts.Chart({
                     chart: {
                         renderTo: 'chart2',
@@ -217,8 +234,8 @@
                         text: 'Situações dos Objetos'
                     },
                     tooltip: {
-                        formatter: function() {
-                            return '<b>'+ this.point.name +'</b>: '+ this.y +' Objetos';
+                        formatter: function () {
+                            return '<b>' + this.point.name + '</b>: ' + this.y + ' Objetos';
                         }
                     },
                     plotOptions: {
@@ -229,7 +246,7 @@
                                 enabled: false
                             },
                             showInLegend: true,
-                            size:220
+                            size: 220
                         }
                     },
                     legend: {
@@ -237,7 +254,7 @@
                         align: 'center',
                         verticalAlign: 'bottom',
                         borderWidth: 1,
-                        labelFormatter: function() {
+                        labelFormatter: function () {
                             return this.name + ': ' + this.y + ' Objetos';
                         }
                     },
@@ -247,11 +264,11 @@
                             data: [<%= graf2%>]
                         }]
                 });
-                
+
                 var chart3 = new Highcharts.Chart({
                     chart: {
                         renderTo: 'chart3',
-                        marginBottom:120
+                        marginBottom: 120
                     },
                     title: {
                         text: 'Quantidade de Objetos Entregues por Periodo'
@@ -260,42 +277,42 @@
                         enabled: true
                     },
                     xAxis: [{
-                            categories: [<%= lista_dt %>],
-                            labels:{
+                            categories: [<%= lista_dt%>],
+                            labels: {
                                 y: 35,
-                                rotation:-90
+                                rotation: -90
                             }
                         }],
                     yAxis: [{
                             title: {
                                 text: ''
-                            }, 
+                            },
                             showFirstLabel: false,
                             opposite: true
-                        }, { // Secondary yAxis
+                        }, {// Secondary yAxis
                             title: {
                                 text: 'Quantidade'
                             },
                             showFirstLabel: false
                         }],
                     tooltip: {
-                        formatter: function() {
-                            return ''+ this.x +': '+ this.y + (this.series.name === 'Quantidade de Obj. Postados' ? ' Obj. Postados' : ' Obj. Entregues');
+                        formatter: function () {
+                            return '' + this.x + ': ' + this.y + (this.series.name === 'Quantidade de Obj. Postados' ? ' Obj. Postados' : ' Obj. Entregues');
                         }
                     },
-                    series: [ {
+                    series: [{
                             name: 'Quantidade de Obj. Postados',
                             color: '#058dc7',
                             type: 'column',
                             yAxis: 1,
-                            data: [<%= lista_qtdp %>]
-                        },{
+                            data: [<%= lista_qtdp%>]
+                        }, {
                             name: 'Quantidade de Obj. Entregues',
                             color: '#50b432',
                             type: 'column',
                             yAxis: 1,
-                            data: [<%= lista_qtde %>]
-      
+                            data: [<%= lista_qtde%>]
+
                         }]
                 });
 
@@ -312,57 +329,58 @@
         <div id="divPrincipal" align="center">
             <div id="container">
                 <div id="conteudo">
-                    
+
                     <form action="graf_objetos.jsp" method="post">
-                    <ul class="ul_formulario">
-                        <li>
-                            <dd>
-                                <label>Periodo de Data de Postagem</label>
-                                <input type="text" style="width:60px;" name="dataIni" id="dataIni" value="<%= dataIni %>" maxlength="10" onkeypress="mascara(this,maskData);" />
-                                até
-                                <input type="text" style="width:60px;" name="dataFim" id="dataFim" value="<%= dataFim %>" maxlength="10" onkeypress="mascara(this,maskData);" />
-                            </dd>
-                            <dd>
-                                <label>Departamento</label>
-                                <select style="width: 250px;" name="departamento" id="departamento">
-                                    <option value="0">-- TODOS --</option>
-                                    <%
-                                        ArrayList<ClientesDeptos> listaDep = ContrClienteDeptos.consultaDeptos(idCliente, nomeBD);
-                                        for (int i = 0; i < listaDep.size(); i++) {
-                                            ClientesDeptos cd = listaDep.get(i);
-                                            String depto = FormataString.removeAccentsToUpper(cd.getNomeDepartamento());
-                                    %>
-                                    <option value="<%=depto%>"><%= cd.getNomeDepartamento()%></option>
-                                    <%}%>
-                                </select>
-                            </dd>
-                            <dd>
-                                <label>Serviço</label>
-                                <select style="width: 250px;" id="servico" name="servico">
-                                    <option value="0">-- TODOS --</option>
-                                    <%
-                                    ArrayList<ServicoECT> listaTipoPostagem = ContrServicoECT.consultaServicosPorGrupo();
-                                    for (int i = 0; i < listaTipoPostagem.size(); i++) {
-                                        ServicoECT sv = listaTipoPostagem.get(i);
-                                    %>
-                                    <option value="<%= sv.getGrupoServico() %>"><%= sv.getNomeSimples() %></option>
-                                    <%}%>
-                                    <option value="OUTROS">OUTROS</option>   
-                                </select>
-                            </dd>
-                        </li>
-                        <li>
-                            <dd style="width: 800px;">
-                                <div class="buttons">
-                                    <button type="submit" class="regular" onclick=""><img src="../../imagensNew/lupa.png"/> ATUALIZAR GRÁFICOS</button>
-                                    <b style="color:red;">* Aparecerá nos gráficos somente os objetos com código de rastreamento!</b>
-                                </div>
-                            </dd>
-                        </li>
-                    </ul>
+                        <ul class="ul_formulario">
+                            <li>
+                                <dd>
+                                    <label>Periodo de Data de Postagem</label>
+                                    <input type="text" style="width:60px;" name="dataIni" id="dataIni" value="<%= dataIni%>" maxlength="10" onkeypress="mascara(this, maskData);" />
+                                    até
+                                    <input type="text" style="width:60px;" name="dataFim" id="dataFim" value="<%= dataFim%>" maxlength="10" onkeypress="mascara(this, maskData);" />
+                                </dd>
+                                <dd>
+                                    <label>Departamento</label>
+                                    <select style="width: 250px;" name="departamento" id="departamento">
+                                        <option value="0">-- TODOS --</option>
+                                        <%
+                                            ArrayList<ClientesDeptos> listaDep = ContrClienteDeptos.consultaDeptos(idCliente, nomeBD);
+                                            for (int i = 0; i < listaDep.size(); i++) {
+                                                ClientesDeptos cd = listaDep.get(i);
+                                                if (dptosSessaoUsuario.contains(cd.getIdDepartamento())) {
+                                        %>
+                                        <option <%if (departamento.equals(cd.getIdDepartamento() + "")) {%>selected<%}%> value="<%= cd.getIdDepartamento()%>"><%= cd.getNomeDepartamento()%></option>
+                                        <%}
+                                        }%>
+                                    </select>
+                                </dd>
+                                <dd>
+                                    <label>Serviço</label>
+                                    <select style="width: 250px;" id="servico" name="servico">
+                                        <option value="0">-- TODOS --</option>
+                                        <%
+                                            ArrayList<ServicoECT> listaTipoPostagem = ContrServicoECT.consultaServicosPorGrupo();
+                                            for (int i = 0; i < listaTipoPostagem.size(); i++) {
+                                                ServicoECT sv = listaTipoPostagem.get(i);
+                                        %>
+                                        <option value="<%= sv.getGrupoServico()%>"><%= sv.getNomeSimples()%></option>
+                                        <%}%>
+                                        <option value="OUTROS">OUTROS</option>   
+                                    </select>
+                                </dd>
+                            </li>
+                            <li>
+                                <dd style="width: 800px;">
+                                    <div class="buttons">
+                                        <button type="submit" class="regular" onclick=""><img src="../../imagensNew/lupa.png"/> ATUALIZAR GRÁFICOS</button>
+                                        <b style="color:red;">* Aparecerá nos gráficos somente os objetos com código de rastreamento!</b>
+                                    </div>
+                                </dd>
+                            </li>
+                        </ul>
                     </form>
                     <img width="100%" src="../../imagensNew/linha.jpg"/>
-                    
+
                     <div style="width: 100%; height: 410px;">
                         <div id="chart2" style="float: left; width: 350px; height: 400px"></div>
                         <div id="chart3" style="float:right;width: 800px; height: 400px"></div>

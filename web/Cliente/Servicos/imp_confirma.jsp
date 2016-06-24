@@ -264,7 +264,7 @@
                             <li>
                                 <dd style="width: 100%;text-align: center;">
                                     <div class="buttons">
-                                        <button type="button" onclick="consultaCeps();" class="regular"><img src="../../imagensNew/refresh.png" /> VERIFICAR CEPs</button>
+                                        <button type="button" onclick="consultaCeps();" class="regular"><img src="../../imagensNew/refresh.png" /> VALIDAR CEPs</button>
                                         <button type="button" class="regular"  onclick="window.open('http://www.buscacep.correios.com.br', 'CORREIOS');" ><img src="../../imagensNew/lupa.png" /> CONSULTE AQUI O CEP CORRETO</button>
                                     </div>
                                 </dd>

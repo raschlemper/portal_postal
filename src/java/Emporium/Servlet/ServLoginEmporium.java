@@ -127,7 +127,7 @@ public class ServLoginEmporium extends HttpServlet {
                     sessao.setAttribute("idCliente", cli.getCodigo());
                     sessao.setAttribute("empresa", nomeBD);
                     sessao.setAttribute("idEmpresa", idEmpresa);
-                    sessao.setAttribute("nomeUser", login);
+                    sessao.setAttribute("nomeUser", login);  
                     sessao.setAttribute("nivelUsuarioEmp", us.getNivel());
                     sessao.setAttribute("idUsuarioEmp", us.getId());
                     sessao.setAttribute("acessos", us.getAcessos());
@@ -144,22 +144,17 @@ public class ServLoginEmporium extends HttpServlet {
                     sessao.setAttribute("usuario_sessao_cliente", us); // Se o cliente usa o etiquetador
                     sessao.setAttribute("cliente", cli); // Se o cliente usa o etiquetador
                     sessao.setAttribute("agencia", emp); // Se o cliente usa o etiquetador
-                    
-                    
-                    //SE É OPERADOD MASTER
-                    
-                        if(us.getNivel() == 100){
-                        
+                                        
+                    //SE É OPERADOD MASTER                         
+                    sessao.setAttribute("senhaUser", senha);                 
+                    if(us.getNivel() == 100){                        
                         ArrayList<Usuario> lsNomesBd = Emporium.Controle.ContrLoginEmporium.verificaOperadores(login);
-                        
-                        sessao.setAttribute("senhaUser", senha);
                         sessao.setAttribute("userMaster", lsNomesBd);
                     }
                     
                   
-                    if(us.getIsFirst() == 0){    
-                          sessao.setAttribute("senhaUser", senha);//para conferir na troca do primeiro acesso                    
-                         response.sendRedirect("Cliente/Cadastros/usuario_primeiro_acesso.jsp");       
+                    if(us.getIsFirst() == 0){                  
+                        response.sendRedirect("Cliente/Cadastros/usuario_primeiro_acesso.jsp");       
                     } else if (us.getNivel() != 99) {
                         response.sendRedirect("Cliente/Postagens/consultas.jsp");
                     } else {

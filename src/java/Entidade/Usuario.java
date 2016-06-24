@@ -44,10 +44,12 @@ public class Usuario {
         this.acessosConsolidador = acessosConsolidador;
     }
 
-    public Usuario(String nome, String cpf, int idEmpresa) {
-        this.nome = nome;
+    public Usuario(String nomeAgf, String cpf, int idEmpresa, String senha, String nomeCliente) {
+        this.nome = nomeAgf;
+        this.senha = senha;
         this.cpf = cpf;
         this.idEmpresa = idEmpresa;
+        this.login = nomeCliente;
     }
 
   

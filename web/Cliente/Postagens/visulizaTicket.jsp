@@ -54,8 +54,7 @@
                 //inicia a variavedo do total da venda
                 float total = 0;
         %>
-        <p style="font-family: Verdana; font-style: italic; font-size: 10px; color: red;">*Relatório para simples conferência.</p>
-        <p style="font-family: Verdana; font-style: italic; font-size: 10px; color: red;">*Não tem realação com comprovante original.</p>
+        <p style="font-family: Verdana; font-style: italic; font-size: 10px; color: red;">*Relatório do ticket.</p>
         <table width="282" cellspacing='0' cellpadding='0'>
             <tr>
                 <td><img src='../../imagensNew/ticket_topo.jpg'></td>
@@ -65,8 +64,8 @@
                     <table width='100%' cellspacing='0' border='0' style='font-family:courier;font-size:9px;color:#8a8a8a; letter-spacing:0;  '>
                         <tr>
                             <td colspan='4'>
-                                Não tem relação com o ticket do <br/>
-                                atendimento original<br/><br/>
+                                Pode ocorrer divergencia em relação ao<br/>
+                                ticket do atendimento original<br/><br/>
                                 <%= nomeEmp%><br>
                                 CNPJ <%= cnpjEmp%><br>
                                 <%= fantasiaEmp%><br>

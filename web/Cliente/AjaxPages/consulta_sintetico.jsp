@@ -34,6 +34,7 @@
         String ar = request.getParameter("ar");
         String vd = request.getParameter("vd");
         String uf = request.getParameter("uf");
+        String late = request.getParameter("atrasado");
 
         String tpFat = request.getParameter("tipoFat");
 
@@ -93,6 +94,9 @@
         }
         if (vd.equals("true")) {
             sql += " AND siglaServAdicionais LIKE '%VD%'";
+        }
+        if (late.equals("true")) {
+            sql += " AND prazo_cumprido > prazo_estimado ";
         }
         if (!tpFat.equals("")) {
             sql += tpFat;

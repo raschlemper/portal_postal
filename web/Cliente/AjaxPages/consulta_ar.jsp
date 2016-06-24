@@ -14,9 +14,25 @@
         String vDepartamento = request.getParameter("departamento");
         String dataInicio = Util.FormatarData.DateToBD(request.getParameter("dataIni"));
         String dataFinal = Util.FormatarData.DateToBD(request.getParameter("dataFim"));
+        
+        String sql = "";
+        if (!vDepartamento.equals("0")) {
+            sql += " AND m.departamento LIKE '" + vDepartamento + "'";
+        }else{
+            ArrayList<Integer> dptosSessaoUsuario = (ArrayList<Integer>) session.getAttribute("departamentos");
+            if (dptosSessaoUsuario != null && dptosSessaoUsuario.size() > 0) {
+                String idsDepto = "";
+                for (Integer idDep : dptosSessaoUsuario) {
+                    idsDepto += idDep + ",";
+                }
+                if (!idsDepto.equals("")) {
+                    idsDepto = idsDepto.substring(0, idsDepto.lastIndexOf(","));
+                    sql += " AND m.idDepartamento IN (" + idsDepto + ") ";
+                }
+            }
+        }
 
-        String sql = null;
-        ArrayList movimentacao = Controle.contrMovimentacao.getMovimentacaoAR(dataInicio, dataFinal, idCliente, ar, vDepartamento, nomeBD);
+        ArrayList movimentacao = Controle.contrMovimentacao.getMovimentacaoAR(dataInicio, dataFinal, idCliente, ar, sql, nomeBD);
         if (movimentacao.size() > 0) {
 %>
 

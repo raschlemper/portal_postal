@@ -24,7 +24,8 @@
 <table cellpadding="0" cellspacing="0" border="0">
     <thead>
         <tr>
-            <th><h5>OBJETO</h5></th>
+            <th><h5>OBJETO (sro antigo)</h5></th>
+            <th><h5>OBJETO (sro novo)</h5></th>
 <th><h5>SERVIÇO</h5></th>
 <th><h5>PESO</h5></th>
 <th><h5>QTD</h5></th>
@@ -60,34 +61,14 @@
             String destinatario = mov.getDestinatario();
             String cepDestino = FormataString.formataCep(mov.getCep());
             String departamento2 = mov.getDepartamento();
-            String status = mov.getStatus();
-
-            String numVenda = mov.getNumVenda();
-            String numCaixa = mov.getNumCaixa();
-
-            String codStatus = "" + mov.getCodStatus();
-            String img_status = "";
-            String grupoStatus = Util.Situacao.consultaGrupoStatus(codStatus, status);
-            if (grupoStatus.equals("POSTADO")) {
-                img_status = "../../imagensNew/mail.png";
-                qtdPos++;
-            } else if (grupoStatus.equals("ENTREGUE")) {
-                img_status = "../../imagensNew/mail_open.png";
-                qtdEnt++;
-            } else if (grupoStatus.equals("DEVOLVIDO")) {
-                img_status = "../../imagensNew/mail_back.png";
-                qtdDev++;
-            } else if (grupoStatus.equals("EXTRAVIADO")) {
-                img_status = "../../imagensNew/mail_alert.png";
-                qtdExt++;
-            } else {
-                img_status = "../../imagensNew/mail_send.png";
-                qtdEnc++;
+            String status = mov.getStatus();            
+            if (mov.getLast_status_date() != null) {
+                status = mov.getLast_status_name();
             }
     %>
-    <tr align='center' style="font-size: 10px;">
-       <%= numeroRegistro%>
-        </td>
+    <tr align='center' style="font-size: 10px;">      
+        <td><a target="_blank" href="http://websro.correios.com.br/sro_bin/txect01$.inexistente?p_itemcode=&p_lingua=001&p_teste=&p_tipo=003&z_action=&p_cod_lis=<%= numeroRegistro%>" ><%= numeroRegistro%></a></td>
+        <td><a target="_blank" href="http://www.portalpostal.com.br/redirSro.jsp?sro=<%= numeroRegistro%>" ><%= numeroRegistro%></a></td>
         <td align='left'><%= servico2%></td>
         <td><%= peso%>g</td>
         <td><%= qtd%></td>

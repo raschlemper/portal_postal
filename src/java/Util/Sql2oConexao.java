@@ -6,7 +6,7 @@ import org.sql2o.Sql2o;
 public class Sql2oConexao {
     
     private static String DRIVER = "com.mysql.jdbc.Driver";
-    private static TipoConexao CONEXAO = TipoConexao.DEVELOPMENT;
+    private static TipoConexao CONEXAO = TipoConexao.DEVELOPMENT_SCC4;
     
     public static Connection getConnection(String nameDB) { 
         try {     

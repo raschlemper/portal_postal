@@ -16,15 +16,10 @@ import Util.Conexao;
 import Util.FormatarDecimal;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
@@ -57,13 +52,14 @@ import org.apache.poi.ss.usermodel.Row;
  */
 public class ContrPreVendaImporta {
 
-    private static boolean temPedido = false;
-    private static String falha = "";
+    private static boolean TEM_PEDIDO = false;
+    private static String FALHA = "";
+    private static String AVISO = "";
     private static final int MAX_ALLOWED = 1000;
 
     public static ArrayList<ArquivoImportacao> validaDadosArquivo(ArrayList<ArquivoImportacao> listaAi, int idCliente, String servicoEscolhido, String nomeBD) {
-
-        falha = "";
+        AVISO = "";
+        FALHA = "";
         //MAP DE SERVICOS A VISTA
         Map<String, ServicoECT> listaServAvista = ContrServicoECT.consultaMapServicosAvista();
         //MAP DE SERVICOS DO CONTRATO
@@ -76,14 +72,20 @@ public class ContrPreVendaImporta {
                 String cep = ai.getCep().replace(".", "").replace("-", "");
                 if (cep.length() < 7 || cep.length() > 8) {
                     //CEP INVÁLIDO NA LINHA X
-                    falha += "Linha n." + ai.getNrLinha() + " - CEP " + ai.getCep() + " invalido!";
+                    FALHA += "<br/>Linha n." + ai.getNrLinha() + " - CEP " + ai.getCep() + " invalido!";
                 }
                 try {
                     cepInteiro = Integer.parseInt(cep);
                 } catch (NumberFormatException e) {
-                    falha += "Linha n." + ai.getNrLinha() + " - CEP " + ai.getCep() + " invalido!";
+                    FALHA += "<br/>Linha n." + ai.getNrLinha() + " - CEP " + ai.getCep() + " invalido!";
                 }
 
+                
+                int linha = 0;
+                try{
+                    linha = Integer.parseInt(ai.getNrLinha()) - 1;
+                }catch(Exception e){                    
+                }
                 //VERIFICA QUAL O SERVICO POSTADO
                 String servico = "";
                 if (!servicoEscolhido.equals("ARQUIVO")) {
@@ -101,6 +103,7 @@ public class ContrPreVendaImporta {
                     if (!ai.getContrato().equals("") && listaContratoCli.containsKey("ESEDEX") && ContrServicoAbrangencia.verificaByCepServico(cepInteiro, "ESEDEX", nomeBD)) {
                         servico = "ESEDEX";
                     } else {
+                        AVISO += "<br/>Linha n." + linha + " - CEP " + ai.getCep() + " nao aceita E-Sedex! O servico foi alterado para Sedex!";
                         servico = "SEDEX";
                     }
                 } else if (ai.getServico().replace(" ", "").startsWith("SEDEX10")) {
@@ -108,6 +111,7 @@ public class ContrPreVendaImporta {
                     if (ContrServicoAbrangencia.verificaByCepServico(cepInteiro, "SEDEX10", nomeBD)) {
                         servico = "SEDEX10";
                     } else {
+                        AVISO += "<br/>Linha n." + linha + " - CEP " + ai.getCep() + " nao aceita Sedex 10! O servico foi alterado para Sedex!";
                         servico = "SEDEX";
                     }
                 } else if (ai.getServico().replace(" ", "").startsWith("SEDEX12")) {
@@ -115,6 +119,15 @@ public class ContrPreVendaImporta {
                     if (ContrServicoAbrangencia.verificaByCepServico(cepInteiro, "SEDEX12", nomeBD)) {
                         servico = "SEDEX12";
                     } else {
+                        AVISO += "<br/>Linha n." + linha + " - CEP " + ai.getCep() + " nao aceita Sedex 12! O servico foi alterado para Sedex!";
+                        servico = "SEDEX";
+                    }
+                } else if (ai.getServico().replace(" ", "").startsWith("SEDEXHJ")) {
+                    //VERIFICAR SE CEP POSSUI SEDEXHJ.
+                    if (ContrServicoAbrangencia.verificaByCepServico(cepInteiro, "SEDEXHJ", nomeBD)) {
+                        servico = "SEDEXHJ";
+                    } else {
+                        AVISO += "<br/>Linha n." + linha + " - CEP " + ai.getCep() + " nao aceita Sedex Hoje! O servico foi alterado para Sedex!";
                         servico = "SEDEX";
                     }
                 } else if (ai.getServico().startsWith("SEDEX")) {
@@ -128,13 +141,13 @@ public class ContrPreVendaImporta {
                         vd = 12;
                     }
                 } catch (NumberFormatException e) {
-                    falha += "Linha n." + ai.getNrLinha() + " - Valor Declr. " + ai.getVd() + " invalido!";
+                    FALHA += "<br/>Linha n." + ai.getNrLinha() + " - Valor Declr. " + ai.getVd() + " invalido!";
                 }
 
                 if (servico.equals("")) {
-                    falha += "Linha n." + ai.getNrLinha() + " - Servico " + ai.getServico() + " invalido!";
+                    FALHA += "<br/>Linha n." + ai.getNrLinha() + " - Servico " + ai.getServico() + " invalido!";
                 } else if (!ai.getNrObjeto().equals("avista") && !CalculoEtiqueta.validaNumObjeto(ai.getNrObjeto())) {
-                    falha += "Linha n." + ai.getNrLinha() + " - Etiqueta " + ai.getNrObjeto() + " invalida!";
+                    FALHA += "<br/>Linha n." + ai.getNrLinha() + " - Etiqueta " + ai.getNrObjeto() + " invalida!";
                 } else {
 
                     float peso = 0;
@@ -176,7 +189,7 @@ public class ContrPreVendaImporta {
                 }
             } catch (Exception e) {
                 //System.out.println("FALHA AO MONTAR DADOS DO SQL = " + e);
-                falha += "FALHA AO MONTAR DADOS DO SQL = " + e;
+                FALHA += "<br/>FALHA AO MONTAR DADOS DO SQL = " + e;
             }
 
         }
@@ -349,15 +362,15 @@ public class ContrPreVendaImporta {
             if (listaAi.size() > 0) {
                 //valida os dados do arquivo para efetuar a importacao
                 listaAi = validaDadosArquivo(listaAi, idCliente, servicoEscolhido, nomeBD);
-                if (!falha.equals("")) {
-                    //retorna mensagem de falha
-                    return falha;
+                if (!FALHA.equals("")) {
+                    //retorna mensagem de FALHA
+                    return FALHA;
                 } else {
                     //MONTA SQL
                     String sql = montaSqlPedido(listaAi, nomeBD);
                     boolean flag = inserir(sql, nomeBD);
                     if (flag) {
-                        return "Pedidos Importados Com Sucesso!";
+                        return "Pedidos Importados Com Sucesso!<br/>" + AVISO;
                     } else {
                         return "Falha ao importar Pedidos!";
                     }
@@ -381,7 +394,7 @@ public class ContrPreVendaImporta {
             //CONTADOR DE LINHA
             int qtdLinha = 1;
             ArrayList<ArquivoImportacao> listaAi = new ArrayList<ArquivoImportacao>();
-             //LER EXCELL
+            //LER EXCELL
 
             // For storing data into CSV files
             StringBuffer data = new StringBuffer();
@@ -402,7 +415,7 @@ public class ContrPreVendaImporta {
                     Iterator<Cell> cellIterator = row.cellIterator();
                     while (cellIterator.hasNext()) {
                         cell = cellIterator.next();
-                        
+
                         switch (cell.getCellType()) {
                             case Cell.CELL_TYPE_BOOLEAN:
                                 data.append(cell.getBooleanCellValue()).append(";");
@@ -431,7 +444,7 @@ public class ContrPreVendaImporta {
             } catch (FileNotFoundException e) {
                 System.out.println(e);
             } catch (IOException e) {
-                  System.out.println(e);
+                System.out.println(e);
             }
 
             InputStream is = new ByteArrayInputStream(data.toString().getBytes());
@@ -503,15 +516,15 @@ public class ContrPreVendaImporta {
             if (listaAi.size() > 0) {
                 //valida os dados do arquivo para efetuar a importacao
                 listaAi = validaDadosArquivo(listaAi, idCliente, servicoEscolhido, nomeBD);
-                if (!falha.equals("")) {
-                    //retorna mensagem de falha
-                    return falha;
+                if (!FALHA.equals("")) {
+                    //retorna mensagem de FALHA
+                    return FALHA;
                 } else {
                     //MONTA SQL
                     String sql = montaSqlPedido(listaAi, nomeBD);
                     boolean flag = inserir(sql, nomeBD);
                     if (flag) {
-                        return "Pedidos Importados Com Sucesso!";
+                        return "Pedidos Importados Com Sucesso!<br/>" + AVISO;
                     } else {
                         return "Falha ao importar Pedidos!";
                     }
@@ -531,7 +544,7 @@ public class ContrPreVendaImporta {
     public static String importaPedidoPSN(FileItem item, int idCliente, int idDepartamento, String departamento, String contrato, String cartaoPostagem, String servicoEscolhido, String nomeBD) {
 
         try {
-            System.out.println("entrou importaPedidoPSN");
+            //System.out.println("entrou importaPedidoPSN");
             //CONTADOR DE LINHA
             int qtdLinha = 1;
             ArrayList<ArquivoImportacao> listaAi = new ArrayList<ArquivoImportacao>();
@@ -539,7 +552,7 @@ public class ContrPreVendaImporta {
             // LE UMA LINHA DO ARQUIVO PARA PULAR O CABEÇALHO
             le.readLine();
             while (le.ready()) {
-                System.out.println("linha " + qtdLinha);
+                //System.out.println("linha "+ qtdLinha);
                 //LE UMA LINHA DO ARQUIVO E DIVIDE A LINHA POR PONTO E VIRGULA
                 String[] aux = le.readLine().replace(";", " ; ").split(";");
                 //ADICIONA CONTADOR DE LINHA
@@ -558,7 +571,7 @@ public class ContrPreVendaImporta {
                     ai.setCodECT(0);
                     ai.setNrLinha(qtdLinha + "");
                     ai.setNrObjeto(aux[9].trim());
-                    System.out.println("linha " + qtdLinha + " sro " + aux[9].trim());
+                    //System.out.println("linha "+ qtdLinha+" sro "+ aux[9].trim());
                     ai.setNome(aux[1].trim());
                     ai.setEmpresa("");
                     ai.setCpf("");
@@ -578,6 +591,8 @@ public class ContrPreVendaImporta {
                         serv = "PAC";
                     } else if (serv.equals("109810")) {
                         serv = "SEDEX";
+                    } else if (serv.equals("104672")) {
+                        serv = "ESEDEX";
                     }
                     ai.setServico(serv);
 
@@ -610,15 +625,15 @@ public class ContrPreVendaImporta {
             if (listaAi.size() > 0) {
                 //valida os dados do arquivo para efetuar a importacao
                 listaAi = validaDadosArquivo(listaAi, idCliente, servicoEscolhido, nomeBD);
-                if (!falha.equals("")) {
-                    //retorna mensagem de falha
-                    return falha;
+                if (!FALHA.equals("")) {
+                    //retorna mensagem de FALHA
+                    return FALHA;
                 } else {
                     //MONTA SQL
                     String sql = montaSqlPedido(listaAi, nomeBD);
                     boolean flag = inserir(sql, nomeBD);
                     if (flag) {
-                        return "Pedidos Importados Com Sucesso!";
+                        return "Pedidos Importados Com Sucesso!<br/>" + AVISO;
                     } else {
                         return "Falha ao importar Pedidos!";
                     }
@@ -708,15 +723,15 @@ public class ContrPreVendaImporta {
             if (listaAi.size() > 0) {
                 //valida os dados do arquivo para efetuar a importacao
                 listaAi = validaDadosArquivo(listaAi, idCliente, servicoEscolhido, nomeBD);
-                if (!falha.equals("")) {
-                    //retorna mensagem de falha
-                    return falha;
+                if (!FALHA.equals("")) {
+                    //retorna mensagem de FALHA
+                    return FALHA;
                 } else {
                     //MONTA SQL
                     String sql = montaSqlPedido(listaAi, nomeBD);
                     boolean flag = inserir(sql, nomeBD);
                     if (flag) {
-                        return "Pedidos Importados Com Sucesso!";
+                        return "Pedidos Importados Com Sucesso!<br/>" + AVISO;
                     } else {
                         return "Falha ao importar Pedidos!";
                     }
@@ -801,12 +816,12 @@ public class ContrPreVendaImporta {
             sql = sql.substring(0, sql.lastIndexOf(","));
             boolean flag = inserir(sql, nomeBD);
             //System.out.println(sql);
-            if (flag && temPedido) {
-                return "Pedidos Importados Com Sucesso!";
-            } else if (!temPedido) {
+            if (flag && TEM_PEDIDO) {
+                return "Pedidos Importados Com Sucesso!<br/>" + AVISO;
+            } else if (!TEM_PEDIDO) {
                 return "Nenhum Pedido Novo Para Importar!";
-            } else if (!falha.equals("")) {
-                return falha;
+            } else if (!FALHA.equals("")) {
+                return FALHA;
             } else {
                 return "Falha ao importar Pedidos!";
             }
@@ -902,12 +917,12 @@ public class ContrPreVendaImporta {
             sql = sql.substring(0, sql.lastIndexOf(","));
             boolean flag = inserir(sql, nomeBD);
             //System.out.println(sql);
-            if (flag && temPedido) {
-                return "Pedidos Importados Com Sucesso!";
-            } else if (!temPedido) {
+            if (flag && TEM_PEDIDO) {
+                return "Pedidos Importados Com Sucesso!<br/>" + AVISO;
+            } else if (!TEM_PEDIDO) {
                 return "Nenhum Pedido Novo Para Importar!";
-            } else if (!falha.equals("")) {
-                return falha;
+            } else if (!FALHA.equals("")) {
+                return FALHA;
             } else {
                 return "Falha ao importar Pedidos!";
             }
@@ -978,12 +993,12 @@ public class ContrPreVendaImporta {
             sql = sql.substring(0, sql.lastIndexOf(","));
             boolean flag = inserir(sql, nomeBD);
             //System.out.println(sql);
-            if (flag && temPedido) {
-                return "Pedidos Importados Com Sucesso!";
-            } else if (!temPedido) {
+            if (flag && TEM_PEDIDO) {
+                return "Pedidos Importados Com Sucesso!<br/>" + AVISO;
+            } else if (!TEM_PEDIDO) {
                 return "Nenhum Pedido Novo Para Importar!";
-            } else if (!falha.equals("")) {
-                return falha;
+            } else if (!FALHA.equals("")) {
+                return FALHA;
             } else {
                 return "Falha ao importar Pedidos!";
             }
@@ -998,7 +1013,7 @@ public class ContrPreVendaImporta {
 
     public static String montaSqlPedidoLINX(String[] aux, String nomeBD, String cartaoPostagem, String contrato, int idCli, int idDepto, String depto, String serv, int temVD, int temAR) {
         String sql = "";
-        falha = "";
+        FALHA = "";
 
         try {
 
@@ -1027,7 +1042,7 @@ public class ContrPreVendaImporta {
 
             if (!servico.equals("") && flag) {
 
-                temPedido = true;
+                TEM_PEDIDO = true;
                 int idRemetente = 1;
                 int idCliente = idCli;
                 int idDepartamento = idDepto;
@@ -1120,7 +1135,7 @@ public class ContrPreVendaImporta {
             }
         } catch (Exception e) {
             //System.out.println("FALHA AO MONTAR DADOS DO SQL = " + e);
-            falha = "FALHA AO MONTAR DADOS DO SQL = " + e;
+            FALHA = "FALHA AO MONTAR DADOS DO SQL = " + e;
         }
 
         return sql;
@@ -1129,7 +1144,7 @@ public class ContrPreVendaImporta {
 
     public static String montaSqlPedidoTRAY(String[] aux, String nomeBD, String cartaoPostagem, String contrato, int idCli, int idDepto, String depto, String serv, int temVD, int temAR) {
         String sql = "";
-        falha = "";
+        FALHA = "";
 
         try {
 
@@ -1153,7 +1168,7 @@ public class ContrPreVendaImporta {
 
             if (!servico.equals("") && flag) {
 
-                temPedido = true;
+                TEM_PEDIDO = true;
                 int idRemetente = 1;
                 int idCliente = idCli;
                 int idDepartamento = idDepto;
@@ -1242,7 +1257,7 @@ public class ContrPreVendaImporta {
             }
         } catch (Exception e) {
             //System.out.println("FALHA AO MONTAR DADOS DO SQL = " + e);
-            falha = "FALHA AO MONTAR DADOS DO SQL = " + e;
+            FALHA = "FALHA AO MONTAR DADOS DO SQL = " + e;
         }
 
         return sql;
@@ -1251,7 +1266,7 @@ public class ContrPreVendaImporta {
 
     public static String montaSqlPedidoINTERLOGIC(String[] aux, String nomeBD, String cartaoPostagem, String contrato, int idCli, int idDepto, String depto, String serv) {
         String sql = "";
-        falha = "";
+        FALHA = "";
 
         try {
 
@@ -1280,7 +1295,7 @@ public class ContrPreVendaImporta {
 
             if (!servico.equals("") && flag) {
 
-                temPedido = true;
+                TEM_PEDIDO = true;
                 int idRemetente = 1;
                 int idCliente = idCli;
                 int idDepartamento = idDepto;
@@ -1369,7 +1384,7 @@ public class ContrPreVendaImporta {
             }
         } catch (Exception e) {
             //System.out.println("FALHA AO MONTAR DADOS DO SQL = " + e);
-            falha = "FALHA AO MONTAR DADOS DO SQL = " + e;
+            FALHA = "FALHA AO MONTAR DADOS DO SQL = " + e;
         }
 
         return sql;
@@ -1545,12 +1560,12 @@ public class ContrPreVendaImporta {
             sql = sql.substring(0, sql.lastIndexOf(","));
             boolean flag = inserir(sql, nomeBD);
             //System.out.println(sql);
-            if (flag && temPedido) {
-                return "Pedidos Importados Com Sucesso!";
-            } else if (!temPedido) {
+            if (flag && TEM_PEDIDO) {
+                return "Pedidos Importados Com Sucesso!<br/>" + AVISO;
+            } else if (!TEM_PEDIDO) {
                 return "Nenhum Pedido Novo Para Importar!";
-            } else if (!falha.equals("")) {
-                return falha;
+            } else if (!FALHA.equals("")) {
+                return FALHA;
             } else {
                 return "Falha ao importar Pedidos!";
             }
@@ -1565,7 +1580,7 @@ public class ContrPreVendaImporta {
 
     public static String montaSqlPedidoEDI(Destinatario aux, String nomeBD, String cartaoPostagem, String contrato, int idCli, int idDepto, String depto, String serv, String vvd, String notaFiscal, int temAR) {
         String sql = "";
-        falha = "";
+        FALHA = "";
 
         try {
 
@@ -1578,7 +1593,7 @@ public class ContrPreVendaImporta {
 
                 if (!servico.equals("") && flag) {
 
-                    temPedido = true;
+                    TEM_PEDIDO = true;
                     int idRemetente = 1;
                     int idCliente = idCli;
                     int idDepartamento = idDepto;
@@ -1670,11 +1685,11 @@ public class ContrPreVendaImporta {
 
             } else {
                 System.out.println("ESCOLHA UM SERVICO!!");
-                falha = "ESCOLHA UM SERVICO!!";
+                FALHA = "ESCOLHA UM SERVICO!!";
             }
         } catch (Exception e) {
             System.out.println("FALHA AO MONTAR DADOS DO SQL = " + e);
-            falha = "FALHA AO MONTAR DADOS DO SQL = " + e;
+            FALHA = "FALHA AO MONTAR DADOS DO SQL = " + e;
         }
 
         return sql;
@@ -1906,15 +1921,15 @@ public class ContrPreVendaImporta {
             if (listaAi.size() > 0) {
                 //valida os dados do arquivo para efetuar a importacao
                 listaAi = validaDadosArquivo(listaAi, idCliente, servicoEscolhido, nomeBD);
-                if (!falha.equals("")) {
-                    //retorna mensagem de falha
-                    return falha;
+                if (!FALHA.equals("")) {
+                    //retorna mensagem de FALHA
+                    return FALHA;
                 } else {
                     //MONTA SQL
                     String sql = montaSqlPedido(listaAi, nomeBD);
                     boolean flag = inserir(sql, nomeBD);
                     if (flag) {
-                        return "Pedidos Importados Com Sucesso!";
+                        return "Pedidos Importados Com Sucesso!<br/>" + AVISO;
                     } else {
                         return "Falha ao importar Pedidos!";
                     }
@@ -2090,12 +2105,12 @@ public class ContrPreVendaImporta {
 
             sql = sql.substring(0, sql.lastIndexOf(","));
             boolean flag = inserir(sql, nomeBD);
-            if (flag && temPedido) {
-                return "Pedidos Importados Com Sucesso!";
-            } else if (!temPedido) {
+            if (flag && TEM_PEDIDO) {
+                return "Pedidos Importados Com Sucesso!<br/>" + AVISO;
+            } else if (!TEM_PEDIDO) {
                 return "ERRO: Nenhuma NF-e Para Importar!";
-            } else if (!falha.equals("")) {
-                return "ERRO: " + falha;
+            } else if (!FALHA.equals("")) {
+                return "ERRO: " + FALHA;
             } else {
                 return "Falha ao importar Pedidos!";
             }
@@ -2194,7 +2209,17 @@ public class ContrPreVendaImporta {
             obs = obs.substring(0, 49);
         }
 
-        String sql = "";
+        int qtt = 1;
+        try {
+            xPath = doc.createXPath(basePath + "nfe:transp/nfe:vol/nfe:qVol");
+            xPath.setNamespaceURIs(uris);
+            String qtd = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+            qtt = Integer.parseInt(qtd);
+            if (qtt <= 0) {
+                qtt = 1;
+            }
+        } catch (Exception e) {
+        }
 
         String servico = "";
         int registro = 0;
@@ -2215,79 +2240,84 @@ public class ContrPreVendaImporta {
         } else if (serv.trim().toUpperCase().startsWith("PAX")) {
             servico = "PAX";
         }
+
+        String sql = "";
         //System.out.println("servico _ " + servico);
-        if (!servico.equals("")) {
-            String aosCuidados = "";
-            String tipo = "SERVICO";
-            String conteudo = "";
-            float vlrCobrar = 0;
+        for (int i = 0; i < qtt; i++) {
 
-            int idRemetente = 1;
-            int idCliente = idCli;
-            int idDepartamento = idDepto;
-            String departamento = depto;
-            String celular = fone;
+            if (!servico.equals("")) {
+                String aosCuidados = "";
+                String tipo = "SERVICO";
+                String conteudo = "";
+                float vlrCobrar = 0;
 
-            int idDestinatario = ContrPreVendaDest.inserir(idCliente, nome.getText(), cnpj, "", cep, lgr, nro, cpl, bairro, municipio, uf, email, celular, "Brasil", nomeBD);
-            //System.out.println("id Destinatario" + idDestinatario);
+                int idRemetente = 1;
+                int idCliente = idCli;
+                int idDepartamento = idDepto;
+                String departamento = depto;
+                String celular = fone;
 
-            String numObjeto = "avista";
-            int peso = 0;
-            int altura = 0;
-            int largura = 0;
-            int comprimento = 0;
+                int idDestinatario = ContrPreVendaDest.inserir(idCliente, nome.getText(), cnpj, "", cep, lgr, nro, cpl, bairro, municipio, uf, email, celular, "Brasil", nomeBD);
+                //System.out.println("id Destinatario" + idDestinatario);
 
-            int ar = temar;
+                String numObjeto = "avista";
+                int peso = 0;
+                int altura = 0;
+                int largura = 0;
+                int comprimento = 0;
 
-            int mp = 0;
+                int ar = temar;
 
-            float vd = 0;
-            if (temvd == 1) {
-                vd = Float.parseFloat(vNF.replace(",", ".").trim());
-                if (vd < 12) {
-                    vd = 12;
+                int mp = 0;
+
+                float vd = 0;
+                if (temvd == 1) {
+                    vd = Float.parseFloat(vNF.replace(",", ".").trim());
+                    if (vd < 12) {
+                        vd = 12;
+                    }
                 }
-            }
 
-            //VERIFICAR SE CEP POSSUI ESEDEX CASO O SERVICO ESCOLHIDO SEJA ESEDEX.
-            //SE NAO POSSUIR O ESEDEX TROCAR PARA SEDEX.
-            cep = cep.replace("-", "").replace(".", "").trim();
-            if (servico.equals("ESEDEX")) {
-                int cep2 = Integer.parseInt(cep);
-                if (!ContrServicoAbrangencia.verificaByCepServico(cep2, servico, nomeBD)) {
-                    servico = "SEDEX";
+                //VERIFICAR SE CEP POSSUI ESEDEX CASO O SERVICO ESCOLHIDO SEJA ESEDEX.
+                //SE NAO POSSUIR O ESEDEX TROCAR PARA SEDEX.
+                cep = cep.replace("-", "").replace(".", "").trim();
+                if (servico.equals("ESEDEX")) {
+                    int cep2 = Integer.parseInt(cep);
+                    if (!ContrServicoAbrangencia.verificaByCepServico(cep2, servico, nomeBD)) {
+                        servico = "SEDEX";
+                    }
                 }
-            }
 
-            Amarracao am = ContrAmarracao.consultaAmarracaoByCep(cep, servico, nomeBD);
-            String siglaAmarracao = "- - -";
-            if (am != null) {
-                siglaAmarracao = am.getSiglaAmarracao();
-            }
-
-            int codECT = ContrClienteContrato.consultaContratoClienteGrupoServ(idCliente, servico, nomeBD);
-            int qtdEtq = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ(servico, 0, idCliente, nomeBD);
-
-            if (codECT != 0 && qtdEtq != 0 && !servico.equals("CARTA")) {
-                //numObjeto = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServ(idCliente, servico, nomeBD);
-                //ContrClienteEtiquetas.alteraUtilizadaEtiqueta(numObjeto, 1, nomeBD);
-            } else if (codECT == 0 || servico.equals("CARTA")) {
-                ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico);
-                codECT = se.getCodECT();
-                contrato = "";
-                if (codECT == 10014 && servico.equals("CARTA")) {
-                    registro = 1;
+                Amarracao am = ContrAmarracao.consultaAmarracaoByCep(cep, servico, nomeBD);
+                String siglaAmarracao = "- - -";
+                if (am != null) {
+                    siglaAmarracao = am.getSiglaAmarracao();
                 }
-            }
 
-            /**
-             * ************************************************************************
-             */
-            if (obs.length() > 50) {
-                obs = obs.substring(0, 49);
+                int codECT = ContrClienteContrato.consultaContratoClienteGrupoServ(idCliente, servico, nomeBD);
+                int qtdEtq = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ(servico, 0, idCliente, nomeBD);
+
+                if (codECT != 0 && qtdEtq != 0 && !servico.equals("CARTA")) {
+                    //numObjeto = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServ(idCliente, servico, nomeBD);
+                    //ContrClienteEtiquetas.alteraUtilizadaEtiqueta(numObjeto, 1, nomeBD);
+                } else if (codECT == 0 || servico.equals("CARTA")) {
+                    ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico);
+                    codECT = se.getCodECT();
+                    contrato = "";
+                    if (codECT == 10014 && servico.equals("CARTA")) {
+                        registro = 1;
+                    }
+                }
+
+                /**
+                 * ************************************************************************
+                 */
+                if (obs.length() > 50) {
+                    obs = obs.substring(0, 49);
+                }
+                sql += "\n('" + numObjeto + "', " + idCliente + ", " + idDestinatario + ", " + idRemetente + ", '" + codECT + "', '" + contrato + "', '" + departamento + "', '" + aosCuidados + "', '" + obs + "', '" + conteudo + "', " + peso + ", " + altura + ", " + largura + ", " + comprimento + ", " + vd + ", " + ar + ", " + mp + ", '" + siglaAmarracao + "', '" + servico + "', '" + nNF + "', " + vlrCobrar + ", '" + tipo + "', " + idDepartamento + ", NOW(), '" + cartaoPostagem + "', " + registro + ", 'IMPORTACAO_NFE'),";
+                TEM_PEDIDO = true;
             }
-            sql += "\n('" + numObjeto + "', " + idCliente + ", " + idDestinatario + ", " + idRemetente + ", '" + codECT + "', '" + contrato + "', '" + departamento + "', '" + aosCuidados + "', '" + obs + "', '" + conteudo + "', " + peso + ", " + altura + ", " + largura + ", " + comprimento + ", " + vd + ", " + ar + ", " + mp + ", '" + siglaAmarracao + "', '" + servico + "', '" + nNF + "', " + vlrCobrar + ", '" + tipo + "', " + idDepartamento + ", NOW(), '" + cartaoPostagem + "', " + registro + ", 'IMPORTACAO_NFE'),";
-            temPedido = true;
         }
         //System.out.println("sql lerNotaFiscal - " + sql);
         return sql;

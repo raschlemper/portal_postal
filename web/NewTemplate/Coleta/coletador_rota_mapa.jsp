@@ -9,9 +9,9 @@
     response.setHeader("Pragma", "no-cache"); //HTTP 1.0
     response.setDateHeader("Expires", 0); //prevent caching at the proxy server
 
-    String nomeBD = (String) session.getAttribute("empresa");
-    if (nomeBD == null) {
-        response.sendRedirect("../index.jsp?msgLog=3");
+    Usuario usrSessao = (Usuario) session.getAttribute("agf_usuario");
+    if (usrSessao == null) {
+        response.sendRedirect("../../index.jsp?msgLog=3");
     } else {
 
         //pega os parametros passados para a pagina
