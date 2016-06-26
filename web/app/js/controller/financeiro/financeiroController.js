@@ -358,7 +358,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                 var dataVencimento = moment(lancamento.dataVencimento);            
                 saldos.push({id: lancamento.idLancamentoProgramado,
                              data: dataVencimento.format('YYYY-MM-DD'),
-                             valor: valor}); 
+                             valor: toFixe(valor, 2)}); 
             });
         }
         
