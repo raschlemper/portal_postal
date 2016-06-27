@@ -29,6 +29,7 @@ public class LancamentoProgramado {
     private String observacao;
     private String usuario;
     private List<Lancamento> lancamentos;
+    private List<LancamentoProgramadoParcela> parcelas;
     private List<LancamentoProgramadoRateio> rateios;
 
     public Integer getIdLancamentoProgramado() {
@@ -197,6 +198,14 @@ public class LancamentoProgramado {
 
     public void setLancamentos(List<Lancamento> lancamentos) {
         this.lancamentos = lancamentos;
+    }
+
+    public List<LancamentoProgramadoParcela> getParcelas() {
+        return parcelas;
+    }
+
+    public void setParcelas(List<LancamentoProgramadoParcela> parcelas) {
+        this.parcelas = parcelas;
     }
 
     public List<LancamentoProgramadoRateio> getRateios() {

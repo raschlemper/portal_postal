@@ -30,6 +30,21 @@ app.directive('appParcelar', function(FrequenciaLancamentoService) {
             };
 
             $scope.createParcelas = function(lancamentoParcelar) {     
+                if(lancamentoParcelar.parcelas) { createParcelasFromLista(lancamentoParcelar); }
+                else { createNovasParcelas(lancamentoParcelar); }
+            };
+
+            $scope.createParcelasFromLista = function(lancamentoParcelar) {  
+                var parcelas = lancamentoParcelar.parcelas; 
+                lancamentoParcelar.parcelas = []; 
+                parcelas.map(function(parcela) {
+                    var lancamento = findParcelaBaixada(lancamentoParcelar.lancamentos, parcela.numero);
+                    parcela = getParcela(lancamentoParcelar, lancamento, parcela.numero, parcela.dataVencimento, parcela.dataVencimento);
+                    lancamentoParcelar.parcelas.push(parcela);
+                });
+            };
+
+            $scope.createNovasParcelas = function(lancamentoParcelar) {   
                 lancamentoParcelar.parcelas = []; 
                 var frequencia = lancamentoParcelar.frequencia;
                 var dataCompetencia = lancamentoParcelar.dataCompetencia;

@@ -2,9 +2,10 @@
 
 app.controller('LancamentoProgramadoController', 
     ['$scope', '$filter', '$state', 'LancamentoProgramadoService', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'ModalService', 
-     'DatePickerService', 'LancamentoProgramadoHandler', 'LancamentoProgramadoRateioHandler', 'ListaService', 'LISTAS', 'MESSAGES',
+     'DatePickerService', 'LancamentoProgramadoHandler', 'LancamentoProgramadoParcelaHandler', 'LancamentoProgramadoRateioHandler', 'ListaService', 'LISTAS', 'MESSAGES',
     function ($scope, $filter, $state, LancamentoProgramadoService, ContaService, PlanoContaService, CentroCustoService, ModalService, 
-        DatePickerService, LancamentoProgramadoHandler, LancamentoProgramadoRateioHandler, ListaService, LISTAS, MESSAGES) {
+        DatePickerService, LancamentoProgramadoHandler, LancamentoProgramadoParcelaHandler, LancamentoProgramadoRateioHandler, ListaService, 
+        LISTAS, MESSAGES) {
 
         var init = function () {
             $scope.lancamentoProgramados = [];
@@ -434,6 +435,7 @@ app.controller('LancamentoProgramadoController',
             var lancamentos = ajustarDadosLancamentos(data.lancamentos);
             var lancamentoProgramado = LancamentoProgramadoHandler.handle(data);
             lancamentoProgramado.lancamentos = lancamentos;
+            lancamentoProgramado.parcelas = LancamentoProgramadoParcelaHandler.handleList(data.parcelas);
             lancamentoProgramado.rateios = LancamentoProgramadoRateioHandler.handleList(data.rateios);
             return lancamentoProgramado;
         } 
