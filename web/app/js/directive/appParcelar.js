@@ -30,31 +30,35 @@ app.directive('appParcelar', function(FrequenciaLancamentoService) {
             };
 
             $scope.createParcelas = function(lancamentoParcelar) {     
-                if(lancamentoParcelar.parcelas) { createParcelasFromLista(lancamentoParcelar); }
+                if(lancamentoParcelar.quantidadeParcela && lancamentoParcelar.parcelas && lancamentoParcelar.parcelas.length) { createParcelasFromLista(lancamentoParcelar); }
                 else { createNovasParcelas(lancamentoParcelar); }
             };
 
-            $scope.createParcelasFromLista = function(lancamentoParcelar) {  
+            var createParcelasFromLista = function(lancamentoParcelar) {  
                 var parcelas = lancamentoParcelar.parcelas; 
                 lancamentoParcelar.parcelas = []; 
+                var frequencia = lancamentoParcelar.frequencia;
+                var dataVencimento = lancamentoParcelar.dataVencimento;
                 parcelas.map(function(parcela) {
-                    var lancamento = findParcelaBaixada(lancamentoParcelar.lancamentos, parcela.numero);
-                    parcela = getParcela(lancamentoParcelar, lancamento, parcela.numero, parcela.dataVencimento, parcela.dataVencimento);
+                    var lancamento = findParcelaBaixada(lancamentoParcelar.lancamentos, parcela.numeroParcela);
+                    if(!parcela.idLancamentoProgramadoParcela) { parcela.dataVencimento = dataVencimento; }
+                    parcela = getParcela(lancamentoParcelar, lancamento, parcela.numeroParcela, parcela.dataVencimento, parcela.dataVencimento);
                     lancamentoParcelar.parcelas.push(parcela);
+                    dataVencimento = FrequenciaLancamentoService.addData(frequencia, dataVencimento);
                 });
             };
 
-            $scope.createNovasParcelas = function(lancamentoParcelar) {   
+            var createNovasParcelas = function(lancamentoParcelar) {   
                 lancamentoParcelar.parcelas = []; 
                 var frequencia = lancamentoParcelar.frequencia;
-                var dataCompetencia = lancamentoParcelar.dataCompetencia;
+//                var dataCompetencia = lancamentoParcelar.dataCompetencia;
                 var dataVencimento = lancamentoParcelar.dataVencimento;
                 for(var i=0; i<lancamentoParcelar.quantidadeParcela; i++) {
                     var numeroParcela = (i + 1);
                     var lancamento = findParcelaBaixada(lancamentoParcelar.lancamentos, numeroParcela);
-                    var parcela = getParcela(lancamentoParcelar, lancamento, numeroParcela, dataCompetencia, dataVencimento);
+                    var parcela = getParcela(lancamentoParcelar, lancamento, numeroParcela, dataVencimento, dataVencimento);
                     lancamentoParcelar.parcelas.push(parcela);
-                    dataCompetencia = FrequenciaLancamentoService.addData(frequencia, dataCompetencia);
+//                    dataCompetencia = FrequenciaLancamentoService.addData(frequencia, dataCompetencia);
                     dataVencimento = FrequenciaLancamentoService.addData(frequencia, dataVencimento);
                 }
             };
@@ -65,32 +69,38 @@ app.directive('appParcelar', function(FrequenciaLancamentoService) {
                 });
             };       
             
-            $scope.$watchCollection("lancamentoParcelar.quantidadeParcela", function(newValue, oldValue) {
+            $scope.$watch("lancamentoParcelar.quantidadeParcela", function(newValue, oldValue) {
                 if(!newValue) return;
+                createNovasParcelas($scope.lancamentoParcelar);
+            });  
+            
+            $scope.$watch("lancamentoParcelar.numero", function(newValue, oldValue) {
+                if(newValue === oldValue) return;
                 init($scope.lancamentoParcelar);
             });  
             
-            $scope.$watchCollection("lancamentoParcelar.numero", function(newValue, oldValue) {
-                if(newValue === oldValue) return;
-                init($scope.lancamentoParcelar);
-            });  
-            
-            $scope.$watchCollection("lancamentoParcelar.planoConta", function(newValue, oldValue) {
+            $scope.$watch("lancamentoParcelar.planoConta", function(newValue, oldValue) {
                 if(newValue === oldValue) return;
                 init($scope.lancamentoParcelar);
             });
             
-            $scope.$watchCollection("lancamentoParcelar.centroCusto", function(newValue, oldValue) {
+            $scope.$watch("lancamentoParcelar.centroCusto", function(newValue, oldValue) {
                 if(newValue === oldValue) return;
                 init($scope.lancamentoParcelar);
             });
             
-            $scope.$watchCollection("lancamentoParcelar.vencimento", function(newValue, oldValue) {
+            $scope.$watch("lancamentoParcelar.frequencia", function(newValue, oldValue) {
                 if(newValue === oldValue) return;
                 init($scope.lancamentoParcelar);
             });
             
-            $scope.$watchCollection("lancamentoParcelar.valor", function(newValue, oldValue) {
+            
+            $scope.$watch("lancamentoParcelar.dataVencimento", function(newValue, oldValue) {
+                if(newValue === oldValue) return;
+                init($scope.lancamentoParcelar);
+            });
+            
+            $scope.$watch("lancamentoParcelar.valor", function(newValue, oldValue) {
                 if(newValue === oldValue) return;
                 init($scope.lancamentoParcelar);
             });
