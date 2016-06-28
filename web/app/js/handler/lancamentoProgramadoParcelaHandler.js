@@ -2,54 +2,54 @@
 
 app.factory('LancamentoProgramadoParcelaHandler', function() {
     
-    var handleList = function(lancamentoProgramadoRateioList) { 
-        if(!lancamentoProgramadoRateioList) return null;
-        return _.map(lancamentoProgramadoRateioList, function(lancamentoProgramadoRateio) {
-            return handle(lancamentoProgramadoRateio);
+    var handleList = function(lancamentoProgramadoParcelaList) { 
+        if(!lancamentoProgramadoParcelaList) return null;
+        return _.map(lancamentoProgramadoParcelaList, function(lancamentoProgramadoParcela) {
+            return handle(lancamentoProgramadoParcela);
         });
     };
     
-    var handle = function(lancamentoProgramadoRateio) { 
-        var lancamentoProgramadoRateioHandle = {};
-        lancamentoProgramadoRateioHandle.idLancamentoProgramadoRateio = getId(lancamentoProgramadoRateio);
-        lancamentoProgramadoRateioHandle.planoConta = getPlanoConta(lancamentoProgramadoRateio); 
-        lancamentoProgramadoRateioHandle.centroCusto = getCentroCusto(lancamentoProgramadoRateio);
-        lancamentoProgramadoRateioHandle.lancamento = getLancamento(lancamentoProgramadoRateio);
-        lancamentoProgramadoRateioHandle.numero = getNumero(lancamentoProgramadoRateio);
-        lancamentoProgramadoRateioHandle.dataVencimento = getDataVencimento(lancamentoProgramadoRateio);
-        lancamentoProgramadoRateioHandle.valor = getValor(lancamentoProgramadoRateio);
-        return lancamentoProgramadoRateioHandle;
+    var handle = function(lancamentoProgramadoParcela) { 
+        var lancamentoProgramadoParcelaHandle = {};
+        lancamentoProgramadoParcelaHandle.idLancamentoProgramadoParcela = getId(lancamentoProgramadoParcela);
+        lancamentoProgramadoParcelaHandle.planoConta = getPlanoConta(lancamentoProgramadoParcela); 
+        lancamentoProgramadoParcelaHandle.centroCusto = getCentroCusto(lancamentoProgramadoParcela);
+        lancamentoProgramadoParcelaHandle.lancamento = getLancamento(lancamentoProgramadoParcela);
+        lancamentoProgramadoParcelaHandle.numero = getNumero(lancamentoProgramadoParcela);
+        lancamentoProgramadoParcelaHandle.dataVencimento = getDataVencimento(lancamentoProgramadoParcela);
+        lancamentoProgramadoParcelaHandle.valor = getValor(lancamentoProgramadoParcela);
+        return lancamentoProgramadoParcelaHandle;
     };
     
-    var getId = function(lancamentoProgramadoRateio) {
-        return lancamentoProgramadoRateio.idLancamentoProgramadoRateio || null;
+    var getId = function(lancamentoProgramadoParcela) {
+        return lancamentoProgramadoParcela.idLancamentoProgramadoParcela || null;
     };
     
-    var getPlanoConta = function(lancamentoProgramadoRateio) {
-        if(!lancamentoProgramadoRateio.planoConta) return lancamentoProgramadoRateio.planoConta;    
-        return { idPlanoConta: lancamentoProgramadoRateio.planoConta.idPlanoConta }; 
+    var getPlanoConta = function(lancamentoProgramadoParcela) {
+        if(!lancamentoProgramadoParcela.planoConta) return lancamentoProgramadoParcela.planoConta;    
+        return { idPlanoConta: lancamentoProgramadoParcela.planoConta.idPlanoConta }; 
     };
     
-    var getCentroCusto = function(lancamentoProgramadoRateio) {
-        if(!lancamentoProgramadoRateio.centroCusto) return lancamentoProgramadoRateio.centroCusto;    
-        return { idCentroCusto: lancamentoProgramadoRateio.centroCusto.idCentroCusto }; 
+    var getCentroCusto = function(lancamentoProgramadoParcela) {
+        if(!lancamentoProgramadoParcela.centroCusto) return lancamentoProgramadoParcela.centroCusto;    
+        return { idCentroCusto: lancamentoProgramadoParcela.centroCusto.idCentroCusto }; 
     };
     
-    var getLancamento = function(lancamentoProgramadoRateio) {
-        if(!lancamentoProgramadoRateio.lancamento) return lancamentoProgramadoRateio.lancamento;
-        return { idLancamentoProgramado: lancamentoProgramadoRateio.lancamento.idLancamento }; 
+    var getLancamento = function(lancamentoProgramadoParcela) {
+        if(!lancamentoProgramadoParcela.lancamento) return lancamentoProgramadoParcela.lancamento;
+        return { idLancamentoProgramado: lancamentoProgramadoParcela.lancamento.idLancamento }; 
     };
     
-    var getNumero = function(lancamentoProgramadoRateio) {
-        return lancamentoProgramadoRateio.numero || null;
+    var getNumero = function(lancamentoProgramadoParcela) {
+        return lancamentoProgramadoParcela.numeroParcela || null;
     };
     
-    var getDataVencimento = function(lancamentoProgramadoRateio) {
-        return lancamentoProgramadoRateio.dataVencimento || null;
+    var getDataVencimento = function(lancamentoProgramadoParcela) {
+        return lancamentoProgramadoParcela.dataVencimento || null;
     };
     
-    var getValor = function(lancamentoProgramadoRateio) {
-        return lancamentoProgramadoRateio.valor || 0;
+    var getValor = function(lancamentoProgramadoParcela) {
+        return lancamentoProgramadoParcela.valor || 0;
     };
 
     return {

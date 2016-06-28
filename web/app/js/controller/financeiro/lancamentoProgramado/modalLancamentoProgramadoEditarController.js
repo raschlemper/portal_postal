@@ -162,7 +162,7 @@ app.controller('ModalLancamentoProgramadoEditarController',
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;
             if(!$scope.validarRateio(lancamentoProgramado)) return;  
             if(!$scope.validarForm(form, lancamentoProgramado)) return;
-            delete lancamentoProgramado.parcelas;
+//            delete lancamentoProgramado.parcelas;
             delete lancamentoProgramado.lancamentos;
             lancamentoProgramado.gerarLancamento = false;     
             $scope.close(lancamentoProgramado);
@@ -182,6 +182,7 @@ app.controller('ModalLancamentoProgramadoEditarController',
             lancamento.valor = (parcela && parcela.valor) || lancamentoProgramado.valor;
             lancamento.situacao = (lancamentoProgramado && lancamentoProgramado.situacao) || $scope.situacoes[0]; 
             lancamento.modelo = modelo;
+            lancamento.parcelas = lancamentoProgramado.parcelas;
             lancamento.rateios = lancamentoProgramado.rateios;
             return lancamento;
         };
