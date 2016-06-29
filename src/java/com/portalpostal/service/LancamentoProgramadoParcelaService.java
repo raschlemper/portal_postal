@@ -43,6 +43,11 @@ public class LancamentoProgramadoParcelaService {
         return lancamentoProgramadoParcelaDAO.update(lancamentoProgramadoParcela);
     } 
     
+    public void removeLancamento(Integer idLancamento) throws Exception {
+        init();
+        lancamentoProgramadoParcelaDAO.removeLancamento(idLancamento);
+    }    
+    
     public LancamentoProgramadoParcela delete(Integer idLancamentoProgramadoParcela) throws Exception {
         init();
         return lancamentoProgramadoParcelaDAO.remove(idLancamentoProgramadoParcela);

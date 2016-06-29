@@ -7,6 +7,7 @@ CREATE TABLE `lancamento_programado_parcela` (
   `idPlanoConta`                  INT NULL,
   `idCentroCusto`                 INT NULL,
   `idLancamentoProgramado`        INT NOT NULL,
+  `idLancamento`                  INT NULL,
   `numero`                        INTEGER NOT NULL,
   `dataVencimento`                DATETIME NOT NULL,
   `valor`                         DECIMAL(13,2) NOT NULL,
@@ -21,6 +22,9 @@ ADD INDEX `i_lancamentoprogramadoparcela_centrocusto` (`idCentroCusto` ASC);
 
 ALTER TABLE `lancamento_programado_parcela` 
 ADD INDEX `i_lancamentoprogramadoparcela_lancamentoprogramado` (`idLancamentoProgramado` ASC);
+
+ALTER TABLE `lancamento_programado_parcela` 
+ADD INDEX `i_lancamentoprogramadoparcela_lancamento` (`idLancamento` ASC);
 
 ALTER TABLE `lancamento_programado_parcela` 
 ADD CONSTRAINT `fk_lancamentoprogramadoparcela_planoconta`
@@ -40,5 +44,12 @@ ALTER TABLE `lancamento_programado_parcela`
 ADD CONSTRAINT `fk_lancamentoprogramadoparcela_lancamentoprogramado`
   FOREIGN KEY (`idLancamentoProgramado`)
   REFERENCES `lancamento_programado` (`idLancamentoProgramado`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `lancamento_programado_parcela` 
+ADD CONSTRAINT `fk_lancamentoprogramadoparcela_lancamento`
+  FOREIGN KEY (`idLancamento`)
+  REFERENCES `lancamento` (`idLancamento`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;

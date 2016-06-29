@@ -73,7 +73,7 @@ app.factory('LancamentoHandler', function(LISTAS) {
     };
     
     var getTipo = function(lancamento) {
-        if(!lancamento.tipo) return lancamento.tipo.id;
+        if(!lancamento.tipo) return lancamento.tipo;
         return lancamento.tipo.id; 
     };
     
@@ -90,7 +90,7 @@ app.factory('LancamentoHandler', function(LISTAS) {
     };
     
     var getSituacao = function(lancamento) {
-        if(!lancamento.situacao) return lancamento.situacao.id;
+        if(!lancamento.situacao) return lancamento.situacao;
         return lancamento.situacao.id; 
     };
     

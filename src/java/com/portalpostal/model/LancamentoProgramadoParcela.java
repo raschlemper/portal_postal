@@ -8,6 +8,7 @@ public class LancamentoProgramadoParcela {
     private PlanoConta planoConta;
     private CentroCusto centroCusto;
     private LancamentoProgramado lancamentoProgramado;
+    private Lancamento lancamento;
     private Integer numero;
     private Date dataVencimento;
     private Double valor;
@@ -42,6 +43,14 @@ public class LancamentoProgramadoParcela {
 
     public void setLancamentoProgramado(LancamentoProgramado lancamentoProgramado) {
         this.lancamentoProgramado = lancamentoProgramado;
+    }
+
+    public Lancamento getLancamento() {
+        return lancamento;
+    }
+
+    public void setLancamento(Lancamento lancamento) {
+        this.lancamento = lancamento;
     }
 
     public Integer getNumero() {

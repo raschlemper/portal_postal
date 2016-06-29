@@ -32,10 +32,9 @@ public class LancamentoProgramadoService {
         init();
         List<LancamentoProgramado> lancamentoProgramados = lancamentoProgramadoDAO.findAll();
         for (LancamentoProgramado lancamentoProgramado : lancamentoProgramados) {
-            List<Lancamento> lancamentos = lancamentoService.findByLancamentoProgramado(lancamentoProgramado.getIdLancamentoProgramado());
-            lancamentoProgramado.setLancamentos(lancamentos);
             lancamentoProgramado = setParcelas(lancamentoProgramado);
             lancamentoProgramado = setRateios(lancamentoProgramado);
+            lancamentoProgramado = setLancamentos(lancamentoProgramado);
         }
         return lancamentoProgramados;
     }  
@@ -43,19 +42,18 @@ public class LancamentoProgramadoService {
     public LancamentoProgramado find(Integer idLancamentoProgramado) throws Exception {
         init();
         LancamentoProgramado lancamentoProgramado = lancamentoProgramadoDAO.find(idLancamentoProgramado);
-        List<Lancamento> lancamentos = lancamentoService.findByLancamentoProgramado(idLancamentoProgramado);
-        lancamentoProgramado.setLancamentos(lancamentos);
         lancamentoProgramado = setParcelas(lancamentoProgramado);
         lancamentoProgramado = setRateios(lancamentoProgramado);
+        lancamentoProgramado = setLancamentos(lancamentoProgramado);
         return lancamentoProgramado;
     } 
     
     public LancamentoProgramado findLancamento(Integer idLancamentoProgramado) throws Exception {
         init();
         LancamentoProgramado lancamentoProgramado = find(idLancamentoProgramado);
-        lancamentoProgramado.setLancamentos(lancamentoService.findByLancamentoProgramado(idLancamentoProgramado));
         lancamentoProgramado = setParcelas(lancamentoProgramado);
         lancamentoProgramado = setRateios(lancamentoProgramado);
+        lancamentoProgramado = setLancamentos(lancamentoProgramado);
         return lancamentoProgramado;
     } 
     
@@ -127,15 +125,33 @@ public class LancamentoProgramadoService {
     
     public LancamentoProgramado createLancamento(LancamentoProgramado lancamentoProgramado) throws Exception {
         init();
-        List<Lancamento> lancamentos = lancamentoProgramado.getLancamentos();
-        if(lancamentoProgramado.getIdLancamentoProgramado() == null) { lancamentoProgramado = save(lancamentoProgramado); }
-        lancamentoProgramado.setLancamentos(null);
-        for (Lancamento lancamento : lancamentos) { 
-            lancamento.setLancamentoProgramado(lancamentoProgramado);
-            lancamentoService.save(lancamento); 
-        } 
+        lancamentoProgramado = setLancamentoNaProgramacao(lancamentoProgramado);
+        lancamentoProgramado = setLancamentoNaParcela(lancamentoProgramado);
         return update(lancamentoProgramado);   
-    }   
+    }    
+    
+    private LancamentoProgramado setLancamentoNaProgramacao(LancamentoProgramado lancamentoProgramado) throws Exception {
+        if(lancamentoProgramado.getIdLancamentoProgramado() == null) { lancamentoProgramado = save(lancamentoProgramado); }
+        List<Lancamento> lancamentos = new ArrayList<Lancamento>();
+        for (Lancamento lancamento : lancamentoProgramado.getLancamentos()) { 
+            lancamento.setLancamentoProgramado(lancamentoProgramado);
+            lancamentos.add(lancamentoService.save(lancamento)); 
+        }   
+        lancamentoProgramado.setLancamentos(lancamentos);
+        return lancamentoProgramado;
+    }
+    
+    private LancamentoProgramado setLancamentoNaParcela(LancamentoProgramado lancamentoProgramado) {
+        List<LancamentoProgramadoParcela> parcelasLancamento = new ArrayList<LancamentoProgramadoParcela>();
+        for (LancamentoProgramadoParcela parcela : lancamentoProgramado.getParcelas()) {
+            for (Lancamento lancamento : lancamentoProgramado.getLancamentos()) {
+                if(lancamento.getNumeroParcela() == parcela.getNumero()) { parcela.setLancamento(lancamento); }
+            }
+            parcelasLancamento.add(parcela);
+        }
+        lancamentoProgramado.setParcelas(parcelasLancamento);
+        return lancamentoProgramado;
+    }
     
     private LancamentoProgramado ajustaLancamento(LancamentoProgramado lancamentoProgramado) {
         lancamentoProgramado = ajustaLancamentoParcela(lancamentoProgramado);
@@ -145,8 +161,20 @@ public class LancamentoProgramadoService {
     
     // ***** PARCELAS ***** //
     
+    private LancamentoProgramado setLancamentos(LancamentoProgramado lancamentoProgramado) throws Exception {
+        if(lancamentoProgramado.getParcelas() != null) return lancamentoProgramado;
+        lancamentoProgramado.setLancamentos(getLancamentos(lancamentoProgramado.getIdLancamentoProgramado()));
+        return lancamentoProgramado;
+    }
+    
+    private List<Lancamento> getLancamentos(Integer idLancamentoProgramado) throws Exception {
+        return lancamentoService.findByLancamentoProgramado(idLancamentoProgramado);
+    }
+    
+    // ***** PARCELAS ***** //
+    
     private LancamentoProgramado setParcelas(LancamentoProgramado lancamentoProgramado) throws Exception {
-        lancamentoProgramado.setRateios(getRateios(lancamentoProgramado.getIdLancamentoProgramado()));
+        lancamentoProgramado.setParcelas(getParcelas(lancamentoProgramado.getIdLancamentoProgramado()));
         return lancamentoProgramado;
     }
     

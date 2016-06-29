@@ -41,7 +41,7 @@ app.factory('LancamentoProgramadoParcelaHandler', function() {
     };
     
     var getNumero = function(lancamentoProgramadoParcela) {
-        return lancamentoProgramadoParcela.numeroParcela || null;
+        return lancamentoProgramadoParcela.numero || null;
     };
     
     var getDataVencimento = function(lancamentoProgramadoParcela) {

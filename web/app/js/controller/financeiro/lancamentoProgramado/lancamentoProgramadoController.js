@@ -29,7 +29,7 @@ app.controller('LancamentoProgramadoController',
                 {label: '', column: 'tipo', headerClass: 'no-sort', dataClass:'text-center col-tipo', filter: {name: 'tipoLancamento', args: ''}},       
                 {label: 'Conta', column: 'conta.nome', filter: {name: 'date', args: 'dd/MM/yyyy'}},                      
                 {label: 'Vencimento', column: 'dataVencimento', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
-                {label: 'Número', column: 'numeroParcela'},         
+                {label: 'Número', column: 'numero'},         
                 {label: 'Plano Conta', column: 'planoConta'},   
                 {label: 'Centro Custo', column: 'centroCusto', showColumn: true, selected: false},             
                 {label: 'Favorecido', column: 'favorecido'},  
@@ -157,7 +157,7 @@ app.controller('LancamentoProgramadoController',
                 
                 var complementoDescricaoFrequencia = '';
                 if(lancamentoProgramado.quantidadeParcela) { 
-                    complementoDescricaoFrequencia = ' - ' + lancamentoProgramado.quantidadeParcela + 'x (' + $filter('currency')(lancamentoProgramado.valor, 'R$ ') + ')';
+                    complementoDescricaoFrequencia = ' - ' + lancamentoProgramado.quantidadeParcelaAbertas + 'x (' + $filter('currency')(lancamentoProgramado.valor, 'R$ ') + ')';
                     lancamentoProgramado.tipo.modelo = $scope.modelos[4];
                     lancamentoProgramado.valor = lancamentoProgramado.valor / lancamentoProgramado.quantidadeParcela;
                 }                
@@ -182,7 +182,7 @@ app.controller('LancamentoProgramadoController',
                 
                 lancamentoProgramado.situacao = lancamentoProgramado.situacao.descricao;
                 lancamentoProgramado.frequencia = lancamentoProgramado.frequencia.descricao + complementoDescricaoFrequencia;
-                lancamentoProgramado.numeroParcela = lancamentoProgramado.numero;
+//                lancamentoProgramado.numeroParcela = lancamentoProgramado.numero;
                 lancamentoProgramado.tipo.modelo = $scope.modelos;
                 if(lancamentoProgramado.lancamentos && lancamentoProgramado.lancamentos.length) {
                     lancamentoProgramado.lancamentos = lancamentoProgramado.lancamentos.length;
@@ -193,7 +193,7 @@ app.controller('LancamentoProgramadoController',
                     lancamentoProgramado.centroCusto = "Diversos";
                 }
                 
-                return _.pick(lancamentoProgramado, 'idLancamentoProgramado', 'lancamentos', 'conta', 'tipo', 'tipoLancamento', 'dataVencimento', 'numeroParcela', 'planoConta', 'centroCusto', 'favorecido', 'valor', 'situacao', 'frequencia');
+                return _.pick(lancamentoProgramado, 'idLancamentoProgramado', 'lancamentos', 'conta', 'tipo', 'tipoLancamento', 'dataVencimento', 'numero', 'planoConta', 'centroCusto', 'favorecido', 'valor', 'situacao', 'frequencia');
             })
         };
         
@@ -387,8 +387,8 @@ app.controller('LancamentoProgramadoController',
         };
         
         var removeAll = function(conta, lancamentosProgramados) {
-            _.map(lancamentosProgramados, function(lancamentoProgramado) {
-                lancamentoProgramado = ajustarDados(lancamentoProgramado);
+            lancamentosProgramados = _.map(lancamentosProgramados, function(lancamentoProgramado) {
+                return ajustarDados(lancamentoProgramado);
             });
             LancamentoProgramadoService.deleteAll(lancamentosProgramados)
                 .then(function(data) { 

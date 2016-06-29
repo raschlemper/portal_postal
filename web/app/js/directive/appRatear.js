@@ -78,11 +78,14 @@ app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES
                         rateio.centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, rateio.centroCusto.idCentroCusto); 
                     } 
                     rateio.percentual = calculatePercentual(lancamentoRatear, rateio);
+                    rateio.valor = rateio.percentual * lancamentoRatear.valor;
+                    rateio.valorParcela = rateio.percentual * (lancamentoRatear.valor / getQuantidadeParcela(lancamentoRatear.quantidadeParcela));
                 })
             };  
             
             var calculatePercentual = function(lancamentoRatear, rateio) {
-                return rateio.valor / (lancamentoRatear.valor / getQuantidadeParcela(lancamentoRatear.quantidadeParcela));
+//                return rateio.valor / (lancamentoRatear.valor / getQuantidadeParcela(lancamentoRatear.quantidadeParcela));
+                return rateio.valor / lancamentoRatear.valor;
             }; 
             
             var getQuantidadeParcela = function(quantidadeParcela) {
@@ -91,7 +94,8 @@ app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES
             }
             
             var updateValueRateio = function(quantidade, valor, rateios) {
-                var valorParcelado = valor / quantidade;
+//                var valorParcelado = valor / quantidade;
+                var valorParcelado = valor;
                 return _.map(rateios, function(rateio) { 
                     rateio.valor =  rateio.percentual * valorParcelado;
                 });

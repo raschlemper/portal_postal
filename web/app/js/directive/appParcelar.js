@@ -40,9 +40,9 @@ app.directive('appParcelar', function(FrequenciaLancamentoService) {
                 var frequencia = lancamentoParcelar.frequencia;
                 var dataVencimento = lancamentoParcelar.dataVencimento;
                 parcelas.map(function(parcela) {
-                    var lancamento = findParcelaBaixada(lancamentoParcelar.lancamentos, parcela.numeroParcela);
                     if(!parcela.idLancamentoProgramadoParcela) { parcela.dataVencimento = dataVencimento; }
-                    parcela = getParcela(lancamentoParcelar, lancamento, parcela.numeroParcela, parcela.dataVencimento, parcela.dataVencimento);
+//                    var lancamento = findParcelaBaixada(lancamentoParcelar.lancamentos, parcela.numero);
+                    parcela = getParcela(lancamentoParcelar, parcela.lancamento, parcela.numero, parcela.dataVencimento, parcela.dataVencimento);
                     lancamentoParcelar.parcelas.push(parcela);
                     dataVencimento = FrequenciaLancamentoService.addData(frequencia, dataVencimento);
                 });
@@ -54,14 +54,22 @@ app.directive('appParcelar', function(FrequenciaLancamentoService) {
 //                var dataCompetencia = lancamentoParcelar.dataCompetencia;
                 var dataVencimento = lancamentoParcelar.dataVencimento;
                 for(var i=0; i<lancamentoParcelar.quantidadeParcela; i++) {
-                    var numeroParcela = (i + 1);
-                    var lancamento = findParcelaBaixada(lancamentoParcelar.lancamentos, numeroParcela);
-                    var parcela = getParcela(lancamentoParcelar, lancamento, numeroParcela, dataVencimento, dataVencimento);
+                    var numeroLancamento = (i + 1);
+//                    var lancamento = findParcelaBaixada(lancamentoParcelar.lancamentos, numeroLancamento);
+                    var parcela = getParcela(lancamentoParcelar, null, numeroLancamento, dataVencimento, dataVencimento);
                     lancamentoParcelar.parcelas.push(parcela);
 //                    dataCompetencia = FrequenciaLancamentoService.addData(frequencia, dataCompetencia);
                     dataVencimento = FrequenciaLancamentoService.addData(frequencia, dataVencimento);
                 }
             };
+            
+            $scope.disabledNumeroParcela = function(parcelas) {
+                var disabled = false;
+                parcelas.map(function(parcela) {
+                    if(parcela.lancamento) { disabled = true; }
+                });
+                return disabled;
+            }
 
             var findParcelaBaixada = function(lancamentos, numeroParcela) {
                 return _.find(lancamentos, function(lancamento) { 
@@ -71,6 +79,7 @@ app.directive('appParcelar', function(FrequenciaLancamentoService) {
             
             $scope.$watch("lancamentoParcelar.quantidadeParcela", function(newValue, oldValue) {
                 if(!newValue) return;
+                if(newValue === oldValue) return;
                 createNovasParcelas($scope.lancamentoParcelar);
             });  
             
@@ -114,8 +123,8 @@ app.directive('appParcelar', function(FrequenciaLancamentoService) {
 
             var getParcela = function(lancamentoParcelar, lancamento, numeroParcela, dataCompetencia, dataVencimento) {
                 var parcela = {
-                    numero: lancamentoParcelar.numero,
-                    numeroParcela: numeroParcela,
+                    numero: numeroParcela,
+                    numeroLancamento: lancamentoParcelar.numero,
                     planoConta: lancamentoParcelar.planoConta,
                     centroCusto: lancamentoParcelar.centroCusto,
                     dataCompetencia: dataCompetencia,
