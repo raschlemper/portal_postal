@@ -53,7 +53,7 @@ app.factory('LancamentoProgramadoHandler', function() {
     };
     
     var getTipo = function(lancamentoProgramado) {
-        if(!lancamentoProgramado.tipo) return lancamentoProgramado.tipo.id;
+        if(!lancamentoProgramado.tipo) return lancamentoProgramado.tipo;
         return lancamentoProgramado.tipo.id; 
     };
     
@@ -66,17 +66,17 @@ app.factory('LancamentoProgramadoHandler', function() {
     };
     
     var getDocumento = function(lancamentoProgramado) {
-        if(!lancamentoProgramado.documento) return lancamentoProgramado.documento.idTipoDocumento;
+        if(!lancamentoProgramado.documento) return lancamentoProgramado.documento;
         return { idTipoDocumento: lancamentoProgramado.documento.idTipoDocumento };
     };
     
     var getFormaPagamento = function(lancamentoProgramado) {
-        if(!lancamentoProgramado.formaPagamento) return lancamentoProgramado.formaPagamento.idTipoFormaPagamento;
+        if(!lancamentoProgramado.formaPagamento) return lancamentoProgramado.formaPagamento;
         return { idTipoFormaPagamento: lancamentoProgramado.formaPagamento.idTipoFormaPagamento };
     };
     
     var getFrequencia = function(lancamentoProgramado) {
-        if(!lancamentoProgramado.frequencia) return lancamentoProgramado.frequencia.id;
+        if(!lancamentoProgramado.frequencia) return lancamentoProgramado.frequencia;
         return lancamentoProgramado.frequencia.id;
     };
     
@@ -105,7 +105,7 @@ app.factory('LancamentoProgramadoHandler', function() {
     };
     
     var getSituacao = function(lancamentoProgramado) {
-        if(!lancamentoProgramado.situacao) return lancamentoProgramado.situacao.id;
+        if(!lancamentoProgramado.situacao) return lancamentoProgramado.situacao;
         return lancamentoProgramado.situacao.id; 
     };
     

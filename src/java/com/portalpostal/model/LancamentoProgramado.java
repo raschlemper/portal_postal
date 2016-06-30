@@ -19,6 +19,8 @@ public class LancamentoProgramado {
     private TipoFormaPagamento formaPagamento;    
     private TipoFrequencia frequencia; 
     private Integer quantidadeParcela;
+    private Integer quantidadeParcelaAbertas;
+    private Integer quantidadeParcelaBaixadas;
     private Integer numeroParcela;
     private Date dataCompetencia;
     private Date dataEmissao;
@@ -29,6 +31,7 @@ public class LancamentoProgramado {
     private String observacao;
     private String usuario;
     private List<Lancamento> lancamentos;
+    private List<LancamentoProgramadoParcela> parcelas;
     private List<LancamentoProgramadoRateio> rateios;
 
     public Integer getIdLancamentoProgramado() {
@@ -117,6 +120,23 @@ public class LancamentoProgramado {
 
     public void setQuantidadeParcela(Integer quantidadeParcela) {
         this.quantidadeParcela = quantidadeParcela;
+        setQuantidadeParcelasByStatus();
+    }
+
+    public Integer getQuantidadeParcelaAbertas() {
+        return quantidadeParcelaAbertas;
+    }
+
+    public void setQuantidadeParcelaAbertas(Integer quantidadeParcelaAbertas) {
+        this.quantidadeParcelaAbertas = quantidadeParcelaAbertas;
+    }
+
+    public Integer getQuantidadeParcelaBaixadas() {
+        return quantidadeParcelaBaixadas;
+    }
+
+    public void setQuantidadeParcelaBaixadas(Integer quantidadeParcelaBaixadas) {
+        this.quantidadeParcelaBaixadas = quantidadeParcelaBaixadas;
     }
 
     public Integer getNumeroParcela() {
@@ -199,12 +219,34 @@ public class LancamentoProgramado {
         this.lancamentos = lancamentos;
     }
 
+    public List<LancamentoProgramadoParcela> getParcelas() {
+        return parcelas;
+    }
+
+    public void setParcelas(List<LancamentoProgramadoParcela> parcelas) {
+        this.parcelas = parcelas;
+        setQuantidadeParcelasByStatus();
+    }
+
     public List<LancamentoProgramadoRateio> getRateios() {
         return rateios;
     }
 
     public void setRateios(List<LancamentoProgramadoRateio> rateios) {
         this.rateios = rateios;
+    }
+    
+    private void setQuantidadeParcelasByStatus() {
+        if(this.parcelas != null && this.quantidadeParcela != null) {
+            this.quantidadeParcelaAbertas = this.quantidadeParcela;
+            this.quantidadeParcelaBaixadas = 0;
+            for (LancamentoProgramadoParcela parcela : this.parcelas) {
+                if(parcela.getLancamento() != null) { 
+                    this.quantidadeParcelaAbertas--;
+                    this.quantidadeParcelaBaixadas++; 
+                }
+            }
+        }
     }
     
 }
