@@ -1,6 +1,7 @@
 package com.portalpostal.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class LancamentoProgramadoParcela {
     
@@ -76,5 +77,27 @@ public class LancamentoProgramadoParcela {
     public void setValor(Double valor) {
         this.valor = valor;
     }    
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.idLancamentoProgramadoParcela);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final LancamentoProgramadoParcela other = (LancamentoProgramadoParcela) obj;
+        if (!Objects.equals(this.idLancamentoProgramadoParcela, other.idLancamentoProgramadoParcela)) {
+            return false;
+        }
+        return true;
+    }
     
 }

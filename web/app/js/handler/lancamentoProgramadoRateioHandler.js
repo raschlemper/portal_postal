@@ -40,7 +40,7 @@ app.factory('LancamentoProgramadoRateioHandler', function() {
     };
     
     var getValor = function(lancamentoProgramadoRateio) {
-        return lancamentoProgramadoRateio.valorParcela || 0;
+        return lancamentoProgramadoRateio.valor || 0;
     };
     
     var getObservacao = function(lancamentoProgramadoRateio) {

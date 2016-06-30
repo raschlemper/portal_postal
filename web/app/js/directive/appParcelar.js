@@ -1,4 +1,4 @@
-app.directive('appParcelar', function(FrequenciaLancamentoService) {
+app.directive('appParcelar', function(LancamentoHandler, FrequenciaLancamentoService) {
     
     return {
         restrict: 'E',
@@ -42,6 +42,7 @@ app.directive('appParcelar', function(FrequenciaLancamentoService) {
                 parcelas.map(function(parcela) {
                     if(!parcela.idLancamentoProgramadoParcela) { parcela.dataVencimento = dataVencimento; }
 //                    var lancamento = findParcelaBaixada(lancamentoParcelar.lancamentos, parcela.numero);
+//                    if(parcela.lancamento) { parcela.lancamento = LancamentoHandler.handle(parcela.lancamento); }
                     parcela = getParcela(lancamentoParcelar, parcela.lancamento, parcela.numero, parcela.dataVencimento, parcela.dataVencimento);
                     lancamentoParcelar.parcelas.push(parcela);
                     dataVencimento = FrequenciaLancamentoService.addData(frequencia, dataVencimento);
@@ -102,8 +103,7 @@ app.directive('appParcelar', function(FrequenciaLancamentoService) {
                 if(newValue === oldValue) return;
                 init($scope.lancamentoParcelar);
             });
-            
-            
+                        
             $scope.$watch("lancamentoParcelar.dataVencimento", function(newValue, oldValue) {
                 if(newValue === oldValue) return;
                 init($scope.lancamentoParcelar);

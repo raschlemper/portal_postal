@@ -37,7 +37,7 @@ app.factory('LancamentoProgramadoParcelaHandler', function() {
     
     var getLancamento = function(lancamentoProgramadoParcela) {
         if(!lancamentoProgramadoParcela.lancamento) return lancamentoProgramadoParcela.lancamento;
-        return { idLancamentoProgramado: lancamentoProgramadoParcela.lancamento.idLancamento }; 
+        return { idLancamento: lancamentoProgramadoParcela.lancamento.idLancamento }; 
     };
     
     var getNumero = function(lancamentoProgramadoParcela) {
