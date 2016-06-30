@@ -74,7 +74,11 @@ public class LancamentoProgramadoService {
     
     public List<LancamentoProgramado> findAllAtivo() throws Exception {
         init();
-        return lancamentoProgramadoDAO.findAllAtivo();
+        List<LancamentoProgramado> lancamentoProgramados = lancamentoProgramadoDAO.findAllAtivo();
+        for (LancamentoProgramado lancamentoProgramado : lancamentoProgramados) {
+            lancamentoProgramado = setParcelas(lancamentoProgramado);
+        }
+        return lancamentoProgramados;
     } 
     
     public LancamentoProgramado save(LancamentoProgramado lancamentoProgramado) throws Exception {
@@ -109,7 +113,7 @@ public class LancamentoProgramadoService {
     
     public LancamentoProgramado delete(Integer idLancamentoProgramado) throws Exception {
         init();
-        if(!podeExcluir(idLancamentoProgramado)) throw new Exception("Este lançamento não pode ser excluída!"); 
+        if(!podeExcluir(idLancamentoProgramado)) throw new Exception("Este lançamento não pode ser excluído!"); 
         LancamentoProgramado lancamentoProgramado = find(idLancamentoProgramado);
         removerLancamentoParcela(lancamentoProgramado, null);
         removerLancamentoRateio(lancamentoProgramado, null);
@@ -162,7 +166,7 @@ public class LancamentoProgramadoService {
     // ***** PARCELAS ***** //
     
     private LancamentoProgramado setLancamentos(LancamentoProgramado lancamentoProgramado) throws Exception {
-        if(lancamentoProgramado.getParcelas() != null) return lancamentoProgramado;
+        if(lancamentoProgramado.getParcelas() != null && !lancamentoProgramado.getParcelas().isEmpty()) return lancamentoProgramado;
         lancamentoProgramado.setLancamentos(getLancamentos(lancamentoProgramado.getIdLancamentoProgramado()));
         return lancamentoProgramado;
     }
@@ -185,7 +189,7 @@ public class LancamentoProgramadoService {
     private List<LancamentoProgramadoParcela> saveOrUpdateParcela(LancamentoProgramado lancamentoProgramado) throws Exception {
         removerLancamentoParcela(lancamentoProgramado, lancamentoProgramado.getParcelas());
         List<LancamentoProgramadoParcela> parcelasLista = new ArrayList<LancamentoProgramadoParcela>();
-        if(lancamentoProgramado.getParcelas() == null) return parcelasLista;
+        if(lancamentoProgramado.getParcelas() == null || lancamentoProgramado.getParcelas().isEmpty()) return parcelasLista;
         for (LancamentoProgramadoParcela parcela : lancamentoProgramado.getParcelas()) {
             parcela.setLancamentoProgramado(getLancamentoToParcela(lancamentoProgramado));
             if(parcela.getIdLancamentoProgramadoParcela() != null) {

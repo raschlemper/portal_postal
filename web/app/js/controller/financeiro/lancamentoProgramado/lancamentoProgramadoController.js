@@ -193,7 +193,8 @@ app.controller('LancamentoProgramadoController',
                     lancamentoProgramado.centroCusto = "Diversos";
                 }
                 
-                return _.pick(lancamentoProgramado, 'idLancamentoProgramado', 'lancamentos', 'conta', 'tipo', 'tipoLancamento', 'dataVencimento', 'numero', 'planoConta', 'centroCusto', 'favorecido', 'valor', 'situacao', 'frequencia');
+                return _.pick(lancamentoProgramado, 'idLancamentoProgramado', 'conta', 'tipo', 'tipoLancamento', 'dataVencimento', 'numero', 
+                'planoConta', 'centroCusto', 'favorecido', 'valor', 'situacao', 'frequencia', 'existeLancamento');
             })
         };
         
@@ -425,8 +426,7 @@ app.controller('LancamentoProgramadoController',
         };
         
         var existeLancamentoVinculado = function(lancamentoProgramado) {   
-            if(lancamentoProgramado.lancamentos && lancamentoProgramado.lancamentos > 0) return true; 
-            return false;
+            return lancamentoProgramado.existeLancamento;
         };
         
         // ***** AJUSTAR ***** //

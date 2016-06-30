@@ -30,6 +30,7 @@ public class LancamentoProgramado {
     private String historico;
     private String observacao;
     private String usuario;
+    private boolean existeLancamento;
     private List<Lancamento> lancamentos;
     private List<LancamentoProgramadoParcela> parcelas;
     private List<LancamentoProgramadoRateio> rateios;
@@ -211,6 +212,15 @@ public class LancamentoProgramado {
         this.usuario = usuario;
     }
 
+    public boolean getExisteLancamento() {
+        existLancamentoVinculado();
+        return existeLancamento;
+    }
+
+    public void setExisteLancamento(boolean existeLancamento) {
+        this.existeLancamento = existeLancamento;
+    }
+
     public List<Lancamento> getLancamentos() {
         return lancamentos;
     }
@@ -247,6 +257,17 @@ public class LancamentoProgramado {
                 }
             }
         }
+    }
+    
+    private void existLancamentoVinculado() {
+        boolean existVinculo = false;
+        if(this.lancamentos != null && !this.lancamentos.isEmpty()) { existVinculo = true; }
+        if(this.parcelas != null) {
+            for (LancamentoProgramadoParcela parcela : this.parcelas) {
+                if(parcela.getLancamento() != null) { existVinculo = true; }
+            }
+        }    
+        this.existeLancamento = existVinculo;
     }
     
 }

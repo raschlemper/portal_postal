@@ -3233,3 +3233,9 @@ table.table-condensed tbody tr td.cel-menu {
     margin-top: -10px;
     border-bottom: 1px solid #DDD;
 }
+
+.input-group-modal {
+    /* position: relative; */
+    display: table;
+    border-collapse: separate;
+}

@@ -330,7 +330,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                     var categorias = getDataChartSaldo(saldos, 'data');
                     var valores = getDataChartSaldo(saldos, 'valor');
                     valores = addSaldoContas($scope.saldoTotal, valores);
-                    configChartSaldo(categorias, valores, limiteContaCorrente);
+                    configChartSaldo(categorias, valores, toFixe(limiteContaCorrente, 2));
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -422,7 +422,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
             var saldoAcumulado = saldoContas;
             return _.map(saldos, function(saldo) {
                 saldoAcumulado += saldo;
-                return saldoAcumulado;
+                return toFixe(saldoAcumulado, 2);
             })
         }
         // Saldos Programados /////
@@ -431,9 +431,10 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
             LancamentoProgramadoService.getAllAtivo()
                .then(function(data) {
                     var dataAtual = moment().format('YYYY-MM-DD');
-                    var dataUmMes = moment().add(1, "M").format('YYYY-MM-DD');
-                    var dataDoisMes = moment().add(2, "M").format('YYYY-MM-DD');
-                    var dataTresMes = moment().add(3, "M").format('YYYY-MM-DD');
+                    var dataDiaSeguinte = moment().add(1, "D");
+                    var dataUmMes = dataDiaSeguinte.add(1, "M").format('YYYY-MM-DD');
+                    var dataDoisMes = dataDiaSeguinte.add(2, "M").format('YYYY-MM-DD');
+                    var dataTresMes = dataDiaSeguinte.add(3, "M").format('YYYY-MM-DD');
                     $scope.lancamentosVencido = getValoresReceitaDespesaDefault();
                     $scope.lancamentosHoje = getValoresReceitaDespesaDefault();
                     $scope.lancamentosUmMes = getValoresReceitaDespesaDefault();
@@ -452,7 +453,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                 });            
         }
         
-        var getValoresReceitaDespesaDefault = function(valores, lancamentos) {
+        var getValoresReceitaDespesaDefault = function() {
             return {receita: 0, despesa: 0};
         }
         

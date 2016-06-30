@@ -1,4 +1,4 @@
-app.directive('appParcelar', function(LancamentoHandler, FrequenciaLancamentoService) {
+app.directive('appParcelar', function(DatePickerService, FrequenciaLancamentoService) {
     
     return {
         restrict: 'E',
@@ -13,6 +13,7 @@ app.directive('appParcelar', function(LancamentoHandler, FrequenciaLancamentoSer
         link: function($scope, element, attr, controller, transclude) {            
                         
             var init = function (lancamentoParcelar) { 
+                $scope.datepickerVencimento = angular.copy(DatePickerService.default); 
                 $scope.createParcelas(lancamentoParcelar);
             };
 
@@ -43,7 +44,7 @@ app.directive('appParcelar', function(LancamentoHandler, FrequenciaLancamentoSer
                     if(!parcela.idLancamentoProgramadoParcela) { parcela.dataVencimento = dataVencimento; }
 //                    var lancamento = findParcelaBaixada(lancamentoParcelar.lancamentos, parcela.numero);
 //                    if(parcela.lancamento) { parcela.lancamento = LancamentoHandler.handle(parcela.lancamento); }
-                    parcela = getParcela(lancamentoParcelar, parcela.lancamento, parcela.numero, parcela.dataVencimento, parcela.dataVencimento);
+                    parcela = getParcela(parcela.idLancamentoProgramadoParcela, lancamentoParcelar, parcela.lancamento, parcela.numero, parcela.dataVencimento, parcela.dataVencimento);
                     lancamentoParcelar.parcelas.push(parcela);
                     dataVencimento = FrequenciaLancamentoService.addData(frequencia, dataVencimento);
                 });
@@ -57,7 +58,7 @@ app.directive('appParcelar', function(LancamentoHandler, FrequenciaLancamentoSer
                 for(var i=0; i<lancamentoParcelar.quantidadeParcela; i++) {
                     var numeroLancamento = (i + 1);
 //                    var lancamento = findParcelaBaixada(lancamentoParcelar.lancamentos, numeroLancamento);
-                    var parcela = getParcela(lancamentoParcelar, null, numeroLancamento, dataVencimento, dataVencimento);
+                    var parcela = getParcela(null, lancamentoParcelar, null, numeroLancamento, dataVencimento, dataVencimento);
                     lancamentoParcelar.parcelas.push(parcela);
 //                    dataCompetencia = FrequenciaLancamentoService.addData(frequencia, dataCompetencia);
                     dataVencimento = FrequenciaLancamentoService.addData(frequencia, dataVencimento);
@@ -121,8 +122,9 @@ app.directive('appParcelar', function(LancamentoHandler, FrequenciaLancamentoSer
 
             // ***** AJUSTAR ***** //
 
-            var getParcela = function(lancamentoParcelar, lancamento, numeroParcela, dataCompetencia, dataVencimento) {
+            var getParcela = function(idLancamentoProgramadoParcela, lancamentoParcelar, lancamento, numeroParcela, dataCompetencia, dataVencimento) {
                 var parcela = {
+                    idLancamentoProgramadoParcela: idLancamentoProgramadoParcela,
                     numero: numeroParcela,
                     numeroLancamento: lancamentoParcelar.numero,
                     planoConta: lancamentoParcelar.planoConta,

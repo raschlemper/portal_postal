@@ -33,7 +33,7 @@
                     <th>Plano Conta</th>
                     <th>Centro Custo</th>
                     <!--<th>Competência</th>-->
-                    <th class="text-center">Vencimento</th>
+                    <th class="col-md-3 text-center">Vencimento</th>
                     <th>Valor</th>
                     <th class="col-md-1 text-center" ng-if="!onlyView"></th>
                 </tr>
@@ -44,7 +44,10 @@
                     <td>{{parcela.planoConta.descricao}}</td>
                     <td>{{parcela.centroCusto.descricao}}</td>
                     <!--<td>{{parcela.dataCompetencia | date : 'dd/MM/yyyy'}}</td>-->
-                    <td class="text-center">{{parcela.dataVencimento | date : 'dd/MM/yyyy'}}</td>
+                    <td class="text-center" ng-if="parcela.lancamento">{{parcela.dataVencimento | date : 'dd/MM/yyyy'}}</td>
+                    <td class="col-md-2 text-center" ng-if="!parcela.lancamento">
+                        <app-datepicker class="input-group-modal" placeholder="Data do vencimento" name="dataVencimento" datepicker-model="parcela.dataVencimento"></app-datepicker>
+                    </td>
                     <td>{{parcela.valor | currency : 'R$ '}}</td>
                     <td class="text-center" ng-if="!onlyView">
                         <button type="button" class="btn btn-sm btn-primary" 
