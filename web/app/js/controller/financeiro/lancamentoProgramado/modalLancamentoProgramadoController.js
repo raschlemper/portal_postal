@@ -20,7 +20,8 @@ app.controller('ModalLancamentoProgramadoController', ['$scope', '$modalInstance
             if($scope.lancamentoProgramado && $scope.lancamentoProgramado.rateios && $scope.lancamentoProgramado.rateios.length) {
                 $scope.showRatear = true;
             } 
-            if($scope.lancamentoProgramado && $scope.lancamentoProgramado.quantidadeParcela) {
+            if(($scope.lancamentoProgramado && $scope.lancamentoProgramado.parcelas && $scope.lancamentoProgramado.parcelas.length) 
+                    || $scope.lancamentoProgramado && $scope.lancamentoProgramado.quantidadeParcela) {
                 $scope.showParcelar = true;
             } 
             $scope.stepFrom = null;

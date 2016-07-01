@@ -20,7 +20,7 @@ public class InformacaoProfissionalHandler extends GenericHandler implements Res
         InformacaoProfissional informacaoProfissional = new InformacaoProfissional();
         informacaoProfissional.setIdInformacaoProfissional(getInt(result, "idInformacaoProfissional"));
         informacaoProfissional.setColaborador(getColaborador(result));
-        informacaoProfissional.setCargaFuncao(getString(result, "cargaFuncao"));
+        informacaoProfissional.setCargoFuncao(getString(result, "cargoFuncao"));
         informacaoProfissional.setSalario(getDouble(result, "salario"));    
         informacaoProfissional.setDataAdmissao(getDate(result, "dataAdmissao"));   
         informacaoProfissional.setDataDemissao(getDate(result, "dataDemissao"));  

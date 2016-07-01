@@ -4,6 +4,7 @@ app.factory('FrequenciaLancamentoService', function(LISTAS) {
     
     var frequencias = LISTAS.frequencia;
     var situacoes = LISTAS.situacaoLancamentoProgramado;
+    
     var execute = function (lancamentoProgramado) {
         if(!lancamentoProgramado) return lancamentoProgramado;
         var numeroParcela = lancamentoProgramado.numeroParcela + 1;

@@ -149,7 +149,7 @@
             <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR
         </button>
         <button type="button" class="btn btn-primary" ng-click="gerar(this.lancamentoProgramadoForm, lancamentoProgramado)" 
-                ng-hide="lancamentoProgramado.parcelas && lancamentoProgramado.parcelas.length"
+                ng-if="!lancamentoProgramado.parcelas || !lancamentoProgramado.parcelas.length"
                 ng-show="lancamentoProgramado.situacao.codigo === 'ativo'">
             <i class="fa fa-lg fa-check fa-spc"></i> GERAR LANÇAMENTO
         </button>

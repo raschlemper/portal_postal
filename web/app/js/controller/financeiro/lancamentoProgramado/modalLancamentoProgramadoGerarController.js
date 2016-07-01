@@ -25,7 +25,7 @@ app.controller('ModalLancamentoProgramadoGerarController',
         
         $scope.lancar = function(form, lancamentoProgramado, lancamento) {
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;
-            if(!$scope.validarRateio(lancamentoProgramado)) return;  
+            if(!$scope.validarRateio(lancamento.valor, lancamentoProgramado)) return;  
             if(!$scope.validarForm(form, lancamentoProgramado)) return;   
             if(!validarForm(form, lancamento)) return;     
             lancamento = ajustarLancamento(lancamento);  

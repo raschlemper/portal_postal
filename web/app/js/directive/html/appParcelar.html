@@ -19,7 +19,7 @@
         <label class="small">Selecione a quantidade de parcelas</label>
         <div class="input-group" for="quantidadeParcela">
             <input class="form-control" type="text" id="quantidadeParcela" name="quantidadeParcela" ng-model="lancamentoParcelar.quantidadeParcela" ng-change="createParcelas(lancamentoParcelar)"
-                   placeholder="Quantidade de parcelas" ng-disabled="(lancamentoParcelar.lancamentos.length)"/>  
+                   placeholder="Quantidade de parcelas" ng-disabled="disabledNumeroParcela(lancamentoParcelar.parcelas)"/>  
         </div>
     </div> 
 
@@ -33,23 +33,28 @@
                     <th>Plano Conta</th>
                     <th>Centro Custo</th>
                     <!--<th>Competência</th>-->
-                    <th class="text-center">Vencimento</th>
+                    <th class="col-md-3 text-center">Vencimento</th>
                     <th>Valor</th>
                     <th class="col-md-1 text-center" ng-if="!onlyView"></th>
                 </tr>
             </thead>     
             <tbody>
                 <tr ng-repeat="parcela in lancamentoParcelar.parcelas track by $index">
-                    <td>{{parcela.numero}} - {{parcela.numeroParcela}}</td>
+                    <td>{{parcela.numeroLancamento}} - {{parcela.numero}}</td>
                     <td>{{parcela.planoConta.descricao}}</td>
                     <td>{{parcela.centroCusto.descricao}}</td>
                     <!--<td>{{parcela.dataCompetencia | date : 'dd/MM/yyyy'}}</td>-->
-                    <td class="text-center">{{parcela.dataVencimento | date : 'dd/MM/yyyy'}}</td>
+                    <td class="text-center" ng-if="parcela.lancamento">{{parcela.dataVencimento | date : 'dd/MM/yyyy'}}</td>
+                    <td class="col-md-2 text-center" ng-if="!parcela.lancamento">
+                        <app-datepicker class="input-group-modal" placeholder="Data do vencimento" name="dataVencimento" datepicker-model="parcela.dataVencimento"></app-datepicker>
+                    </td>
                     <td>{{parcela.valor | currency : 'R$ '}}</td>
                     <td class="text-center" ng-if="!onlyView">
-                        <button type="button" class="btn btn-sm btn-primary" ng-click="lancar(form, lancamentoParcelar, parcela)"
-                                ng-show="lancamentoParcelar.situacao.codigo === 'ativo'" ng-if="!parcela.lancamento" ng-disabled="lancamentoParcelar.numeroParcela !== parcela.numeroParcela">
-                            <i class="fa fa-sm fa-plus fa-spc"></i>Gerar
+                        <button type="button" class="btn btn-sm btn-primary" 
+                                ng-click="lancar(form, lancamentoParcelar, parcela)"
+                                ng-show="lancamentoParcelar.situacao.codigo === 'ativo'" 
+                                ng-if="!parcela.lancamento">
+                            <i class="fa fa-sm fa-plus fa-spc"></i>Lançar
                         </button>
                     </td>
                 </tr>

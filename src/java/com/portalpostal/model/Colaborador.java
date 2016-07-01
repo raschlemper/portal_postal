@@ -4,6 +4,7 @@ import com.portalpostal.model.dd.TipoEstadoCivil;
 import com.portalpostal.model.dd.TipoSexo;
 import com.portalpostal.model.dd.TipoStatusColaborador;
 import java.util.Date;
+import java.util.List;
 
 public class Colaborador {
     
@@ -30,6 +31,8 @@ public class Colaborador {
     private Endereco endereco;
     private InformacaoProfissional informacaoProfissional;
     private InformacaoBancaria informacaoBancaria;
+    private List<Lancamento> lancamentos;
+    private List<LancamentoProgramado> lancamentosProgramados;
 
     public Integer getIdColaborador() {
         return idColaborador;
@@ -213,6 +216,22 @@ public class Colaborador {
 
     public void setInformacaoBancaria(InformacaoBancaria informacaoBancaria) {
         this.informacaoBancaria = informacaoBancaria;
+    }
+
+    public List<Lancamento> getLancamentos() {
+        return lancamentos;
+    }
+
+    public void setLancamentos(List<Lancamento> lancamentos) {
+        this.lancamentos = lancamentos;
+    }
+
+    public List<LancamentoProgramado> getLancamentosProgramados() {
+        return lancamentosProgramados;
+    }
+
+    public void setLancamentosProgramados(List<LancamentoProgramado> lancamentosProgramados) {
+        this.lancamentosProgramados = lancamentosProgramados;
     }
     
 }

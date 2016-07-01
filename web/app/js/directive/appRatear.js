@@ -70,6 +70,7 @@ app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES
             };
 
             var criarRateiosLista = function(lancamentoRatear) {
+                var saldo = saldoRateio(lancamentoRatear);
                 return _.map(lancamentoRatear.rateios, function(rateio) {                 
                     if(rateio.planoConta && rateio.planoConta.idPlanoConta) { 
                         rateio.planoConta = ListaService.getPlanoContaValue($scope.planoContas, rateio.planoConta.idPlanoConta); 
@@ -77,12 +78,15 @@ app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES
                     if(rateio.centroCusto && rateio.centroCusto.idCentroCusto) { 
                         rateio.centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, rateio.centroCusto.idCentroCusto); 
                     } 
-                    rateio.percentual = calculatePercentual(lancamentoRatear, rateio);
+                    rateio.percentual = calculatePercentual(saldo, rateio);
+                    rateio.valor = rateio.percentual * lancamentoRatear.valor;
+//                    rateio.valorParcela = rateio.percentual * (lancamentoRatear.valor / getQuantidadeParcela(lancamentoRatear.quantidadeParcela));
                 })
             };  
             
-            var calculatePercentual = function(lancamentoRatear, rateio) {
-                return rateio.valor / (lancamentoRatear.valor / getQuantidadeParcela(lancamentoRatear.quantidadeParcela));
+            var calculatePercentual = function(saldo, rateio) {
+//                return rateio.valor / (lancamentoRatear.valor / getQuantidadeParcela(lancamentoRatear.quantidadeParcela));
+                return rateio.valor / saldo;
             }; 
             
             var getQuantidadeParcela = function(quantidadeParcela) {
@@ -91,7 +95,8 @@ app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES
             }
             
             var updateValueRateio = function(quantidade, valor, rateios) {
-                var valorParcelado = valor / quantidade;
+//                var valorParcelado = valor / quantidade;
+                var valorParcelado = valor;
                 return _.map(rateios, function(rateio) { 
                     rateio.valor =  rateio.percentual * valorParcelado;
                 });

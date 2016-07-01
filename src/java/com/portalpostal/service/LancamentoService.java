@@ -21,6 +21,7 @@ public class LancamentoService {
     private LancamentoTransferenciaService lancamentoTransferenciaService;
     private LancamentoConciliadoService lancamentoConciliadoService;
     private LancamentoRateioService lancamentoRateioService;
+    private LancamentoProgramadoParcelaService lancamentoprogramadoParcelaService;
 
     public LancamentoService(String nomeBD) {
         this.nomeBD = nomeBD;
@@ -32,6 +33,7 @@ public class LancamentoService {
         lancamentoTransferenciaService = new LancamentoTransferenciaService(nomeBD);
         lancamentoConciliadoService = new LancamentoConciliadoService(nomeBD);
         lancamentoRateioService = new LancamentoRateioService(nomeBD);
+        lancamentoprogramadoParcelaService = new LancamentoProgramadoParcelaService(nomeBD);
     }
     
     public List<Lancamento> findAll() throws Exception {
@@ -177,9 +179,12 @@ public class LancamentoService {
         removerLancamentoTransferencia(lancamento);
         removerLancamentoProgramado(lancamento);
         removerLancamentoConciliado(lancamento);
+        removerLancamentoParcela(lancamento);
         removerLancamentoRateio(lancamento, null);
         return lancamentoDAO.remove(idLancamento);     
     } 
+    
+    // ***** RATEIO ***** //
     
     private List<Lancamento> setRateios(List<Lancamento> lancamentos) throws Exception {
         for (Lancamento lancamento : lancamentos) {
@@ -234,6 +239,17 @@ public class LancamentoService {
         return lancamentoRateio;
     }
     
+    private void removerLancamentoRateio(Lancamento lancamento, List<LancamentoRateio> rateiosLancamento) throws Exception {
+        List<LancamentoRateio> rateios = getRateios(lancamento.getIdLancamento());
+        for (LancamentoRateio rateio : rateios) {    
+            if(rateiosLancamento == null || rateiosLancamento.isEmpty() || !rateiosLancamento.contains(rateio)) {
+                lancamentoRateioService.delete(rateio.getIdLancamentoRateio());
+            } 
+        }
+    }
+    
+    // ***** TRANSFERENCIA ***** //
+    
     private void removerLancamentoTransferencia(Lancamento lancamento) throws Exception {
         if(lancamento.getModelo() == TipoModeloLancamento.TRANSFERENCIA) {
             LancamentoTransferencia lancamentoTransferencia = lancamentoTransferenciaService.findByLancamento(lancamento.getIdLancamento());
@@ -246,6 +262,8 @@ public class LancamentoService {
             }
         }
     }
+    
+    // ***** PROGRAMACAO ***** //
     
     private void removerLancamentoProgramado(Lancamento lancamento) throws Exception {
         LancamentoProgramado lancamentoProgamado = lancamento.getLancamentoProgramado();
@@ -264,6 +282,8 @@ public class LancamentoService {
         lancamentoProgramadoService.updateSituacao(lancamentoProgamado);     
     }
     
+    // ***** CONCILIACAO ***** //
+    
     private void removerLancamentoConciliado(Lancamento lancamento) throws Exception {
         lancamentoDAO.removeNumeroLoteConciliado(lancamento.getDataLancamento());
         if(lancamento.getModelo() == TipoModeloLancamento.CONCILIADO) {
@@ -271,13 +291,10 @@ public class LancamentoService {
         }
     }
     
-    private void removerLancamentoRateio(Lancamento lancamento, List<LancamentoRateio> rateiosLancamento) throws Exception {
-        List<LancamentoRateio> rateios = getRateios(lancamento.getIdLancamento());
-        for (LancamentoRateio rateio : rateios) {    
-            if(rateiosLancamento == null || rateiosLancamento.isEmpty() || !rateiosLancamento.contains(rateio)) {
-                lancamentoRateioService.delete(rateio.getIdLancamentoRateio());
-            } 
-        }
+    // ***** PARCELA ***** //
+    
+    private void removerLancamentoParcela(Lancamento lancamento) throws Exception {
+        lancamentoprogramadoParcelaService.removeLancamento(lancamento.getIdLancamento());
     }
     
 }

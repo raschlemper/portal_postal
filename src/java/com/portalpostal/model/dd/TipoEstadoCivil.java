@@ -6,8 +6,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonSerialize(using = TipoEstadoCivilSerializer.class)
 public enum TipoEstadoCivil {    
     
-    ATIVO("solteiro", "Solteiro"),
-    ENCERRADO("casado", "Casado"),
+    SOLTEIRO("solteiro", "Solteiro"),
+    CASADO("casado", "Casado"),
     SEPARADO("separado", "Separado"),
     DIVORCIADO("divorciado", "Divorciado"),
     VIUVO("viuvo", "Viúvo");

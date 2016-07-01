@@ -1,0 +1,161 @@
+<form name="colaboradorForm" novalidate>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
+        <h4 class="modal-title">Visualizar Colaborador</h4>
+    </div>
+    <div class="modal-body">
+        <div class="bootbox-body">            
+                        
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="carteira" class="active">
+                    <a href="#geral" aria-controls="geral" role="tab" data-toggle="tab">Geral</a>
+                </li>
+                <li role="carteira">
+                    <a href="#beneficiario" aria-controls="beneficiario" role="tab" data-toggle="tab">Beneficiário</a>
+                </li>
+                <li role="carteira">
+                    <a href="#instrucao" aria-controls="instrucao" role="tab" data-toggle="tab">Instrução</a>
+                </li>
+            </ul>                   
+                        
+            <div class="tab-content" style="padding-top: 20px;">
+                <div role="tabpanel" class="tab-pane active" id="geral">            
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Nome:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.nome}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Bebeficiário:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.codigoBeneficiario}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Convênio:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.codigoConvenio}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Carteira:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.codigoCarteira}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Aceite:</label>
+                        </div>
+                        <div class="col-md-8">{{(colaborador.aceite ? 'Sim' : 'Não')}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Baixa:</label>
+                        </div>
+                        <div class="col-md-8">{{(colaborador.baixa ? 'Sim' : 'Não')}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Espécie Documento:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.especieDocumento}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Local Pagto:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.localPagamento}}</div>
+                    </div> 
+                </div>
+                <div role="tabpanel" class="tab-pane" id="beneficiario">
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Nome Beneficiário:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.beneficiarioNome}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Doc. Beneficiário:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.beneficiarioDocumento}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Lograd. Beneficiário:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.beneficiarioLogradouro}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Bairro Beneficiário:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.beneficiarioBairro}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Cidade Beneficiário:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.beneficiarioCidade}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Uf Beneficiário:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.beneficiarioUf}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Cep Beneficiário:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.beneficiarioCep}}</div>
+                    </div>         
+                </div>
+                <div role="tabpanel" class="tab-pane" id="instrucao">
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Instrução 01:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.instrucao01}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Instrução 02:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.instrucao02}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Instrução 03:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.instrucao03}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Instrução 04:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.instrucao04}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Instrução 05:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.instrucao05}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-warning" ng-click="editar()">
+            <i class="fa fa-lg fa-pencil fa-spc"></i> EDITAR
+        </button>
+        <button type="button" class="btn btn-default" ng-click="cancel()">
+            <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR
+        </button>
+    </div>
+</form>    
+
+  

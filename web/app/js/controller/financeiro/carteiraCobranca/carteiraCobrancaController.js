@@ -61,13 +61,17 @@ app.controller('CarteiraCobrancaController',
         $scope.visualizar = function(idCarteiraCobranca) {
             CarteiraCobrancaService.get(idCarteiraCobranca)
                 .then(function(carteiraCobranca) {
-                     modalVisualizar(carteiraCobranca).then(function(result) {
-                         $scope.editar(result);
-                     })          
+                     visualizar(carteiraCobranca);   
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
+        };
+
+        var visualizar = function(carteiraCobranca) {
+            modalVisualizar(carteiraCobranca).then(function(result) {
+                $scope.editar(result);
+            })          
         };
 
         // ***** SALVAR ***** //

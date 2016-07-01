@@ -6,8 +6,6 @@ import com.portalpostal.model.Endereco;
 import com.portalpostal.model.Favorecido;
 import com.portalpostal.model.InformacaoBancaria;
 import com.portalpostal.model.InformacaoProfissional;
-import com.portalpostal.model.Lancamento;
-import com.portalpostal.model.LancamentoProgramado;
 import java.util.List;
 
 public class ColaboradorService {
@@ -19,6 +17,8 @@ public class ColaboradorService {
     private InformacaoProfissionalService informacaoProfissionalService; 
     private InformacaoBancariaService informacaoBancariaService; 
     private FavorecidoService favorecidoService;
+    private LancamentoService lancamentoService;
+    private LancamentoProgramadoService lancamentoProgramadoService;
 
     public ColaboradorService(String nomeBD) {
         this.nomeBD = nomeBD;
@@ -30,6 +30,8 @@ public class ColaboradorService {
         informacaoProfissionalService = new InformacaoProfissionalService(nomeBD);
         informacaoBancariaService = new InformacaoBancariaService(nomeBD);
         favorecidoService = new FavorecidoService(nomeBD);
+        lancamentoService = new LancamentoService(nomeBD);
+        lancamentoProgramadoService = new LancamentoProgramadoService(nomeBD);
     }
     
     public List<Colaborador> findAll() throws Exception {
@@ -43,6 +45,20 @@ public class ColaboradorService {
         init();
         Colaborador colaborador = colaboradorDAO.find(idColaborador);
         colaborador = setEndereco(colaborador);
+        return colaborador;
+    }  
+    
+    public Colaborador findLancamento(Integer idColaborador) throws Exception {
+        init();
+        Colaborador colaborador = find(idColaborador);
+        colaborador.setLancamentos(lancamentoService.findByConta(idColaborador));
+        return colaborador;
+    } 
+    
+    public Colaborador findLancamentoProgramado(Integer idColaborador) throws Exception {
+        init();
+        Colaborador colaborador = find(idColaborador);
+        colaborador.setLancamentosProgramados(lancamentoProgramadoService.findByConta(idColaborador));
         return colaborador;
     } 
     
@@ -76,6 +92,8 @@ public class ColaboradorService {
         if(favorecido != null) return false;
         return true;                
     } 
+    
+    // ***** ENDERECO ***** //
     
     private List<Colaborador> setEnderecos(List<Colaborador> colaboradores) throws Exception {
         for (Colaborador colaborador : colaboradores) {
@@ -114,6 +132,15 @@ public class ColaboradorService {
         return colaborador;
     } 
     
+    private void removerEndereco(Colaborador colaborador) throws Exception {
+        Endereco endereco = colaborador.getEndereco();
+        if(endereco != null) {   
+            enderecoService.update(endereco);            
+        }
+    }
+    
+    // ***** INFORMACAO PROFISSIONAL ***** //
+    
     private Colaborador saveOrUpdateInformacaoProfissional(Colaborador colaborador) throws Exception {
         InformacaoProfissional informacaoProfissional = colaborador.getInformacaoProfissional();
         informacaoProfissional.setColaborador(colaborador);
@@ -126,6 +153,15 @@ public class ColaboradorService {
         return colaborador;
     } 
     
+    private void removerInformacaoProfissional(Colaborador colaborador) throws Exception {
+        InformacaoProfissional informacaoProfissional = colaborador.getInformacaoProfissional();
+        if(informacaoProfissional != null) {   
+            informacaoProfissionalService.update(informacaoProfissional);            
+        }
+    }
+    
+    // ***** INFORMACAO BANCARIA ***** //
+    
     private Colaborador saveOrUpdateInformacaoBancaria(Colaborador colaborador) throws Exception {
         InformacaoBancaria informacaoBancaria = colaborador.getInformacaoBancaria();
         informacaoBancaria.setColaborador(colaborador);
@@ -137,20 +173,6 @@ public class ColaboradorService {
         colaborador.setInformacaoBancaria(informacaoBancaria);
         return colaborador;
     } 
-    
-    private void removerEndereco(Colaborador colaborador) throws Exception {
-        Endereco endereco = colaborador.getEndereco();
-        if(endereco != null) {   
-            enderecoService.update(endereco);            
-        }
-    }
-    
-    private void removerInformacaoProfissional(Colaborador colaborador) throws Exception {
-        InformacaoProfissional informacaoProfissional = colaborador.getInformacaoProfissional();
-        if(informacaoProfissional != null) {   
-            informacaoProfissionalService.update(informacaoProfissional);            
-        }
-    }
     
     private void removerInformacaoBancaria(Colaborador colaborador) throws Exception {
         InformacaoBancaria informacaoBancaria = colaborador.getInformacaoBancaria();

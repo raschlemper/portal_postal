@@ -17,7 +17,7 @@ app.controller('ModalContaCorrenteVisualizarController',
         };
         
         $scope.editar = function() {
-            $modalInstance.close(contaCorrente.idContaCorrente);
+            $modalInstance.close(contaCorrente);
         };
         
         $scope.cancel = function () {

@@ -11,7 +11,7 @@ app.controller('ModalCartaoCreditoVisualizarController',
         // ***** CONTROLLER ***** //   
         
         $scope.editar = function() {
-            $modalInstance.close(cartaoCredito.idCartaoCredito);
+            $modalInstance.close(cartaoCredito);
         };
         
         $scope.cancel = function () {

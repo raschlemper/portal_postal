@@ -8,28 +8,60 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
         if(!isValid(lancamento)) return;
         var dataVencimento = moment(lancamento.dataVencimento);
         if((dataVencimento.isSame(dataInicio) || dataVencimento.isAfter(dataInicio)) && 
-           (dataVencimento.isSame(dataFim) || dataVencimento.isBefore(dataFim))) {
+           (dataVencimento.isSame(dataFim) || dataVencimento.isBefore(dataFim)) && !lancamento.baixado) {
             lista.push(angular.copy(lancamento));  
         }
         if(dataVencimento.isAfter(dataFim)) return; 
-        lancamentoProgramado(lista, FrequenciaLancamentoService.execute(lancamento), dataInicio, dataFim);        
+        lancamentoProgramado(lista, getNextLancamento(lancamento), dataInicio, dataFim);        
     }
     
     var lancamentoProgramadoVencido = function(lista, lancamento, data) {
         if(!isValid(lancamento)) return;
         var dataVencimento = moment(lancamento.dataVencimento);
-        if(dataVencimento.isBefore(data)) { 
-            lista.push(lancamento); 
+        if(dataVencimento.isBefore(data) && !lancamento.baixado) { 
+            lista.push(angular.copy(lancamento)); 
         } 
         if(dataVencimento.isAfter(data)) return;
-        lancamentoProgramadoVencido(lista, FrequenciaLancamentoService.execute(lancamento), data);        
+        lancamentoProgramadoVencido(lista, getNextLancamento(lancamento), data);        
     }
     
-    var isValid = function(lancamento) {        
+    var isValid = function(lancamento) {      
+        if(!lancamento) return false;
         if(lancamento.situacao.id !== situacoes[0].id) return false;
         if(lancamento.quantidadeParcela && lancamento.numeroParcela > lancamento.quantidadeParcela) return false;
         return true;
     }
+    
+    var getFirstLancamento = function(lancamento) {
+        if(!lancamento.parcelas || !lancamento.parcelas.length) { return lancamento; }
+        return setLancamento(lancamento, 1);
+    }
+    
+    var getNextLancamento = function(lancamento) {
+        if(!lancamento.parcelas || !lancamento.parcelas.length) {
+            return FrequenciaLancamentoService.execute(lancamento);
+        }
+        return setLancamento(lancamento, lancamento.numeroParcela + 1);
+    }
+    
+    var setLancamento = function(lancamento, numeroParcela) {  
+        var parcelaLancamento;
+        lancamento.parcelas.map(function(parcela) {
+            if(parcela.numero === numeroParcela) { parcelaLancamento = parcela; }
+        });      
+        if(!parcelaLancamento) return null;
+        lancamento.numeroParcela = parcelaLancamento.numero;
+        lancamento.dataVencimento = parcelaLancamento.dataVencimento;
+        lancamento.baixado = false;
+        if(parcelaLancamento && parcelaLancamento.lancamento) { lancamento.baixado = true; }
+        return lancamento;
+    }
+    
+//    var setNumeroParcelaLancamento = function(lancamento) {
+//        if(lancamento.parcelas && lancamento.parcelas.length) {
+//            lancamento.numeroParcela = 0;            
+//        }        
+//    }
 
     return {
 
@@ -90,12 +122,16 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
         
         lancamentoProgramado: function(lancamento, dataInicio, dataFim) {
             var lista = [];
+//            setNumeroParcelaLancamento(lancamento);
+            lancamento = getFirstLancamento(lancamento);
             lancamentoProgramado(lista, lancamento, dataInicio, dataFim)
             return lista;
         },
         
         lancamentoProgramadoVencido: function(lancamento, data) {
             var lista = [];
+//            setNumeroParcelaLancamento(lancamento);
+            lancamento = getFirstLancamento(lancamento);
             lancamentoProgramadoVencido(lista, lancamento, data)
             return lista;
         }

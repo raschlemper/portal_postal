@@ -330,7 +330,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                     var categorias = getDataChartSaldo(saldos, 'data');
                     var valores = getDataChartSaldo(saldos, 'valor');
                     valores = addSaldoContas($scope.saldoTotal, valores);
-                    configChartSaldo(categorias, valores, limiteContaCorrente);
+                    configChartSaldo(categorias, valores, toFixe(limiteContaCorrente, 2));
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -358,7 +358,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                 var dataVencimento = moment(lancamento.dataVencimento);            
                 saldos.push({id: lancamento.idLancamentoProgramado,
                              data: dataVencimento.format('YYYY-MM-DD'),
-                             valor: valor}); 
+                             valor: toFixe(valor, 2)}); 
             });
         }
         
@@ -422,7 +422,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
             var saldoAcumulado = saldoContas;
             return _.map(saldos, function(saldo) {
                 saldoAcumulado += saldo;
-                return saldoAcumulado;
+                return toFixe(saldoAcumulado, 2);
             })
         }
         // Saldos Programados /////
@@ -431,9 +431,13 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
             LancamentoProgramadoService.getAllAtivo()
                .then(function(data) {
                     var dataAtual = moment().format('YYYY-MM-DD');
-                    var dataUmMes = moment().add(1, "M").format('YYYY-MM-DD');
-                    var dataDoisMes = moment().add(2, "M").format('YYYY-MM-DD');
-                    var dataTresMes = moment().add(3, "M").format('YYYY-MM-DD');
+                    var dataDiaSeguinte = moment().add(1, "d");
+                    var dataUmMesInicio = angular.copy(dataDiaSeguinte).format('YYYY-MM-DD');
+                    var dataUmMesFim = angular.copy(dataDiaSeguinte).add(1, "M").subtract(1, 'day').format('YYYY-MM-DD');
+                    var dataDoisMesesInicio = angular.copy(dataDiaSeguinte).add(1, "M").format('YYYY-MM-DD');
+                    var dataDoisMesesFim = angular.copy(dataDiaSeguinte).add(2, "M").subtract(1, 'day').format('YYYY-MM-DD');
+                    var dataTresdataDoisMesesInicio = angular.copy(dataDiaSeguinte).add(2, "M").format('YYYY-MM-DD');
+                    var dataTresdataDoisMesesFim = angular.copy(dataDiaSeguinte).add(3, "M").subtract(1, 'day').format('YYYY-MM-DD');
                     $scope.lancamentosVencido = getValoresReceitaDespesaDefault();
                     $scope.lancamentosHoje = getValoresReceitaDespesaDefault();
                     $scope.lancamentosUmMes = getValoresReceitaDespesaDefault();
@@ -442,9 +446,9 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                     _.map(data, function(programado) {
                         getValoresReceitaDespesa($scope.lancamentosVencido, LancamentoProgramadoService.lancamentoProgramadoVencido(angular.copy(programado), dataAtual));
                         getValoresReceitaDespesa($scope.lancamentosHoje, LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataAtual, dataAtual));
-                        getValoresReceitaDespesa($scope.lancamentosUmMes, LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataAtual, dataUmMes));
-                        getValoresReceitaDespesa($scope.lancamentosDoisMeses, LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataUmMes, dataDoisMes));
-                        getValoresReceitaDespesa($scope.lancamentosTresMeses, LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataDoisMes, dataTresMes));
+                        getValoresReceitaDespesa($scope.lancamentosUmMes, LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataUmMesInicio, dataUmMesFim));
+                        getValoresReceitaDespesa($scope.lancamentosDoisMeses, LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataDoisMesesInicio, dataDoisMesesFim));
+                        getValoresReceitaDespesa($scope.lancamentosTresMeses, LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataTresdataDoisMesesInicio, dataTresdataDoisMesesFim));
                     });
                 })
                 .catch(function(e) {
@@ -452,7 +456,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                 });            
         }
         
-        var getValoresReceitaDespesaDefault = function(valores, lancamentos) {
+        var getValoresReceitaDespesaDefault = function() {
             return {receita: 0, despesa: 0};
         }
         

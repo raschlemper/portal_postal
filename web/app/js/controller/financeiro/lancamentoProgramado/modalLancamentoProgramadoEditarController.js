@@ -21,7 +21,7 @@ app.controller('ModalLancamentoProgramadoEditarController',
             $scope.lancamentoProgramado.frequencia = ($scope.lancamentoProgramado && $scope.lancamentoProgramado.frequencia) || $scope.frequencias[0];
             $scope.lancamentoProgramado.situacao = ($scope.lancamentoProgramado && $scope.lancamentoProgramado.situacao) || $scope.situacoes[0];
             $scope.lancamentoProgramado.numeroParcela = getNumeroParcela($scope.lancamentoProgramado); 
-            $scope.lancamento = $scope.getLancamento($scope.lancamentoProgramado, null, $scope.modelos[2]);
+//            $scope.lancamento = $scope.getLancamento($scope.lancamentoProgramado, null, $scope.modelos[2]);
             getTitle($scope.lancamentoProgramado);
             contas();
         };
@@ -37,6 +37,7 @@ app.controller('ModalLancamentoProgramadoEditarController',
         };
         
         var getNumeroParcela = function(lancamentoProgramado) {
+            if(lancamentoProgramado.parcelas && lancamentoProgramado.parcelas.length) return 0;
             if(!lancamentoProgramado) return 1;
             var lancamento = _.max(lancamentoProgramado.lancamentos, function(lancamento){ 
                 return lancamento.numeroParcela; 
@@ -144,7 +145,7 @@ app.controller('ModalLancamentoProgramadoEditarController',
         
         $scope.gerar = function(form, lancamentoProgramado) {
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;
-            if(!$scope.validarRateio(lancamentoProgramado)) return;  
+            if(!$scope.validarRateio(lancamentoProgramado.valor, lancamentoProgramado)) return;  
             if(!$scope.validarForm(form, lancamentoProgramado)) return;   
             $scope.lancamento = $scope.getLancamento($scope.lancamentoProgramado, null, $scope.modelos[2]);  
             $scope.goToLancar();
@@ -152,7 +153,7 @@ app.controller('ModalLancamentoProgramadoEditarController',
         
         $scope.gerarParcela = function(form, lancamentoProgramado, parcela) {
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;
-            if(!$scope.validarRateio(lancamentoProgramado)) return;  
+            if(!$scope.validarRateio(lancamentoProgramado.valor, lancamentoProgramado)) return;  
             if(!$scope.validarForm(form, lancamentoProgramado)) return;   
             $scope.lancamento = $scope.getLancamento($scope.lancamentoProgramado, parcela, $scope.modelos[4]);  
             $scope.goToLancar();
@@ -160,9 +161,9 @@ app.controller('ModalLancamentoProgramadoEditarController',
         
         $scope.ok = function(form, lancamentoProgramado) {
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;
-            if(!$scope.validarRateio(lancamentoProgramado)) return;  
+            if(!$scope.validarRateio(lancamentoProgramado.valor, lancamentoProgramado)) return;  
             if(!$scope.validarForm(form, lancamentoProgramado)) return;
-            delete lancamentoProgramado.parcelas;
+//            delete lancamentoProgramado.parcelas;
             delete lancamentoProgramado.lancamentos;
             lancamentoProgramado.gerarLancamento = false;     
             $scope.close(lancamentoProgramado);
@@ -176,12 +177,13 @@ app.controller('ModalLancamentoProgramadoEditarController',
             lancamento.centroCusto = lancamentoProgramado.centroCusto;
             lancamento.tipo = lancamentoProgramado.tipo;
             lancamento.numero = (parcela && parcela.numero) || lancamentoProgramado.numero;
-            lancamento.numeroParcela = (parcela && parcela.numeroParcela) || lancamentoProgramado.numeroParcela;
+            lancamento.numeroParcela = (parcela && parcela.numero) || lancamentoProgramado.numeroParcela;
             lancamento.dataCompetencia = (parcela && parcela.dataCompetencia) || lancamentoProgramado.dataCompetencia;
             lancamento.dataVencimento = (parcela && parcela.dataVencimento) || lancamentoProgramado.dataVencimento;
             lancamento.valor = (parcela && parcela.valor) || lancamentoProgramado.valor;
             lancamento.situacao = (lancamentoProgramado && lancamentoProgramado.situacao) || $scope.situacoes[0]; 
             lancamento.modelo = modelo;
+//            lancamento.parcelas = lancamentoProgramado.parcelas;
             lancamento.rateios = lancamentoProgramado.rateios;
             return lancamento;
         };
@@ -200,9 +202,9 @@ app.controller('ModalLancamentoProgramadoEditarController',
             return FinanceiroValidation.centroCustoResultado(centroCusto);
         };  
 
-        $scope.validarRateio = function(lancamentoProgramado) {
+        $scope.validarRateio = function(valor, lancamentoProgramado) {
             if (!lancamentoProgramado.rateios || !lancamentoProgramado.rateios.length) return true;
-            var valor = lancamentoProgramado.valor; 
+//            var valor = lancamentoProgramado.valor; 
 //            if(lancamentoProgramado.quantidadeParcela) { 
 //                valor = lancamentoProgramado.valor / lancamentoProgramado.quantidadeParcela; 
 //                valor = parseFloat(valor.toFixed(2));

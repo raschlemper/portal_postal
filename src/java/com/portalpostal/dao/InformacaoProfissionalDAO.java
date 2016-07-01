@@ -32,14 +32,14 @@ public class InformacaoProfissionalDAO extends GenericDAO {
     }
 
     public InformacaoProfissional save(InformacaoProfissional informacaoProfissional) throws Exception {  
-        String sql = "INSERT INTO informacao_profissional (idColaborador, cargaFuncao, salario, dataAdmissao, dataDemissao, "
+        String sql = "INSERT INTO informacao_profissional (idColaborador, cargoFuncao, salario, dataAdmissao, dataDemissao, "
                    + "pisPasep, tituloEleitoral, certificadoReservista, ctps, horarioEntrada, horarioSaida, intervaloDe, intervaloAte, "
                    + "observacao) "
-                   + "VALUES(:idColaborador, :cargaFuncao, :salario, :dataAdmissao, :dataDemissao, :pisPasep, :tituloEleitoral, "
+                   + "VALUES(:idColaborador, :cargoFuncao, :salario, :dataAdmissao, :dataDemissao, :pisPasep, :tituloEleitoral, "
                    + ":certificadoReservista, :ctps, :horarioEntrada, :horarioSaida, :intervaloDe, :intervaloAte, :observacao)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idColaborador", informacaoProfissional.getColaborador().getIdColaborador());
-        params.put("cargaFuncao", informacaoProfissional.getCargaFuncao());
+        params.put("cargoFuncao", informacaoProfissional.getCargoFuncao());
         params.put("salario", informacaoProfissional.getSalario());      
         params.put("dataAdmissao", informacaoProfissional.getDataAdmissao());      
         params.put("dataDemissao", informacaoProfissional.getDataDemissao());      
@@ -58,7 +58,7 @@ public class InformacaoProfissionalDAO extends GenericDAO {
 
     public InformacaoProfissional update(InformacaoProfissional informacaoProfissional) throws Exception {
         String sql = "UPDATE informacao_profissional "
-                   + "SET idColaborador = :idColaborador, cargaFuncao = :cargaFuncao, salario = :salario, dataAdmissao = :dataAdmissao, "
+                   + "SET idColaborador = :idColaborador, cargoFuncao = :cargoFuncao, salario = :salario, dataAdmissao = :dataAdmissao, "
                    + "dataDemissao = :dataDemissao, pisPasep = :pisPasep, tituloEleitoral = :tituloEleitoral, certificadoReservista = :certificadoReservista, "
                    + "ctps = :ctps, horarioEntrada = :horarioEntrada, horarioSaida = :horarioSaida, intervaloDe = :intervaloDe, intervaloAte = :intervaloAte, "
                    + "observacao = :observacao "
@@ -66,7 +66,7 @@ public class InformacaoProfissionalDAO extends GenericDAO {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idInformacaoProfissional", informacaoProfissional.getIdInformacaoProfissional());
         params.put("idColaborador", informacaoProfissional.getColaborador().getIdColaborador());
-        params.put("cargaFuncao", informacaoProfissional.getCargaFuncao());
+        params.put("cargoFuncao", informacaoProfissional.getCargoFuncao());
         params.put("salario", informacaoProfissional.getSalario());      
         params.put("dataAdmissao", informacaoProfissional.getDataAdmissao());      
         params.put("dataDemissao", informacaoProfissional.getDataDemissao());      

@@ -6,7 +6,7 @@ public class InformacaoProfissional {
     
     private Integer idInformacaoProfissional;
     private Colaborador colaborador;
-    private String cargaFuncao;
+    private String cargoFuncao;
     private Double salario;
     private Date dataAdmissao;
     private Date dataDemissao;
@@ -36,12 +36,12 @@ public class InformacaoProfissional {
         this.colaborador = colaborador;
     }
 
-    public String getCargaFuncao() {
-        return cargaFuncao;
+    public String getCargoFuncao() {
+        return cargoFuncao;
     }
 
-    public void setCargaFuncao(String cargaFuncao) {
-        this.cargaFuncao = cargaFuncao;
+    public void setCargoFuncao(String cargoFuncao) {
+        this.cargoFuncao = cargoFuncao;
     }
 
     public Double getSalario() {
