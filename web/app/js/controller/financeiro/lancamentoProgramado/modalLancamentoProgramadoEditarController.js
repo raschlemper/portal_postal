@@ -37,7 +37,7 @@ app.controller('ModalLancamentoProgramadoEditarController',
         };
         
         var getNumeroParcela = function(lancamentoProgramado) {
-            if(lancamentoProgramado.parcelas) return 0;
+            if(lancamentoProgramado.parcelas && lancamentoProgramado.parcelas.length) return 0;
             if(!lancamentoProgramado) return 1;
             var lancamento = _.max(lancamentoProgramado.lancamentos, function(lancamento){ 
                 return lancamento.numeroParcela; 

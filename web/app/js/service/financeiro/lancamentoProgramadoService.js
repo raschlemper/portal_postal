@@ -8,7 +8,7 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
         if(!isValid(lancamento)) return;
         var dataVencimento = moment(lancamento.dataVencimento);
         if((dataVencimento.isSame(dataInicio) || dataVencimento.isAfter(dataInicio)) && 
-           (dataVencimento.isSame(dataFim) || dataVencimento.isBefore(dataFim))) {
+           (dataVencimento.isSame(dataFim) || dataVencimento.isBefore(dataFim)) && !lancamento.baixado) {
             lista.push(angular.copy(lancamento));  
         }
         if(dataVencimento.isAfter(dataFim)) return; 
@@ -18,8 +18,8 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
     var lancamentoProgramadoVencido = function(lista, lancamento, data) {
         if(!isValid(lancamento)) return;
         var dataVencimento = moment(lancamento.dataVencimento);
-        if(dataVencimento.isBefore(data)) { 
-            lista.push(lancamento); 
+        if(dataVencimento.isBefore(data) && !lancamento.baixado) { 
+            lista.push(angular.copy(lancamento)); 
         } 
         if(dataVencimento.isAfter(data)) return;
         lancamentoProgramadoVencido(lista, getNextLancamento(lancamento), data);        
@@ -52,6 +52,8 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
         if(!parcelaLancamento) return null;
         lancamento.numeroParcela = parcelaLancamento.numero;
         lancamento.dataVencimento = parcelaLancamento.dataVencimento;
+        lancamento.baixado = false;
+        if(parcelaLancamento && parcelaLancamento.lancamento) { lancamento.baixado = true; }
         return lancamento;
     }
     

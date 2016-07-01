@@ -45,7 +45,7 @@ app.factory('ContaHandler', function() {
         return conta.tipo.id; 
     };
     
-    var getTipo = function(conta) {
+    var getStatus = function(conta) {
         if(!conta.status) return conta.status;
         return conta.status.id; 
     };
@@ -56,6 +56,10 @@ app.factory('ContaHandler', function() {
     
     var getValorSaldoAbertura = function(conta) {
         return conta.valorSaldoAbertura || null; 
+    };
+    
+    var getSaldo = function(conta) {
+        return conta.saldo || null; 
     };
 
     return {
