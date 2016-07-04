@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('ColaboradorController', 
-    ['$scope', '$filter', 'ColaboradorService', 'ModalService', 'MESSAGES',
-    function ($scope, $filter, ColaboradorService, ModalService, MESSAGES) {
+    ['$scope', '$filter', 'ColaboradorService', 'ModalService', 'ColaboradorHandler', 'MESSAGES',
+    function ($scope, $filter, ColaboradorService, ModalService, ColaboradorHandler, MESSAGES) {
 
         var init = function () {
             $scope.colaboradores = [];
@@ -84,6 +84,7 @@ app.controller('ColaboradorController',
         var salvar = function() {
             modalSalvar()
                 .then(function(result) {
+                    result = ajustarDados(result);
                     save(result);
                 });
         };
@@ -162,6 +163,12 @@ app.controller('ColaboradorController',
                 .catch(function(e) {
                     modalMessage(e);
                 });
+        };
+
+        // ***** AJUSTAR ***** //
+        
+        var ajustarDados = function(data) {  
+            return ColaboradorHandler.handle(data);
         };
 
         // ***** MODAL ***** //

@@ -19,7 +19,7 @@ public class InformacaoProfissionalHandler extends GenericHandler implements Res
     public InformacaoProfissional handle(ResultSet result) throws SQLException {
         InformacaoProfissional informacaoProfissional = new InformacaoProfissional();
         informacaoProfissional.setIdInformacaoProfissional(getInt(result, "idInformacaoProfissional"));
-        informacaoProfissional.setColaborador(getColaborador(result));
+//        informacaoProfissional.setColaborador(getColaborador(result));
         informacaoProfissional.setCargoFuncao(getString(result, "cargoFuncao"));
         informacaoProfissional.setSalario(getDouble(result, "salario"));    
         informacaoProfissional.setDataAdmissao(getDate(result, "dataAdmissao"));   

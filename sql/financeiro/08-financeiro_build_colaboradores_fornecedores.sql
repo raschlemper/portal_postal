@@ -1,10 +1,11 @@
 USE pp_06895434000183;
 
 DROP TABLE colaborador_endereco;
-DROP TABLE colaborador;
-DROP TABLE endereco;
 DROP TABLE informacao_profissional;
 DROP TABLE informacao_bancaria;
+DROP TABLE endereco;
+DROP TABLE favorecido;
+DROP TABLE colaborador;
 
 CREATE TABLE `colaborador` (
   `idColaborador`        INT NOT NULL AUTO_INCREMENT,
@@ -14,10 +15,8 @@ CREATE TABLE `colaborador` (
   `rg`                   VARCHAR(50) NULL,
   `sexo`                 INT DEFAULT NULL,
   `dataNascimento`       DATETIME NULL,
-  `dddTelefone`          INT DEFAULT NULL,
-  `telefone`             INT DEFAULT NULL,
-  `dddCelular`           INT DEFAULT NULL,
-  `celular`              INT DEFAULT NULL,
+  `telefone`             VARCHAR(20) NULL,
+  `celular`              VARCHAR(20) NULL,
   `email`                VARCHAR(254) NULL,
   `conjuge`              VARCHAR(254) NULL,
   `estadoCivil`          INT DEFAULT NULL,
@@ -143,9 +142,9 @@ ADD CONSTRAINT `fk_favorecido_colaborador`
 ALTER TABLE `favorecido` 
 ADD INDEX `i_favorecido_cliente` (`idCliente` ASC);
 
-ALTER TABLE `favorecido` 
-ADD CONSTRAINT `fk_favorecido_cliente`
-  FOREIGN KEY (`idCliente`)
-  REFERENCES `cliente` (`codigo`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
+-- ALTER TABLE `favorecido` 
+-- ADD CONSTRAINT `fk_favorecido_cliente`
+--   FOREIGN KEY (`idCliente`)
+--   REFERENCES `cliente` (`codigo`)
+--   ON DELETE NO ACTION
+--   ON UPDATE NO ACTION;

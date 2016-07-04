@@ -15,10 +15,8 @@ public class Colaborador {
     private String rg;
     private TipoSexo sexo;
     private Date dataNascimento;
-    private Integer dddTelefone;
-    private Integer telefone;
-    private Integer dddCelular;
-    private Integer celular;
+    private String telefone;
+    private String celular;
     private String email;
     private String conjuge;
     private TipoEstadoCivil estadoCivil;
@@ -90,35 +88,19 @@ public class Colaborador {
         this.dataNascimento = dataNascimento;
     }
 
-    public Integer getDddTelefone() {
-        return dddTelefone;
-    }
-
-    public void setDddTelefone(Integer dddTelefone) {
-        this.dddTelefone = dddTelefone;
-    }
-
-    public Integer getTelefone() {
+    public String getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(Integer telefone) {
+    public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
 
-    public Integer getDddCelular() {
-        return dddCelular;
-    }
-
-    public void setDddCelular(Integer dddCelular) {
-        this.dddCelular = dddCelular;
-    }
-
-    public Integer getCelular() {
+    public String getCelular() {
         return celular;
     }
 
-    public void setCelular(Integer celular) {
+    public void setCelular(String celular) {
         this.celular = celular;
     }
 

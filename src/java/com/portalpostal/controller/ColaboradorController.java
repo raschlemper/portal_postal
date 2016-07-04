@@ -3,7 +3,6 @@ package com.portalpostal.controller;
 import Controle.ContrErroLog;
 import com.portalpostal.validation.Validation;
 import com.portalpostal.model.Colaborador;
-import com.portalpostal.model.Conta;
 import com.portalpostal.service.ColaboradorService;
 import com.portalpostal.validation.ColaboradorValidation;
 import java.util.List;

@@ -16,18 +16,18 @@ public class ColaboradorDAO extends GenericDAO {
     } 
 
     public List<Colaborador> findAll() throws Exception {
-        String sql = "SELECT * FROM colaborador, informacao_profissional, informacao_bancaria "
-                   + "WHERE colaborador.idColaborador = informacao_profissional.idColaborador "
-                   + "AND colaborador.idColaborador = informacao_bancaria.idColaborador "
-                   + "ORDER BY idColaborador";        
+        String sql = "SELECT * FROM colaborador "
+                   + "LEFT OUTER JOIN informacao_profissional ON(colaborador.idColaborador = informacao_profissional.idColaborador) "
+                   + "LEFT OUTER JOIN informacao_bancaria ON(colaborador.idColaborador = informacao_bancaria.idColaborador) "
+                   + "ORDER BY colaborador.idColaborador";        
         return findAll(sql, null, colaboradorHandler);
     }
 
     public Colaborador find(Integer idColaborador) throws Exception {
         String sql = "SELECT * FROM colaborador "
-                   + "WHERE colaborador.idColaborador = informacao_profissional.idColaborador "
-                   + "AND colaborador.idColaborador = informacao_bancaria.idColaborador "
-                   + "AND colaborador.idColaborador = :idColaborador";
+                   + "LEFT OUTER JOIN informacao_profissional ON(colaborador.idColaborador = informacao_profissional.idColaborador) "
+                   + "LEFT OUTER JOIN informacao_bancaria ON(colaborador.idColaborador = informacao_bancaria.idColaborador) "
+                   + "WHERE colaborador.idColaborador = :idColaborador";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idColaborador", idColaborador);
         return (Colaborador) find(sql, params, colaboradorHandler);
@@ -41,26 +41,24 @@ public class ColaboradorDAO extends GenericDAO {
     }
 
     public Colaborador save(Colaborador colaborador) throws Exception {  
-        String sql = "INSERT INTO colaborador (nome, status, cpf, rg, sexo, dataNascimento, dddTelefone, telefone, "
-                   + "dddCelular, celular, email, conjuge, estadoCivil, naturalidade, nacionalidade, quantidadeDependente, "
+        String sql = "INSERT INTO colaborador (nome, status, cpf, rg, sexo, dataNascimento, telefone, "
+                   + "celular, email, conjuge, estadoCivil, naturalidade, nacionalidade, quantidadeDependente, "
                    + "nomePai, nomeMae, observacao) "
-                   + "VALUES(:nome, :status, :cpf, :rg, :sexo, :dataNascimento, :dddTelefone, :telefone, "
-                   + ":dddCelular, :celular, :email, :conjuge, :estadoCivil, :naturalidade, :nacionalidade, :quantidadeDependente, "
+                   + "VALUES(:nome, :status, :cpf, :rg, :sexo, :dataNascimento, :telefone, "
+                   + ":celular, :email, :conjuge, :estadoCivil, :naturalidade, :nacionalidade, :quantidadeDependente, "
                    + ":nomePai, :nomeMae, :observacao)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("nome", colaborador.getNome());
-        params.put("status", colaborador.getStatus().ordinal());
+        params.put("status", (colaborador.getStatus() == null ? null : colaborador.getStatus().ordinal()));
         params.put("cpf", colaborador.getCpf());      
         params.put("rg", colaborador.getRg());      
         params.put("sexo", (colaborador.getSexo() == null ? null : colaborador.getSexo().ordinal()));      
-        params.put("dataNascimento", colaborador.getDataNascimento());      
-        params.put("dddTelefone", colaborador.getDddTelefone());      
-        params.put("telefone", colaborador.getTelefone());       
-        params.put("dddCelular", colaborador.getDddCelular());      
+        params.put("dataNascimento", colaborador.getDataNascimento());  
+        params.put("telefone", colaborador.getTelefone());        
         params.put("celular", colaborador.getCelular());          
         params.put("email", colaborador.getEmail());          
         params.put("conjuge", colaborador.getConjuge());          
-        params.put("estadoCivil", colaborador.getEstadoCivil());          
+        params.put("estadoCivil", (colaborador.getEstadoCivil() == null ? null : colaborador.getEstadoCivil().ordinal()));  
         params.put("naturalidade", colaborador.getNaturalidade());          
         params.put("nacionalidade", colaborador.getNacionalidade());          
         params.put("quantidadeDependente", colaborador.getQuantidadeDependente());          
@@ -74,25 +72,23 @@ public class ColaboradorDAO extends GenericDAO {
     public Colaborador update(Colaborador colaborador) throws Exception {
         String sql = "UPDATE colaborador "
                    + "SET nome = :nome, status = :status, cpf = :cpf, rg = :rg, sexo = :sexo, dataNascimento = :dataNascimento, "
-                   + "dddTelefone = :dddTelefone, telefone = :telefone, dddCelular = :dddCelular, celular = :celular, email = :email, "
-                   + "conjuge = :conjuge, estadoCivil = :estadoCivil, naturalidade = :naturalidade, nacionalidade = :nacionalidade, "
-                   + "quantidadeDependente = :quantidadeDependente, nomePai = :nomePai, nomeMae = :nomeMae, observacao = :observacao "
+                   + "telefone = :telefone, celular = :celular, email = :email, conjuge = :conjuge, estadoCivil = :estadoCivil, "
+                   + "naturalidade = :naturalidade, nacionalidade = :nacionalidade, quantidadeDependente = :quantidadeDependente, "
+                   + "nomePai = :nomePai, nomeMae = :nomeMae, observacao = :observacao "
                    + "WHERE idColaborador = :idColaborador ";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idColaborador", colaborador.getIdColaborador());
         params.put("nome", colaborador.getNome());
-        params.put("status", colaborador.getStatus().ordinal());
+        params.put("status", (colaborador.getStatus() == null ? null : colaborador.getStatus().ordinal()));
         params.put("cpf", colaborador.getCpf());      
         params.put("rg", colaborador.getRg());      
         params.put("sexo", (colaborador.getSexo() == null ? null : colaborador.getSexo().ordinal()));      
-        params.put("dataNascimento", colaborador.getDataNascimento());      
-        params.put("dddTelefone", colaborador.getDddTelefone());      
-        params.put("telefone", colaborador.getTelefone());       
-        params.put("dddCelular", colaborador.getDddCelular());      
+        params.put("dataNascimento", colaborador.getDataNascimento());   
+        params.put("telefone", colaborador.getTelefone());         
         params.put("celular", colaborador.getCelular());          
         params.put("email", colaborador.getEmail());          
         params.put("conjuge", colaborador.getConjuge());          
-        params.put("estadoCivil", colaborador.getEstadoCivil());          
+        params.put("estadoCivil", (colaborador.getEstadoCivil() == null ? null : colaborador.getEstadoCivil().ordinal()));         
         params.put("naturalidade", colaborador.getNaturalidade());          
         params.put("nacionalidade", colaborador.getNacionalidade());          
         params.put("quantidadeDependente", colaborador.getQuantidadeDependente());          

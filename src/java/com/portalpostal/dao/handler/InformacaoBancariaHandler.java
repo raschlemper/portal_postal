@@ -21,7 +21,7 @@ public class InformacaoBancariaHandler extends GenericHandler implements ResultS
     public InformacaoBancaria handle(ResultSet result) throws SQLException {
         InformacaoBancaria informacaoBancaria = new InformacaoBancaria();
         informacaoBancaria.setIdInformacaoBancaria(getInt(result, "idInformacaoBancaria"));
-        informacaoBancaria.setColaborador(getColaborador(result));  
+//        informacaoBancaria.setColaborador(getColaborador(result));  
         informacaoBancaria.setBanco(getBanco(result));
         informacaoBancaria.setTipoConta(TipoConta.values()[getInt(result, "tipoConta")]);      
         informacaoBancaria.setAgencia(getInt(result, "agencia"));

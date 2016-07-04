@@ -29,11 +29,9 @@ public class ColaboradorHandler extends GenericHandler implements ResultSetHandl
         colaborador.setCpf(getString(result, "cpf"));
         colaborador.setRg(getString(result, "rg"));    
         colaborador.setSexo(TipoSexo.values()[getInt(result, "sexo")]); 
-        colaborador.setDataNascimento(getDate(result, "dataNascimento"));   
-        colaborador.setDddTelefone(getInt(result, "dddTelefone"));   
-        colaborador.setTelefone(getInt(result, "telefone")); 
-        colaborador.setDddCelular(getInt(result, "dddCelular"));    
-        colaborador.setCelular(getInt(result, "celular"));
+        colaborador.setDataNascimento(getDate(result, "dataNascimento"));  
+        colaborador.setTelefone(getString(result, "telefone")); 
+        colaborador.setCelular(getString(result, "celular"));
         colaborador.setEmail(getString(result, "email"));     
         colaborador.setConjuge(getString(result, "conjuge"));       
         colaborador.setEstadoCivil(TipoEstadoCivil.values()[getInt(result, "estadoCivil")]);
