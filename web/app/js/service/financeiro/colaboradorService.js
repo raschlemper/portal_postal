@@ -14,12 +14,12 @@ app.factory('ColaboradorService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/colaborador/" + idColaborador));
         },
 
-        getLancamento: function(idConta) {
+        getLancamento: function(idColaborador) {
             return PromiseService.execute(
                     $http.get(_contextPath + "/api/financeiro/colaborador/" + idColaborador + "/lancamento"));
         },
 
-        getLancamentoProgramado: function(idConta) {
+        getLancamentoProgramado: function(idColaborador) {
             return PromiseService.execute(
                     $http.get(_contextPath + "/api/financeiro/colaborador/" + idColaborador + "/lancamento/programado"));
         },

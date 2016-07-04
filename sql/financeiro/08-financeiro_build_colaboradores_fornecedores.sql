@@ -31,21 +31,21 @@ CREATE TABLE `colaborador` (
 
 CREATE TABLE `endereco` (
   `idEndereco`  INT NOT NULL AUTO_INCREMENT,
-  `logradouro`  VARCHAR(254) NOT NULL,
+  `logradouro`  VARCHAR(254) NULL,
   `cep`         INT DEFAULT NULL,
-  `complemento` VARCHAR(254) NOT NULL,
-  `numero`      INT NOT NULL,
-  `bairro`      VARCHAR(254) NOT NULL,
-  `cidade`      VARCHAR(254) NOT NULL,
-  `estado`      VARCHAR(2) NOT NULL,
+  `complemento` VARCHAR(254) NULL,
+  `numero`      INT NULL,
+  `bairro`      VARCHAR(254) NULL,
+  `cidade`      VARCHAR(254) NULL,
+  `estado`      VARCHAR(2) NULL,
   PRIMARY KEY (`idEndereco`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `informacao_profissional` (
   `idInformacaoProfissional` INT NOT NULL AUTO_INCREMENT,
   `idColaborador`            INT NOT NULL,
-  `cargoFuncao`              VARCHAR(254) NOT NULL,
-  `salario`                  DECIMAL(13,2) NOT NULL DEFAULT 0,
+  `cargoFuncao`              VARCHAR(254) NULL,
+  `salario`                  DECIMAL(13,2) NULL DEFAULT 0,
   `dataAdmissao`             DATETIME NULL,
   `dataDemissao`             DATETIME NULL,
   `pisPasep`                 VARCHAR(11) NULL,
@@ -73,11 +73,11 @@ ADD CONSTRAINT `fk_informacaoprofissional_colaborador`
 CREATE TABLE `informacao_bancaria` (
   `idInformacaoBancaria` INT NOT NULL AUTO_INCREMENT,
   `idColaborador`        INT NOT NULL,
-  `tipoConta`            INT NOT NULL,
-  `idBanco`              INT NOT NULL,
-  `agencia`              INT NOT NULL,
+  `tipoConta`            INT NULL,
+  `idBanco`              INT NULL,
+  `agencia`              INT NULL,
   `agencia_dv`           TINYINT (2) DEFAULT 0,
-  `contaCorrente`        INT NOT NULL,
+  `contaCorrente`        INT NULL,
   `contaCorrente_dv`     TINYINT (2) DEFAULT 0,
   PRIMARY KEY (`idInformacaoBancaria`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

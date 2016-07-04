@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('ColaboradorController', 
-    ['$scope', '$filter', 'ColaboradorService', 'ModalService', 'ColaboradorHandler', 'MESSAGES',
-    function ($scope, $filter, ColaboradorService, ModalService, ColaboradorHandler, MESSAGES) {
+    ['$scope', '$q', 'ColaboradorService', 'ModalService', 'ColaboradorHandler', 'InformacaoBancariaHandler', 'MESSAGES',
+    function ($scope, $q, ColaboradorService, ModalService, ColaboradorHandler, InformacaoBancariaHandler, MESSAGES) {
 
         var init = function () {
             $scope.colaboradores = [];
@@ -51,7 +51,9 @@ app.controller('ColaboradorController',
         
         var criarColaboradorsLista = function(colaboradores) {
             return _.map(colaboradores, function(colaborador) {
-                colaborador.cargoFuncao = colaborador.informacoProfisional.cargoFuncao;
+                if(colaborador.informacaoProfissional) {
+                    colaborador.cargoFuncao = colaborador.informacaoProfissional.cargoFuncao;
+                }
                 colaborador.situacao = colaborador.status.descricao;
                 return _.pick(colaborador, 'idColaborador', 'nome', 'cargoFuncao', 'celular', 'email', 'situacao');
             })
@@ -115,6 +117,7 @@ app.controller('ColaboradorController',
         var editar = function(colaborador) {
             modalSalvar(colaborador)
                 .then(function(result) {
+                    result = ajustarDados(result);
                     update(result);
                 });
         };
@@ -168,7 +171,17 @@ app.controller('ColaboradorController',
         // ***** AJUSTAR ***** //
         
         var ajustarDados = function(data) {  
-            return ColaboradorHandler.handle(data);
+            var colaborador = ColaboradorHandler.handle(data);            
+            if(!_.isEmpty(data.endereco)) {
+                colaborador.endereco = data.endereco;
+            }
+            if(!_.isEmpty(data.informacaoProfissional)) {
+                colaborador.informacaoProfissional = data.informacaoProfissional;
+            }            
+            if(!_.isEmpty(data.informacaoBancaria)) {
+                colaborador.informacaoBancaria = InformacaoBancariaHandler.handle(data.informacaoBancaria);
+            }
+            return colaborador;
         };
 
         // ***** MODAL ***** //

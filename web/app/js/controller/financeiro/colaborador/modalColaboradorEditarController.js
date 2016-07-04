@@ -16,7 +16,7 @@ app.controller('ModalColaboradorEditarController',
             $scope.colaborador.status = (colaborador && colaborador.status) || $scope.situacoes[0]; 
             $scope.colaborador.sexo = (colaborador && colaborador.sexo) || $scope.sexos[0];
             $scope.colaborador.estadoCivil = (colaborador && colaborador.estadoCivil) || $scope.estadosCivil[0];
-            $scope.colaborador.informacaoBancaria.tipo = (colaborador && colaborador.informacaoBancaria.tipo) || $scope.tipos[0];
+            $scope.colaborador.informacaoBancaria.tipoConta = (colaborador && colaborador.informacaoBancaria.tipoConta) || $scope.tipos[0];
             getTitle();
             bancos();
         };

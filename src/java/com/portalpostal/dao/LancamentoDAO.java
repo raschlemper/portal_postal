@@ -117,6 +117,15 @@ public class LancamentoDAO extends GenericDAO {
         return findAll(sql, params, lancamentoHandler);
     }
 
+    public List<Lancamento> findByColaborador(Integer idColaborador) throws Exception {
+        String sql = "SELECT * FROM lancamento, favorecido "
+                   + "WHERE lancamento.idFavorecido = favorecido.idFavorecido "
+                   + "AND favorecido.idColaborador = :idColaborador";
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idColaborador", idColaborador);
+        return findAll(sql, params, lancamentoHandler);
+    }
+
     public List<Saldo> findSaldo(Date dataInicio, Date dataFim) throws Exception {
         String sql = "SELECT DATE(lancamento.dataLancamento) as data, "
                           + "SUM( IF(lancamento.tipo = 0, IFNULL(lancamento_rateio.valor, lancamento.valor), IFNULL(lancamento_rateio.valor, lancamento.valor) * -1) ) as valor "

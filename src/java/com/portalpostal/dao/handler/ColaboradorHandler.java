@@ -49,17 +49,20 @@ public class ColaboradorHandler extends GenericHandler implements ResultSetHandl
     
     private Endereco getEndereco(ResultSet result) throws SQLException {
         if(!existColumn(result, "endereco.idEndereco")) return null;
-        return new EnderecoHandler().handle(result);         
+        if(!existFKValue(result, "endereco.idEndereco")) return null;
+        return new EnderecoHandler().handle(result); 
     }
     
     private InformacaoProfissional getInformacaoProfissional(ResultSet result) throws SQLException {
         if(!existColumn(result, "informacao_profissional.idInformacaoProfissional")) return null;
-        return new InformacaoProfissionalHandler().handle(result);         
+        if(!existFKValue(result, "informacao_profissional.idInformacaoProfissional")) return null;
+        return new InformacaoProfissionalHandler().handle(result);      
     }
     
     private InformacaoBancaria getInformacaoBancaria(ResultSet result) throws SQLException {
         if(!existColumn(result, "informacao_bancaria.idInformacaoBancaria")) return null;
-        return new InformacaoBancariaHandler().handle(result);         
+        if(!existFKValue(result, "informacao_bancaria.idInformacaoBancaria")) return null;
+        return new InformacaoBancariaHandler().handle(result);       
     }
     
 }

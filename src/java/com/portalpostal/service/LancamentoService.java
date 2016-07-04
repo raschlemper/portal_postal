@@ -97,6 +97,13 @@ public class LancamentoService {
         return lancamentos;
     } 
     
+    public List<Lancamento> findByColaborador(Integer idFavorecido) throws Exception {
+        init();
+        List<Lancamento> lancamentos = lancamentoDAO.findByColaborador(idFavorecido);
+        lancamentos = setRateios(lancamentos);
+        return lancamentos;
+    } 
+    
     public List<Saldo> findSaldo(Date dataInicio, Date dataFim) throws Exception {
         init();
         return lancamentoDAO.findSaldo(dataInicio, dataFim);

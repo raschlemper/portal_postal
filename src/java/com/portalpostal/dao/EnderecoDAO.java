@@ -29,8 +29,8 @@ public class EnderecoDAO extends GenericDAO {
 
     public List<Endereco> findByColaborador(Integer idColaborador) throws Exception {
         String sql = "SELECT endereco.* FROM endereco, colaborador_endereco "
-                   + "WHERE endereco.idEndereco = colaborador_enedereco.idEndereco "
-                   + "AND colaborador_enedereco.idColaborador = :idColaborador";
+                   + "WHERE endereco.idEndereco = colaborador_endereco.idEndereco "
+                   + "AND colaborador_endereco.idColaborador = :idColaborador";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idColaborador", idColaborador);
         return findAll(sql, params, enderecoHandler);
@@ -38,7 +38,7 @@ public class EnderecoDAO extends GenericDAO {
 
     public Endereco findVinculoColaborador(Integer idEndereco) throws Exception {
         String sql = "SELECT endereco.* FROM endereco, colaborador_endereco "
-                   + "WHERE endereco.idEndereco = colaborador_enedereco.idEndereco "
+                   + "WHERE endereco.idEndereco = colaborador_endereco.idEndereco "
                    + "AND endereco.idEndereco = :idEndereco";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idEndereco", idEndereco);

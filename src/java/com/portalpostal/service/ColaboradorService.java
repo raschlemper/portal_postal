@@ -51,29 +51,35 @@ public class ColaboradorService {
     public Colaborador findLancamento(Integer idColaborador) throws Exception {
         init();
         Colaborador colaborador = find(idColaborador);
-        colaborador.setLancamentos(lancamentoService.findByConta(idColaborador));
+        colaborador.setLancamentos(lancamentoService.findByColaborador(idColaborador));
         return colaborador;
     } 
     
     public Colaborador findLancamentoProgramado(Integer idColaborador) throws Exception {
         init();
         Colaborador colaborador = find(idColaborador);
-        colaborador.setLancamentosProgramados(lancamentoProgramadoService.findByConta(idColaborador));
+        colaborador.setLancamentosProgramados(lancamentoProgramadoService.findByColaborador(idColaborador));
         return colaborador;
     } 
     
     public Colaborador save(Colaborador colaborador) throws Exception {
         init();
         validation(colaborador);
-        colaboradorDAO.save(colaborador);
-        return saveOrUpdate(colaborador);
+        Colaborador colaboradorResult = colaboradorDAO.save(colaborador);  
+        colaboradorResult.setEndereco(colaborador.getEndereco());        
+        colaboradorResult.setInformacaoProfissional(colaborador.getInformacaoProfissional());    
+        colaboradorResult.setInformacaoBancaria(colaborador.getInformacaoBancaria());
+        return saveOrUpdate(colaboradorResult);
     } 
     
     public Colaborador update(Colaborador colaborador) throws Exception {
         init();
         validation(colaborador);
-        colaboradorDAO.update(colaborador);
-        return saveOrUpdate(colaborador);
+        Colaborador colaboradorResult = colaboradorDAO.update(colaborador);
+        colaboradorResult.setEndereco(colaborador.getEndereco());        
+        colaboradorResult.setInformacaoProfissional(colaborador.getInformacaoProfissional());    
+        colaboradorResult.setInformacaoBancaria(colaborador.getInformacaoBancaria());
+        return saveOrUpdate(colaboradorResult);
     } 
     
     public Colaborador delete(Integer idColaborador) throws Exception {
@@ -93,6 +99,14 @@ public class ColaboradorService {
         return true;                
     } 
     
+    private Colaborador saveOrUpdate(Colaborador colaborador) throws Exception {
+        if(colaborador == null) return colaborador;
+        if(colaborador.getEndereco() != null) { colaborador = saveOrUpdateEndereco(colaborador); }
+        if(colaborador.getInformacaoProfissional() != null) { colaborador = saveOrUpdateInformacaoProfissional(colaborador); }
+        if(colaborador.getInformacaoBancaria() != null) { colaborador = saveOrUpdateInformacaoBancaria(colaborador); }
+        return find(colaborador.getIdColaborador());
+    }
+    
     // ***** ENDERECO ***** //
     
     private List<Colaborador> setEnderecos(List<Colaborador> colaboradores) throws Exception {
@@ -111,14 +125,6 @@ public class ColaboradorService {
         List<Endereco> enderecos = enderecoService.findByColaborador(idColaborador);
         if(enderecos != null && !enderecos.isEmpty()) return enderecos.get(0);
         return null;
-    }
-    
-    private Colaborador saveOrUpdate(Colaborador colaborador) throws Exception {
-        if(colaborador == null) return colaborador;
-        if(colaborador.getEndereco() != null) { colaborador = saveOrUpdateEndereco(colaborador); }
-        if(colaborador.getInformacaoProfissional() != null) { colaborador = saveOrUpdateInformacaoProfissional(colaborador); }
-        if(colaborador.getInformacaoBancaria() != null) { colaborador = saveOrUpdateInformacaoBancaria(colaborador); }
-        return colaborador;
     } 
     
     private Colaborador saveOrUpdateEndereco(Colaborador colaborador) throws Exception {

@@ -86,6 +86,11 @@ public class LancamentoProgramadoService {
         return lancamentoProgramadoDAO.findByFavorecido(idFavorecido);
     } 
     
+    public List<LancamentoProgramado> findByColaborador(Integer idColaborador) throws Exception {
+        init();
+        return lancamentoProgramadoDAO.findByColaborador(idColaborador);
+    } 
+    
     public LancamentoProgramado save(LancamentoProgramado lancamentoProgramado) throws Exception {
         init();
 //        LancamentoProgramado lancamentoProgramadoResult = lancamentoProgramadoDAO.save(ajustaLancamento(lancamentoProgramado));
