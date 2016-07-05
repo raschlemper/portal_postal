@@ -6,6 +6,7 @@ import com.portalpostal.model.Endereco;
 import com.portalpostal.model.Favorecido;
 import com.portalpostal.model.InformacaoBancaria;
 import com.portalpostal.model.InformacaoProfissional;
+import com.portalpostal.model.dd.TipoFavorecido;
 import java.util.List;
 
 public class ColaboradorService {
@@ -89,6 +90,7 @@ public class ColaboradorService {
         removerEndereco(colaborador);
         removerInformacaoProfissional(colaborador);
         removerInformacaoBancaria(colaborador);
+        removerFavorecido(colaborador);
         return colaboradorDAO.remove(idColaborador);
     }    
     
@@ -99,11 +101,25 @@ public class ColaboradorService {
         return true;                
     } 
     
+    private void validation(Colaborador colaborador) throws Exception {  
+        if(existeColaborador(colaborador)) {
+            throw new Exception("Este Colaborador já foi cadastrado!");
+        } 
+    }  
+    
+    private boolean existeColaborador(Colaborador colaborador) throws Exception {
+        Colaborador colaboradorCpf = colaboradorDAO.findByCpf(colaborador.getCpf());
+        if(colaboradorCpf == null) return false;
+        if(colaboradorCpf.getIdColaborador().equals(colaborador.getIdColaborador())) return false;
+        return true;
+    }
+    
     private Colaborador saveOrUpdate(Colaborador colaborador) throws Exception {
         if(colaborador == null) return colaborador;
         if(colaborador.getEndereco() != null) { colaborador = saveOrUpdateEndereco(colaborador); }
         if(colaborador.getInformacaoProfissional() != null) { colaborador = saveOrUpdateInformacaoProfissional(colaborador); }
         if(colaborador.getInformacaoBancaria() != null) { colaborador = saveOrUpdateInformacaoBancaria(colaborador); }
+        saveOrUpdateFavorecido(colaborador);
         return find(colaborador.getIdColaborador());
     }
     
@@ -162,7 +178,7 @@ public class ColaboradorService {
     private void removerInformacaoProfissional(Colaborador colaborador) throws Exception {
         InformacaoProfissional informacaoProfissional = colaborador.getInformacaoProfissional();
         if(informacaoProfissional != null) {   
-            informacaoProfissionalService.update(informacaoProfissional);            
+            informacaoProfissionalService.delete(informacaoProfissional.getIdInformacaoProfissional());            
         }
     }
     
@@ -183,21 +199,36 @@ public class ColaboradorService {
     private void removerInformacaoBancaria(Colaborador colaborador) throws Exception {
         InformacaoBancaria informacaoBancaria = colaborador.getInformacaoBancaria();
         if(informacaoBancaria != null) {   
-            informacaoBancariaService.update(informacaoBancaria);            
+            informacaoBancariaService.delete(informacaoBancaria.getIdInformacaoBancaria());            
         }
     }
     
-    private void validation(Colaborador colaborador) throws Exception {  
-        if(existeColaborador(colaborador)) {
-            throw new Exception("Este Colaborador já foi cadastrado!");
-        } 
-    }  
+    // ***** FAVORECIDO ***** //
     
-    private boolean existeColaborador(Colaborador colaborador) throws Exception {
-        Colaborador colaboradorCpf = colaboradorDAO.findByCpf(colaborador.getCpf());
-        if(colaboradorCpf == null) return false;
-        if(colaboradorCpf.getIdColaborador().equals(colaborador.getIdColaborador())) return false;
-        return true;
+    private Colaborador saveOrUpdateFavorecido(Colaborador colaborador) throws Exception {
+        Favorecido favorecido = getFavorecido(colaborador);
+        if(favorecido.getIdFavorecido() != null) {
+            favorecido = favorecidoService.update(favorecido);
+        } else {
+            favorecido = favorecidoService.save(favorecido);
+        }
+        return colaborador;
+    } 
+    
+    private Favorecido getFavorecido(Colaborador colaborador) throws Exception {
+        Favorecido favorecido = favorecidoService.findByColaborador(colaborador.getIdColaborador());
+        if(favorecido == null) { favorecido = new Favorecido(); }
+        favorecido.setTipo(TipoFavorecido.COLABORADOR);
+        favorecido.setNome(colaborador.getNome());
+        favorecido.setColaborador(colaborador);
+        return favorecido;
+    }
+    
+    private void removerFavorecido(Colaborador colaborador) throws Exception {
+        InformacaoBancaria informacaoBancaria = colaborador.getInformacaoBancaria();
+        if(informacaoBancaria != null) {   
+            favorecidoService.deleteByColaborador(colaborador.getIdColaborador());            
+        }
     }
     
 }

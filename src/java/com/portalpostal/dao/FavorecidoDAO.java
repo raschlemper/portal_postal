@@ -87,5 +87,12 @@ public class FavorecidoDAO extends GenericDAO {
         remove(sql, params, favorecidoHandler);
         return favorecido;
     }
+
+    public void removeByColaborador(Integer idColaborador) throws Exception { 
+        String sql = "DELETE FROM favorecido WHERE idColaborador = :idColaborador ";
+        Map<String, Object> params = new HashMap<String, Object>();        
+        params.put("idFavorecido", idColaborador);
+        remove(sql, params, null);
+    }
     
 }

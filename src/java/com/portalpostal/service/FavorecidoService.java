@@ -58,7 +58,13 @@ public class FavorecidoService {
         init();
         if(!podeExcluir(idFavorecido)) throw new Exception("Este favorecido não pode ser excluído!"); 
         return favorecidoDAO.remove(idFavorecido);
-    }    
+    }   
+    
+    public void deleteByColaborador(Integer idFavorecido) throws Exception {
+        init();
+        if(!podeExcluir(idFavorecido)) throw new Exception("Este favorecido não pode ser excluído!"); 
+        favorecidoDAO.removeByColaborador(idFavorecido);
+    }   
     
     public boolean podeExcluir(Integer idFavorecido) throws Exception {
         init();

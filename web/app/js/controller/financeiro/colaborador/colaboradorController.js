@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('ColaboradorController', 
-    ['$scope', '$q', 'ColaboradorService', 'ModalService', 'ColaboradorHandler', 'InformacaoBancariaHandler', 'MESSAGES',
-    function ($scope, $q, ColaboradorService, ModalService, ColaboradorHandler, InformacaoBancariaHandler, MESSAGES) {
+    ['$scope', '$q', 'ColaboradorService', 'ModalService', 'ColaboradorHandler', 'InformacaoProfissionalHandler', 'InformacaoBancariaHandler', 'MESSAGES',
+    function ($scope, $q, ColaboradorService, ModalService, ColaboradorHandler, InformacaoProfissionalHandler, InformacaoBancariaHandler, MESSAGES) {
 
         var init = function () {
             $scope.colaboradores = [];
@@ -17,7 +17,7 @@ app.controller('ColaboradorController',
             $scope.colunas = [
                 {label: 'Nome', column: 'nome'},
                 {label: 'Cargo / Função', column: 'cargoFuncao'},                         
-                {label: 'Celular', column: 'celular'},                         
+                {label: 'Celular', column: 'celular', filter: {name: 'telefone', args: ''}},                         
                 {label: 'Email', column: 'email'},                         
                 {label: 'Situação', column: 'situacao'}
             ]            
@@ -176,7 +176,7 @@ app.controller('ColaboradorController',
                 colaborador.endereco = data.endereco;
             }
             if(!_.isEmpty(data.informacaoProfissional)) {
-                colaborador.informacaoProfissional = data.informacaoProfissional;
+                colaborador.informacaoProfissional = InformacaoProfissionalHandler.handle(data.informacaoProfissional);
             }            
             if(!_.isEmpty(data.informacaoBancaria)) {
                 colaborador.informacaoBancaria = InformacaoBancariaHandler.handle(data.informacaoBancaria);

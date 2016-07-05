@@ -17,6 +17,7 @@ app.controller('ModalColaboradorEditarController',
             $scope.colaborador.sexo = (colaborador && colaborador.sexo) || $scope.sexos[0];
             $scope.colaborador.estadoCivil = (colaborador && colaborador.estadoCivil) || $scope.estadosCivil[0];
             $scope.colaborador.informacaoBancaria.tipoConta = (colaborador && colaborador.informacaoBancaria.tipoConta) || $scope.tipos[0];
+            ajustesDadosInformacaoProfissional($scope.colaborador.informacaoProfissional);
             getTitle();
             bancos();
         };
@@ -54,6 +55,22 @@ app.controller('ModalColaboradorEditarController',
                     $scope.colaborador.endereco.estado = '';
                 });
         };
+        
+        var ajustesDadosInformacaoProfissional = function(informacaoProfissional) {
+            if(!informacaoProfissional) return;
+            if(informacaoProfissional.horarioEntrada) { 
+                informacaoProfissional.horarioEntrada = moment(informacaoProfissional.horarioEntrada).format("HH:mm"); 
+            }
+            if(informacaoProfissional.horarioSaida) { 
+                informacaoProfissional.horarioSaida = moment(informacaoProfissional.horarioSaida).format("HH:mm");
+            }
+            if(informacaoProfissional.intervaloDe) { 
+                informacaoProfissional.intervaloDe = moment(informacaoProfissional.intervaloDe).format("HH:mm");
+            }
+            if(informacaoProfissional.intervaloAte) { 
+                informacaoProfissional.intervaloAte = moment(informacaoProfissional.intervaloAte).format("HH:mm");
+            }
+        }
         
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
