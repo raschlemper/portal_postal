@@ -21,7 +21,7 @@ public class FavorecidoHandler extends GenericHandler implements ResultSetHandle
     public Favorecido handle(ResultSet result) throws SQLException {
         Favorecido favorecido = new Favorecido();
         favorecido.setIdFavorecido(getInt(result, "idFavorecido"));
-        favorecido.setTipo(TipoFavorecido.values()[getInt(result, "tipo")]);
+        favorecido.setTipo(getTipo(result));
         favorecido.setColaborador(getColaborador(result));
 //        favorecido.setFornecedor(getFornecedor(result));
         favorecido.setCliente(getCliente(result));
@@ -29,13 +29,21 @@ public class FavorecidoHandler extends GenericHandler implements ResultSetHandle
         return favorecido;
     }
     
+    private TipoFavorecido getTipo(ResultSet result) throws SQLException {
+        Integer id = getInt(result, "tipo");
+        if(id == null) return null;
+        return TipoFavorecido.values()[getInt(result, "tipo")];
+    }
+    
     private Colaborador getColaborador(ResultSet result) throws SQLException {
         if(!existColumn(result, "colaborador.idColaborador")) return null;
+        if(!existFKValue(result, "colaborador.idColaborador")) return null;
         return new ColaboradorHandler().handle(result);         
     }
     
     private Clientes getCliente(ResultSet result) throws SQLException {
         if(!existColumn(result, "clientes.codigo")) return null;
+        if(!existFKValue(result, "clientes.codigo")) return null;
         return new ClienteHandler().handle(result);         
     }
     

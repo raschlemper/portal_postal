@@ -1,9 +1,9 @@
 'use strict';
 
 app.controller('ModalLancamentoProgramadoEditarController', 
-    ['$scope', '$filter', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'LancamentoService', 
+    ['$scope', '$filter', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'FavorecidoService', 
      'ModalService', 'DatePickerService', 'LancamentoHandler', 'ListaService', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
-    function ($scope, $filter, ContaService, PlanoContaService, CentroCustoService, TipoDocumentoService, TipoFormaPagamentoService, LancamentoService, 
+    function ($scope, $filter, ContaService, PlanoContaService, CentroCustoService, TipoDocumentoService, TipoFormaPagamentoService, FavorecidoService, 
         ModalService, DatePickerService, LancamentoHandler, ListaService, FinanceiroValidation, LISTAS, MESSAGES) {
 
         var init = function () {  
@@ -129,7 +129,7 @@ app.controller('ModalLancamentoProgramadoEditarController',
         };
         
         var favorecidos = function() {
-            LancamentoService.getFavorecidos()
+            FavorecidoService.getAll()
                 .then(function (data) {
                     $scope.favorecidos = data;
                 })
@@ -137,6 +137,10 @@ app.controller('ModalLancamentoProgramadoEditarController',
                     console.log(e);
                 });
         };
+        
+        $scope.selectFavorecido = function(favorecido) {
+            $scope.lancamentoProgramado.favorecido = favorecido;
+        }
         
         $scope.setDataCompetencia = function(lancamentoProgramado) {
             if(lancamentoProgramado.dataCompetencia) return;

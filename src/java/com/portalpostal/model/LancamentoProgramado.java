@@ -13,7 +13,7 @@ public class LancamentoProgramado {
     private PlanoConta planoConta;
     private CentroCusto centroCusto;
     private TipoLancamento tipo;
-    private String favorecido;
+    private Favorecido favorecido;
     private String numero;
     private TipoDocumento documento;
     private TipoFormaPagamento formaPagamento;    
@@ -75,11 +75,11 @@ public class LancamentoProgramado {
         this.tipo = tipo;
     }
 
-    public String getFavorecido() {
+    public Favorecido getFavorecido() {
         return favorecido;
     }
 
-    public void setFavorecido(String favorecido) {
+    public void setFavorecido(Favorecido favorecido) {
         this.favorecido = favorecido;
     }
 

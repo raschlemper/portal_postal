@@ -1,12 +1,13 @@
 'use strict';
 
 app.controller('ModalLancamentoProgramadoGerarController', 
-    ['$scope', 'LancamentoConciliadoService', 'FrequenciaLancamentoService', 'ListaService', 'ModalService', 'LancamentoHandler', 'LancamentoRateioHandler', 'LISTAS', 'MESSAGES',
-    function ($scope, LancamentoConciliadoService, FrequenciaLancamentoService, ListaService, ModalService, LancamentoHandler, LancamentoRateioHandler, LISTAS, MESSAGES) {
+    ['$scope', 'LancamentoConciliadoService', 'FavorecidoService', 'FrequenciaLancamentoService', 'ListaService', 'ModalService', 'LancamentoHandler', 'LancamentoRateioHandler', 'LISTAS', 'MESSAGES',
+    function ($scope, LancamentoConciliadoService, FavorecidoService, FrequenciaLancamentoService, ListaService, ModalService, LancamentoHandler, LancamentoRateioHandler, LISTAS, MESSAGES) {
 
         var init = function () {  
             getTitle();
             initStep($scope.lancamento);
+            favorecidos();
         };
         
         // ***** NAVEGAR ***** //
@@ -22,6 +23,20 @@ app.controller('ModalLancamentoProgramadoGerarController',
         var getTitle = function() {
             $scope.titleGerar = $scope.title + " - " + MESSAGES.lancamento.title.GERAR; 
         };
+        
+        var favorecidos = function() {
+            FavorecidoService.getAll()
+                .then(function (data) {
+                    $scope.favorecidos = data;
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+        
+        $scope.selectFavorecido = function(favorecido) {
+            $scope.lancamento.favorecido = favorecido;
+        }
         
         $scope.lancar = function(form, lancamentoProgramado, lancamento) {
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;

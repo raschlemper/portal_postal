@@ -69,18 +69,6 @@ public class LancamentoController {
     } 
     
     @GET
-    @Path("/favorecido")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<String> findFavorecido() {
-        try {
-            init();    
-            return lancamentoService.findFavorecido();
-        } catch (Exception ex) {
-            throw new WebApplicationException(getMessageError(ex.getMessage()));
-        }
-    }  
-    
-    @GET
     @Path("/saldo")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Saldo> findSaldo(@QueryParam("dataInicio") String dataInicio, 

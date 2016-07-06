@@ -1,9 +1,9 @@
 'use strict';
 
 app.controller('ModalLancamentoEditarController', 
-    ['$scope', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoService', 'LancamentoConciliadoService', 'LancamentoAnexoService', 
-     'ModalService', 'DatePickerService', 'ListaService', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
-    function ($scope, ContaService, PlanoContaService, CentroCustoService, LancamentoService, LancamentoConciliadoService, LancamentoAnexoService, 
+    ['$scope', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'LancamentoAnexoService', 'FavorecidoService', 
+        'ModalService', 'DatePickerService', 'ListaService', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
+    function ($scope, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, LancamentoAnexoService, FavorecidoService,
         ModalService, DatePickerService, ListaService, FinanceiroValidation, LISTAS, MESSAGES) {
 
         var init = function () {  
@@ -79,7 +79,7 @@ app.controller('ModalLancamentoEditarController',
         };
         
         var favorecidos = function() {
-            LancamentoService.getFavorecidos()
+            FavorecidoService.getAll()
                 .then(function (data) {
                     $scope.favorecidos = data;
                 })
@@ -87,6 +87,10 @@ app.controller('ModalLancamentoEditarController',
                     console.log(e);
                 });
         };
+        
+        $scope.selectFavorecido = function(favorecido) {
+            $scope.lancamento.favorecido = favorecido;
+        }
         
         var criarPlanoContasLista = function(data) {
             return _.filter(data, function(planoConta) { 

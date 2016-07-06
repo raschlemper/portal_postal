@@ -121,7 +121,7 @@ ADD CONSTRAINT `fk_colaboradorendereco_endereco`
 
 CREATE TABLE `favorecido` (
   `idFavorecido`  INT NOT NULL AUTO_INCREMENT,
-  `tipo`          INT NOT NULL,
+  `tipo`          INT NULL,
   `idColaborador` INT NULL,
   `idFornecedor`  INT NULL,
   `idCliente`     INT NULL,

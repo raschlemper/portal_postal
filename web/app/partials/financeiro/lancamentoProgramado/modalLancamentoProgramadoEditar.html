@@ -50,7 +50,9 @@
                                     <!--<input class="form-control" type="text" name="favorecido" ng-model="lancamentoProgramado.favorecido" 
                                            placeholder="Favorecido do lançamento"/>  -->
                                     <input class="form-control" type="text" name="favorecido" ng-model="lancamentoProgramado.favorecido" placeholder="Favorecido do lançamento"
-                                            autocomplete="off" typeahead="favorecido for favorecido in favorecidos | filter:$viewValue | limitTo:8">
+                                            autocomplete="off"  
+                                            typeahead-on-select="selectFavorecido($item)" 
+                                            typeahead="favorecido.nome for favorecido in favorecidos | filter:$viewValue | limitTo:10">
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">

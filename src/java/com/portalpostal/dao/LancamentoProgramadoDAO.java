@@ -17,6 +17,7 @@ public class LancamentoProgramadoDAO extends GenericDAO {
 
     public List<LancamentoProgramado> findAll() throws Exception {
         String sql = "SELECT * FROM conta, tipo_documento, tipo_forma_pagamento, lancamento_programado "
+                   + "LEFT OUTER JOIN favorecido ON(lancamento_programado.idFavorecido = favorecido.idFavorecido) "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento_programado.idPlanoConta = plano_conta.idPlanoConta) "
                    + "LEFT OUTER JOIN centro_custo ON(lancamento_programado.idCentroCusto = centro_custo.idCentroCusto) "
                    + "WHERE lancamento_programado.idConta = conta.idConta "
@@ -34,6 +35,7 @@ public class LancamentoProgramadoDAO extends GenericDAO {
 
     public LancamentoProgramado find(Integer idLancamentoProgramado) throws Exception {
         String sql = "SELECT * FROM conta, tipo_documento, tipo_forma_pagamento, lancamento_programado "
+                   + "LEFT OUTER JOIN favorecido ON(lancamento_programado.idFavorecido = favorecido.idFavorecido) "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento_programado.idPlanoConta = plano_conta.idPlanoConta) "
                    + "LEFT OUTER JOIN centro_custo ON(lancamento_programado.idCentroCusto = centro_custo.idCentroCusto) "
                    + "WHERE lancamento_programado.idConta = conta.idConta "
@@ -46,8 +48,9 @@ public class LancamentoProgramadoDAO extends GenericDAO {
     }
 
     public List<LancamentoProgramado> findByConta(Integer idConta) throws Exception {
-        String sql = "SELECT lancamento_programado.*, plano_conta.*, tipo_documento.*, tipo_forma_pagamento.*, centro_custo.* "
+        String sql = "SELECT lancamento_programado.*, plano_conta.*, tipo_documento.*, tipo_forma_pagamento.*, centro_custo.*, favorecido.* "
                    + "FROM conta, tipo_documento, tipo_forma_pagamento, lancamento_programado "
+                   + "LEFT OUTER JOIN favorecido ON(lancamento_programado.idFavorecido = favorecido.idFavorecido) "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento_programado.idPlanoConta = plano_conta.idPlanoConta) "
                    + "LEFT OUTER JOIN centro_custo ON(lancamento_programado.idCentroCusto = centro_custo.idCentroCusto) "
                    + "WHERE conta.idConta = lancamento_programado.idConta "
@@ -102,18 +105,18 @@ public class LancamentoProgramadoDAO extends GenericDAO {
     }
 
     public LancamentoProgramado save(LancamentoProgramado lancamentoProgramado) throws Exception {  
-        String sql = "INSERT INTO lancamento_programado (idConta, idPlanoConta, idCentroCusto, tipo, favorecido, "
+        String sql = "INSERT INTO lancamento_programado (idConta, idPlanoConta, idCentroCusto, tipo, idFavorecido, "
                    + "numero, idTipoDocumento, idTipoFormaPagamento, frequencia, quantidadeParcela, numeroParcela, dataCompetencia, "
                    + "dataEmissao, dataVencimento, valor, situacao, historico, observacao, usuario) "
-                   + "VALUES(:idConta, :idPlanoConta, :idCentroCusto, :tipo, :favorecido, :numero, :idTipoDocumento, "
+                   + "VALUES(:idConta, :idPlanoConta, :idCentroCusto, :tipo, :idFavorecido, :numero, :idTipoDocumento, "
                    + ":idTipoFormaPagamento, :frequencia, :quantidadeParcela, :numeroParcela, :dataCompetencia, :dataEmissao, "
                    + ":dataVencimento, :valor, :situacao, :historico, :observacao, :usuario)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idConta", lancamentoProgramado.getConta().getIdConta());
         params.put("idPlanoConta", (lancamentoProgramado.getPlanoConta() == null ? null : lancamentoProgramado.getPlanoConta().getIdPlanoConta()));
         params.put("idCentroCusto", (lancamentoProgramado.getCentroCusto() == null ? null : lancamentoProgramado.getCentroCusto().getIdCentroCusto()));
-        params.put("tipo", lancamentoProgramado.getTipo().ordinal());     
-        params.put("favorecido", lancamentoProgramado.getFavorecido());     
+        params.put("tipo", lancamentoProgramado.getTipo().ordinal()); 
+        params.put("idFavorecido", (lancamentoProgramado.getFavorecido() == null ? null : lancamentoProgramado.getFavorecido().getIdFavorecido()));     
         params.put("numero", lancamentoProgramado.getNumero());        
         params.put("idTipoDocumento", lancamentoProgramado.getDocumento().getIdTipoDocumento());        
         params.put("idTipoFormaPagamento", lancamentoProgramado.getFormaPagamento().getIdTipoFormaPagamento());          
@@ -135,7 +138,7 @@ public class LancamentoProgramadoDAO extends GenericDAO {
     public LancamentoProgramado update(LancamentoProgramado lancamentoProgramado) throws Exception {
         String sql = "UPDATE lancamento_programado "
                    + "SET idConta = :idConta, idPlanoConta = :idPlanoConta, idCentroCusto = :idCentroCusto, "
-                   + "tipo = :tipo, favorecido = :favorecido, numero = :numero, idTipoDocumento = :idTipoDocumento, "
+                   + "tipo = :tipo, idFavorecido = :idFavorecido, numero = :numero, idTipoDocumento = :idTipoDocumento, "
                    + "idTipoFormaPagamento = :idTipoFormaPagamento, frequencia = :frequencia, quantidadeParcela = :quantidadeParcela, "
                    + "numeroParcela = :numeroParcela, dataCompetencia = :dataCompetencia, dataEmissao = :dataEmissao, dataVencimento = :dataVencimento, "
                    + "valor = :valor, situacao = :situacao, historico = :historico, observacao = :observacao, usuario = :usuario "
@@ -146,7 +149,7 @@ public class LancamentoProgramadoDAO extends GenericDAO {
         params.put("idPlanoConta", (lancamentoProgramado.getPlanoConta() == null ? null : lancamentoProgramado.getPlanoConta().getIdPlanoConta()));
         params.put("idCentroCusto", (lancamentoProgramado.getCentroCusto() == null ? null : lancamentoProgramado.getCentroCusto().getIdCentroCusto()));
         params.put("tipo", lancamentoProgramado.getTipo().ordinal());     
-        params.put("favorecido", lancamentoProgramado.getFavorecido());     
+        params.put("idFavorecido", (lancamentoProgramado.getFavorecido() == null ? null : lancamentoProgramado.getFavorecido().getIdFavorecido()));  
         params.put("numero", lancamentoProgramado.getNumero());        
         params.put("idTipoDocumento", lancamentoProgramado.getDocumento().getIdTipoDocumento());        
         params.put("idTipoFormaPagamento", lancamentoProgramado.getFormaPagamento().getIdTipoFormaPagamento());          
