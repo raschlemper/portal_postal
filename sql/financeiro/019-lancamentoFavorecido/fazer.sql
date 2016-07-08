@@ -21,7 +21,7 @@ UPDATE lancamento
 UPDATE lancamento_programado 
    SET lancamento_programado.idFavorecido = (SELECT favorecido.idFavorecido 
                                                FROM favorecido 
-                                               WHERE favorecido.nome = lancamento_programado.favorecido);
+                                              WHERE favorecido.nome = lancamento_programado.favorecido);
 
 ALTER TABLE lancamento DROP `favorecido`;
 ALTER TABLE lancamento_programado DROP `favorecido`;

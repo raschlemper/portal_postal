@@ -22,13 +22,13 @@ app.controller('CartaoCreditoController',
             $scope.linha = {
                 events: { 
                     edit: function(cartaoCredito) {
-                        $scope.editar(cartaoCredito.idCartaoCredito);
+                        $scope.editar(cartaoCredito);
                     },
                     remove: function(cartaoCredito) {
-                        $scope.excluir(cartaoCredito.idCartaoCredito);
+                        $scope.excluir(cartaoCredito);
                     },
                     view: function(cartaoCredito) {
-                        $scope.visualizar(cartaoCredito.idCartaoCredito);
+                        $scope.visualizar(cartaoCredito);
                     }
                 }
             }             
@@ -55,10 +55,10 @@ app.controller('CartaoCreditoController',
 
         // ***** VISUALIZAR ***** //
 
-        $scope.visualizar = function(idCartaoCredito) {
-            CartaoCreditoService.get(idCartaoCredito)
-                .then(function(cartaoCredito) {
-                     visualizar(cartaoCredito);        
+        $scope.visualizar = function(cartaoCredito) {
+            CartaoCreditoService.get(cartaoCredito.idCartaoCredito)
+                .then(function(result) {
+                     visualizar(result);        
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -98,10 +98,10 @@ app.controller('CartaoCreditoController',
 
         // ***** EDITAR ***** //
 
-        $scope.editar = function(idCartaoCredito) {
-            CartaoCreditoService.get(idCartaoCredito)
-                .then(function(cartaoCredito) {
-                    editar(cartaoCredito);
+        $scope.editar = function(cartaoCredito) {
+            CartaoCreditoService.get(cartaoCredito.idCartaoCredito)
+                .then(function(result) {
+                    editar(result);
                 })
                 .catch(function(e) {
                     modalMessage(e.error);
@@ -128,13 +128,13 @@ app.controller('CartaoCreditoController',
 
         // ***** EXCLUIR ***** //
 
-        $scope.excluir = function(idCartaoCredito) {
-            CartaoCreditoService.getConta(idCartaoCredito)
-                .then(function(cartaoCredito) {   
-                    if(cartaoCredito.contas.length) {
+        $scope.excluir = function(cartaoCredito) {
+            CartaoCreditoService.get(cartaoCredito.idCartaoCredito)
+                .then(function(result) {   
+                    if(result.contas.length) {
                         modalMessage("Este cartão crédito não pode ser excluído! <br/> Existem Contas vinculadas a este cartão de crédito.");
                     } else {
-                        excluir(idCartaoCredito);
+                        excluir(cartaoCredito);
                     }
                 })
                 .catch(function(e) {
@@ -142,15 +142,15 @@ app.controller('CartaoCreditoController',
                 });
         }; 
         
-        var excluir = function(idCartaoCredito) {
+        var excluir = function(cartaoCredito) {
             modalExcluir()
                 .then(function() {
-                    remove(idCartaoCredito);
+                    remove(cartaoCredito);
                 });            
         };
         
-        var remove = function(idCartaoCredito) {
-            CartaoCreditoService.delete(idCartaoCredito)
+        var remove = function(cartaoCredito) {
+            CartaoCreditoService.delete(cartaoCredito.idCartaoCredito)
                 .then(function(data) { 
                     modalMessage("Cartão de Crédito " + data.nome + " Removido com sucesso!");
                     todos();                        

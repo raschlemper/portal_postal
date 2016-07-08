@@ -16,7 +16,7 @@ app.controller('ModalCarteiraCobrancaVisualizarController',
         };
         
         $scope.editar = function() {
-            $modalInstance.close(carteiraCobranca.idCarteiraCobranca);
+            $modalInstance.close(carteiraCobranca);
         };
         
         $scope.cancel = function () {

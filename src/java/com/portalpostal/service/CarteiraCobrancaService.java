@@ -1,6 +1,7 @@
 package com.portalpostal.service;
 
 import com.portalpostal.dao.CarteiraCobrancaDAO;
+import com.portalpostal.model.CartaoCredito;
 import com.portalpostal.model.CarteiraCobranca;
 import com.portalpostal.model.Conta;
 import java.util.List;
@@ -23,12 +24,16 @@ public class CarteiraCobrancaService {
     
     public List<CarteiraCobranca> findAll() throws Exception {
         init();
-        return carteiraCobrancaDAO.findAll();
+        List<CarteiraCobranca> carteiraCobrancas = carteiraCobrancaDAO.findAll();
+        carteiraCobrancas = setContas(carteiraCobrancas);
+        return carteiraCobrancas;
     }  
     
     public CarteiraCobranca find(Integer idCarteiraCobranca) throws Exception {
         init();
-        return carteiraCobrancaDAO.find(idCarteiraCobranca);
+        CarteiraCobranca carteiraCobranca = carteiraCobrancaDAO.find(idCarteiraCobranca);
+        carteiraCobranca = setConta(carteiraCobranca);
+        return carteiraCobranca;
     } 
 
     public List<CarteiraCobranca> findByContaCorrente(Integer idContaCorrente) throws Exception {
@@ -89,6 +94,24 @@ public class CarteiraCobrancaService {
            carteira.getCodigoBeneficiarioDv().equals(carteiraCobranca.getCodigoBeneficiarioDv()) && 
            carteira.getCodigoCarteira().equals(carteiraCobranca.getCodigoCarteira())) return false;
         return true;
+    }
+    
+    // ***** ENDERECO ***** //
+    
+    private List<CarteiraCobranca> setContas(List<CarteiraCobranca> carteiraCobrancas) throws Exception {
+        for (CarteiraCobranca carteiraCobranca : carteiraCobrancas) {
+            setConta(carteiraCobranca);
+        }
+        return carteiraCobrancas;
+    }
+    
+    private CarteiraCobranca setConta(CarteiraCobranca carteiraCobranca) throws Exception {
+        carteiraCobranca.setContas(getContas(carteiraCobranca.getIdCarteiraCobranca()));
+        return carteiraCobranca;
+    }
+    
+    private List<Conta> getContas(Integer idCarteiraCobranca) throws Exception {
+       return contaService.findByCarteiraCobranca(idCarteiraCobranca);
     }
     
 }

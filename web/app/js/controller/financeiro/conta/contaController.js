@@ -23,13 +23,13 @@ app.controller('ContaController',
             ]            
             $scope.events = { 
                 view: function(conta) {
-                    $scope.visualizar(conta.idConta);                    
+                    $scope.visualizar(conta);                    
                 },
                 edit: function(conta) {
-                    $scope.editar(conta.idConta);
+                    $scope.editar(conta);
                 },
                 remove: function(conta) {
-                    $scope.excluir(conta.idConta);
+                    $scope.excluir(conta);
                 }
             }             
         };
@@ -55,10 +55,10 @@ app.controller('ContaController',
 
         // ***** VISUALIZAR ***** //
 
-        $scope.visualizar = function(idConta) {
-            ContaService.get(idConta)
-                .then(function(conta) {
-                     visualizar(conta);
+        $scope.visualizar = function(conta) {
+            ContaService.get(conta.idConta)
+                .then(function(result) {
+                     visualizar(result);
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -99,10 +99,10 @@ app.controller('ContaController',
 
         // ***** EDITAR ***** //
 
-        $scope.editar = function(idConta) {
-            ContaService.get(idConta)
-                .then(function(conta) {
-                    editar(conta);
+        $scope.editar = function(conta) {
+            ContaService.get(conta.idConta)
+                .then(function(result) {
+                    editar(result);
                 })
                 .catch(function(e) {
                     modalMessage(e.error);
@@ -131,27 +131,27 @@ app.controller('ContaController',
 
         // ***** EXCLUIR ***** //
 
-        $scope.excluir = function(idConta) {
-            $q.all([ContaService.getLancamento(idConta),
-                    ContaService.getLancamentoProgramado(idConta)])
+        $scope.excluir = function(conta) {
+            $q.all([ContaService.getLancamento(conta.idConta),
+                    ContaService.getLancamentoProgramado(conta.idConta)])
                 .then(function(values) {   
                     if(values[0].lancamentos.length || values[1].lancamentosProgramados.length) {
                         modalMessage("Esta conta não pode ser excluída! <br/> Existem Lançamentos vinculados a esta conta.");
                     } else {
-                        excluir(idConta);
+                        excluir(conta);
                     }
                 });
         }; 
         
-        var excluir = function(idConta) {
+        var excluir = function(conta) {
             modalExcluir()
                 .then(function() {
-                    remove(idConta);
+                    remove(conta);
                 });
         };
         
-        var remove = function(idConta) {
-            ContaService.delete(idConta)
+        var remove = function(conta) {
+            ContaService.delete(conta.idConta)
                 .then(function(data) { 
                     modalMessage("Conta " + data.nome + " Removida com sucesso!");
                     todos();                        

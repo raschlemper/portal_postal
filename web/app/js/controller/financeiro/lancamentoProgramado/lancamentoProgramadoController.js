@@ -193,6 +193,8 @@ app.controller('LancamentoProgramadoController',
                     lancamentoProgramado.centroCusto = "Diversos";
                 }
                 
+                if(lancamentoProgramado.favorecido) { lancamentoProgramado.favorecido = lancamentoProgramado.favorecido.nome; }
+                
                 return _.pick(lancamentoProgramado, 'idLancamentoProgramado', 'conta', 'tipo', 'tipoLancamento', 'dataVencimento', 'numero', 
                 'planoConta', 'centroCusto', 'favorecido', 'valor', 'situacao', 'frequencia', 'existeLancamento');
             })

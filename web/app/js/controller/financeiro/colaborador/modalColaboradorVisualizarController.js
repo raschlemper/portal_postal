@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('ModalColaboradorVisualizarController', 
-    ['$scope', '$modalInstance', '$filter', 'colaborador', 'MESSAGES', 
-    function ($scope, $modalInstance, $filter, colaborador, MESSAGES) {
+    ['$scope', '$modalInstance', 'colaborador', 'MESSAGES', 
+    function ($scope, $modalInstance, colaborador, MESSAGES) {
 
         var init = function () { 
             $scope.colaborador = colaborador;

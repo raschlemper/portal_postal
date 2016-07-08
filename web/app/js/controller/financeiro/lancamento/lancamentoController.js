@@ -210,6 +210,8 @@ app.controller('LancamentoController',
                     lancamento.planoConta = "Diversos";
                     lancamento.centroCusto = "Diversos";
                 }
+                
+                if(lancamento.favorecido) { lancamento.favorecido = lancamento.favorecido.nome; }
 
                 return _.pick(lancamento, 'idLancamento', 'tipo', 'anexos', 'dataLancamento', 'numero', 'planoConta', 'centroCusto', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico', 'situacao', 'numeroLoteConciliado');
             })

@@ -24,13 +24,13 @@ app.controller('ColaboradorController',
             $scope.linha = {
                 events: { 
                     edit: function(colaborador) {
-                        $scope.editar(colaborador.idColaborador);
+                        $scope.editar(colaborador);
                     },
                     remove: function(colaborador) {
-                        $scope.excluir(colaborador.idColaborador);
+                        $scope.excluir(colaborador);
                     },
                     view: function(colaborador) {
-                        $scope.visualizar(colaborador.idColaborador);
+                        $scope.visualizar(colaborador);
                     }
                 }
             }             
@@ -61,10 +61,10 @@ app.controller('ColaboradorController',
 
         // ***** VISUALIZAR ***** //
 
-        $scope.visualizar = function(idColaborador) {
-            ColaboradorService.get(idColaborador)
-                .then(function(colaborador) {
-                     visualizar(colaborador);          
+        $scope.visualizar = function(colaborador) {
+            ColaboradorService.get(colaborador.idColaborador)
+                .then(function(result) {
+                     visualizar(result);          
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -104,10 +104,10 @@ app.controller('ColaboradorController',
 
         // ***** EDITAR ***** //
 
-        $scope.editar = function(idColaborador) {
-            ColaboradorService.get(idColaborador)
-                .then(function(colaborador) {
-                     editar(colaborador);
+        $scope.editar = function(colaborador) {
+            ColaboradorService.get(colaborador.idColaborador)
+                .then(function(result) {
+                     editar(result);
                 })
                 .catch(function(e) {
                     modalMessage(e.error);
@@ -135,14 +135,14 @@ app.controller('ColaboradorController',
 
         // ***** EXCLUIR ***** //
 
-        $scope.excluir = function(idColaborador) {
-            $q.all([ColaboradorService.getLancamento(idColaborador),
-                    ColaboradorService.getLancamentoProgramado(idColaborador)])
+        $scope.excluir = function(colaborador) {
+            $q.all([ColaboradorService.getLancamento(colaborador.idColaborador),
+                    ColaboradorService.getLancamentoProgramado(colaborador.idColaborador)])
                 .then(function(values) {   
                     if(values[0].lancamentos.length || values[1].lancamentosProgramados.length) {
                         modalMessage("Esta colaborador não pode ser excluído! <br/> Existem Lançamentos vinculados a esta colaborador.");
                     } else {
-                        excluir(idColaborador);
+                        excluir(colaborador);
                     }
                 })
                 .catch(function(e) {
@@ -150,15 +150,15 @@ app.controller('ColaboradorController',
                 });
         }; 
         
-        var excluir = function(idColaborador) {
+        var excluir = function(colaborador) {
             modalExcluir()
                 .then(function() {
-                    remove(idColaborador);
+                    remove(colaborador);
                 });
         };
         
-        var remove = function(idColaborador) {
-            ColaboradorService.delete(idColaborador)
+        var remove = function(colaborador) {
+            ColaboradorService.delete(colaborador.idColaborador)
                 .then(function(data) { 
                     modalMessage("Colaborador " + data.nome + " Removido com sucesso!");
                     todos();                        

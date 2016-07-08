@@ -58,7 +58,7 @@ public class LancamentoDAO extends GenericDAO {
     }
 
     public List<Lancamento> findByConta(Integer idConta) throws Exception {
-        String sql = "SELECT lancamento.*, plano_conta.*, centro_custo.*, lancamento_transferencia.*, lancamento_programado.*, "
+        String sql = "SELECT lancamento.*, plano_conta.*, centro_custo.*, lancamento_transferencia.*, lancamento_programado.*, favorecido.*, "
                    + "(SELECT count(1) FROM lancamento_anexo WHERE lancamento.idLancamento = lancamento_anexo.idLancamento) as anexos "
                    + "FROM conta, lancamento "
                    + "LEFT OUTER JOIN favorecido ON(lancamento.idFavorecido = favorecido.idFavorecido) "
