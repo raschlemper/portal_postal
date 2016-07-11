@@ -29,6 +29,26 @@ CREATE TABLE `colaborador` (
   PRIMARY KEY (`idColaborador`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `fornecedor` (
+  `idFornecedor`         INT NOT NULL AUTO_INCREMENT,
+  `nomeFantasia`         VARCHAR(254) NOT NULL,
+  `razaoSocial`          VARCHAR(254) NOT NULL,
+  `status`               INT NOT NULL,
+  `tipoPessoa`           INT NOT NULL,
+  `cpf`                  VARCHAR(14) NULL,
+  `cnpj`                 VARCHAR(20) NULL,
+  `inscricaoEstadual`    VARCHAR(50) NULL,
+  `fundacao`             INT NULL,
+  `capitalSocial`        INT NULL,
+  `categoria`            INT NULL,
+  `potencial`            INT NULL,
+  `telefone`             VARCHAR(20) NULL,
+  `celular`              VARCHAR(20) NULL,
+  `email`                VARCHAR(254) NULL,
+  `observacao`           VARCHAR(254) NULL,
+  PRIMARY KEY (`idColaborador`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `endereco` (
   `idEndereco`  INT NOT NULL AUTO_INCREMENT,
   `logradouro`  VARCHAR(254) NULL,
@@ -119,6 +139,33 @@ ADD CONSTRAINT `fk_colaboradorendereco_endereco`
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
+CREATE TABLE `fornecedor_endereco` (
+  `idFornecedorEndereco` INT NOT NULL AUTO_INCREMENT,
+  `idFornecedor`         INT NOT NULL,
+  `idEndereco`           INT NOT NULL,
+  PRIMARY KEY (`idFornecedorEndereco`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `fornecedor_endereco` 
+ADD INDEX `i_fornecedorendereco_fornecedor` (`idFornecedor` ASC);
+
+ALTER TABLE `fornecedor_endereco` 
+ADD INDEX `i_fornecedorendereco_endereco` (`idEndereco` ASC);
+
+ALTER TABLE `fornecedor_endereco` 
+ADD CONSTRAINT `fk_fornecedorendereco_fornecedor`
+  FOREIGN KEY (`idFornecedor`)
+  REFERENCES `fornecedor` (`idFornecedor`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `fornecedor_endereco` 
+ADD CONSTRAINT `fk_fornecedorendereco_endereco`
+  FOREIGN KEY (`idEndereco`)
+  REFERENCES `endereco` (`idEndereco`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
 CREATE TABLE `favorecido` (
   `idFavorecido`  INT NOT NULL AUTO_INCREMENT,
   `tipo`          INT NULL,
@@ -133,9 +180,19 @@ ALTER TABLE `favorecido`
 ADD INDEX `i_favorecido_colaborador` (`idColaborador` ASC);
 
 ALTER TABLE `favorecido` 
+ADD INDEX `i_favorecido_fornecedor` (`idFornecedor` ASC);
+
+ALTER TABLE `favorecido` 
 ADD CONSTRAINT `fk_favorecido_colaborador`
   FOREIGN KEY (`idColaborador`)
   REFERENCES `colaborador` (`idColaborador`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `favorecido` 
+ADD CONSTRAINT `fk_favorecido_fornecedor`
+  FOREIGN KEY (`idFornecedor`)
+  REFERENCES `colaborador` (`idFornecedor`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
