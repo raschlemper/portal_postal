@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('CartaoCreditoController', 
-    ['$scope', 'CartaoCreditoService', 'ModalService', 'MESSAGES',
-    function ($scope, CartaoCreditoService, ModalService, MESSAGES) {
+    ['$scope', 'CartaoCreditoService', 'ModalService', 'ContaHandler', 'MESSAGES',
+    function ($scope, CartaoCreditoService, ModalService, ContaHandler, MESSAGES) {
 
         var init = function () {
             $scope.cartaoCreditos = [];
@@ -81,6 +81,7 @@ app.controller('CartaoCreditoController',
         var salvar = function() {
             modalSalvar()
                 .then(function(result) {
+                    result = ajustarDados(result);
                     save(result);
                 });
         };
@@ -111,6 +112,7 @@ app.controller('CartaoCreditoController',
         var editar = function(cartaoCredito) {
             modalSalvar(cartaoCredito)
                 .then(function(result) {
+                    result = ajustarDados(result);
                     update(result);
                 });           
         };
@@ -158,6 +160,19 @@ app.controller('CartaoCreditoController',
                 .catch(function(e) {
                     modalMessage(e);
                 });
+        };
+
+        // ***** AJUSTAR ***** //
+        
+        var ajustarDados = function(data) {  
+            if(data.contas) {
+                var contas = [];
+                data.contas.map(function(conta) {
+                    contas.push(ContaHandler.handle(conta));
+                });
+                data.contas = contas;
+            }    
+            return data;
         };
 
         // ***** MODAL ***** //

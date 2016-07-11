@@ -111,10 +111,11 @@ app.controller('ContaCorrenteController',
         };
         
         var editar = function(contaCorrente) {
-            modalSalvar(contaCorrente).then(function(result) {
-                result = ajustarDados(result);
-                update(result);
-            });            
+            modalSalvar(contaCorrente)
+                .then(function(result) {
+                    result = ajustarDados(result);
+                    update(result);
+                });            
         };
         
         var update = function(contaCorrente) {

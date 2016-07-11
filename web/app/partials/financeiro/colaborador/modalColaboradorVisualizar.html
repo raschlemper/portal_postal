@@ -51,13 +51,13 @@
                         <div class="col-md-4 text-right">
                             <label>Sexo:</label>
                         </div>
-                        <div class="col-md-8">{{(colaborador.sexo.descricao)}}</div>
+                        <div class="col-md-8">{{colaborador.sexo.descricao}}</div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 text-right">
                             <label>Data Nascimento:</label>
                         </div>
-                        <div class="col-md-8">{{(colaborador.dataNascimento | date: 'dd/MM/yyyy')}}</div>
+                        <div class="col-md-8">{{colaborador.dataNascimento | date: 'dd/MM/yyyy'}}</div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 text-right">
@@ -71,81 +71,209 @@
                         </div>
                         <div class="col-md-8">{{colaborador.celular | telefone}}</div>
                     </div> 
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Email:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.email}}</div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Cônjuge:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.conjuge}}</div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Estado Civil:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.estadoCivil.descricao}}</div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Naturalidade:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.naturalidade}}</div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Nacionalidade:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.nacionalidade}}</div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Dependentes:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.dependentes}}</div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Nome Pai:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.nomePai}}</div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Nome Mãe:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.nomeMae}}</div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Observação:</label>
+                        </div>
+                        <div class="col-md-8 angular-with-newlines">{{colaborador.observacao}}</div>
+                    </div>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="beneficiario">
+                <div role="tabpanel" class="tab-pane" id="endereco">
                     <div class="row">
                         <div class="col-md-4 text-right">
-                            <label>Nome Beneficiário:</label>
+                            <label>Logradouro:</label>
                         </div>
-                        <div class="col-md-8">{{colaborador.beneficiarioNome}}</div>
+                        <div class="col-md-8">{{colaborador.endereco.logradouro}}</div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 text-right">
-                            <label>Doc. Beneficiário:</label>
+                            <label>CEP:</label>
                         </div>
-                        <div class="col-md-8">{{colaborador.beneficiarioDocumento}}</div>
+                        <div class="col-md-8">{{colaborador.endereco.cep}}</div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 text-right">
-                            <label>Lograd. Beneficiário:</label>
+                            <label>Complemento:</label>
                         </div>
-                        <div class="col-md-8">{{colaborador.beneficiarioLogradouro}}</div>
+                        <div class="col-md-8">{{colaborador.endereco.complemento}}</div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 text-right">
-                            <label>Bairro Beneficiário:</label>
+                            <label>Número:</label>
                         </div>
-                        <div class="col-md-8">{{colaborador.beneficiarioBairro}}</div>
+                        <div class="col-md-8">{{colaborador.endereco.numero}}</div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 text-right">
-                            <label>Cidade Beneficiário:</label>
+                            <label>Bairo:</label>
                         </div>
-                        <div class="col-md-8">{{colaborador.beneficiarioCidade}}</div>
+                        <div class="col-md-8">{{colaborador.endereco.bairro}}</div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 text-right">
-                            <label>Uf Beneficiário:</label>
+                            <label>Cidade:</label>
                         </div>
-                        <div class="col-md-8">{{colaborador.beneficiarioUf}}</div>
+                        <div class="col-md-8">{{colaborador.endereco.cidade}}</div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 text-right">
-                            <label>Cep Beneficiário:</label>
+                            <label>Estado:</label>
                         </div>
-                        <div class="col-md-8">{{colaborador.beneficiarioCep}}</div>
+                        <div class="col-md-8">{{colaborador.endereco.estado}}</div>
                     </div>         
                 </div>
-                <div role="tabpanel" class="tab-pane" id="instrucao">
+                <div role="tabpanel" class="tab-pane" id="profissional">
                     <div class="row">
                         <div class="col-md-4 text-right">
-                            <label>Instrução 01:</label>
+                            <label>Cargo / Função:</label>
                         </div>
-                        <div class="col-md-8">{{colaborador.instrucao01}}</div>
+                        <div class="col-md-8">{{colaborador.informacaoProfissional.cargoFuncao}}</div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 text-right">
-                            <label>Instrução 02:</label>
+                            <label>Salário:</label>
                         </div>
-                        <div class="col-md-8">{{colaborador.instrucao02}}</div>
+                        <div class="col-md-8">{{colaborador.informacaoProfissional.salario}}</div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 text-right">
-                            <label>Instrução 03:</label>
+                            <label>Admissão:</label>
                         </div>
-                        <div class="col-md-8">{{colaborador.instrucao03}}</div>
+                        <div class="col-md-8">{{colaborador.informacaoProfissional.dataAdmissao | date: 'dd/MM/yyyy'}}</div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 text-right">
-                            <label>Instrução 04:</label>
+                            <label>Demissão:</label>
                         </div>
-                        <div class="col-md-8">{{colaborador.instrucao04}}</div>
+                        <div class="col-md-8">{{colaborador.informacaoProfissional.dataDemissao | date: 'dd/MM/yyyy'}}</div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 text-right">
-                            <label>Instrução 05:</label>
+                            <label>PIS / PASEP:</label>
                         </div>
-                        <div class="col-md-8">{{colaborador.instrucao05}}</div>
+                        <div class="col-md-8">{{colaborador.informacaoProfissional.pisPasep}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Título Eleitoral:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.informacaoProfissional.tituloEleitoral}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Cert. Reservista:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.informacaoProfissional.certificadoReservista}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>N. CTPS:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.informacaoProfissional.ctps}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Horário Entrada:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.informacaoProfissional.horarioEntrada | date: 'hh:mm'}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Horário Saída:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.informacaoProfissional.horarioSaida | date: 'hh:mm'}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Intervalo Início:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.informacaoProfissional.intervaloDe | date: 'hh:mm'}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Intervalo Fim:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.informacaoProfissional.intervaloAte | date: 'hh:mm'}}</div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Observação:</label>
+                        </div>
+                        <div class="col-md-8 angular-with-newlines">{{colaborador.informacaoProfissional.observacao}}</div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="bancaria">
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Tipo Conta:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.informacaoBancaria.tipoConta.descricao}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Banco:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.informacaoBancaria.banco}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Agência:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.informacaoBancaria.agencia}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <label>Conta Corrente:</label>
+                        </div>
+                        <div class="col-md-8">{{colaborador.informacaoBancaria.contaCorrente}}</div>
                     </div>
                 </div>
             </div>

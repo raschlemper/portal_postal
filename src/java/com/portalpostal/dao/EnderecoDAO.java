@@ -86,5 +86,23 @@ public class EnderecoDAO extends GenericDAO {
         remove(sql, params, enderecoHandler);
         return endereco;
     }
+
+    public Integer saveColaborador(Integer idColaborador, Integer idEndereco) throws Exception {  
+        String sql = "INSERT INTO colaborador_endereco (idColaborador, idEndereco) "
+                   + "VALUES(:idColaborador, :idEndereco)";        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idColaborador", idColaborador);
+        params.put("idEndereco", idEndereco);
+        return save(sql, params, enderecoHandler);
+    }
+
+    public void removeColaborador(Integer idColaborador, Integer idEndereco) throws Exception { 
+        String sql = "DELETE FROM colaborador_endereco WHERE idEndereco = :idEndereco AND idColaborador = :idColaborador ";
+        Endereco endereco = find(idEndereco);
+        Map<String, Object> params = new HashMap<String, Object>();        
+        params.put("idEndereco", idEndereco);    
+        params.put("idColaborador", idColaborador);
+        remove(sql, params, enderecoHandler);
+    }
     
 }

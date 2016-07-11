@@ -91,7 +91,7 @@
                                     <label class="small">Email</label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-asterisk"></i></span>
-                                        <input type="email" autocomplete="off" name="email" class="form-control" ng-model="colaborador.email"
+                                        <input type="text" autocomplete="off" name="email" class="form-control" ng-model="colaborador.email"
                                                placeholder="Email do colaborador"/>                                               
                                     </div>
                                 </div>
@@ -100,14 +100,14 @@
                                     <div class="input-group">
                                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
                                         <input type="number" autocomplete="off" name="conjuge" class="form-control" ng-model="colaborador.conjuge" 
-                                               ng-required="true" placeholder="Cônjuge do colaborador"/>   
+                                               placeholder="Cônjuge do colaborador"/>   
                                     </div>
                                 </div>  
                                 <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
                                     <label class="small">Estado Civil</label>
                                     <div class="input-group">
                                         <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                        <select class="form-control" name="estadoCivil" ng-model="colaborador.estadoCivil" ng-required="true"
+                                        <select class="form-control" name="estadoCivil" ng-model="colaborador.estadoCivil"
                                                 ng-options="estadoCivil.descricao for estadoCivil in estadosCivil track by estadoCivil.id"></select>
                                     </div>
                                 </div>    
@@ -330,10 +330,10 @@
                                     <div class="input-group">
                                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
                                         <input type="number" autocomplete="off" name="agencia" class="form-control" ng-model="colaborador.informacaoBancaria.agencia" 
-                                               ng-required="true" placeholder="Número agência"/>     
+                                               placeholder="Número agência"/>     
                                         <span class="input-group-addon">-</span>
                                         <input type="number" autocomplete="off" name="agenciaDv"  min="0" max="99" class="form-control" ng-model="colaborador.informacaoBancaria.agenciaDv" 
-                                               ng-required="true"/>                                               
+                                              />                                               
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -341,10 +341,10 @@
                                     <div class="input-group">
                                         <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
                                         <input type="number" autocomplete="off" name="contaCorrente" class="form-control" ng-model="colaborador.informacaoBancaria.contaCorrente" 
-                                               ng-required="true" placeholder="Número conta corrente"/>     
+                                               placeholder="Número conta corrente"/>     
                                         <span class="input-group-addon">-</span>
                                         <input type="number" autocomplete="off" name="contaCorrenteDv" min="0" max="99" class="form-control" ng-model="colaborador.informacaoBancaria.contaCorrenteDv" 
-                                               ng-required="true" />                                       
+                                               />                                       
                                     </div>
                                 </div>          
                             </div>

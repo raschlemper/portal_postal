@@ -56,4 +56,19 @@ public class EnderecoService {
         return true;                
     } 
     
+    // ***** COLABORADOR ***** //
+    
+    public Endereco saveColaborador(Integer idColaborador, Endereco endereco) throws Exception {
+        init();
+        endereco = save(endereco);
+        enderecoDAO.saveColaborador(idColaborador, endereco.getIdEndereco());
+        return endereco;
+    } 
+    
+    public Endereco deleteColaborador(Integer idColaborador, Integer idEndereco) throws Exception {
+        init();      
+        enderecoDAO.removeColaborador(idColaborador, idEndereco);
+        return enderecoDAO.remove(idEndereco);
+    }  
+    
 }

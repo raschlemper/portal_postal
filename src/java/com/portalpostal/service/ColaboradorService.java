@@ -97,7 +97,8 @@ public class ColaboradorService {
     public boolean podeExcluir(Integer idColaborador) throws Exception {
         init();
         Favorecido favorecido = favorecidoService.findByColaborador(idColaborador);
-        if(favorecido != null) return false;
+        if(favorecido == null) return true;        
+        if(!favorecidoService.podeExcluir(idColaborador)) return false;
         return true;                
     } 
     
@@ -148,7 +149,7 @@ public class ColaboradorService {
         if(endereco.getIdEndereco() != null) {
             endereco = enderecoService.update(endereco);
         } else {
-            endereco = enderecoService.save(endereco);
+            endereco = enderecoService.saveColaborador(colaborador.getIdColaborador(), endereco);
         }
         colaborador.setEndereco(endereco);
         return colaborador;
@@ -156,8 +157,9 @@ public class ColaboradorService {
     
     private void removerEndereco(Colaborador colaborador) throws Exception {
         Endereco endereco = colaborador.getEndereco();
-        if(endereco != null) {   
-            enderecoService.update(endereco);            
+        if(endereco != null) {     
+            enderecoService.deleteColaborador(colaborador.getIdColaborador(), endereco.getIdEndereco());    
+            enderecoService.delete(endereco.getIdEndereco());           
         }
     }
     
@@ -225,8 +227,8 @@ public class ColaboradorService {
     }
     
     private void removerFavorecido(Colaborador colaborador) throws Exception {
-        InformacaoBancaria informacaoBancaria = colaborador.getInformacaoBancaria();
-        if(informacaoBancaria != null) {   
+        Favorecido favorecido = getFavorecido(colaborador);
+        if(favorecido != null) {   
             favorecidoService.deleteByColaborador(colaborador.getIdColaborador());            
         }
     }
