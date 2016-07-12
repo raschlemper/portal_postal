@@ -4,7 +4,7 @@ import com.portalpostal.model.serializer.TipoPessoaFornecedorSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonSerialize(using = TipoPessoaFornecedorSerializer.class)
-public enum TipoPessoaFornecedor {    
+public enum TipoPessoa {    
     
     ATIVO("fisica", "Física"),
     CANCELADO("juridica", "Jurídica");
@@ -12,7 +12,7 @@ public enum TipoPessoaFornecedor {
     private final String codigo;
     private final String descricao;
     
-    TipoPessoaFornecedor(String codigo, String descricao) {
+    TipoPessoa(String codigo, String descricao) {
         this.codigo = codigo;
         this.descricao = descricao;
     }

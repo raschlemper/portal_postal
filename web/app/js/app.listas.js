@@ -88,6 +88,9 @@ app.constant('LISTAS', {
     "statusColaborador": [{'id': 0, 'codigo': 'ativo', 'descricao': 'Ativo'},  
                           {'id': 1, 'codigo': 'cancelado', 'descricao': 'Cancelado'}],
 
+    "statusFornecedor": [{'id': 0, 'codigo': 'ativo', 'descricao': 'Ativo'},  
+                         {'id': 1, 'codigo': 'cancelado', 'descricao': 'Cancelado'}],
+
     "statusVeiculo": [{'id': 0, 'codigo': 'novo', 'descricao': 'Novo'},  
                       {'id': 1, 'codigo': 'seminovo', 'descricao': 'Seminovo'},  
                       {'id': 2, 'codigo': 'usado', 'descricao': 'Usado'}],
@@ -97,6 +100,9 @@ app.constant('LISTAS', {
                   {'id': 2, 'codigo': 'poupanca', 'descricao': 'Poupança'},
                   {'id': 3, 'codigo': 'cobranca', 'descricao': 'Cobrança'},
                   {'id': 4, 'codigo': 'cartaocredito', 'descricao': 'Cartão Crédito'}],
+
+    "tipoPessoa": [{'id': 0, 'codigo': 'fisica', 'descricao': 'Física'},
+                   {'id': 1, 'codigo': 'juridica', 'descricao': 'Jurídica'}],
 
     "tipoVeiculo": [{'id': 0, 'codigo': 'motos', 'descricao': 'Moto'},
                     {'id': 1, 'codigo': 'carros', 'descricao': 'Carro'},

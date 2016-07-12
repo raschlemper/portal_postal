@@ -28,11 +28,6 @@ public class EnderecoService {
         return enderecoDAO.find(idEndereco);
     }  
     
-    public List<Endereco> findByColaborador(Integer idColaborador) throws Exception {
-        init();
-        return enderecoDAO.findByColaborador(idColaborador);
-    }  
-    
     public Endereco save(Endereco endereco) throws Exception {
         init();
         return enderecoDAO.save(endereco);
@@ -56,7 +51,12 @@ public class EnderecoService {
         return true;                
     } 
     
-    // ***** COLABORADOR ***** //
+    // ***** COLABORADOR ***** // 
+    
+    public List<Endereco> findByColaborador(Integer idColaborador) throws Exception {
+        init();
+        return enderecoDAO.findByColaborador(idColaborador);
+    } 
     
     public Endereco saveColaborador(Integer idColaborador, Endereco endereco) throws Exception {
         init();
@@ -70,5 +70,25 @@ public class EnderecoService {
         enderecoDAO.removeColaborador(idColaborador, idEndereco);
         return enderecoDAO.remove(idEndereco);
     }  
+    
+    // ***** FORNACEDOR ***** // 
+    
+    public List<Endereco> findByFornecedor(Integer idFornecedor) throws Exception {
+        init();
+        return enderecoDAO.findByFornecedor(idFornecedor);
+    } 
+    
+    public Endereco saveFornecedor(Integer idFornecedor, Endereco endereco) throws Exception {
+        init();
+        endereco = save(endereco);
+        enderecoDAO.saveFornecedor(idFornecedor, endereco.getIdEndereco());
+        return endereco;
+    } 
+    
+    public Endereco deleteFornecedor(Integer idFornecedor, Integer idEndereco) throws Exception {
+        init();      
+        enderecoDAO.removeFornecedor(idFornecedor, idEndereco);
+        return enderecoDAO.remove(idEndereco);
+    } 
     
 }

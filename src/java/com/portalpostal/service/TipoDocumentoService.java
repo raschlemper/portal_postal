@@ -52,7 +52,7 @@ public class TipoDocumentoService {
     
     private void validation(TipoDocumento tipoDocumento) throws Exception {  
         if(existeTipoDocumento(tipoDocumento)) {
-            throw new Exception("Este TipoDocumento já foi cadastrado!");
+            throw new Exception("Este Documento já foi cadastrado!");
         } 
     }  
     

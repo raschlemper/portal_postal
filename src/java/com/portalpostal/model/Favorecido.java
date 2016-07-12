@@ -8,7 +8,7 @@ public class Favorecido {
     private Integer idFavorecido;
     private TipoFavorecido tipo;
     private Colaborador colaborador;
-//    private Fornecedor fornecedor;
+    private Fornecedor fornecedor;
     private Clientes cliente;
     private String nome;
 
@@ -34,6 +34,14 @@ public class Favorecido {
 
     public void setColaborador(Colaborador colaborador) {
         this.colaborador = colaborador;
+    }
+
+    public Fornecedor getFornecedor() {
+        return fornecedor;
+    }
+
+    public void setFornecedor(Fornecedor fornecedor) {
+        this.fornecedor = fornecedor;
     }
 
     public Clientes getCliente() {

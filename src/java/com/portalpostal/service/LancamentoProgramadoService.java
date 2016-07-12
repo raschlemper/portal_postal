@@ -91,6 +91,11 @@ public class LancamentoProgramadoService {
         return lancamentoProgramadoDAO.findByColaborador(idColaborador);
     } 
     
+    public List<LancamentoProgramado> findByFornecedor(Integer idFornecedor) throws Exception {
+        init();
+        return lancamentoProgramadoDAO.findByFornecedor(idFornecedor);
+    } 
+    
     public LancamentoProgramado save(LancamentoProgramado lancamentoProgramado) throws Exception {
         init();
 //        LancamentoProgramado lancamentoProgramadoResult = lancamentoProgramadoDAO.save(ajustaLancamento(lancamentoProgramado));

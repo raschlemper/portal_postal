@@ -140,7 +140,7 @@ app.controller('ColaboradorController',
                     ColaboradorService.getLancamentoProgramado(colaborador.idColaborador)])
                 .then(function(values) {   
                     if(values[0].lancamentos.length || values[1].lancamentosProgramados.length) {
-                        modalMessage("Esta colaborador não pode ser excluído! <br/> Existem Lançamentos vinculados a esta colaborador.");
+                        modalMessage("Este colaborador não pode ser excluído! <br/> Existem Lançamentos vinculados a esta colaborador.");
                     } else {
                         excluir(colaborador);
                     }

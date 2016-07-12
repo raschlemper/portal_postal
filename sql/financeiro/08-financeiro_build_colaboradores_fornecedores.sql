@@ -1,11 +1,13 @@
 USE pp_06895434000183;
 
 DROP TABLE colaborador_endereco;
+DROP TABLE fornecedor_endereco;
 DROP TABLE informacao_profissional;
 DROP TABLE informacao_bancaria;
 DROP TABLE endereco;
 DROP TABLE favorecido;
 DROP TABLE colaborador;
+DROP TABLE fornecedor;
 
 CREATE TABLE `colaborador` (
   `idColaborador`        INT NOT NULL AUTO_INCREMENT,
@@ -36,12 +38,14 @@ CREATE TABLE `fornecedor` (
   `status`               INT NOT NULL,
   `tipoPessoa`           INT NOT NULL,
   `cpf`                  VARCHAR(14) NULL,
+  `rg`                   VARCHAR(50) NULL,
   `cnpj`                 VARCHAR(20) NULL,
+  `sexo`                 INT DEFAULT NULL,
+  `dataNascimento`       DATETIME NULL,
   `inscricaoEstadual`    VARCHAR(50) NULL,
-  `fundacao`             INT NULL,
-  `capitalSocial`        INT NULL,
-  `categoria`            INT NULL,
-  `potencial`            INT NULL,
+  `dataFundacao`         DATETIME NULL,
+  `capitalSocial`        DECIMAL(13,2) NULL,
+  `idTipoCategoria`      INT NULL,
   `telefone`             VARCHAR(20) NULL,
   `celular`              VARCHAR(20) NULL,
   `email`                VARCHAR(254) NULL,

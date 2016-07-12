@@ -36,6 +36,15 @@ public class EnderecoDAO extends GenericDAO {
         return findAll(sql, params, enderecoHandler);
     }
 
+    public List<Endereco> findByFornecedor(Integer idFornecedor) throws Exception {
+        String sql = "SELECT endereco.* FROM endereco, fornecedor_endereco "
+                   + "WHERE endereco.idEndereco = fornecedor_endereco.idEndereco "
+                   + "AND fornecedor_endereco.idFornecedor = :idFornecedor";
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idFornecedor", idFornecedor);
+        return findAll(sql, params, enderecoHandler);
+    }
+
     public Endereco findVinculoColaborador(Integer idEndereco) throws Exception {
         String sql = "SELECT endereco.* FROM endereco, colaborador_endereco "
                    + "WHERE endereco.idEndereco = colaborador_endereco.idEndereco "
@@ -96,12 +105,28 @@ public class EnderecoDAO extends GenericDAO {
         return save(sql, params, enderecoHandler);
     }
 
-    public void removeColaborador(Integer idColaborador, Integer idEndereco) throws Exception { 
-        String sql = "DELETE FROM colaborador_endereco WHERE idEndereco = :idEndereco AND idColaborador = :idColaborador ";
-        Endereco endereco = find(idEndereco);
+    public Integer saveFornecedor(Integer idColaborador, Integer idEndereco) throws Exception {  
+        String sql = "INSERT INTO colaborador_endereco (idColaborador, idEndereco) "
+                   + "VALUES(:idColaborador, :idEndereco)";        
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idColaborador", idColaborador);
+        params.put("idEndereco", idEndereco);
+        return save(sql, params, enderecoHandler);
+    }
+
+    public void removeColaborador(Integer idFornecedor, Integer idEndereco) throws Exception { 
+        String sql = "DELETE FROM colaborador_endereco WHERE idEndereco = :idEndereco AND idFornecedor = :idFornecedor ";
         Map<String, Object> params = new HashMap<String, Object>();        
         params.put("idEndereco", idEndereco);    
-        params.put("idColaborador", idColaborador);
+        params.put("idFornecedor", idFornecedor);
+        remove(sql, params, enderecoHandler);
+    }
+
+    public void removeFornecedor(Integer idFornecedor, Integer idEndereco) throws Exception { 
+        String sql = "DELETE FROM colaborador_endereco WHERE idEndereco = :idEndereco AND idFornecedor = :idFornecedor ";
+        Map<String, Object> params = new HashMap<String, Object>();        
+        params.put("idEndereco", idEndereco);    
+        params.put("idFornecedor", idFornecedor);
         remove(sql, params, enderecoHandler);
     }
     

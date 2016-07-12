@@ -2,9 +2,9 @@ package com.portalpostal.controller;
 
 import Controle.ContrErroLog;
 import com.portalpostal.validation.Validation;
-import com.portalpostal.model.TipoFormaPagamento;
-import com.portalpostal.service.TipoFormaPagamentoService;
-import com.portalpostal.validation.TipoFormaPagamentoValidation;
+import com.portalpostal.model.TipoCategoria;
+import com.portalpostal.service.TipoCategoriaService;
+import com.portalpostal.validation.TipoCategoriaValidation;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -21,8 +21,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/financeiro/tipo/formapagamento")
-public class TipoFormaPagamentoController {
+@Path("/financeiro/tipo/categoria")
+public class TipoCategoriaController {
     
     @Context
     private HttpServletRequest request;
@@ -30,33 +30,33 @@ public class TipoFormaPagamentoController {
     private HttpSession sessao;
     private String nomeBD;
     
-    private TipoFormaPagamentoService tipoFormaPagamentoService;
+    private TipoCategoriaService tipoCategoriaService;
 
     private void init() {
         sessao = request.getSession();
         nomeBD = (String) sessao.getAttribute("nomeBD");
-        tipoFormaPagamentoService = new TipoFormaPagamentoService(nomeBD);
+        tipoCategoriaService = new TipoCategoriaService(nomeBD);
     }
     
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<TipoFormaPagamento> findAll() {
+    public List<TipoCategoria> findAll() {
         try {
             init();    
-            return tipoFormaPagamentoService.findAll();
+            return tipoCategoriaService.findAll();
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     }  
     
     @GET
-    @Path("/{idTipoFormaPagamento}")
+    @Path("/{idTipoCategoria}")
     @Produces(MediaType.APPLICATION_JSON)
-    public TipoFormaPagamento find(@PathParam("idTipoFormaPagamento") Integer idTipoFormaPagamento) {
+    public TipoCategoria find(@PathParam("idTipoCategoria") Integer idTipoCategoria) {
         try {
             init();    
-            return tipoFormaPagamentoService.find(idTipoFormaPagamento);
+            return tipoCategoriaService.find(idTipoCategoria);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -65,10 +65,10 @@ public class TipoFormaPagamentoController {
     @GET
     @Path("/descricao/{descricao}")
     @Produces(MediaType.APPLICATION_JSON)
-    public TipoFormaPagamento findByDescricao(@PathParam("descricao") String descricao) {
+    public TipoCategoria findByDescricao(@PathParam("descricao") String descricao) {
         try {
             init();    
-            return tipoFormaPagamentoService.findByDescricao(descricao);
+            return tipoCategoriaService.findByDescricao(descricao);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -78,52 +78,52 @@ public class TipoFormaPagamentoController {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public TipoFormaPagamento save(TipoFormaPagamento tipoFormaPagamento) {
+    public TipoCategoria save(TipoCategoria tipoCategoria) {
         try {
             init();
-            validation(tipoFormaPagamento);
-            return tipoFormaPagamentoService.save(tipoFormaPagamento);
+            validation(tipoCategoria);
+            return tipoCategoriaService.save(tipoCategoria);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     } 
     
     @PUT
-    @Path("/{idTipoFormaPagamento}")
+    @Path("/{idTipoCategoria}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public TipoFormaPagamento update(TipoFormaPagamento tipoFormaPagamento) {
+    public TipoCategoria update(TipoCategoria tipoCategoria) {
         try {
             init();
-            validation(tipoFormaPagamento);
-            return tipoFormaPagamentoService.update(tipoFormaPagamento);
+            validation(tipoCategoria);
+            return tipoCategoriaService.update(tipoCategoria);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     } 
     
     @DELETE
-    @Path("/{idTipoFormaPagamento}")
+    @Path("/{idTipoCategoria}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public TipoFormaPagamento delete(@PathParam("idTipoFormaPagamento") Integer idTipoFormaPagamento) {
+    public TipoCategoria delete(@PathParam("idTipoCategoria") Integer idTipoCategoria) {
         try {
             init();
-            return tipoFormaPagamentoService.delete(idTipoFormaPagamento);
+            return tipoCategoriaService.delete(idTipoCategoria);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     } 
     
-    private void validation(TipoFormaPagamento tipoFormaPagamento) throws Exception {  
-        Validation validacao = new TipoFormaPagamentoValidation();
-        if(!validacao.validar(tipoFormaPagamento)) {
+    private void validation(TipoCategoria tipoCategoria) throws Exception {  
+        Validation validacao = new TipoCategoriaValidation();
+        if(!validacao.validar(tipoCategoria)) {
             throw new WebApplicationException(getMessageError(validacao.getMsg()));
         } 
     }  
     
     private Response getMessageError(String msg) {  
-        int idErro = ContrErroLog.inserir("Portal Postal - ServTipoFormaPagamento", "Exception", null, msg);
+        int idErro = ContrErroLog.inserir("Portal Postal - ServTipoCategoria", "Exception", null, msg);
         return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN)
                 .entity("SYSTEM ERROR Nº: " + idErro + "<br/> Ocorreu um erro inesperado!").build();
     }

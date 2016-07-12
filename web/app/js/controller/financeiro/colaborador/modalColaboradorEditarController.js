@@ -1,39 +1,34 @@
 'use strict';
 
-app.controller('ModalColaboradorEditarController', 
-    ['$scope', '$modalInstance', 'colaborador', 'BancoService', 'CepService', 'ModalService', 'DatePickerService', 'LISTAS', 'MESSAGES',
-    function ($scope, $modalInstance, colaborador, BancoService, CepService, ModalService, DatePickerService, LISTAS, MESSAGES) {
+app.controller('ModalFornecedorEditarController', 
+    ['$scope', '$modalInstance', 'fornecedor', 'CategoriaService', 'CepService', 'ModalService', 'LISTAS', 'MESSAGES',
+    function ($scope, $modalInstance, fornecedor, CategoriaService, CepService, ModalService, LISTAS, MESSAGES) {
 
         var init = function () {  
-            $scope.situacoes = LISTAS.statusColaborador;
+            $scope.situacoes = LISTAS.statusFornecedor;
+            $scope.tipoPessoas = LISTAS.tipoPessoa;
             $scope.sexos = LISTAS.sexo;
-            $scope.estadosCivil = LISTAS.estadoCivil;
-            $scope.tipos = LISTAS.tipoConta;
-            $scope.colaborador = colaborador || {};  
-            $scope.colaborador.endereco = $scope.colaborador.endereco || {};
-            $scope.colaborador.informacaoProfissional = $scope.colaborador.informacaoProfissional || {};
-            $scope.colaborador.informacaoBancaria = $scope.colaborador.informacaoBancaria || {};
-            $scope.colaborador.status = (colaborador && colaborador.status) || $scope.situacoes[0]; 
-            $scope.colaborador.sexo = (colaborador && colaborador.sexo) || $scope.sexos[0];
-            $scope.colaborador.estadoCivil = (colaborador && colaborador.estadoCivil) || $scope.estadosCivil[0];
-            $scope.colaborador.informacaoBancaria.tipoConta = (colaborador && colaborador.informacaoBancaria.tipoConta) || $scope.tipos[0];
-            ajustesDadosInformacaoProfissional($scope.colaborador.informacaoProfissional);
+            $scope.fornecedor = fornecedor || {};  
+            $scope.fornecedor.endereco = $scope.fornecedor.endereco || {};
+            $scope.fornecedor.status = (fornecedor && fornecedor.status) || $scope.situacoes[0]; 
+            $scope.fornecedor.tipoPessoa = (fornecedor && fornecedor.tipoPessoa) || $scope.tipoPessoas[0]; 
+            $scope.fornecedor.sexo = (fornecedor && fornecedor.sexo) || $scope.sexos[0];
             getTitle();
-            bancos();
+            categorias();
         };
 
         // ***** CONTROLLER ***** //
         
         var getTitle = function() {
-            if(colaborador && colaborador.idColaborador) { $scope.title = "Editar Colaborador"; }
-            else { $scope.title = "Inserir Colaborador"; }
+            if(fornecedor && fornecedor.idFornecedor) { $scope.title = "Editar Fornecedor"; }
+            else { $scope.title = "Inserir Fornecedor"; }
         };
         
-        var bancos = function() {
-            BancoService.getAll()
+        var categorias = function() {
+            CategoriaService.getAll()
                 .then(function (data) {
-                    $scope.bancos = data;
-                    $scope.colaborador.informacaoBancaria.banco = $scope.colaborador.informacaoBancaria.banco || $scope.bancos[0];
+                    $scope.categorias = data;
+                    $scope.fornecedor.categoria = $scope.fornecedor.categoria || $scope.categorias[0];
                 })
                 .catch(function (e) {
                     console.log(e);
@@ -43,38 +38,22 @@ app.controller('ModalColaboradorEditarController',
         $scope.pesquisarCep = function(cep) {
             CepService.cep(cep)
                 .then(function (data) {
-                    $scope.colaborador.endereco.logradouro = data.logradouro;
-                    $scope.colaborador.endereco.bairro = data.bairro;
-                    $scope.colaborador.endereco.cidade = data.cidade;
-                    $scope.colaborador.endereco.estado = data.estado;
+                    $scope.fornecedor.endereco.logradouro = data.logradouro;
+                    $scope.fornecedor.endereco.bairro = data.bairro;
+                    $scope.fornecedor.endereco.cidade = data.cidade;
+                    $scope.fornecedor.endereco.estado = data.estado;
                 })
                 .catch(function (e) {
-                    $scope.colaborador.endereco.logradouro = '';
-                    $scope.colaborador.endereco.bairro = '';
-                    $scope.colaborador.endereco.cidade = '';
-                    $scope.colaborador.endereco.estado = '';
+                    $scope.fornecedor.endereco.logradouro = '';
+                    $scope.fornecedor.endereco.bairro = '';
+                    $scope.fornecedor.endereco.cidade = '';
+                    $scope.fornecedor.endereco.estado = '';
                 });
         };
         
-        var ajustesDadosInformacaoProfissional = function(informacaoProfissional) {
-            if(!informacaoProfissional) return;
-            if(informacaoProfissional.horarioEntrada) { 
-                informacaoProfissional.horarioEntrada = moment(informacaoProfissional.horarioEntrada).format("HH:mm"); 
-            }
-            if(informacaoProfissional.horarioSaida) { 
-                informacaoProfissional.horarioSaida = moment(informacaoProfissional.horarioSaida).format("HH:mm");
-            }
-            if(informacaoProfissional.intervaloDe) { 
-                informacaoProfissional.intervaloDe = moment(informacaoProfissional.intervaloDe).format("HH:mm");
-            }
-            if(informacaoProfissional.intervaloAte) { 
-                informacaoProfissional.intervaloAte = moment(informacaoProfissional.intervaloAte).format("HH:mm");
-            }
-        }
-        
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
-            $modalInstance.close($scope.colaborador);
+            $modalInstance.close($scope.fornecedor);
         };
         
         $scope.cancel = function () {
@@ -89,7 +68,7 @@ app.controller('ModalColaboradorEditarController',
 
         var validarForm = function (form) {
             if (form.nome.$error.required) {
-                alert('Preencha o nome do colaborador!');
+                alert('Preencha o nome do fornecedor!');
                 return false;
             }
             return true;

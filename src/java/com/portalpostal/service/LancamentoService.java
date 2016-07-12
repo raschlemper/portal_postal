@@ -92,9 +92,16 @@ public class LancamentoService {
         return lancamentos;
     } 
     
-    public List<Lancamento> findByColaborador(Integer idFavorecido) throws Exception {
+    public List<Lancamento> findByColaborador(Integer idColaborador) throws Exception {
         init();
-        List<Lancamento> lancamentos = lancamentoDAO.findByColaborador(idFavorecido);
+        List<Lancamento> lancamentos = lancamentoDAO.findByColaborador(idColaborador);
+        lancamentos = setRateios(lancamentos);
+        return lancamentos;
+    } 
+    
+    public List<Lancamento> findByFornecedor(Integer idFornecedor) throws Exception {
+        init();
+        List<Lancamento> lancamentos = lancamentoDAO.findByFornecedor(idFornecedor);
         lancamentos = setRateios(lancamentos);
         return lancamentos;
     } 

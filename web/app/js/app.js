@@ -123,6 +123,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
                 controller: 'ColaboradorController',
                 resolve: {}
             })
+            .state('app.financeiro.fornecedor', {
+                url: '/fornecedor',
+                templateUrl: 'partials/financeiro/fornecedor/fornecedor.html',
+                controller: 'FornecedorController',
+                resolve: {}
+            })
 //            .state('app.financeiro.banco', {
 //                url: '/banco',
 //                templateUrl: 'partials/financeiro/banco/banco.html',

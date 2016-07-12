@@ -34,18 +34,24 @@ public class FavorecidoDAO extends GenericDAO {
     }
 
     public Favorecido findByColaborador(Integer idColaborador) throws Exception {
-        String sql = "SELECT * FROM favorecido, colaborador "
-                   + "WHERE favorecido.idColaborador = colaborador.idColaborador "
-                   + "AND favorecido.idColaborador = :idColaborador";
+        String sql = "SELECT * FROM favorecido "
+                   + "WHERE favorecido.idColaborador = :idColaborador";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idColaborador", idColaborador);
         return (Favorecido) find(sql, params, favorecidoHandler);
     }
 
+    public Favorecido findByFornecedor(Integer idFornecedor) throws Exception {
+        String sql = "SELECT * FROM favorecido "
+                   + "WHERE favorecido.idFornecedor = :idFornecedor";
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idFornecedor", idFornecedor);
+        return (Favorecido) find(sql, params, favorecidoHandler);
+    }
+
     public Favorecido findByCliente(Integer idCliente) throws Exception {
-        String sql = "SELECT * FROM favorecido, clientes "
-                   + "WHERE favorecido.idCliente = clientes.codigo "
-                   + "AND favorecido.idCliente = :idCliente";
+        String sql = "SELECT * FROM favorecido "
+                   + "WHERE favorecido.idCliente = :idCliente";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idCliente", idCliente);
         return (Favorecido) find(sql, params, favorecidoHandler);
@@ -92,6 +98,20 @@ public class FavorecidoDAO extends GenericDAO {
         String sql = "DELETE FROM favorecido WHERE idColaborador = :idColaborador ";
         Map<String, Object> params = new HashMap<String, Object>();        
         params.put("idColaborador", idColaborador);
+        remove(sql, params, favorecidoHandler);
+    }
+
+    public void removeByFornecedor(Integer idFornecedor) throws Exception { 
+        String sql = "DELETE FROM favorecido WHERE idFornecedor = :idFornecedor ";
+        Map<String, Object> params = new HashMap<String, Object>();        
+        params.put("idFornecedor", idFornecedor);
+        remove(sql, params, favorecidoHandler);
+    }
+
+    public void removeByCliente(Integer idCliente) throws Exception { 
+        String sql = "DELETE FROM favorecido WHERE idCliente = :idCliente ";
+        Map<String, Object> params = new HashMap<String, Object>();        
+        params.put("idCliente", idCliente);
         remove(sql, params, favorecidoHandler);
     }
     

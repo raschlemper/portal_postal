@@ -34,16 +34,6 @@ public class FavorecidoService {
         return favorecidoDAO.find(idFavorecido);
     }  
     
-    public Favorecido findByColaborador(Integer idColaborador) throws Exception {
-        init();
-        return favorecidoDAO.findByColaborador(idColaborador);
-    }  
-    
-    public Favorecido findByCliente(Integer idCliente) throws Exception {
-        init();
-        return favorecidoDAO.findByCliente(idCliente);
-    }  
-    
     public Favorecido save(Favorecido favorecido) throws Exception {
         init();
         return favorecidoDAO.save(favorecido);
@@ -60,12 +50,6 @@ public class FavorecidoService {
         return favorecidoDAO.remove(idFavorecido);
     }   
     
-    public void deleteByColaborador(Integer idFavorecido) throws Exception {
-        init();
-        if(!podeExcluir(idFavorecido)) throw new Exception("Este favorecido não pode ser excluído!"); 
-        favorecidoDAO.removeByColaborador(idFavorecido);
-    }   
-    
     public boolean podeExcluir(Integer idFavorecido) throws Exception {
         init();
         List<Lancamento> lancamentos = lancamentoService.findByFavorecido(idFavorecido);
@@ -73,6 +57,45 @@ public class FavorecidoService {
         List<LancamentoProgramado> lancamentoProgramados = lancamentoProgramadoService.findByFavorecido(idFavorecido);
         if(!lancamentoProgramados.isEmpty()) return false;
         return true;                 
+    }  
+    
+    // ***** COLABORADOR ***** // 
+    
+    public Favorecido findByColaborador(Integer idColaborador) throws Exception {
+        init();
+        return favorecidoDAO.findByColaborador(idColaborador);
+    }   
+    
+    public void deleteByColaborador(Integer idFavorecido) throws Exception {
+        init();
+        if(!podeExcluir(idFavorecido)) throw new Exception("Este favorecido não pode ser excluído!"); 
+        favorecidoDAO.removeByColaborador(idFavorecido);
+    }    
+    
+    // ***** FORNECEDOR ***** // 
+    
+    public Favorecido findByFornecedor(Integer idFornecedor) throws Exception {
+        init();
+        return favorecidoDAO.findByFornecedor(idFornecedor);
+    }   
+    
+    public void deleteByFornecedor(Integer idFavorecido) throws Exception {
+        init();
+        if(!podeExcluir(idFavorecido)) throw new Exception("Este favorecido não pode ser excluído!"); 
+        favorecidoDAO.removeByFornecedor(idFavorecido);
+    }  
+    
+    // ***** CLIENTE ***** // 
+    
+    public Favorecido findByCliente(Integer idCliente) throws Exception {
+        init();
+        return favorecidoDAO.findByCliente(idCliente);
+    }   
+    
+    public void deleteByCliente(Integer idCliente) throws Exception {
+        init();
+        if(!podeExcluir(idCliente)) throw new Exception("Este favorecido não pode ser excluído!"); 
+        favorecidoDAO.removeByCliente(idCliente);
     }  
     
 }

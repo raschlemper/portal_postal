@@ -52,7 +52,7 @@ public class TipoFormaPagamentoService {
     
     private void validation(TipoFormaPagamento tipoFormaPagamento) throws Exception {  
         if(existeTipoFormaPagamento(tipoFormaPagamento)) {
-            throw new Exception("Este TipoFormaPagamento já foi cadastrado!");
+            throw new Exception("Este Forma Pagamento já foi cadastrado!");
         } 
     }  
     
