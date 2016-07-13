@@ -34,7 +34,7 @@ CREATE TABLE `colaborador` (
 CREATE TABLE `fornecedor` (
   `idFornecedor`         INT NOT NULL AUTO_INCREMENT,
   `nomeFantasia`         VARCHAR(254) NOT NULL,
-  `razaoSocial`          VARCHAR(254) NOT NULL,
+  `razaoSocial`          VARCHAR(254) NULL,
   `status`               INT NOT NULL,
   `tipoPessoa`           INT NOT NULL,
   `cpf`                  VARCHAR(14) NULL,
@@ -50,7 +50,7 @@ CREATE TABLE `fornecedor` (
   `celular`              VARCHAR(20) NULL,
   `email`                VARCHAR(254) NULL,
   `observacao`           VARCHAR(254) NULL,
-  PRIMARY KEY (`idColaborador`)
+  PRIMARY KEY (`idFornecedor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `endereco` (

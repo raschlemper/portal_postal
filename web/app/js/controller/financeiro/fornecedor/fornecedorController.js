@@ -15,8 +15,8 @@ app.controller('FornecedorController',
         
         var initTable = function() {            
             $scope.colunas = [
-                {label: 'Nome', column: 'nome'},
-                {label: 'Cargo / Função', column: 'cargoFuncao'},                         
+                {label: 'Nome', column: 'nomeFantasia'},
+                {label: 'Pessoa', column: 'tipoPessoa'},                         
                 {label: 'Celular', column: 'celular', filter: {name: 'telefone', args: ''}},                         
                 {label: 'Email', column: 'email'},                         
                 {label: 'Situação', column: 'situacao'}
@@ -51,9 +51,7 @@ app.controller('FornecedorController',
         
         var criarFornecedorsLista = function(fornecedores) {
             return _.map(fornecedores, function(fornecedor) {
-                if(fornecedor.informacaoProfissional) {
-                    fornecedor.tipoPessoa = fornecedor.tipoPessoa.descricao;
-                }
+                fornecedor.tipoPessoa = fornecedor.tipoPessoa.descricao;
                 fornecedor.situacao = fornecedor.status.descricao;
                 return _.pick(fornecedor, 'idFornecedor', 'nomeFantasia', 'tipoPessoa', 'celular', 'email', 'situacao');
             })
@@ -94,7 +92,7 @@ app.controller('FornecedorController',
         var save = function(fornecedor) {
             FornecedorService.save(fornecedor)
                 .then(function(data) {  
-                    modalMessage("Fornecedor " + data.nome +  " Inserido com sucesso!");
+                    modalMessage("Fornecedor " + data.nomeFantasia +  " Inserido com sucesso!");
                     todos();
                 })
                 .catch(function(e) {
@@ -125,7 +123,7 @@ app.controller('FornecedorController',
         var update = function(fornecedor) {
             FornecedorService.update(fornecedor.idFornecedor, fornecedor)
                 .then(function (data) {  
-                    modalMessage("Fornecedor " + data.nome + " Alterado com sucesso!");
+                    modalMessage("Fornecedor " + data.nomeFantasia + " Alterado com sucesso!");
                     todos();
                 })
                 .catch(function(e) {
@@ -160,7 +158,7 @@ app.controller('FornecedorController',
         var remove = function(fornecedor) {
             FornecedorService.delete(fornecedor.idFornecedor)
                 .then(function(data) { 
-                    modalMessage("Fornecedor " + data.nome + " Removido com sucesso!");
+                    modalMessage("Fornecedor " + data.nomeFantasia + " Removido com sucesso!");
                     todos();                        
                 })
                 .catch(function(e) {

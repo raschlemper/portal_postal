@@ -52,7 +52,7 @@ public class FornecedorDAO extends GenericDAO {
         params.put("nomeFantasia", fornecedor.getNomeFantasia());
         params.put("razaoSocial", fornecedor.getRazaoSocial());
         params.put("status", (fornecedor.getStatus() == null ? null : fornecedor.getStatus().ordinal()));
-        params.put("status", (fornecedor.getTipoPessoa() == null ? null : fornecedor.getTipoPessoa().ordinal()));
+        params.put("tipoPessoa", (fornecedor.getTipoPessoa() == null ? null : fornecedor.getTipoPessoa().ordinal()));
         params.put("cpf", fornecedor.getCpf());      
         params.put("rg", fornecedor.getRg());       
         params.put("cnpj", fornecedor.getCnpj());       
@@ -83,7 +83,7 @@ public class FornecedorDAO extends GenericDAO {
         params.put("nomeFantasia", fornecedor.getNomeFantasia());
         params.put("razaoSocial", fornecedor.getRazaoSocial());
         params.put("status", (fornecedor.getStatus() == null ? null : fornecedor.getStatus().ordinal()));
-        params.put("status", (fornecedor.getTipoPessoa() == null ? null : fornecedor.getTipoPessoa().ordinal()));
+        params.put("tipoPessoa", (fornecedor.getTipoPessoa() == null ? null : fornecedor.getTipoPessoa().ordinal()));
         params.put("cpf", fornecedor.getCpf());      
         params.put("rg", fornecedor.getRg());       
         params.put("cnpj", fornecedor.getCnpj());       

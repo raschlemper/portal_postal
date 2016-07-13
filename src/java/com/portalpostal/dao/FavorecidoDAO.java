@@ -18,6 +18,7 @@ public class FavorecidoDAO extends GenericDAO {
     public List<Favorecido> findAll() throws Exception {
         String sql = "SELECT * FROM favorecido "
                    + "LEFT OUTER JOIN colaborador ON(favorecido.idColaborador = colaborador.idColaborador) "
+                   + "LEFT OUTER JOIN fornecedor ON(favorecido.idFornecedor = fornecedor.idFornecedor) "
                    + "LEFT OUTER JOIN cliente ON(favorecido.idCliente = cliente.codigo) "
                    + "ORDER BY favorecido.idFavorecido";        
         return findAll(sql, null, favorecidoHandler);
@@ -26,6 +27,7 @@ public class FavorecidoDAO extends GenericDAO {
     public Favorecido find(Integer idFavorecido) throws Exception {
         String sql = "SELECT * FROM favorecido "
                    + "LEFT OUTER JOIN colaborador ON(favorecido.idColaborador = colaborador.idColaborador) "
+                   + "LEFT OUTER JOIN fornecedor ON(favorecido.idFornecedor = fornecedor.idFornecedor) "
                    + "LEFT OUTER JOIN cliente ON(favorecido.idCliente = cliente.codigo) "
                    + "WHERE favorecido.idFavorecido = :idFavorecido";
         Map<String, Object> params = new HashMap<String, Object>();
@@ -63,7 +65,7 @@ public class FavorecidoDAO extends GenericDAO {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("tipo", favorecido.getTipo().ordinal());
         params.put("idColaborador", (favorecido.getColaborador() == null ? null : favorecido.getColaborador().getIdColaborador()));
-        params.put("idFornecedor", null);//(favorecido.getFornecedor() == null ? null : favorecido.getFornecedor().getIdFornecedor()));      
+        params.put("idFornecedor", (favorecido.getFornecedor() == null ? null : favorecido.getFornecedor().getIdFornecedor()));      
         params.put("idCliente", (favorecido.getCliente() == null ? null : favorecido.getCliente().getCodigo()));      
         params.put("nome", favorecido.getNome()); 
         Integer idFavorecido = save(sql, params, favorecidoHandler);
@@ -78,7 +80,7 @@ public class FavorecidoDAO extends GenericDAO {
         params.put("idFavorecido", favorecido.getIdFavorecido());
         params.put("tipo", favorecido.getTipo().ordinal());
         params.put("idColaborador", (favorecido.getColaborador() == null ? null : favorecido.getColaborador().getIdColaborador()));
-        params.put("idFornecedor", null);//(favorecido.getFornecedor() == null ? null : favorecido.getFornecedor().getIdFornecedor()));      
+        params.put("idFornecedor", (favorecido.getFornecedor() == null ? null : favorecido.getFornecedor().getIdFornecedor()));      
         params.put("idCliente", (favorecido.getCliente() == null ? null : favorecido.getCliente().getCodigo()));      
         params.put("nome", favorecido.getNome());   
         update(sql, params, favorecidoHandler);

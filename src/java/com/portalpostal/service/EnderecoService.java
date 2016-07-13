@@ -46,8 +46,10 @@ public class EnderecoService {
     
     public boolean podeExcluir(Integer idEndereco) throws Exception {
         init();
-        Endereco enderecos = enderecoDAO.findVinculoColaborador(idEndereco);
-        if(enderecos != null) return false;
+        Endereco enderecoColaborador = enderecoDAO.findVinculoColaborador(idEndereco);
+        if(enderecoColaborador != null) return false;
+        Endereco enderecoFornecedor = enderecoDAO.findVinculoFornecedor(idEndereco);
+        if(enderecoFornecedor != null) return false;
         return true;                
     } 
     
