@@ -13,6 +13,7 @@ import Entidade.ServicoECT;
 import Util.FormataString;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -178,7 +179,7 @@ public class ServPreVenda extends HttpServlet {
         }
         if(request.getParameter("salvarDestinatario") != null){
             if (idDest == 0) {
-                contrDestinatario.inserir(idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, pais, email_destinatario, celular, nomeBD);
+                contrDestinatario.inserir(idCliente, idDepartamento, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, pais, email_destinatario, celular, nomeBD, "");
             } else {
                 contrDestinatario.editar(idDest, idCliente, nome, cpf, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, pais, email_destinatario, celular, nomeBD);
             }
@@ -207,7 +208,16 @@ public class ServPreVenda extends HttpServlet {
                 int codECT = codECTsolicitado;
                 //VERIFICA A QTD DE ETIQUETA
                 int qtdEtq = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ(servico, 0, idCliente, nomeBD);
-                if (codECT != 0 && qtdEtq != 0) {
+                if (codECT != 0 && qtdEtq == 0) {
+                    if(ContrClienteEtiquetas.solicitarEtiquetasSigepWEB(codECT, cli, nomeBD)) {
+                        String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, nomeBD);
+                        if (etq != null) {
+                            String aux[] = etq.split(";");
+                            numObjeto = aux[0];
+                            tipoEtiqueta = aux[1];
+                        }
+                    }
+                } else if (codECT != 0 && qtdEtq != 0) {
                     String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, nomeBD);
                     if (etq != null) {
                         String aux[] = etq.split(";");
@@ -224,9 +234,18 @@ public class ServPreVenda extends HttpServlet {
                 }
                 //VERIFICA A EXISTENCIA DE COMBO PARA O SERVIÇO
                 //codECT = ContrServicoCombo.consultaCodCombo(codECT, ar, mp, vd);
-
-                //INSERE PRE VENDA      
-                ContrPreVenda.inserir(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD);
+                
+                //INSERE PRE VENDA  
+                int posta_restante = 0;
+                int registro_modico = 0;
+                if(servico.startsWith("MDPB")){
+                    String val = request.getParameter("tipoRg");
+                    System.out.println("tipoRg >"+val);
+                    if(val != null && val.trim().equals("1")){                        
+                    registro_modico = 1;
+                    }
+                }                
+                ContrPreVenda.inserir(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD,posta_restante,registro_modico);
 
             } else {
                 //response.sendRedirect("Cliente/Servicos/pre_postagem.jsp?Falha ao inserir o destinatario!");                

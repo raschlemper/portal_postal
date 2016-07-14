@@ -165,6 +165,20 @@
                 }
             }
 
+            function myFunction() {
+               var flag = false;
+              if($('#allCheck').is(':checked')){
+                  flag = true;
+              }
+                var x = document.getElementsByName("cks_dest");
+                var i;
+                for (i = 0; i < x.length; i++) {
+                    if (x[i].type === "checkbox") {
+                        x[i].checked = flag;
+                    }
+                }
+            }
+
         </script>
 
         <title>Portal Postal | Pré Postagem</title>

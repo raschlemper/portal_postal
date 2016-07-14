@@ -21,7 +21,7 @@
     </div>
     <img width="100%" src="../../imagensNew/linha.jpg"/>
 
-    <form name='formObs' action='../../ServAlterarObsColeta' method='post'>
+    <form name='' action='' method='post'>
         <ul style="width: 95%; text-align: left;" class="ul_formulario">
             <li>
                 <dd>
@@ -36,6 +36,8 @@
                     <label>Empresa</label>
                     <input name="empresa_d" id="empresa_d" size="25" />
                 </dd>
+                </li>
+            <li>
                 <dd>
                     <label>Endereço</label>
                     <input name="endereco_d" id="endereco_d" size="25" />
@@ -44,6 +46,11 @@
                     <label>CEP</label>
                     <input name="cep_d" id="cep_d" size="6" maxlength="9" onkeypress="mascara(this, maskCep)"/>
                 </dd>
+                <dd>
+                    <label>TAGS</label>
+                    <input name="tags_d" id="tags_d" size="39" />
+                </dd>
+            
                 <dd>
                     <div class="buttons" style="margin-top: -7px;">
                         <button type="button" class="regular" onclick="pesquisarDestinatario('<%=nomeBD%>', '<%=multi%>');"><img src="../../imagensNew/lupa.png"/> PESQUISAR</button>

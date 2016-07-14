@@ -116,7 +116,7 @@
             });
         </script>
 
-        <title>Portal Postal | Etiquetas Impressas</title>
+        <title>Portal Postal | Lista de Postagem</title>
 
     </head>
     <body>
@@ -187,6 +187,8 @@
                             </thead>
                             <tbody>
                                 <%
+                                    
+                                    ArrayList<Integer> dptosSessaoUsuario = (ArrayList<Integer>) session.getAttribute("departamentos");
                                     ArrayList<PreVenda> lista = ContrPreVenda.consultaVendasReimpressao(idCli, 1, -1, nivel, idUser, true, vDataInicio, vDataFinal, nomeBD);
                                     for (int i = 0; i < lista.size(); i++) {
                                         PreVenda pv = lista.get(i);
@@ -202,6 +204,8 @@
                                         if(pv.getIdOs() > 0){
                                             os = "<a href='lista_postagem_print.jsp?idOs="+pv.getIdOs()+"'>"+pv.getIdOs()+"</a>";
                                         }
+                                        if(dptosSessaoUsuario.isEmpty() || pv.getIdDepartamento() == 0 || dptosSessaoUsuario.contains(pv.getIdDepartamento())){                                             
+                                        
                                 %>
                                 <tr style="cursor:default;">
                                     <td align="center">
@@ -228,7 +232,7 @@
                                         <%}%>
                                     </td>
                                 </tr>
-                                <%}%>
+                                <%}}%>
                             </tbody>
                         </table>
                         <script type="text/javascript">

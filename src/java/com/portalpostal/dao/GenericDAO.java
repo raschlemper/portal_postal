@@ -40,6 +40,21 @@ public class GenericDAO {
         return list;
     }  
 
+    public List findAll(String sql, Map<String, Object> params, Class<?> classe) throws Exception {
+        Connection connection = Sql2oConexao.getConnection(nameDB);
+        List list = new ArrayList();
+        try {  
+            Query query = connection.createQuery(sql);
+            if(params != null) { addParameter(query, params); }
+            list = query.executeAndFetch(classe);
+        } catch (Exception e) {
+            ContrErroLog.inserir("HOITO - " + clazz.getSimpleName(), "SQLException", sql, e.toString());
+        } finally {
+            connection.close();   
+        }
+        return list;
+    }  
+
     public Object find(String sql, Map<String, Object> params, ResultSetHandler handler) throws Exception {
         Connection connection = Sql2oConexao.getConnection(nameDB);
         Object object = null;
@@ -47,6 +62,21 @@ public class GenericDAO {
             Query query = connection.createQuery(sql);
             if(params != null) { addParameter(query, params); }
             object = query.executeAndFetchFirst(handler);
+        } catch (Exception e) {
+            ContrErroLog.inserir("HOITO - " + clazz.getSimpleName(), "SQLException", sql, e.toString());
+        } finally {
+            connection.close();   
+        }
+        return object;
+    } 
+
+    public Object find(String sql, Map<String, Object> params, Class<?> classe) throws Exception {
+        Connection connection = Sql2oConexao.getConnection(nameDB);
+        Object object = null;
+        try {      
+            Query query = connection.createQuery(sql);
+            if(params != null) { addParameter(query, params); }
+            object = query.executeAndFetchFirst(classe);
         } catch (Exception e) {
             ContrErroLog.inserir("HOITO - " + clazz.getSimpleName(), "SQLException", sql, e.toString());
         } finally {
@@ -95,7 +125,7 @@ public class GenericDAO {
             query.executeUpdate().getKey(Integer.class); 
             connection.commit(true);
         } catch (Exception e) {
-            ContrErroLog.inserir("HOITO - " + clazz.getSimpleName(), "SQLException", sql, e.toString());
+                ContrErroLog.inserir("HOITO - " + clazz.getSimpleName(), "SQLException", sql, e.toString());
             connection.rollback();
         } finally {
             connection.close();

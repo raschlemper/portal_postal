@@ -67,6 +67,7 @@
                     <%if (listaAcessos.contains(404)) {%><li><a href="../../Agencia/Configuracao/usuario_lista.jsp">Usuários</a></li><%}%>
                     <%if (listaAcessos.contains(405)) {%><li><a href="../../Agencia/Configuracao/cliente_lista.jsp">Clientes</a></li><%}%>
                     <%if (listaAcessos.contains(406)) {%><li><a href="../../Agencia/Configuracao/cliente_log_contrato.jsp">Verificação de Contratos</a></li><%}%>
+                    <%if (empMenu.getChamada() == 1 && listaAcessos.contains(404)) {%><li><a href="../../Agencia/Configuracao/bancos_lista.jsp">Bancos</a></li><%}%>
                     <%--if (empMenu.getChamada() == 1) {%><li><a href="../../Agencia/Configuracao/atualizar_SRO.jsp">Atualizar SRO</a></li><%}--%>
                 </ul>
             </li>

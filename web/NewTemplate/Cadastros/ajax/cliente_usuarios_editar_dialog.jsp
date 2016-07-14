@@ -110,6 +110,7 @@
                                 <option value="5" <%if (listAcc.contains("5")) {%> selected <%}%> >GERAR ETIQUETAS</option>
                                 <option value="6" <%if (listAcc.contains("6")) {%> selected <%}%> >VER DADOS DA EMPRESA</option>
                                 <option value="7" <%if (listAcc.contains("7")) {%> selected <%}%> >CADASTRO DE DESTINATÁRIOS</option>
+                                <option value="8" <%if (listAcc.contains("8")) {%> selected <%}%> >VISUALIZAR PRAZOS ESTIMADOS DOS CORREIOS</option>
                             </select>
                             <script language="">
                                 function selectAllCombo(combo, flag) {

@@ -14,20 +14,21 @@
     response.setHeader("Pragma", "no-cache"); //HTTP 1.0
     response.setDateHeader("Expires", 0); //prevent caching at the proxy server
 
-    if (session.getAttribute("usuario") == null) {
-        response.sendRedirect("../index.jsp?msgLog=3");
+
+    Usuario usrSessao = (Usuario) session.getAttribute("agf_usuario");
+    if (usrSessao == null) {
+        response.sendRedirect("../../index.jsp?msgLog=3");
+    } else if (usrSessao.getListaAcessosPortalPostal().contains("405")) {
+        response.sendRedirect("../../NewTemplate/Dashboard/index.jsp?msg=Usuario sem permissao!");
     } else {
 
-        int idNivelDoUsuario = (Integer) session.getAttribute("nivel");
-        if (idNivelDoUsuario == 3) {
-            response.sendRedirect("../Importacao/imp_movimento.jsp?msg=Acesso Negado!");
-        }
-
-        String nomeBD = (String) session.getAttribute("empresa");
-        int idEmpresa = (Integer) session.getAttribute("idEmpresa");
+        empresas agf_empresa = (empresas) session.getAttribute("agf_empresa");
+        
         int idClienteInc = Integer.parseInt(request.getParameter("idCliente"));
+        
+        ClienteSMTP cliSmtp = Controle.ContrClienteSMTP.consultaCadastroSMTP(idClienteInc, agf_empresa.getCnpj());
 
-        Entidade.Clientes cliInc = Controle.contrCliente.consultaClienteById(idClienteInc, nomeBD);
+        Entidade.Clientes cliInc = Controle.contrCliente.consultaClienteById(idClienteInc, agf_empresa.getCnpj());
         String cnpj = cliInc.getCnpj();
         String nome = cliInc.getNome();
         String fantasia = cliInc.getNomeFantasia();
@@ -121,10 +122,10 @@
             }
 
             function mostraTipoServer() {
-                $('#is_cadastro').prop('checked', true);                
+                $('#is_cadastro').prop('checked', true);
                 $('#is_cadastro').attr("disabled", true);
-                
-                $('#mostra_smtp').toggleClass("hidden");
+
+                //$('#mostra_smtp').toggleClass("hidden");
                 $('#cad_email').toggleClass("hidden");
             }
             function meTireDaqui() {
@@ -163,8 +164,10 @@
             function confirmaCadastro() {
 
                 bootbox.dialog({
-                    message: "Ao efetuar este o cadastro você estará autorizando a SCC4 efetuar  a cobrança dos valores <br>relativos aos custos desse serviço em suas proximas faturas.",
-                    title: "CADASTRAR ENVIO DE EMAIL COM ATUALIZAÇÃO DO SRO?",
+                    message: "Ao efetuar este o cadastro você estará autorizando a SCC4 efetuar  a cobrança dos valores <br>relativos aos custos desse serviço em suas proximas faturas. <br/>\n\
+        <br/><b>CUSTO PARA UTILIZAÇÃO DESTE SERVIÇO (VÁLIDO PARA TODOS OS CLIENTES) </b><br></br>- R$ 50,00 mensal com direito de 4.000 objetos/mês. <br></br>- Acima de 4.000 objetos/mês custo adicional de R$0,05 por objeto.\n\
+<br/><br/> <span style='color:red'>*Esta ativação é valida para todos os clientes da sua AGF.<br/>*Caso já tenha ativado este serviço no cadastro de outro cliente, não serão gerados encargos adicionais respeitando os limites de envios de e-mails descritos acima.</span>",
+                    title: "CADASTRAR ENVIO DE EMAIL COM ATUALIZAÇÕES DO SRO?",
                     onEscape: function () {
                     },
                     show: true,
@@ -190,12 +193,29 @@
                 });
             }
 
-
-
-
-
-
+            function desativaCli() {
+                var desat = $("#ck_destivar").val();
+                var desat2 = $("#nomeBD").val();
+                alert(desat);
+                $.ajax({
+                    url: '../../ServDesativaCliente',
+                    data: {nome: desat, nomeBD: desat2},
+                    type: 'get',
+                    cache: false,
+                    success: function (data) {
+                        alert(data);                             
+                        window.location= "cliente_lista_b.jsp";
+                    },
+                    error: function () {
+                        alert('Erro na requisição');
+                    }
+                }
+                );
+            }
         </script>
+
+
+
     </head>        
     <body>   
         <script type="text/javascript">
@@ -210,12 +230,24 @@
                     <div id="page-wrapper">
 
                         <jsp:include page="cliente_menu_b.jsp" >
-                            <jsp:param name="nomeBDTab" value="<%= nomeBD%>" />
+                            <jsp:param name="nomeBDTab" value="<%= agf_empresa.getCnpj()%>" />
                             <jsp:param name="activeTab" value="0" />
                             <jsp:param name="idClienteTab" value="<%= idClienteInc%>" />
                             <jsp:param name="temContratoTab" value="<%= cliInc.getTemContrato()%>" />
                             <jsp:param name="nomeClienteTab" value="<%= cliInc.getNomeFantasia()%>" />
-                        </jsp:include>    
+                        </jsp:include>   
+
+                        <%if(agf_empresa.getTipo_sistema().equals("PORTALPOSTAL")){%>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                <div id="destiva"> </div>
+                                <div class="form-inline">
+                                    <label><input id="ck_destivar" name="ck_desativar" type="checkbox" value="<%= idClienteInc%>" onclick="desativaCli();" >&nbsp;&nbsp;DESATIVAR ESTE CLIENTE</label>
+                                    <input type="hidden" name="nomeBD" value="<%=agf_empresa.getCnpj()%>" id="nomeBD" />
+                                </div>
+                                </div>
+                            </div>
+                        <%}%>
 
                         <div class="row">
                             <div class="col-xs-12">
@@ -268,7 +300,7 @@
                                                         <select class="form-control" name="grupo_fat" id="grupo_fat">
                                                             <option value="0">-- SELECIONE --</option>
                                                             <%
-                                                                ArrayList<GrupoFaturamento> listaGrupo = ContrGrupoFaturamento.consultaTodosTipoColeta(nomeBD);
+                                                                ArrayList<GrupoFaturamento> listaGrupo = ContrGrupoFaturamento.consultaTodosTipoColeta(agf_empresa.getCnpj());
                                                                 for (int i = 0; i < listaGrupo.size(); i++) {
                                                                     GrupoFaturamento gf = listaGrupo.get(i);
                                                                     String sel = "";
@@ -428,7 +460,7 @@
                                     <li class="list-group-item list-group-item-danger">
                                         <div class="form-inline">
                                             <label>&nbsp;</label>
-                                            <label><input type="checkbox" name="is_cadastro" value="1" id="is_cadastro" readonly onclick="confirmaCadastro()"/> CADASTRAR SERVIDOR PARA E-MAILS COM ATUALIZAÇÕES DO SRO </label>
+                                            <label><input type="checkbox" name="is_cadastro" value="1" id="is_cadastro" readonly onclick="confirmaCadastro()" <%if(cliSmtp != null){%> checked="checked" disabled<%}%>/> ENVIAR E-MAILS COM ATUALIZAÇÕES DO SRO </label>
                                             <label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ATENÇÃO AO EFETUAR ESSE CADASTRO SERÃO GERADOS ENCARGOS)</label>
                                         </div>
                                     </li>
@@ -436,26 +468,26 @@
                             </div>
                         </div>
                         <form name="form2" action="../../ServCriaSMTP" method="post">
-                            <div class="row hidden" id="mostra_smtp">
+                             <!-- <div class="row hidden" id="mostra_smtp">
                                 <div class="col-md-12"> 
                                     <ul class="list-group">
                                         <li class="list-group-item list-group-item-warning">
-                                            <div class="form-inline">
+                                          <div class="form-inline">
                                                 <label>&nbsp;</label>
                                                 <label><input type="radio" name="is_smtp_client" value="1" id="is_smtp_client" onclick="mostraCampos2()"/> CADASTRAR SERVIDOR SMTP (CUSTO DE R$ 0,10/Objeto)</label>
-                                            </div>
+                                            </div> 
                                             <div class="form-inline">
                                                 <label>&nbsp;</label>
-                                                <label><input type="radio" name="is_smtp_client" value="0" id="is_smtp_client" checked="checked" onclick="mostraCampos2()"/> UTILIZAR SERVIDOR DO PORTALPOSTAL (CUSTO DE R$ 0,15/Objeto)</label>
-                                            </div>
+                                             </div>
                                         </li>
                                     </ul>
                                 </div>
-                            </div>
+                            </div>-->
                             <div class="row" >
                                 <div class="col-md-12">   
-
-                                    <ul class="list-group hidden" id="camposSMTP">
+                                    <input type="hidden" name="is_smtp_client" value="0" id="is_smtp_client" checked="checked" onclick="mostraCampos2()"/> 
+                                           
+                                 <!--   <ul class="list-group hidden" id="camposSMTP">
                                         <li class="list-group-item list-group-heading">
                                             <label>CADASTRE O SERVIDOR SMTP DO CLIENTE OU DA AGF</label>
                                         </li>
@@ -522,16 +554,29 @@
                                                 </div>
                                             </div>                                        
                                         </li>
-                                    </ul>
-
-                                    <ul class="list-group hidden" id="cad_email">
+                                    </ul> -->
+                                    <!-- verificar se ja esta cadastrado -->
+                                    <%
+                                    boolean dest = true;
+                                    if(cliSmtp != null){
+                                       if(cliSmtp.getEnvia_destinatario() == 0){
+                                           dest = false;
+                                       }
+                                    }
+                                    %>
+                                    <ul class="list-group <%if(cliSmtp == null){%>hidden<%}%>" id="cad_email">
                                         <li class="list-group-item">
                                             <div class="form-inline">
+                                                <!-- verificar se ja que tipo está cadastrado -->
                                                 <label>&nbsp;</label>
-                                                <label><input type="checkbox" name="is_destinatario" value="1" id="is_destinatario" checked="checked"/> ENVIAR PARA O E-MAIL DO DESTINATARIO (deve estar cadastrado)</label>
+                                                <label><input type="radio" name="is_destinatario" value="1" id="is_destinatario" <%if(dest){%> checked="checked" <%}%>/> ENVIAR PARA O E-MAIL DO DESTINATARIO (deve estar cadastrado na venda)</label>
+                                            </div>
+                                            <div class="form-inline">
+                                                <label>&nbsp;</label>
+                                                <label><input type="radio" name="is_destinatario" value="0" id="is_destinatario" <%if(!dest){%> checked="checked" <%}%>/> ENVIAR PARA O E-MAIL DESTE CLIENTE (deve estar cadastrado acima) </label>
                                             </div>
                                         </li>
-                                        <li class="list-group-item" id="campos">
+                                      <%--    <li class="list-group-item" id="campos">
                                             <div class="row form-horizontal">                                             
                                                 <div class="col-sm-6 col-md-4 col-lg-4">
                                                     <label class="small"> ADICIONAR OUTROS E-MAILS (separados por ;)</label>                                            
@@ -542,7 +587,7 @@
                                                 </div>
                                             </div>
                                         </li>
-                                        <li class="list-group-item">
+                                      <li class="list-group-item">
                                             <div class="row form-horizontal">
 
                                                 <div class="col-sm-12 col-md-4 col-lg-4">
@@ -553,7 +598,7 @@
                                                     </label>
                                                     <select class="form-control" name='departamentos' id='departamentos' multiple='true' onclick="controleCombobox1(this)" size=10 >
                                                         <%
-                                                            ArrayList<ClientesDeptos> listaDep = ContrClienteDeptos.consultaDeptos(idClienteInc, nomeBD);
+                                                            ArrayList<ClientesDeptos> listaDep = ContrClienteDeptos.consultaDeptos(idClienteInc, agf_empresa.getCnpj());
                                                             for (int i = 0; i < listaDep.size(); i++) {
                                                                 ClientesDeptos cd = listaDep.get(i);
                                                         %>
@@ -580,16 +625,20 @@
                                                 </div>
 
                                             </div>
-                                        </li>
+                                        </li> --%>
                                         <li class="list-group-item">
                                             <input type="hidden" name="local" value="1" />
                                             <input type="hidden" name="idCliente" value="<%= idClienteInc%>" />
-                                            <button type="button" class="btn btn-success" onclick="document.form2.submit();" ><i class="fa fa-lg fa-spc fa-save"></i> SALVAR DADOS</button>                                        
-                                        </li>
+                                            <button type="button" class="btn btn-success" onclick="document.form2.submit();" ><i class="fa fa-lg fa-spc fa-save"></i> CONFIRMAR ENVIOS</button>   
+                                            <input type="hidden" id="cancelar" name="cancelar" value="0"/>            
+                                          <%if(cliSmtp != null){%>                                            
+                                          <button type="button" class="btn btn-danger" onclick="document.getElementById('cancelar').value = '1';document.form2.submit();" ><i class="fa fa-lg fa-spc fa-trash"></i> CANCELAR ENVIOS</button>   
+                                          <%}%>                                     
+                                        </li> 
                                     </ul>
                                     </form>
-
-                                    <div class="panel panel-default">
+  
+                                  <%--<div class="panel panel-default">
                                         <div class="panel-heading"><label>Lista dos SMTP/Departamentos Cadastrados</label></div>
                                         <div class="panel-body">
                                             <div class="dataTable_wrapper no-padding">
@@ -604,7 +653,7 @@
                                                     </thead>
                                                     <tbody>
                                                         <%
-                                                            ArrayList<ClienteSMTP> lista = Controle.ContrClienteSMTP.consultaCadastroSMTP(idClienteInc, nomeBD);
+                                                            ArrayList<ClienteSMTP> lista = Controle.ContrClienteSMTP.consultaCadastroSMTP(idClienteInc, agf_empresa.getCnpj());
                                                             for (int i = 0; i < lista.size(); i++) {
                                                                 ClienteSMTP smtp = lista.get(i);
 
@@ -628,7 +677,7 @@
                                                 </table>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --%>
                                 </div>
                             </div>
                             <div class="row spacer-xlg"></div>

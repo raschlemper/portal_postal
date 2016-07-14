@@ -35,7 +35,9 @@
             antecedencia = hc.getMinAntecedencia();
         }
 
-        int coletadorEventual = Coleta.Controle.contrColetaFixa.consultaColetadorEventualDoCliente(idCliente, nomeBD);
+        int coleEve = Coleta.Controle.contrColetaFixa.consultaColetadorEventualDoCliente(idCliente, nomeBD);
+        int coleEvTipo = Coleta.Controle.contrColetaFixa.consultaTipoColetaEventualDoCliente(idCliente, nomeBD);
+        
         int tipoEscolhaColeta = Coleta.Controle.contrColetaFixa.consultaTipoEscolhaColetaDoCliente((Integer) session.getAttribute("idEmpresa"));
 %>
 
@@ -71,7 +73,7 @@
 
         <link rel="stylesheet" href="../../javascript/plugins/dropdown/css/style.css" type="text/css" media="screen, projection"/>
         <!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="../../javascript/plugins/dropdown/css/ie.css" media="screen" /><![endif]-->
-        <script type="text/javascript" language="javascript" src="../../javascript/plugins/dropdown/js/jquery.dropdownPlain.js"></script>
+        <script type="text/javascript" src="../../javascript/plugins/dropdown/js/jquery.dropdownPlain.js"></script>
 
 
         <script type="text/javascript" charset="utf-8">
@@ -339,7 +341,8 @@
                                         <input type="hidden" name="conteudoLiContato" id="conteudoLiContato" value=""/>
                                         <input type="hidden" name="idCliente" value="<%= idCliente%>"/>
                                         <input type="hidden" name="idUsuario" value="0"/>
-                                        <input type="hidden" name="idColetador" value="<%= coletadorEventual%>"/>
+                                        <input type="hidden" name="idColetador" value="<%= coleEve%>"/>
+                                        <input type="hidden" name="idTipo" value="<%= coleEvTipo %>"/>
                                         <button type="button" <%if (hc == null) {%> class="disabled" disabled <%} else {%> class="positive" <%}%> onclick="return preencherCampos();"><img src="../../imagensNew/tick_circle.png" /> SOLICITAR COLETA</button>
                                     </div>
                                 </dd>

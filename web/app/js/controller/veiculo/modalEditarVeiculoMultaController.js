@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('ModalEditarVeiculoMultaController', ['$scope', '$modalInstance', '$filter', 'veiculoMulta', 'VeiculoService', 'CepService', 'DatePickerService', 'ListaService',
-    function ($scope, $modalInstance, $filter, veiculoMulta, VeiculoService, CepService, DatePickerService, ListaService) {
+app.controller('ModalEditarVeiculoMultaController', ['$scope', '$modalInstance', '$filter', 'veiculoMulta', 'VeiculoService', 'CepService', 'DatePickerService', 'ListaService', 'ValorService',
+    function ($scope, $modalInstance, $filter, veiculoMulta, VeiculoService, CepService, DatePickerService, ListaService, ValorService) {
 
         var init = function () {  
             $scope.datepicker = DatePickerService.default;      
@@ -39,7 +39,7 @@ app.controller('ModalEditarVeiculoMultaController', ['$scope', '$modalInstance',
         
         var ajustarVeiculos = function(veiculos) {
             return _.map(veiculos, function(veiculo) {
-                veiculo.descricao = veiculo.marca + ' / ' + veiculo.modelo + ' (' + $filter('placa')(veiculo.placa) + ')';
+                veiculo.descricao = ValorService.getValueLocalCep(data);
                 return veiculo;
             });
         }

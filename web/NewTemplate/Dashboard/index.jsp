@@ -1,6 +1,6 @@
+<%@page import="com.portalpostal.model.dd.TipoManutencaoVeiculo"%>
 <%@page import="com.portalpostal.model.VeiculoSeguro"%>
 <%@page import="com.portalpostal.service.VeiculoSeguroService"%>
-<%@page import="com.portalpostal.model.TipoManutencao"%>
 <%@page import="java.util.List"%>
 <%@page import="com.portalpostal.model.VeiculoManutencao"%>
 <%@page import="com.portalpostal.service.VeiculoManutencaoService"%>
@@ -123,7 +123,7 @@
                                 <%                                
                                     ArrayList<ClienteLogEtiqueta> lista = Controle.ContrClienteEtiquetas.consultaQtdEtiquetasRestantes(200, nomeBD);
                                    int listaTele = ContrTelegramaPostal.consultaQtdNaoEnviados(nomeBD);
-                                    ArrayList<Clientes> listaContr = contrCliente.getClientesComContratoVencendo(30, nomeBD);
+                                    ArrayList<Clientes> listaContr = contrCliente.getClientesComContratoVencendo(90, nomeBD);
                                     if(lista.size() > 0){
                                 %>
                                 <div class="alert alert-danger no-margin">
@@ -140,7 +140,7 @@
                                 <%if(listaContr.size()>0){%>
                                 <div class="alert alert-danger no-margin">
                                     <a href="#" class="close" data-dismiss="alert">&times;</a>
-                                    <strong>ATENÇÃO!</strong> Existem clientes com o contrato a vencer em menos de 30 Dias:<br/>
+                                    <strong>ATENÇÃO!</strong> Existem clientes com o contrato a vencer em menos de 90 Dias:<br/>
                                     <%
                                         for(int i=0; i<listaContr.size(); i++){
                                             Clientes cli = listaContr.get(i);
@@ -161,9 +161,9 @@
                                         Integer quantidadeRotina = 0;
                                         for(int i = 0; i < listaVeiculoManutencao.size(); i++){
                                             VeiculoManutencao veiculoManutencao = listaVeiculoManutencao.get(i);
-                                            if(veiculoManutencao.getTipo() == TipoManutencao.TROCA_OLEO) { quantidadeTrocaOleo++; }
-                                            if(veiculoManutencao.getTipo() == TipoManutencao.PROGRAMADA) { quantidadeProgramada++; }
-                                            if(veiculoManutencao.getTipo() == TipoManutencao.ROTINA) { quantidadeRotina++; }
+                                            if(veiculoManutencao.getTipo() == TipoManutencaoVeiculo.TROCA_OLEO) { quantidadeTrocaOleo++; }
+                                            if(veiculoManutencao.getTipo() == TipoManutencaoVeiculo.PROGRAMADA) { quantidadeProgramada++; }
+                                            if(veiculoManutencao.getTipo() == TipoManutencaoVeiculo.ROTINA) { quantidadeRotina++; }
                                         }
                                     %>
                                     <%if(quantidadeTrocaOleo > 0){ %>

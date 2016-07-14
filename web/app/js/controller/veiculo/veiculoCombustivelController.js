@@ -44,7 +44,7 @@ app.controller('VeiculoCombustivelController', ['$scope', '$filter', 'VeiculoCom
                 result = ajustarDados(result);
                 VeiculoCombustivelService.save(result)
                     .then(function(data) {  
-                        modalMessage("Abastecimento do Veículo Inserido " + getMsgToClient(data.veiculo) +  " com sucesso!");
+                        modalMessage("Abastecimento do Veículo " + getMsgToClient(data.veiculo) +  " Inserido com sucesso!");
                         todos();
                     })
                     .catch(function(e) {

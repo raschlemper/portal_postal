@@ -28,7 +28,7 @@ public class ContrOrdemServico {
     public static int inserir(int idCliente, int idUsuario, String nomeUsuario, int qtd, String ids, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "INSERT INTO ordem_servico (idCliente, idUsuario, nomeUsuario, dataOs, qtdObjetos) VALUES(?,?,?,NOW(),?)";
-        String sql2 = "UPDATE pre_venda SET idOs = ? WHERE id IN ("+ids+")";
+        String sql2 = "UPDATE pre_venda SET idOs = ?, isSync = 0 WHERE id IN ("+ids+")";
         try {
             PreparedStatement valores = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             valores.setInt(1, idCliente);
@@ -61,7 +61,7 @@ public class ContrOrdemServico {
     public static int removerObjeto(int idPV, int idOS, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "UPDATE ordem_servico SET qtdObjetos = (qtdObjetos-1) WHERE idOs = " + idOS;
-        String sql2 = "UPDATE pre_venda SET idOs = 0 WHERE id = " + idPV;
+        String sql2 = "UPDATE pre_venda SET idOs = 0, isSync = 0 WHERE id = " + idPV;
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.executeUpdate();

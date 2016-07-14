@@ -81,9 +81,10 @@ public class ServAgendaColeta extends HttpServlet {
 
                 String nomeBD = (String) sessao.getAttribute("nomeBD");
                 
-                int status = 1, idTipo = 0, idUsuario = 0;
+                int idColeta = 0, idTipo = 0, idUsuario = 0;
                 int idColetador = Integer.parseInt(request.getParameter("idColetador"));
                 int idCliente = Integer.parseInt(request.getParameter("idCliente"));
+                idTipo = Integer.parseInt(request.getParameter("idTipo"));
                 String obs = request.getParameter("obs");
                 String dataHoraColeta = request.getParameter("dataColeta") +" "+request.getParameter("horaColeta");
                 //formata a data para timestamp do tipo 'dd/MM/yyyy HH:mm'
@@ -102,8 +103,13 @@ public class ServAgendaColeta extends HttpServlet {
                         Controle.contrContato.inserir(idCliente, contato, email, fone, setor, nomeBD);
                     }
                 }
+                if(idColetador == 0){
+                                    idColeta = Coleta.Controle.contrColeta.inserir(idCliente, idUsuario, idColetador, idContato, idTipo, 1, vDataHoraColeta, obs, 3, nomeBD);
 
-                int idColeta = Coleta.Controle.contrColeta.inserir(idCliente, idUsuario, idColetador, idContato, idTipo, status, vDataHoraColeta, obs, 3, nomeBD);
+                }else{
+                    idColeta = Coleta.Controle.contrColeta.inserir(idCliente, idUsuario, idColetador, idContato, idTipo, 2, vDataHoraColeta, obs, 3, nomeBD);
+                
+                }
                 Controle.ContrLogColeta.inserir(idColeta, idUsuario, "Solicitação WEB", "Coleta Solicitada pela WEB", nomeBD);
 
                 sessao.setAttribute("msg", "Nova Coleta inserida com sucesso!");

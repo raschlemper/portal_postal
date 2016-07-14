@@ -64,6 +64,24 @@ public class contrSenhaCliente {
             Conexao.desconectar(conn);
         }
     }
+    
+    public static boolean alterarPriemiroAcesso(String login, String senha, int idCliente,  String nomeBD, String novaSenha) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "UPDATE cliente_usuarios SET isFirst = 1, senha = '"+novaSenha+"' WHERE codigo = "+idCliente+" AND senha = '"+senha+"' AND login = '"+login+"' ;";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+          
+            valores.executeUpdate();
+            valores.close();
+            return true;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrSenhaCliente", "SQLException", sql, e.toString());
+            return false;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+    
 
     public static boolean excluir2(int idCliente, String login, String senha, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
@@ -165,6 +183,7 @@ public class contrSenhaCliente {
     public static ClientesUsuario usuarioEmp(String login, String senha, String nomeBD) {
         Connection con = Conexao.conectar(nomeBD);
         String sql = "SELECT * FROM cliente_usuarios WHERE login = ? AND senha = ?;";
+       
         try {
             PreparedStatement valores = con.prepareStatement(sql);
             valores.setString(1, login);
@@ -178,6 +197,7 @@ public class contrSenhaCliente {
                 int nivel = result.getInt("nivel");
                 String login1 = result.getString("login");
                 String ac = result.getString("acessos");
+                int isFirst = result.getInt("isFirst");
                 ArrayList<Integer> acessos = new ArrayList<Integer>();
                 if (ac != null && ac.contains(";")) {
                     String aux[] = ac.split(";");
@@ -211,7 +231,7 @@ public class contrSenhaCliente {
                     servicos.add(Integer.parseInt(sv));
                 }
 
-                us = new ClientesUsuario(id, idCliente, login1, nivel, acessos, departamentos, servicos);
+                us = new ClientesUsuario(id, idCliente, login1, nivel, acessos, departamentos, servicos, isFirst);
             }
             valores.close();
             return us;

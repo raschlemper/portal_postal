@@ -10,8 +10,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <%
-    if (session.getAttribute("emp") == null) {
+    
+    Usuario usrSessao = (Usuario) session.getAttribute("agf_usuario");
+    if (usrSessao == null) {
         response.sendRedirect("../../index.jsp?msgLog=3");
+    } else if (usrSessao.getListaAcessosPortalPostal().contains("405")) {
+        response.sendRedirect("../../NewTemplate/Dashboard/index.jsp?msg=Usuario sem permissao!");
     } else {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -66,7 +70,7 @@
                                                     <label class="small">SERVIÇO</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-envelope"></i></span>                                                
-                                                        <select style="max-width: 250px;" class="form-control" name="servico">
+                                                        <select style="max-width: 250px;" class="form-control" name="servico" onchange="verificaTipoReg(this);">
                                                             <option value="0">ESCOLHA UM SERVIÇO</option>
                                                             <%
                                                                 ArrayList<Integer> listaContrato = ContrClienteContrato.consultaContratoClienteGroupByServico(idClienteInc, nomeBD);
@@ -76,8 +80,8 @@
                                                                     ServicoECT sv = listaServ.get(i);
                                                                     if (listaContrato.contains(sv.getCodECT()) || listaOutros.contains(sv.getCodECT())) {
                                                                         out.print("<option value='0;" + sv.getGrupoServico() + "'>" + sv.getNomeSimples() + "</option>");
-                                                                    }                                                                    
-                                                                }    
+                                                                    }
+                                                                }
                                                                 //out.print("<option value='0;PPI'>PROTOCOLO POSTAL</option>");
                                                             %>
                                                         </select>
@@ -105,10 +109,22 @@
                                                     <label class="small">QUANTIDADE</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-list-ol"></i></span>  
-                                                        <input class="form-control" style="width: 80px;" type="text" autocomplete="off" name="qtd" maxlength="5" onkeypress="mascara(this, maskNumero)" />
+                                                        <input class="form-control" type="text" autocomplete="off" name="qtd" maxlength="5" onkeypress="mascara(this, maskNumero)" />
                                                     </div>   
                                                 </div>
                                             </div>
+                                           <!--<div class="row form-horizontal hidden" id="tipoRegitro">
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                                    <label class="small">TIPO REGISTRO</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon" ><i class="fa fa-barcode"></i></span>                                                
+                                                        <select style="max-width: 250px;" class="form-control" name="tipo_reg">
+                                                            <option value="1">NORMAL</option>
+                                                            <option value="0">MÓDICO</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>-->
                                         </li>
                                         <li class="list-group-item">
                                             <input type="hidden" name="idCliente" value="<%= idClienteInc%>" />
@@ -234,15 +250,15 @@
                                                             <form action="../../ServExcluirFaixaEtiqueta" method="post" name="formDel">
                                                                 <input type="hidden" name="idLog" value="<%= log.getIdLog()%>" />
                                                                 <input type="hidden" name="idCliente" value="<%= idClienteInc%>" />
-                                                                <button type="button" class="btn btn-sm btn-danger" onclick="confirmExcluir(this,'Tem certeza que deseja excluir esta faixa?','Deseja excluir a faixa?');" ><i class="fa fa-lg fa-trash"></i></button>
+                                                                <button type="button" class="btn btn-sm btn-danger" onclick="confirmExcluir(this, 'Tem certeza que deseja excluir esta faixa?', 'Deseja excluir a faixa?');" ><i class="fa fa-lg fa-trash"></i></button>
                                                             </form>
                                                             <%} else if ((log.getQtd() - qtdUt) > 0) {%>
                                                             <form action="../../ServSuspenderFaixaEtiqueta" method="post" name="formDel">
                                                                 <input type="hidden" name="idLog" value="<%= log.getIdLog()%>" />
                                                                 <input type="hidden" name="idCliente" value="<%= idClienteInc%>" />
-                                                                <button type="button" class="btn btn-sm btn-info" onclick="confirmSuspender(this,'Tem certeza que deseja suspender esta faixa?','Deseja suspender a faixa?');" ><i class="fa fa-lg fa-pause"></i></button>
+                                                                <button type="button" class="btn btn-sm btn-info" onclick="confirmSuspender(this, 'Tem certeza que deseja suspender esta faixa?', 'Deseja suspender a faixa?');" ><i class="fa fa-lg fa-pause"></i></button>
                                                             </form>
-                                                            <%}else{%>
+                                                            <%} else {%>
                                                             <b class="text-danger">Suspensa</b>
                                                             <%}%>
                                                         </td>
@@ -264,7 +280,7 @@
             </div>
         </div>
         <script type="text/javascript">
-            function confirmExcluir(button, pergunta, titulo) {                
+            function confirmExcluir(button, pergunta, titulo) {
                 bootbox.confirm({
                     title: titulo,
                     message: pergunta,
@@ -278,14 +294,14 @@
                             className: 'btn btn-danger pull-right'
                         }
                     },
-                    callback: function(result) {
-                        if(result){
+                    callback: function (result) {
+                        if (result) {
                             button.form.submit();
                         }
                     }
                 });
             }
-            function confirmSuspender(button, pergunta, titulo) {                
+            function confirmSuspender(button, pergunta, titulo) {
                 bootbox.confirm({
                     title: titulo,
                     message: pergunta,
@@ -299,8 +315,8 @@
                             className: 'btn btn-danger pull-right'
                         }
                     },
-                    callback: function(result) {
-                        if(result){
+                    callback: function (result) {
+                        if (result) {
                             button.form.submit();
                         }
                     }
@@ -357,7 +373,7 @@
                 var nIni = form.faixa_inicial.value.substring(0, 8);
                 var nFim = form.faixa_final.value.substring(0, 8);
                 var qtd = parseInt(nFim - nIni + 1);
-                
+
                 if (parseInt(form.qtd.value) !== qtd) {
                     alert('Quantidade de Etiquetas não Confere!\n\nQuantidade Calculada pelo Sistema: ' + qtd);
                     return false;
@@ -405,7 +421,7 @@
                 fechaMsg();
             }
 
-            $(document).ready(function() {
+            $(document).ready(function () {
                 LoadDataTablesScripts(AllTables);
             });
         </script>

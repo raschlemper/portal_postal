@@ -13,6 +13,7 @@ public class Destinatario {
 
     private int idDestinatario;
     private int idCliente;
+    private int idDepartamento;
     private String nome;
     private String cpf_cnpj;
     private String empresa;
@@ -25,10 +26,37 @@ public class Destinatario {
     private String uf;
     private String email;
     private String celular;
+    private String tags;
 
-    public Destinatario(int idDestinatario, int idCliente, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String email, String celular) {
+  
+
+
+    public Destinatario(String nome, String cpf_cnpj, String endereco, String numero, String bairro, String cidade, String uf) {
+        this.nome = nome;
+        this.cpf_cnpj = cpf_cnpj;
+        this.endereco = endereco;
+        this.numero = numero;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.uf = uf;
+    }
+    public Destinatario(String nome, String cpf_cnpj, String endereco, String numero, String bairro, String cidade,String cep ,String uf) {
+        this.nome = nome;
+        this.cpf_cnpj = cpf_cnpj;
+        this.endereco = endereco;
+        this.numero = numero;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.cep = cep;
+        this.uf = uf;
+    }
+
+
+
+    public Destinatario(int idDestinatario, int idCliente, int idDepartamento, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String email, String celular, String tags) {
         this.idDestinatario = idDestinatario;
         this.idCliente = idCliente;
+        this.idDepartamento = idDepartamento;
         this.nome = nome;
         this.cpf_cnpj = cpf_cnpj;
         this.empresa = empresa;
@@ -41,8 +69,26 @@ public class Destinatario {
         this.uf = uf;
         this.email = email;
         this.celular = celular;
+        this.tags = tags;
+    }
+    
+
+    public String getTags() {
+        return tags;
     }
 
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    public int getIdDepartamento() {
+        return idDepartamento;
+    }
+
+    public void setIdDepartamento(int idDepartamento) {
+        this.idDepartamento = idDepartamento;
+    }
+    
     public String getEmail() {
         return email;
     }

@@ -16,7 +16,7 @@
         } else {
             out.println("OBJETO;SERVIÇO;PESO;QTD;POSTAGEM;DESTINATÁRIO;CEP;SITUAÇÃO;NF;DEPARTAMENTO");
         }*/
-        out.println("datax;descri;destinatario;cep;uf;peso;cubico;qtde;registro;adicionais;obs;contalote;nf;declarado;unitario;valor");
+        out.print("datax;descri;destinatario;cep;uf;peso;cubico;qtde;registro;adicionais;obs;contalote;nf;declarado;unitario;valor\r\n");
 
         for (int i = 0; i < movimentacao.size(); i++) {
             Entidade.Movimentacao mov = (Entidade.Movimentacao) movimentacao.get(i);
@@ -53,7 +53,7 @@
             }else{
                 out.println(numeroRegistro + ";" + servico2 + ";" + peso + ";" + qtd + ";" + vData + ";" + destinatario + ";" + cepDestino + ";" + status + ";" + notaFiscal + ";" + departamento2);
             }*/
-            out.println(vData+ ";" + servico2+ ";" + destinatario + ";" +cepDestino + ";" +en.getUf()+" ;" + peso + "; ;" +qtd+ ";" +numeroRegistro+ ";" +adc+ ";" +obs+"; ;"+notaFiscal+ ";" +vVd+";0.00;"+vValor);
+            out.print(vData+ ";" + servico2+ ";" + destinatario + ";" +cepDestino + ";" +en.getUf()+" ;" + peso + "; ;" +qtd+ ";" +numeroRegistro+ ";" +adc+ ";" +obs+"; ;"+notaFiscal+ ";" +vVd+";0.00;"+vValor+"\r\n");
         }
     } else {
         out.println("Nenhum Objeto Encontrado!");

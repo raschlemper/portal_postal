@@ -44,6 +44,18 @@ public class Usuario {
         this.acessosConsolidador = acessosConsolidador;
     }
 
+    public Usuario(String nomeAgf, String cpf, int idEmpresa, String senha, String nomeCliente) {
+        this.nome = nomeAgf;
+        this.senha = senha;
+        this.cpf = cpf;
+        this.idEmpresa = idEmpresa;
+        this.login = nomeCliente;
+    }
+
+  
+
+    
+    
     public ArrayList<Integer> getListaAcessosPortalPostal() {
         listaAcessosPortalPostal = new ArrayList<Integer>();
         try{

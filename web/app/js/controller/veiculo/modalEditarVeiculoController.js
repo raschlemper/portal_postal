@@ -1,13 +1,13 @@
 'use strict';
 
-app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'veiculo', 'FipeService', 'ListaService', 'ValorService', 'LISTAS',
-    function ($scope, $modalInstance, veiculo, FipeService, ListaService, ValorService, LISTAS) {
+app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'veiculo', 'VeiculoService', 'ModalService', 'FipeService', 'ListaService', 'ValorService', 'LISTAS',
+    function ($scope, $modalInstance, veiculo, VeiculoService, ModalService, FipeService, ListaService, ValorService, LISTAS) {
 
         var init = function () {
-            $scope.tipos = LISTAS.tipo;
+            $scope.tipos = LISTAS.tipoVeiculo;
             $scope.combustiveis = LISTAS.combustivel;
-            $scope.status = LISTAS.status;
-            $scope.situacoes = LISTAS.situacao;
+            $scope.status = LISTAS.statusVeiculo;
+            $scope.situacoes = LISTAS.situacaoVeiculo;
             
             $scope.veiculo = {
                 idVeiculo: (veiculo && veiculo.idVeiculo) || null,
@@ -101,11 +101,23 @@ app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'vei
         
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
-            $modalInstance.close($scope.veiculo);
+            VeiculoService.getByPlaca($scope.veiculo.placa)
+                .then(function(veiculo) {
+                    if(!veiculo) { $modalInstance.close($scope.veiculo); }
+                    else if(veiculo.idVeiculo == $scope.veiculo.idVeiculo) { $modalInstance.close($scope.veiculo); }
+                    else { modalMessage("Esta placa de veículo já está cadastrada!"); } 
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });            
         };
         
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
+        };
+        
+        var modalMessage = function(message) {
+            ModalService.modalMessage(message);
         };
 
         var validarForm = function (form) {

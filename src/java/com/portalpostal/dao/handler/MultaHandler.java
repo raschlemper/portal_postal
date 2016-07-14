@@ -1,27 +1,40 @@
 package com.portalpostal.dao.handler;
 
+import com.portalpostal.model.Veiculo;
 import com.portalpostal.model.VeiculoMulta;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.sql2o.ResultSetHandler;
 
-public class MultaHandler implements ResultSetHandler<VeiculoMulta> {
-        
-    public MultaHandler() { }
+public class MultaHandler extends GenericHandler implements ResultSetHandler<VeiculoMulta> {
+                
+    public MultaHandler() { 
+        super("veiculo_multa");
+    }
+    
+    public MultaHandler(String table) {
+        super(table);
+    }
 
     @Override
     public VeiculoMulta handle(ResultSet result) throws SQLException {
         VeiculoMulta multa = new VeiculoMulta();
-        multa.setIdVeiculoMulta(result.getInt("veiculo_multa.idVeiculoMulta"));
-        multa.setCondutor(result.getString("veiculo_multa.condutor"));
-        multa.setNumero(result.getInt("veiculo_multa.numero"));
-        multa.setValor(result.getDouble("veiculo_multa.valor"));
-        multa.setData(result.getDate("veiculo_multa.data"));
-        multa.setValor(result.getDouble("veiculo_multa.valor"));
-        multa.setDescontada(result.getBoolean("veiculo_multa.descontada"));
-        multa.setLocal(result.getString("veiculo_multa.local"));
-        multa.setDescricao(result.getString("veiculo_multa.descricao"));
+        multa.setIdVeiculoMulta(getInt(result, "idVeiculoMulta"));
+        multa.setCondutor(getString(result, "condutor"));
+        multa.setNumero(getInt(result, "numero"));
+        multa.setValor(getDouble(result, "valor"));
+        multa.setData(getDate(result, "data"));
+        multa.setValor(getDouble(result, "valor"));
+        multa.setDescontada(getBoolean(result, "descontada"));
+        multa.setLocal(getString(result, "local"));
+        multa.setDescricao(getString(result, "descricao"));
+        multa.setVeiculo(getVeiculo(result));
         return multa;
+    }
+    
+    private Veiculo getVeiculo(ResultSet result) throws SQLException {
+        if(!existColumn(result, "veiculo.idVeiculo")) return null;
+        return new VeiculoHandler().handle(result); 
     }
     
 }

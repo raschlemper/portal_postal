@@ -1,28 +1,33 @@
+<%@page import="Coleta.Controle.contrTipoColeta"%>
+<%@page import="Coleta.Entidade.*"%>
+<%@page import="Coleta.Controle.contrColetaFixa"%>
+<%@page import="java.util.Map"%>
 <%@page import="Entidade.Clientes"%>
 <%@page import="Coleta.Entidade.Coletador"%>
 <%@page import="Coleta.Controle.contrColetador"%>
 <%@ page import = "java.util.ArrayList,java.sql.Timestamp, java.util.Date, java.text.SimpleDateFormat"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%
-    if (session.getAttribute("usuario") == null) {
+      Usuario usrSessao = (Usuario) session.getAttribute("agf_usuario");
+    if (usrSessao == null) {
         response.sendRedirect("../../index.jsp?msgLog=3");
+    } else if (usrSessao.getListaAcessosPortalPostal().contains("203")) {
+        response.sendRedirect("../../NewTemplate/Dashboard/index.jsp?msg=Usuario sem permissao!");
     } else {
-
-        int idNivelDoUsuario = (Integer) session.getAttribute("nivel");
-        if (idNivelDoUsuario != 1) {
-            response.sendRedirect("../jsp/imp_movimento.jsp?msg=Acesso Negado!");
-        }
 
         String nomeBD = (String) session.getAttribute("empresa");
 
         int idColetador = Integer.parseInt(request.getParameter("idColetador"));
-        String nomeColetador = Coleta.Controle.contrColetador.consultaNomeColetadoresById(idColetador, nomeBD);
-        ArrayList listaColetaFixa = Coleta.Controle.contrColetaFixa.consultaColetasFixasPeloColetador(idColetador, nomeBD);
+        String nomeColetador = contrColetador.consultaNomeColetadoresById(idColetador, nomeBD);
+        ArrayList listaColetaFixa = contrColetaFixa.consultaColetasFixasPeloColetador(idColetador, nomeBD);
         int numColetaFixa = listaColetaFixa.size();
-        ArrayList listaTipo = Coleta.Controle.contrTipoColeta.consultaTodosTipoColeta(nomeBD);
+
+        Map<Integer, ArrayList<Coleta>> lsC = contrColetaFixa.verificaExistenciaRotaParaCliente(nomeBD);
+
+        ArrayList listaTipo = contrTipoColeta.consultaTodosTipoColeta(nomeBD);
         String optTipo = "";
         for (int i = 0; i < listaTipo.size(); i++) {
-            Coleta.Entidade.TipoColeta tip = (Coleta.Entidade.TipoColeta) listaTipo.get(i);
+            TipoColeta tip = (TipoColeta) listaTipo.get(i);
             String nomeTipo = tip.getTipo();
             int idTipo = tip.getIdTipoColeta();
             optTipo += "<option value='" + idTipo + "'>" + nomeTipo + "</option>";
@@ -77,10 +82,10 @@
                                                     <select name="idCliente" id="idCliente" onchange="pegaClienteJson(this.value);">
                                                         <option value="sel" >-- Selecione um Cliente --</option>
                                                         <%
-                                                            ArrayList<Clientes> listaCliente = Controle.contrCliente.getNomeCodigoMetodo(nomeBD);
+                                                            ArrayList<Clientes> listaCliente = Controle.contrCliente.getNomeCodigoMetodo(nomeBD, false);
                                                             for (Clientes c : listaCliente) {
                                                                 out.println("<option value='" + c.getCodigo() + "'>[" + c.getCodigo() + "] " + c.getNome() + "</option>");
-                                                                jsonCliente += ",{ \"id\":\"" + c.getCodigo() 
+                                                                jsonCliente += ",{ \"id\":\"" + c.getCodigo()
                                                                         + "\" , \"nome\":\"" + c.getNome().replace("\"", "").replace("'", "")
                                                                         + "\" , \"logradouro\":\"" + c.getEndereco().replace("\"", "").replace("'", "")
                                                                         + "\" , \"numero\":\"" + c.getNumero()
@@ -89,20 +94,20 @@
                                                                         + "\" , \"cidade\":\"" + c.getCidade().replace("\"", "").replace("'", "")
                                                                         + "\" , \"uf\":\"" + c.getUf()
                                                                         + "\" , \"cep\":\"" + c.getCep()
-                                                                        + "\" , \"telefone\":\"" + c.getTelefone().replace("\"", "")  
-                                                                        + "\" , \"email\":\"" + c.getEmail().replace("\"", "")  + "\" }";
+                                                                        + "\" , \"telefone\":\"" + c.getTelefone().replace("\"", "")
+                                                                        + "\" , \"email\":\"" + c.getEmail().replace("\"", "") + "\" }";
                                                             }
                                                             jsonCliente = "{ \"clientes\" : [" + jsonCliente.substring(1) + "]}";
                                                         %>
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-2">
-                                                    <button type="button" disabled class="btn btn-sm btn-success" id="add" onclick="addRow();"><i class="fa fa-plus fa-spc"></i> ADICIONAR NA ROTA</button>
+                                                    <button type="button" disabled class="btn btn-sm btn-success hidden" id="add" onclick="addRow();"><i class="fa fa-plus fa-spc"></i> ADICIONAR NA ROTA</button>
                                                     <%--<input style="width:450px;" type="text" id="nomeCliente" name="nomeCliente" onclick="javascript:this.value = '';" />--%>
                                                     <input type="hidden" id="nomeCliAux" name="nomeCliAux" />
                                                     <input type="hidden" id="idCliAux" name="idCliAux" />
                                                 </div>
-                                                <div class="col-lg-2"><button type="button" disabled class="btn btn-sm btn-info" id="verMapa" onclick="abrirPopMapa();" ><i class="fa fa-map-marker fa-spc"></i> VER NO MAPA</button></div>
+                                                <div class="col-lg-2"><button type="button" disabled class="btn btn-sm btn-info hidden" id="verMapa" onclick="abrirPopMapa();" ><i class="fa fa-map-marker fa-spc"></i> VER NO MAPA</button></div>
                                             </div>
                                         </li>
                                         <li class="list-group-item" style="display: none;" id="liDadosCli">
@@ -117,6 +122,7 @@
                                                     <tr>
                                                         <th class="no-sort">CK</th>
                                                         <th>Cliente</th>
+                                                        <th>Outra Rota</th>
                                                         <th class="no-sort" width="150">Tipo da Coleta</th>
                                                         <th width="90">Horario</th>
                                                         <th class="no-sort" width="130">Coleta Fixa?</th>
@@ -126,18 +132,18 @@
                                                 <tbody id="table">
                                                     <%
                                                         for (int i = 0; i < numColetaFixa; i++) {
-                                                            Coleta.Entidade.ColetaFixa cf = (Coleta.Entidade.ColetaFixa) listaColetaFixa.get(i);
+                                                            ColetaFixa cf = (ColetaFixa) listaColetaFixa.get(i);
                                                             int idColetaFixa = cf.getIdColetaFixa();
                                                             int idCliente = cf.getIdCliente();
                                                             int idTipoColeta = cf.getIdTipo();
                                                             int fixo = cf.getFixo();
                                                             String horaColeta = cf.getHora();
                                                             String nomeCliente = Controle.contrCliente.consultaNomeById(idCliente, nomeBD);
-                                                            if(nomeCliente.equals("")){
-                                                                nomeCliente = "Cliente Cód. "+idCliente+" não encontrado!";
+                                                            if (nomeCliente.equals("")) {
+                                                                nomeCliente = "Cliente Cód. " + idCliente + " não encontrado!";
                                                             }
                                                             /*Entidade.Clientes cli = Controle.contrCliente.consultaClienteById(idCliente, nomeBD);
-                                                            String nomeCliente = cli.getNome();*/
+                                                             String nomeCliente = cli.getNome();*/
                                                             String className = "odd";
                                                             if (i % 2 == 0) {
                                                                 className = "even";
@@ -151,10 +157,32 @@
                                                             <input class="form-control" type="hidden" id="idRota<%=i%>" value="<%= idColetaFixa%>" name="idRota<%=i%>" />
                                                         </td>
                                                         <td align="center">
+                                                            <%
+                                                                if (lsC.containsKey(idCliente)) {
+                                                                    String rt = "";
+                                                                    ArrayList<Coleta> colts = lsC.get(idCliente);
+                                                                    for (Coleta cl : colts) {
+                                                                        if (!cl.getNomeColetador().trim().equals(nomeColetador.trim())) {
+                                                                            String fx = "eventual";
+                                                                            if (cl.getIdTipo() == 1) {
+                                                                                fx = "fixo";
+                                                                            }
+                                                                            rt += "| "+ cl.getNomeColetador() +" - "+ fx +" ";
+
+                                                                        }
+                                                                    }
+                                                                    if(rt.contains("|")){
+                                                                        rt = rt.substring(1);
+                                                                    }
+                                                            %>
+                                                            <%=rt%>
+                                                            <%}%>
+                                                        </td>
+                                                        <td align="center">
                                                             <select class="form-control" id="select<%=i%>" name="select<%=i%>">
                                                                 <%
                                                                     for (int j = 0; j < listaTipo.size(); j++) {
-                                                                        Coleta.Entidade.TipoColeta tip = (Coleta.Entidade.TipoColeta) listaTipo.get(j);
+                                                                        TipoColeta tip = (TipoColeta) listaTipo.get(j);
                                                                         String nomeTipo = tip.getTipo();
                                                                         int idTipo = tip.getIdTipoColeta();
                                                                 %>
@@ -227,7 +255,7 @@
             function selectCliente() {
                 $('#idCliente').select2();
             }
-            $(document).ready(function() {
+            $(document).ready(function () {
                 LoadSelect2Script(selectCliente);
                 LoadDataTablesScripts(AllTables);
             });
@@ -244,10 +272,10 @@
                         if (cliArray[i].id === idSelecionado) {
                             document.getElementById('idCliAux').value = cliArray[i].id;
                             document.getElementById('nomeCliAux').value = cliArray[i].nome;
-                            $('#liDadosCli').html("<b>"+cliArray[i].nome + "</b><br/>" + 
-                                    cliArray[i].logradouro + " " + cliArray[i].complemento + "<br/>" + 
-                                    cliArray[i].bairro + " - " + cliArray[i].cidade + " / " + cliArray[i].uf + " - CEP " + cliArray[i].cep  + "<br/>" +
-                                    "Fone: "+cliArray[i].telefone);
+                            $('#liDadosCli').html("<b>" + cliArray[i].nome + "</b><br/>" +
+                                    cliArray[i].logradouro + " " + cliArray[i].complemento + "<br/>" +
+                                    cliArray[i].bairro + " - " + cliArray[i].cidade + " / " + cliArray[i].uf + " - CEP " + cliArray[i].cep + "<br/>" +
+                                    "Fone: " + cliArray[i].telefone);
                             $('#liDadosCli').show();
                             habilitaBotao();
                         }
@@ -271,7 +299,7 @@
                 var idCliente = document.getElementById('idCliente').value;
                 bootbox.dialog({
                     title: "Mapa do Cliente",
-                    message: '<iframe style="width:100%; height:520px;border:0px;" src="ajax/coletador_rota_mapa_cliente.jsp?idCliente='+idCliente+'"></iframe>',
+                    message: '<iframe style="width:100%; height:520px;border:0px;" src="ajax/coletador_rota_mapa_cliente.jsp?idCliente=' + idCliente + '"></iframe>',
                     animate: true,
                     className: "modal-lgWidth",
                     onEscape: true,
@@ -279,20 +307,25 @@
                         success: {
                             label: "<i class='fa fa-lg fa-times fa-spc'></i>&nbsp;&nbsp;FECHAR",
                             className: "btn btn-danger",
-                            callback: function() {
+                            callback: function () {
                                 bootbox.hideAll();
                             }
                         }
                     }
                 });
             }
-            
+
             function habilitaBotao() {
+
+                $('#add').toggleClass('hidden');
+                $('#verMapa').toggleClass('hidden');
                 document.getElementById('add').disabled = false;
                 document.getElementById('verMapa').disabled = false;
             }
 
             function desabilitaBotao() {
+                $('#add').toggleClass('hidden');
+                $('#verMapa').toggleClass('hidden');
                 document.getElementById('add').disabled = true;
                 document.getElementById('verMapa').disabled = true;
             }
@@ -315,24 +348,30 @@
 
                 linha.insertCell(1).innerHTML = "<input type='hidden' id='cliente" + cont + "' name='cliente" + cont + "' value='" + idCli + "' /><b>" + nomeCli + "</b>";
 
-                var coluna1 = linha.insertCell(2);
-                coluna1.innerHTML = "<select class='form-control' id='select" + cont + "' name='select" + cont + "'> <%= optTipo%> </select>";
-                coluna1.align = "center";
-
-                var coluna2 = linha.insertCell(3);
-                coluna2.innerHTML = "<input class='form-control' type='text' id='hora" + cont + "' name='hora" + cont + "' value='' size='2' maxlength='5' onKeyPress='mascara(this,maskHora)' onblur='valida_hora(this);' />";
+                var coluna2 = linha.insertCell(2);
+                coluna2.innerHTML = "";
                 coluna2.align = "center";
 
-                var coluna3 = linha.insertCell(4);
-                coluna3.innerHTML = "<select class='form-control' id='fixo" + cont + "' name='fixo" + cont + "'>"
+                var coluna3 = linha.insertCell(3);
+                coluna3.innerHTML = "<select class='form-control' id='select" + cont + "' name='select" + cont + "'> <%= optTipo%> </select>";
+                coluna3.align = "center";
+
+
+
+                var coluna4 = linha.insertCell(4);
+                coluna4.innerHTML = "<input class='form-control' type='text' id='hora" + cont + "' name='hora" + cont + "' value='' size='2' maxlength='5' onKeyPress='mascara(this,maskHora)' onblur='valida_hora(this);' />";
+                coluna4.align = "center";
+
+                var coluna5 = linha.insertCell(5);
+                coluna5.innerHTML = "<select class='form-control' id='fixo" + cont + "' name='fixo" + cont + "'>"
                         + "<option value='1' selected >Fixa</option>"
                         + "<option value='0'>Eventual</option>"
                         + "</select>";
-                coluna3.align = "center"
+                coluna5.align = "center"
 
-                var coluna4 = linha.insertCell(5);
-                coluna4.innerHTML = "<button class='btn btn-sm btn-danger' type='button' id='del' onclick='delRow(this);'><i class='fa fa-lg fa-trash'></i></button>";
-                coluna4.align = "center"
+                var coluna6 = linha.insertCell(6);
+                coluna6.innerHTML = "<button class='btn btn-sm btn-danger' type='button' id='del' onclick='delRow(this);'><i class='fa fa-lg fa-trash'></i></button>";
+                coluna6.align = "center"
 
                 document.getElementById('contador').value = newCont;
 
@@ -388,7 +427,7 @@
                             className: 'btn btn-danger pull-right'
                         }
                     },
-                    callback: function(result) {
+                    callback: function (result) {
                         if (result) {
                             var tabela = document.getElementById('table');
                             linha = linha.parentNode.parentNode;

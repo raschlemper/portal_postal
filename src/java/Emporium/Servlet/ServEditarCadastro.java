@@ -32,25 +32,25 @@ public class ServEditarCadastro extends HttpServlet {
         
         HttpSession sessao = request.getSession();
         String nomeBD = (String) sessao.getAttribute("empresa");
-        System.out.println("chego");
+       
         //VERIFICA SE ESTA LOGADO NA SESSAO
         if (nomeBD == null) {
-        System.out.println("chego1");
+        
             response.sendRedirect("index.jsp?msgLog=3");
         } else {      
-        System.out.println("chego2");
+        
             //PEGA OS PARAMETROS DO FORM HTML
             int nome_etq = Integer.parseInt(request.getParameter("nome_etq"));
-        System.out.println("chego3" +  nome_etq);
+        
             int idCli = Integer.parseInt(request.getParameter("idCliente"));
-        System.out.println("chego4" + idCli);
+        
             String url_logo = request.getParameter("logo_img_url");            
-        System.out.println("chego5" + url_logo);
+        
             //ALTERA URL NO BANCO
             contrCliente.alterarLogo(url_logo, idCli, nomeBD);
-        System.out.println("chego5");
+       
             contrCliente.editarNomeEtq(idCli, nome_etq, nomeBD);
-        System.out.println("chego6");
+        
             response.sendRedirect("Cliente/Cadastros/cadastro.jsp?msg=Cadastro Atualizado!");
         }
     } 

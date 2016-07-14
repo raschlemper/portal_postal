@@ -120,6 +120,23 @@ public class contrColeta {
         }
     }
 
+    public static int darBaixaColetas(String idColetas, int status, int statusEntrega, String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "UPDATE coleta SET status=?, statusEntrega=?, dataHoraBaixa=NOW() where idColeta IN("+idColetas+")";
+
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.setInt(1, status);
+            valores.setInt(2, statusEntrega);
+            int i = valores.executeUpdate();
+            return i;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrColeta", "SQLException", sql, e.toString());
+            return -1;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
     public static int darBaixa(int idColeta, int status, int statusEntrega, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "update coleta set status=?, statusEntrega=?, dataHoraBaixa=NOW() where idColeta = ?";
@@ -146,6 +163,27 @@ public class contrColeta {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setInt(1, idColetador);
             valores.setInt(2, idColeta);
+            int i = valores.executeUpdate();
+            return i;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrColeta", "SQLException", sql, e.toString());
+            return -1;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+    public static int alterarColetadordasColetas(String idColetas, int idColetador, boolean isWeb ,String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        
+        String sql = "UPDATE coleta SET idColetador=? WHERE idColeta IN("+idColetas+");";
+        if(isWeb){
+            
+        sql = "UPDATE coleta SET idColetador = ?, status = 2 WHERE idColeta IN("+idColetas+");";
+        }
+        
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.setInt(1, idColetador);
             int i = valores.executeUpdate();
             return i;
         } catch (SQLException e) {
@@ -209,7 +247,8 @@ public class contrColeta {
 
     public static ArrayList<Coleta> consultaUltimasColetas(String nomeBD, String data) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "SELECT * FROM coleta WHERE DATE(dataHoraColeta)='" + data + "' and status > 2 ORDER BY dataHoraBaixa DESC LIMIT 10;";
+       // String sql = "SELECT * FROM coleta WHERE DATE(dataHoraColeta)='" + data + "' and status > 2 ORDER BY dataHoraBaixa DESC LIMIT 10;";
+        String sql = "SELECT * FROM coleta WHERE DATE(dataHoraColeta)='" + data + "' and status > 2 ORDER BY dataHoraBaixa DESC;";
 
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
@@ -338,7 +377,7 @@ public class contrColeta {
 
     public static String consultaQtdColetasSolicitadas(String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "SELECT COUNT(idColeta) AS qtd FROM coleta WHERE status = 1";
+        String sql = "SELECT COUNT(idColeta) AS qtd FROM coleta WHERE status = 1";        
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();
@@ -355,6 +394,44 @@ public class contrColeta {
         }
     }
 
+    public static boolean verificaSeJaHouveColeta(int idColetador, String data, String nomeBD){
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "SELECT *"
+                + " FROM coleta AS c"
+                + " WHERE c.idColetador = ? AND DATE(dataHoraColeta) = ? " 
+                + " AND status IN (4,5,6,7);";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.setInt(1, idColetador);
+            valores.setString(2, data);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            boolean r = result.next();
+            valores.close();
+            return r;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrColeta", "SQLException", sql, e.toString());
+            return false;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+    public static boolean verificaSeJaHouveRotaFixa(String data, String nomeBD){
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "SELECT * FROM log_coleta_fixa WHERE DATE(dataHoraCarregada) = '"+data+"';";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);           
+            ResultSet result = (ResultSet) valores.executeQuery();
+            boolean r = result.next();
+            valores.close();
+            return r;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrColeta", "SQLException", sql, e.toString());
+            return false;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+    
     public static ArrayList<Coleta> consultaColetasPeloStatus(int status, int idColetador, String data, String ordem, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "SELECT idColeta, status, idCliente, idTipo, dataHoraColeta, dataHoraAguardando, dataHoraBaixa, dataHoraSolicitacao, obs,"
@@ -366,16 +443,21 @@ public class contrColeta {
                 + " LEFT JOIN coleta_coletador ON coleta_coletador.idColetador = c.idColetador"
                 + " WHERE c.idColetador = ? AND DATE(dataHoraColeta) = ? ";
         if (status == 3 || status == 4) {
+           
             sql += " AND (status = 3 OR status = 4)";
         } else if (status == 2) {
+           
             sql += " AND (status = 2 OR status = 6)";
         } else if (status == 5) {
+           
             sql += " AND (status = 5 OR status = 7)";
         } else if (status > 0) {
+           
             sql += " AND status = " + status;
         }
-        sql += " ORDER BY status DESC, " + ordem;
-
+        sql += " ORDER BY " + ordem;
+        
+        
         ArrayList<Coleta> listaStatus = new ArrayList();
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
@@ -508,7 +590,7 @@ public class contrColeta {
 
     public static ArrayList<Coleta> consultaTodasColetasDoColetador(int idColetador, String data, String ordem, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "SELECT * FROM coleta WHERE idColetador=? and DATE(dataHoraColeta)=? and status > 1 ORDER BY " + ordem;
+        String sql = "SELECT * FROM coleta WHERE idColetador=? and DATE(dataHoraColeta)=? and status IN (2,4,5,6,7) ORDER BY " + ordem;
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setInt(1, idColetador);
@@ -545,7 +627,7 @@ public class contrColeta {
 
     public static ArrayList<Coleta> consultaTodasFinalizadas(int idColetador, String data, String ordem, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "SELECT * FROM coleta WHERE idColetador=? and DATE(dataHoraColeta)=? and status > 2 and status <> 6 ORDER BY " + ordem;
+        String sql = "SELECT * FROM coleta WHERE idColetador=? and DATE(dataHoraColeta)=? and status IN (4,5,7) ORDER BY " + ordem;
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setInt(1, idColetador);

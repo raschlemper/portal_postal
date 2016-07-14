@@ -569,11 +569,15 @@
         <servlet-class>Servlet.ServCriaSMTP</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>Help</servlet-name>
+        <jsp-file>/app/help.jsp</jsp-file>
+    </servlet>
+    <servlet>
         <servlet-name>App</servlet-name>
         <jsp-file>/app/index.jsp</jsp-file>
     </servlet>
     <servlet>
-        <servlet-name>jersey-serlvet</servlet-name>
+        <servlet-name>jersey-servlet</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
@@ -590,6 +594,23 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet>
+        <servlet-name>jersey-servlet-report</servlet-name>
+        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+            <param-value>com.portalpostal.filter.AppFilter</param-value>
+        </init-param>
+        <init-param>
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-value>com.portalpostal.report</param-value>
+        </init-param>
+        <init-param>
+            <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet>
         <servlet-name>ServListaPostagemRemoverObj</servlet-name>
         <servlet-class>Emporium.Servlet.ServListaPostagemRemoverObj</servlet-class>
     </servlet>
@@ -604,6 +625,38 @@
     <servlet>
         <servlet-name>ImagemAR</servlet-name>
         <servlet-class>Servlet.ImagemAR</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServDesativaCliente</servlet-name>
+        <servlet-class>Servlet.ServDesativaCliente</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SerAtivaCliente</servlet-name>
+        <servlet-class>Servlet.SerAtivaCliente</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServExcluirDepto</servlet-name>
+        <servlet-class>Servlet.ServExcluirDepto</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServTrocaSenhaPortal</servlet-name>
+        <servlet-class>Servlet.ServTrocaSenhaPortal</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServClienteSepararDest</servlet-name>
+        <servlet-class>Servlet.ServClienteSepararDest</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServImportaVpne</servlet-name>
+        <servlet-class>Emporium.Servlet.ServImportaVpne</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServInserirVendedor</servlet-name>
+        <servlet-class>Vendedor.Servlet.ServInserirVendedor</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServInserirClientesVendedor</servlet-name>
+        <servlet-class>Vendedor.Servlet.ServInserirClientesVendedor</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ServLogin</servlet-name>
@@ -1170,12 +1223,21 @@
         <url-pattern>/ServCriaSMTP</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>App</servlet-name>
-        <url-pattern>/app/veiculo/*</url-pattern>
+        <servlet-name>Help</servlet-name>
+        <url-pattern>/app/help/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>jersey-serlvet</servlet-name>
+        <servlet-name>App</servlet-name>
+        <url-pattern>/app/veiculo/*</url-pattern>
+        <url-pattern>/app/financeiro/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>jersey-servlet</servlet-name>
         <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>jersey-servlet-report</servlet-name>
+        <url-pattern>/report/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ServListaPostagemRemoverObj</servlet-name>
@@ -1193,11 +1255,47 @@
         <servlet-name>ImagemAR</servlet-name>
         <url-pattern>/ImagemAR</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServDesativaCliente</servlet-name>
+        <url-pattern>/ServDesativaCliente</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SerAtivaCliente</servlet-name>
+        <url-pattern>/SerAtivaCliente</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServExcluirDepto</servlet-name>
+        <url-pattern>/ServExcluirDepto</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServTrocaSenhaPortal</servlet-name>
+        <url-pattern>/ServTrocaSenhaPortal</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServClienteSepararDest</servlet-name>
+        <url-pattern>/ServClienteSepararDest</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServImportaVpne</servlet-name>
+        <url-pattern>/ServImportaVpne</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServInserirVendedor</servlet-name>
+        <url-pattern>/ServInserirVendedor</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServInserirClientesVendedor</servlet-name>
+        <url-pattern>/ServInserirClientesVendedor</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             5
         </session-timeout>
     </session-config>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/erro404.html</location>
+    </error-page>
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>

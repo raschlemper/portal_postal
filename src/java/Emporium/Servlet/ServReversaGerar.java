@@ -91,6 +91,7 @@ public class ServReversaGerar extends HttpServlet {
         String bairro_destinatario = request.getParameter("bairroCli");
         String cidade_destinatario = request.getParameter("cidadeCli");
         String uf_destinatario = request.getParameter("ufCli");
+        String cklist = request.getParameter("cklist");
 
         /*
          AP = Autorização Postagem
@@ -141,7 +142,21 @@ public class ServReversaGerar extends HttpServlet {
                 int ar = Integer.parseInt(request.getParameter("ar"));
                 c.setAg(validade);
                 c.setAr(ar);
-                c.setCklist("4");
+                if(!cklist.equals("0")){
+                     c.setCklist(cklist);
+                     if(cklist.equals("5")){
+                        String[] pedidos = request.getParameterValues("ckPedido");
+                        String adicional = "";
+                        for (int i = 0; i < pedidos.length; i++) {
+                            adicional += ","+pedidos[i];                             
+                        }
+                        if(!adicional.equals("")){
+                            adicional = adicional.substring(1);
+                        }
+                        c.setServicoAdicional(adicional);
+                     }
+                }
+               
 
                 //DEFINE O REMETENTE DA REVERSA
                 RemetenteTO rem = new RemetenteTO();

@@ -9,19 +9,17 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Conexao {
-    
+
     public static int contConn = 0;
-    
+
     public static Connection conectar(String nome) {
-        try {            
+        try {
             //Conexão Servidor Scc4.com.br
             Class.forName("com.mysql.jdbc.Driver");
-            
-            //String url = "jdbc:mysql://localhost:3306/pp_06895434000183?zeroDateTimeBehavior=convertToNull&autoReconnect=true";
-            String url = "jdbc:mysql://localhost:3306/pp_" + nome +"?zeroDateTimeBehavior=convertToNull&autoReconnect=true";
-            Connection con = DriverManager.getConnection(url, "root", "1s2c3c4");
+            String url = "jdbc:mysql://localhost:3306/pp_" + nome + "?zeroDateTimeBehavior=convertToNull&autoReconnect=true";
+            //String url = "jdbc:mysql://scc4.com.br:3306/pp_" + nome + "?zeroDateTimeBehavior=convertToNull&autoReconnect=true";
+            Connection con = DriverManager.getConnection(url, "root", "123456");
             //Connection con = DriverManager.getConnection(url,"smart_bd","33m.SMRT");
-            
             //contConn++;
             //System.out.println("+ Conexoes Ativas = " + contConn);
             return (con);
@@ -35,14 +33,14 @@ public class Conexao {
     }
 
     public static Connection conectarGeral() {
-        try {            
+        try {
             //Conexão Banco Local
             Class.forName("com.mysql.jdbc.Driver");
-            
             String url = "jdbc:mysql://localhost:3306/portalpostal?zeroDateTimeBehavior=convertToNull&autoReconnect=true";
-            Connection con = DriverManager.getConnection(url, "root", "1s2c3c4");
+            //String url = "jdbc:mysql://scc4.com.br:3306/portalpostal?zeroDateTimeBehavior=convertToNull&autoReconnect=true";
+            Connection con = DriverManager.getConnection(url, "root", "123456");
             //Connection con = DriverManager.getConnection(url,"smart_bd","33m.SMRT");
-            
+
             //contConn++;
             //System.out.println("G Conexoes Ativas = " + contConn);
             return (con);
@@ -56,14 +54,13 @@ public class Conexao {
     }
 
     public static Connection conectarCep() {
-        try {            
+        try {
             //Conexão Banco Local
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/_dne?zeroDateTimeBehavior=convertToNull&autoReconnect=true";
             //Connection con = DriverManager.getConnection(url,"smart_bd","33m.SMRT");
-            Connection con = DriverManager.getConnection(url, "root", "1s2c3c4");
-            
-            
+            Connection con = DriverManager.getConnection(url, "root", "123456");
+
             //contConn++;
             //System.out.println("C Conexoes Ativas = " + contConn);
             return (con);
@@ -82,8 +79,8 @@ public class Conexao {
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/scc4?zeroDateTimeBehavior=convertToNull&autoReconnect=true";
             //Connection con = DriverManager.getConnection(url,"smart_bd","33m.SMRT");
-            Connection con = DriverManager.getConnection(url, "root", "1s2c3c4");
-            
+            Connection con = DriverManager.getConnection(url, "root", "123456");
+
             //contConn++;
             //System.out.println("S Conexoes Ativas = " + contConn);
             return (con);
@@ -95,15 +92,15 @@ public class Conexao {
             return null;
         }
     }
-    
-      public static Connection conectarBoxCubo() {
+
+    public static Connection conectarBoxCubo() {
         try {
             //Conexão Banco Local
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/boxcubo?zeroDateTimeBehavior=convertToNull&autoReconnect=true";
-           Connection con = DriverManager.getConnection(url,"smart_bd","33m.SMRT");
-            // Connection con = DriverManager.getConnection(url, "root", "1s2c3c4");
-            
+            //Connection con = DriverManager.getConnection(url, "smart_bd", "33m.SMRT");
+            Connection con = DriverManager.getConnection(url, "root", "123456");
+
             //contConn++;
             //System.out.println("S Conexoes Ativas = " + contConn);
             return (con);

@@ -69,7 +69,10 @@
                     document.getElementById("divInteracao").className = "esconder";
                 }
             }
-
+            function pesqSro(param) {
+                $('#objetos').val(param);
+                $('#frmSRO').submit();
+            }
 
 
         </script>
@@ -162,7 +165,9 @@
                                 %>
                                 <tr style="cursor:default;">
                                     <td><%= nomeCli%></td>
-                                    <td align="center"><a href='http://websro.correios.com.br/sro_bin/txect01$.QueryList?P_LINGUA=001&P_TIPO=001&P_COD_UNI=<%= numObj%>' target=_blank><%= numObj%></a></td>
+                                    <td align="center">
+                                        <a href='#' onclick="pesqSro('<%= numObj%>');"><%= numObj%></a>
+                                    </td>
                                     <td><%= servico%></td>
                                     <td><%= codigoEct%></td>
                                     <td><%= detinatario%></td>
@@ -236,6 +241,9 @@
                 </div>
             </div>
         </div>
+        <form name="frmSRO" id="frmSRO" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
+            <input type="hidden" name="objetos" id="objetos" value="" />
+        </form>
     </body>
 </html>
 <%}%>

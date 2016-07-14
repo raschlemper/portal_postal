@@ -62,7 +62,7 @@
         <script type="text/javascript" src="../../javascript/plugins/dropdown/js/jquery.dropdownPlain.js"></script>
 
         <script type="text/javascript" charset="utf-8">
-            $(function() {
+            $(function () {
                 $("#data").datepicker({
                     maxDate: '<%= vDataAtual%>',
                     showOn: "button",
@@ -134,9 +134,10 @@
                                 <th style="width: 50px;" class="nosort"><h3>STATUS</h3></th>
                                 <th style="width: 50px;" class="nosort"><h3>IMPRIMIR</h3></th>
                                 <th><h3>N° DO TELEGRAMA</h3></th>
-                                <th><h3>Destinatario</h3></th>
+                                <th><h3>Departamento</h3></th>
+                                <th><h3>Destinatário</h3></th>
                                 <th><h3>Cidade / UF</h3></th>
-                                <th><h3>Agendado/Enviado</h3></th>
+                                <th><h3>Dt. Solicitação / Dt. Envio</h3></th>
                                 <th><h3>Adicionais</h3></th>
                             </tr>
                         </thead>
@@ -147,13 +148,18 @@
                                     Endereco ed = t.getEnderecoDes();
                                     String enviado = "";
                                     if (t.getStatus() == 1) {
-                                        enviado = " / "+sdf.format(t.getDataHoraEnviado());
+                                        enviado = " - " + sdf.format(t.getDataHoraEnviado());
                                     }
                             %>
                             <tr>
                                 <td align="center">     
-                                    <%if (t.getStatus() == 1) {%>                                    
+                                    <%if (t.getStatus() == 1) {%>    
+
+                                    <%if (t.getValor() > 0) {%>
+                                    <img src="../../imagensNew/tick_circle.png" /><br/>R$<%= t.getValor()%>
+                                    <%} else {%>
                                     <img src="../../imagensNew/tick_circle.png" />
+                                    <%}%>
                                     <%} else {%>
                                     <form action="../../ServTelegramaExcluir" method="post" >                                                 
                                         <input type="hidden" name="id" value="<%= t.getId()%>" />
@@ -163,17 +169,23 @@
                                     <%}%>
                                 </td>
                                 <td align="center">
-                                        <a href="../../Agencia/Telegrama/telegrama_impressao.jsp?id=<%= t.getId()%>" target="_blank" ><img src="../../imagensNew/printer.png" /></a>
+                                    <a href="../../Agencia/Telegrama/telegrama_impressao.jsp?id=<%= t.getId()%>" target="_blank" ><img src="../../imagensNew/printer.png" /></a>
                                 </td>
-                                <td><a style="font-weight: bold; color: blue;" href='http://websro.correios.com.br/sro_bin/txect01$.QueryList?P_LINGUA=001&P_TIPO=001&P_COD_UNI=<%= t.getSro()%>' target=_blank><%= t.getSro()%></a></td>
+                                <td>
+                                    <a href='#' onclick="pesqSro('<%= t.getSro()%>');"><%= t.getSro()%></a> 
+                                </td>
+                                <td><b><%= t.getDepartamento()%></b></td>
                                 <td><b><%= ed.getNome()%></b></td>
-                                <td><%= ed.getCidade() + "/" + ed.getUf()%></td>
-                                <td><%= sdf.format(t.getDataHoraAgendado()) + enviado %></td>
+                                <td><%= ed.getCidade() + " / " + ed.getUf()%></td>
+                                <td><%= sdf.format(t.getDataHoraAgendado()) + enviado%></td>
                                 <td><%= t.getAdicionais()%></td>
                             </tr>
                             <%}%>
                         </tbody>
                     </table>
+                    <form name="frmSRO" id="frmSRO" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
+                        <input type="hidden" name="objetos" id="objetos" value="" />
+                    </form>
                     <script type="text/javascript">
                         var sorter2 = new TINY.table.sorter('sorter2', 'table2', {
                             headclass: 'head',
@@ -190,6 +202,10 @@
                             sortdir: -1,
                             init: true
                         });
+                        function pesqSro(param) {
+                            $('#objetos').val(param);
+                            $('#frmSRO').submit();
+                        }
                     </script>
                     <div style="width: 100%;clear: both;"></div>
 
@@ -198,6 +214,7 @@
                 </div>
             </div>
         </div>
+
     </body>
 </html>
 <%}%>

@@ -114,8 +114,7 @@ public class ContrDashboard {
                 " AND dataImpressao IS NOT NULL " +
                 " AND DATE(dataImpressao) BETWEEN '"+dataIni+"' AND '"+dataFim+"' " +
                 " GROUP BY idCliente " +
-                " ORDER BY qtd DESC";
-        
+                " ORDER BY qtd DESC";        
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();

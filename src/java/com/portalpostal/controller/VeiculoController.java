@@ -83,6 +83,18 @@ public class VeiculoController {
     }  
     
     @GET
+    @Path("/placa/{placa}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Veiculo findByPlaca(@PathParam("placa") String placa) {
+        try {
+            init();    
+            return veiculoService.findByPlaca(placa);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }  
+    
+    @GET
     @Path("/{idVeiculo}/combustivel")
     @Produces(MediaType.APPLICATION_JSON)
     public List<VeiculoCombustivel> findCombustivelByIdVeiculo(@PathParam("idVeiculo") Integer idVeiculo) {

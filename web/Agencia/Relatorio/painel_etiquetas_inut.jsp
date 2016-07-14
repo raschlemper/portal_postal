@@ -19,8 +19,7 @@
         int idUsuario = (Integer) session.getAttribute("idUsuario");
         String nomeBD = (String) session.getAttribute("empresa");
         int num = Controle.contrCliente.numeroClientes(nomeBD);
-        
-        
+
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         Date dataAtual = new Date();
@@ -52,7 +51,7 @@
         <script type="text/javascript" src="../../javascript/jquery/js/jquery-1.6.2.min.js"></script>
         <script type="text/javascript" src="../../javascript/jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
         <script type="text/javascript" src="../../javascript/jquery/js/jquery.ui.datepicker-pt-BR.js"></script>
-        
+
         <!-- TableSorter -->
         <link rel="stylesheet" href="../../javascript/plugins/TableSorter/styleSorterV3.css" />
         <script type="text/javascript" src="../../javascript/plugins/TableSorter/scriptSorterV3.js"></script>
@@ -67,16 +66,16 @@
         <script type="text/javascript" language="javascript" src="../../javascript/plugins/dropdown/js/jquery.dropdownPlain.js"></script>
 
         <script type="text/javascript" charset="utf-8">
-            function validaForm(){
+            function validaForm() {
                 var form = document.form1;
-                if(form.arquivo.value == ""){
+                if (form.arquivo.value == "") {
                     alert("Escolha o arquivo de clientes a ser importado!\nGeralmente encontrado em 'C:/clientes.txt'.");
                     return false;
-                }else{
+                } else {
                     var indexA = form.arquivo.value.lastIndexOf(".");
                     var indexB = form.arquivo.value.length;
                     var ext = form.arquivo.value.substring(indexA, indexB).toUpperCase();
-                    if(ext != ".TXT"){
+                    if (ext != ".TXT") {
                         alert("O arquivo a ser importado deve ser '.TXT' !");
                         return false;
                     }
@@ -84,19 +83,19 @@
 
                 form.submit();
             }
-            
-            function chamaDivProtecao(){
+
+            function chamaDivProtecao() {
                 var classe = document.getElementById("divProtecao").className;
-                if(classe == "esconder"){
+                if (classe == "esconder") {
                     document.getElementById("divProtecao").className = "mostrar";
                     document.getElementById("divInteracao").className = "mostrar";
-                }else{
+                } else {
                     document.getElementById("divProtecao").className = "esconder";
                     document.getElementById("divInteracao").className = "esconder";
                 }
             }
 
-            $(function() {
+            $(function () {
                 $("#dataIni").datepicker({
                     maxDate: '<%= vDataAtual%>',
                     showOn: "button",
@@ -129,43 +128,43 @@
 
                     <div id="titulo1">Etiquetas Inutilizadas</div>
 
-                        <form action="painel_etiquetas_inut.jsp" method="post">
-                            <ul class="ul_formulario" >
-                                <li class="titulo"><dd><span>SELECIONE O PERIODO</span></dd></li>
-                                <li>
-                                    <dd>
-                                        <label>Periodo de Data</label>
-                                        <input type="text" style="width:60px;" name="dataIni" id="dataIni" value="<%= dataAnterior%>" maxlength="10" onkeypress="mascara(this, maskData);" />
-                                        até
-                                        <input type="text" style="width:60px;" name="dataFim" id="dataFim" value="<%=vDataAtual%>" maxlength="10" onkeypress="mascara(this, maskData);" />
-                                    </dd>
-                                </li>
-                                <li>
-                                    <dd>
-                                        <div class="buttons">
-                                            <button type="submit" class="regular"><img src="../../imagensNew/lupa.png"/> PESQUISAR</button>
-                                        </div>
-                                    </dd>
-                                </li>
-                            </ul>
-                        </form>
+                    <form action="painel_etiquetas_inut.jsp" method="post">
+                        <ul class="ul_formulario" >
+                            <li class="titulo"><dd><span>SELECIONE O PERIODO</span></dd></li>
+                            <li>
+                                <dd>
+                                    <label>Periodo de Data</label>
+                                    <input type="text" style="width:60px;" name="dataIni" id="dataIni" value="<%= dataAnterior%>" maxlength="10" onkeypress="mascara(this, maskData);" />
+                                    até
+                                    <input type="text" style="width:60px;" name="dataFim" id="dataFim" value="<%=vDataAtual%>" maxlength="10" onkeypress="mascara(this, maskData);" />
+                                </dd>
+                            </li>
+                            <li>
+                                <dd>
+                                    <div class="buttons">
+                                        <button type="submit" class="regular"><img src="../../imagensNew/lupa.png"/> PESQUISAR</button>
+                                    </div>
+                                </dd>
+                            </li>
+                        </ul>
+                    </form>
                     <div style="width: 100%; padding: 10px; background: white;">
                         <div id="titulo2">Lista de Etiquetas que estão INUTILIZADAS</div>
-                            <table id="barraAtendimento" border="0">
-                                <tr>
-                                    <td align="left" style="font-weight:bold;font-size:12px;">
-                                        Pesquisa Rápida:
-                                        <select style='min-width:150px;' id="columns3" onchange="sorter3.search('query3')"></select>
-                                        <input type="text" id="query3" onkeyup="sorter3.search('query3')" placeholder="Digite aqui a sua pesquisa..." />
-                                        <a style="text-decoration:none;font-weight:bold;font-size:11px;" href="javascript:document.getElementById('query3').value='';sorter3.reset()">RESTAURAR PADRÕES</a>
-                                    </td>
-                                    <td align="right">
-                                        <div class="details" style="clear:both;">
-                                            <div>Resultado <span id="startrecord3"></span>-<span id="endrecord3"></span> de <span id="totalrecords3"></span></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
+                        <table id="barraAtendimento" border="0">
+                            <tr>
+                                <td align="left" style="font-weight:bold;font-size:12px;">
+                                    Pesquisa Rápida:
+                                    <select style='min-width:150px;' id="columns3" onchange="sorter3.search('query3')"></select>
+                                    <input type="text" id="query3" onkeyup="sorter3.search('query3')" placeholder="Digite aqui a sua pesquisa..." />
+                                    <a style="text-decoration:none;font-weight:bold;font-size:11px;" href="javascript:document.getElementById('query3').value='';sorter3.reset()">RESTAURAR PADRÕES</a>
+                                </td>
+                                <td align="right">
+                                    <div class="details" style="clear:both;">
+                                        <div>Resultado <span id="startrecord3"></span>-<span id="endrecord3"></span> de <span id="totalrecords3"></span></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                         <table cellpadding="0" cellspacing="0" border="0" id="table3" class="tinytable">
                             <thead>
                                 <tr>
@@ -206,7 +205,9 @@
                                 %>
                                 <tr style="cursor:default;">
                                     <%--<td align="center"><input type="checkbox" name="ids" value="<%= des.getId()%>" /></td>--%>
-                                    <td align="center"><a href='http://websro.correios.com.br/sro_bin/txect01$.QueryList?P_LINGUA=001&P_TIPO=001&P_COD_UNI=<%= numObj %>' target=_blank><%= numObj%></a></td>
+                                    <td align="center">  
+                                         <a href='#' onclick="pesqSro('<%= numObj %>');"><%= numObj%></a>                                     
+                                    </td>
                                     <td><%= des.getNomeServico()%></td>
                                     <td><%= nomeCli%></td>
                                     <td><%= des.getNomeDes()%></td>
@@ -232,10 +233,10 @@
                             </div>
                             <div id="tablenav3" class="tablenav">
                                 <div>
-                                    <img src="../../javascript/plugins/TableSorter/images/left_end.png" width="20" height="20" alt="First Page" onclick="sorter3.move(-1,true)" />
+                                    <img src="../../javascript/plugins/TableSorter/images/left_end.png" width="20" height="20" alt="First Page" onclick="sorter3.move(-1, true)" />
                                     <img src="../../javascript/plugins/TableSorter/images/left.png" width="20" height="20" alt="First Page" onclick="sorter3.move(-1)" />
                                     <img src="../../javascript/plugins/TableSorter/images/right.png" width="20" height="20" alt="First Page" onclick="sorter3.move(1)" />
-                                    <img src="../../javascript/plugins/TableSorter/images/right_end.png" width="20" height="20" alt="Last Page" onclick="sorter3.move(1,true)" />
+                                    <img src="../../javascript/plugins/TableSorter/images/right_end.png" width="20" height="20" alt="Last Page" onclick="sorter3.move(1, true)" />
                                     <select style="margin-left:5px;" id="pagedropdown3"></select>
                                     <a style="margin-left:10px;" href="javascript:sorter3.showall()">Ver Tudo</a>
                                 </div>
@@ -244,30 +245,37 @@
                                 <div class="page">Página <span id="currentpage3"></span> de <span id="totalpages3"></span></div>
                             </div>
                         </div>
+                        <form name="frmSRO" id="frmSRO" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
+                            <input type="hidden" name="objetos" id="objetos" value="" />
+                        </form>
                         <script type="text/javascript">
-                            var sorter3 = new TINY.table.sorter('sorter3','table3',{
-                                headclass:'head',
-                                ascclass:'asc',
-                                descclass:'desc',
-                                evenclass:'evenrow',
-                                oddclass:'oddrow',
-                                evenselclass:'evenselected',
-                                oddselclass:'oddselected',
-                                paginate:true,
-                                size:10,
-                                colddid:'columns3',
-                                currentid:'currentpage3',
-                                totalid:'totalpages3',
-                                startingrecid:'startrecord3',
-                                endingrecid:'endrecord3',
-                                totalrecid:'totalrecords3',
-                                hoverid:'selectedrowPointer',
-                                pageddid:'pagedropdown3',
-                                navid:'tablenav3',
-                                sortcolumn:6,
-                                sortdir:1,
-                                init:true
+                            var sorter3 = new TINY.table.sorter('sorter3', 'table3', {
+                                headclass: 'head',
+                                ascclass: 'asc',
+                                descclass: 'desc',
+                                evenclass: 'evenrow',
+                                oddclass: 'oddrow',
+                                evenselclass: 'evenselected',
+                                oddselclass: 'oddselected',
+                                paginate: true,
+                                size: 10,
+                                colddid: 'columns3',
+                                currentid: 'currentpage3',
+                                totalid: 'totalpages3',
+                                startingrecid: 'startrecord3',
+                                endingrecid: 'endrecord3',
+                                totalrecid: 'totalrecords3',
+                                hoverid: 'selectedrowPointer',
+                                pageddid: 'pagedropdown3',
+                                navid: 'tablenav3',
+                                sortcolumn: 6,
+                                sortdir: 1,
+                                init: true
                             });
+                            function pesqSro(param) {
+                                $('#objetos').val(param);
+                                $('#frmSRO').submit();
+                            }
                         </script>
                     </div>
 

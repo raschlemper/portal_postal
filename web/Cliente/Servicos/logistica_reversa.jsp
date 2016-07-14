@@ -26,7 +26,6 @@
         int idCli = Integer.parseInt(String.valueOf(session.getAttribute("idCliente")));
 
         Clientes cli = (Clientes) session.getAttribute("cliente");
-        int nivel = (Integer) session.getAttribute("nivelUsuarioEmp");
         int idUser = (Integer) session.getAttribute("idUsuarioEmp");
         String nomeUser = (String) session.getAttribute("nomeUser");
         String numero = cli.getNumero();
@@ -106,6 +105,24 @@
                 } else if (form.vd.value > 10000) {
                     alert('O Valor Declarado de Encomendas deve ser até R$ 10.000,00!');
                     return false;
+                }
+                
+                if(form.cklist.value === '5'){
+                    var contSelected = 0;
+                    var inputElements = document.getElementsByName('ckPedido');
+                    for(var i=0; inputElements[i]; ++i){
+                          if(inputElements[i].checked){
+                                contSelected++
+                                if(contSelected > 8){
+                                    alert('Selecione no máximo 8 tipos de documentos');
+                                    return false;
+                                }
+                          }
+                    }
+                    if(contSelected === 0){
+                        alert('Selecione ao menos 1 tipo de documento');                        
+                        return false;
+                    }
                 }
 
                 //PREENCHIMENTO DA CONFIRMAÇÃO                
@@ -190,6 +207,14 @@
                 } else {
                     document.getElementById("numeroCli").value = "";
                     document.getElementById("numeroCli").disabled = false;
+                }
+            }
+            
+            function mudaTipoChecklist(tipoChecklist){
+                if(tipoChecklist === '5'){
+                    document.getElementById("tipoDocs").className = 'mostrar';
+                }else{
+                    document.getElementById("tipoDocs").className = 'esconder';                    
                 }
             }
         </script>
@@ -465,18 +490,18 @@
                                         <label>Autorizar aquisição de embalagem?</label>
                                         <select name="caixa" id="caixa">
                                             <option value="0">Não</option>
-                                            <option value="116600403;0">Caixa de Encomenda "B" (16x11x6 cm)</option>
-                                            <option value="116600055;0">Caixa Encomenda 01 (18x13,5x9 cm)</option>
-                                            <option value="116600063;0">Caixa Encomenda 02 (27x18x9 cm)</option>
-                                            <option value="116600071;2">Caixa Encomenda 03 (27x22,5x13,5 cm)</option>
-                                            <option value="116600080;0">Caixa Encomenda 04 (36x27x18 cm)</option>
-                                            <option value="116600160;2">Caixa Encomenda 05 (54x36x27 cm)</option>
-                                            <option value="116600179;0">Caixa Encomenda 06 (36x27x27 cm)</option>
-                                            <option value="116600187;0">Caixa Encomenda 07 (36x28x4 cm)</option>
-                                            <option value="765000660;0">Envelope Bolha Grande (20x28 cm)</option>
-                                            <option value="765000652;2">Envelope Bolha Médio (21x18 cm)</option>
-                                            <option value="765000644;2">Envelope SEDEX Plástico Grande (40x28 cm)</option>
-                                            <option value="765000636;0">Envelope SEDEX Plástico Médio (35,3x25 cm)</option>
+                                            <option value="116600403;0">Caixa de Encomenda "B" (16 x 11 x 6 cm)</option>
+                                            <option value="116600055;0">Caixa Encomenda 01 (18 x 13,5 x 9 cm)</option>
+                                            <option value="116600063;0">Caixa Encomenda 02 (27 x 18 x 9 cm)</option>
+                                            <option value="116600071;2">Caixa Encomenda 03 (27 x 22,5 x 13,5 cm)</option>
+                                            <option value="116600080;0">Caixa Encomenda 04 (36 x 27 x 18 cm)</option>
+                                            <option value="116600160;2">Caixa Encomenda 05 (54 x 36 x 27 cm)</option>
+                                            <option value="116600179;0">Caixa Encomenda 06 (36 x 27 x 27 cm)</option>
+                                            <option value="116600187;0">Caixa Encomenda 07 (36 x 28 x 4 cm)</option>
+                                            <option value="765000660;0">Envelope Bolha Grande (20 x 28 cm)</option>
+                                            <option value="765000652;2">Envelope Bolha Médio (21 x 18 cm)</option>
+                                            <option value="765000644;2">Envelope SEDEX Plástico Grande (40 x 28 cm)</option>
+                                            <option value="765000636;0">Envelope SEDEX Plástico Médio (35,3 x 25 cm)</option>
                                         </select>
                                     </dd>
                                     <dd>
@@ -508,9 +533,96 @@
                                             <option value="28">28 Dias</option>
                                             <option value="29">29 Dias</option>
                                             <option value="30" selected>30 Dias</option>
+                                            <option value="31">31 Dias</option>
+                                            <option value="32">32 Dias</option>
+                                            <option value="33">33 Dias</option>
+                                            <option value="34">34 Dias</option>
+                                            <option value="35">35 Dias</option>
+                                            <option value="36">36 Dias</option>
+                                            <option value="37">37 Dias</option>
+                                            <option value="38">38 Dias</option>
+                                            <option value="39">39 Dias</option>
+                                            <option value="40">40 Dias</option>
+                                            <option value="41">41 Dias</option>
+                                            <option value="42">42 Dias</option>
+                                            <option value="43">43 Dias</option>
+                                            <option value="44">44 Dias</option>
+                                            <option value="45">45 Dias</option>
+                                            <option value="46">46 Dias</option>
+                                            <option value="47">47 Dias</option>
+                                            <option value="48">48 Dias</option>
+                                            <option value="49">49 Dias</option>
+                                            <option value="40">50 Dias</option>
+                                            <option value="51">51 Dias</option>
+                                            <option value="52">52 Dias</option>
+                                            <option value="53">53 Dias</option>
+                                            <option value="54">54 Dias</option>
+                                            <option value="55">55 Dias</option>
+                                            <option value="56">56 Dias</option>
+                                            <option value="57">57 Dias</option>
+                                            <option value="58">58 Dias</option>
+                                            <option value="59">59 Dias</option>
+                                            <option value="60">60 Dias</option>
                                         </select>
                                     </dd>     
-                                </li>
+                                    <dd>
+                                        <label>Solicitação de Checklist:(Apenas clientes previamente habilitados devem utilizar essa opção)</label>
+                                        <select style="width: 300px;" name="cklist" onchange="mudaTipoChecklist(this.value);">						
+                                            <option value="0">Sem Solicitação de Checklist</option>
+                                            <option value="2">2 via(s) - Check List Celular </option>
+                                            <option value="4">2 via(s) - Check List Eletrônico</option>                                            
+                                            <option value="5">2 via(s) - Check List Documento</option> <!-- Somente nos SEDEX -->
+                                            <option value="7">2 via(s) - Check List Conteúdo</option>                                            
+                                        </select>
+                                    </dd>     
+                                    <dd id="tipoDocs" class="esconder">
+                                        <br/><b><font color="#ff0000">Atenção!</font></b><br/>
+                                        <b>
+                                            Orientar o seu cliente quanto à documentação a ser encaminhada, ou seja, se deve ser original ou cópia,<br/>
+                                            se a cópia deve ser autenticada em cartório ou não e se deve ter firma reconhecida ou não,<br/>
+                                            pois não cabe ao carteiro / atendente tais verificações.<br/>
+                                        </b>
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="1"  /> Atestado de Antecedentes Criminais
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="2"  /> Cadastro de Pessoas Físicas (CPF)
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="3"  /> Cadastro Nacional de Pessoa Jurídica (CNPJ)
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="9"  /> Cartão do Programa de Formação do Patrimônio do Servidor Público (PASEP)
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="10" /> Cartão do Programa de Integração Social (PIS)
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="5"  /> Carteira de Identidade Profissional (Ex: CRA, CRM, OAB)
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="4"  /> Carteira de Identidade (RG)
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="6"  /> Carteira de Trabalho e Previdência Social (CTPS)
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="7"  /> Carteira do Aposentado
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="8"  /> Carteira Nacional de Habilitação (CNH)
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="11" /> Certidão de Batismo
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="12" /> Certidão de Casamento
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="13" /> Certidão de Nascimento
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="14" /> Certidão de Óbito
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="15" /> Certidão Negativa de Débitos
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="16" /> Certificado de Registro e Licenciamento de Veículo (CRLV)
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="17" /> Certificado de Reservista
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="18" /> Comprovante de Matrícula
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="20" /> Comprovante de Pagamento de Anuidade / Mensalidade
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="19" /> Comprovante de Pagamento de Boleto / Fatura
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="21" /> Conta de Água
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="22" /> Conta de Gás
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="23" /> Conta de Luz
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="24" /> Conta de Telefone
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="25" /> Contrato Assinado
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="26" /> Escritura
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="27" /> Extrato Bancário
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="28" /> Extrato de Benefícios
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="29" /> Extrato de Fundo de Garantia (FGTS)
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="30" /> Fatura de Cartão de Crédito
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="31" /> Holerite (Contracheque)
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="32" /> Nota / Cupom Fiscal
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="33" /> Passaporte
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="34" /> Procuração
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="35" /> Proposta Assinada
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="36" /> Recibo de Aluguel
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="37" /> Recibo de Entrega da Declaração de Imposto de Renda
+                                        <br/><input name="ckPedido" type="checkbox" title="Selecionar o tipo de Documento" style="cursor:pointer;" value="38" /> Título de Eleitor
+
+                                    </dd>
+                                </li>                                        
                                 <li>
                                     <dd style="width: 100%;">
                                         <div class="buttons">

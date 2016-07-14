@@ -136,6 +136,36 @@ public class ServServicoAbrangencia extends HttpServlet {
                 ContrServicoAbrangencia.inserir("ESEDEX", cepInicial, cepFinal, suspenso, nomeBD);
             }
         }        
+        ContrServicoAbrangencia.excluirByServico("MDPB_L", nomeBD);
+        int ml_contador = Integer.parseInt(request.getParameter("mdpbl_contador"));
+        for(int i=1; i<=ml_contador;i++){
+            if(request.getParameter("mdpbl_cepIni"+i) != null && request.getParameter("mdpbl_cepFim"+i) != null){
+                int cepInicial = Integer.parseInt(request.getParameter("mdpbl_cepIni"+i).replaceAll("-", ""));
+                int cepFinal = Integer.parseInt(request.getParameter("mdpbl_cepFim"+i).replaceAll("-", ""));
+                int suspenso = Integer.parseInt(request.getParameter("mdpbl_suspenso_"+i));
+                ContrServicoAbrangencia.inserir("MDPB_L", cepInicial, cepFinal, suspenso, nomeBD);
+            }
+        }        
+        ContrServicoAbrangencia.excluirByServico("MDPB_E", nomeBD);
+        int me_contador = Integer.parseInt(request.getParameter("mdpbe_contador"));
+        for(int i=1; i<=me_contador;i++){
+            if(request.getParameter("mdpbe_cepIni"+i) != null && request.getParameter("mdpbe_cepFim"+i) != null){
+                int cepInicial = Integer.parseInt(request.getParameter("mdpbe_cepIni"+i).replaceAll("-", ""));
+                int cepFinal = Integer.parseInt(request.getParameter("mdpbe_cepFim"+i).replaceAll("-", ""));
+                int suspenso = Integer.parseInt(request.getParameter("mdpbe_suspenso_"+i));
+                ContrServicoAbrangencia.inserir("MDPB_E", cepInicial, cepFinal, suspenso, nomeBD);
+            }
+        }        
+        ContrServicoAbrangencia.excluirByServico("MDPB_N", nomeBD);
+        int mn_contador = Integer.parseInt(request.getParameter("mdpbn_contador"));
+        for(int i=1; i<=mn_contador;i++){
+            if(request.getParameter("mdpbn_cepIni"+i) != null && request.getParameter("mdpbn_cepFim"+i) != null){
+                int cepInicial = Integer.parseInt(request.getParameter("mdpbn_cepIni"+i).replaceAll("-", ""));
+                int cepFinal = Integer.parseInt(request.getParameter("mdpbn_cepFim"+i).replaceAll("-", ""));
+                int suspenso = Integer.parseInt(request.getParameter("mdpbn_suspenso_"+i));
+                ContrServicoAbrangencia.inserir("MDPB_N", cepInicial, cepFinal, suspenso, nomeBD);
+            }
+        }        
         
         sessao.setAttribute("msg", "Abrangência dos Serviços Alterados com Sucesso!");
         //response.sendRedirect("Agencia/Configuracao/servicos_abrangencia.jsp");

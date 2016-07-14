@@ -20,7 +20,7 @@
                 Date dataAtual = new Date();
                 String vDataAtual = sdf.format(dataAtual);
                 String dataOntem = Util.SomaData.SomarDiasDatas(dataAtual, -1);
-                String dataInicioCalendario = Util.SomaData.SomarDiasDatas(dataAtual, -60); // diminui 2 meses                       
+                String dataInicioCalendario = Util.SomaData.SomarDiasDatas(dataAtual, -150); // diminui 5 meses                       
         %>
         <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
         <title>Portal Postal | Controle de AR</title>
@@ -261,12 +261,14 @@
                                         <option selected value="0">Todos os Departamentos</option>
                                         <%
                                             ArrayList<ClientesDeptos> listaDep = ContrClienteDeptos.consultaDeptos(idCliente, nomeBD);
+                                            ArrayList<Integer> dpsUser = (ArrayList<Integer>) session.getAttribute("departamentos");
                                             for (int i = 0; i < listaDep.size(); i++) {
                                                 ClientesDeptos cd = listaDep.get(i);
                                                 String depto = FormataString.removeAccentsToUpper(cd.getNomeDepartamento());
+                                                if(dpsUser.contains(cd.getIdDepartamento())){                                                    
                                         %>
                                         <option value="<%=depto%>"><%= cd.getNomeDepartamento()%></option>
-                                        <%}%>
+                                        <%}}%>
                                     </select>
                                 </dd>
                             </li>

@@ -1,0 +1,1 @@
+alter table cliente add separar_destinatarios integer default 1;

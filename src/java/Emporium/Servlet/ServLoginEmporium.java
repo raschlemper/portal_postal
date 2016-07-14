@@ -7,9 +7,11 @@ package Emporium.Servlet;
 import Controle.contrEmpresa;
 import Entidade.Clientes;
 import Entidade.ClientesUsuario;
+import Entidade.Usuario;
 import Entidade.empresas;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -82,6 +84,7 @@ public class ServLoginEmporium extends HttpServlet {
         int idEmpresa = 0;
         try {
             idEmpresa = Integer.parseInt(request.getParameter("agenciaHoito"));
+           
         } catch (NumberFormatException e) {
             if (caminho != null) {
                 response.sendRedirect(caminho + "?msg=Codigo de agencia inexistente!");
@@ -91,6 +94,7 @@ public class ServLoginEmporium extends HttpServlet {
         }
 
         String nomeBD = Controle.contrEmpresa.cnpjEmpresa(idEmpresa);
+       
         if (nomeBD == null || nomeBD.trim().equals("")) {
             if (caminho != null) {
                 response.sendRedirect(caminho + "?msg=Codigo de agencia inexistente!");
@@ -102,37 +106,56 @@ public class ServLoginEmporium extends HttpServlet {
 
             String senha = request.getParameter("senhaHoito");
             String login = request.getParameter("loginHoito");
-
+          
             Clientes cli = Emporium.Controle.ContrLoginEmporium.login(login, senha, nomeBD);
 
             if (cli != null) {
                 HttpSession sessao = request.getSession();
-                sessao.setMaxInactiveInterval(1800);
+                //sessao.invalidate();                
+                sessao = request.getSession();
+                sessao.setMaxInactiveInterval(360000);
+                
 
                 Controle.contrLogin.registraLoginDeCliente(idEmpresa, cli.getCodigo());
                 if (Controle.contrLogin.verificaStatusEmpresa(idEmpresa)) {
-
+                    
+         
                     ClientesUsuario us = Controle.contrSenhaCliente.usuarioEmp(login, senha, nomeBD);
                     empresas emp = contrEmpresa.consultaEmpresa(idEmpresa);
 
+                    /**DEPRECATED INIT*/
                     sessao.setAttribute("idCliente", cli.getCodigo());
                     sessao.setAttribute("empresa", nomeBD);
-                    sessao.setAttribute("nomeBD", nomeBD);
                     sessao.setAttribute("idEmpresa", idEmpresa);
-                    sessao.setAttribute("nomeUser", login);
+                    sessao.setAttribute("nomeUser", login);  
                     sessao.setAttribute("nivelUsuarioEmp", us.getNivel());
                     sessao.setAttribute("idUsuarioEmp", us.getId());
                     sessao.setAttribute("acessos", us.getAcessos());
                     sessao.setAttribute("departamentos", us.getDepartamentos());
                     sessao.setAttribute("servicos", us.getServicos());
-
                     sessao.setAttribute("nomeEmpresa", emp.getFantasia());
-                    sessao.setAttribute("temColeta", emp.getColeta()); // se a agencia tem COLETA
-                    sessao.setAttribute("temPV", emp.getChamada()); //se a agencia tem PRE VENDA
+                    sessao.setAttribute("temColeta", 1); // se a agencia tem COLETA
+                    sessao.setAttribute("temPV", 1); //se a agencia tem PRE VENDA
                     sessao.setAttribute("temETQ", cli.getUsaEtiquetador()); // Se o cliente usa o etiquetador
+                    /**DEPRECATED END*/
+                    
+                    
+                    sessao.setAttribute("nomeBD", nomeBD);
+                    sessao.setAttribute("usuario_sessao_cliente", us); // Se o cliente usa o etiquetador
                     sessao.setAttribute("cliente", cli); // Se o cliente usa o etiquetador
                     sessao.setAttribute("agencia", emp); // Se o cliente usa o etiquetador
-                    if (us.getNivel() != 99) {
+                                        
+                    //SE É OPERADOD MASTER                         
+                    sessao.setAttribute("senhaUser", senha);                 
+                    if(us.getNivel() == 100){                        
+                        ArrayList<Usuario> lsNomesBd = Emporium.Controle.ContrLoginEmporium.verificaOperadores(login);
+                        sessao.setAttribute("userMaster", lsNomesBd);
+                    }
+                    
+                  
+                    if(us.getIsFirst() == 0){                  
+                        response.sendRedirect("Cliente/Cadastros/usuario_primeiro_acesso.jsp");       
+                    } else if (us.getNivel() != 99) {
                         response.sendRedirect("Cliente/Postagens/consultas.jsp");
                     } else {
                         response.sendRedirect("Cliente/Servicos/pre_postagem.jsp");

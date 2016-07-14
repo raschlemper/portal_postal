@@ -4,6 +4,8 @@
  */
 package Entidade;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 
 
@@ -15,6 +17,7 @@ public class empresas {
 
     private int idEmpresa;
     private String empresa;
+    private String cnpj;
     private String endereco;
     private String telefone;
     private String bairro;
@@ -22,15 +25,10 @@ public class empresas {
     private String uf;
     private String cep;
     private String email;
-    private String cnpj;
     private String fantasia;
     private String complemento;
     private String status;
     private Timestamp dataHora;
-    private int crm;
-    private int desk;
-    private int chamada;
-    private int coleta;
     private String codSto;
     private String ip_server;
     private String login_server;
@@ -39,8 +37,17 @@ public class empresas {
     private String login_ws_sigep;
     private String senha_ws_sigep;
     private String tipo_agencia;
+    private String tipo_sistema;
+    private int tipoEscolhaColeta;
+    //private int crm;
+    //private int desk;
+    //private int chamada;
+    //private int coleta;
+    private String latitude;
+    private String longitude;
+    private String cpf_cnpj;
 
-    public empresas(int idEmpresa, String empresa, String endereco, String telefone, String bairro, String cidade, String uf, String cep, String email, String cnpj, String fantasia, String complemento, String status, int chamada, int coleta, String login_ws_sigep, String senha_ws_sigep, String tipo_agencia) {
+    /*public empresas(int idEmpresa, String empresa, String endereco, String telefone, String bairro, String cidade, String uf, String cep, String email, String cnpj, String fantasia, String complemento, String status, int chamada, int coleta, String login_ws_sigep, String senha_ws_sigep, String tipo_agencia) {
         this.idEmpresa = idEmpresa;
         this.empresa = empresa;
         this.endereco = endereco;
@@ -54,13 +61,78 @@ public class empresas {
         this.fantasia = fantasia;
         this.complemento = complemento;
         this.status = status;
-        this.chamada = chamada;
-        this.coleta = coleta;
         this.login_ws_sigep = login_ws_sigep;
         this.senha_ws_sigep = senha_ws_sigep;
         this.tipo_agencia = tipo_agencia;
-    }    
+    }   */ 
+    
+    public empresas(ResultSet result) throws SQLException {
+        this.idEmpresa = result.getInt("idEmpresa");
+        this.empresa = result.getString("empresa");
+        this.endereco = result.getString("endereco");
+        this.telefone = result.getString("telefone");
+        this.bairro = result.getString("bairro");
+        this.cidade = result.getString("cidade");
+        this.uf = result.getString("uf");
+        this.cep = result.getString("cep");
+        this.email = result.getString("email");
+        this.cnpj = result.getString("cnpj");
+        this.fantasia = result.getString("fantasia");
+        this.complemento = result.getString("complemento");
+        this.status = result.getString("status");
+        this.login_ws_sigep = result.getString("login_ws_sigep");
+        this.senha_ws_sigep = result.getString("senha_ws_sigep");
+        this.tipo_agencia = result.getString("tipo_agencia");
+        this.tipo_sistema = result.getString("tipo_sistema");
+        this.latitude = result.getString("latitude");
+        this.longitude = result.getString("longitude");
+        this.tipoEscolhaColeta = result.getInt("tipoEscolhaColeta");
+        this.cpf_cnpj = result.getString("cpf_cnpj");
+    }
 
+    public String getCpf_cnpj() {
+        return cpf_cnpj;
+    }
+
+    public void setCpf_cnpj(String cpf_cnpj) {
+        this.cpf_cnpj = cpf_cnpj;
+    }
+        
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    
+    
+    public String getTipo_sistema() {
+        return tipo_sistema;
+    }
+
+    public void setTipo_sistema(String tipo_sistema) {
+        this.tipo_sistema = tipo_sistema;
+    }
+
+    public int getTipoEscolhaColeta() {
+        return tipoEscolhaColeta;
+    }
+
+    public void setTipoEscolhaColeta(int tipoEscolhaColeta) {
+        this.tipoEscolhaColeta = tipoEscolhaColeta;
+    }
+    
     public String getTipo_agencia() {
         return tipo_agencia;
     }
@@ -237,7 +309,7 @@ public class empresas {
         this.uf = uf;
     }
 
-    public int getChamada() {
+    /*public int getChamada() {
         return chamada;
     }
 
@@ -267,6 +339,6 @@ public class empresas {
 
     public void setDesk(int desk) {
         this.desk = desk;
-    }
+    }*/
 
 }

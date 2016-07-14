@@ -1,18 +1,17 @@
 package com.portalpostal.model;
 
-import com.portalpostal.model.serializer.JsonDateSerializer;
+import com.portalpostal.model.dd.TipoSinistroVeiculo;
+import com.portalpostal.model.dd.TipoResponsavelVeiculo;
 import java.util.Date;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class VeiculoSinistro {
     
     private Integer idVeiculoSinistro;
     private Veiculo veiculo;
-    private TipoSinistro tipo;
+    private TipoSinistroVeiculo tipo;
     private Integer boletimOcorrencia;
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date data;
-    private TipoResponsavel responsavel;
+    private TipoResponsavelVeiculo responsavel;
     private String local;
     private String descricao;
     
@@ -34,11 +33,11 @@ public class VeiculoSinistro {
         this.veiculo = veiculo;
     }
 
-    public TipoSinistro getTipo() {
+    public TipoSinistroVeiculo getTipo() {
         return tipo;
     }
 
-    public void setTipo(TipoSinistro tipo) {
+    public void setTipo(TipoSinistroVeiculo tipo) {
         this.tipo = tipo;
     }
 
@@ -66,11 +65,11 @@ public class VeiculoSinistro {
         this.local = local;
     }
 
-    public TipoResponsavel getResponsavel() {
+    public TipoResponsavelVeiculo getResponsavel() {
         return responsavel;
     }
 
-    public void setResponsavel(TipoResponsavel responsavel) {
+    public void setResponsavel(TipoResponsavelVeiculo responsavel) {
         this.responsavel = responsavel;
     }
 

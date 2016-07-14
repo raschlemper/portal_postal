@@ -177,6 +177,28 @@ public class ContrServicoECT {
             Conexao.desconectar(conn);
         }
     }
+    public static ArrayList<ServicoECT> consultaServicosTelaPesquisa() throws SQLException {
+        Connection conn = Conexao.conectarGeral();
+        String sql = "SELECT * FROM servicos_ect WHERE ativo = 1 AND tipo = 'SERVICO' AND codEct IN (40010, 40096, 40436, 40444, 40843, 81019, 40045, 40126, 40215, 40886, 41068, 41106, 10014, 10138, 10707, 10065, 10715) GROUP BY grupoServico ORDER BY nomeServico";
+
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            ArrayList<ServicoECT> listaStatus = new ArrayList<ServicoECT>();
+            while (result.next()) {
+                ServicoECT sv = new ServicoECT(result);
+                listaStatus.add(sv);
+            }
+            valores.close();
+            return listaStatus;
+        } catch (SQLException e) {
+            System.out.println(e);
+            //ContrErroLog.inserir("HOITO - contrNivel", "SQLException", sql, e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
 
     //OK
     public static String consultaNomeServicoById(int idServ) throws SQLException {
@@ -210,6 +232,27 @@ public class ContrServicoECT {
             grupo = "SEDEX";
         }
         String sql = "SELECT * FROM servicos_ect WHERE grupoServico = '" + grupo + "' AND ativo = 1 AND avista >= 1 AND tipo = 'SERVICO' ;";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            ServicoECT sv = null;
+            if (result.next()) {
+                sv = new ServicoECT(result);
+            }
+            valores.close();
+            return sv;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrNivel", "SQLException", sql, e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+    
+    //OK
+    public static ServicoECT consultaByCodigoECT(int codigoECT) {
+        Connection conn = Conexao.conectarGeral();
+        String sql = "SELECT * FROM servicos_ect WHERE codECT = " + codigoECT + ";";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();

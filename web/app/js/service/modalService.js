@@ -7,10 +7,12 @@ app.factory('ModalService', function($modal) {
         modalDefault: function (templateUrl, controller, size, resolve) {
             return $modal.open({
                 animation: true,
+                backdrop: 'static',
                 templateUrl: templateUrl,
                 controller: controller,
                 size: size,
-                resolve: resolve
+                resolve: resolve,
+                windowClass: 'modal-window'
             })
         },
 
@@ -37,6 +39,20 @@ app.factory('ModalService', function($modal) {
             })
         },
 
+        modalConfirmar: function (title, message) {
+            return $modal.open({
+                animation: true,
+                templateUrl: 'partials/modal/modalConfirmar.html',
+                controller: function($scope, $modalInstance) {
+                    $scope.title = title;
+                    $scope.message = message;        
+                    $scope.ok = function() { $modalInstance.close(); };
+                    $scope.cancel = function () { $modalInstance.dismiss('cancel'); };
+                },
+                resolve: {}
+            })
+        },
+
         modalExcluir: function (title, message) {
             return $modal.open({
                 animation: true,
@@ -47,6 +63,16 @@ app.factory('ModalService', function($modal) {
                     $scope.ok = function() { $modalInstance.close(); };
                     $scope.cancel = function () { $modalInstance.dismiss('cancel'); };
                 },
+                resolve: {}
+            })
+        },
+
+        modalHelp: function () {
+            return $modal.open({
+                animation: true,
+                templateUrl: 'partials/modal/modalHelp.html',
+                controller: 'modalHelpController',
+                size: 'lg',
                 resolve: {}
             })
         }

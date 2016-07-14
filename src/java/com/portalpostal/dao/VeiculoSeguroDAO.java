@@ -1,8 +1,6 @@
 package com.portalpostal.dao;
 
 import com.portalpostal.dao.handler.SeguroHandler;
-import com.portalpostal.dao.handler.VeiculoSeguroHandler;
-import com.portalpostal.model.VeiculoManutencao;
 import com.portalpostal.model.VeiculoSeguro;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,19 +9,17 @@ import java.util.Map;
 
 public class VeiculoSeguroDAO extends GenericDAO {   
     
-    private SeguroHandler seguroHandler;
-    private VeiculoSeguroHandler veiculoSeguroHandler;
+    private final SeguroHandler seguroHandler;
 
     public VeiculoSeguroDAO(String nameDB) { 
         super(nameDB, VeiculoSeguroDAO.class);
         seguroHandler = new SeguroHandler();
-        veiculoSeguroHandler = new VeiculoSeguroHandler();
     } 
 
     public List<VeiculoSeguro> findAll() throws Exception {
         String sql = "SELECT * FROM veiculo_seguro, veiculo WHERE veiculo.idVeiculo = veiculo_seguro.idVeiculo "
                    + "ORDER BY veiculo_seguro.idVeiculo";
-        return findAll(sql, null, veiculoSeguroHandler);
+        return findAll(sql, null, seguroHandler);
     }
 
     public VeiculoSeguro find(Integer idVeiculoSeguro) throws Exception {
@@ -31,7 +27,7 @@ public class VeiculoSeguroDAO extends GenericDAO {
                    + "WHERE veiculo.idVeiculo = veiculo_seguro.idVeiculo AND idVeiculoSeguro = :idVeiculoSeguro ";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idVeiculoSeguro", idVeiculoSeguro);
-        return (VeiculoSeguro) find(sql, params, veiculoSeguroHandler);
+        return (VeiculoSeguro) find(sql, params, seguroHandler);
     }
 
     public VeiculoSeguro save(VeiculoSeguro veiculo) throws Exception { 
@@ -48,7 +44,7 @@ public class VeiculoSeguroDAO extends GenericDAO {
         params.put("indenizacao", veiculo.getIndenizacao().ordinal());
         params.put("dataInicioVigencia", veiculo.getDataInicioVigencia());
         params.put("dataFimVigencia", veiculo.getDataFimVigencia());
-        Integer idVeiculoSeguro = save(sql, params, veiculoSeguroHandler);
+        Integer idVeiculoSeguro = save(sql, params, seguroHandler);
         return find(idVeiculoSeguro);
     }
 
@@ -68,7 +64,7 @@ public class VeiculoSeguroDAO extends GenericDAO {
         params.put("indenizacao", veiculo.getIndenizacao().ordinal());
         params.put("dataInicioVigencia", veiculo.getDataInicioVigencia());
         params.put("dataFimVigencia", veiculo.getDataFimVigencia());
-        update(sql, params, veiculoSeguroHandler);
+        update(sql, params, seguroHandler);
         return veiculo;  
     }
 
@@ -77,7 +73,7 @@ public class VeiculoSeguroDAO extends GenericDAO {
         VeiculoSeguro veiculo = find(idVeiculoSeguro);
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idVeiculoSeguro", idVeiculoSeguro);
-        remove(sql, params, veiculoSeguroHandler);
+        remove(sql, params, seguroHandler);
         return veiculo;
     }
 
@@ -95,6 +91,6 @@ public class VeiculoSeguroDAO extends GenericDAO {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("dataInicio", dataInicio);
         params.put("dataFim", dataFim);
-        return findAll(sql, params, veiculoSeguroHandler);
+        return findAll(sql, params, seguroHandler);
     }
 }

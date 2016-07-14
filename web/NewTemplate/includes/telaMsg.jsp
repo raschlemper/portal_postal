@@ -14,7 +14,7 @@
     function telaMsg(){
        <%if (!msg2.equals("")) {%>
            bootbox.dialog({
-                title: "Mesagem do Sistema!",
+                title: "Mensagem do Sistema!",
                 message: "<%= msg2.replace("\"", "'") %>",
                 animate: true,
                 onEscape: true,

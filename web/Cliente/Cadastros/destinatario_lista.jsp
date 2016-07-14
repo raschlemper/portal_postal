@@ -1,3 +1,6 @@
+<%@page import="Entidade.ClientesUsuario"%>
+<%@page import="Controle.ContrClienteDeptos"%>
+<%@page import="Entidade.ClientesDeptos"%>
 <%@page import="Controle.contrDestinatario"%>
 <%@page import="Entidade.Destinatario"%>
 <%@page import="Entidade.SenhaCliente"%>
@@ -9,10 +12,10 @@
     if (nomeBD == null) {
         response.sendRedirect("../../index.jsp?msg=Sua sessao expirou! Para voltar ao Portal faça seu login novamente!");
     } else {
-
-        int nivelUsuarioEmp2 = (Integer) session.getAttribute("nivelUsuarioEmp");
-        int idEmpresa = Integer.parseInt(String.valueOf(session.getAttribute("idCliente")));
-        int idCli = Integer.parseInt(String.valueOf(session.getAttribute("idCliente")));
+        ClientesUsuario us = (ClientesUsuario) session.getAttribute("usuario_sessao_cliente");
+        Clientes cli = (Clientes) session.getAttribute("cliente");
+        ArrayList<Integer> dps = us.getDepartamentos();
+        ArrayList<ClientesDeptos> listaDep = ContrClienteDeptos.consultaDeptos(cli.getCodigo(), nomeBD);
 %>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -39,82 +42,132 @@
         <!-- TableSorter -->
 
         <script type="text/javascript">
-            function preencherCampos(){
+            function preencherCampos() {
                 var form = document.form1;
-                if(form.nome.value==""){
+                if (form.nome.value === "") {
                     alert('Preencha o NOME do destinatário!');
                     return false;
+                } else if(form.nome.value.length > 70){
+                    alert('Tamanho máximo de 70 caracteres para o NOME do destinatário!');
+                    return false;
                 }
-                if(form.cep.value==""){
+                if (form.cep.value === "") {
                     alert('Preencha o CEP do destinatário!');
                     return false;
-                }
-                if(form.endereco.value==""){
-                    alert('Preencha o ENDEREÇO do destinatário!');
+                } else if(form.cep.value.length > 9){
+                    alert('Tamanho máximo de 9 caracteres para o CEP do destinatário!');
                     return false;
                 }
-                if(form.numero.value==""){
+                if (form.endereco.value === "") {
+                    alert('Preencha o ENDEREÇO do destinatário!');
+                    return false;
+                } else if(form.nome.value.length > 80){
+                    alert('Tamanho máximo de 80 caracteres para o ENDEREÇO do destinatário!');
+                    return false;
+                }
+                if (form.numero.value === "") {
                     alert('Preencha o NÚMERO do destinatário!');
                     return false;
+                } else if(form.numero.value.length > 8){
+                    alert('Tamanho máximo de 8 caracteres para o NÚMERO do destinatário!');
+                    return false;
                 }
-                if(form.cidade.value==""){
+                if(form.complemento.value.length > 50){
+                    alert('Tamanho máximo de 50 caracteres para o COMPLEMENTO do destinatário!');
+                    return false;
+                }
+                if (form.bairro.value === "") {
+                    alert('Preencha o BAIRRO do destinatário!');
+                    return false;
+                } else if(form.bairro.value.length > 50){
+                    alert('Tamanho máximo de 50 caracteres para o BAIRRO do destinatário!');
+                    return false;
+                }
+                if (form.cidade.value === "") {
                     alert('Preencha a CIDADE do destinatário!');
                     return false;
                 }
-                if(form.uf.value==""){
+                if (form.uf.value === "") {
                     alert('Preencha a UF do destinatário!');
                     return false;
                 }
                 form.submit();
             }
 
-            function preencherCamposEdit(){
+            function preencherCamposEdit() {
                 var form = document.form5;
-                if(form.nome.value==""){
+                if (form.nome.value === "") {
                     alert('Preencha o NOME do destinatário!');
                     return false;
+                } else if(form.nome.value.length > 70){
+                    alert('Tamanho máximo de 70 caracteres para o NOME do destinatário!');
+                    return false;
                 }
-                if(form.cep.value==""){
+                if (form.cep.value === "") {
                     alert('Preencha o CEP do destinatário!');
                     return false;
-                }
-                if(form.endereco.value==""){
-                    alert('Preencha o ENDEREÇO do destinatário!');
+                } else if(form.cep.value.length > 9){
+                    alert('Tamanho máximo de 9 caracteres para o CEP do destinatário!');
                     return false;
                 }
-                if(form.cidade.value==""){
+                if (form.endereco.value === "") {
+                    alert('Preencha o ENDEREÇO do destinatário!');
+                    return false;
+                } else if(form.nome.value.length > 80){
+                    alert('Tamanho máximo de 80 caracteres para o ENDEREÇO do destinatário!');
+                    return false;
+                }
+                if (form.numero.value === "") {
+                    alert('Preencha o NÚMERO do destinatário!');
+                    return false;
+                } else if(form.numero.value.length > 8){
+                    alert('Tamanho máximo de 8 caracteres para o NÚMERO do destinatário!');
+                    return false;
+                }
+                if(form.complemento.value.length > 50){
+                    alert('Tamanho máximo de 50 caracteres para o COMPLEMENTO do destinatário!');
+                    return false;
+                }
+                if (form.bairro.value === "") {
+                    alert('Preencha o BAIRRO do destinatário!');
+                    return false;
+                } else if(form.bairro.value.length > 50){
+                    alert('Tamanho máximo de 50 caracteres para o BAIRRO do destinatário!');
+                    return false;
+                }
+                if (form.cidade.value === "") {
                     alert('Preencha a CIDADE do destinatário!');
                     return false;
                 }
-                if(form.uf.value==""){
+                if (form.uf.value === "") {
                     alert('Preencha a UF do destinatário!');
                     return false;
                 }
                 form.submit();
             }
 
-            function chamaDivProtecao(){
+            function chamaDivProtecao() {
                 var classe = document.getElementById("divProtecao").className;
-                if(classe == "esconder"){
+                if (classe == "esconder") {
                     document.getElementById("divProtecao").className = "mostrar";
                     document.getElementById("divInteracao").className = "mostrar";
-                }else{
+                } else {
                     document.getElementById("divProtecao").className = "esconder";
                     document.getElementById("divInteracao").className = "esconder";
                 }
             }
-            
-            $(document).ready(function(){
+
+            $(document).ready(function () {
                 /* ao pressionar uma tecla em um campo que seja de class="pula" */
-                $('#cep').keypress(function(e){
+                $('#cep').keypress(function (e) {
                     /* 
                      * verifica se o evento é Keycode (para IE e outros browsers)
                      * se não for pega o evento Which (Firefox)
                      */
-                    var tecla = (e.keyCode?e.keyCode:e.which);
-                    
+                    var tecla = (e.keyCode ? e.keyCode : e.which);
+
                     /* verifica se a tecla pressionada foi o ENTER */
-                    if(tecla == 13){
+                    if (tecla == 13) {
                         verPesquisarCepDest($('#cep').val());
                     }
                     /* impede o sumbit caso esteja dentro de um form */
@@ -122,14 +175,14 @@
                     //return false;
                 })
             });
-            
-            function funcEnter(e){
-                var tecla = (e.keyCode?e.keyCode:e.which);                    
+
+            function funcEnter(e) {
+                var tecla = (e.keyCode ? e.keyCode : e.which);
                 /* verifica se a tecla pressionada foi o ENTER */
-                if(tecla == 13){
+                if (tecla == 13) {
                     verPesquisarCepDest($('#cep2').val());
                 }
-            }            
+            }
 
             function semNumero() {
                 if (document.getElementById("sn").checked) {
@@ -179,6 +232,37 @@
                                     <label>ESCOLHA UM ARQUIVO PARA IMPORTAR:</label>
                                     <input style="width:300px;" type="file" name="arquivo" id="arquivo" accept=".csv"/>
                                 </dd>
+                                <dd>
+                                    <h3>LAYOUT DE EXEMPLO</h3><br/>
+                                    <a style="font-weight: bold;" href="ARQUIVO_EXEMPLO_DESTINATARIO.csv" target="_blank">CLIQUE AQUI PARA FAZER DOWNLOAD DO ARQUIVO DE EXEMPLO</a>
+                                </dd>
+                            </li>
+                            <li>                                
+                                <dd>
+                                    <label>Departamento / Centro de Custo</label>
+                                    <select name="idDepartamento" style="width: 230px;">
+                                        <%
+                                            if (listaDep != null && listaDep.size() > 0) {
+                                                for (int i = 0; i < listaDep.size(); i++) {
+                                                    ClientesDeptos cd = listaDep.get(i);
+                                                    if (dps.contains(cd.getIdDepartamento())) {
+                                        %>
+                                        <option value="<%=cd.getIdDepartamento()%>"><%= cd.getNomeDepartamento()%></option>
+                                        <%}
+                                            }
+                                        } else {%>
+                                        <option value="0">SEM DEPARTAMENTO</option>
+                                        <%}%>
+                                    </select>
+                                </dd>
+                            </li>
+                            <li>
+                                <dd>
+                                    <div class="buttons">
+                                        <input type="hidden" name="idCliente" value="<%= cli.getCodigo() %>" />
+                                        <button type="submit" class="positive"><img src="../../imagensNew/tick_circle.png" />IMPORTAR</button>
+                                    </div>
+                                </dd>
                             </li>
                         </ul>
                     </form>
@@ -190,50 +274,51 @@
                             <li>
                                 <dd>
                                     <label>Nome / Razão Social<b class="obg">*</b></label>
-                                    <input type="text" name="nome" size="50" value="" />
+                                    <input type="text" name="nome" size="50"  maxlength="70" value="" />
                                 </dd>
                                 <dd>
                                     <label>CPF / CNPJ</label>
-                                    <input type="text" name="cpf_cnpj" value="" />
+                                    <input type="text" name="cpf_cnpj"  maxlength="18" value=""  onkeydown="mascara(this, maskCpfCnpj);" />
                                 </dd>
                                 <dd>
                                     <label>Empresa</label>
-                                    <input type="text" name="empresa" value="" />
+                                    <input type="text" name="empresa"  maxlength="40" value="" />
                                 </dd>
                                 <dd>
                                     <label>CEP<b class="obg">*</b><a onclick="window.open('http://www.buscacep.correios.com.br', 'CORREIOS');" ><img src="../../imagensNew/question.png" /></a></label>
-                                    <input type="text" name="cep" id="cep" size="8" value="" maxlength="9" onkeypress="mascara(this, maskCep);handleEnter();" onblur="verPesquisarCepDest(this.value);" />
+                                    <input type="text" name="cep" id="cep" size="8" value="" maxlength="9" onkeypress="mascara(this, maskCep);
+                                            handleEnter();" onblur="verPesquisarCepDest(this.value);" />
                                 </dd>
                                 <dd>
                                     <label>E-mail</label>
-                                    <input type="text" name="email" value="" />
+                                    <input type="text" name="email"  maxlength="100" value="" />
                                 </dd>
                                 <dd>
                                     <label>Celular</label>
-                                    <input type="text" name="celular" value="" onkeypress="mascara(this, maskTelefone);" />
+                                    <input type="text" name="celular"  maxlength="15" value="" onkeypress="mascara(this, maskTelefone);" />
                                 </dd>
                             </li>
                             <li>
                                 <dd>
                                     <label>Endereço</label>
-                                    <input type="text" name="endereco" id="endereco" size="50" value="" />
+                                    <input type="text" name="endereco" id="endereco"  maxlength="80" size="50" value="" />
                                 </dd>
                                 <dd>
                                     <label>Número</label>
-                                    <input type="text" name="numero" id="numero" size="10" value="" maxlength="5" onkeypress="mascara(this, maskNumero)" />
-                                        <input type="checkbox" name="sn" id="sn" value="S/N" onclick="semNumero();" /> <span style="font-size: 14px;font-weight: bold">S/N</span>
+                                    <input type="text" name="numero" id="numero" size="10" value="" maxlength="8" onkeypress="mascara(this, maskNumero)" />
+                                    <input type="checkbox" name="sn" id="sn" value="S/N" onclick="semNumero();" /> <span style="font-size: 14px;font-weight: bold">S/N</span>
                                 </dd>
                                 <dd>
                                     <label>Complemento</label>
-                                    <input type="text" name="complemento" id="complemento" value="" />
+                                    <input type="text" name="complemento" id="complemento"  maxlength="50" value="" />
                                 </dd>
                                 <dd>
                                     <label>Bairro</label>
-                                    <input type="text" name="bairro" id="bairro" value="" />
+                                    <input type="text" name="bairro" id="bairro"  maxlength="50" value="" />
                                 </dd>
                                 <dd>
                                     <label>Cidade<b class="obg">*</b></label>
-                                    <input type="text" name="cidade" id="cidade" readonly value="" />
+                                    <input type="text" name="cidade" id="cidade"  maxlength="50" readonly value="" />
                                 </dd>
                                 <dd>
                                     <label>UF<b class="obg">*</b></label>
@@ -269,10 +354,33 @@
                                     </select>
                                 </dd>
                             </li>
+                            <li>                   
+                                <dd>
+                                    <label>Departamento / Centro de Custo</label>
+                                    <select name="idDepartamento" style="width: 230px;">
+                                        <%
+                                            if (listaDep != null && listaDep.size() > 0) {
+                                                for (int i = 0; i < listaDep.size(); i++) {
+                                                    ClientesDeptos cd = listaDep.get(i);
+                                                    if (dps.contains(cd.getIdDepartamento())) {
+                                        %>
+                                        <option value="<%=cd.getIdDepartamento()%>"><%= cd.getNomeDepartamento()%></option>
+                                        <%}
+                                            }
+                                        } else {%>
+                                        <option value="0">SEM DEPARTAMENTO</option>
+                                        <%}%>
+                                    </select>
+                                </dd>
+                                <dd>
+                                    <label>Tags (seus mailings podem ser associados a tags) utilize @ e separe as tags com espaços ex. @mailing1 @mailing2</label>
+                                    <input type="text" name="tags" id="tags" size="130" value="" placeholder="Cadastre aqui suas tags ex. @mailing1 @mailing2" />
+                                </dd>
+                            </li>
                             <li>
                                 <dd style="width: 100%;">
                                     <div class="buttons">
-                                        <input type="hidden" name="idCliente" value="<%= idCli%>" />
+                                        <input type="hidden" name="idCliente" value="<%= cli.getCodigo()%>" />
                                         <button type="button" class="positive" onclick="return preencherCampos();"><img src="../../imagensNew/tick_circle.png" />CADASTRAR DESTINATÁRIO</button>
                                     </div>
                                 </dd>
@@ -282,7 +390,17 @@
                     <img width="100%" src="../../imagensNew/linha.jpg"/>
 
 
-                    <div id="titulo2">Lista de todos os destinatários</div>
+                    
+                    <div id="titulo2" style="padding-top: 8px;">
+                        Lista de todos os destinatários
+                        <div style="float: right;">
+                            <a style="color: white; font-size: 12px; background: #008ED6; border: 1px solid grey; padding: 4px;" href="#" onclick="document.formExcelDest.action = '../AjaxPages/xls_destinatarios.jsp'; document.formExcelDest.submit()"><img class="link_img" src="../../imagensNew/excel.png" /> EXPORTAR .XLS</a>
+                            <form name="formExcelDest" action="#">
+                                <input type="hidden" name="idCliente" value="<%= cli.getCodigo()%>" />
+                                <input type="hidden" name="nomeBD" value="<%= nomeBD%>" />
+                            </form>
+                        </div>
+                    </div>
                     <table id="barraAtendimento" border="0">
                         <tr>
                             <td align="left" style="font-weight:bold;font-size:12px;">
@@ -313,9 +431,10 @@
                         </thead>
                         <tbody>
                             <%
-                                ArrayList<Destinatario> lista = contrDestinatario.pesquisa(idCli, "", "", "", "", "", "", "", "", nomeBD);
+                                ArrayList<Destinatario> lista = contrDestinatario.pesquisa(cli.getCodigo(), "", "", "", "", "", "", "", "", nomeBD, "");
                                 for (int i = 0; i < lista.size(); i++) {
                                     Destinatario des = lista.get(i);
+                                    if (cli.getSeparar_destinatarios() == 0 || des.getIdDepartamento() == 0 || dps.contains(des.getIdDepartamento())) {
                             %>
                             <tr style="cursor:default;">
                                 <td><%= des.getIdDestinatario()%></td>
@@ -324,16 +443,21 @@
                                 <td><%= des.getEndereco() + ", " + des.getNumero()%></td>
                                 <td><%= des.getBairro()%></td>
                                 <td><%= des.getCidade() + " / " + des.getUf()%></td>
-                                <td align="center"><a onclick="verEditarDestinatario(<%= des.getIdDestinatario()%>, <%= idCli%>);" style="cursor:pointer;" ><img src="../../imagensNew/pencil.png" /></a></td>
+                                <td align="center"><a onclick="verEditarDestinatario(<%= des.getIdDestinatario()%>, <%= cli.getCodigo()%>);" style="cursor:pointer;" ><img src="../../imagensNew/pencil.png" /></a></td>
                                 <td align="center">
                                     <form action="../../ServExcluirDestinatario" method="post" name="formDel">
-                                        <input type="hidden" name="idCliente" value="<%= idCli%>" />
+                                        <input type="hidden" name="idCliente" value="<%= cli.getCodigo()%>" />
                                         <input type="hidden" name="idDestinatario" value="<%= des.getIdDestinatario()%>" />
-                                        <input type="image" src="../../imagensNew/cancel.png" border="0" onClick="javascript:if (confirm('Tem certeza que deseja excluir?')){return true;}else{return false;}" />
+                                        <input type="image" src="../../imagensNew/cancel.png" border="0" onClick="javascript:if (confirm('Tem certeza que deseja excluir?')) {
+                                                    return true;
+                                                } else {
+                                                    return false;
+                                                }" />
                                     </form>
                                 </td>
                             </tr>
-                            <%}%>
+                            <%}
+                                }%>
                         </tbody>
                     </table>
                     <div id="tablefooter" align='center'>
@@ -349,10 +473,10 @@
                         </div>
                         <div id="tablenav2" class="tablenav">
                             <div>
-                                <img src="../../javascript/plugins/TableSorter/images/left_end.png" width="20" height="20" alt="First Page" onclick="sorter2.move(-1,true)" />
+                                <img src="../../javascript/plugins/TableSorter/images/left_end.png" width="20" height="20" alt="First Page" onclick="sorter2.move(-1, true)" />
                                 <img src="../../javascript/plugins/TableSorter/images/left.png" width="20" height="20" alt="First Page" onclick="sorter2.move(-1)" />
                                 <img src="../../javascript/plugins/TableSorter/images/right.png" width="20" height="20" alt="First Page" onclick="sorter2.move(1)" />
-                                <img src="../../javascript/plugins/TableSorter/images/right_end.png" width="20" height="20" alt="Last Page" onclick="sorter2.move(1,true)" />
+                                <img src="../../javascript/plugins/TableSorter/images/right_end.png" width="20" height="20" alt="Last Page" onclick="sorter2.move(1, true)" />
                                 <select style="margin-left:5px;" id="pagedropdown2"></select>
                                 <a style="margin-left:10px;" href="javascript:sorter2.showall()">Ver Tudo</a>
                             </div>
@@ -362,28 +486,28 @@
                         </div>
                     </div>
                     <script type="text/javascript">
-                        var sorter2 = new TINY.table.sorter('sorter2','table2',{
-                            headclass:'head',
-                            ascclass:'asc',
-                            descclass:'desc',
-                            evenclass:'evenrow',
-                            oddclass:'oddrow',
-                            evenselclass:'evenselected',
-                            oddselclass:'oddselected',
-                            paginate:true,
-                            size:20,
-                            colddid:'columns2',
-                            currentid:'currentpage2',
-                            totalid:'totalpages2',
-                            startingrecid:'startrecord2',
-                            endingrecid:'endrecord2',
-                            totalrecid:'totalrecords2',
-                            hoverid:'selectedrowDefault',
-                            pageddid:'pagedropdown2',
-                            navid:'tablenav2',
-                            sortcolumn:0,
-                            sortdir:1,
-                            init:true
+                        var sorter2 = new TINY.table.sorter('sorter2', 'table2', {
+                            headclass: 'head',
+                            ascclass: 'asc',
+                            descclass: 'desc',
+                            evenclass: 'evenrow',
+                            oddclass: 'oddrow',
+                            evenselclass: 'evenselected',
+                            oddselclass: 'oddselected',
+                            paginate: true,
+                            size: 20,
+                            colddid: 'columns2',
+                            currentid: 'currentpage2',
+                            totalid: 'totalpages2',
+                            startingrecid: 'startrecord2',
+                            endingrecid: 'endrecord2',
+                            totalrecid: 'totalrecords2',
+                            hoverid: 'selectedrowDefault',
+                            pageddid: 'pagedropdown2',
+                            navid: 'tablenav2',
+                            sortcolumn: 0,
+                            sortdir: 1,
+                            init: true
                         });
                     </script>
 

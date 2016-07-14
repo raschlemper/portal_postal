@@ -1,32 +1,39 @@
 package com.portalpostal.dao.handler;
 
-import com.portalpostal.model.TipoManutencao;
+import com.portalpostal.model.Veiculo;
+import com.portalpostal.model.dd.TipoManutencaoVeiculo;
 import com.portalpostal.model.VeiculoManutencao;
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.sql2o.ResultSetHandler;
 
-public class ManutencaoHandler implements ResultSetHandler<VeiculoManutencao> {
-        
-    public ManutencaoHandler() { }
+public class ManutencaoHandler extends GenericHandler implements ResultSetHandler<VeiculoManutencao> {
+    
+    public ManutencaoHandler() { 
+        super("veiculo_manutencao");
+    }
+    
+    public ManutencaoHandler(String table) {
+        super(table);
+    }
     
     @Override
     public VeiculoManutencao handle(ResultSet result) throws SQLException {
         VeiculoManutencao manutencao = new VeiculoManutencao();
-        manutencao.setIdVeiculoManutencao(result.getInt("veiculo_manutencao.idVeiculoManutencao"));
-        manutencao.setTipo(TipoManutencao.values()[result.getInt("veiculo_manutencao.tipo")]);
-        manutencao.setQuilometragem((Integer) result.getObject("veiculo_manutencao.quilometragem"));
-        Double valor = result.getDouble("veiculo_manutencao.valor");
-        if (result.wasNull()) {
-            valor = null;
-        }
-        manutencao.setValor(valor);
-//        manutencao.setValor(result.getBigDecimal("veiculo_manutencao.valor").doubleValue());
-        manutencao.setDataManutencao(result.getDate("veiculo_manutencao.dataManutencao"));
-        manutencao.setDataAgendamento(result.getDate("veiculo_manutencao.dataAgendamento"));
-        manutencao.setDescricao(result.getString("veiculo_manutencao.descricao"));
+        manutencao.setIdVeiculoManutencao(getInt(result, "idVeiculoManutencao"));
+        manutencao.setTipo(TipoManutencaoVeiculo.values()[getInt(result, "tipo")]);
+        manutencao.setQuilometragem(getInt(result, "quilometragem"));
+        manutencao.setValor(getDouble(result, "valor"));
+        manutencao.setDataManutencao(getDate(result, "dataManutencao"));
+        manutencao.setDataAgendamento(getDate(result, "dataAgendamento"));
+        manutencao.setDescricao(getString(result, "descricao"));
+        manutencao.setVeiculo(getVeiculo(result));
         return manutencao;
+    }
+    
+    private Veiculo getVeiculo(ResultSet result) throws SQLException {
+        if(!existColumn(result, "veiculo.idVeiculo")) return null;
+        return new VeiculoHandler().handle(result); 
     }
     
 }

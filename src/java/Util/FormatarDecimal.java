@@ -13,22 +13,18 @@ import java.util.Locale;
  * @author Avell
  */
 public class FormatarDecimal {
-    
-    public static void main(String[] args) {
-        System.out.println(formatarFloat((float) 254165460.55));
-    }
 
     public static String formatarFloat(float numero) {
         String retorno = "";
         Locale ptBr = new Locale("pt", "BR");
         DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(ptBr);
         otherSymbols.setDecimalSeparator(',');
-        otherSymbols.setGroupingSeparator('.'); 
+        otherSymbols.setGroupingSeparator('.');
         DecimalFormat formatter = new DecimalFormat("###,###.00", otherSymbols);
         try {
             retorno = formatter.format(numero);
-            if(retorno.indexOf(",") == 0){
-                retorno = "0"+retorno;
+            if (retorno.indexOf(",") == 0) {
+                retorno = "0" + retorno;
             }
         } catch (Exception ex) {
             System.err.println("Erro ao formatar numero: " + ex);
@@ -56,5 +52,14 @@ public class FormatarDecimal {
     public static int intParser(String v) throws Exception {
         return Integer.parseInt(v.trim());
     }
-    
+
+    public static String somaDecimal(String d1, String d2){
+        
+        double s1 = Double.parseDouble(d1);
+        double s2 = Double.parseDouble(d2);        
+        double sum = s1 + s2;
+        
+        return  Double.toString(sum);
+    }
+
 }

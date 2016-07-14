@@ -48,6 +48,38 @@ public class contrLogin {
             Conexao.desconectar(con);
         }
     }
+    public static Usuario pegaLoginAdm(String idEmp) {
+        Usuario user = null;
+        Connection con = Conexao.conectarGeral();
+        String sql = "SELECT * FROM usuarios WHERE idEmpresa = "+idEmp+" AND idNivel = 1 AND ativo = 1";
+        try {
+            PreparedStatement valores = con.prepareStatement(sql);
+           
+            ResultSet result = (ResultSet) valores.executeQuery();
+            if (result.next()) {
+                int idEmpresa = result.getInt("idEmpresa");
+                int idUsuario = result.getInt("idUsuario");
+                String nome = result.getString("nome");
+                String email = result.getString("email");
+                String cpf = result.getString("cpf");
+                int idNivel = result.getInt("idNivel");
+                int ativo = result.getInt("ativo");
+                int usaPortalPostal = result.getInt("usaPortalPostal");
+                String acessosPortalPostal = result.getString("acessosPortalPostal");
+                int usaConsolidador = result.getInt("usaPortalPostal");
+                String acessosConsolidador = result.getString("acessosConsolidador");
+                String login = result.getString("login");
+                String senha = result.getString("senha");
+                user = new Usuario(idUsuario, idEmpresa, nome, login, senha, email, cpf, ativo, idNivel, usaPortalPostal, acessosPortalPostal, usaConsolidador, acessosConsolidador);
+            }
+            return user;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrLogin", "SQLException", sql, e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(con);
+        }
+    }
 
     public static boolean verificaLoginSenha(String login, String senha, int nivel, String nomeBD) {
         Connection con = Conexao.conectarGeral();

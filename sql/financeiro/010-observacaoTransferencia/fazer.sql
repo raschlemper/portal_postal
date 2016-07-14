@@ -1,0 +1,1 @@
+ALTER TABLE lancamento_transferencia ADD `observacao` LONGTEXT DEFAULT NULL;

@@ -5,14 +5,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <%
-    if (session.getAttribute("usuario") == null) {
-        response.sendRedirect("../index.jsp?msgLog=3");
+    Usuario usrSessao = (Usuario) session.getAttribute("agf_usuario");
+    if (usrSessao == null) {
+        response.sendRedirect("../../index.jsp?msgLog=3");
+    } else if (usrSessao.getListaAcessosPortalPostal().contains("405")) {
+        response.sendRedirect("../../NewTemplate/Dashboard/index.jsp?msg=Usuario sem permissao!");
     } else {
-
-        int idNivelDoUsuario = (Integer) session.getAttribute("nivel");
-        if (idNivelDoUsuario == 3) {
-            response.sendRedirect("../Importacao/imp_movimento.jsp?msg=Acesso Negado!");
-        }
 
         String nomeBD = (String) session.getAttribute("empresa");
         int idEmpresa = (Integer) session.getAttribute("idEmpresa");
@@ -24,7 +22,7 @@
     <head>
         <title>Portal Postal</title>
         <%@ include file="../includes/Css_js.jsp" %>
-    </head>        
+    </head>
     <body onload="fechaMsg();">   
         <script>
             waitMsg();
@@ -43,8 +41,7 @@
                             <jsp:param name="idClienteTab" value="<%= idClienteInc%>" />
                             <jsp:param name="temContratoTab" value="<%= cliInc.getTemContrato()%>" />
                             <jsp:param name="nomeClienteTab" value="<%= cliInc.getNomeFantasia()%>" />
-                        </jsp:include>    
-
+                        </jsp:include>
 
                         <div class="row">
                             <div class="col-md-12">   
@@ -107,6 +104,7 @@
                                                         <option value="5" >GERAR ETIQUETAS</option>
                                                         <option value="6" >VER DADOS DA EMPRESA</option>
                                                         <option value="7" >CADASTRO DE DESTINATÁRIOS</option>
+                                                        <option value="8" >VISUALIZAR PRAZOS ESTIMADOS</option>
                                                     </select>
                                                     <script language="">
                                                         function selectAllCombo(combo, flag) {
@@ -213,17 +211,21 @@
                                                 </thead>
                                                 <tbody>
                                                     <%
-                                                    ArrayList<Entidade.SenhaCliente> listaLogins = Controle.contrSenhaCliente.consultaTodasSenhaCliente(idClienteInc, nomeBD);
-                                                    for (int i = 0; i < listaLogins.size(); i++) {
-                                                        Entidade.SenhaCliente sc3 = listaLogins.get(i);
-                                                        String loginSc = sc3.getLogin();
-                                                        String senhaSc = sc3.getSenha();
-                                                        int nivel = sc3.getNivel();
-                                                        int id = sc3.getId();
-                                                        String nomeNivel = Controle.contrNivel.consultaNomeByIdNivel(nivel, nomeBD);
-                                                        if (nivel == 99) {
-                                                            nomeNivel = "WEB SERVICE";
-                                                        }
+                                                        ArrayList<Entidade.SenhaCliente> listaLogins = Controle.contrSenhaCliente.consultaTodasSenhaCliente(idClienteInc, nomeBD);
+                                                        for (int i = 0; i < listaLogins.size(); i++) {
+                                                            Entidade.SenhaCliente sc3 = listaLogins.get(i);
+                                                            String loginSc = sc3.getLogin();
+                                                            String senhaSc = sc3.getSenha();
+                                                            int nivel = sc3.getNivel();
+                                                            int id = sc3.getId();
+                                                            String nomeNivel = Controle.contrNivel.consultaNomeByIdNivel(nivel, nomeBD);
+                                                            if (nivel == 99) {
+                                                                nomeNivel = "WEB SERVICE";
+                                                            }
+                                                            if (nivel == 100) {
+                                                                nomeNivel = "OPERADOR MASTER";
+                                                                senhaSc = "********";
+                                                            }
                                                     %>
                                                     <tr>
                                                         <td><%= loginSc%></td>
@@ -235,9 +237,12 @@
                                                                 <input type="hidden" name="agenciaHoito" id="inputCodigo" value="<%= idEmpresa%>" />
                                                                 <input type="hidden" name="loginHoito" id="inputEmail" value="<%= loginSc%>" />
                                                                 <input type="hidden" name="senhaHoito" id="inputPassword" value="<%= senhaSc%>" />                        
+                                                                <%if (nivel < 99) {%>
                                                                 <button type="submit" class="btn btn-primary" formtarget="_blank"><i class="fa fa-sign-in fa-lg"></i></button>
-
-                                                            </form>
+                                                                    <%} else {%>
+                                                                <button type="submit" class="btn btn-primary disabled" formtarget="_blank"><i class="fa fa-sign-in fa-lg"></i></button>
+                                                                    <%}%>
+                                                            </form> 
                                                             <%--<a class="btn btn-sm btn-info" href="../../ServLoginCliente?agenciaHoito=<%= idEmpresa%>&loginHoito=<%= loginSc%>&senhaHoito=<%= senhaSc%>" target="_blank" style="cursor:pointer;" ><i class="fa fa-sign-in fa-lg"></i></a>--%>                              
                                                         </td>
                                                         <td align="center">
@@ -253,7 +258,11 @@
                                                                 <input type="hidden" name="idCliente" value="<%= idClienteInc%>" />
                                                                 <input type="hidden" name="login" value="<%= loginSc%>" />
                                                                 <input type="hidden" name="senha" value="<%= senhaSc%>" />
+                                                                <%if (nivel < 99) {%>
                                                                 <button type="button" class="btn btn-sm btn-danger" onClick="confirmExcluir(this);" ><i class="fa fa-trash fa-lg"></i></button>
+                                                                    <%} else {%>
+                                                                <button type="button" class="btn btn-sm btn-danger disabled" onClick="confirmExcluir(this);" ><i class="fa fa-trash fa-lg"></i></button>
+                                                                    <%}%>
                                                             </form>
                                                         </td>
                                                     </tr>

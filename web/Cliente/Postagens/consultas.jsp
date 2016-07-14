@@ -15,7 +15,7 @@
             if (nomeBD == null) {
                 response.sendRedirect("../../index.jsp?msg=Sua sessao expirou! Para voltar ao Portal faça seu login novamente!");
             } else {
-
+                 ArrayList<Integer> acessosUs = (ArrayList<Integer>) session.getAttribute("acessos");
                 String numCliente = String.valueOf(session.getAttribute("idCliente"));
                 int idCliente = (Integer) session.getAttribute("idCliente");
                 int nivel = (Integer) session.getAttribute("nivelUsuarioEmp");
@@ -55,12 +55,23 @@
 
 
         <script type="text/javascript" charset="utf-8">
+            
+               function chamaDivProtecao() {
+                var classe = document.getElementById("divProtecao").className;
+                if (classe === 'esconder') {
+                    document.getElementById("divProtecao").className = "mostrar";
+                    document.getElementById("divInteracao").className = "mostrar";
+                } else {
+                    document.getElementById("divProtecao").className = "esconder";
+                    document.getElementById("divInteracao").className = "esconder";
+                }
+            }
 
-            $(document).ready(function() {
+            $(document).ready(function () {
                 pesquisaSintetica('<%=numCliente%>', '<%=nomeBD%>');
             });
 
-            $(function() {
+            $(function () {
                 $("#dataIni").datepicker({
                     minDate: '<%=dataInicioCalendario%>',
                     maxDate: '<%= vDataAtual%>',
@@ -116,7 +127,7 @@
                     text: 'SITUAÇÕES'
                 },
                 tooltip: {
-                    formatter: function() {                        
+                    formatter: function () {
                         return "<b>" + this.point.name + "</b>: " + this.y + "";
                     }
                 },
@@ -138,7 +149,7 @@
                     x: -10,
                     y: 40,
                     borderWidth: 0,
-                    labelFormatter: function() {
+                    labelFormatter: function () {
                         return this.name + ': ' + this.y;
                     }
                 },
@@ -164,8 +175,8 @@
 
     </head>
     <body>
-        <div id="divInteracao" class="esconder" align="center"><input id="textointeracao" /></div>
-        <div id="divProtecao" class="esconder"></div>
+       <div id="divInteracao" class="esconder" style="top:10%; left:10%; right:10%; bottom:10%;" align="center"><input id="textointeracao" /></div>
+       <div id="divProtecao" class="esconder"></div>
 
         <%@ include file="../../Includes/telaMsg.jsp" %>
         <%@ include file="../../Includes/menu_cliente.jsp" %>
@@ -196,12 +207,14 @@
                                                 ClientesDeptos cd = listaDep.get(i);
                                                 if (dpsUser.contains(cd.getIdDepartamento()) || nivel == 1) {
                                                     String depto = FormataString.removeAccentsToUpper(cd.getNomeDepartamento());
-                                                    if(depto.length()>20){
-                                                        depto = depto.substring(0,20);                                                        
+                                                    if (depto.length() > 20) {
+                                                        depto = depto.substring(0, 20);
                                                     }
                                     %>
-                                    <option value="<%= cd.getIdDepartamento()+";"+depto %>"><%= cd.getNomeDepartamento()%></option>
-                                    <%}}}%>
+                                    <option value="<%= cd.getIdDepartamento() + ";" + depto%>"><%= cd.getNomeDepartamento()%></option>
+                                    <%}
+                                            }
+                                        }%>
                                 </select>
                             </dd>
                             <dd>
@@ -209,9 +222,10 @@
                                 <select style="width: 130px;" id="servico" name="servico">
                                     <option value="0">-- TODOS --</option>
                                     <%
-                                        ArrayList<ServicoECT> listaTipoPostagem = ContrServicoECT.consultaServicosPorGrupo();
-                                        for (int i = 0; i < listaTipoPostagem.size(); i++) {
+                                        ArrayList<ServicoECT> listaTipoPostagem = ContrServicoECT.consultaServicosTelaPesquisa();
+                                        for (int i = 0; i < listaTipoPostagem.size(); i++) {                                            
                                             ServicoECT sv = listaTipoPostagem.get(i);
+                                            
                                     %>
                                     <option value="<%= sv.getGrupoServico()%>"><%= sv.getNomeSimples()%></option>
                                     <%}%>
@@ -228,18 +242,35 @@
                                 <label>Situação</label>
                                 <select style="width: 110px;" id="situacao" name="situacao">
                                     <option selected value="">-- TODAS --</option>
-                                    <option value=" AND codStatus <> 1 AND LOCATE('entregue',status) = 0 AND LOCATE('retirada',status) = 0 ">NÃO ENTREGUE</option>
+                                    <option value=" AND (last_status_code, last_status_type) NOT IN ((0,'BDE'),(1,'BDE'),(0,'BDI'),(1,'BDI'),(0,'BDR'),(1,'BDR')) ">NÃO ENTREGUE</option>
+                                    <option value=" AND (last_status_code, last_status_type) IN ((0,'BDE'),(1,'BDE'),(0,'BDI'),(1,'BDI'),(0,'BDR'),(1,'BDR')) ">ENTREGUE</option>
+                                    <option value=" AND last_status_date IS NULL ">POSTADO</option>
+                                    <option value=" AND (last_status_code, last_status_type) NOT IN 
+                                            ((0,'BDE'),(1,'BDE'),(0,'BDI'),(1,'BDI'),(0,'BDR'),(1,'BDR'),
+                                            (9,'BDE'),(12,'BDE'),(28,'BDE'),(37,'BDE'),(43,'BDE'),(50,'BDE'),(51,'BDE'),(52,'BDE'),(69,'BDE'),
+                                            (9,'BDI'),(12,'BDI'),(28,'BDI'),(37,'BDI'),(43,'BDI'),(50,'BDI'),(51,'BDI'),(52,'BDI'),(69,'BDI'),
+                                            (9,'BDR'),(12,'BDR'),(28,'BDR'),(37,'BDR'),(43,'BDR'),(50,'BDR'),(51,'BDR'),(52,'BDR'),(69,'BDR'),
+                                            (4,'BDE'),(5,'BDE'),(6,'BDE'),(7,'BDE'),(8,'BDE'),(10,'BDE'),(18,'BDE'),(19,'BDE'),(20,'BDE'),(21,'BDE'),(22,'BDE'),(23,'BDE'),(25,'BDE'),(26,'BDE'),(27,'BDE'),(33,'BDE'),(34,'BDE'),(36,'BDE'),(40,'BDE'),(42,'BDE'),(48,'BDE'),(49,'BDE'),(56,'BDE'),
+                                            (4,'BDI'),(5,'BDI'),(6,'BDI'),(7,'BDI'),(8,'BDI'),(10,'BDI'),(18,'BDI'),(19,'BDI'),(20,'BDI'),(21,'BDI'),(22,'BDI'),(23,'BDI'),(25,'BDI'),(26,'BDI'),(27,'BDI'),(33,'BDI'),(34,'BDI'),(36,'BDI'),(40,'BDI'),(42,'BDI'),(48,'BDI'),(49,'BDI'),(56,'BDI'),
+                                            (4,'BDR'),(5,'BDR'),(6,'BDR'),(7,'BDR'),(8,'BDR'),(10,'BDR'),(18,'BDR'),(19,'BDR'),(20,'BDR'),(21,'BDR'),(22,'BDR'),(23,'BDR'),(25,'BDR'),(26,'BDR'),(27,'BDR'),(33,'BDR'),(34,'BDR'),(36,'BDR'),(40,'BDR'),(42,'BDR'),(48,'BDR'),(49,'BDR'),(56,'BDR')) ">ENCAMINHADO</option>
+                                    <option value=" AND (last_status_code, last_status_type) IN 
+                                            ((4,'BDE'),(5,'BDE'),(6,'BDE'),(7,'BDE'),(8,'BDE'),(10,'BDE'),(18,'BDE'),(19,'BDE'),(20,'BDE'),(21,'BDE'),(22,'BDE'),(23,'BDE'),(25,'BDE'),(26,'BDE'),(27,'BDE'),(33,'BDE'),(34,'BDE'),(36,'BDE'),(40,'BDE'),(42,'BDE'),(48,'BDE'),(49,'BDE'),(56,'BDE'),
+                                            (4,'BDI'),(5,'BDI'),(6,'BDI'),(7,'BDI'),(8,'BDI'),(10,'BDI'),(18,'BDI'),(19,'BDI'),(20,'BDI'),(21,'BDI'),(22,'BDI'),(23,'BDI'),(25,'BDI'),(26,'BDI'),(27,'BDI'),(33,'BDI'),(34,'BDI'),(36,'BDI'),(40,'BDI'),(42,'BDI'),(48,'BDI'),(49,'BDI'),(56,'BDI'),
+                                            (4,'BDR'),(5,'BDR'),(6,'BDR'),(7,'BDR'),(8,'BDR'),(10,'BDR'),(18,'BDR'),(19,'BDR'),(20,'BDR'),(21,'BDR'),(22,'BDR'),(23,'BDR'),(25,'BDR'),(26,'BDR'),(27,'BDR'),(33,'BDR'),(34,'BDR'),(36,'BDR'),(40,'BDR'),(42,'BDR'),(48,'BDR'),(49,'BDR'),(56,'BDR')) ">DEVOLVIDO</option>
+                                    <option value=" AND (last_status_code, last_status_type) IN 
+                                            ((9,'BDE'),(12,'BDE'),(28,'BDE'),(37,'BDE'),(43,'BDE'),(50,'BDE'),(51,'BDE'),(52,'BDE'),(69,'BDE'),
+                                            (9,'BDI'),(12,'BDI'),(28,'BDI'),(37,'BDI'),(43,'BDI'),(50,'BDI'),(51,'BDI'),(52,'BDI'),(69,'BDI'),
+                                            (9,'BDR'),(12,'BDR'),(28,'BDR'),(37,'BDR'),(43,'BDR'),(50,'BDR'),(51,'BDR'),(52,'BDR'),(69,'BDR')) ">EXTRAVIADO</option>
+                                    <option value=" AND (last_status_code, last_status_type) IN 
+                                            ((26,'BDE'),(24,'BDE'),(26,'BDI'),(24,'BDI'),(26,'BDR'),(24,'BDR'),(0,'LDI'),(1,'LDI'),(2,'LDI'),(3,'LDI'),(4,'LDI'),(14,'LDI')) ">AGUARDA RETIRADA</option>
+
+                                    <%--<option value=" AND codStatus <> 1 AND LOCATE('entregue',status) = 0 AND LOCATE('retirada',status) = 0 ">NÃO ENTREGUE</option>
                                     <option value=" AND (codStatus = 1 OR (codStatus = 99 AND (LOCATE('entregue',status) > 0 OR LOCATE('retirada',status) > 0))) ">ENTREGUE</option>
                                     <option value=" AND codStatus = 0 ">POSTADO</option>
                                     <option value=" AND codStatus NOT IN (0, 4, 5, 6, 7, 8, 10, 18, 19, 20, 21, 22, 23, 25, 26, 27, 34, 42, 9, 12, 28, 31, 43, 44, 50, 51, 52, 69, 1) AND LOCATE('entregue',status) = 0 AND LOCATE('retirada',status) = 0 ">ENCAMINHADO</option>
                                     <option value=" AND codStatus IN (4, 5, 6, 7, 8, 10, 18, 19, 20, 21, 22, 23, 25, 26, 27, 34, 42) ">DEVOLVIDO</option>
-                                    <option value=" AND codStatus IN (9, 12, 28, 31, 43, 44, 50, 51, 52, 69) ">EXTRAVIADO</option>
-                                    <%--
-                                        ArrayList<String> listaSituacao = Emporium.Controle.ContrRelatorios.pesquisaSituacoesDoCliente(nomeBD, numCliente);
-                                        for (int i = 0; i < listaSituacao.size(); i++) {
-                                    %>
-                                    <option value="<%= listaSituacao.get(i)%>"><%= listaSituacao.get(i)%></option>
-                                    --%>
+                                    <option value=" AND codStatus IN (9, 12, 28, 31, 43, 44, 50, 51, 52, 69) ">EXTRAVIADO</option>--%>
+
                                 </select>
                             </dd>
                         </li>
@@ -295,6 +326,28 @@
                                     <option value="cep >= 77000000 AND cep <= 77999999">TO</option>
                                 </select>
                             </dd>
+                            <dd>
+                                <label>L. de Postagem</label>
+                                <input style="width: 100px;" type="text" name="lp" id="lp" value="" maxlength="13" onkeypress="mascara(this, maskNumero)" />
+                            </dd>
+                            <dd>
+                                <label>Faturamento</label>
+                                <select style="width: 120px;" id="tipoFat" name="tipoFat">
+                                    <option selected value="">-- TODOS --</option>
+                                    <option value=" AND contratoEct <> ''">CONTRATO ECT</option>
+                                    <option value=" AND contratoEct = ''">FATURADO AGF</option> 
+                                </select>
+                            </dd>
+                             <%if (acessosUs.contains(8)) {%>
+                            <dd>
+                                <br/>
+                                <input style="position : relative ; top:3px;" name="atrasado" id="atrasado" value="1" type="checkbox" /><b> SOMENTE COM ATRASO
+                               
+                            </dd>
+                            <%}else{%>
+                            <input style="display: none;" name="atrasado" id="atrasado" value="0" type="checkbox" />
+                               
+                            <%}%>
                         </li>
                         <li>
                             <dd style="width: 500px;">
@@ -330,15 +383,10 @@
                         </li>
                     </ul>
                     <img width="100%" src="../../imagensNew/linha.jpg"/>
-
-
                     <div style="width: 100%;clear: both;">
                         <div id="titulo2" >Resultado da Pesquisa</div>
                         <div id="tableObjeto"></div>
                     </div>
-
-
-
                 </div>
             </div>
         </div>

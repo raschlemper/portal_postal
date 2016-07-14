@@ -267,7 +267,7 @@ table.table-condensed thead tr th {
     padding: 5px 10px;
     font-size: 13px;
 }
-
+/*
 table.dataTable thead .sorting,
 table.dataTable thead .sorting_asc,
 table.dataTable thead .sorting_desc,
@@ -293,7 +293,38 @@ table.dataTable thead .sorting:after {
     float: right;
     font-family: fontawesome;
     color: rgba(50,50,50,.5);
+}*/
+
+
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc,
+table.dataTable thead .sorting_desc,
+table.dataTable thead .sorting_asc_disabled,
+table.dataTable thead .sorting_desc_disabled {
+    background: 0 0;
 }
+
+/*Datatable Fix*/
+table.dataTable thead .sorting_asc:after {
+    content: "\f0de";
+    float: right;
+    font-family: fontawesome;
+}
+
+table.dataTable thead .sorting_desc:after {
+    content: "\f0dd";
+    float: right;
+    font-family: fontawesome;
+}
+
+table.dataTable thead .sorting:after {
+    content: "\f0dc";
+    float: right;
+    font-family: fontawesome;
+    color: rgba(50,50,50,.5);
+}
+
+
 table.dataTable tbody tr td {
     padding: 3px 10px;
     font-size: 13px;
@@ -784,6 +815,11 @@ a.show-sidebar:hover {
     padding: 10px 10px 0 10px;
     background: #FBFBF0;
     margin-bottom: -20px;
+}
+.box-content-filters {
+    position: relative;
+    padding: 10px;
+    background: #FBFBF0;
 }
 .box-content.dropbox, .box-content.sortablebox {
   overflow: hidden;
@@ -1422,13 +1458,15 @@ ul.DTTT_dropdown.dropdown-menu > li:hover > a {
   -o-transition: 1s;
   transition: 1s;
 }
+
 .radio + .radio, .checkbox + .checkbox {
   margin-top: 10px;
 }
+/*
 .checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {
   position: absolute;
   clip: rect(0, 0, 0, 0);
-}
+}*/
 .checkbox i, .checkbox-inline i, .radio i, .radio-inline i {
   cursor: pointer;
   position: absolute;
@@ -1444,6 +1482,7 @@ ul.DTTT_dropdown.dropdown-menu > li:hover > a {
   font-size: 18px;
   top:2px;
 }
+
 .checkbox input[type=checkbox]:checked + i:before, .checkbox-inline input[type=checkbox]:checked + i:before {
   content:"\f046";
 }
@@ -2216,15 +2255,16 @@ label.small{
   padding: 0 15px;
 }
 .btn + .dropdown-menu {
-  margin-top: -10px;
-  background: rgba(0, 0, 0, 0.7) !important; padding: 0; border: 0; 
+/* margin-top: -10px;*/
+/*  background: rgba(0, 0, 0, 0.7) !important;*/
+padding: 0; border: 0; 
   right: 0; 
   left: auto; 
   min-width: 100%;
 }
 .btn + .dropdown-menu > li > a {
   padding: 5px 10px !important;
-  color: #f0f0f0;
+ /*color: #f0f0f0;*/
 }
 .v-txt {
   -moz-transform: rotate(-90deg);
@@ -2744,7 +2784,6 @@ border-radius: 50%;}
 .spacer-xlg {
     margin-top: 200px; /* define margin as you see fit */
 }
-
 .text-8px{
     font-size: 8px;
 }
@@ -2776,10 +2815,427 @@ border-radius: 50%;}
   min-height: 70px;
 }
 
+
+/* ***** APP CSS ***** */
+
 .angular-with-newlines {
     white-space: pre-wrap;
 }
-
 .icon-search {
     cursor: pointer;
+}
+/* Table */
+.sortorder:after {
+    content: "\f0dc";
+    float: right;
+    font-family: fontawesome;
+    color: rgba(50,50,50,.5);
+}
+.sortorder_asc:after {
+    content: "\f0de";
+    float: right;
+    font-family: fontawesome;
+}
+.sortorder_desc:after {
+    content: "\f0dd";
+    float: right;
+    font-family: fontawesome;
+}
+/* Tree */
+.tree, .tree ul {
+    margin:0;
+    padding:0;
+    list-style:none
+}
+.tree ul {
+    margin-left:1em;
+    position:relative
+}
+.tree ul ul {
+    margin-left:.5em
+}
+.tree ul:before {
+    content:"";
+    display:block;
+    width:0;
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    border-left:1px dotted
+}
+.tree ul:first-child:before {
+    border:none;    
+}
+.tree li {
+    margin:0;
+    padding:0 0 0 1em;
+    line-height:2em;
+    color:#369;
+/*    font-weight:700;*/
+    position:relative
+}
+.action {
+    display: none;
+}
+.name {
+    display: inline-block;
+    width: 90%
+}
+.name:hover {
+    background-color: #e7e7e7;
+}
+.name:hover .action {
+    padding: 6px;
+    display: block;
+}
+.tree ul li:before {
+    content:"";
+    display:block;
+    width:10px;
+    height:0;
+    border-top:1px dotted;
+    margin-top:-1px;
+    position:absolute;
+    top:1em;
+    left:0
+}
+.tree ul li:last-child:before {
+    background:#fff;
+    height:auto;
+    top:1em;
+    bottom:0
+}
+.indicator, .tree ul li i {
+    margin-right:5px;
+}
+.tree .action i {
+    font-size: 16pt;
+}
+.tree li a {
+    text-decoration: none;
+    color:#369;
+}
+.tree li button, .tree li button:active, .tree li button:focus {
+    text-decoration: none;
+    color:#369;
+    border:none;
+    background:transparent;
+    margin:0px 0px 0px 0px;
+    padding:0px 0px 0px 0px;
+    outline: 0;
+}
+/* List */
+.list-category {
+    padding-bottom: 8px;
+}
+div.list-category h4.title {
+    display: block;
+    padding: 5px 0 10px 0;
+    font-size: 20px;
+    font-weight: 100;
+    margin-bottom: 0px;
+    border-bottom: 1px solid;
+}
+div.list-category h4.title i {
+    margin-right:5px;
+}
+div.list-category span.list-footer {
+    display: block;
+    padding: 14px 0 15px 0;
+    font-size: 20px;
+    font-weight: 100;
+    margin-bottom: 0px;
+    border-bottom: 1px solid;
+}
+div.list-category a.list-group-item:first-child {
+    border-top: 0;
+}
+div.list-category .list-footer {
+    margin-top:-15px;
+}
+div.list-category div.list-group-item {
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+    border-bottom: 1px solid #E0E4E9;
+    padding: 5px 0;
+    color: #4c4c4c; 
+    text-decoration: none;
+    overflow: hidden;
+}
+.truncate {
+    width: 5em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.checkbox-form {
+    margin: 20px 0 10px 0;
+}
+
+.margin-top {
+    margin-top: 20px;
+}
+.panel-list {
+    padding: 20px;
+}
+.panel-list>.list-group {
+    margin-bottom: 0;
+}
+.panel-list>.list-group .list-group-item {
+    border-width: 1px 0;
+    border-radius: 0;
+    color: #666;
+}
+.list-group .list-group-item span.item-list {
+/*    color: #666;*/
+}
+.panel-list>.list-group .list-group-header,
+.panel-list>.list-group .list-group-footer {
+    padding: 10px 10px;
+    font-weight: bold;
+    background-color: #f5f5f5; 
+    padding-right: 25px;
+}
+.panel-list>.list-group .list-group-header {
+    font-size: 12px;
+}
+.panel-list>.list-group .list-group-footer {
+    font-size: 10px;
+}
+.panel-list>.list-group .list-group-content {
+    font-size: 10px;
+    padding: 5px 10px;
+}
+.list-group-container {
+    overflow-y:scroll;
+    overflow-x:hidden;
+    height: 360px;
+}
+.panel-list>.list-group .list-group-item:hover {
+    background-color: #f8f8f8;    
+}
+.list-group-header:hover,
+.list-group-footer:hover{
+    background-color: #f5f5f5 !important;    
+}
+.col-list-item-group {
+    font-weight: bold;
+}
+.btn-list {
+    width: 40px;
+    height: 40px;    
+    padding: 10px 6px;
+}
+.modal-window {
+    overflow: auto;
+}
+
+.form-inline div.form-group {
+    padding-bottom: 10px;
+}
+
+.col-ident-1 {
+    padding-left: 0px;
+}
+.col-ident-2 {
+    padding-left: 10px;
+}
+.col-ident-3 {
+    padding-left: 20px;
+}
+.col-ident-4 {
+    padding-left: 30px;
+}
+.col-ident-5 {
+    padding-left: 40px;
+}
+.col-ident-6 {
+    padding-left: 50px;
+}
+.col-ident-7 {
+    padding-left: 60px;
+}
+.col-ident-8 {
+    padding-left: 70px;
+}
+.col-ident-9 {
+    padding-left: 80px;
+}
+.col-ident-10 {
+    padding-left: 90px;
+}
+.list-group-overflow {
+    overflow-y: auto;
+    max-height: 300px;
+}
+.panel-chart {
+    padding: 15px;
+    margin-left: -10px;
+    max-height: 300px;
+}
+.panel-chart-full {
+    padding: 15px;
+    margin-left: -10px;
+}
+
+.panel-msg-info {
+    padding: 20px;
+    margin: 20px 50px;
+    border: 1px dashed #666;
+    font-size: 22px;
+    color: #666;
+}
+
+.divider-vertical-right {
+    border-right: 1px solid #DDD;
+}
+
+.divider-horizontal-top {
+    margin-top: 15px; 
+    padding-top: 8px;
+    border-top: 1px solid #DDD;
+}
+
+.spc-default-top {
+    margin-top: 15px; 
+    padding-top: 8px;
+}
+.bg-modal-primary {
+    background-color: #337ab7;
+    color: #FFF;
+}
+.bg-modal-danger {
+    background-color: #c9302c;
+    color: #FFF;
+}
+.bg-modal-success {
+    background-color: #5cb85c;
+    color: #FFF;
+}
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > div:hover{
+    color: #000;
+    text-decoration: none;
+    background-color: #f5f5f5;
+}
+.btn + .dropdown-menu > li > div {
+    padding: 5px 10px !important;
+    /* color: #f0f0f0; */
+}
+.dropdown-menu > li > div {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+}
+.col-defualt {
+    color: #000;
+    padding: 2px !important;
+}
+.col-tipo {
+    padding: 2px !important;
+}
+.col-compensado {
+    color: #9853C3;
+    padding: 2px !important;
+}
+.col-reconciliado {
+    color: #3CAB49;
+    padding: 2px !important;
+    font-size: 8pt !important;
+}
+.col-transferencia {
+    color: #5cb85c;
+    padding: 2px !important;
+}
+table.table-condensed tbody tr td.cel-btn {
+    padding: 4px;
+}
+table.table-condensed tbody tr td.cel-data {
+    padding: 4px;
+    width: 65px;
+}
+table.table-condensed tbody tr td.cel-menu {
+    padding: 0px;
+    width: 20px;
+    color: #333;
+}
+.btn-table {
+    padding: 5px;
+    width: 30px;
+}
+.input-group > span.input-group-btn > button.btn-lg {
+    padding: 3px 10px;
+}
+
+.content-programacao {
+    padding: 0 15px 0 15px; 
+    margin: 10px 0 10px 0; 
+    border-right: 1px solid #CCC; 
+    color: #666;
+    width: 18%;
+    float: left;
+    position: relative;
+}
+
+.content-programacao-title {
+    width: 10%;
+    border-right: none; 
+}
+
+.content-programacao-title .title {
+    margin-top: 30px;
+    border-bottom: none !important;
+}
+
+.content-programacao:first-child {
+    padding: 0 15px 0 30px; 
+}
+
+.content-programacao:last-child {
+    padding: 0 30px 0 15px; 
+    border-right: none; 
+}
+
+.content-programacao .title {
+    width:100%; 
+    margin-bottom: 10px; 
+    border-bottom: 1px solid #CCC;
+}
+
+.content-programacao .value {
+    width:100%; 
+}
+
+.spc-right {
+    margin-right: 10px !important;
+}
+.title-table {
+    padding-top: 10px; 
+    border-top: 1px solid #CCC; 
+    font-size: 16pt;
+}
+.text-primary {
+    color: #337ab7 !important;
+}
+.text-danger {
+    color: #a94442 !important;
+}
+
+.subtitle-modal {
+    background-color: #F8F8F8;
+    margin-top: -10px;
+    border-bottom: 1px solid #DDD;
+}
+
+.input-group-modal {
+    /* position: relative; */
+    display: table;
+    border-collapse: separate;
 }

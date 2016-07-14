@@ -22,9 +22,15 @@ import java.util.Date;
  */
 public class contrMovimentacao {
 
-    /***************************************************************************/
-    /******************** IMPORTACAO DE MOVIMENTO ******************************/
-    /***************************************************************************/
+    /**
+     * ************************************************************************
+     */
+    /**
+     * ****************** IMPORTACAO DE MOVIMENTO *****************************
+     */
+    /**
+     * ************************************************************************
+     */
     public static void importarMov(ArrayList<String> listaIDS, ArrayList<String> listaValues, String sqlBase, String sqlDuplicate, Date dataIni, Date dataFim, String nomeBD, int idUsuario) throws SQLException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Connection conn = (Connection) Conexao.conectar(nomeBD);
@@ -58,6 +64,7 @@ public class contrMovimentacao {
             Conexao.desconectar(conn);
         }
     }
+
     public static void importarMovVisual(ArrayList<String> listaIDS, ArrayList<String> listaQueries, String sqlBase, Date dataIni, String nomeBD, int idUsuario) throws SQLException {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         try {
@@ -68,20 +75,20 @@ public class contrMovimentacao {
             valores.close();
 
             for (String query : listaQueries) {
-                System.out.println("\n\n"+query);
+                System.out.println("\n\n" + query);
                 PreparedStatement valores1 = conn.prepareStatement(query);
                 valores1.executeUpdate();
                 valores1.close();
             }
-            
+
             PreparedStatement valores2 = conn.prepareStatement("DELETE FROM movimentacao WHERE dataPostagem IN (SELECT DISTINCT(STR_TO_DATE(DATA, '%Y/%m/%d')) FROM visual_movimento  WHERE `codCliente` = '126430000');");
             valores2.executeUpdate();
-            
-            valores2 = conn.prepareStatement("REPLACE INTO movimentacao (id, numCaixa, numVenda, seqVenda, dataPostagem, descServico, numObjeto, destinatario, notaFiscal, peso, cep, paisDestino, valorServico, valorDestino, quantidade, valorDeclarado, departamento, codCliente, codSto, siglaServAdicionais)" +
-            " (SELECT visual_movimento.id, '0','0','0', STR_TO_DATE(DATA, '%Y/%m/%d'), nomeServ, IF(numObjeto='','',CONCAT(numObjeto,'BR')), nomeDestinatario, '', 0, cep, 'BR', valor1, valor1, 1, valorAdicional, '', '2110', campo7, campo3 " +
-            " FROM visual_movimento " +
-            " LEFT JOIN visual_servicos " +
-            " ON visual_servicos.id = codServico WHERE `codCliente` = '126430000');");
+
+            valores2 = conn.prepareStatement("REPLACE INTO movimentacao (id, numCaixa, numVenda, seqVenda, dataPostagem, descServico, numObjeto, destinatario, notaFiscal, peso, cep, paisDestino, valorServico, valorDestino, quantidade, valorDeclarado, departamento, codCliente, codSto, siglaServAdicionais)"
+                    + " (SELECT visual_movimento.id, '0','0','0', STR_TO_DATE(DATA, '%Y/%m/%d'), nomeServ, IF(numObjeto='','',CONCAT(numObjeto,'BR')), nomeDestinatario, '', 0, cep, 'BR', valor1, valor1, 1, valorAdicional, '', '2110', campo7, campo3 "
+                    + " FROM visual_movimento "
+                    + " LEFT JOIN visual_servicos "
+                    + " ON visual_servicos.id = codServico WHERE `codCliente` = '126430000');");
             valores2.executeUpdate();
             valores2.close();
 
@@ -154,9 +161,15 @@ public class contrMovimentacao {
         }
     }
 
-    /***************************************************************************/
-    /***************************************************************************/
-    /***************************************************************************/
+    /**
+     * ************************************************************************
+     */
+    /**
+     * ************************************************************************
+     */
+    /**
+     * ************************************************************************
+     */
     public static Date getPrimeiraDataDoCliente(String idCliente, String nomeBD) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         String sql = "SELECT dataPostagem FROM movimentacao WHERE codCliente = ? ORDER BY dataPostagem LIMIT 1;";
@@ -180,9 +193,9 @@ public class contrMovimentacao {
 
     public static boolean darBaixaAr(int baixa, String numObjeto, String nome, String data, int codCli, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "INSERT INTO movimentacao_ar (numObjeto, nomeRecebAr, dataBaixaAr, daraRecebRem, codCliente) VALUES ('"+numObjeto+"', '"+nome+"', DATE(NOW()), '"+data+"', "+codCli+")";
-        if(baixa == 0){
-            sql = "DELETE FROM movimentacao_ar WHERE numObjeto = '"+numObjeto+"' ;";
+        String sql = "INSERT INTO movimentacao_ar (numObjeto, nomeRecebAr, dataBaixaAr, daraRecebRem, codCliente) VALUES ('" + numObjeto + "', '" + nome + "', DATE(NOW()), '" + data + "', " + codCli + ")";
+        if (baixa == 0) {
+            sql = "DELETE FROM movimentacao_ar WHERE numObjeto = '" + numObjeto + "' ;";
         }
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
@@ -205,16 +218,16 @@ public class contrMovimentacao {
                 + " LEFT JOIN movimentacao_ar AS a ON a.numObjeto = m.numObjeto"
                 + " WHERE m.siglaServAdicionais LIKE '%AR%'"
                 + " AND m.codCliente = " + idCliente
-                + " AND (m.dataPostagem BETWEEN '"+dataInicio+"' AND '"+dataFinal+"')";
+                + " AND (m.dataPostagem BETWEEN '" + dataInicio + "' AND '" + dataFinal + "')";
         if (ar == 1) {
             sql += " AND a.nomeRecebAr IS NOT NULL";
         }
         if (ar == 0) {
             sql += " AND a.nomeRecebAr IS NULL";
         }
-        if (!departamentoPesq.equals("0")) {
-            sql += " AND m.departamento LIKE '" + departamentoPesq + "'";
-        }
+        //if (!departamentoPesq.equals("0")) {
+            sql += departamentoPesq;
+        //}
 
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
@@ -251,15 +264,64 @@ public class contrMovimentacao {
         }
     }
 
-    /*********************************** PESQUISAS DOS RELATÓRIOS SINTETICO ***************************************/
+    public static Movimentacao getConsultaBySRO(String sro, String nomeBD) {
+        String sql = "SELECT * FROM movimentacao WHERE numObjeto = '" + sro + "'";
+        System.out.println(sql);
+        Connection conn = (Connection) Conexao.conectar(nomeBD);
+        Movimentacao mov = null;
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            //System.out.println(sql);
+            if (result.next()) {
+                String id = result.getString("id");
+                Date dataPostagem = result.getDate("dataPostagem");
+                String descServico = result.getString("descServico");
+                String numObjeto = result.getString("numObjeto");
+                String destinatario1 = result.getString("destinatario");
+                float peso = result.getFloat("peso");
+                String cep1 = result.getString("cep");
+                float valorServico = result.getFloat("valorServico");
+                float quantidade = result.getFloat("quantidade");
+                String departamentos = result.getString("departamento");
+                String status = result.getString("status");
+                String notaFiscal = result.getString("notaFiscal");
+                Date dataEntrega = result.getDate("dataEntrega");
+                String numVenda = result.getString("numVenda");
+                String numCaixa = result.getString("numCaixa");
+                /* int codStatus = result.getInt("codStatus");
+                 Date last_status_date = result.getDate("last_status_date");
+                 int last_status_code = result.getInt("last_status_code");
+                 String last_status_type = result.getString("last_status_type");
+                 String last_status_name = result.getString("last_status_name");
+                 Date prazo_estimado = result.getDate("prazo_estimado");
+                 Timestamp prazo_cumprido = result.getTimestamp("prazo_cumprido");*/
+                mov = new Movimentacao(id, dataPostagem, descServico, numObjeto, destinatario1, peso, cep1, valorServico, quantidade, departamentos, status, dataEntrega, notaFiscal, numVenda, numCaixa);
+
+            }
+            valores.close();
+            return mov;
+        } catch (SQLException e) {
+            System.out.println(e + "\n" + sql);
+            ContrErroLog.inserir("HOITO - contrMovimentacao", "SQLException", sql, e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+
+    /**
+     * ********************************* PESQUISAS DOS RELATÓRIOS SINTETICO **************************************
+     */
     public static ArrayList getConsultaSintetica(String sql, String nomeBD) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();
-            
+            //System.out.println(sql);
             ArrayList movimentacao = new ArrayList();
-            for (int i = 0; result.next(); i++) {
+            while (result.next()) {
+                String id = result.getString("id");
                 Date dataPostagem = result.getDate("dataPostagem");
                 String descServico = result.getString("descServico");
                 String numObjeto = result.getString("numObjeto");
@@ -275,13 +337,21 @@ public class contrMovimentacao {
                 String numVenda = result.getString("numVenda");
                 String numCaixa = result.getString("numCaixa");
                 int codStatus = result.getInt("codStatus");
+                Date last_status_date = result.getDate("last_status_date");
+                int last_status_code = result.getInt("last_status_code");
+                String last_status_type = result.getString("last_status_type");
+                String last_status_name = result.getString("last_status_name");
+                Date prazo_estimado = result.getDate("prazo_estimado");
+                Timestamp prazo_cumprido = result.getTimestamp("prazo_cumprido");
+                int idPre_venda = result.getInt("idPre_venda");
 
-                Movimentacao mov = new Movimentacao(dataPostagem, descServico, numObjeto, destinatario1, peso, cep1, valorServico, quantidade, departamentos, status, dataEntrega, notaFiscal, numVenda, numCaixa, codStatus);
+                Movimentacao mov = new Movimentacao(id, dataPostagem, descServico, numObjeto, destinatario1, peso, cep1, valorServico, quantidade, departamentos, status, dataEntrega, notaFiscal, numVenda, numCaixa, codStatus, last_status_date, last_status_code, last_status_type, last_status_name, prazo_estimado, prazo_cumprido, idPre_venda);
                 movimentacao.add(mov);
             }
             valores.close();
             return movimentacao;
         } catch (SQLException e) {
+            System.out.println(e + "\n" + sql);
             ContrErroLog.inserir("HOITO - contrMovimentacao", "SQLException", sql, e.toString());
             return null;
         } finally {
@@ -289,7 +359,9 @@ public class contrMovimentacao {
         }
     }
 
-    /*********************************** PESQUISAS DOS RELATÓRIOS ANALITICO ***************************************/
+    /**
+     * ********************************* PESQUISAS DOS RELATÓRIOS ANALITICO **************************************
+     */
     public static ArrayList getConsultaAnalitica(String sql, String nomeBD) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         try {
@@ -298,6 +370,8 @@ public class contrMovimentacao {
 
             ArrayList movimentacao = new ArrayList();
             for (int i = 0; result.next(); i++) {
+
+                String id = result.getString("id");
                 Date dataPostagem = result.getDate("dataPostagem");
                 String descServico = result.getString("descServico");
                 String numObjeto = result.getString("numObjeto");
@@ -322,8 +396,16 @@ public class contrMovimentacao {
                 float altura = result.getFloat("altura");
                 float largura = result.getFloat("largura");
                 float comprimento = result.getFloat("comprimento");
+                int idPre_venda = result.getInt("idPre_venda");
+                int idOS = result.getInt("idOS");
+                Date last_status_date = result.getDate("last_status_date");
+                int last_status_code = result.getInt("last_status_code");
+                String last_status_type = result.getString("last_status_type");
+                String last_status_name = result.getString("last_status_name");
+                Date prazo_estimado = result.getDate("prazo_estimado");
+                Timestamp prazo_cumprido = result.getTimestamp("prazo_cumprido");
 
-                Movimentacao mov = new Movimentacao(dataPostagem, descServico, numObjeto, destinatario1, peso, cep1, valorServico, quantidade, departamentos, status, dataEntrega, notaFiscal, numVenda, numCaixa, valorDeclarado, valorDestino, paisDestino, contratoEct, conteudoObjeto, siglaServAdicionais, codStatus, altura, largura, comprimento);
+                Movimentacao mov = new Movimentacao(id, dataPostagem, descServico, numObjeto, destinatario1, peso, cep1, valorServico, quantidade, departamentos, status, dataEntrega, notaFiscal, numVenda, numCaixa, valorDeclarado, valorDestino, paisDestino, contratoEct, conteudoObjeto, siglaServAdicionais, codStatus, altura, largura, comprimento, idPre_venda, idOS, last_status_date, last_status_code, last_status_type, last_status_name, prazo_estimado, prazo_cumprido);
                 movimentacao.add(mov);
             }
             valores.close();
@@ -336,10 +418,12 @@ public class contrMovimentacao {
         }
     }
 
-    /**************************************************** PESQUISAS DO TICKET *************************************************************/
+    /**
+     * ************************************************** PESQUISAS DO TICKET ************************************************************
+     */
     public static ArrayList getMovimentacaoByNumCaixaENumVenda(int idCliente, int numCaixa, int numVenda, String nomeBD) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
-        String sql = "SELECT contratoEct, seqVenda, dataPostagem, descServico, numObjeto, valorServico, valorDeclarado, valorDestino,"
+        String sql = "SELECT codigoECT, contratoEct, seqVenda, dataPostagem, descServico, numObjeto, valorServico, valorDeclarado, valorDestino,"
                 + " peso, quantidade, altura, largura, comprimento, destinatario, cep, siglaServAdicionais, notaFiscal, paisDestino"
                 + " FROM movimentacao"
                 + " WHERE codCliente = " + idCliente
@@ -369,8 +453,9 @@ public class contrMovimentacao {
                 String siglaServAdicionais = result.getString("SiglaServAdicionais");
                 String notaFiscal = result.getString("notaFiscal");
                 String paisDestino = result.getString("paisDestino");
+                String codECT = result.getString("codigoECT");
 
-                Movimentacao mov = new Movimentacao(seqVenda, dataPostagem, descServico, numObjeto, destinatario, notaFiscal, peso, cep, valorServico, valorDestino, quantidade, valorDeclarado, contrato, altura, largura, comprimento, siglaServAdicionais, paisDestino);
+                Movimentacao mov = new Movimentacao(seqVenda, dataPostagem, descServico, numObjeto, destinatario, notaFiscal, peso, cep, valorServico, valorDestino, quantidade, valorDeclarado, contrato, altura, largura, comprimento, siglaServAdicionais, paisDestino, codECT);
                 movimentacao.add(mov);
             }
             valores.close();
@@ -382,4 +467,51 @@ public class contrMovimentacao {
             Conexao.desconectar(conn);
         }
     }
+
+    public static Movimentacao getMovimentacaoById(String idMov, String nomeBD) {
+        Connection conn = (Connection) Conexao.conectar(nomeBD);
+        String sql = "SELECT * FROM movimentacao"
+                + " WHERE id = " + idMov + " ;";
+
+        Movimentacao mov = null;
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+
+            if (result.next()) {
+                String contrato = result.getString("contratoEct");
+                String seqVenda = result.getString("seqVenda");
+                Date dataPostagem = result.getDate("dataPostagem");
+                String descServico = result.getString("descServico");
+                String numObjeto = result.getString("numObjeto");
+                float valorServico = result.getFloat("valorServico");
+                float valorDeclarado = result.getFloat("valorDeclarado");
+                float valorDestino = result.getFloat("valorDestino");
+                float peso = result.getFloat("peso");
+                float quantidade = result.getFloat("quantidade");
+                float altura = result.getFloat("altura");
+                float largura = result.getFloat("largura");
+                float comprimento = result.getFloat("comprimento");
+                String destinatario = result.getString("destinatario");
+                String cep = result.getString("cep");
+                String siglaServAdicionais = result.getString("SiglaServAdicionais");
+                String notaFiscal = result.getString("notaFiscal");
+                String paisDestino = result.getString("paisDestino");
+                String codECT = result.getString("codigoECT");
+                String numCaixa = result.getString("numCaixa");
+                String numVenda = result.getString("numVenda");
+
+                mov = new Movimentacao(seqVenda, dataPostagem, descServico, numObjeto, destinatario, notaFiscal, peso, cep, valorServico, valorDestino, quantidade, valorDeclarado, contrato, altura, largura, comprimento, siglaServAdicionais, paisDestino, codECT, numCaixa, numVenda);
+
+            }
+            valores.close();
+            return mov;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrMovimentacao", "SQLException", sql, e.toString());
+            return mov;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+
 }

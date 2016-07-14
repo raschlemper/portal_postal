@@ -23,6 +23,50 @@ import java.util.Locale;
  */
 public class FormatarData {
 
+    public static String nomeMes(int mes) {
+        String monthString = "";
+        switch (mes) {
+            case 1:
+                monthString = "Janeiro";
+                break;
+            case 2:
+                monthString = "Fevereiro";
+                break;
+            case 3:
+                monthString = "Marco";
+                break;
+            case 4:
+                monthString = "Abril";
+                break;
+            case 5:
+                monthString = "Maio";
+                break;
+            case 6:
+                monthString = "Junho";
+                break;
+            case 7:
+                monthString = "Julho";
+                break;
+            case 8:
+                monthString = "Agosto";
+                break;
+            case 9:
+                monthString = "Setembro";
+                break;
+            case 10:
+                monthString = "Outubro";
+                break;
+            case 11:
+                monthString = "Novembro";
+                break;
+            case 12:
+                monthString = "Dezembro";
+                break;
+
+        }
+        return monthString;
+    }
+
     public static String formataStringToString(String data, String patternEntrada, String patternSaida) throws Exception {
         try {
             DateFormat formatter = new SimpleDateFormat(patternEntrada);
@@ -44,27 +88,30 @@ public class FormatarData {
         }
     }
 
-    /**************************************************************************/
+    /**
+     * ***********************************************************************
+     */
 
     /* Recebe String no formato dd/MM/yyyy HH:mm */
-     public static Timestamp formataDateTime(String dataEntrada)throws Exception{
-        if(dataEntrada == null || dataEntrada.equals(""))
-          return null;
-          Timestamp timest = null;
-            try{
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                Date date = sdf.parse(dataEntrada);
-                timest = new Timestamp(date.getTime());
-            }catch(ParseException e){
-                throw e;
-            }
+    public static Timestamp formataDateTime(String dataEntrada) throws Exception {
+        if (dataEntrada == null || dataEntrada.equals("")) {
+            return null;
+        }
+        Timestamp timest = null;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            Date date = sdf.parse(dataEntrada);
+            timest = new Timestamp(date.getTime());
+        } catch (ParseException e) {
+            throw e;
+        }
         return timest;
     }
-     
+
     public static Date getDateFromString(String data, String pattern) throws ParseException {
         return new SimpleDateFormat(pattern).parse(data);
     }
-    
+
     public static String DateToBDcomAspas(String dataAtual) {
         try {
             if (dataAtual == null || dataAtual.equals("") || dataAtual.length() != 10) {
@@ -386,23 +433,26 @@ public class FormatarData {
         }
         return date;
     }
-    
-        /** 
-        * Calcula a diferença de duas datas em dias 
-        * <br> 
-        * <b>Importante:</b> Quando realiza a diferença em dias entre duas datas, este método considera as horas restantes e as converte em fração de dias. 
-        * @param dataInicial 
-        * @param dataFinal 
-        * @return quantidade de dias existentes entre a dataInicial e dataFinal. 
-        */  
-       public static double diferencaEmDias(Date dataInicial, Date dataFinal){  
-           double result = 0;  
-           long diferenca = dataFinal.getTime() - dataInicial.getTime();  
-           double diferencaEmDias = (diferenca /1000) / 60 / 60 /24; //resultado é diferença entre as datas em dias  
-           long horasRestantes = (diferenca /1000) / 60 / 60 %24; //calcula as horas restantes  
-           result = diferencaEmDias + (horasRestantes /24d); //transforma as horas restantes em fração de dias  
-         
-           return result;  
-       }  
-    
+
+    /**
+     * Calcula a diferença de duas datas em dias
+     * <br>
+     * <b>Importante:</b> Quando realiza a diferença em dias entre duas datas,
+     * este método considera as horas restantes e as converte em fração de dias.
+     *
+     * @param dataInicial
+     * @param dataFinal
+     * @return quantidade de dias existentes entre a dataInicial e dataFinal.
+     */
+    public static double diferencaEmDias(Date dataInicial, Date dataFinal) {
+        double result = 0;
+        if (dataInicial != null && dataFinal != null) {
+            long diferenca = dataFinal.getTime() - dataInicial.getTime();
+            double diferencaEmDias = (diferenca / 1000) / 60 / 60 / 24; //resultado é diferença entre as datas em dias  
+            long horasRestantes = (diferenca / 1000) / 60 / 60 % 24; //calcula as horas restantes  
+            result = diferencaEmDias + (horasRestantes / 24d); //transforma as horas restantes em fração de dias  
+        }
+        return result;
+    }
+
 }

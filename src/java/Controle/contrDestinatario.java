@@ -19,9 +19,9 @@ import java.util.ArrayList;
  */
 public class contrDestinatario {
 
-    public static int inserir(int idCliente, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String pais, String email, String celular, String nomeBD) {
+    public static int inserir(int idCliente, int idDepartamento, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String pais, String email, String celular, String nomeBD, String tags) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "INSERT INTO cliente_destinatario (idCliente, nome, cpf_cnpj, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, pais, email, celular) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO cliente_destinatario (idCliente, nome, cpf_cnpj, empresa, cep, endereco, numero, complemento, bairro, cidade, uf, pais, email, celular, tags, idDepartamento) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
         try {
             PreparedStatement valores = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             valores.setInt(1, idCliente);
@@ -38,9 +38,13 @@ public class contrDestinatario {
             valores.setString(12, pais);
             valores.setString(13, email);
             valores.setString(14, celular);
+            valores.setString(15, tags); 
+            valores.setInt(16, idDepartamento); 
             valores.executeUpdate();
+           
             int autoIncrementKey = 0;
             ResultSet rs = valores.getGeneratedKeys();
+            
             if (rs.next()) {
                 autoIncrementKey = rs.getInt(1);
             }
@@ -84,6 +88,39 @@ public class contrDestinatario {
             Conexao.desconectar(conn);
         }
     }
+    
+    public static boolean editarComTag(int idDestinatario, int idCliente, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String pais, String email, String celular, String nomeBD, String tags) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "UPDATE cliente_destinatario SET nome = ?, cpf_cnpj = ?, empresa = ?, cep = ?, endereco = ?, numero = ?, complemento = ?, bairro = ?, cidade = ?, uf = ?, pais=?, email=?, celular=?, tags =? WHERE idDestinatario = ? AND idCliente = ? ";
+        
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.setString(1, FormataString.removeSpecialChars(nome));
+            valores.setString(2, cpf_cnpj);
+            valores.setString(3, empresa);
+            valores.setString(4, cep);
+            valores.setString(5, endereco);
+            valores.setString(6, numero);
+            valores.setString(7, complemento);
+            valores.setString(8, bairro);
+            valores.setString(9, cidade);
+            valores.setString(10, uf);
+            valores.setString(11, pais);
+            valores.setString(12, email);
+            valores.setString(13, celular);
+            valores.setString(14, tags);
+            valores.setInt(15, idDestinatario);
+            valores.setInt(16, idCliente);
+            valores.executeUpdate();
+            valores.close();
+            return true;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrContato", "SQLException", sql, e.toString());
+            return false;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
 
     public static boolean deletar(int idDestinatario, int idCliente, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
@@ -101,8 +138,14 @@ public class contrDestinatario {
         }
     }
 
-    public static ArrayList<Destinatario> pesquisa(int idCli, String codigo, String nome, String cpf_cnpj, String bairro, String cidade, String cep, String emp, String end, String nomeBD) {
+    public static ArrayList<Destinatario> pesquisa(int idCli, String codigo, String nome, String cpf_cnpj, String bairro, String cidade, String cep, String emp, String end, String nomeBD, String tags) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
+        
+        String whereTag = "";
+        if(tags != null && !tags.trim().equals("")){
+            whereTag = " AND tags LIKE '%" + tags + "%'";
+        }        
+        
         String sql = "SELECT * FROM cliente_destinatario"
                 + " WHERE idCliente = " + idCli
                 + " AND idDestinatario LIKE '%" + codigo + "%'"
@@ -113,7 +156,9 @@ public class contrDestinatario {
                 + " OR cidade LIKE '%" + cidade + "%'"
                 + " OR endereco LIKE '%" + end + "%')"
                 + " AND cep LIKE '%" + cep + "%'"
+                + whereTag
                 + " ORDER BY nome";
+        
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();
@@ -121,6 +166,7 @@ public class contrDestinatario {
             for (int i = 0; result.next(); i++) {
                 int idDestinatario = result.getInt("idDestinatario");
                 int idCliente = result.getInt("idCliente");
+                int idDepartamento = result.getInt("idDepartamento");
                 String nom = result.getString("nome");
                 String empresa = result.getString("empresa");
                 String cepp = result.getString("cep");
@@ -133,7 +179,8 @@ public class contrDestinatario {
                 String complemento = result.getString("complemento");
                 String email = result.getString("email");
                 String celular = result.getString("celular");
-                Destinatario des = new Destinatario(idDestinatario, idCliente, nom, cnpjj, empresa, cepp, ende, numero, complemento, bair, cid, uf, email, celular);
+                String tg = result.getString("tags");
+                Destinatario des = new Destinatario(idDestinatario, idCliente, idDepartamento, nom, cnpjj, empresa, cepp, ende, numero, complemento, bair, cid, uf, email, celular, tg);
                 lista.add(des);
             }
             valores.close();
@@ -146,11 +193,11 @@ public class contrDestinatario {
         }
     }
 
-    public static String consultaDestinatarioAutoComplete(int idCli, String nomePesquisa, String destino, String nomeBD) {
+    public static String consultaDestinatarioAutoComplete(int idCli, String nomePesquisa, String destino, int separar_dest, ArrayList<Integer> deptos, String nomeBD) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
-        String where = " AND pais = 'Brasil' ";
+        String where = " AND (pais = 'Brasil' OR pais = 'BR')";
         if(destino.equals("INT")){
-            where = " AND pais <> 'Brasil' ";
+            where = " AND (pais <> 'Brasil' AND pais <> 'BR') ";
         }
         String sql = "SELECT *, UPPER(TRIM(nome)) AS nomep"
                 + " FROM cliente_destinatario"
@@ -160,13 +207,14 @@ public class contrDestinatario {
                 + " GROUP BY nomep"
                 + " ORDER BY LOCATE('" + nomePesquisa + "', nomep), nomep"
                 + " LIMIT 0, 7";
-        
+ 
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();
             String ret = "";
             while (result.next()) {
 
+                int idDepartamento = result.getInt("idDepartamento");
                 int idDestinatario = result.getInt("idDestinatario");
                 String nome = result.getString("nomep");
                 String empresa = result.getString("empresa");
@@ -179,8 +227,10 @@ public class contrDestinatario {
                 String cnpjj = result.getString("cpf_cnpj");
                 String complemento = result.getString("complemento");
                 String pais = result.getString("pais");
+                String celular = result.getString("celular");
+                String email = result.getString("email");
                 
-
+                if (separar_dest == 0 || idDepartamento == 0 || deptos.contains(idDepartamento)) {
                 ret += ",{\"value\": \"" + idDestinatario + "\", "
                         + "\"label\": \"" + Util.FormataString.removeAccentsToUpper(nome) + "\", "
                         + "\"endereco\": \"" + Util.FormataString.removeAccentsToUpper(ende) + "\", "
@@ -192,12 +242,13 @@ public class contrDestinatario {
                         + "\"cep\":\"" + cepp + "\", "
                         + "\"aoscuidados\":\"\", "
                         + "\"empresa\":\"" + Util.FormataString.removeAccentsToUpper(empresa) + "\", "
-                        + "\"email_destinatario\":\"\", "
-                        + "\"celular\":\"\", "
+                        + "\"email_destinatario\":\""+email+"\", "
+                        + "\"celular\":\""+celular+"\", "
                         + "\"cpf_cnpj\":\"" + cnpjj + "\", "
                         + "\"destino\":\"" + destino + "\", "
                         + "\"pais\":\"" + pais + "\" "
                         + "}";
+                }
             }
             valores.close();
             if (!ret.equals("")) {
@@ -224,6 +275,7 @@ public class contrDestinatario {
             if (result.next()) {
                 int idDestinatario = result.getInt("idDestinatario");
                 int idCliente = result.getInt("idCliente");
+                int idDepartamento = result.getInt("idDepartamento");
                 String nom = result.getString("nome");
                 String empresa = result.getString("empresa");
                 String cepp = result.getString("cep");
@@ -236,7 +288,8 @@ public class contrDestinatario {
                 String complemento = result.getString("complemento");
                 String email = result.getString("email");
                 String celular = result.getString("celular");
-                Destinatario des = new Destinatario(idDestinatario, idCliente, nom, cnpjj, empresa, cepp, end, numero, complemento, bair, cid, uf, email, celular);
+                String tags = result.getString("tags");
+                Destinatario des = new Destinatario(idDestinatario, idCliente, idDepartamento, nom, cnpjj, empresa, cepp, end, numero, complemento, bair, cid, uf, email, celular, tags);
 
                 return des;
             } else {

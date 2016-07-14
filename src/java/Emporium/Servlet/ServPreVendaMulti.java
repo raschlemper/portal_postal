@@ -19,6 +19,7 @@ import Entidade.ServicoECT;
 import Util.FormataString;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -188,7 +189,16 @@ public class ServPreVendaMulti extends HttpServlet {
                 String tipoEtiqueta = "SEM_REGISTRO";
                 //VERIFICA A QTD DE ETIQUETA
                 int qtdEtq = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ(servico, 0, idCliente, nomeBD);
-                if (codECT != 0 && qtdEtq != 0) {
+                if (codECT != 0 && qtdEtq == 0) {
+                    if(ContrClienteEtiquetas.solicitarEtiquetasSigepWEB(codECT, cli, nomeBD)) {
+                        String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, nomeBD);
+                        if (etq != null) {
+                            String aux[] = etq.split(";");
+                            numObjeto = aux[0];
+                            tipoEtiqueta = aux[1];
+                        }
+                    }
+                } else if (codECT != 0 && qtdEtq != 0) {
                     String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, nomeBD);
                     if (etq != null) {
                         String aux[] = etq.split(";");
@@ -203,9 +213,10 @@ public class ServPreVendaMulti extends HttpServlet {
 
                 //VERIFICA A EXISTENCIA DE COMBO PARA O SERVIÇO
                 //codECT = ContrServicoCombo.consultaCodCombo(codECT, ar, mp, vd);
-                
+                int resgistro_modico = 0;
+                int posta_restante = 0;
                 //INSERE PRE VENDA         
-                ContrPreVenda.inserir(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD);
+                ContrPreVenda.inserir(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD,posta_restante, resgistro_modico);
             }
         }
 

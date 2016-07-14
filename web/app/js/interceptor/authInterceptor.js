@@ -1,6 +1,6 @@
 'use strict';
 
-app.factory('authInterceptor', ['$rootScope', '$q', '$timeout',
+app.factory('authInterceptor', ['$q', '$timeout',
     function ($q, $timeout) {
         return {
             request: function (config) {

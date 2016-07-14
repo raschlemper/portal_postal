@@ -1,27 +1,40 @@
 package com.portalpostal.dao.handler;
 
-import com.portalpostal.model.TipoResponsavel;
-import com.portalpostal.model.TipoSinistro;
+import com.portalpostal.model.Veiculo;
+import com.portalpostal.model.dd.TipoResponsavelVeiculo;
+import com.portalpostal.model.dd.TipoSinistroVeiculo;
 import com.portalpostal.model.VeiculoSinistro;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.sql2o.ResultSetHandler;
 
-public class SinistroHandler implements ResultSetHandler<VeiculoSinistro> {
-        
-    public SinistroHandler() { }
+public class SinistroHandler extends GenericHandler implements ResultSetHandler<VeiculoSinistro> {
+            
+    public SinistroHandler() {
+        super("veiculo_sinistro");
+    }
+    
+    public SinistroHandler(String table) {
+        super(table);
+    }
 
     @Override
     public VeiculoSinistro handle(ResultSet result) throws SQLException {
         VeiculoSinistro sinistro = new VeiculoSinistro();
-        sinistro.setIdVeiculoSinistro(result.getInt("veiculo_sinistro.idVeiculoSinistro"));
-        sinistro.setTipo(TipoSinistro.values()[result.getInt("veiculo_sinistro.tipo")]);
-        sinistro.setBoletimOcorrencia(result.getInt("veiculo_sinistro.boletimOcorrencia"));
-        sinistro.setData(result.getDate("veiculo_sinistro.data"));
-        sinistro.setLocal(result.getString("veiculo_sinistro.local"));
-        sinistro.setResponsavel(TipoResponsavel.values()[result.getInt("veiculo_sinistro.responsavel")]);
-        sinistro.setDescricao(result.getString("veiculo_sinistro.descricao"));
+        sinistro.setIdVeiculoSinistro(getInt(result, "idVeiculoSinistro"));
+        sinistro.setTipo(TipoSinistroVeiculo.values()[getInt(result, "tipo")]);
+        sinistro.setBoletimOcorrencia(getInt(result, "boletimOcorrencia"));
+        sinistro.setData(getDate(result, "data"));
+        sinistro.setLocal(getString(result, "local"));
+        sinistro.setResponsavel(TipoResponsavelVeiculo.values()[getInt(result, "responsavel")]);
+        sinistro.setDescricao(getString(result, "descricao"));
+        sinistro.setVeiculo(getVeiculo(result));
         return sinistro;
+    }
+    
+    private Veiculo getVeiculo(ResultSet result) throws SQLException {
+        if(!existColumn(result, "veiculo.idVeiculo")) return null;
+        return new VeiculoHandler().handle(result); 
     }
     
 }

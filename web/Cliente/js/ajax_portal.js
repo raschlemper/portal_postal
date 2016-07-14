@@ -53,7 +53,7 @@ function handleHttpResponseBootStrap() {
             }
 
         } else {
-            alert(http.status + " - Not able to retrieve name");
+            alert("Erro: "+http.status + " <br> Informa&ccedil;&atilde;o n&atilde;o dispon&iacute;vel em nosso banco de dados.");
         }
     }
 }
@@ -72,7 +72,7 @@ function handleHttpResponse() {
             }
 
         } else {
-            alert(http.status + " - Not able to retrieve name");
+           alert("Erro: "+http.status + " <br><br>Informa&ccedil;&atilde;o n&atilde;o dispon&iacute;vel em nosso banco de dados.<br><br> Verifique com a sua Ag&ecirc;ncia!");
         }
     }
 }
@@ -140,8 +140,9 @@ function pesquisarDestinatario(nomeBD, multi) {
     var empresa = document.getElementById("empresa_d").value;
     var endereco = document.getElementById("endereco_d").value;
     var cep = document.getElementById("cep_d").value;
+    var tag = document.getElementById("tags_d").value;
 
-    http.open("GET", "../../Cliente/AjaxPages/consulta_destinatario.jsp?codigo=" + codigo + "&nome=" + nome + "&empresa=" + empresa + "&endereco=" + endereco + "&cep=" + cep + "&multi=" + multi, true);
+    http.open("GET", "../../Cliente/AjaxPages/consulta_destinatario.jsp?codigo=" + codigo + "&nome=" + nome + "&empresa=" + empresa + "&endereco=" + endereco + "&cep=" + cep + "&tags=" + tag + "&multi=" + multi, true);
     http.onreadystatechange = handleHttpResponseConsultaDest;
     http.send(null);
 }
@@ -362,7 +363,9 @@ function pesquisaSintetica(idCliente, nomeBD) {
     var uf = document.getElementById("uf").value;
     var ar = document.getElementById("ar").checked;
     var vd = document.getElementById("vd").checked;
-    http.open("GET", "../AjaxPages/consulta_sintetico.jsp?idCliente=" + idCliente + "&nomeBD=" + nomeBD + "&dataIni=" + dataInicio + "&dataFim=" + dataFinal + "&situacao=" + situacao + "&servico=" + servico + "&departamento=" + departamento + "&objeto=" + objeto + "&notaFiscal=" + notafiscal + "&destinatario=" + destinatario + "&cep=" + cep + "&ar=" + ar + "&vd=" + vd + "&uf=" + uf, true);
+    var atrasado = document.getElementById("atrasado").checked;
+    var tpFat = document.getElementById("tipoFat").value;
+    http.open("GET", "../AjaxPages/consulta_sintetico.jsp?idCliente=" + idCliente + "&nomeBD=" + nomeBD + "&dataIni=" + dataInicio + "&dataFim=" + dataFinal + "&situacao=" + situacao + "&servico=" + servico + "&departamento=" + departamento + "&objeto=" + objeto + "&notaFiscal=" + notafiscal + "&destinatario=" + destinatario + "&cep=" + cep + "&ar=" + ar + "&vd=" + vd + "&uf=" + uf +"&tipoFat=" + tpFat+"&atrasado=" + atrasado, true);
     http.onreadystatechange = handleHttpResponsePesquisaCustomizadaObjetos;
     http.send(null);
 }
@@ -377,6 +380,10 @@ function pesquisaAr(idCliente, nomeBD) {
     http.onreadystatechange = handleHttpResponsePesquisaCustomizadaObjetos;
     http.send(null);
 }
+function pesqSro(param) {
+		$('#objetos').val(param);
+		$('#frmSRO').submit();
+	}
 
 function pesquisaAnalitica(idCliente, nomeBD) {
     abrirTelaEspera();
@@ -392,7 +399,11 @@ function pesquisaAnalitica(idCliente, nomeBD) {
     var uf = document.getElementById("uf").value;
     var ar = document.getElementById("ar").checked;
     var vd = document.getElementById("vd").checked;
-    http.open("GET", "../AjaxPages/consulta_analitico.jsp?idCliente=" + idCliente + "&nomeBD=" + nomeBD + "&dataIni=" + dataInicio + "&dataFim=" + dataFinal + "&situacao=" + situacao + "&servico=" + servico + "&departamento=" + departamento + "&objeto=" + objeto + "&notaFiscal=" + notafiscal + "&destinatario=" + destinatario + "&cep=" + cep + "&ar=" + ar + "&vd=" + vd + "&uf=" + uf, true);
+    var lp = document.getElementById("lp").value;    
+    var tpFat = document.getElementById("tipoFat").value;
+    var atrasado = document.getElementById("atrasado").checked;
+    http.open("GET", "../AjaxPages/consulta_analitico.jsp?idCliente=" + idCliente + "&nomeBD=" + nomeBD + "&dataIni=" + dataInicio + "&dataFim=" + dataFinal + "&situacao=" + situacao + "&servico=" + servico + "&departamento=" + departamento + "&objeto=" + objeto + "&notaFiscal=" 
+            + notafiscal + "&destinatario=" + destinatario + "&cep=" + cep + "&ar=" + ar + "&vd=" + vd + "&uf=" + uf+ "&lp="+lp+ "&tipoFat=" + tpFat+"&atrasado=" + atrasado, true );
     http.onreadystatechange = handleHttpResponsePesquisaCustomizadaObjetos;
     http.send(null);
 }
@@ -557,23 +568,25 @@ function darBaixaAr2() {
 
 
 function handleHttpResponseAbrangenciaServ() {
-    if (http.readyState == 4) {
-        if (http.status == 200) {
+    if (http.readyState === 4) {
+        if (http.status === 200) {
             //alert("handleHTTPResponse");
             var resultado = http.responseText;
-            if (resultado.toString() == "sessaoexpirada") {
+            if (resultado.toString().trim() === "sessaoexpirada") {
                 window.location = "../../index.jsp?msgLog=3";
             } else {
-                if (resultado == 'aceita') {
+                if (resultado.trim() === 'aceita') {
                     chamaDivProtecao2();
-                } else if (resultado == 'ESEDEX') {
+                } else if (resultado.trim() === 'ESEDEX') {
                     alert('Nao existe o ESEDEX para este CEP!');
-                } else if (resultado == 'SEDEX10') {
+                } else if (resultado.trim() === 'SEDEX10') {
                     alert('Nao existe o SEDEX 10 para este CEP!');
-                } else if (resultado == 'SEDEX12') {
+                } else if (resultado.trim() === 'SEDEX12') {
                     alert('Nao existe o SEDEX 12 para este CEP!');
-                } else if (resultado == 'PAX') {
-                    alert('Nao existe o PAX para este CEP!');
+                } else if (resultado.trim() === 'SEDEXHJ') {
+                    alert('Nao existe o SEDEX HOJE para este CEP!');
+                } else if (resultado.trim() === 'PAX') {
+                    alert('Nao existe o PAX para este CEP!');                
                 }
             }
         } else {

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package iReports;
 
 import Controle.contrCliente;
@@ -49,7 +48,7 @@ public class ServEtiquetasPLP extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         HttpSession sessao = request.getSession();
         String expira = (String) sessao.getAttribute("empresa");
         if (expira == null) {
@@ -59,12 +58,12 @@ public class ServEtiquetasPLP extends HttpServlet {
             String nomeBD = (String) sessao.getAttribute("empresa");
             int idCliente = (Integer) sessao.getAttribute("idCliente");
             String SROs = request.getParameter("ids");
-            
+
             String formato = request.getParameter("formato");
             String url_jrxml = "etiqueta_plp.jrxml";
-            if(formato.equals("A4")){
+            if (formato.equals("A4")) {
                 url_jrxml = "etiqueta_plp.jrxml";
-            }else if(formato.equals("ETQ_16x10")){
+            } else if (formato.equals("ETQ_16x10")) {
                 url_jrxml = "etiqueta_plp_16x10.jrxml";
             }
 
@@ -76,29 +75,36 @@ public class ServEtiquetasPLP extends HttpServlet {
                     url = "";
                 }
 
+                String nomeChancela = cli.getNomeContrato();
+                String contrato = cli.getNumContrato();
+                if (contrato != null && contrato.trim().equals("9912278851")) {
+                    nomeChancela = "EBAZAR.COM.BR LTDA";
+                }
                 // mapa de parâmetros do relatório (ainda vamos aprender a usar)
                 Map parametros = new HashMap();
                 parametros.put("nomeBD", nomeBD);
-                parametros.put("urlLogoCli", url);                   
+                parametros.put("contratoCli", contrato);
+                parametros.put("nomeChancela", nomeChancela);
+                parametros.put("urlLogoCli", url);
 
                 byte[] bytes = null;
                 Connection conn = Conexao.conectar(nomeBD);
                 try {
                     InputStream in = getClass().getResourceAsStream(url_jrxml);
-                    JasperDesign jasperDesign = JRXmlLoader.load(in);                    
-                    
+                    JasperDesign jasperDesign = JRXmlLoader.load(in);
+
                     String sqlQuery = "SELECT *,"
                             + " IF(servico = 'CARTA' || servico = 'SIMPLES', "
-                                    + "CONCAT('"+url_base+"/imagensNew/chancelas/', servico, '.png'), "
-                                    + "CONCAT('"+url_base+"/imagensNew/chancelas/CHANCELA_', servico, '.png')"
+                            + "CONCAT('" + url_base + "/imagensNew/chancelas/', servico, '.png'), "
+                            + "CONCAT('" + url_base + "/imagensNew/chancelas/CHANCELA_', servico, '.png')"
                             + ")  AS imgChancela"
                             + " FROM me_plp"
                             + " WHERE idCliente = " + idCliente + " AND status = 0 AND sro IN (" + SROs + ");";
-                    
+
                     JRDesignQuery query = new JRDesignQuery();
                     query.setText(sqlQuery);
                     jasperDesign.setQuery(query);
-                    
+
                     JasperReport jr = JasperCompileManager.compileReport(jasperDesign);
                     JasperPrint impressao = JasperFillManager.fillReport(jr, parametros, conn);
                     Conexao.desconectar(conn);
@@ -113,7 +119,7 @@ public class ServEtiquetasPLP extends HttpServlet {
                 //  
                 if (bytes != null && bytes.length > 0) {
                     ContrImpressaoPLP.setarImpresso(nomeBD, SROs);
-                    
+
                     response.setContentType("application/pdf");
                     response.setContentLength(bytes.length);
                     ServletOutputStream ouputStream = response.getOutputStream();

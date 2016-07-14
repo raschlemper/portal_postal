@@ -3786,12 +3786,12 @@ function Datepicker() {
 	this.regional[""] = { // Default regional settings
 		closeText: "Fechar", // Display text for close link
 		prevText: "Ant.", // Display text for previous month link
-		nextText: "Próx.", // Display text for next month link
+		nextText: "Pr&oacute;x.", // Display text for next month link
 		currentText: "Hoje", // Display text for current month link
-		monthNames: ["Janeiro","Fevereiro","Março","Abril","Maio","Julho",
+		monthNames: ["Janeiro","Fevereiro","Mar&ccedil;o","Abril","Maio","Junho",
 			"Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"], // Names of months for drop-down and formatting
 		monthNamesShort: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"], // For formatting
-		dayNames: ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"], // For formatting
+		dayNames: ["Domingo", "Segunda", "Ter&ccedil;a", "Quarta", "Quinta", "Sexta", "Sabado"], // For formatting
 		dayNamesShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"], // For formatting
 		dayNamesMin: ["D","S","T","Q","Q","S","S"], // Column headings for days starting at Sunday
 		weekHeader: "Wk", // Column header for week of the year

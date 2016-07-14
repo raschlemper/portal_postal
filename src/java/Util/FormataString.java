@@ -377,15 +377,17 @@ public class FormataString {
     public static String montaWhereServicos(String serv) {
         String sql = "";
         if (serv.equals("SEDEX")) {
-            sql = " AND codigoEct IN (40010, 40096, 40436, 40444, 40843) ";
+            sql = " AND codigoEct IN (40010, 40096, 40436, 40444, 40843, 40568) ";
         } else if (serv.equals("ESEDEX")) {
-            sql = " AND codigoEct IN (81019) ";
+            sql = " AND codigoEct IN (81019, 81833) ";
         } else if (serv.equals("SEDEXC")) {
             sql = " AND codigoEct IN (40045, 40126) ";
         } else if (serv.equals("SEDEX10")) {
-            sql = " AND codigoEct IN (40215, 40886) ";
+            sql = " AND codigoEct IN (40215, 40886, 40789) ";
+        } else if (serv.equals("SEDEX12")) {
+            sql = " AND codigoEct IN (40169) ";
         } else if (serv.equals("PAC")) {
-            sql = " AND codigoEct IN (41068, 41106) ";
+            sql = " AND codigoEct IN (41068, 41106, 41211) ";
         } else if (serv.equals("CARTA")) {
             sql = " AND (codigoEct IN (10138, 10707) OR (codigoEct = 10014 AND siglaServAdicionais LIKE '%RG%'))";
         } else if (serv.equals("SIMPLES")) {

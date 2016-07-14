@@ -1,5 +1,6 @@
 package com.portalpostal.model;
 
+import com.portalpostal.model.dd.TipoSeguroVeiculo;
 import com.portalpostal.model.serializer.JsonDateSerializer;
 import java.util.Date;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -12,10 +13,8 @@ public class VeiculoSeguro {
     private String corretora;
     private String assegurado;
     private Double valorFranquia;
-    private TipoSeguro indenizacao;
-    @JsonSerialize(using = JsonDateSerializer.class)
+    private TipoSeguroVeiculo indenizacao;
     private Date dataInicioVigencia;
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date dataFimVigencia;
     
     public VeiculoSeguro() {}
@@ -68,11 +67,11 @@ public class VeiculoSeguro {
         this.valorFranquia = valorFranquia;
     }
 
-    public TipoSeguro getIndenizacao() {
+    public TipoSeguroVeiculo getIndenizacao() {
         return indenizacao;
     }
 
-    public void setIndenizacao(TipoSeguro indenizacao) {
+    public void setIndenizacao(TipoSeguroVeiculo indenizacao) {
         this.indenizacao = indenizacao;
     }
 

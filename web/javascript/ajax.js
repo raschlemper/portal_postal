@@ -175,7 +175,7 @@ function verEditarContato(idContato) {
 
 // funcao que retorna o form para editar o usuario solicitado
 function verEditarLoginPortal(id, local) {
-    http.open("GET", "../../Agencia/Configuracao/cliente_usuarios_editar.jsp?id=" + id + "&local=" + local, true);
+    http.open("GET", "../../Cliente/Cadastros/usuario_editar.jsp?id=" + id + "&local=" + local, true);
     http.onreadystatechange = handleHttpResponse;
     http.send(null);
 }
