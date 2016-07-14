@@ -113,7 +113,7 @@
                                                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                                     <select style="margin-left: 15px;" name="acessos_pp"  id="acessos_pp" data-width="auto" class="selectpicker show-tick" multiple title="Selecione os acessos permitidos..." multiple data-actions-box="true" data-selected-text-format="static" ><%--onclick="controleComboboxPP5(this)"--%>
                                                         <optgroup label="DASHBOARD">
-                                                            <option value="201" >OVERVIEW COLETAS</option>
+                                                            <option value="702" >OVERVIEW COLETAS</option>
                                                             <option value="701" >RELATORIOS</option>                                                            
                                                         </optgroup>
                                                         <optgroup label="TELEGRAMAS">

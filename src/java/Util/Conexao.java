@@ -17,6 +17,7 @@ public class Conexao {
             //Conexão Servidor Scc4.com.br
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/pp_" + nome + "?zeroDateTimeBehavior=convertToNull&autoReconnect=true";
+            //String url = "jdbc:mysql://scc4.com.br:3306/pp_" + nome + "?zeroDateTimeBehavior=convertToNull&autoReconnect=true";
             Connection con = DriverManager.getConnection(url, "root", "123456");
             //Connection con = DriverManager.getConnection(url,"smart_bd","33m.SMRT");
             //contConn++;
@@ -35,8 +36,8 @@ public class Conexao {
         try {
             //Conexão Banco Local
             Class.forName("com.mysql.jdbc.Driver");
-
             String url = "jdbc:mysql://localhost:3306/portalpostal?zeroDateTimeBehavior=convertToNull&autoReconnect=true";
+            //String url = "jdbc:mysql://scc4.com.br:3306/portalpostal?zeroDateTimeBehavior=convertToNull&autoReconnect=true";
             Connection con = DriverManager.getConnection(url, "root", "123456");
             //Connection con = DriverManager.getConnection(url,"smart_bd","33m.SMRT");
 

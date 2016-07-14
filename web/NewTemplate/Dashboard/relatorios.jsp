@@ -225,7 +225,7 @@
                                     <h4 class="subtitle">Selecione o Relatório e o Periodo</h4>
                                 </div> 
                                 <form action="painel_etiquetas_pesq_b.jsp" method="post" name="form2">
-                                    <div class="row">
+                                    <div class="row" >
                                         <div class="form-group col-md-8" >
                                             <label class="small">Selecione um dos Relatórios</label>
                                             <select class="populate placeholder" name="tipoRel" id="tipoRel" onchange="validaCampos(this)">
@@ -240,8 +240,9 @@
                                             </select>
                                         </div>  
                                     </div>
-                                    <div class="row">
+                                    <div class="row" >
                                         <div class="form-inline col-md-8" >
+                                            <span id="select_data">
                                             <label class="small">Selecione o Periodo da Impressão</label>
                                             <div class="clearfix"></div>
                                             <label for="data">De</label>
@@ -254,6 +255,7 @@
                                                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                                 <input type="text" id="data2" name="data2" size="10" class="form-control" value="<%= vData2%>"  maxlength="10" onkeypress="mascara(this, maskData)" />
                                             </div>
+                                            </span>
                                             <input type="hidden" style="width:100px;" name="obj" />
                                             <button type="button" class="btn btn-sm btn-primary form-control" onclick="ajaxtable();">
                                                 <i class="fa fa-lg fa-spc fa-file-text"></i>GERAR
@@ -331,12 +333,16 @@
                     var value = sel.value;
 
                     if (value === "2" || value === "4" || value === "7") {
-                        $('#data').attr('disabled', 'disabled');
-                        $('#data2').attr('disabled', 'disabled');
+                        
+                        $('#select_data').hide();
+                        
+                        //$('#data').attr('disabled', 'disabled');
+                        //$('#data2').attr('disabled', 'disabled');
 
                     } else if (value === "1" || value === "3" || value === "5" || value === "6") {
-                        $('#data').removeAttr('disabled');
-                        $('#data2').removeAttr('disabled');
+                        $('#select_data').show();
+                       // $('#data').removeAttr('disabled');
+                       // $('#data2').removeAttr('disabled');
                     }
                 }
             </script>

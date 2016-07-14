@@ -1,3 +1,5 @@
+<%@page import="java.text.ParseException"%>
+<%@page import="javax.swing.text.MaskFormatter"%>
 <%@page import="Entidade.Clientes"%>
 <%@page import="Entidade.ClientesUsuario"%>
 <%@page import="Util.FormataString"%>
@@ -20,6 +22,20 @@
         String emp = request.getParameter("empresa");
         String end = request.getParameter("endereco");
         String cep1 = request.getParameter("cep");
+        
+        MaskFormatter mask; 
+        if (cep1 != null) {
+            try {
+                String value = cep1.replace("-", "").replace(".", "").replace(" ", "");
+                value = String.format("%08d", Integer.parseInt(value));
+                mask = new MaskFormatter("#####-###");
+                mask.setValueContainsLiteralCharacters(false);
+                cep1 = mask.valueToString(value);
+            } catch (ParseException e) {
+            } catch (NumberFormatException e) {                
+            }
+        }
+        
         String tags = request.getParameter("tags");
         String multi = request.getParameter("multi");
 
@@ -76,6 +92,18 @@
                     String tag = "";
                     if (dest.getTags() != null) {
                         tag = dest.getTags();
+                    }
+                    
+                    if (cep != null) {
+                        try {
+                            String value = cep.replace("-", "").replace(".", "").replace(" ", "");
+                            value = String.format("%08d", Integer.parseInt(value));
+                            mask = new MaskFormatter("#####-###");
+                            mask.setValueContainsLiteralCharacters(false);
+                            cep = mask.valueToString(value);
+                        } catch (ParseException e) {
+                        } catch (NumberFormatException e) {                
+                        }
                     }
 
             %>

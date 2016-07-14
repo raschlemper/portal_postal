@@ -57,7 +57,8 @@ public class ServInserirDepto extends HttpServlet {
                     }
                 }
                 int idCli = Integer.parseInt(request.getParameter("idCliente"));
-                ContrClienteDeptos.inserirDepto(nomeBD, idCli, nome, cartao);
+                String cod_ref = request.getParameter("cod_ref").trim();
+                ContrClienteDeptos.inserirDepto(nomeBD, idCli, nome, cartao, cod_ref);
                 
                 sessao.setAttribute("msg", "Departamento inserido com sucesso!");
                 //response.sendRedirect("Agencia/Coleta/tipo_coleta_lista.jsp");

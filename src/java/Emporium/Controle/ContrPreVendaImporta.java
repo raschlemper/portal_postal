@@ -80,11 +80,10 @@ public class ContrPreVendaImporta {
                     FALHA += "<br/>Linha n." + ai.getNrLinha() + " - CEP " + ai.getCep() + " invalido!";
                 }
 
-                
                 int linha = 0;
-                try{
+                try {
                     linha = Integer.parseInt(ai.getNrLinha()) - 1;
-                }catch(Exception e){                    
+                } catch (Exception e) {
                 }
                 //VERIFICA QUAL O SERVICO POSTADO
                 String servico = "";
@@ -97,7 +96,13 @@ public class ContrPreVendaImporta {
                 } else if (ai.getServico().startsWith("SIMPLES")) {
                     servico = "SIMPLES";
                 } else if (ai.getServico().startsWith("PAX")) {
-                    servico = "PAX";
+                    //VERIFICAR SE CEP POSSUI PAX
+                    if (!ai.getContrato().equals("") && listaContratoCli.containsKey("PAX") && ContrServicoAbrangencia.verificaByCepServico(cepInteiro, "PAX", nomeBD)) {
+                        servico = "PAX";
+                    } else {
+                        AVISO += "<br/>Linha n." + linha + " - CEP " + ai.getCep() + " nao aceita PAC GRANDES FORMATOS! O servico foi alterado para PAC!";
+                        servico = "PAC";
+                    }
                 } else if (ai.getServico().startsWith("ESEDEX") || ai.getServico().startsWith("E-SEDEX")) {
                     //VERIFICAR SE CEP POSSUI ESEDEX
                     if (!ai.getContrato().equals("") && listaContratoCli.containsKey("ESEDEX") && ContrServicoAbrangencia.verificaByCepServico(cepInteiro, "ESEDEX", nomeBD)) {

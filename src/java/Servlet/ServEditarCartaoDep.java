@@ -93,6 +93,7 @@ public class ServEditarCartaoDep extends HttpServlet {
                 
                 String nome = request.getParameter("nome").trim();                
                 String cartao = request.getParameter("cartao").trim();
+                String codReferencia = request.getParameter("codReferencia").trim();
                 
                 int temEndereco = 0;
                 String nomeEndereco = "";
@@ -128,7 +129,7 @@ public class ServEditarCartaoDep extends HttpServlet {
                     }
                 }
 
-                Controle.ContrClienteDeptos.alterarDepto(nomeBD, idCli, idDep, nome, cartao, temEndereco, nomeEndereco, logradouro, numero, complemento, bairro, cidade, uf, cep);
+                Controle.ContrClienteDeptos.alterarDepto(nomeBD, idCli, idDep, nome, cartao, temEndereco, nomeEndereco, logradouro, numero, complemento, bairro, cidade, uf, cep, codReferencia);
 
                 sessao.setAttribute("msg", "Departamento alterado com sucesso!");
                                 

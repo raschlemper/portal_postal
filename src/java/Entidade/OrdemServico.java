@@ -18,6 +18,8 @@ public class OrdemServico {
     private String nomeUsuario;
     private Timestamp dataOs;
     private int qtdObjetos;
+    private int status;
+    private Timestamp dataHoraStatus;
 
     public OrdemServico(int idOs, int idCliente, int idUsuario, String nomeUsuario, Timestamp dataOs, int qtdObjetos) {
         this.idOs = idOs;
@@ -27,6 +29,37 @@ public class OrdemServico {
         this.dataOs = dataOs;
         this.qtdObjetos = qtdObjetos;
     }
+
+    public OrdemServico(int idOs, int idCliente, int idUsuario, String nomeUsuario, Timestamp dataOs, int qtdObjetos, int status, Timestamp dataHoraStatus) {
+        this.idOs = idOs;
+        this.idCliente = idCliente;
+        this.idUsuario = idUsuario;
+        this.nomeUsuario = nomeUsuario;
+        this.dataOs = dataOs;
+        this.qtdObjetos = qtdObjetos;
+        this.status = status;
+        this.dataHoraStatus = dataHoraStatus;
+    }
+    
+
+    public Timestamp getDataHoraStatus() {
+        return dataHoraStatus;
+    }
+
+    public void setDataHoraStatus(Timestamp dataHoraStatus) {
+        this.dataHoraStatus = dataHoraStatus;
+    }
+
+ 
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+    
 
     public int getIdOs() {
         return idOs;
