@@ -79,6 +79,21 @@ public class LancamentoProgramadoService {
             lancamentoProgramado = setParcelas(lancamentoProgramado);
         }
         return lancamentoProgramados;
+    }  
+    
+    public List<LancamentoProgramado> findByFavorecido(Integer idFavorecido) throws Exception {
+        init();
+        return lancamentoProgramadoDAO.findByFavorecido(idFavorecido);
+    } 
+    
+    public List<LancamentoProgramado> findByColaborador(Integer idColaborador) throws Exception {
+        init();
+        return lancamentoProgramadoDAO.findByColaborador(idColaborador);
+    } 
+    
+    public List<LancamentoProgramado> findByFornecedor(Integer idFornecedor) throws Exception {
+        init();
+        return lancamentoProgramadoDAO.findByFornecedor(idFornecedor);
     } 
     
     public LancamentoProgramado save(LancamentoProgramado lancamentoProgramado) throws Exception {

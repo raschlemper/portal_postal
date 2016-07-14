@@ -78,7 +78,8 @@ app.factory('LancamentoHandler', function(LISTAS) {
     };
     
     var getFavorecido = function(lancamento) {
-        return lancamento.favorecido || null;
+        if(!lancamento.favorecido) return lancamento.favorecido;
+        return { idFavorecido: lancamento.favorecido.idFavorecido }; 
     };
     
     var getNumero = function(lancamento) {

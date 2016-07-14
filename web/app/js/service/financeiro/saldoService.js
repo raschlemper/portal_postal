@@ -73,20 +73,26 @@ app.factory('SaldoService', function($filter) {
      
     var setSaldoPlanoContaTotalMes = function(estruturas, meses) {
         var totais = {};
+        var totalGeral = 0;
         angular.forEach(estruturas, function(estrutura) {
             getSaldoEstrutura(estrutura, totais, meses);
+            setSaldoPlanoContaTotal(estrutura);
+            totalGeral += getSaldoGeral(estrutura, totalGeral);
         });
-        return totais;
+        return { 'total': totais, 'geral': totalGeral };
     };
     
     // SALDO TOTAL MES CENTRO DE CUSTO /////
      
     var setSaldoCentroCustoTotalMes = function(estruturas, meses) {
         var totais = {};
+        var totalGeral = 0;
         angular.forEach(estruturas, function(estrutura) {
             getSaldoEstrutura(estrutura, totais, meses);
+            setSaldoPlanoContaTotal(estrutura);
+            totalGeral += getSaldoGeral(estrutura, totalGeral);
         });
-        return totais;
+        return { 'total': totais, 'geral': totalGeral };
     };
 
     var getSaldoEstrutura = function(estrutura, totais, meses) {
@@ -96,10 +102,28 @@ app.factory('SaldoService', function($filter) {
                 if(estrutura.tipo.codigo === 'receita') { totais[mes.order] += toFixe(estrutura.saldos[mes.order], 2); }
                 else if(estrutura.tipo.codigo === 'despesa') { totais[mes.order] -= toFixe(estrutura.saldos[mes.order], 2); }
             } else {
-                totais[mes.order] += toFixe(estrutura.saldos[mes.order], 2);;
+                totais[mes.order] += toFixe(estrutura.saldos[mes.order], 2);
             }    
         });
-    };  
+    }; 
+
+    var getSaldoGeral = function(estrutura) {
+        var total = 0;
+        if(estrutura.tipo) {
+            if(estrutura.tipo.codigo === 'receita') { total += estrutura.total; }
+            else if(estrutura.tipo.codigo === 'despesa') { total -= estrutura.total; }
+        } else {
+            total += estrutura.total;
+        }  
+        return toFixe(total, 2);
+    }; 
+     
+    var setSaldoPlanoContaTotal = function(estrutura) {
+        estrutura.total = 0;
+        angular.forEach(estrutura.saldos, function(saldo) {
+            estrutura.total += saldo;
+        });
+    }; 
     
     // SALDO PLANO DE CONTA /////
     

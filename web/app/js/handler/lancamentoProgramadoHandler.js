@@ -57,8 +57,9 @@ app.factory('LancamentoProgramadoHandler', function() {
         return lancamentoProgramado.tipo.id; 
     };
     
-    var getFavorecido = function(lancamentoProgramado) {
-        return lancamentoProgramado.favorecido || null;
+    var getFavorecido = function(lancamento) {
+        if(!lancamento.favorecido) return lancamento.favorecido;
+        return { idFavorecido: lancamento.favorecido.idFavorecido }; 
     };
     
     var getNumero = function(lancamentoProgramado) {

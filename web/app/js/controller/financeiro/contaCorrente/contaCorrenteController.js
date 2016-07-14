@@ -23,13 +23,13 @@ app.controller('ContaCorrenteController',
             $scope.linha = {
                 events: { 
                     edit: function(contaCorrente) {
-                        $scope.editar(contaCorrente.idContaCorrente);
+                        $scope.editar(contaCorrente);
                     },
                     remove: function(contaCorrente) {
-                        $scope.excluir(contaCorrente.idContaCorrente);
+                        $scope.excluir(contaCorrente);
                     },
                     view: function(contaCorrente) {
-                        $scope.visualizar(contaCorrente.idContaCorrente);
+                        $scope.visualizar(contaCorrente);
                     }
                 }
             }             
@@ -59,10 +59,10 @@ app.controller('ContaCorrenteController',
 
         // ***** VISUALIZAR ***** //
 
-        $scope.visualizar = function(idContaCorrente) {
-            ContaCorrenteService.get(idContaCorrente)
-                .then(function(contaCorrente) {
-                    visualizar(contaCorrente);
+        $scope.visualizar = function(contaCorrente) {
+            ContaCorrenteService.get(contaCorrente.idContaCorrente)
+                .then(function(result) {
+                    visualizar(result);
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -99,10 +99,10 @@ app.controller('ContaCorrenteController',
 
         // ***** EDITAR ***** //
 
-        $scope.editar = function(idContaCorrente) {
-            ContaCorrenteService.get(idContaCorrente)
-                .then(function(contaCorrente) {
-                    editar(contaCorrente);
+        $scope.editar = function(contaCorrente) {
+            ContaCorrenteService.get(contaCorrente.idContaCorrente)
+                .then(function(result) {
+                    editar(result);
                 })
                 .catch(function(e) {
                     modalMessage(e.error);
@@ -111,10 +111,11 @@ app.controller('ContaCorrenteController',
         };
         
         var editar = function(contaCorrente) {
-            modalSalvar(contaCorrente).then(function(result) {
-                result = ajustarDados(result);
-                update(contaCorrente);
-            });            
+            modalSalvar(contaCorrente)
+                .then(function(result) {
+                    result = ajustarDados(result);
+                    update(result);
+                });            
         };
         
         var update = function(contaCorrente) {
@@ -130,10 +131,10 @@ app.controller('ContaCorrenteController',
 
         // ***** EXCLUIR ***** //
 
-        $scope.excluir = function(idContaCorrente) {
-            $q.all([ContaCorrenteService.getCartaoCredito(idContaCorrente),
-                    ContaCorrenteService.getCarteiraCobranca(idContaCorrente),
-                    ContaCorrenteService.getConta(idContaCorrente)])
+        $scope.excluir = function(contaCorrente) {
+            $q.all([ContaCorrenteService.getCartaoCredito(contaCorrente.idContaCorrente),
+                    ContaCorrenteService.getCarteiraCobranca(contaCorrente.idContaCorrente),
+                    ContaCorrenteService.getConta(contaCorrente.idContaCorrente)])
                 .then(function(values) {   
                     if(values[0].cartaoCreditos.length) {
                         modalMessage("Esta conta corrente não pode ser excluída! <br/> Existem Cartões de Crédito vinculados a esta conta corrente.");
@@ -142,20 +143,20 @@ app.controller('ContaCorrenteController',
                     } else if(values[2].contas.length) {
                         modalMessage("Esta conta corrente não pode ser excluída! <br/> Existem Contas vinculadas a esta conta corrente.");
                     } else {
-                        excluir(idContaCorrente);
+                        excluir(contaCorrente);
                     }
                 });
         }; 
         
-        var excluir = function(idContaCorrente) {
+        var excluir = function(contaCorrente) {
             modalExcluir()
                 .then(function() {
-                    remove(idContaCorrente);
+                    remove(contaCorrente);
                 });            
         };
         
-        var remove = function(idContaCorrente) {
-            ContaCorrenteService.delete(idContaCorrente)
+        var remove = function(contaCorrente) {
+            ContaCorrenteService.delete(contaCorrente.idContaCorrente)
                 .then(function(data) { 
                     modalMessage("Conta Corrente " + data.nome + " Removida com sucesso!");
                     todos();                        

@@ -75,15 +75,16 @@ public class ContrClienteDeptos {
         }
     }
     
-    public static boolean inserirDepto(String nomeBD, int idCliente, String nome, String cartao) {
+    public static boolean inserirDepto(String nomeBD, int idCliente, String nome, String cartao, String cod_ref) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "INSERT INTO cliente_departamentos (idCliente,nomeDepartamento,cartaoPostagem,ativo,codReferencia) \n" +
-                    " VALUES (?,?,?,1,0) ;";
+        String sql = "INSERT INTO cliente_departamentos (idCliente,nomeDepartamento,cartaoPostagem,codReferencia,ativo) \n" +
+                    " VALUES (?,?,?,?,1) ;";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setInt(1, idCliente);
             valores.setString(2, nome);
             valores.setString(3, cartao);
+            valores.setString(4, cod_ref);
             valores.executeUpdate();
             valores.close();
             return true;
@@ -112,9 +113,9 @@ public class ContrClienteDeptos {
         }
     }
     
-    public static boolean alterarDepto(String nomeBD, int idCliente, int idDepto, String nome, String cartao, int temEndereco, String nomeEndereco, String logradouro, String numero, String complemento, String bairro, String cidade, String uf, String cep) {
+    public static boolean alterarDepto(String nomeBD, int idCliente, int idDepto, String nome, String cartao, int temEndereco, String nomeEndereco, String logradouro, String numero, String complemento, String bairro, String cidade, String uf, String cep, String codReferencia) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "UPDATE cliente_departamentos SET cartaoPostagem = ?, nomeDepartamento = ?, temEndereco = ?, nomeEndereco = ?, logradouro = ?, numero = ?, complemento = ?, bairro = ?, cidade = ?, uf = ?, cep = ? "
+        String sql = "UPDATE cliente_departamentos SET cartaoPostagem = ?, nomeDepartamento = ?, temEndereco = ?, nomeEndereco = ?, logradouro = ?, numero = ?, complemento = ?, bairro = ?, cidade = ?, uf = ?, cep = ?, codReferencia = ? "
                 + " WHERE idCliente = ? AND idDepartamento = ?;";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
@@ -129,8 +130,9 @@ public class ContrClienteDeptos {
             valores.setString(9, cidade);
             valores.setString(10, uf);
             valores.setString(11, cep);
-            valores.setInt(12, idCliente);
-            valores.setInt(13, idDepto);
+            valores.setString(12, codReferencia);
+            valores.setInt(13, idCliente);
+            valores.setInt(14, idDepto);
             valores.executeUpdate();
             valores.close();
             return true;
@@ -179,7 +181,7 @@ public class ContrClienteDeptos {
                 int idDepartamento = result.getInt("idDepartamento");
                 String nomeDepartamento = result.getString("nomeDepartamento");
                 String cartaoPostagem = result.getString("cartaoPostagem");
-                int codReferencia = result.getInt("codReferencia");
+                String codReferencia = result.getString("codReferencia");
                 int temEndereco = result.getInt("temEndereco");
                 String nomeEndereco = result.getString("nomeEndereco");
                 String logradouro = result.getString("logradouro");
@@ -249,7 +251,7 @@ public class ContrClienteDeptos {
                 int idDepartamento = result.getInt("idDepartamento");
                 String nomeDepartamento = result.getString("nomeDepartamento");
                 String cartaoPostagem = result.getString("cartaoPostagem");
-                int codReferencia = result.getInt("codReferencia");
+                String codReferencia = result.getString("codReferencia");
                 int temEndereco = result.getInt("temEndereco");
                 String nomeEndereco = result.getString("nomeEndereco");
                 String logradouro = result.getString("logradouro");

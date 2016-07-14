@@ -65,7 +65,7 @@ public class TipoFormaPagamentoController {
     @GET
     @Path("/descricao/{descricao}")
     @Produces(MediaType.APPLICATION_JSON)
-    public TipoFormaPagamento findByNumero(@PathParam("descricao") String descricao) {
+    public TipoFormaPagamento findByDescricao(@PathParam("descricao") String descricao) {
         try {
             init();    
             return tipoFormaPagamentoService.findByDescricao(descricao);

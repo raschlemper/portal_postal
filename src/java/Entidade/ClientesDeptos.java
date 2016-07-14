@@ -14,7 +14,7 @@ public class ClientesDeptos {
     private int idCliente;
     private String nomeDepartamento;
     private String cartaoPostagem;
-    private int codReferencia;
+    private String codReferencia;
     private int temEndereco;
     private String nomeEndereco;
     private String logradouro;
@@ -32,7 +32,7 @@ public class ClientesDeptos {
     this.cartaoPostagem = cartaoPostagem;
     }*/
     
-    public ClientesDeptos(int idDepartamento, int idCliente, String nomeDepartamento, String cartaoPostagem, int codReferencia, int temEndereco, String nomeEndereco, String logradouro, String numero, String complemento, String bairro, String cidade, String uf, String cep) {    
+    public ClientesDeptos(int idDepartamento, int idCliente, String nomeDepartamento, String cartaoPostagem, String codReferencia, int temEndereco, String nomeEndereco, String logradouro, String numero, String complemento, String bairro, String cidade, String uf, String cep) {    
         this.idDepartamento = idDepartamento;
         this.idCliente = idCliente;
         this.nomeDepartamento = nomeDepartamento;
@@ -57,11 +57,11 @@ public class ClientesDeptos {
         this.cep = cep;
     }
 
-    public int getCodReferencia() {
+    public String getCodReferencia() {
         return codReferencia;
     }
     
-    public void setCodReferencia(int codReferencia) {
+    public void setCodReferencia(String codReferencia) {
         this.codReferencia = codReferencia;
     }
 

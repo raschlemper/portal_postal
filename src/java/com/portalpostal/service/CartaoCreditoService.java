@@ -2,7 +2,9 @@ package com.portalpostal.service;
 
 import com.portalpostal.dao.CartaoCreditoDAO;
 import com.portalpostal.model.CartaoCredito;
+import com.portalpostal.model.Colaborador;
 import com.portalpostal.model.Conta;
+import com.portalpostal.model.Endereco;
 import java.util.List;
 
 public class CartaoCreditoService {
@@ -23,12 +25,16 @@ public class CartaoCreditoService {
     
     public List<CartaoCredito> findAll() throws Exception {
         init();
-        return cartaoCreditoDAO.findAll();
+        List<CartaoCredito> cartaoCreditos = cartaoCreditoDAO.findAll();
+        cartaoCreditos = setContas(cartaoCreditos);
+        return cartaoCreditos;
     }  
     
     public CartaoCredito find(Integer idCartaoCredito) throws Exception {
         init();
-        return cartaoCreditoDAO.find(idCartaoCredito);
+        CartaoCredito cartaoCredito = cartaoCreditoDAO.find(idCartaoCredito);
+        cartaoCredito = setConta(cartaoCredito);
+        return cartaoCredito;
     } 
 
     public List<CartaoCredito> findByContaCorrente(Integer idContaCorrente) throws Exception {
@@ -64,5 +70,23 @@ public class CartaoCreditoService {
         if(!contas.isEmpty()) return false;
         return true;                
     } 
+    
+    // ***** ENDERECO ***** //
+    
+    private List<CartaoCredito> setContas(List<CartaoCredito> cartaoCreditos) throws Exception {
+        for (CartaoCredito cartaoCredito : cartaoCreditos) {
+            setConta(cartaoCredito);
+        }
+        return cartaoCreditos;
+    }
+    
+    private CartaoCredito setConta(CartaoCredito cartaoCredito) throws Exception {
+        cartaoCredito.setContas(getContas(cartaoCredito.getIdCartaoCredito()));
+        return cartaoCredito;
+    }
+    
+    private List<Conta> getContas(Integer idCartaoCredito) throws Exception {
+       return contaService.findByCartaoCredito(idCartaoCredito);
+    }
     
 }

@@ -65,7 +65,7 @@ public class TipoDocumentoController {
     @GET
     @Path("/descricao/{descricao}")
     @Produces(MediaType.APPLICATION_JSON)
-    public TipoDocumento findByNumero(@PathParam("descricao") String descricao) {
+    public TipoDocumento findByDescricao(@PathParam("descricao") String descricao) {
         try {
             init();    
             return tipoDocumentoService.findByDescricao(descricao);

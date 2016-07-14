@@ -116,7 +116,7 @@
             });
         </script>
 
-        <title>Portal Postal | Etiquetas Impressas</title>
+        <title>Portal Postal | Lista de Postagem</title>
 
     </head>
     <body>
@@ -204,7 +204,7 @@
                                         if(pv.getIdOs() > 0){
                                             os = "<a href='lista_postagem_print.jsp?idOs="+pv.getIdOs()+"'>"+pv.getIdOs()+"</a>";
                                         }
-                                        if(dptosSessaoUsuario.contains(pv.getIdDepartamento())){                                            
+                                        if(dptosSessaoUsuario.isEmpty() || pv.getIdDepartamento() == 0 || dptosSessaoUsuario.contains(pv.getIdDepartamento())){                                             
                                         
                                 %>
                                 <tr style="cursor:default;">

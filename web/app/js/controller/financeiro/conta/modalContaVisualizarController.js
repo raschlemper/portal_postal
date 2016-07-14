@@ -10,7 +10,7 @@ app.controller('ModalContaVisualizarController', ['$scope', '$modalInstance', 'c
         // ***** CONTROLLER ***** //  
         
         $scope.editar = function() {
-            $modalInstance.close(conta.idConta);
+            $modalInstance.close(conta);
         };
         
         $scope.cancel = function () {

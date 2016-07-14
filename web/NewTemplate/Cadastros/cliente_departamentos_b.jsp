@@ -115,6 +115,17 @@
                                             </div>
                                         </li>
                                         <li class="list-group-item">
+                                            <div class="row form-horizontal">
+                                                <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4">
+                                                    <label class="small">Código referencia</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon" ><i class="fa fa-sitemap"></i></span>
+                                                        <input type="text" name="cod_ref" maxlength="40" class="form-control"  onkeypress="mascara(this, maskNumero)" placeholder="Código referência"  />
+                                                    </div>
+                                                </div>                                                
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item">
                                             <input type="hidden" name="idCliente" value="<%= cliInc.getCodigo()%>" />
                                             <button type="button" class="btn btn-success" onclick="return preencherCampos();"><i class="fa fa-lg fa-spc fa-save"></i> INSERIR NOVO DEPARTAMENTO</button>
                                         </li>
@@ -129,7 +140,8 @@
                                             <table class="table table-striped table-bordered table-hover table-condensed" id="dataTables-example">
                                                 <thead>
                                                     <tr>
-                                                        <th>Código</th>
+                                                        <th>Cód. PP</th>
+                                                        <th>Cód. Referência</th>
                                                         <th>Departamento</th>
                                                         <th>Cartão de Postagem</th>
                                                         <th class="no-sort" width="150">Alterar</th>
@@ -145,13 +157,14 @@
                                                             ClientesDeptos sc3 = listaLogins.get(i);
                                                             String cartao = sc3.getCartaoPostagem();
                                                             String cart = cartao;
-                                                            if (cartao == null) {
+                                                            if (cartao == null || cartao.trim().equals("")) {
                                                                 cartao = "";
                                                                 cart = " - - - ";
                                                             }
                                                     %>
                                                     <tr>
                                                         <td><%= sc3.getIdDepartamento()%></td>
+                                                        <td><%= sc3.getCodReferencia() %></td>
                                                         <td><%= sc3.getNomeDepartamento()%></td>
                                                         <td><%= cart%></td>
                                                         <td align="center"><button type="button" class="btn btn-sm btn-warning" onclick="ajaxCartaoPostagem(<%= idClienteInc%>, <%= sc3.getIdDepartamento()%>, '<%= cartao%>', '<%= sc3.getNomeDepartamento()%>');" ><i class="fa fa-lg fa-pencil"></i></button></td>                                                                                                                
@@ -187,7 +200,7 @@
             function preencherCampos() {
                 var form = document.form1;
                 if (form.nome.value === '') {
-                    alert('Preencha o nome do grupo!');
+                    alert('Preencha o nome do Departamento!');
                     return false;
                 }
                 form.submit();
@@ -196,7 +209,7 @@
             function preencherCamposEdit() {
                 var form = document.form5;
                 if (form.nome.value === '') {
-                    alert('Preencha o nome do grupo!');
+                    alert('Preencha o nome do Departamento!');
                     return false;
                 }
                 form.submit();

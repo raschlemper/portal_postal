@@ -2,6 +2,7 @@ package com.portalpostal.dao.handler;
 
 import com.portalpostal.model.CentroCusto;
 import com.portalpostal.model.Conta;
+import com.portalpostal.model.Favorecido;
 import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.model.PlanoConta;
 import com.portalpostal.model.TipoDocumento;
@@ -30,7 +31,7 @@ public class LancamentoProgramadoHandler extends GenericHandler implements Resul
         lancamentoProgramado.setPlanoConta(getPlanoConta(result));
         lancamentoProgramado.setCentroCusto(getCentroCusto(result));
         lancamentoProgramado.setTipo(TipoLancamento.values()[getInt(result, "tipo")]);
-        lancamentoProgramado.setFavorecido(getString(result, "favorecido"));
+        lancamentoProgramado.setFavorecido(getFavorecido(result));
         lancamentoProgramado.setNumero(getString(result, "numero"));
         lancamentoProgramado.setDocumento(getTipoDocumento(result));
         lancamentoProgramado.setFormaPagamento(getTipoFormaPagamento(result));
@@ -72,5 +73,10 @@ public class LancamentoProgramadoHandler extends GenericHandler implements Resul
         if(!existColumn(result, "tipo_forma_pagamento.idTipoFormaPagamento")) return null;
         return new TipoFormaPagamentoHandler().handle(result); 
     }
+    
+    private Favorecido getFavorecido(ResultSet result) throws SQLException {
+        if(!existColumn(result, "favorecido.idFavorecido")) return null;
+        return new FavorecidoHandler().handle(result); 
+    }     
     
 }

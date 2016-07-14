@@ -15,9 +15,12 @@
             String nomeBD = request.getParameter("nomeBD");
             String cep = request.getParameter("cep");
 
-            int idEmpresa = Integer.parseInt(request.getParameter("idEmpresa"));
+            //int idEmpresa = Integer.parseInt(request.getParameter("idEmpresa"));
             int idCliente = Integer.parseInt(request.getParameter("idCliente"));
             int temContrato = Integer.parseInt(request.getParameter("isECT"));
+            
+            session.setAttribute( "nomeBD", nomeBD );
+            session.setAttribute( "idCliente", idCliente );
 
             String[] acc = Controle.contrCliente.consultaLoginPrecosPrazosCorreios(idCliente, nomeBD);
             String login = "";
@@ -297,6 +300,8 @@
                         <li>
                             <dd>
                                 <div class="buttons">
+                                    <input type="hidden" name="nomeBD" id="nomeBD" value="<%= nomeBD %>" />
+                                    <input type="hidden" name="idCliente" id="idCliente" value="<%= idCliente %>" />
                                     <button type="button" class="regular" onclick="pesquisaPrecoPrazo();"><img src="../../imagensNew/lupa.png"/> CALCULAR PREÇO E PRAZO</button>
                                 </div>
                             </dd>

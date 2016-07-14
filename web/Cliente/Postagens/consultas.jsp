@@ -222,9 +222,10 @@
                                 <select style="width: 130px;" id="servico" name="servico">
                                     <option value="0">-- TODOS --</option>
                                     <%
-                                        ArrayList<ServicoECT> listaTipoPostagem = ContrServicoECT.consultaServicosPorGrupo();
-                                        for (int i = 0; i < listaTipoPostagem.size(); i++) {
+                                        ArrayList<ServicoECT> listaTipoPostagem = ContrServicoECT.consultaServicosTelaPesquisa();
+                                        for (int i = 0; i < listaTipoPostagem.size(); i++) {                                            
                                             ServicoECT sv = listaTipoPostagem.get(i);
+                                            
                                     %>
                                     <option value="<%= sv.getGrupoServico()%>"><%= sv.getNomeSimples()%></option>
                                     <%}%>

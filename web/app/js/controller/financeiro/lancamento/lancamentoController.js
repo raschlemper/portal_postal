@@ -36,10 +36,11 @@ app.controller('LancamentoController',
                 {label: 'Número', column: 'numero'},               
                 {label: 'Plano Conta', column: 'planoConta'},   
                 {label: 'Centro Custo', column: 'centroCusto', showColumn: true, selected: false},
+                {label: 'Usuário', column: 'usuario', showColumn: true, selected: false},
                 {label: 'Favorecido', column: 'favorecido'},                
                 {label: 'Histórico', column: 'historico'},
-                {label: 'Depósito', column: 'deposito', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}},  
-                {label: 'Pagamento', column: 'pagamento', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}},  
+                {label: 'Crédito', column: 'deposito', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}},  
+                {label: 'Débito', column: 'pagamento', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}},  
                 {label: 'Saldo', column: 'saldo', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'saldoLancamento', args: ''}}
             ]            
             $scope.linha = {
@@ -210,8 +211,10 @@ app.controller('LancamentoController',
                     lancamento.planoConta = "Diversos";
                     lancamento.centroCusto = "Diversos";
                 }
+                
+                if(lancamento.favorecido) { lancamento.favorecido = lancamento.favorecido.nome; }
 
-                return _.pick(lancamento, 'idLancamento', 'tipo', 'anexos', 'dataLancamento', 'numero', 'planoConta', 'centroCusto', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico', 'situacao', 'numeroLoteConciliado');
+                return _.pick(lancamento, 'idLancamento', 'tipo', 'anexos', 'dataLancamento', 'numero', 'planoConta', 'centroCusto', 'usuario', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico', 'situacao', 'numeroLoteConciliado');
             })
         };
 

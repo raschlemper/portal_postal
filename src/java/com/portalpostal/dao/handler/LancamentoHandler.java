@@ -2,6 +2,7 @@ package com.portalpostal.dao.handler;
 
 import com.portalpostal.model.CentroCusto;
 import com.portalpostal.model.Conta;
+import com.portalpostal.model.Favorecido;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.model.LancamentoTransferencia;
@@ -32,7 +33,7 @@ public class LancamentoHandler extends GenericHandler implements ResultSetHandle
         lancamento.setLancamentoProgramado(getLancamentoProgramado(result));
         lancamento.setLancamentoTransferencia(getLancamentoTransferencia(result));
         lancamento.setTipo(TipoLancamento.values()[getInt(result, "tipo")]);
-        lancamento.setFavorecido(getString(result, "favorecido"));
+        lancamento.setFavorecido(getFavorecido(result));
         lancamento.setNumero(getString(result, "numero"));
         lancamento.setNumeroParcela(getInt(result, "numeroParcela"));
         lancamento.setDataCompetencia(getDate(result, "dataCompetencia"));
@@ -83,7 +84,12 @@ public class LancamentoHandler extends GenericHandler implements ResultSetHandle
         LancamentoTransferencia transferencia = new LancamentoTransferencia();
         transferencia.setIdLancamentoTransferencia(id);
         return transferencia;
-    }        
+    } 
+    
+    private Favorecido getFavorecido(ResultSet result) throws SQLException {
+        if(!existColumn(result, "favorecido.idFavorecido")) return null;
+        return new FavorecidoHandler().handle(result); 
+    }       
         
     private boolean getAnexos(ResultSet result) throws SQLException {
         if(!existColumn(result, "anexos")) return false;

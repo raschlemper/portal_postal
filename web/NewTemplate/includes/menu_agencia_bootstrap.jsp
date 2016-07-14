@@ -82,7 +82,7 @@
             </ul>
         </li>
         
-        
+        <%if(empMenu.getIdEmpresa() == 4 || empMenu.getIdEmpresa() == 64){%>
         <li>
             <a href="#">
                 <span class="fa-stack fa-lg pull-left"><i class="fa fa-car fa-stack-1x "></i></span> Veículos <span style="margin: 5px 20px 0 0;" class="fa-stack fa-fw pull-right"><i id="arrow" class="fa fa-chevron-down fa-stack-1x "></i></span>
@@ -112,6 +112,8 @@
                     </a> 
                     <ul class="nav-pills nav-stacked" style="list-style-type:none;">
                         <li style="display:none;"><a href="${pageContext.request.contextPath}/app/financeiro/banco">Banco</a></li>
+                        <li><a href="${pageContext.request.contextPath}/app/financeiro/colaborador">Colaborador</a></li>
+                        <li><a href="${pageContext.request.contextPath}/app/financeiro/fornecedor">Fornecedor</a></li>
                         <li><a href="${pageContext.request.contextPath}/app/financeiro/planoconta">Plano Conta</a></li>
                         <li><a href="${pageContext.request.contextPath}/app/financeiro/centrocusto">Centro Custo</a></li>
                         <li><a href="${pageContext.request.contextPath}/app/financeiro/contacorrente">Conta Corrente</a></li>
@@ -122,6 +124,7 @@
                 </li>
             </ul>
         </li>
+        <%}%>
         <li>
             <a class="danger" href="${pageContext.request.contextPath}/ServLogout"><span class="fa-stack fa-lg pull-left"><i class="fa fa-power-off fa-stack-1x "></i></span> Sair</a>
         </li>

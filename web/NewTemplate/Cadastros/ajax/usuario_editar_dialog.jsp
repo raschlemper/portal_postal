@@ -93,93 +93,13 @@
             <input type="checkbox" name="usaPortalPostal" id="usaPortalPostalEdit" value="1" <%if (usaPortal == 1) {%>checked="true"<%}%> data-size="mini" data-toggle="toggle" data-on="SIM" data-off="NÃO" data-onstyle="success" data-offstyle="danger" />
         </li>
         <li class="list-group-item" id="liPortalPostalEdit" <%if (usaPortal == 0) {%> style="display:none;" <%}%>>
-            <div class="row form-horizontal">
-                <%--
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                    <label>
-                        ABA GERENCIAR ETIQUETAS:<br/>
-                        <a style="color:blue;font-size: 8px;" onclick="selectAllCombo(document.getElementById('geretq_e'), true);">MARCAR TUDO</a><br/>
-                        <a style="color:red;font-size: 8px;" onclick="selectAllCombo(document.getElementById('geretq_e'), false);">DESMARCAR TUDO</a><br/>
-                    </label>
-                    <select class="form-control text-10px no-padding" name="geretq_e" id="geretq_e" multiple="true" onclick="controleCombobox0(this);" size="10" >
-                        <option value="101" <%if (listaAcPortal.contains(101)) {%>selected<%}%> >ETIQUETAS RESTANTES</option>
-                        <option value="102" <%if (listaAcPortal.contains(102)) {%>selected<%}%> >SEQUÊNCIAS GERADAS</option>
-                        <option value="103" <%if (listaAcPortal.contains(103)) {%>selected<%}%> >PESQUISAR ETIQUETA</option>
-                        <option value="104" <%if (listaAcPortal.contains(104)) {%>selected<%}%> >ETIQUETAS PENDENTES</option>
-                        <option value="105" <%if (listaAcPortal.contains(105)) {%>selected<%}%> >ETIQUETAS INUTILIZADAS</option>
-                    </select>      
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                    <label>
-                        ABA COLETA:<br/>
-                        <a style="color:blue;font-size: 8px;" onclick="selectAllCombo(document.getElementById('coleta_e'), true);">MARCAR TUDO</a><br/>
-                        <a style="color:red;font-size: 8px;" onclick="selectAllCombo(document.getElementById('coleta_e'), false);">DESMARCAR TUDO</a><br/>
-                    </label>
-                    <select class="form-control text-10px no-padding" name=coleta_e id=coleta_e multiple onclick="controleCombobox1(this)" size=10 >
-                        <option value="201" <%if (listaAcPortal.contains(201)) {%>selected<%}%> >ACOMPANHAMENTO</option>
-                        <option value="206" <%if (listaAcPortal.contains(206)) {%>selected<%}%> >GERENCIAR ROTAS</option>
-                        <option value="202" <%if (listaAcPortal.contains(202)) {%>selected<%}%> >NOVA COLETA</option>
-                        <option value="203" <%if (listaAcPortal.contains(203)) {%>selected<%}%> >COLETADORES</option>
-                        <option value="204" <%if (listaAcPortal.contains(204)) {%>selected<%}%> >TIPO DE COLETA</option>
-                        <option value="205" <%if (listaAcPortal.contains(205)) {%>selected<%}%> >HORÁRIOS DA COLETA</option>
-                    </select>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                    <label>
-                        ABA IMPORTAÇÕES:<br/>
-                        <a style="color:blue;font-size: 8px;" onclick="selectAllCombo(document.getElementById('importacao_e'), true);">MARCAR TUDO</a><br/>
-                        <a style="color:red;font-size: 8px;" onclick="selectAllCombo(document.getElementById('importacao_e'), false);">DESMARCAR TUDO</a><br/></label>
-                    <select class="form-control text-10px no-padding" name="importacao_e" id="importacao_e" multiple onclick="controleCombobox2(this)" size="10" >
-                        <option value="302" <%if (listaAcPortal.contains(302)) {%>selected<%}%> >ARQUIVO DE RETORNO DE AR</option>
-                        <option value="301" <%if (listaAcPortal.contains(301)) {%>selected<%}%> >ARQUIVO DE MOVIMENTAÇAO</option>
-                        <option value="303" <%if (listaAcPortal.contains(303)) {%>selected<%}%> >ARQUIVO DE CLIENTES</option>
-                        <option value="304" <%if (listaAcPortal.contains(304)) {%>selected<%}%> >ARQUIVO DE DEPARTAMENTOS</option>
-                    </select>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                    <label>
-                        ABA CADASTROS:<br/>
-                        <a style="color:blue;font-size: 8px;" onclick="selectAllCombo(document.getElementById('cadastro_e'), true);">MARCAR TUDO</a><br/>
-                        <a style="color:red;font-size: 8px;" onclick="selectAllCombo(document.getElementById('cadastro_e'), false);">DESMARCAR TUDO</a><br/></label>
-                    <select class="form-control text-10px no-padding" name="cadastro_e" id="cadastro_e" multiple onclick="controleCombobox3(this)" size="10" >
-                        <option value="401" <%if (listaAcPortal.contains(401)) {%>selected<%}%> >PREFIXO DE ETIQUETAS</option>
-                        <option value="402" <%if (listaAcPortal.contains(402)) {%>selected<%}%> >ABRANGÊNCIA DE SERVIÇOS</option>
-                        <option value="403" <%if (listaAcPortal.contains(403)) {%>selected<%}%> >AMARRAÇÕES</option>
-                        <option value="404" <%if (listaAcPortal.contains(404)) {%>selected<%}%> >USUÁRIOS DA AGÊNCIA</option>
-                        <option value="405" <%if (listaAcPortal.contains(405)) {%>selected<%}%> >CLIENTES</option>
-                        <option value="407" <%if (listaAcPortal.contains(407)) {%>selected<%}%> >GRUPOS DE FATURAMENTO</option>
-                        <option value="406" <%if (listaAcPortal.contains(406)) {%>selected<%}%> >VERIFICAÇÃO DE CONTRATOS</option>
-                    </select>
-                </div>
-                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                    <label>
-                        ABA VEICULOS:<br/>
-                        <a style="color:blue;font-size: 8px;" onclick="selectAllCombo(document.getElementById('veiculo_e'), true);">MARCAR TUDO</a><br/>
-                        <a style="color:red;font-size: 8px;" onclick="selectAllCombo(document.getElementById('veiculo_e'), false);">DESMARCAR TUDO</a><br/></label>
-                    <select class="form-control text-10px no-padding" name="veiculo_e" id="veiculo_e" multiple onclick="controleComboboxPP4(this)" size="10" >
-                        <option value="501" <%if (listaAcPortal.contains(501)) {%>selected<%}%> >CADASTRO DE VEICULO</option>
-                        <option value="502" <%if (listaAcPortal.contains(502)) {%>selected<%}%> >MANUTENÇAO</option>
-                        <option value="503" <%if (listaAcPortal.contains(503)) {%>selected<%}%> >COMBUSTIVEL</option>
-                        <option value="504" <%if (listaAcPortal.contains(504)) {%>selected<%}%> >MULTA</option>
-                        <option value="505" <%if (listaAcPortal.contains(505)) {%>selected<%}%> >SEGURO</option>
-                        <option value="506" <%if (listaAcPortal.contains(506)) {%>selected<%}%> >SINISTRO</option>
-                    </select>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                    <label>
-                        ABA FINANCEIRO:<br/>
-                        <a style="color:blue;font-size: 8px;" onclick="selectAllCombo(document.getElementById('financeiro_e'), true);">MARCAR TUDO</a><br/>
-                        <a style="color:red;font-size: 8px;" onclick="selectAllCombo(document.getElementById('financeiro_e'), false);">DESMARCAR TUDO</a><br/></label>
-                    <select class="form-control text-10px no-padding" name="financeiro_e" id="financeiro_e" multiple onclick="controleComboboxPP5(this)" size="10" >
-                        <option value="601" <%if (listaAcPortal.contains(601)) {%>selected<%}%> >INICIO</option>
-                        <option value="602" <%if (listaAcPortal.contains(602)) {%>selected<%}%> >LANÇAMENTOS</option>
-                        <option value="603" <%if (listaAcPortal.contains(603)) {%>selected<%}%> >PROGRAMAÇAO</option>
-                        <option value="604" <%if (listaAcPortal.contains(604)) {%>selected<%}%> >DEMONSTRATIVO</option>
-                        <option value="605" <%if (listaAcPortal.contains(605)) {%>selected<%}%> >CADASTROS</option>
-                    </select>
-                </div> --%>
+            <div class="row form-horizontal">                
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                     <select style="margin-left: 15px;" name="acessos_pp_edit"  id="acessos_pp_edit" data-width="auto" class="selectpicker show-tick" multiple title="Selecione os acessos permitidos..." multiple data-actions-box="true" data-selected-text-format="static" ><%--onclick="controleComboboxPP5(this)"--%>
+                        <optgroup label="DASHBOARD">
+                            <option value="702" <%if (listaAcPortal.contains(702)) {%>selected<%}%> >OVERVIEW COLETAS</option>
+                            <option value="701" <%if (listaAcPortal.contains(701)) {%>selected<%}%> >RELATORIOS</option>                                                            
+                        </optgroup>
                         <optgroup label="TELEGRAMAS">
                             <option value="106" <%if (listaAcPortal.contains(106)) {%>selected<%}%> >TELEGRAMAS</option>                                                            
                         </optgroup>
@@ -212,6 +132,7 @@
                             <option value="405" <%if (listaAcPortal.contains(405)) {%>selected<%}%> >CLIENTES</option>
                             <option value="407" <%if (listaAcPortal.contains(407)) {%>selected<%}%> >GRUPO DE FATURAMENTO</option>
                             <option value="406" <%if (listaAcPortal.contains(406)) {%>selected<%}%> >VERIFICAÇÃO DE CONTRATOS</option>
+                            <option value="408" <%if (listaAcPortal.contains(408)) {%>selected<%}%> >VENDEDORES</option>
                         </optgroup>
                         <optgroup label="VEICULOS">
                             <option value="501" <%if (listaAcPortal.contains(501)) {%>selected<%}%> >CADASTRO DE VEICULO</option>

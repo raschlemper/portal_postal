@@ -22,10 +22,10 @@ app.controller('BancoController',
             $scope.linha = {
                 events: { 
                     edit: function(banco) {
-                        $scope.editar(banco.idBanco);
+                        $scope.editar(banco);
                     },
                     remove: function(banco) {
-                        $scope.excluir(banco.idBanco);
+                        $scope.excluir(banco);
                     }
                 }   
             }          
@@ -76,10 +76,10 @@ app.controller('BancoController',
 
         // ***** EDITAR ***** //
 
-        $scope.editar = function(idBanco) {
-            BancoService.get(idBanco)
-                .then(function(banco) {
-                    editar(banco);
+        $scope.editar = function(banco) {
+            BancoService.get(banco.idBanco)
+                .then(function(result) {
+                    editar(result);
                 })
                 .catch(function(e) {
                     modalMessage(e.error);
@@ -95,7 +95,7 @@ app.controller('BancoController',
         };
         
         var update = function(banco) {
-            BancoService.update(banco.idBanco, result)
+            BancoService.update(banco.idBanco, banco)
                 .then(function (data) {  
                     modalMessage("Banco " + data.nome + " Alterado com sucesso!");
                     todos();
@@ -107,13 +107,13 @@ app.controller('BancoController',
 
         // ***** EXCLUIR ***** //
 
-        $scope.excluir = function(idBanco) {
-            BancoService.getContaCorrente(idBanco)
-                .then(function(banco) {   
-                    if(banco.contaCorrentes.length) {
+        $scope.excluir = function(banco) {
+            BancoService.getContaCorrente(banco.idBanco)
+                .then(function(result) {   
+                    if(result.contaCorrentes.length) {
                         modalMessage("Este banco não pode ser excluído! <br/> Existem Contas Correntes vinculadas a este banco.");
                     } else {
-                        excluir(idBanco);
+                        excluir(banco);
                     }
                 })
                 .catch(function(e) {
@@ -121,15 +121,15 @@ app.controller('BancoController',
                 });
         }; 
         
-        var excluir = function(idBanco) {
+        var excluir = function(banco) {
             modalExcluir()
                 .then(function() {
-                    remove(idBanco);
+                    remove(banco);
                 });
         };
         
-        var remove = function(idBanco) {
-            BancoService.delete(idBanco)
+        var remove = function(banco) {
+            BancoService.delete(banco.idBanco)
                 .then(function(data) { 
                     modalMessage("Banco " + data.nome + " Removido com sucesso!");
                     todos();                        

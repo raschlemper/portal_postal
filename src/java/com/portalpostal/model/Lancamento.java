@@ -15,7 +15,7 @@ public class Lancamento {
     private LancamentoProgramado lancamentoProgramado;
     private LancamentoTransferencia lancamentoTransferencia;
     private TipoLancamento tipo;
-    private String favorecido;
+    private Favorecido favorecido;
     private String numero;
     private Integer numeroParcela;
     private Date dataCompetencia;
@@ -93,11 +93,11 @@ public class Lancamento {
         this.tipo = tipo;
     }
 
-    public String getFavorecido() {
+    public Favorecido getFavorecido() {
         return favorecido;
     }
 
-    public void setFavorecido(String favorecido) {
+    public void setFavorecido(Favorecido favorecido) {
         this.favorecido = favorecido;
     }
 

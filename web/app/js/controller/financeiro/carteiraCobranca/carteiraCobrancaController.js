@@ -24,13 +24,13 @@ app.controller('CarteiraCobrancaController',
             $scope.linha = {
                 events: { 
                     edit: function(carteiraCobranca) {
-                        $scope.editar(carteiraCobranca.idCarteiraCobranca);
+                        $scope.editar(carteiraCobranca);
                     },
                     remove: function(carteiraCobranca) {
-                        $scope.excluir(carteiraCobranca.idCarteiraCobranca);
+                        $scope.excluir(carteiraCobranca);
                     },
                     view: function(carteiraCobranca) {
-                        $scope.visualizar(carteiraCobranca.idCarteiraCobranca);
+                        $scope.visualizar(carteiraCobranca);
                     }
                 }
             }             
@@ -58,16 +58,20 @@ app.controller('CarteiraCobrancaController',
 
         // ***** VISUALIZAR ***** //
 
-        $scope.visualizar = function(idCarteiraCobranca) {
-            CarteiraCobrancaService.get(idCarteiraCobranca)
-                .then(function(carteiraCobranca) {
-                     modalVisualizar(carteiraCobranca).then(function(result) {
-                         $scope.editar(result);
-                     })          
+        $scope.visualizar = function(carteiraCobranca) {
+            CarteiraCobrancaService.get(carteiraCobranca.idCarteiraCobranca)
+                .then(function(result) {
+                     visualizar(result);   
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
+        };
+
+        var visualizar = function(carteiraCobranca) {
+            modalVisualizar(carteiraCobranca).then(function(result) {
+                $scope.editar(result);
+            })          
         };
 
         // ***** SALVAR ***** //
@@ -96,10 +100,10 @@ app.controller('CarteiraCobrancaController',
 
         // ***** EDITAR ***** //
 
-        $scope.editar = function(idCarteiraCobranca) {
-            CarteiraCobrancaService.get(idCarteiraCobranca)
-                .then(function(carteiraCobranca) {
-                     editar(carteiraCobranca);
+        $scope.editar = function(carteiraCobranca) {
+            CarteiraCobrancaService.get(carteiraCobranca.idCarteiraCobranca)
+                .then(function(result) {
+                     editar(result);
                 })
                 .catch(function(e) {
                     modalMessage(e.error);
@@ -126,13 +130,13 @@ app.controller('CarteiraCobrancaController',
 
         // ***** EXCLUIR ***** //
 
-        $scope.excluir = function(idCarteiraCobranca) {
-            CarteiraCobrancaService.getConta(idCarteiraCobranca)
-                .then(function(carteiraCobranca) {   
-                    if(carteiraCobranca.contas.length) {
+        $scope.excluir = function(carteiraCobranca) {
+            CarteiraCobrancaService.get(carteiraCobranca.idCarteiraCobranca)
+                .then(function(result) {   
+                    if(result.contas.length) {
                         modalMessage("Esta carteira de cobrança não pode ser excluída! <br/> Existem Contas vinculadas a esta carteira de cobrança.");
                     } else {
-                        excluir(idCarteiraCobranca);
+                        excluir(carteiraCobranca);
                     }
                 })
                 .catch(function(e) {
@@ -140,15 +144,15 @@ app.controller('CarteiraCobrancaController',
                 });
         }; 
         
-        var excluir = function(idCarteiraCobranca) {
+        var excluir = function(carteiraCobranca) {
             modalExcluir()
                 .then(function() {
-                    remove(idCarteiraCobranca);
+                    remove(carteiraCobranca);
                 });
         };
         
-        var remove = function(idCarteiraCobranca) {
-            CarteiraCobrancaService.delete(idCarteiraCobranca)
+        var remove = function(carteiraCobranca) {
+            CarteiraCobrancaService.delete(carteiraCobranca.idCarteiraCobranca)
                 .then(function(data) { 
                     modalMessage("Carteira de Cobrança " + data.nome + " Removida com sucesso!");
                     todos();                        

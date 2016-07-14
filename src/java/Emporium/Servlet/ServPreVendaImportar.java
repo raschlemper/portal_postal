@@ -88,7 +88,7 @@ public class ServPreVendaImportar extends HttpServlet {
                         }
                     }
                     System.out.println("chegou aqui");
-                   
+
                     if (fileItem == null || (!fileItem.getName().toUpperCase().endsWith(".CSV") && !fileItem.getName().toUpperCase().endsWith(".XML") && !fileItem.getName().toUpperCase().endsWith(".TXT") && !fileItem.getName().toUpperCase().endsWith(".XLS"))) {
                         response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=Escolha um arquivo para importacao !");
                     } else {
@@ -117,7 +117,6 @@ public class ServPreVendaImportar extends HttpServlet {
                                 contrato = "";
                                 cartaoPostagem = "";
                             }
-                                    
 
                             if (tipo.equals("XML")) { // ARQUIVO TIPO .XML -> SISTEMA PORTAL POSTAL
                                 String condicao = ContrPreVendaImporta.importaPedidoXML(fileItem, idCliente, campoDepartamento, servico, nomeBD);
@@ -144,11 +143,9 @@ public class ServPreVendaImportar extends HttpServlet {
                                 String condicao = ContrPreVendaImporta.importaPedidoWebVendas(fileItem, idCliente, idDepartamento, departamento, contrato, cartaoPostagem, servico, nomeBD);
                                 response.sendRedirect("Cliente/Servicos/imp_confirma.jsp?msg=" + condicao);
                             } else if (tipo.equals("PS")) { // ARQUIVO TIPO .XLS -> SISTEMA PORTAL POSTAL   
-                                System.out.println("FOI PS");
                                 String condicao = ContrPreVendaImporta.importaPedidoPS(fileItem, idCliente, idDepartamento, departamento, contrato, cartaoPostagem, servico, nomeBD);
                                 response.sendRedirect("Cliente/Servicos/imp_confirma.jsp?msg=" + condicao);
-                            }else if (tipo.equals("PSN")) { // ARQUIVO TIPO .CSV -> SISTEMA PORTAL POSTAL                            
-                                System.out.println("entrou PSN");
+                            } else if (tipo.equals("PSN")) { // ARQUIVO TIPO .CSV -> SISTEMA PORTAL POSTAL                            
                                 String condicao = ContrPreVendaImporta.importaPedidoPSN(fileItem, idCliente, idDepartamento, departamento, contrato, cartaoPostagem, servico, nomeBD);
                                 response.sendRedirect("Cliente/Servicos/imp_confirma.jsp?msg=" + condicao);
                             } else { // ARQUIVO TIPO .CSV -> SISTEMA PORTAL POSTAL                            
@@ -170,8 +167,7 @@ public class ServPreVendaImportar extends HttpServlet {
             response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=Sua sessao expirou!");
         }
     }
-   
-    
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
