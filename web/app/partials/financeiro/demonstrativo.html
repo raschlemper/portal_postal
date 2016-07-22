@@ -9,7 +9,7 @@
                                 <div class="col-md-3">Demonstrativo Financeiro</div>
                                 <div class="col-md-9 pull-right">
                                     <div class="form-inline pull-right">  
-                                        <button class="btn btn-sm btn-primary" ng-click="report(dataInicio, dataFim, periodoSelected, estruturasLista)" style="margin-right: 10px;">
+                                        <button class="btn btn-sm btn-default" ng-click="report(planoContasLista)" style="margin-right: 10px;">
                                             <i class="fa fa-lg fa-print fa-spc"></i> IMPRIMIR 
                                         </button>                                          
                                     </div>
@@ -58,10 +58,13 @@
                                     <div class="row">
                                         <div class="col-md-3" ng-if="!byCentroCusto">Plano de Conta</div>
                                         <div class="col-md-3" ng-if="byCentroCusto">Centro de Custo</div>
-                                        <div class="col-md-9">
+                                        <div class="col-md-8">
                                             <div class="col-md-1 text-center" ng-repeat="periodo in periodoSelected track by $index">
                                                 {{periodo.abreviacao}}<br/>{{periodo.ano}}
                                             </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="text-center">TOTAL</div>
                                         </div>
                                     </div>                
                                 </div> 
@@ -73,8 +76,11 @@
                                             <div class="col-md-3">
                                                 <span class="item-list col-ident-{{estrutura.nivel}}">{{estrutura.descricao}}</span>
                                             </div>
-                                            <div class="col-md-9">
+                                            <div class="col-md-8">
                                                 <div class="col-md-1" ng-repeat="saldo in estrutura.saldos track by $index">{{saldo | currency : ''}}</div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="text-right">{{estrutura.total | currency : ''}}</div>
                                             </div>
                                         </div>                
                                     </div>
@@ -82,8 +88,11 @@
                                 <div class="list-group-item list-group-footer">
                                     <div class="row">
                                         <div class="col-md-3" style="font-size: 14px">Total</div>
-                                        <div class="col-md-9">
-                                            <div class="col-md-1" ng-repeat="total in totais track by $index">{{total | currency : ''}}</div>
+                                        <div class="col-md-8">
+                                            <div class="col-md-1" ng-repeat="total in totais.total track by $index">{{total | currency : ''}}</div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="text-right">{{totais.geral | currency : ''}}</div>
                                         </div>
                                     </div>                
                                 </div>                                

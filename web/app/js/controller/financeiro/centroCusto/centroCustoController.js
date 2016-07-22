@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('CentroCustoController', 
-    ['$scope', '$q', 'CentroCustoService', 'ModalService', 'CentroCustoHandler', 'MESSAGES',
-    function ($scope, $q, CentroCustoService, ModalService, CentroCustoHandler, MESSAGES) {
+    ['$scope', '$q', 'CentroCustoService', 'ReportService', 'ModalService', 'CentroCustoHandler', 'MESSAGES',
+    function ($scope, $q, CentroCustoService, ReportService, ModalService, CentroCustoHandler, MESSAGES) {
 
         var init = function () {
             $scope.centroCustos = [];
@@ -174,6 +174,14 @@ app.controller('CentroCustoController',
                     });
             });
         };
+
+        // ***** REPORT ***** //
+        
+        $scope.report = function(planoContas) {
+            var params = CentroCustoService.report(planoContas);   
+            ReportService.pdf('centrocusto', params);
+        };
+
 
         // ***** VALIDAR ***** //
 
