@@ -329,7 +329,7 @@
 					<printWhenExpression><![CDATA[!$F{contrato_ect}.equals("") && $F{sro}.length() == 13]]></printWhenExpression>
 				</reportElement>
 				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barWidth="2" barHeight="68">
-					<jr:codeExpression><![CDATA["XX123456789BR"]]></jr:codeExpression>
+					<jr:codeExpression><![CDATA[$F{sro}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
 			<componentElement>

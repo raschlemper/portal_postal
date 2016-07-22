@@ -208,7 +208,7 @@ public class ServPreVenda extends HttpServlet {
                 int codECT = codECTsolicitado;
                 //VERIFICA A QTD DE ETIQUETA
                 int qtdEtq = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ(servico, 0, idCliente, nomeBD);
-                if (codECT != 0 && qtdEtq == 0) {
+                if (codECT != 0 && qtdEtq == 0 && !servico.equals("SIMPLES")) {
                     if(ContrClienteEtiquetas.solicitarEtiquetasSigepWEB(codECT, cli, nomeBD)) {
                         String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, nomeBD);
                         if (etq != null) {
@@ -217,7 +217,7 @@ public class ServPreVenda extends HttpServlet {
                             tipoEtiqueta = aux[1];
                         }
                     }
-                } else if (codECT != 0 && qtdEtq != 0) {
+                } else if (codECT != 0 && qtdEtq != 0 && !servico.equals("SIMPLES")) {
                     String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, nomeBD);
                     if (etq != null) {
                         String aux[] = etq.split(";");
@@ -232,6 +232,7 @@ public class ServPreVenda extends HttpServlet {
                     }
                     contrato = "";
                 }
+                
                 //VERIFICA A EXISTENCIA DE COMBO PARA O SERVIÇO
                 //codECT = ContrServicoCombo.consultaCodCombo(codECT, ar, mp, vd);
                 
@@ -240,11 +241,12 @@ public class ServPreVenda extends HttpServlet {
                 int registro_modico = 0;
                 if(servico.startsWith("MDPB")){
                     String val = request.getParameter("tipoRg");
-                    System.out.println("tipoRg >"+val);
+                    //System.out.println("tipoRg >"+val);
                     if(val != null && val.trim().equals("1")){                        
                     registro_modico = 1;
                     }
-                }                
+                }          
+                
                 ContrPreVenda.inserir(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD,posta_restante,registro_modico);
 
             } else {

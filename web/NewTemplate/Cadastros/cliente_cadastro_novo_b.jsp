@@ -107,6 +107,47 @@
                 load();
                 fechaMsg();
             });
+            
+            
+            function validarDados(){
+                
+              if(!$('#cnpj').val()){
+                  alert('Preencha o CNPJ');
+                  return false;
+              }else if(!$('#razao').val()){
+                  alert('Preencha a razão social ');
+                  return false;
+              }else if(!$('#fantasia').val()){
+                  alert('Preencha o nome fantasia ');
+                  return false;
+              }else if(!$('#telefone').val()){
+                  alert('Preencha o telefone');
+                  return false;
+              }else if(!$('#email').val()){
+                  alert('Preencha o email');
+                  return false;
+              }else if(!$('#cep').val()){
+                  alert('Preencha o CEP');
+                  return false;
+              }else if(!$('#logradouro_').val()){
+                  alert('Preencha a rua ');
+                  return false;
+              }else if(!$('#numero_').val()){
+                  alert('Preencha o numero');
+                  return false;
+              }else if(!$('#bairro').val()){
+                  alert('Preencha o bairro');
+                  return false;
+              }else if(!$('#cidade_').val()){
+                  alert('Preencha a cidade ');
+                  return false;
+              }else if(!$('#uf_').val()){
+                  alert('escolha o estado');
+                  return false;
+              }else {
+                  document.form1.submit();
+              }                
+            }
         </script>
     </head>        
     <body>   
@@ -139,38 +180,38 @@
                                         <li class="list-group-item" >
                                             <div class="row form-horizontal">
                                                 <div class="col-sm-6 col-md-3 col-lg-3">
-                                                    <label class="small">CNPJ</label>
+                                                    <label class="small">CNPJ *</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-key fa-fw"></i></span>                                                                                                             
                                                         <input class="form-control" type="text" name="cnpj" id="cnpj" maxlength="18" value="" onKeyPress="mascara(this, maskCpfCnpj)" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-5 col-lg-5">
-                                                    <label class="small">Razão Social</label>
+                                                    <label class="small">Razão Social *</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-user fa-fw"></i></span>                                                                                                             
                                                         <input class="form-control" type="text" name="razao" id="razao" value="" maxlength="60" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Fantasia</label>
+                                                    <label class="small">Fantasia *</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-user fa-fw"></i></span>                                                                                                             
                                                         <input class="form-control" type="text" name="fantasia" id="fantasia" value="" maxlength="25" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">E-mail</label>
+                                                    <label class="small">E-mail *</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-at fa-fw"></i></span>                                                                                                             
-                                                        <input class="form-control" type="text" name="email" id="email" maxlength="100" value="" />
+                                                        <input class="form-control" type="text" name="email" id="email" maxlength="40" value="" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-3 col-lg-3">
-                                                    <label class="small">Telefone</label>
+                                                    <label class="small">Telefone *</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-phone fa-fw"></i></span>                                                                                                             
-                                                        <input class="form-control" type="text" name="telefone" id="telefone" value="" onKeyPress="mascara(this, maskTelefone)" />
+                                                        <input class="form-control" type="text" name="telefone" id="telefone" value="" maxlength="25" onKeyPress="mascara(this, maskTelefone)" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-4 col-lg-5">
@@ -192,21 +233,21 @@
                                             </div>
                                             <div class="row form-horizontal">
                                                 <div class="col-sm-6 col-md-3 col-lg-2">
-                                                    <label class="small">CEP</label>
+                                                    <label class="small">CEP *</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-search fa-fw"></i></span>                                                                                                             
                                                         <input class="form-control" type="text" name="cep" id="cep" value="" maxlength="9" onKeyPress="mascara(this, maskCep)" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-5 col-lg-5">
-                                                    <label class="small">Logradouro</label>
+                                                    <label class="small">Logradouro *</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-home fa-fw"></i></span>                                                                                                             
                                                         <input class="form-control" type="text" name="logradouro" id="logradouro_" maxlength="100" value="" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-3 col-lg-2">
-                                                    <label class="small">Número</label>
+                                                    <label class="small">Número *</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-home fa-fw"></i></span>                                                                                                             
                                                         <input class="form-control" type="text" name="numero" id="numero_" maxlength="10" value="" />
@@ -220,21 +261,21 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-5 col-lg-3">
-                                                    <label class="small">Bairro</label>
+                                                    <label class="small">Bairro *</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-home fa-fw"></i></span>                                                                                                             
                                                         <input class="form-control" type="text" name="bairro" id="bairro" maxlength="50" value="" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Cidade</label>
+                                                    <label class="small">Cidade *</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-home fa-fw"></i></span>                                                                                                             
                                                         <input class="form-control" type="text" name="cidade" id="cidade_" maxlength="60" value="" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-3 col-lg-2">
-                                                    <label class="small">UF</label>
+                                                    <label class="small">UF *</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-home fa-fw"></i></span>                                                             
                                                         <select class="form-control" name="uf" id="uf_">
@@ -324,7 +365,7 @@
                                         </li>
 
                                     </ul>
-                                    <button type="button" class="btn btn-success" onclick="document.form1.submit();"><i class="fa fa-lg fa-spc fa-save"></i> SALVAR DADOS</button>
+                                    <button type="button" class="btn btn-success" onclick="validarDados(); "><i class="fa fa-lg fa-spc fa-save"></i> SALVAR DADOS</button>
                                 </form>
                             </div>
                         </div>

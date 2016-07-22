@@ -51,6 +51,36 @@ public class ContrServicoECT {
     }
     
     //OK
+    public static ArrayList<ServicoECT> consultaGruposServicosByTAG(int avista, int atv, String tag) throws SQLException {
+        Connection conn = Conexao.conectarGeral();
+        String sql = "SELECT * FROM servicos_ect";
+        if (avista == 0) {
+            sql += " WHERE ativo = " + atv + " AND tipo = 'SERVICO' AND tipo_agencia LIKE '%" + tag + "%' AND faturar = 1";
+        } else if (avista == 1) {
+            sql += " WHERE ativo = " + atv + " AND tipo = 'SERVICO' AND tipo_agencia LIKE '%" + tag + "%' AND avista >= 1";
+        }
+        sql += " GROUP BY grupoServico ORDER BY nomeServico";
+
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            ArrayList<ServicoECT> listaStatus = new ArrayList<ServicoECT>();
+            while (result.next()) {
+                ServicoECT sv = new ServicoECT(result);
+                listaStatus.add(sv);
+            }
+            valores.close();
+            return listaStatus;
+        } catch (SQLException e) {
+            System.out.println(e);
+            ContrErroLog.inserir("HOITO - contrNivel", "SQLException", sql, e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+    
+    //OK
     public static ArrayList<ServicoECT> consultaServicosReversa() throws SQLException {
         Connection conn = Conexao.conectarGeral();
         String sql = "SELECT * FROM servicos_ect"

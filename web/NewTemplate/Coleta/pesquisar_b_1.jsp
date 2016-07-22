@@ -146,7 +146,7 @@
 
                         <div class="row">
                             <%
-                                if (listaColetasAntigasNaoFinalizadas.size() > 0) {
+                                if (listaColetasAntigasNaoFinalizadas != null &&  listaColetasAntigasNaoFinalizadas.size() > 0) {
                                     String datasNaoFinalizadas = "";
                                     for (int i = 0; i < listaColetasAntigasNaoFinalizadas.size(); i++) {
                                         String dtColeta = (String) listaColetasAntigasNaoFinalizadas.get(i);
@@ -213,7 +213,7 @@
                                             <li>
                                                 <a href="#" onclick="mostraListaBaixa();
                                                         return false;" >Status da Coleta</a>
-                                            </li>
+                                            </li> 
                                         </ul>
                                     </div> 
 

@@ -41,15 +41,17 @@ public class ContrVpne {
        
         try {
             
-             ClientesDeptos dep = consultaDeptoById(idCliente, idDepartamento,  nomeBD);
-            String nomeDepto = dep.getNomeDepartamento();
+            ClientesDeptos dep = consultaDeptoById(idCliente, idDepartamento,  nomeBD);
+            String nomeDepto = "";
+            if(dep != null){
+                nomeDepto = dep.getNomeDepartamento();
+            }
 
             for (FileItem item : listaFiles) {
                 sql += lerVpne(item, idCliente, idDepartamento, nomeDepto, nomeBD);
             }
 
             sql = sql.substring(0, sql.lastIndexOf(","));
-            System.out.println(sql);
             boolean flag = inserirVpne(sql, nomeBD);
             // boolean flag = true;
             if (flag) {
@@ -69,7 +71,6 @@ public class ContrVpne {
     public static boolean inserirVpne(String sql, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         try {
-            //System.out.println("SQL PEDIDO:\n" + sql);
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.executeUpdate();
             valores.close();
@@ -131,51 +132,69 @@ public class ContrVpne {
                 r_endereco = aux.substring(130, 190).trim();
                 r_numero = aux.substring(190, 198).trim();
                 r_bairro = aux.substring(236, 276).trim();
-                //String r_cidade; // se exiisteir o CEP no DNE
-                // String r_uf; // se exiisteir o CEP no DNE
+                try {
+                    r_numero = Integer.parseInt(r_numero) + "";
+                } catch (Exception ex) {
+                }
             }
-            if (lineNum == 2) {
-                //destinatario
-                d_nome = aux.substring(26, 76).trim();
-                d_cpf_cnpj = aux.substring(86, 100).trim();
-                d_cep = aux.substring(100, 108).trim();
-                d_endereco = aux.substring(118, 178).trim();
-                d_numero = aux.substring(178, 224).trim();
-                d_bairro = aux.substring(224, 264).trim();
-                // String d_cidade;// se exiisteir o CEP no DNE
-                // String d_uf;// se exiisteir o CEP no DNE
+            if (lineNum >= 2 && aux.startsWith("DT")) {
+                
+                if(item.getName().contains("ValesPagos")){                    
+                    //destinatario
+                    d_nome = aux.substring(26, 76).trim();
+                    d_cpf_cnpj = aux.substring(86, 106).trim();//ate106
+                    d_cep = aux.substring(106, 114).trim();
+                    d_endereco = aux.substring(124, 184).trim();
+                    d_numero = aux.substring(184, 230).trim();
+                    d_bairro = aux.substring(230, 270).trim();
+                    // String d_cidade;// se exiisteir o CEP no DNE
+                    // String d_uf;// se exiisteir o CEP no DNE
 
-                sro = aux.substring(300, 313).trim();
-                descricao = aux.substring(313, 363).trim();
-                valor = aux.substring(292, 300).trim();
-                data = aux.substring(363).trim();
+                    sro = aux.substring(306, 319).trim();
+                    descricao = aux.substring(319, 369).trim();
+                    valor = aux.substring(298, 306).trim();
+                    data = aux.substring(369).trim();
+                } else {
+                    //destinatario
+                    d_nome = aux.substring(26, 76).trim();
+                    d_cpf_cnpj = aux.substring(86, 100).trim();//ate106
+                    d_cep = aux.substring(100, 108).trim();
+                    d_endereco = aux.substring(118, 178).trim();
+                    d_numero = aux.substring(178, 224).trim();
+                    d_bairro = aux.substring(224, 264).trim();
+                    // String d_cidade;// se exiisteir o CEP no DNE
+                    // String d_uf;// se exiisteir o CEP no DNE
+
+                    sro = aux.substring(300, 313).trim();
+                    descricao = aux.substring(313, 363).trim();
+                    valor = aux.substring(292, 300).trim();
+                    data = aux.substring(363).trim();
+                }
+                                
+                try {
+                    d_numero = Integer.parseInt(d_numero) + "";
+                } catch (Exception ex) {}
+                try {
+                    valor = df.format((double) Integer.parseInt(valor)/100) + "";
+                } catch (Exception ex) {}
+                
+                data = data.substring(4, 8) + "-" + data.substring(2, 4) + "-" + data.substring(0, 2);
+
+                Movimentacao mv = getConsultaBySRO(sro, nomeBD);
+                if(mv != null){
+                     d_uf = mv.getId();// USEI O CAMPO dufF PARA COLOCAR O ID DA MOVIMENTACAO CASO EXISTA
+                }
+                Endereco end_cep =  pesquisaCep(d_cep);
+                d_cidade = end_cep.getCidade() +" / "+end_cep.getUf();
+
+                ret += "(" + idCli + "," + idDepto + ",'" + nomeDepto + "','" + sro + "','" + descricao + "','" + valor + "','" + r_nome + "','" + r_cpf_cnpj + "','" + r_endereco + "','" + r_numero + "','" + r_bairro + "','" + r_cidade + "','" + r_uf + "',"
+                        + "'" + d_nome + "','" + d_cpf_cnpj + "','" + d_endereco + "','" + d_numero + "','" + d_bairro + "','" + d_cidade + "','" + d_cep + "','" + d_uf +"','" + data + "'),";
+                
             }
             lineNum++;
-
         }
         le.close();
-        try {
-            r_numero = Integer.parseInt(r_numero) + "";
-            d_numero = Integer.parseInt(d_numero) + "";
-            valor = df.format((double) Integer.parseInt(valor)/100) + "";
-        } catch (Exception ex) {
-
-        }
-        data = data.substring(4, 8) + "-" + data.substring(2, 4) + "-" + data.substring(0, 2);
         
-        System.out.println("foi 1");
-        Movimentacao mv = getConsultaBySRO(sro, nomeBD);
-         System.out.println("foi 2");
-        if(mv != null){
-             d_uf = mv.getId();// USEI O CAMPO dufF PARA COLOCAR O ID DA MOVIMENTACAO CASO EXISTA
-        }
-         System.out.println("foi 3");
-        Endereco end_cep =  pesquisaCep(d_cep);
-         System.out.println("foi 4");
-        d_cidade = end_cep.getCidade() +" / "+end_cep.getUf();
-
-        ret = "(" + idCli + "," + idDepto + ",'" + nomeDepto + "','" + sro + "','" + descricao + "','" + valor + "','" + r_nome + "','" + r_cpf_cnpj + "','" + r_endereco + "','" + r_numero + "','" + r_bairro + "','" + r_cidade + "','" + r_uf + "',"
-                + "'" + d_nome + "','" + d_cpf_cnpj + "','" + d_endereco + "','" + d_numero + "','" + d_bairro + "','" + d_cidade + "','" + d_cep + "','" + d_uf +"','" + data + "'),";
         return ret;
     }
 
