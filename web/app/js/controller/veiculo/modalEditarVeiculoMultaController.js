@@ -39,7 +39,7 @@ app.controller('ModalEditarVeiculoMultaController', ['$scope', '$modalInstance',
         
         var ajustarVeiculos = function(veiculos) {
             return _.map(veiculos, function(veiculo) {
-                veiculo.descricao = ValorService.getValueLocalCep(data);
+                veiculo.descricao = veiculo.marca + ' / ' + veiculo.modelo + ' (' + $filter('placa')(veiculo.placa) + ')';
                 return veiculo;
             });
         }

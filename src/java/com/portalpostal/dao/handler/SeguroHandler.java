@@ -21,7 +21,7 @@ public class SeguroHandler extends GenericHandler implements ResultSetHandler<Ve
     public VeiculoSeguro handle(ResultSet result) throws SQLException {
         VeiculoSeguro seguro = new VeiculoSeguro();
         seguro.setIdVeiculoSeguro(getInt(result, "idVeiculoSeguro"));
-        seguro.setNumeroApolice(getInt(result, "numeroApolice"));
+        seguro.setNumeroApolice(getLong(result, "numeroApolice"));
         seguro.setCorretora(getString(result, "corretora"));
         seguro.setAssegurado(getString(result, "assegurado"));
         seguro.setValorFranquia(getDouble(result, "valorFranquia"));

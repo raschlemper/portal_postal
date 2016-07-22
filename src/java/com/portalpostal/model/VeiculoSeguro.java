@@ -1,15 +1,13 @@
 package com.portalpostal.model;
 
 import com.portalpostal.model.dd.TipoSeguroVeiculo;
-import com.portalpostal.model.serializer.JsonDateSerializer;
 import java.util.Date;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class VeiculoSeguro {
     
     private Integer idVeiculoSeguro;
     private Veiculo veiculo;
-    private Integer numeroApolice;
+    private Long numeroApolice;
     private String corretora;
     private String assegurado;
     private Double valorFranquia;
@@ -35,11 +33,11 @@ public class VeiculoSeguro {
         this.veiculo = veiculo;
     }
 
-    public Integer getNumeroApolice() {
+    public Long getNumeroApolice() {
         return numeroApolice;
     }
 
-    public void setNumeroApolice(Integer numeroApolice) {
+    public void setNumeroApolice(Long numeroApolice) {
         this.numeroApolice = numeroApolice;
     }
 
