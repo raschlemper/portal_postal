@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('PlanoContaController', 
-    ['$scope', '$q', 'PlanoContaService', 'ModalService', 'PlanoContaHandler', 'StringService', 'LISTAS', 'MESSAGES',
-    function ($scope, $q, PlanoContaService, ModalService, PlanoContaHandler, StringService, LISTAS, MESSAGES) {
+    ['$scope', '$q', 'PlanoContaService', 'ReportService', 'ModalService', 'PlanoContaHandler', 'StringService', 'LISTAS', 'MESSAGES',
+    function ($scope, $q, PlanoContaService, ReportService, ModalService, PlanoContaHandler, StringService, LISTAS, MESSAGES) {
 
         var init = function () {
             $scope.planoContas = [];
@@ -155,6 +155,13 @@ app.controller('PlanoContaController',
                         modalMessage(e);
                     });
             });
+        };
+
+        // ***** REPORT ***** //
+        
+        $scope.report = function(planoContas) {
+            var params = PlanoContaService.report(planoContas);   
+            ReportService.pdf('planoconta', params);
         };
 
         // ***** VALIDAR ***** //

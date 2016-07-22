@@ -66,6 +66,7 @@ app.directive('appParcelar', function(DatePickerService, FrequenciaLancamentoSer
             };
             
             $scope.disabledNumeroParcela = function(parcelas) {
+                if(!parcelas) return false;
                 var disabled = false;
                 parcelas.map(function(parcela) {
                     if(parcela.lancamento) { disabled = true; }

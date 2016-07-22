@@ -1,4 +1,4 @@
-package com.portalpostal.report;
+package com.portalpostal.report.dto;
 
 import java.util.Date;
 

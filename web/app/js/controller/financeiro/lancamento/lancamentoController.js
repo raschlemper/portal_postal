@@ -2,11 +2,11 @@
 
 app.controller('LancamentoController', 
     ['$scope', 'LancamentoService', 'LancamentoTransferenciaService', 'LancamentoConciliadoService', 'ContaService', 'PlanoContaService', 
-    'CentroCustoService', 'ModalService', 'DatePickerService', 'ListaService', 'LancamentoHandler', 'LancamentoRateioHandler', 'LancamentoTransferenciaHandler', 
-    'LancamentoConciliadoHandler', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
+    'CentroCustoService', 'ReportService', 'ModalService', 'DatePickerService', 'ListaService', 'LancamentoHandler', 'LancamentoRateioHandler', 
+    'LancamentoTransferenciaHandler', 'LancamentoConciliadoHandler', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
     function ($scope, LancamentoService, LancamentoTransferenciaService, LancamentoConciliadoService, ContaService, PlanoContaService, 
-        CentroCustoService, ModalService, DatePickerService, ListaService, LancamentoHandler, LancamentoRateioHandler, LancamentoTransferenciaHandler, 
-        LancamentoConciliadoHandler, FinanceiroValidation, LISTAS, MESSAGES) {
+        CentroCustoService, ReportService, ModalService, DatePickerService, ListaService, LancamentoHandler, LancamentoRateioHandler, 
+        LancamentoTransferenciaHandler, LancamentoConciliadoHandler, FinanceiroValidation, LISTAS, MESSAGES) {
 
         var init = function () {
             $scope.lancamentos = [];
@@ -509,6 +509,13 @@ app.controller('LancamentoController',
                 .catch(function(e) {
                     modalMessage(e);
                 });
+        };
+
+        // ***** REPORT ***** //
+        
+        $scope.report = function(lancamentos) {
+            var params = LancamentoService.report(lancamentos);   
+            ReportService.pdf('lancamento', params);
         };
 
         // ***** VALIDAR ***** //

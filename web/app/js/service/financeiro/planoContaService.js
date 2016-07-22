@@ -2,6 +2,24 @@
 
 app.factory('PlanoContaService', function($http, PromiseService) { 
     
+    var report = function(planoContas) {
+        var dados = [];
+        _.map(planoContas, function(planoConta) {
+            var estruturas = [];
+            flatten(planoConta, estruturas); 
+            //estruturas = identing(estruturas);
+            _.map(estruturas, function(estrutura) { 
+                var report = {}; 
+                report.tipo = estrutura.tipo.id;
+                report.nivel = estrutura.nivel;
+                report.ehGrupo = estrutura.ehGrupo;
+                report.descricao = estrutura.descricao;
+                dados.push(report);
+            });            
+        })  
+        return dados;
+    };
+    
     var identing = function(estruturas) {        
         angular.forEach(estruturas, function(estrutura) {            
             estrutura.descricao = formatingEstrutura(estrutura.nivel) + estrutura.descricao;
@@ -124,6 +142,8 @@ app.factory('PlanoContaService', function($http, PromiseService) {
         estrutura: function(estruturas) {
             getEstrutura(estruturas);
         }, 
+        
+        report: report
 
     }
 
