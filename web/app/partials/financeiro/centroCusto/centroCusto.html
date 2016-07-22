@@ -7,10 +7,15 @@
                         <div class="panel-heading" >
                             <div class="row">
                                 <div class="col-md-8">Lista com todos os Centros de Custos</div>
-                                <div class="col-md-4">
-                                    <button class="btn btn-sm btn-primary pull-right" ng-click="grupo()">
-                                        <i class="fa fa-lg fa-plus fa-spc"></i> GRUPO 
-                                    </button>
+                                <div class="col-md-4"> 
+                                    <div class="form-inline pull-right"> 
+                                        <button class="btn btn-sm btn-primary" ng-click="grupo()">
+                                            <i class="fa fa-lg fa-plus fa-spc"></i> GRUPO 
+                                        </button> 
+                                        <button class="btn btn-sm btn-default" ng-click="report(centroCustosLista)" style="margin-right: 10px;">
+                                            <i class="fa fa-lg fa-print fa-spc"></i> IMPRIMIR 
+                                        </button>                         
+                                    </div>
                                 </div>
                             </div>                    
                             </div>                              

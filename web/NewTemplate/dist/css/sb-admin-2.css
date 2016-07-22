@@ -3239,3 +3239,7 @@ table.table-condensed tbody tr td.cel-menu {
     display: table;
     border-collapse: separate;
 }
+
+.pull-top {
+    margin-top: -10px;
+}

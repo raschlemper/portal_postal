@@ -2,6 +2,25 @@
 
 app.factory('LancamentoService', function($http, PromiseService) {
     
+    var report = function(lancamentos) {
+        var dados = [];
+        _.map(lancamentos, function(lancamento) { 
+            var report = {}; 
+            if(lancamento.numeroLoteConciliado) { report.reconciliado = true; }
+            else { report.reconciliado = false; }
+            report.tipo = lancamento.tipo.id;
+            report.data = moment(lancamento.dataLancamento);
+            report.numero = lancamento.numero;
+            report.favorecido = lancamento.favorecido;
+            report.historico = lancamento.historico;
+            report.deposito = lancamento.deposito;
+            report.pagamento = lancamento.pagamento;
+            report.saldo = lancamento.saldo;
+            dados.push(report);
+        });
+        return dados;
+    };
+    
     var lancamentoFromRateio = function(lancamento) {
         var rateios = [];
         _.map(lancamento.rateios, function(rateio) {
@@ -102,7 +121,9 @@ app.factory('LancamentoService', function($http, PromiseService) {
                 return lancamentoFromRateio(lancamento);
             }));
             return rateios;
-        }
+        },
+        
+        report: report
 
     }
 

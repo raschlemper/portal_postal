@@ -43,7 +43,9 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
                 });
         }; 
         
-        var createAnosLista = function(anos) {            
+        var createAnosLista = function(anos) {    
+            if(!anos) { anos = []; }
+            if(!anos.length) { anos.push(moment().year()); }
             return _.map(anos, function(ano, index) {
                 return {'id': index, 'codigo': ano, 'descricao': ano}
             })

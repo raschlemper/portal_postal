@@ -4,6 +4,8 @@ import com.portalpostal.dao.PlanoContaDAO;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.model.PlanoConta;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +36,8 @@ public class PlanoContaService {
     public List<PlanoConta> findStructure() throws Exception {
         init();
         List<PlanoConta> grupos = planoContaDAO.findWithoutGrupo(); 
-        findContas(grupos, null, null);
+        List<PlanoConta> planoContas = planoContaDAO.findAll(); 
+        findContas(planoContas, grupos, null, null);
         return grupos;
     }  
 
@@ -67,7 +70,8 @@ public class PlanoContaService {
     public List<PlanoConta> findStructureByTipo(Integer tipo) throws Exception {
         init();
         List<PlanoConta> grupos = planoContaDAO.findWithoutGrupoByTipo(tipo); 
-        findContas(grupos, null, null);
+        List<PlanoConta> planoContas = planoContaDAO.findByTipo(tipo); 
+        findContas(planoContas, grupos, null, null);
         return grupos;
     } 
 
@@ -110,17 +114,27 @@ public class PlanoContaService {
         return true;                
     }  
     
-    private void findContas(List<PlanoConta> contas, Map<Integer, Integer> estrutura, Integer nivel) throws Exception { 
+    private void findContas(List<PlanoConta> planoContas, List<PlanoConta> contas, Map<Integer, Integer> estrutura, Integer nivel) throws Exception {
         nivel = getNivel(nivel);
         for (PlanoConta conta : contas) {
             conta.setNivel(nivel);
             estrutura = getEstrutura(conta, estrutura, nivel);
-            List<PlanoConta> grupos = planoContaDAO.findByGrupo(conta);
+            List<PlanoConta> grupos = findByGrupo(planoContas, conta);
             if(grupos.isEmpty()) { continue; }
             conta.setContas(grupos);            
-            findContas(grupos, estrutura, nivel);
+            findContas(planoContas, grupos, estrutura, nivel);
         }
     } 
+    
+    private List<PlanoConta> findByGrupo(List<PlanoConta> planoContas, PlanoConta grupo) {
+        List<PlanoConta> planos = new ArrayList<PlanoConta>();
+        for (PlanoConta planoConta : planoContas) {
+            if(planoConta.getGrupo() != null && planoConta.getGrupo().getIdPlanoConta() == grupo.getIdPlanoConta()) {
+                planos.add(planoConta);
+            }
+        }
+        return planos;
+    }
     
     private Integer getNivel(Integer nivel) {    
         if(nivel == null) { nivel = 0; }

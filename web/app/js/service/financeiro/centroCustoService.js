@@ -1,6 +1,21 @@
 'use strict';
 
 app.factory('CentroCustoService', function($http, PromiseService) {    
+    
+    var report = function(centroCusto) {
+        var dados = [];
+        var estruturas = [];
+        flatten(centroCusto, estruturas); 
+        //estruturas = identing(estruturas);
+        _.map(estruturas, function(estrutura) { 
+            var report = {}; 
+            report.nivel = estrutura.nivel;
+            report.ehGrupo = estrutura.ehGrupo;
+            report.descricao = estrutura.descricao;
+            dados.push(report);
+        }); 
+        return dados;
+    };
         
     var flatten = function(estruturas, estruturasLista) {
         angular.forEach(estruturas, function(estrutura) {
@@ -89,6 +104,8 @@ app.factory('CentroCustoService', function($http, PromiseService) {
         estrutura: function(estruturas) {
             getEstrutura(estruturas);
         }, 
+        
+        report: report
 
     }
 

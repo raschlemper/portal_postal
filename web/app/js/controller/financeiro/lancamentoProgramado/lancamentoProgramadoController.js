@@ -1,9 +1,9 @@
 'use strict';
 
 app.controller('LancamentoProgramadoController', 
-    ['$scope', '$filter', '$state', 'LancamentoProgramadoService', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'ModalService', 
+    ['$scope', '$filter', '$state', 'LancamentoProgramadoService', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'ReportService', 'ModalService', 
      'DatePickerService', 'LancamentoProgramadoHandler', 'LancamentoProgramadoParcelaHandler', 'LancamentoProgramadoRateioHandler', 'ListaService', 'LISTAS', 'MESSAGES',
-    function ($scope, $filter, $state, LancamentoProgramadoService, ContaService, PlanoContaService, CentroCustoService, ModalService, 
+    function ($scope, $filter, $state, LancamentoProgramadoService, ContaService, PlanoContaService, CentroCustoService, ReportService, ModalService, 
         DatePickerService, LancamentoProgramadoHandler, LancamentoProgramadoParcelaHandler, LancamentoProgramadoRateioHandler, ListaService, 
         LISTAS, MESSAGES) {
 
@@ -418,6 +418,13 @@ app.controller('LancamentoProgramadoController',
 //                    });
 //            });
 //        };
+
+        // ***** REPORT ***** //
+        
+        $scope.report = function(lancamentos) {
+            var params = LancamentoProgramadoService.report(lancamentos);   
+            ReportService.pdf('lancamento/programado', params);
+        };
                 
         // ***** VALIDAR ***** //
         

@@ -1,17 +1,12 @@
 package com.portalpostal.report;
 
-import com.portalpostal.report.dto.DemonstartivoReportDTO;
+import com.portalpostal.report.dto.CentroCustoReportDTO;
 import Controle.ContrErroLog;
-import com.portalpostal.model.Saldo;
-import com.portalpostal.service.LancamentoService;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.GregorianCalendar;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -21,8 +16,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
-@Path("/demonstrativo")
-public class DemonstrativoReportController {
+@Path("/centrocusto")
+public class CentroCustoReportController {
     
     @Context
     private HttpServletRequest request;
@@ -34,26 +29,14 @@ public class DemonstrativoReportController {
     private void init() {
         sessao = request.getSession();
         nomeBD = (String) sessao.getAttribute("nomeBD");
-        nameReport = "demonstrativo";
+        nameReport = "centroCusto";
     }
-    
-    @GET
-    @Path("/pdf")
-    @Produces("application/pdf")
-    public Response pdf() {
-        try {
-            init(); 
-            return Response.ok(getReport(getCollection(nomeBD))).build();
-        } catch (Exception ex) {
-            throw new WebApplicationException(getMessageError(ex.getMessage()));
-        }
-    }  
     
     @POST
     @Path("/pdf")
     @Produces("application/pdf")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response pdf(List<DemonstartivoReportDTO> params) {
+    public Response pdf(List<CentroCustoReportDTO> params) {
         try {
             init(); 
             return Response.ok(getReport(params)).build();
@@ -67,16 +50,9 @@ public class DemonstrativoReportController {
                     .collection(collection)
                     .report(); 
     }
-    
-    private List<Saldo> getCollection(String nomeBD) throws Exception {
-        LancamentoService service = new LancamentoService(nomeBD);
-        Calendar data1 = new GregorianCalendar(2016,1,1);
-        Calendar data2 = new GregorianCalendar(2016,12,31);
-        return service.findSaldoPlanoConta(data1.getTime(), data2.getTime());        
-    }
             
     private Response getMessageError(String msg) {  
-        int idErro = ContrErroLog.inserir("Portal Postal - ServPlanoConta", "Exception", null, msg);
+        int idErro = ContrErroLog.inserir("Portal Postal - ServCentroCusto", "Exception", null, msg);
         return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN)
                 .entity("SYSTEM ERROR Nº: " + idErro + "<br/> Ocorreu um erro inesperado!").build();
     }

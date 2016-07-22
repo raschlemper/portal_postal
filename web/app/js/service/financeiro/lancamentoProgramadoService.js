@@ -4,6 +4,21 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
     
     var situacoes = LISTAS.situacaoLancamentoProgramado;
     
+    var report = function(lancamentos) {
+        var dados = [];
+        _.map(lancamentos, function(lancamento) { 
+            var report = {}; 
+            report.tipo = lancamento.tipo.id;
+            report.data = moment(lancamento.dataVencimento);
+            report.numero = lancamento.numero;
+            report.favorecido = lancamento.favorecido;
+            report.frequencia = lancamento.frequencia;
+            report.valor = lancamento.valor;
+            dados.push(report);
+        });
+        return dados;
+    };
+    
     var lancamentoProgramado = function(lista, lancamento, dataInicio, dataFim) {
         if(!isValid(lancamento)) return;
         var dataVencimento = moment(lancamento.dataVencimento);
@@ -134,7 +149,9 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
             lancamento = getFirstLancamento(lancamento);
             lancamentoProgramadoVencido(lista, lancamento, data)
             return lista;
-        }
+        },
+        
+        report: report
 
     }
 
