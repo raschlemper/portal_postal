@@ -117,6 +117,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
                 controller: 'DemonstrativoController',
                 resolve: {}
             })
+            .state('app.financeiro.fluxocaixa', {
+                url: '/fluxocaixa',
+                templateUrl: 'partials/financeiro/fluxoCaixa.html',
+                controller: 'FluxoCaixaController',
+                resolve: {}
+            })
             .state('app.financeiro.colaborador', {
                 url: '/colaborador',
                 templateUrl: 'partials/financeiro/colaborador/colaborador.html',
