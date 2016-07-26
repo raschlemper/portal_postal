@@ -23,7 +23,7 @@ public class SinistroHandler extends GenericHandler implements ResultSetHandler<
         VeiculoSinistro sinistro = new VeiculoSinistro();
         sinistro.setIdVeiculoSinistro(getInt(result, "idVeiculoSinistro"));
         sinistro.setTipo(TipoSinistroVeiculo.values()[getInt(result, "tipo")]);
-        sinistro.setBoletimOcorrencia(getInt(result, "boletimOcorrencia"));
+        sinistro.setBoletimOcorrencia(getLong(result, "boletimOcorrencia"));
         sinistro.setData(getDate(result, "data"));
         sinistro.setLocal(getString(result, "local"));
         sinistro.setResponsavel(TipoResponsavelVeiculo.values()[getInt(result, "responsavel")]);

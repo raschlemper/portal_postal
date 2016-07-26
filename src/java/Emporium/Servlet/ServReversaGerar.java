@@ -102,7 +102,7 @@ public class ServReversaGerar extends HttpServlet {
          */
         String tipo_ap = "AP";
         //SOLICITA NUMERO PARA SOLICITACAO DE REVERSA
-        RetornoFaixaNumericaTO range = solicitarRange(usuario, senha, Integer.parseInt(codAdm), new Long(contrato), tipo_ap, "", 1);
+        RetornoFaixaNumericaTO range = solicitarRange(usuario, senha, Integer.parseInt(codAdm), contrato, tipo_ap, "", 1);
         if (range.getCodErro().equals("0")) {
 
             //CALCULA O DIGITO VERIFICADOR DO NUMERO SOLICITADO
@@ -190,14 +190,14 @@ public class ServReversaGerar extends HttpServlet {
                     produtos.setCodigo(new Long(prod[0]));
                     produtos.setTipo(new Long(prod[1]));
                     produtos.setQtd(new Long("1"));
-                    c.getProduto().add(produtos);
+                    c.getProduto().add(produtos); 
                 }
 
                 //ADICIONA NA LISTA
                 lista.add(c);
 
                 //FAZ A SOLICIACAO DA REVERSA                
-                RetornoPostagemTO ap = solicitarPostagemReversa(usuario, senha, Integer.parseInt(codAdm), new Long(contrato), Integer.parseInt(codServ), new Long(cartao), d, lista);
+                RetornoPostagemTO ap = solicitarPostagemReversa(usuario, senha, Integer.parseInt(codAdm), contrato, Integer.parseInt(codServ), cartao, d, lista);
                 if (Integer.parseInt(ap.getCodErro()) == 0) {
                     List<ResultadoSolicitacaoTO> listaR = ap.getResultadoSolicitacao();
                     for (ResultadoSolicitacaoTO res : listaR) {
@@ -259,11 +259,6 @@ public class ServReversaGerar extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private static RetornoFaixaNumericaTO solicitarRange(java.lang.String usuario, java.lang.String senha, java.lang.Integer codAdministrativo, java.lang.Long contrato, java.lang.String tipo, java.lang.String servico, java.lang.Integer quantidade) {
-        br.com.correios.scol.webservice.WebServiceScol_Service service = new br.com.correios.scol.webservice.WebServiceScol_Service();
-        br.com.correios.scol.webservice.WebServiceScol port = service.getWebServiceScolPort();
-        return port.solicitarRange(usuario, senha, codAdministrativo, contrato, tipo, servico, quantidade);
-    }
 
     private static RetornoDigitoVerificadorTO calcularDigitoVerificador(java.lang.String usuario, java.lang.String senha, java.lang.Integer codAdministrativo, java.lang.Integer numero) {
         br.com.correios.scol.webservice.WebServiceScol_Service service = new br.com.correios.scol.webservice.WebServiceScol_Service();
@@ -271,10 +266,16 @@ public class ServReversaGerar extends HttpServlet {
         return port.calcularDigitoVerificador(usuario, senha, codAdministrativo, numero);
     }
 
-    private static RetornoPostagemTO solicitarPostagemReversa(java.lang.String usuario, java.lang.String senha, java.lang.Integer codAdministrativo, java.lang.Long contrato, java.lang.Integer codigoServico, java.lang.Long cartao, br.com.correios.scol.webservice.PessoaTO destinatario, java.util.List<br.com.correios.scol.webservice.ColetaReversaTO> coletasSolicitadas) {
+    private static RetornoFaixaNumericaTO solicitarRange(java.lang.String usuario, java.lang.String senha, java.lang.Integer codAdministrativo, java.lang.String contrato, java.lang.String tipo, java.lang.String servico, java.lang.Integer quantidade) {
         br.com.correios.scol.webservice.WebServiceScol_Service service = new br.com.correios.scol.webservice.WebServiceScol_Service();
         br.com.correios.scol.webservice.WebServiceScol port = service.getWebServiceScolPort();
-        return port.solicitarPostagemReversa(usuario, senha, codAdministrativo, contrato, codigoServico, cartao, destinatario, coletasSolicitadas);
+        return port.solicitarRange(usuario, senha, codAdministrativo, new Long(contrato), tipo, servico, quantidade); 
+    }
+
+    private static RetornoPostagemTO solicitarPostagemReversa(java.lang.String usuario, java.lang.String senha, java.lang.Integer codAdministrativo, java.lang.String contrato, java.lang.Integer codigoServico, java.lang.String cartao, br.com.correios.scol.webservice.PessoaTO destinatario, java.util.List<br.com.correios.scol.webservice.ColetaReversaTO> coletasSolicitadas) {
+        br.com.correios.scol.webservice.WebServiceScol_Service service = new br.com.correios.scol.webservice.WebServiceScol_Service();
+        br.com.correios.scol.webservice.WebServiceScol port = service.getWebServiceScolPort();
+        return port.solicitarPostagemReversa(usuario, senha, codAdministrativo, new Long(contrato), codigoServico, new Long(cartao), destinatario, coletasSolicitadas); 
     }
 
 }

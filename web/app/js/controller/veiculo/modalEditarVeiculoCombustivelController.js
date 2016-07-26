@@ -29,7 +29,11 @@ app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInst
             VeiculoService.getAll()
                 .then(function (data) {
                     $scope.veiculos = ajustarVeiculos(data);
-                    $scope.veiculoCombustivel.veiculo = ListaService.getVeiculoValue($scope.veiculos, $scope.veiculoCombustivel.veiculo.idVeiculo);
+                    if($scope.veiculoCombustivel.veiculo && $scope.veiculoCombustivel.veiculo.idVeiculo) {
+                        $scope.veiculoCombustivel.veiculo = ListaService.getVeiculoValue($scope.veiculos, $scope.veiculoCombustivel.veiculo.idVeiculo);
+                    } else {
+                        if($scope.veiculos && $scope.veiculos.length) { $scope.veiculoCombustivel.veiculo = $scope.veiculos[0]; }
+                    }
                     $scope.veiculoCombustivel.tipo = $scope.veiculoCombustivel.veiculo.combustivel;
                     $scope.getLastVeiculoCombustivel($scope.veiculoCombustivel);
                 })

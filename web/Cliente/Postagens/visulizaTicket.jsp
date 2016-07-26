@@ -140,6 +140,12 @@
                                 //soma o subTotal ao total da venda
                                 total += subTotal;
 
+                                if(paisDestino == null){
+                                    paisDestino = "BR";
+                                }else if(paisDestino.toUpperCase().startsWith("BRASIL")){
+                                    paisDestino = "BR";
+                                }
+                                
                                 //verifica os servicos adicionais da venda
                                 ArrayList listaDeServicos = Util.ServicosAdicionais.listaDeServicos(servicosAdicionais.replace("VDVD", "VD"), paisDestino, dataPostagem, nomeBD, valorDestino, valorDeclarado);
 

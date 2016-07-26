@@ -102,6 +102,49 @@
                                                 </li>
                                             </ul>
                                         </li>
+                                                 
+                                                            
+                                        <li class="list-group-item">
+                                            <div class="row form-horizontal">
+                                                <div class="col-sm-12 col-md-12 col-lg-12">
+                                                    <label class="small">Este utiliza AR Digital?</label>
+                                                    <div class="input-group">
+                                                        <input type="checkbox" name="toggleBtn" id="radioContrato" value="1" <%if (cliInc.getTemContrato() == 0) {%> checked="false" disabled <%}%> data-toggle="toggle" data-on="<i class='fa fa-check-circle fa-spc fa-lg'></i>SIM" data-off="<i class='fa fa-times-circle fa-spc fa-lg'></i>NÃO" data-onstyle="success" data-offstyle="danger" />
+                                                        <input type="hidden" name="contrato" id="radio_1" value="<%=cliInc.getTemContrato()%>" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row form-horizontal">
+                                                <div class="col-sm-12 col-md-12 col-lg-12">
+                                                    <label class="small">PREFIXOS DOS SERVIÇOS INCLUSOS NO AR DIGITAL:</label>
+                                                        <table style="width: 320px;" class="table table-striped table-bordered table-hover table-condensed" id="table" name="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>HAB.</th>
+                                                                    <th>SERVIÇO</th>
+                                                                    <th>PREFIXO DO AR</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <%
+                                                                    ArrayList<ServicoECT> listaServAD = ContrServicoECT.consultaGruposServicosByTAG(0, 1, "ARD");
+                                                                    if (listaServAD != null) {
+                                                                        for (int i = 0; i < listaServAD.size(); i++) {
+                                                                            ServicoECT sv = listaServAD.get(i);
+                                                                            out.println("<tr>");
+                                                                            out.println("<td><input type='checkbox' name='habilitados' value='" + sv.getGrupoServico() + "' /></td>");
+                                                                            out.println("<td>"+ sv.getGrupoServico() + "</td>");
+                                                                            out.println("<td><input class='form-control' maxlength='2' type='text' size='3' name='prefixo_" + sv.getGrupoServico() + "' value='' /></td>");
+                                                                            out.println("</tr>");
+                                                                        }
+                                                                    }
+                                                                %>
+                                                            </tbody>
+                                                        </table>
+                                                </div>
+                                            </div>
+                                        </li>                    
+                                                            
                                         <li class="list-group-item">
                                             <input type="hidden" name="idCliente" id="idCliente" value="<%= idClienteInc%>" />
                                             <input type="hidden" name="servicos" id="servicos" value="" />
@@ -118,6 +161,8 @@
         </div>
 
 
+        <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet" />
+        <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
         <script type="text/javascript">
             function trocaServ(listRemove, listAdiciona) {
                 var selIndex = document.getElementById(listRemove).selectedIndex;
@@ -185,6 +230,18 @@
                 fechaMsg();
             });
 
+
+            $(function() {
+                $('#radioContrato').change(function() {
+                    if ($(this).prop('checked')) {
+                        mostraEsconde();
+                        $('#radio_1').val('1');
+                    } else {
+                        mostraEsconde();
+                        $('#radio_1').val('0');
+                    }
+                });
+            });
         </script>
 
     </body>

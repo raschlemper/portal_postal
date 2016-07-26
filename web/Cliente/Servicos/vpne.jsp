@@ -66,9 +66,7 @@
         }
 
         where += " AND data > '" + w_dataI + "' AND data < '" + w_dataF + "' ";
-        
-        System.out.println(where);
-        
+                
         ArrayList<Vpne> listaVpne = ContrVpne.listaVpne(where, nomeBD, cli.getCodigo());
         
         
