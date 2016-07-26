@@ -27,7 +27,7 @@ app.controller('LancamentoProgramadoController',
         var initTable = function() {            
             $scope.colunas = [              
                 {label: '', column: 'tipo', headerClass: 'no-sort', dataClass:'text-center col-tipo', filter: {name: 'tipoLancamento', args: ''}},       
-                {label: 'Conta', column: 'conta.nome', filter: {name: 'date', args: 'dd/MM/yyyy'}},                      
+                {label: 'Conta', column: 'conta.nome'},                      
                 {label: 'Vencimento', column: 'dataVencimento', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
                 {label: 'Número', column: 'numero'},         
                 {label: 'Plano Conta', column: 'planoConta'},   
