@@ -45,13 +45,14 @@ public class ContrClienteEtiquetas {
             String cartao = "";
             int uso = 0;
             int qtd = 500;
+            
+            if (idServico > 0) { 
+                if (c.getTemContrato() == 1 && !c.getLogin_sigep().equals("") && !c.getSenha_sigep().equals("")) {
+                    String login = c.getLogin_sigep();
+                    String senha = c.getSenha_sigep();
 
-            if (c.getTemContrato() == 1 && !c.getLogin_sigep().equals("") && !c.getSenha_sigep().equals("")) {
-                String login = c.getLogin_sigep();
-                String senha = c.getSenha_sigep();
-
-                cnpj = cnpj.replaceAll("\\.", "").replaceAll("/", "").replaceAll("-", "").replaceAll(" ", "");
-                if (!cnpj.equals("") && FormataString.isCNPJ(cnpj)) {
+                    cnpj = cnpj.replaceAll("\\.", "").replaceAll("/", "").replaceAll("-", "").replaceAll(" ", "");
+                    if (!cnpj.equals("") && FormataString.isCNPJ(cnpj)) {
 
                         XTrustProvider.install();
 
@@ -107,6 +108,10 @@ public class ContrClienteEtiquetas {
                         //System.out.println(cnpj + " - CNPJ Inválido!");
                         return false;
                     }
+                } else {
+                    //System.out.println("Este cliente não possui uma senha do SigepWEB!");
+                    return false;
+                }
             } else {
                 //System.out.println("Este cliente não possui uma senha do SigepWEB!");
                 return false;

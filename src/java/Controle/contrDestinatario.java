@@ -239,7 +239,7 @@ public class contrDestinatario {
                         + "\"bairro\":\"" + Util.FormataString.removeAccentsToUpper(bair) + "\", "
                         + "\"cidade\":\"" + Util.FormataString.removeAccentsToUpper(cid) + "\", "
                         + "\"uf\":\"" + uf + "\", "
-                        + "\"cep\":\"" + cepp + "\", "
+                        + "\"cep\":\"" + Util.FormataString.formatarCep("#####-###", cepp) + "\", "
                         + "\"aoscuidados\":\"\", "
                         + "\"empresa\":\"" + Util.FormataString.removeAccentsToUpper(empresa) + "\", "
                         + "\"email_destinatario\":\""+email+"\", "

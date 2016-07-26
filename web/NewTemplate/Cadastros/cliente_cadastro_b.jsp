@@ -212,6 +212,49 @@
                 }
                 );
             }
+            
+               
+            function validarDados(){
+                
+              if(!$('#cnpj').val()){
+                  alert('Preencha o CNPJ');
+                  return false;
+              }else if(!$('#razao').val()){
+                  alert('Preencha a razão social ');
+                  return false;
+              }else if(!$('#fantasia').val()){
+                  alert('Preencha o nome fantasia ');
+                  return false;
+              }else if(!$('#telefone').val()){
+                  alert('Preencha o telefone');
+                  return false;
+              }else if(!$('#email').val()){
+                  alert('Preencha o email');
+                  return false;
+              }else if(!$('#cep').val()){
+                  alert('Preencha o CEP');
+                  return false;
+              }else if(!$('#logradouro_').val()){
+                  alert('Preencha a rua ');
+                  return false;
+              }else if(!$('#numero_').val()){
+                  alert('Preencha o numero');
+                  return false;
+              }else if(!$('#bairro').val()){
+                  alert('Preencha o bairro');
+                  return false;
+              }else if(!$('#cidade_').val()){
+                  alert('Preencha a cidade ');
+                  return false;
+              }else if(!$('#uf_').val()){
+                  alert('escolha o estado');
+                  return false;
+              }else {
+                  document.form1.submit();
+              }                
+            }
+            
+            
         </script>
 
 
@@ -449,7 +492,7 @@
 
                                     </ul>
                                     <input type="hidden" name="idCliente" value="<%= idClienteInc%>" />
-                                    <button type="button" class="btn btn-success" onclick="document.form1.submit();"><i class="fa fa-lg fa-spc fa-save"></i> SALVAR DADOS</button>
+                                    <button type="button" class="btn btn-success" onclick="validarDados();"><i class="fa fa-lg fa-spc fa-save"></i> SALVAR DADOS</button>
                                 </form>
                             </div>
                         </div>

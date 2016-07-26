@@ -3,16 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Emporium.Servlet;
 
 import Emporium.Controle.ContrLogisticaReversa;
 import br.com.correios.scol.webservice.ColetasSolicitadasTO;
-import br.com.correios.scol.webservice.HistoricoColetaTO;
 import br.com.correios.scol.webservice.ObjetoPostalTO;
 import br.com.correios.scol.webservice.RetornoAcompanhamentoTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -37,7 +34,7 @@ public class ServReversaAtualizar extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String nomeBD = request.getParameter("nomeBD");
         String usuario = request.getParameter("usuario");//"jonathan@wi2be.com";
         String senha = request.getParameter("senha");//"cs5b72";
@@ -46,48 +43,61 @@ public class ServReversaAtualizar extends HttpServlet {
         String tipoBusca = "U"; //<!-- H (Todos) - U (Último) -->
         String tipoSolicitacao = "A";//<!-- L (Domiciliar) - A (Autorização) - C (Coleta) -->
         List<String> listaAP = ContrLogisticaReversa.consultaReversasPendByCliente(idCli, nomeBD);
-        
-        RetornoAcompanhamentoTO ret = acompanharPedido(usuario, senha, codAdm, tipoBusca, tipoSolicitacao, listaAP);
-        for(ColetasSolicitadasTO c : ret.getColeta()){
-            int idRev = 0;
-            String obj = "- - -";
-            String desc = "";
-            String ultStatus = "";
-            String data = "";
-            String hora = "";
-            
-            for(ObjetoPostalTO o : c.getObjeto()){
-                //System.out.println("Obj: "+o.getNumeroEtiqueta());
-                //System.out.println("ID2: "+o.getControleObjetoCliente());
-                //System.out.println("Data: " + o.getDataUltimaAtualizacao());
-                //System.out.println("Hora: "+ o.getHoraUltimaAtualizacao());
-                //System.out.println("Desc: "+o.getDescricaoStatus());
-                //System.out.println("Ult Status: "+o.getUltimoStatus());
-                
-                if(idRev == 0){
-                    obj = o.getNumeroEtiqueta();
-                    desc = o.getDescricaoStatus();
-                    ultStatus = o.getUltimoStatus();
-                    data = o.getDataUltimaAtualizacao();
-                    hora = o.getHoraUltimaAtualizacao();
-                    String aux[] = o.getControleObjetoCliente().split("_");
-                    idRev = Integer.parseInt(aux[0].trim());
-                } else {
-                    obj += "<br/>\n"+o.getNumeroEtiqueta();
-                    desc += "<br/>\n"+o.getDescricaoStatus();
-                    ultStatus += "<br/>\n"+o.getUltimoStatus();
-                    data += "<br/>\n"+o.getDataUltimaAtualizacao();
-                    hora += "<br/>\n"+o.getHoraUltimaAtualizacao();
+        List<String> listaAP_30 = new ArrayList<String>();
+        for (int i = 0; i < listaAP.size(); i++) {
+            listaAP_30.add(listaAP.get(i));
+            if ((i + 1) % 30 == 0) {
+
+                //System.out.println("entroo " + (i + 1));
+                try {
+                    RetornoAcompanhamentoTO ret = acompanharPedido(usuario, senha, codAdm, tipoBusca, tipoSolicitacao, listaAP_30);
+                    //System.out.println(ret.getCodErro() + " = " + ret.getMsgErro());
+                    for (ColetasSolicitadasTO c : ret.getColeta()) {
+                        //System.out.println(c.getNumeroPedido());
+                        int idRev = 0;
+                        String obj = "- - -";
+                        String desc = "";
+                        String ultStatus = "";
+                        String data = "";
+                        String hora = "";
+
+                        for (ObjetoPostalTO o : c.getObjeto()) {
+                            //System.out.println("Obj: " + o.getNumeroEtiqueta());
+                            //System.out.println("ID2: " + o.getControleObjetoCliente());
+                            //System.out.println("Data: " + o.getDataUltimaAtualizacao());
+                            //System.out.println("Hora: " + o.getHoraUltimaAtualizacao());
+                            //System.out.println("Desc: " + o.getDescricaoStatus());
+                            //System.out.println("Ult Status: " + o.getUltimoStatus());
+
+                            if (idRev == 0) {
+                                obj = o.getNumeroEtiqueta();
+                                desc = o.getDescricaoStatus();
+                                ultStatus = o.getUltimoStatus();
+                                data = o.getDataUltimaAtualizacao();
+                                hora = o.getHoraUltimaAtualizacao();
+                                String aux[] = o.getControleObjetoCliente().split("_");
+                                idRev = Integer.parseInt(aux[0].trim());
+                            } else {
+                                obj += "<br/>\n" + o.getNumeroEtiqueta();
+                                desc += "<br/>\n" + o.getDescricaoStatus();
+                                ultStatus += "<br/>\n" + o.getUltimoStatus();
+                                data += "<br/>\n" + o.getDataUltimaAtualizacao();
+                                hora += "<br/>\n" + o.getHoraUltimaAtualizacao();
+                            }
+                        }
+                        if (idRev > 0) {
+                            ContrLogisticaReversa.alterarSituacao(idRev, ultStatus, desc, obj, data, hora, nomeBD);
+                        }
+                    }
+                } catch (Exception e) {
+                   // System.out.println(e);
                 }
-            }
-            if(idRev > 0){
-                ContrLogisticaReversa.alterarSituacao(idRev, ultStatus, desc, obj, data, hora, nomeBD);            
+                listaAP_30 = new ArrayList<String>();
             }
         }
-        
+
         response.sendRedirect("Cliente/Servicos/lista_reversa.jsp?msg=Status Atualizados!");
-        
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

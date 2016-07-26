@@ -14,7 +14,7 @@ import br.com.correios.bsb.sigep.master.bean.cliente.SigepClienteException;
 import java.awt.HeadlessException;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.List;
+import java.util.List; 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

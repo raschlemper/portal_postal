@@ -346,7 +346,7 @@
 			</image>
 			<image onErrorType="Blank">
 				<reportElement x="283" y="115" width="143" height="77" uuid="ed1a3b8f-1628-447c-ad66-89eec0137075"/>
-				<imageExpression><![CDATA["http://localhost:8080/imagensNew/etq_ar2.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["http://localhost:8080/PortalPostal/imagensNew/etq_ar2.jpg"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="13" y="126" width="15" height="124" uuid="1a4bb0bd-e874-4d87-93dd-54bffbfa1e6b"/>

@@ -6,23 +6,11 @@ package Servlet;
 
 import Controle.ContrClienteContrato;
 import Controle.contrCliente;
-import Entidade.empresas;
-import Util.FormataString;
-import Util.XTrustProvider;
-import br.com.correios.bsb.sigep.master.bean.cliente.AutenticacaoException;
-import br.com.correios.bsb.sigep.master.bean.cliente.CartaoPostagemERP;
-import br.com.correios.bsb.sigep.master.bean.cliente.ClienteERP;
-import br.com.correios.bsb.sigep.master.bean.cliente.ContratoERP;
-import br.com.correios.bsb.sigep.master.bean.cliente.EnderecoERP;
-import br.com.correios.bsb.sigep.master.bean.cliente.ServicoERP;
-import br.com.correios.bsb.sigep.master.bean.cliente.SigepClienteException;
-import br.com.correios.bsb.sigep.master.bean.cliente.StatusCartao;
 import br.com.correios.scol.webservice.RetornoFaixaNumericaTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -182,7 +170,7 @@ public class ServClienteContrato extends HttpServlet {
 
             if(!login_reversa.equals("") && !senha_reversa.equals("") && !cartao_reversa.equals("")){
                 //SOLICITA NUMERO PARA SOLICITACAO DE REVERSA        
-                RetornoFaixaNumericaTO ret = solicitarRange(login_reversa, senha_reversa, Integer.parseInt(codAdm), new Long(numContrato), "AP", "", 1);
+                RetornoFaixaNumericaTO ret = solicitarRange(login_reversa, senha_reversa, Integer.parseInt(codAdm), numContrato, "AP", "", 1);
                 if (ret.getCodErro().equals("0")) {
                     contrCliente.alterarLoginReversa(login_reversa, senha_reversa, cartao_reversa, idCliente, nomeBD);
                 } else {
@@ -211,10 +199,16 @@ public class ServClienteContrato extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private static RetornoFaixaNumericaTO solicitarRange(java.lang.String usuario, java.lang.String senha, java.lang.Integer codAdministrativo, java.lang.Long contrato, java.lang.String tipo, java.lang.String servico, java.lang.Integer quantidade) {
+    /*private static RetornoFaixaNumericaTO solicitarRange(java.lang.String usuario, java.lang.String senha, java.lang.Integer codAdministrativo, java.lang.Long contrato, java.lang.String tipo, java.lang.String servico, java.lang.Integer quantidade) {
         br.com.correios.scol.webservice.WebServiceScol_Service service = new br.com.correios.scol.webservice.WebServiceScol_Service();
         br.com.correios.scol.webservice.WebServiceScol port = service.getWebServiceScolPort();
         return port.solicitarRange(usuario, senha, codAdministrativo, contrato, tipo, servico, quantidade);
+    }*/
+
+    private static RetornoFaixaNumericaTO solicitarRange(java.lang.String usuario, java.lang.String senha, java.lang.Integer codAdministrativo, java.lang.String contrato, java.lang.String tipo, java.lang.String servico, java.lang.Integer quantidade) {
+        br.com.correios.scol.webservice.WebServiceScol_Service service = new br.com.correios.scol.webservice.WebServiceScol_Service();
+        br.com.correios.scol.webservice.WebServiceScol port = service.getWebServiceScolPort();
+        return port.solicitarRange(usuario, senha, codAdministrativo, new Long(contrato), tipo, servico, quantidade); 
     }
 
 }

@@ -7,7 +7,6 @@
 package Emporium.Servlet;
 
 import Controle.contrCliente;
-import Emporium.Controle.ContrLogisticaReversa;
 import br.com.correios.scol.webservice.RetornoFaixaNumericaTO;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -45,7 +44,7 @@ public class ServReversaLogin extends HttpServlet {
         
         String tipo_ap = "AP";
         //SOLICITA NUMERO PARA SOLICITACAO DE REVERSA        
-        RetornoFaixaNumericaTO ret = solicitarRange(usuario, senha, Integer.parseInt(codAdm), new Long(contrato), tipo_ap, "", 1);
+        RetornoFaixaNumericaTO ret = solicitarRange(usuario, senha, Integer.parseInt(codAdm), contrato, tipo_ap, "", 1);
                   
         if(ret.getCodErro().equals("0")){
             contrCliente.alterarLoginReversa(usuario, senha, cartao, idCliente, nomeBD);
@@ -96,10 +95,12 @@ public class ServReversaLogin extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private static RetornoFaixaNumericaTO solicitarRange(java.lang.String usuario, java.lang.String senha, java.lang.Integer codAdministrativo, java.lang.Long contrato, java.lang.String tipo, java.lang.String servico, java.lang.Integer quantidade) {
+    private static RetornoFaixaNumericaTO solicitarRange(java.lang.String usuario, java.lang.String senha, java.lang.Integer codAdministrativo, java.lang.String contrato, java.lang.String tipo, java.lang.String servico, java.lang.Integer quantidade) {
         br.com.correios.scol.webservice.WebServiceScol_Service service = new br.com.correios.scol.webservice.WebServiceScol_Service();
         br.com.correios.scol.webservice.WebServiceScol port = service.getWebServiceScolPort();
-        return port.solicitarRange(usuario, senha, codAdministrativo, contrato, tipo, servico, quantidade);
+        return port.solicitarRange(usuario, senha, codAdministrativo, new Long(contrato), tipo, servico, quantidade); 
     }
+
+    
 
 }
