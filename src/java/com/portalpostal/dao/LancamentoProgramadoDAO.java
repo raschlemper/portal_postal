@@ -28,8 +28,11 @@ public class LancamentoProgramadoDAO extends GenericDAO {
     }
 
     public List<LancamentoProgramado> findAllAtivo() throws Exception {
-        String sql = "SELECT * FROM lancamento_programado "
-                   + "WHERE lancamento_programado.situacao = 0 ";
+        String sql = "SELECT * FROM conta, lancamento_programado "
+                   + "LEFT OUTER JOIN favorecido ON(lancamento_programado.idFavorecido = favorecido.idFavorecido) "
+                   + "LEFT OUTER JOIN plano_conta ON(lancamento_programado.idPlanoConta = plano_conta.idPlanoConta) "
+                   + "WHERE lancamento_programado.idConta = conta.idConta "
+                   + "AND lancamento_programado.situacao = 0 ";
         return findAll(sql, null, lancamentoProgramadoHandler);
     }
 
