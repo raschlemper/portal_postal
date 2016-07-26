@@ -1,23 +1,17 @@
 'use strict';
 
 app.controller('FluxoCaixaController', 
-    ['$scope', '$filter', 'LancamentoService', 'LancamentoProgramadoService', 'LancamentoTransferenciaService', 'LancamentoConciliadoService', 'ContaService', 'PlanoContaService', 
-    'CentroCustoService', 'ReportService', 'ModalService', 'DatePickerService', 'ListaService', 'LancamentoHandler', 'LancamentoRateioHandler', 
-    'LancamentoTransferenciaHandler', 'LancamentoConciliadoHandler', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
-    function ($scope, $filter, LancamentoService, LancamentoProgramadoService, LancamentoTransferenciaService, LancamentoConciliadoService, ContaService, PlanoContaService, 
-        CentroCustoService, ReportService, ModalService, DatePickerService, ListaService, LancamentoHandler, LancamentoRateioHandler, 
-        LancamentoTransferenciaHandler, LancamentoConciliadoHandler, FinanceiroValidation, LISTAS, MESSAGES) {
+    ['$scope', 'LancamentoProgramadoService', 'ContaService', 'PlanoContaService', 'DatePickerService', 'ListaService', 'LISTAS', 'MESSAGES',
+    function ($scope, LancamentoProgramadoService, ContaService, PlanoContaService, DatePickerService, ListaService, LISTAS, MESSAGES) {
 
         var init = function () {
             $scope.lancamentos = [];
             $scope.lancamentosLista = [];     
             $scope.tipos = LISTAS.lancamento;
             $scope.modelos = LISTAS.modeloLancamento;
-            $scope.situacoes = LISTAS.situacaoLancamento;
-            $scope.statusConta = LISTAS.statusConta;
             $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
-            $scope.datepickerDataFim = angular.copy(DatePickerService.default);    
-            $scope.saldoTotal = 0;
+            $scope.datepickerDataFim = angular.copy(DatePickerService.default);   
+            $scope.vencidos = false;
             $scope.lancSearch = {};
             getTitle();
             periodos();
@@ -53,21 +47,21 @@ app.controller('FluxoCaixaController',
         };
 
         $scope.filter = function(lista, search) { 
-            lista = _.filter(lista, function(item) {
-                return filterByData(item, search);
-            });    
+//            lista = _.filter(lista, function(item) {
+//                return filterByData(item, search);
+//            });    
             lista = filterConta(lista, search);
             return lista;
         };
 
-        var filterByData = function(item, search) {
-            var dataInicio = moment(search.dataInicio);
-            var dataFim = moment(search.dataFim);
-            if((!search.dataInicio || !dataInicio.isValid()) || (!search.dataFim || !dataFim.isValid())) return true;
-            var data = moment(item.dataLancamento);
-            return (data.isBefore(search.dataFim) && data.isAfter(search.dataInicio) 
-                    || (data.isSame(search.dataInicio) || data.isSame(search.dataFim)));
-        }; 
+//        var filterByData = function(item, search) {
+//            var dataInicio = moment(search.dataInicio);
+//            var dataFim = moment(search.dataFim);
+//            if((!search.dataInicio || !dataInicio.isValid()) || (!search.dataFim || !dataFim.isValid())) return true;
+//            var data = moment(item.dataLancamento);
+//            return (data.isBefore(search.dataFim) && data.isAfter(search.dataInicio) 
+//                    || (data.isSame(search.dataInicio) || data.isSame(search.dataFim)));
+//        }; 
         
         var filterConta = function(lista, search) {          
             if(!search.conta) return lista;
@@ -113,19 +107,19 @@ app.controller('FluxoCaixaController',
                     $scope.planoContas = data;
                     PlanoContaService.estrutura($scope.planoContas);
                     $scope.planoContas = PlanoContaService.flatten($scope.planoContas);                 
-                    todos($scope.periodo.codigo);
+                    todos($scope.periodo.codigo, $scope.vencidos);
                 })
                 .catch(function (e) {
                     console.log(e);
                 });
         };
 
-        var todos = function(periodos) {
+        var todos = function(periodos, vencidos) {
             var dataInicio = moment().format('YYYY-MM-DD');
             var dataFim = moment().add(periodos, 'months').format('YYYY-MM-DD');
             LancamentoProgramadoService.getAllAtivo()
                 .then(function (data) {
-                    $scope.lancamentos = getLancamentos(angular.copy(data), dataInicio, dataFim);
+                    $scope.lancamentos = getLancamentos(angular.copy(data), dataInicio, dataFim, vencidos);
                     $scope.lancamentos.sort(compareData);
                     $scope.lancamentosLista = criarLancamentosLista(angular.copy($scope.lancamentos));
                 })
@@ -134,20 +128,28 @@ app.controller('FluxoCaixaController',
                 });
         };
         
-        var getLancamentos = function(programados, dataInicio, dataFim) {
+        var getLancamentos = function(programados, dataInicio, dataFim, vencidos) {
             var resultado = [];
             _.map(programados, function(programado) {
-                var lancamentos = LancamentoProgramadoService.lancamentoProgramado(programado, dataInicio, dataFim);
+                var lancamentos = LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataInicio, dataFim);
                 _.map(lancamentos, function(lancamento) {
+                    lancamento.dataVencimento = moment(lancamento.dataVencimento).format('YYYY-MM-DD');
                     resultado.push(lancamento);
                 });
+                if(vencidos) {
+                    var lancamentosVencidos = LancamentoProgramadoService.lancamentoProgramadoVencido(angular.copy(programado), dataInicio);
+                    _.map(lancamentosVencidos, function(lancamento) {
+                        lancamento.dataVencimento = moment(lancamento.dataVencimento).format('YYYY-MM-DD');
+                        resultado.push(lancamento);
+                    });
+                }
             });
             return resultado;
         };
         
         var compareData = function (a,b) {
-            a = moment(a.data);
-            b = moment(b.data);
+            a = moment(a.dataVencimento);
+            b = moment(b.dataVencimento);
             if(a.isBefore(b)) return -1;
             if(a.isAfter(b)) return 1;
             return 0;
@@ -203,8 +205,12 @@ app.controller('FluxoCaixaController',
             });
         };
         
-        $scope.changePeriodo = function(periodo) {
-            todos(periodo.codigo);
+        $scope.changePeriodo = function(periodo, vencidos) {
+            todos(periodo.codigo, vencidos);
+        }
+        
+        $scope.pesquisar = function(periodo, vencidos) {
+            todos(periodo.codigo, vencidos);
         }
 
         // ***** VALIDAR ***** //

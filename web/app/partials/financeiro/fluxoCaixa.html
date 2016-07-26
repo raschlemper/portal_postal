@@ -19,10 +19,8 @@
                                             filter="filter" 
                                             search="lancSearch" 
                                             default-filter="true" 
-                                            order-by-column="data" 
-                                            show-checkbox="true"
-                                            show-menu="false"
-                                            show-column-menu="true">
+                                            order-by-column="dataVencimento" 
+                                            show-menu="false">
                                     
                                     <filter-content>
                                         <div class="form-inline pull-left">
@@ -36,9 +34,14 @@
                                                 </select>
                                                 
                                                 <label>Período:</label>
-                                                <select class="form-control spc-right" ng-model="periodo" ng-change="changePeriodo(periodo)"
+                                                <select class="form-control spc-right" ng-model="periodo" ng-change="changePeriodo(periodo, vencidos)"
                                                     ng-options="periodo.descricao for periodo in periodos track by periodo.id">    
-                                                </select>
+                                                </select>   
+                                                
+                                                <label style="margin-right: 10px;">
+                                                    <input type="checkbox" ng-model="vencidos" ng-change="pesquisar(periodo, vencidos)">
+                                                    Vencidos
+                                                </label>   
                                                 
 <!--                                                <label>Data:</label>
                                                 <div class="input-group spc-right">
