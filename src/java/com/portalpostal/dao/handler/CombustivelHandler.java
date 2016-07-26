@@ -1,6 +1,5 @@
 package com.portalpostal.dao.handler;
 
-import com.portalpostal.model.ContaCorrente;
 import com.portalpostal.model.Veiculo;
 import com.portalpostal.model.dd.TipoCombustivelVeiculo;
 import com.portalpostal.model.VeiculoCombustivel;
@@ -23,7 +22,7 @@ public class CombustivelHandler extends GenericHandler implements ResultSetHandl
         VeiculoCombustivel combustivel = new VeiculoCombustivel();
         combustivel.setIdVeiculoCombustivel(getInt(result, "idVeiculoCombustivel"));
         combustivel.setTipo(TipoCombustivelVeiculo.values()[getInt(result, "tipo")]);
-        combustivel.setQuantidade(getInt(result, "quantidade"));
+        combustivel.setQuantidade(getDouble(result, "quantidade"));
         combustivel.setValorUnitario(getDouble(result, "valorUnitario"));
         combustivel.setData(getDate(result, "data"));
         combustivel.setValorTotal(getDouble(result, "valorTotal"));

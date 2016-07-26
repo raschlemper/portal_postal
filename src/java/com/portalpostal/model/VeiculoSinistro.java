@@ -9,7 +9,7 @@ public class VeiculoSinistro {
     private Integer idVeiculoSinistro;
     private Veiculo veiculo;
     private TipoSinistroVeiculo tipo;
-    private Integer boletimOcorrencia;
+    private Long boletimOcorrencia;
     private Date data;
     private TipoResponsavelVeiculo responsavel;
     private String local;
@@ -41,11 +41,11 @@ public class VeiculoSinistro {
         this.tipo = tipo;
     }
 
-    public Integer getBoletimOcorrencia() {
+    public Long getBoletimOcorrencia() {
         return boletimOcorrencia;
     }
 
-    public void setBoletimOcorrencia(Integer boletimOcorrencia) {
+    public void setBoletimOcorrencia(Long boletimOcorrencia) {
         this.boletimOcorrencia = boletimOcorrencia;
     }
 

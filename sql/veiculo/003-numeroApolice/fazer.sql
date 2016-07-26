@@ -1,1 +1,0 @@
-ALTER TABLE `veiculo_seguro` CHANGE `numeroApolice` `numeroApolice` INT NOT NULL;

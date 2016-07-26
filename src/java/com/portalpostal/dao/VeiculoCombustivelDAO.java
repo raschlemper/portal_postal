@@ -80,8 +80,9 @@ public class VeiculoCombustivelDAO extends GenericDAO {
 
     public VeiculoCombustivel findLastCombustivelByIdVeiculo(Integer idVeiculo) throws Exception {
         String sql = "SELECT * FROM veiculo_combustivel, veiculo "
-                   + "WHERE idVeiculoCombustivel = (SELECT MAX(idVeiculoCombustivel) as idVeiculoCombustivel "
-                                                   + "FROM veiculo_combustivel vc WHERE vc.idVeiculo = :idVeiculo";
+                   + "WHERE veiculo.idVeiculo = veiculo_combustivel.idVeiculo"
+                   + "  AND idVeiculoCombustivel = (SELECT MAX(idVeiculoCombustivel) as idVeiculoCombustivel "
+                                                   + "FROM veiculo_combustivel vc WHERE vc.idVeiculo = :idVeiculo)";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idVeiculo", idVeiculo);
         return (VeiculoCombustivel) find(sql, params, combustivelHandler);

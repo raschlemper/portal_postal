@@ -1,16 +1,14 @@
 package com.portalpostal.model;
 
 import com.portalpostal.model.dd.TipoCombustivelVeiculo;
-import com.portalpostal.model.serializer.JsonDateSerializer;
 import java.util.Date;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class VeiculoCombustivel {
     
     private Integer idVeiculoCombustivel;
     private Veiculo veiculo;
     private TipoCombustivelVeiculo tipo;
-    private Integer quantidade;
+    private Double quantidade;
     private Double valorUnitario;
     private Date data; 
     private Double valorTotal;
@@ -42,11 +40,11 @@ public class VeiculoCombustivel {
         this.tipo = tipo;
     }
 
-    public Integer getQuantidade() {
+    public Double getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(Integer quantidade) {
+    public void setQuantidade(Double quantidade) {
         this.quantidade = quantidade;
     }
 
