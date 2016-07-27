@@ -2,9 +2,9 @@ package com.portalpostal.controller;
 
 import Controle.ContrErroLog;
 import com.portalpostal.validation.Validation;
-import com.portalpostal.model.LancamentoTransferenciaProgramado;
-import com.portalpostal.service.LancamentoTransferenciaProgramadoService;
-import com.portalpostal.validation.LancamentoTransferenciaProgramadoValidation;
+import com.portalpostal.model.LancamentoProgramadoTransferencia;
+import com.portalpostal.service.LancamentoProgramadoTransferenciaService;
+import com.portalpostal.validation.LancamentoProgramadoTransferenciaValidation;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,7 +22,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/financeiro/lancamento/programado/transferencia")
-public class LancamentoTransferenciaProgramadoController {
+public class LancamentoProgramadoTransferenciaController {
     
     @Context
     private HttpServletRequest request;
@@ -31,19 +31,19 @@ public class LancamentoTransferenciaProgramadoController {
     private String nomeBD;
     private String usuario;
     
-    private LancamentoTransferenciaProgramadoService lancamentoTransferenciaProgramadoService;
+    private LancamentoProgramadoTransferenciaService lancamentoTransferenciaProgramadoService;
 
     private void init() {
         sessao = request.getSession();
         nomeBD = (String) sessao.getAttribute("nomeBD");
         usuario = (String) sessao.getAttribute("usuario");  
-        lancamentoTransferenciaProgramadoService = new LancamentoTransferenciaProgramadoService(nomeBD);
+        lancamentoTransferenciaProgramadoService = new LancamentoProgramadoTransferenciaService(nomeBD);
     }
     
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<LancamentoTransferenciaProgramado> findAll() {
+    public List<LancamentoProgramadoTransferencia> findAll() {
         try {
             init();    
             return lancamentoTransferenciaProgramadoService.findAll();
@@ -55,7 +55,7 @@ public class LancamentoTransferenciaProgramadoController {
     @GET
     @Path("/{idLancamentoTransferenciaProgramado}")
     @Produces(MediaType.APPLICATION_JSON)
-    public LancamentoTransferenciaProgramado find(@PathParam("idLancamentoTransferenciaProgramado") Integer idLancamentoTransferenciaProgramado) {
+    public LancamentoProgramadoTransferencia find(@PathParam("idLancamentoTransferenciaProgramado") Integer idLancamentoTransferenciaProgramado) {
         try {
             init();    
             return lancamentoTransferenciaProgramadoService.find(idLancamentoTransferenciaProgramado);
@@ -68,7 +68,7 @@ public class LancamentoTransferenciaProgramadoController {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public LancamentoTransferenciaProgramado save(LancamentoTransferenciaProgramado lancamentoTransferenciaProgramado) {
+    public LancamentoProgramadoTransferencia save(LancamentoProgramadoTransferencia lancamentoTransferenciaProgramado) {
         try {
             init();
             validation(lancamentoTransferenciaProgramado);
@@ -83,7 +83,7 @@ public class LancamentoTransferenciaProgramadoController {
     @Path("/{idLancamentoTransferenciaProgramado}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public LancamentoTransferenciaProgramado update(LancamentoTransferenciaProgramado lancamentoTransferenciaProgramado) {
+    public LancamentoProgramadoTransferencia update(LancamentoProgramadoTransferencia lancamentoTransferenciaProgramado) {
         try {
             init();
             validation(lancamentoTransferenciaProgramado);
@@ -98,7 +98,7 @@ public class LancamentoTransferenciaProgramadoController {
     @Path("/{idLancamentoTransferenciaProgramado}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public LancamentoTransferenciaProgramado delete(@PathParam("idLancamentoTransferenciaProgramado") Integer idLancamentoTransferenciaProgramado) {
+    public LancamentoProgramadoTransferencia delete(@PathParam("idLancamentoTransferenciaProgramado") Integer idLancamentoTransferenciaProgramado) {
         try {
             init();
             return lancamentoTransferenciaProgramadoService.delete(idLancamentoTransferenciaProgramado);
@@ -107,8 +107,8 @@ public class LancamentoTransferenciaProgramadoController {
         }
     } 
     
-    private void validation(LancamentoTransferenciaProgramado lancamentoTransferenciaProgramado) throws Exception {  
-        Validation validacao = new LancamentoTransferenciaProgramadoValidation();
+    private void validation(LancamentoProgramadoTransferencia lancamentoTransferenciaProgramado) throws Exception {  
+        Validation validacao = new LancamentoProgramadoTransferenciaValidation();
         if(!validacao.validar(lancamentoTransferenciaProgramado)) {
             throw new WebApplicationException(getMessageError(validacao.getMsg()));
         } 

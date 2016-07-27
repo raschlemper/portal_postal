@@ -105,6 +105,8 @@ app.constant('MESSAGES', {
                 DATA_LANCAMENTO_VALIDA: "A data do lançamento não é válida!",
                 DATA_COMPETENCIA_REQUERIDA: "Preencha a competência do lançamento!",
                 DATA_COMPETENCIA_VALIDA: "A competência do lançamento não é válida!",
+                DATA_VENCIMENTO_REQUERIDA: "Preencha o vencimento do lançamento!",
+                DATA_VENCIMENTO_VALIDA: "O vencimento do lançamento não é válida!",
                 VALOR_REQUERIDA: "Preencha o valor do lançamento!",
                 VALOR_VALIDA: "O valor do lançamento não é válido",
                 HISTORICO_REQUERIDA: "Preencha o histórico do lançamento!"
