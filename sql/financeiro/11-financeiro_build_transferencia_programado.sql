@@ -1,9 +1,9 @@
 USE pp_06895434000183;
 
-DROP TABLE lancamento_transferencia_programado;
+DROP TABLE lancamento_programado_transferencia;
 
-CREATE TABLE `lancamento_transferencia_programado` (
-   `idLancamentoTransferenciaProgramado` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE `lancamento_programado_transferencia` (
+   `idLancamentoProgramadoTransferencia` INT NOT NULL AUTO_INCREMENT,
    `idLancamentoProgramadoOrigem`        INT NOT NULL,
    `idLancamentoProgramadoDestino`       INT NOT NULL,
    `numero`                              VARCHAR(254) NULL,
@@ -14,24 +14,24 @@ CREATE TABLE `lancamento_transferencia_programado` (
    `valor`                               DECIMAL(13,2) NOT NULL,
    `historico`                           VARCHAR(254) NOT NULL,
    `usuario`                             VARCHAR(100) DEFAULT NULL,
-   PRIMARY KEY (`idLancamentoTransferenciaProgramado`)
+   PRIMARY KEY (`idLancamentoProgramadoTransferencia`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
- ALTER TABLE `lancamento_transferencia_programado` 
- ADD INDEX `i_lancamentoprogramadoprogramado_lancamentoprogramadoorigem` (`idLancamentoProgramadoOrigem` ASC);
+ ALTER TABLE `lancamento_programado_transferencia` 
+ ADD INDEX `i_lancamentoprogramadotransferencia_lancamentoprogramadoorigem` (`idLancamentoProgramadoOrigem` ASC);
 
- ALTER TABLE `lancamento_transferencia_programado` 
- ADD INDEX `i_lancamentoprogramadoprogramado_lancamentoprogramadodestino` (`idLancamentoProgramadoDestino` ASC);
+ ALTER TABLE `lancamento_programado_transferencia` 
+ ADD INDEX `i_lancamentoprogramadotransferencia_lancamentoprogramadodestino` (`idLancamentoProgramadoDestino` ASC);
 
- ALTER TABLE `lancamento_transferencia_programado` 
- ADD CONSTRAINT `fk_lancamentotransferenciaprogramado_lancamentoprogramadoorigem`
+ ALTER TABLE `lancamento_programado_transferencia` 
+ ADD CONSTRAINT `fk_lancamentoprogramadotransferencia_lancamentoprogramadoorigem`
    FOREIGN KEY (`idLancamentoProgramadoOrigem`)
    REFERENCES `lancamento_programado` (`idLancamentoProgramado`)
    ON DELETE NO ACTION
    ON UPDATE NO ACTION;
 
-ALTER TABLE `lancamento_transferencia_programado` 
-ADD CONSTRAINT `fk_lancamentotransferenciaprogramado_lancamentoprogramadodestino`
+ALTER TABLE `lancamento_programado_transferencia` 
+ADD CONSTRAINT `fk_lancamentoprogramadotransferencia_lancamentoprogramadodestino`
    FOREIGN KEY (`idLancamentoProgramadoDestino`)
    REFERENCES `lancamento_programado` (`idLancamentoProgramado`)
    ON DELETE NO ACTION

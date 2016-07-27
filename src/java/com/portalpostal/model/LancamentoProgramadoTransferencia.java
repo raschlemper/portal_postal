@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class LancamentoProgramadoTransferencia {
     
-    private Integer idLancamentoTransferenciaProgramado;
+    private Integer idLancamentoProgramadoTransferencia;
     private LancamentoProgramado lancamentoProgramadoOrigem;
     private LancamentoProgramado lancamentoProgramadoDestino;
     private String numero;
@@ -20,13 +20,13 @@ public class LancamentoProgramadoTransferencia {
     private String observacao;
     private String usuario;
 
-    public Integer getIdLancamentoTransferenciaProgramado() {
-        return idLancamentoTransferenciaProgramado;
+    public Integer getIdLancamentoProgramadoTransferencia() {
+        return idLancamentoProgramadoTransferencia;
     }
 
-    public void setIdLancamentoTransferenciaProgramado(Integer idLancamentoTransferenciaProgramado) {
-        this.idLancamentoTransferenciaProgramado = idLancamentoTransferenciaProgramado;
-    }
+    public void setIdLancamentoProgramadoTransferencia(Integer idLancamentoProgramadoTransferencia) {
+        this.idLancamentoProgramadoTransferencia = idLancamentoProgramadoTransferencia;
+    }    
 
     public LancamentoProgramado getLancamentoProgramadoOrigem() {
         return lancamentoProgramadoOrigem;

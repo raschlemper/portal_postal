@@ -8,11 +8,11 @@ import java.util.Map;
 
 public class LancamentoProgramadoTransferenciaDAO extends GenericDAO { 
     
-    private final LancamentoProgramadoTransferenciaHandler lancamentoTransferenciaProgramadoHandler;
+    private final LancamentoProgramadoTransferenciaHandler lancamentoProgramadoTransferenciaHandler;
 
     public LancamentoProgramadoTransferenciaDAO(String nameDB) { 
         super(nameDB, LancamentoProgramadoTransferenciaDAO.class);
-        this.lancamentoTransferenciaProgramadoHandler = new LancamentoProgramadoTransferenciaHandler();
+        this.lancamentoProgramadoTransferenciaHandler = new LancamentoProgramadoTransferenciaHandler();
     } 
 
     public List<LancamentoProgramadoTransferencia> findAll() throws Exception {
@@ -21,17 +21,17 @@ public class LancamentoProgramadoTransferenciaDAO extends GenericDAO {
                    + "WHERE lancamento_programado_transferencia.idLancamentoProgramadoOrigem = lancamentoProgramadoOrigem.idLancamentoProgramado "
                    + "AND lancamento_programado_transferencia.idLancamentoProgramadoDestino = lancamentoProgramadoDestino.idLancamentoProgramado "
                    + "ORDER BY lancamento_programado_transferencia.idLancamentoTransferenciaProgramado";        
-        return findAll(sql, null, lancamentoTransferenciaProgramadoHandler);
+        return findAll(sql, null, lancamentoProgramadoTransferenciaHandler);
     }
 
-    public LancamentoProgramadoTransferencia find(Integer idLancamentoTransferenciaProgramado) throws Exception {
+    public LancamentoProgramadoTransferencia find(Integer idLancamentoProgramadoTransferencia) throws Exception {
         String sql = "SELECT * FROM lancamento_programado_transferencia, lancamentoProgramado lancamentoProgramadoOrigem, lancamentoProgramado lancamentoProgramadoDestino "
                    + "WHERE lancamento_programado_transferencia.idLancamentoProgramadoOrigem = lancamentoProgramadoOrigem.idLancamentoProgramado "
                    + "AND lancamento_programado_transferencia.idLancamentoProgramadoDestino = lancamentoProgramadoDestino.idLancamentoProgramado "
-                   + "AND lancamento_programado_transferencia.idLancamentoTransferenciaProgramado = :idLancamentoTransferenciaProgramado";
+                   + "AND lancamento_programado_transferencia.idLancamentoProgramadoTransferencia = :idLancamentoProgramadoTransferencia";
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("idLancamentoTransferenciaProgramado", idLancamentoTransferenciaProgramado);
-        return (LancamentoProgramadoTransferencia) find(sql, params, lancamentoTransferenciaProgramadoHandler);
+        params.put("idLancamentoProgramadoTransferencia", idLancamentoProgramadoTransferencia);
+        return (LancamentoProgramadoTransferencia) find(sql, params, lancamentoProgramadoTransferenciaHandler);
     }
 
     public LancamentoProgramadoTransferencia findByLancamentoOrigem(Integer idLancamentoProgramadoOrigem) throws Exception {
@@ -41,7 +41,7 @@ public class LancamentoProgramadoTransferenciaDAO extends GenericDAO {
                    + "AND lancamento_programado_transferencia.idLancamentoProgramadoOrigem = :idLancamentoProgramadoOrigem";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamentoProgramadoOrigem", idLancamentoProgramadoOrigem);
-        return (LancamentoProgramadoTransferencia) find(sql, params, lancamentoTransferenciaProgramadoHandler);
+        return (LancamentoProgramadoTransferencia) find(sql, params, lancamentoProgramadoTransferenciaHandler);
     }
 
     public LancamentoProgramadoTransferencia findByLancamentoDestino(Integer idLancamentoProgramadoDestino) throws Exception {
@@ -51,61 +51,61 @@ public class LancamentoProgramadoTransferenciaDAO extends GenericDAO {
                    + "AND lancamento_programado_transferencia.idLancamentoProgramadoDestino = :idLancamentoProgramadoDestino";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamentoProgramadoDestino", idLancamentoProgramadoDestino);
-        return (LancamentoProgramadoTransferencia) find(sql, params, lancamentoTransferenciaProgramadoHandler);
+        return (LancamentoProgramadoTransferencia) find(sql, params, lancamentoProgramadoTransferenciaHandler);
     }
 
-    public LancamentoProgramadoTransferencia save(LancamentoProgramadoTransferencia lancamentoTransferenciaProgramado) throws Exception {  
+    public LancamentoProgramadoTransferencia save(LancamentoProgramadoTransferencia lancamentoProgramadoTransferencia) throws Exception {  
         String sql = "INSERT INTO lancamento_programado_transferencia (idLancamentoProgramadoOrigem, idLancamentoProgramadoDestino, numero, "
                    + "documento, formaPagamento, frequencia, dataCompetencia, dataEmissao, dataVencimento, valor, historico, usuario) "
                    + "VALUES(:idLancamentoProgramadoOrigem, :idLancamentoProgramadoDestino, :numero, :documento, :formaPagamento, "
                    + ":frequencia, :dataCompetencia, :dataEmissao, :dataVencimento, :valor, :historico, :usuario)";        
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("idLancamentoProgramadoOrigem", lancamentoTransferenciaProgramado.getLancamentoProgramadoOrigem().getIdLancamentoProgramado());
-        params.put("idLancamentoProgramadoDestino", lancamentoTransferenciaProgramado.getLancamentoProgramadoDestino().getIdLancamentoProgramado()); 
-        params.put("numero", lancamentoTransferenciaProgramado.getNumero());          
-        params.put("documento", lancamentoTransferenciaProgramado.getDocumento().getIdTipoDocumento());           
-        params.put("formaPagamento", lancamentoTransferenciaProgramado.getFormaPagamento().getIdTipoFormaPagamento());         
-        params.put("frequencia", lancamentoTransferenciaProgramado.getFrequencia().ordinal());   
-        params.put("dataCompetencia", lancamentoTransferenciaProgramado.getDataCompetencia());       
-        params.put("dataEmissao", lancamentoTransferenciaProgramado.getDataEmissao());       
-        params.put("dataVencimento", lancamentoTransferenciaProgramado.getDataVencimento());      
-        params.put("valor", lancamentoTransferenciaProgramado.getValor());   
-        params.put("historico", lancamentoTransferenciaProgramado.getHistorico());                
-        params.put("usuario", lancamentoTransferenciaProgramado.getUsuario());
-        Integer idLancamentoTransferenciaProgramado = save(sql, params, lancamentoTransferenciaProgramadoHandler);
+        params.put("idLancamentoProgramadoOrigem", lancamentoProgramadoTransferencia.getLancamentoProgramadoOrigem().getIdLancamentoProgramado());
+        params.put("idLancamentoProgramadoDestino", lancamentoProgramadoTransferencia.getLancamentoProgramadoDestino().getIdLancamentoProgramado()); 
+        params.put("numero", lancamentoProgramadoTransferencia.getNumero());          
+        params.put("documento", lancamentoProgramadoTransferencia.getDocumento().getIdTipoDocumento());           
+        params.put("formaPagamento", lancamentoProgramadoTransferencia.getFormaPagamento().getIdTipoFormaPagamento());         
+        params.put("frequencia", lancamentoProgramadoTransferencia.getFrequencia().ordinal());   
+        params.put("dataCompetencia", lancamentoProgramadoTransferencia.getDataCompetencia());       
+        params.put("dataEmissao", lancamentoProgramadoTransferencia.getDataEmissao());       
+        params.put("dataVencimento", lancamentoProgramadoTransferencia.getDataVencimento());      
+        params.put("valor", lancamentoProgramadoTransferencia.getValor());   
+        params.put("historico", lancamentoProgramadoTransferencia.getHistorico());                
+        params.put("usuario", lancamentoProgramadoTransferencia.getUsuario());
+        Integer idLancamentoTransferenciaProgramado = save(sql, params, lancamentoProgramadoTransferenciaHandler);
         return find(idLancamentoTransferenciaProgramado);
     }
 
-    public LancamentoProgramadoTransferencia update(LancamentoProgramadoTransferencia lancamentoTransferenciaProgramado) throws Exception {
+    public LancamentoProgramadoTransferencia update(LancamentoProgramadoTransferencia lancamentoProgramadoTransferencia) throws Exception {
         String sql = "UPDATE lancamento_programado_transferencia "
                    + "SET idLancamentoProgramadoOrigem = :idLancamentoProgramadoOrigem, idLancamentoProgramadoDestino = :idLancamentoProgramadoDestino "
                    + "numero = :numero, documento = :documento, formaPagamento = :formaPagamento, frequencia = :frequencia, dataCompetencia = :dataCompetencia, "
                    + "dataEmissao = :dataEmissao, dataVencimento = :dataVencimento, valor = :valor, historico = :historico, usuario = :usuario "
-                   + "WHERE idLancamentoTransferenciaProgramado = :idLancamentoTransferenciaProgramado ";        
+                   + "WHERE idLancamentoProgramadoTransferencia = :idLancamentoProgramadoTransferencia ";        
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("idLancamentoTransferenciaProgramado", lancamentoTransferenciaProgramado.getIdLancamentoTransferenciaProgramado());
-        params.put("idLancamentoProgramadoOrigem", lancamentoTransferenciaProgramado.getLancamentoProgramadoOrigem().getIdLancamentoProgramado());
-        params.put("idLancamentoProgramadoDestino", lancamentoTransferenciaProgramado.getLancamentoProgramadoDestino().getIdLancamentoProgramado());
-        params.put("numero", lancamentoTransferenciaProgramado.getNumero());               
-        params.put("documento", lancamentoTransferenciaProgramado.getDocumento().getIdTipoDocumento());           
-        params.put("formaPagamento", lancamentoTransferenciaProgramado.getFormaPagamento().getIdTipoFormaPagamento());         
-        params.put("frequencia", lancamentoTransferenciaProgramado.getFrequencia().ordinal());  
-        params.put("dataCompetencia", lancamentoTransferenciaProgramado.getDataCompetencia());       
-        params.put("dataEmissao", lancamentoTransferenciaProgramado.getDataEmissao());       
-        params.put("dataVencimento", lancamentoTransferenciaProgramado.getDataVencimento());      
-        params.put("valor", lancamentoTransferenciaProgramado.getValor());   
-        params.put("historico", lancamentoTransferenciaProgramado.getHistorico());              
-        params.put("usuario", lancamentoTransferenciaProgramado.getUsuario());
-        update(sql, params, lancamentoTransferenciaProgramadoHandler);
-        return lancamentoTransferenciaProgramado;  
+        params.put("idLancamentoTransferenciaProgramado", lancamentoProgramadoTransferencia.getIdLancamentoProgramadoTransferencia());
+        params.put("idLancamentoProgramadoOrigem", lancamentoProgramadoTransferencia.getLancamentoProgramadoOrigem().getIdLancamentoProgramado());
+        params.put("idLancamentoProgramadoDestino", lancamentoProgramadoTransferencia.getLancamentoProgramadoDestino().getIdLancamentoProgramado());
+        params.put("numero", lancamentoProgramadoTransferencia.getNumero());               
+        params.put("documento", lancamentoProgramadoTransferencia.getDocumento().getIdTipoDocumento());           
+        params.put("formaPagamento", lancamentoProgramadoTransferencia.getFormaPagamento().getIdTipoFormaPagamento());         
+        params.put("frequencia", lancamentoProgramadoTransferencia.getFrequencia().ordinal());  
+        params.put("dataCompetencia", lancamentoProgramadoTransferencia.getDataCompetencia());       
+        params.put("dataEmissao", lancamentoProgramadoTransferencia.getDataEmissao());       
+        params.put("dataVencimento", lancamentoProgramadoTransferencia.getDataVencimento());      
+        params.put("valor", lancamentoProgramadoTransferencia.getValor());   
+        params.put("historico", lancamentoProgramadoTransferencia.getHistorico());              
+        params.put("usuario", lancamentoProgramadoTransferencia.getUsuario());
+        update(sql, params, lancamentoProgramadoTransferenciaHandler);
+        return lancamentoProgramadoTransferencia;  
     }
 
-    public LancamentoProgramadoTransferencia remove(Integer idLancamentoTransferenciaProgramado) throws Exception { 
-        String sql = "DELETE FROM lancamento_programado_transferencia WHERE idLancamentoTransferenciaProgramado = :idLancamentoTransferenciaProgramado ";
-        LancamentoProgramadoTransferencia lancamentoTransferenciaProgramado = find(idLancamentoTransferenciaProgramado);
+    public LancamentoProgramadoTransferencia remove(Integer idLancamentoProgramadoTransferencia) throws Exception { 
+        String sql = "DELETE FROM lancamento_programado_transferencia WHERE idLancamentoProgramadoTransferencia = :idLancamentoProgramadoTransferencia ";
+        LancamentoProgramadoTransferencia lancamentoTransferenciaProgramado = find(idLancamentoProgramadoTransferencia);
         Map<String, Object> params = new HashMap<String, Object>();        
-        params.put("idLancamentoTransferenciaProgramado", idLancamentoTransferenciaProgramado);
-        remove(sql, params, lancamentoTransferenciaProgramadoHandler);
+        params.put("idLancamentoProgramadoTransferencia", idLancamentoProgramadoTransferencia);
+        remove(sql, params, lancamentoProgramadoTransferenciaHandler);
         return lancamentoTransferenciaProgramado;
     }
 }

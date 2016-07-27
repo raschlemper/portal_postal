@@ -9,7 +9,7 @@ public class LancamentoProgramadoTransferenciaService {
     
     private final String nomeBD;
     
-    private LancamentoProgramadoTransferenciaDAO lancamentoTransferenciaProgramadoDAO;
+    private LancamentoProgramadoTransferenciaDAO lancamentoProgramadoTransferenciaDAO;
     private LancamentoProgramadoService lancamentoProgramadoService;
 
     public LancamentoProgramadoTransferenciaService(String nomeBD) {
@@ -17,49 +17,49 @@ public class LancamentoProgramadoTransferenciaService {
     }
 
     public void init() {
-        lancamentoTransferenciaProgramadoDAO = new LancamentoProgramadoTransferenciaDAO(nomeBD);
+        lancamentoProgramadoTransferenciaDAO = new LancamentoProgramadoTransferenciaDAO(nomeBD);
         lancamentoProgramadoService = new LancamentoProgramadoService(nomeBD);
     }
     
     public List<LancamentoProgramadoTransferencia> findAll() throws Exception {
         init();
-        return lancamentoTransferenciaProgramadoDAO.findAll();
+        return lancamentoProgramadoTransferenciaDAO.findAll();
     }  
     
-    public LancamentoProgramadoTransferencia find(Integer idLancamentoTransferenciaProgramado) throws Exception {
+    public LancamentoProgramadoTransferencia find(Integer idLancamentoProgramadoTransferencia) throws Exception {
         init();
-        LancamentoProgramadoTransferencia lancamentoTransferenciaProgramado = lancamentoTransferenciaProgramadoDAO.find(idLancamentoTransferenciaProgramado);
-        lancamentoTransferenciaProgramado.setLancamentoProgramadoOrigem(lancamentoProgramadoService.find(
-                lancamentoTransferenciaProgramado.getLancamentoProgramadoOrigem().getIdLancamentoProgramado()));
-        lancamentoTransferenciaProgramado.setLancamentoProgramadoDestino(lancamentoProgramadoService.find(
-                lancamentoTransferenciaProgramado.getLancamentoProgramadoDestino().getIdLancamentoProgramado()));
-        return lancamentoTransferenciaProgramado;
+        LancamentoProgramadoTransferencia lancamentoProgramadoTransferencia = lancamentoProgramadoTransferenciaDAO.find(idLancamentoProgramadoTransferencia);
+        lancamentoProgramadoTransferencia.setLancamentoProgramadoOrigem(lancamentoProgramadoService.find(
+                lancamentoProgramadoTransferencia.getLancamentoProgramadoOrigem().getIdLancamentoProgramado()));
+        lancamentoProgramadoTransferencia.setLancamentoProgramadoDestino(lancamentoProgramadoService.find(
+                lancamentoProgramadoTransferencia.getLancamentoProgramadoDestino().getIdLancamentoProgramado()));
+        return lancamentoProgramadoTransferencia;
     }  
     
     public LancamentoProgramadoTransferencia findByLancamento(Integer idLancamento) throws Exception {
         init();
-        LancamentoProgramadoTransferencia transferencia = lancamentoTransferenciaProgramadoDAO.findByLancamentoOrigem(idLancamento);
-        if(transferencia == null) { transferencia = lancamentoTransferenciaProgramadoDAO.findByLancamentoDestino(idLancamento); }
+        LancamentoProgramadoTransferencia transferencia = lancamentoProgramadoTransferenciaDAO.findByLancamentoOrigem(idLancamento);
+        if(transferencia == null) { transferencia = lancamentoProgramadoTransferenciaDAO.findByLancamentoDestino(idLancamento); }
         return transferencia;
     } 
     
-    public LancamentoProgramadoTransferencia save(LancamentoProgramadoTransferencia lancamentoTransferenciaProgramado) throws Exception {
+    public LancamentoProgramadoTransferencia save(LancamentoProgramadoTransferencia lancamentoProgramadoTransferencia) throws Exception {
         init();
-        LancamentoProgramado origem = lancamentoProgramadoService.save(lancamentoTransferenciaProgramado.getLancamentoProgramadoOrigem());
-        LancamentoProgramado destino = lancamentoProgramadoService.save(lancamentoTransferenciaProgramado.getLancamentoProgramadoDestino());
-        lancamentoTransferenciaProgramado.setLancamentoProgramadoOrigem(origem);
-        lancamentoTransferenciaProgramado.setLancamentoProgramadoDestino(destino);
-        return lancamentoTransferenciaProgramadoDAO.save(lancamentoTransferenciaProgramado);
+        LancamentoProgramado origem = lancamentoProgramadoService.save(lancamentoProgramadoTransferencia.getLancamentoProgramadoOrigem());
+        LancamentoProgramado destino = lancamentoProgramadoService.save(lancamentoProgramadoTransferencia.getLancamentoProgramadoDestino());
+        lancamentoProgramadoTransferencia.setLancamentoProgramadoOrigem(origem);
+        lancamentoProgramadoTransferencia.setLancamentoProgramadoDestino(destino);
+        return lancamentoProgramadoTransferenciaDAO.save(lancamentoProgramadoTransferencia);
     } 
     
-    public LancamentoProgramadoTransferencia update(LancamentoProgramadoTransferencia lancamentoTransferenciaProgramado) throws Exception {
+    public LancamentoProgramadoTransferencia update(LancamentoProgramadoTransferencia lancamentoProgramadoTransferencia) throws Exception {
         init();
-        return lancamentoTransferenciaProgramadoDAO.update(lancamentoTransferenciaProgramado);
+        return lancamentoProgramadoTransferenciaDAO.update(lancamentoProgramadoTransferencia);
     } 
     
-    public LancamentoProgramadoTransferencia delete(Integer idLancamentoTransferenciaProgramado) throws Exception {
+    public LancamentoProgramadoTransferencia delete(Integer idLancamentoProgramadoTransferencia) throws Exception {
         init();
-        return lancamentoTransferenciaProgramadoDAO.remove(idLancamentoTransferenciaProgramado);
+        return lancamentoProgramadoTransferenciaDAO.remove(idLancamentoProgramadoTransferencia);
     }   
     
 }

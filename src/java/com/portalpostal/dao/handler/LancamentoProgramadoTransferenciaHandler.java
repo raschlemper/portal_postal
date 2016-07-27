@@ -21,7 +21,7 @@ public class LancamentoProgramadoTransferenciaHandler extends GenericHandler imp
 
     public LancamentoProgramadoTransferencia handle(ResultSet result) throws SQLException {
         LancamentoProgramadoTransferencia lancamento = new LancamentoProgramadoTransferencia();
-        lancamento.setIdLancamentoTransferenciaProgramado(getInt(result, "idLancamentoTransferenciaProgramado"));
+        lancamento.setIdLancamentoProgramadoTransferencia(getInt(result, "idLancamentoProgramadoTransferencia"));
         lancamento.setLancamentoProgramadoOrigem(getLancamentoProgramadoOrigem(result));
         lancamento.setLancamentoProgramadoDestino(getLancamentoProgramadoDestino(result));
         lancamento.setNumero(getString(result, "numero"));
