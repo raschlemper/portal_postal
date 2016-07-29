@@ -58,7 +58,8 @@ public class VeiculoDAO extends GenericDAO {
                    + "versao = :versao, placa = :placa, anoModelo = :anoModelo, chassis = :chassis, renavam = :renavam, "
                    + "quilometragem = :quilometragem, combustivel = :combustivel, status = :status, situacao = :situacao "
                    + "WHERE idVeiculo = :idVeiculo ";        
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<String, Object>();     
+        params.put("idVeiculo", veiculo.getIdVeiculo());
         params.put("tipo", veiculo.getTipo().ordinal());
         params.put("idMarca", veiculo.getIdMarca());
         params.put("marca", veiculo.getMarca());
