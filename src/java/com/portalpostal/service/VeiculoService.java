@@ -89,6 +89,7 @@ public class VeiculoService {
     private boolean existeVeiculo(Veiculo veiculo) throws Exception {
         Veiculo veiculoPlaca = veiculoDAO.findByPlaca(veiculo.getPlaca());
         if(veiculoPlaca == null) return false;
+        if(veiculoPlaca.getIdVeiculo().equals(veiculo.getIdVeiculo())) return false;
         return true;
     }
     
