@@ -1,17 +1,18 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package iReports;
 
 import Controle.contrCliente;
-import Emporium.Controle.ContrPreVenda;
 import Entidade.Clientes;
 import Entidade.DadosEtiqueta;
 import Util.Conexao;
 import static iReports.ServEtiquetasReimp.urlExist;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,15 +26,19 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRPrintPage;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
  *
- * @author RICARDINHO
+ * @author Ricardinho
  */
-public class ServEtiquetasAr extends HttpServlet {
+public class LinkImpressaoAR extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,16 +51,34 @@ public class ServEtiquetasAr extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        
+        String codAgencia = request.getParameter("codAgencia");
+        int cod = Integer.parseInt(codAgencia);
+        String nomeBD = Controle.contrLogin.cnpjEmpresa(cod).trim();
 
-        HttpSession sessao = request.getSession();
-        String expira = (String) sessao.getAttribute("empresa");
-        if (expira == null) {
-            response.sendRedirect("index.jsp?msgLog=3");
+        String login = request.getParameter("login");
+        String senha = request.getParameter("senha");
+
+        Clientes cli = Controle.contrLogin.loginWS(login, senha, nomeBD);
+
+        if (cli == null) {
+            response.setContentType("text/html");
+            PrintWriter out = response.getWriter();
+            out.println("<erro>");
+            out.println("login ou senha ou codigo da agencia invalidos");
+            out.println("</erro>");
+
         } else {
+            String sro = request.getParameter("sro");
+            if (sro.contains(",")) {
+                sro = sro.replace(",", "','");
+            }
+            sro = "'" + sro + "'";
 
-            String nomeBD = (String) sessao.getAttribute("empresa");
-            int idCliente = (Integer) sessao.getAttribute("idCliente");
-            String param = request.getParameter("ids");
+            int idCliente = cli.getCodigo();
+            
+            
             String ordem = request.getParameter("ordem");
             String formato = request.getParameter("formato");
             String url_jrxml = "aviso_recebimento_A4.jasper";
@@ -70,7 +93,6 @@ public class ServEtiquetasAr extends HttpServlet {
 
             try {
 
-                Clientes cli = contrCliente.consultaClienteById(idCliente, nomeBD);
                 String nome = cli.getNome();
                 if (cli.getNome_etq() == 1) {
                     nome = cli.getNomeFantasia();
@@ -137,12 +159,11 @@ public class ServEtiquetasAr extends HttpServlet {
                         + "   cliente_departamentos AS dep "
                         + "   ON p.idDepartamento = dep.idDepartamento AND p.idCliente = dep.idCliente"
                         + " WHERE"
-                        + "   p.idCliente = " + idCliente + ""
-                        + "   AND impresso_ar = 0"
-                        + "   AND aviso_recebimento = 1"
-                        + "   AND id IN (" + param + ")"
+                        + "   p.idCliente = " + idCliente + " "
+                        + "   AND aviso_recebimento = 1 "
+                        + "   AND numObjeto IN (" + sro + ")"
                         + " ORDER BY " + ordem + ";";
-
+                
                 String sql_query_digital = "SELECT"
                         + "   IF(numObjeto = 'avista', '', numObjeto) AS nObj, "
                         + "   nomeServico, "
@@ -179,13 +200,11 @@ public class ServEtiquetasAr extends HttpServlet {
                         + "   cliente_prefix_ar AS ard "
                         + "   ON ard.grupoServico = p.nomeServico AND p.idCliente = ard.idCliente"
                         + " WHERE"
-                        + "   p.idCliente = " + idCliente + ""
-                        + "   AND impresso_ar = 0"
-                        + "   AND aviso_recebimento = 2"
-                        + "   AND id IN (" + param + ")"
+                        + "   p.idCliente = " + idCliente + " "
+                        + "   AND aviso_recebimento = 2 "
+                        + "   AND numObjeto IN (" + sro + ")"
                         + " ORDER BY " + ordem + ";";
 
-                //System.out.println(sql_query);
                 Connection conn = Conexao.conectar(nomeBD);
                 byte[] bytes = null;
                 JasperPrint impressao = null;
@@ -288,7 +307,6 @@ public class ServEtiquetasAr extends HttpServlet {
                         System.out.println(e);
                     }
                     
-                      
                     
                /****************************************************************************/
                
@@ -383,15 +401,13 @@ public class ServEtiquetasAr extends HttpServlet {
                         }
                     } catch (JRException e) {
                         System.out.println(e);
-                    }    
-
+                    }     
+                    
                 } catch (SQLException e) {
                     System.out.println(e);
                 } finally {
                     Conexao.desconectar(conn);
                 }
-                
-                
                 
                 if(impressao != null){
                     bytes = JasperExportManager.exportReportToPdf(impressao);
@@ -407,7 +423,8 @@ public class ServEtiquetasAr extends HttpServlet {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+            }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -448,4 +465,5 @@ public class ServEtiquetasAr extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 }

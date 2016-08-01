@@ -587,6 +587,8 @@ function handleHttpResponseAbrangenciaServ() {
                     alert('Nao existe o SEDEX HOJE para este CEP!');
                 } else if (resultado.trim() === 'PAX') {
                     alert('Nao existe o PAX para este CEP!');                
+                } else if(resultado.trim() === 'MSGRIO'){
+                    alert('Os envios para este CEP estao suspensos ate 20/08/2016!<br/>Motivo: Jogos Olimpicos do Rio 2016!');                
                 }
             }
         } else {
@@ -606,6 +608,38 @@ function verPesquisarAbrangenciaServ(cep, servico) {
         document.getElementById('cep').focus();
     }
 }
+
+    function handleHttpResponseCepsSuspensos() {
+        if (http.readyState === 4) {
+            if (http.status === 200) {
+                //alert("handleHTTPResponse");
+                var resultado = http.responseText;
+                if (resultado.toString().trim() === "sessaoexpirada") {
+                    window.location = "../../index.jsp?msgLog=3";
+                } else {
+                    if (resultado.trim() === 'aceita') {
+                        chamaDivProtecao2();
+                    } else if(resultado.trim() === 'MSGRIO'){
+                        alert('Os envios para este CEP estao suspensos ate 20/08/2016!<br/>Motivo: Jogos Olimpicos do Rio 2016!');                
+                    }
+                }
+            } else {
+                alert(http.status + " - Not able to retrieve name");
+            }
+        }
+    }
+
+    // funcao que retorna o forrm parra editarr o cooletador solicitado
+    function verPesquisarCepsSuspensos(cep, servico) {
+        if (cep.length === 9) {
+            http.open("GET", "../AjaxPages/consulta_ceps_suspensos.jsp?cep=" + cep + "&servico=" + servico, true);
+            http.onreadystatechange = handleHttpResponseCepsSuspensos;
+            http.send(null);
+        } else if (cep !== '') {
+            alert('Preencha o CEP por completo!');
+            document.getElementById('cep').focus();
+        }
+    }
 
 /***************************************************************************/
 

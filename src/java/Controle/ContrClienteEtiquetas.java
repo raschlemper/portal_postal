@@ -45,8 +45,8 @@ public class ContrClienteEtiquetas {
             String cartao = "";
             int uso = 0;
             int qtd = 500;
-            
-            if (idServico > 0) { 
+
+            if (idServico > 0) {
                 if (c.getTemContrato() == 1 && !c.getLogin_sigep().equals("") && !c.getSenha_sigep().equals("")) {
                     String login = c.getLogin_sigep();
                     String senha = c.getSenha_sigep();
@@ -373,8 +373,10 @@ public class ContrClienteEtiquetas {
                 String servico = result.getString("servico");
                 int qtd = result.getInt("qtd");
                 Timestamp dataHora = result.getTimestamp("dataHora");
-
-                ClienteLogEtiqueta log = new ClienteLogEtiqueta(idLog, idCliente, idUsuario, nomeUsuario, faixaIni, faixaFim, dataHora, qtd, servico, nomeServico);
+                String tipoGeracao = result.getString("tipoGeracao");
+                String tipoUso = result.getString("tipoUso");
+                
+                ClienteLogEtiqueta log = new ClienteLogEtiqueta(idLog, idCliente, idUsuario, nomeUsuario, faixaIni, faixaFim, dataHora, qtd, servico, nomeServico, tipoGeracao, tipoUso);
                 lista.add(log);
             }
             return lista;

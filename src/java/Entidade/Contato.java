@@ -17,6 +17,10 @@ public class Contato {
     private String email;
     private String foneramal;
     private String setor;
+    private String aniver;
+    private String url;
+    private String obs;
+    private String nivel;
 
     public Contato(int idContato, String contato, int idEmpresa, String email, String foneramal, String setor) {
         this.idContato = idContato;
@@ -26,6 +30,55 @@ public class Contato {
         this.foneramal = foneramal;
         this.setor = setor;
     }
+
+    public Contato(int idContato, String contato, int idEmpresa, String email, String foneramal, String setor, String aniver, String url, String obs, String nivel) {
+        this.idContato = idContato;
+        this.contato = contato;
+        this.idEmpresa = idEmpresa;
+        this.email = email;
+        this.foneramal = foneramal;
+        this.setor = setor;
+        this.aniver = aniver;
+        this.url = url;
+        this.obs = obs;
+        this.nivel = nivel;
+    }
+    
+
+    public String getAniver() {
+        return aniver;
+    }
+
+    public void setAniver(String aniver) {
+        this.aniver = aniver;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getObs() {
+        return obs;
+    }
+
+    public void setObs(String obs) {
+        this.obs = obs;
+    }
+
+    public String getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(String nivel) {
+        this.nivel = nivel;
+    }
+    
+    
+    
 
     public String getContato() {
         return contato;

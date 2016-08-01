@@ -26,15 +26,18 @@
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String vDataAtual = sdf.format(new Date());
         String dataAnterior = vDataAtual;
+          String dataFim = vDataAtual;
         if (request.getParameter("dataFim") != null) {
-            vDataAtual = request.getParameter("dataFim");
+            dataFim = request.getParameter("dataFim");
         }
         if (request.getParameter("dataIni") != null) {
             dataAnterior = request.getParameter("dataIni");
         }
 
         String vDataInicio = Util.FormatarData.DateToBD(dataAnterior);
-        String vDataFinal = Util.FormatarData.DateToBD(vDataAtual);
+        String vDataFinal = Util.FormatarData.DateToBD(dataFim);
+           ArrayList<PreVenda> lista = ContrPreVenda.consultaVendasReimpressao(idCli, 1, -1, nivel, idUser, true, vDataInicio, vDataFinal, nomeBD);
+                                   
 %>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -114,6 +117,13 @@
                     showAnim: "slideDown"
                 });
             });
+              function validaData() {
+                if ($("#dataIni").val() > $("#dataFim").val()) {
+                    alert('Data inicial não pode ser maior que data final');
+                } else {
+                    $('#pesq').submit();
+                }
+            }
         </script>
 
         <title>Portal Postal | Lista de Postagem</title>
@@ -132,7 +142,7 @@
 
                     <div id="titulo1">Gerar Lista de Postagem</div>
                     
-                    <form action="lista_postagem_gerar.jsp" method="post">
+                    <form id="pesq" action="lista_postagem_gerar.jsp" method="post">
                         <ul class="ul_formulario" >
                             <li class="titulo"><dd><span>SELECIONE O PERIODO</span></dd></li>
                             <li>
@@ -146,7 +156,7 @@
                             <li>
                                 <dd>
                                     <div class="buttons">
-                                        <button type="submit" class="regular"><img src="../../imagensNew/lupa.png"/> PESQUISAR</button>
+                                        <button type="button" class="regular" onclick="validaData();"><img src="../../imagensNew/lupa.png"/> PESQUISAR</button>
                                     </div>
                                 </dd>
                             </li>
@@ -160,7 +170,7 @@
                         .barraArqTable a:hover{background: #2d89ef; border: 1px solid white; border-bottom: none; color: white;}
                     </style>
                     <div id="titulo2">                        
-                        Etiquetas sem Lista de Postagem
+                        Etiquetas sem Lista de Postagem - [<span style="color: yellow;"><%=lista.size()%> </span>etiqueta(s)]
                     </div>
                     <form name="formi" id="formi" action="ordem_servico.jsp" method="post">
                         <table cellpadding="0" cellspacing="0" border="0" id="table2" class="tinytable">
@@ -189,8 +199,7 @@
                                 <%
                                     
                                     ArrayList<Integer> dptosSessaoUsuario = (ArrayList<Integer>) session.getAttribute("departamentos");
-                                    ArrayList<PreVenda> lista = ContrPreVenda.consultaVendasReimpressao(idCli, 1, -1, nivel, idUser, true, vDataInicio, vDataFinal, nomeBD);
-                                    for (int i = 0; i < lista.size(); i++) {
+                                  for (int i = 0; i < lista.size(); i++) {
                                         PreVenda pv = lista.get(i);
                                         String numObj = pv.getNumObjeto();
                                         if ("avista".equals(numObj)) {

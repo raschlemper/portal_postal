@@ -658,6 +658,26 @@
         <servlet-name>ServInserirClientesVendedor</servlet-name>
         <servlet-class>Vendedor.Servlet.ServInserirClientesVendedor</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ServArDigital</servlet-name>
+        <servlet-class>Emporium.Servlet.ServArDigital</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServDeleteContato</servlet-name>
+        <servlet-class>Servlet.ServDeleteContato</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServInsertContato</servlet-name>
+        <servlet-class>Servlet.ServInsertContato</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LinkImpressaoSRO</servlet-name>
+        <servlet-class>iReports.LinkImpressaoSRO</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LinkImpressaoAR</servlet-name>
+        <servlet-class>iReports.LinkImpressaoAR</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ServLogin</servlet-name>
         <url-pattern>/ServLogin</url-pattern>
@@ -1286,6 +1306,26 @@
     <servlet-mapping>
         <servlet-name>ServInserirClientesVendedor</servlet-name>
         <url-pattern>/ServInserirClientesVendedor</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServArDigital</servlet-name>
+        <url-pattern>/ServArDigital</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServDeleteContato</servlet-name>
+        <url-pattern>/ServDeleteContato</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServInsertContato</servlet-name>
+        <url-pattern>/ServInsertContato</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LinkImpressaoSRO</servlet-name>
+        <url-pattern>/LinkImpressaoSRO</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LinkImpressaoAR</servlet-name>
+        <url-pattern>/LinkImpressaoAR</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
