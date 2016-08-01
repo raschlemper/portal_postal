@@ -24,7 +24,7 @@
         response.sendRedirect("../../index.jsp?msg=Sua sessao expirou! Para voltar ao Portal faça seu login novamente!");
     } else {
         int idCli = Integer.parseInt(String.valueOf(session.getAttribute("idCliente")));
-        String nomeCli = contrCliente.consultaNomeById(idCli, nomeBD);
+        Clientes cli = contrCliente.consultaClienteById(idCli, nomeBD);
         ArrayList<Integer> acs = (ArrayList<Integer>) session.getAttribute("servicos");
         ArrayList<Integer> dps = (ArrayList<Integer>) session.getAttribute("departamentos");
         int nivel = (Integer) session.getAttribute("nivelUsuarioEmp");
@@ -411,7 +411,8 @@
                         form.servico.value = ret.trim();
                     }
                 } else {
-                    chamaDivProtecao2();
+                    verPesquisarCepsSuspensos(form.cep.value, form.servico.value);
+                    //chamaDivProtecao2();
                 }
             }
 
@@ -1305,7 +1306,7 @@
                                 <li>
                                     <dd>
                                         <label>Nome / Razão Social<b class="obg">*</b></label>
-                                        <input readonly type="text" name="nomeCli" size="55" value="<%= nomeCli%>" />
+                                        <input readonly type="text" name="nomeCli" size="55" value="<%= cli.getNome() %>" />
                                     </dd>
                                     <dd>
                                         <label>Departamento / Centro de Custo</label>
@@ -1544,7 +1545,12 @@
                                         <label>A.R.</label>
                                         <select name="ar" id="ar">
                                             <option value="0">Não</option>
-                                            <option value="1">Sim</option>
+                                            <%if(cli.getAr_digital()>0){%>
+                                                <option value="1">Normal</option>
+                                                <option value="2">Digital</option>                                                
+                                            <%} else {%>
+                                                <option value="1">Sim</option>
+                                            <%}%>
                                         </select>
                                     </dd>
                                 </li>
@@ -1626,7 +1632,9 @@
                                             numObj = "- - -";
                                         }
                                         String ar = "SIM";
-                                        if (des.getAviso_recebimento() == 0) {
+                                        if (des.getAviso_recebimento() == 2) {
+                                            ar = "DIGITAL";
+                                        } else if (des.getAviso_recebimento() == 0) {
                                             ar = "NÃO";
                                         }
                                 %>

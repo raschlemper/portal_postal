@@ -42,26 +42,28 @@ app.controller('FluxoCaixaController',
             $scope.events = { 
                 table: function(lancamentos) {
                     calculateSaldo(lancamentos);
+                    initChartFluxoCaixa(lancamentos);
                 }
             }
         };
 
         $scope.filter = function(lista, search) { 
-//            lista = _.filter(lista, function(item) {
-//                return filterByData(item, search);
-//            });    
+            lista = _.filter(lista, function(item) {
+                return filterByData(item, search);
+            });    
             lista = filterConta(lista, search);
+            if(!_.isEmpty(search)) { initChartFluxoCaixa(lista); }
             return lista;
         };
 
-//        var filterByData = function(item, search) {
-//            var dataInicio = moment(search.dataInicio);
-//            var dataFim = moment(search.dataFim);
-//            if((!search.dataInicio || !dataInicio.isValid()) || (!search.dataFim || !dataFim.isValid())) return true;
-//            var data = moment(item.dataLancamento);
-//            return (data.isBefore(search.dataFim) && data.isAfter(search.dataInicio) 
-//                    || (data.isSame(search.dataInicio) || data.isSame(search.dataFim)));
-//        }; 
+        var filterByData = function(item, search) {
+            var dataInicio = moment(search.dataInicio);
+            var dataFim = moment(search.dataFim);
+            if((!search.dataInicio || !dataInicio.isValid()) || (!search.dataFim || !dataFim.isValid())) return true;
+            var data = moment(item.dataVencimento);
+            return (data.isBefore(search.dataFim) && data.isAfter(search.dataInicio) 
+                    || (data.isSame(search.dataInicio) || data.isSame(search.dataFim)));
+        }; 
         
         var filterConta = function(lista, search) {          
             if(!search.conta) return lista;
@@ -211,7 +213,66 @@ app.controller('FluxoCaixaController',
         
         $scope.pesquisar = function(periodo, vencidos) {
             todos(periodo.codigo, vencidos);
+        };
+
+        // ***** GRÁFICO ***** //
+        
+        var initChartFluxoCaixa = function(lancamentos) {
+            var categorias = getDataChartSaldo(lancamentos, 'dataVencimento');
+            var valores = getDataChartSaldo(lancamentos, 'saldo');
+            if($scope.configChartFluxoCaixa) { changeChartFluxoCaixa(lancamentos); }
+            else { configChartFluxoCaixa(categorias, valores); }
         }
+        
+        var changeChartFluxoCaixa = function(lancamentos) {
+            var categorias = getDataChartSaldo(lancamentos, 'dataVencimento');
+            var valores = getDataChartSaldo(lancamentos, 'saldo');
+            $scope.configChartFluxoCaixa.xAxis.categories = categorias;
+            $scope.configChartFluxoCaixa.series[0].data = valores;
+        }
+        
+        var configChartFluxoCaixa = function(categorias, valores) {        
+            $scope.configChartFluxoCaixa = {
+                title: " ",     
+                options: { 
+                    chart: { type: "area" },           
+                    plotOptions: {
+                        area: {
+                            marker: {
+                                enabled: false,
+                                symbol: 'circle',
+                                radius: 2,
+                                states: {
+                                    hover: {
+                                        enabled: true
+                                    }
+                                }
+                            }
+                        }
+                    },
+                },
+                xAxis: {
+                    categories: categorias,
+                    title: { enabled: false }
+                },
+                yAxis: {
+                    title: { text: ' ' }
+                },
+                series: [{  
+                    name: 'Saldos',    
+                    data: valores
+                }],         
+                legend: { enabled: false },
+                credits: {
+                    enabled: false
+                }
+            };
+        };   
+        
+        var getDataChartSaldo = function(saldos, field) {  
+            var values = _.pluck(saldos, field);
+            return _.values(values);
+        };
 
         // ***** VALIDAR ***** //
 

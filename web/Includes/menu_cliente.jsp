@@ -74,6 +74,7 @@
                     <li><a href="../../Cliente/Servicos/telegrama_postal.jsp">Solicitar Telegrama Postal</a></li>
                         <%}%>
                     <li><a href="../../Cliente/Servicos/vpne.jsp">Controle de VPNe</a></li>
+                    <li><a href="../../Cliente/Servicos/ar_digital_arquivo.jsp">Arquivos de AR Digital</a></li>
                 </ul>
             </li>
             <li><a href="#">Etiquetas</a>

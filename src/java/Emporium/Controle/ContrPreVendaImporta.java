@@ -56,6 +56,17 @@ public class ContrPreVendaImporta {
     private static String FALHA = "";
     private static String AVISO = "";
     private static final int MAX_ALLOWED = 1000;
+    private static final Integer[] CEPS_SUSPENSOS = {
+                20271080, 20271090, 20271100, 20550140, 20271150, 20271110, 20271111,
+                20271130, 20271160, 20271260, 20550170, 20756120, 20756121, 20770001,
+                20770002, 20755330, 20756116, 20756115, 20760225, 20760226, 20770061,
+                20770062, 20770010, 20770006, 20770060, 20755310, 20755320, 20756085,
+                20755300, 20755290, 20755280, 20770100, 20770080, 20770070, 20770210,
+                20770120, 20770090, 20755250, 22780160, 22783127, 22783119, 22783135,
+                22783145, 22790714, 22775023, 22775040, 22775060, 22775120, 22775051,
+                21615220, 21615310, 21615435, 21745590, 21745520, 21745420, 21750330,
+                21750320, 21735035, 21620070, 21853000
+            };
 
     public static ArrayList<ArquivoImportacao> validaDadosArquivo(ArrayList<ArquivoImportacao> listaAi, int idCliente, String servicoEscolhido, String nomeBD) {
         AVISO = "";
@@ -137,6 +148,14 @@ public class ContrPreVendaImporta {
                     }
                 } else if (ai.getServico().startsWith("SEDEX")) {
                     servico = "SEDEX";
+                } else if (ai.getServico().startsWith("MDPB")) {
+                    servico = "CARTA";                    
+                    String resultado = ContrServicoAbrangencia.verificaMDPBxCep(cepInteiro, nomeBD);
+                    if(resultado != null && resultado.equals("erro")){
+                        AVISO += "<br/>Linha n." + linha + " - CEP " + ai.getCep() + " nao aceita MDPB! O servico foi alterado para CARTA!";
+                    }else{
+                        servico = resultado;
+                    }
                 }
 
                 float vd = 0;
@@ -149,7 +168,15 @@ public class ContrPreVendaImporta {
                     FALHA += "<br/>Linha n." + ai.getNrLinha() + " - Valor Declr. " + ai.getVd() + " invalido!";
                 }
 
-                if (servico.equals("")) {
+                for (int cs : CEPS_SUSPENSOS) {
+                    if (!servico.equals("CARTA") && cs == cepInteiro) {
+                        servico = "MSGRIO";
+                    }
+                } 
+                
+                if (servico.equals("MSGRIO")) {
+                    FALHA += "<br/>Linha n." + linha + " <br/>Os envios para o CEP " + ai.getCep() + " estao suspensao ate 20/08/2016!<br/>Motivo: Jogos Olimpicos Rio 2016!<br/>Remova este objeto do arquivo para importar.";
+                }else if (servico.equals("")) {
                     FALHA += "<br/>Linha n." + ai.getNrLinha() + " - Servico " + ai.getServico() + " invalido!";
                 } else if (!ai.getNrObjeto().equals("avista") && !CalculoEtiqueta.validaNumObjeto(ai.getNrObjeto())) {
                     FALHA += "<br/>Linha n." + ai.getNrLinha() + " - Etiqueta " + ai.getNrObjeto() + " invalida!";
@@ -588,7 +615,7 @@ public class ContrPreVendaImporta {
                     ai.setCidade(aux[6].trim());
                     ai.setUf(aux[7].trim());
                     ai.setEmail("");
-                    ai.setCelular("");
+                    ai.setCelular(aux[16].trim());
                     ai.setAosCuidados("");
                     ai.setNotaFiscal(aux[11].trim());
                     String serv = aux[10].trim().toUpperCase();

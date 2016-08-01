@@ -24,6 +24,8 @@ public class ClienteLogEtiqueta {
     private String nomeServico;
     private String cartaoPostagem;
     private String codAdiministrativo; 
+    private String tipoGeracao; 
+    private String tipoUso; 
 
     public ClienteLogEtiqueta(int idLog, int idCliente, int idUsuario, String nomeUsuario, String faixaIni, String faixaFim, Timestamp dataHora, int qtd, String servico, String nomeServico) {
         this.idLog = idLog;
@@ -37,6 +39,37 @@ public class ClienteLogEtiqueta {
         this.servico = servico;
         this.nomeServico = nomeServico;
     }
+    public ClienteLogEtiqueta(int idLog, int idCliente, int idUsuario, String nomeUsuario, String faixaIni, String faixaFim, Timestamp dataHora, int qtd, String servico, String nomeServico, String tipoGeracao, String tipoUso) {
+        this.idLog = idLog;
+        this.idCliente = idCliente;
+        this.idUsuario = idUsuario;
+        this.nomeUsuario = nomeUsuario;
+        this.faixaIni = faixaIni;
+        this.faixaFim = faixaFim;
+        this.dataHora = dataHora;
+        this.qtd = qtd;
+        this.servico = servico;
+        this.nomeServico = nomeServico;
+        this.tipoGeracao = tipoGeracao;
+        this.tipoUso = tipoUso;
+    }
+
+    public String getTipoGeracao() {
+        return tipoGeracao;
+    }
+
+    public void setTipoGeracao(String tipoGeracao) {
+        this.tipoGeracao = tipoGeracao;
+    }
+
+    public String getTipoUso() {
+        return tipoUso;
+    }
+
+    public void setTipoUso(String tipoUso) {
+        this.tipoUso = tipoUso;
+    }
+    
 
     public String getCartaoPostagem() {
         return cartaoPostagem;

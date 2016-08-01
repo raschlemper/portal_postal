@@ -20,7 +20,7 @@
 
         int idCli = Integer.parseInt(String.valueOf(session.getAttribute("idCliente")));
         ArrayList<Integer> dps = (ArrayList<Integer>) session.getAttribute("departamentos");
-        String nomeCli = contrCliente.consultaNomeById(idCli, nomeBD);
+        Clientes cli = contrCliente.consultaClienteById(idCli, nomeBD);
         int nivel = (Integer) session.getAttribute("nivelUsuarioEmp");
         int idUser = (Integer) session.getAttribute("idUsuarioEmp");
         String nomeUser = (String) session.getAttribute("nomeUser");
@@ -226,11 +226,14 @@
                                             <option value="SIMPLES" <%if (pv.getNomeServico().equals("SIMPLES")) {%> selected <%}%>>CARTA SIMPLES</option>
                                             <option value="SEDEX10" <%if (pv.getNomeServico().equals("SEDEX10")) {%> selected <%}%>>SEDEX 10</option>
                                             <option value="SEDEX12" <%if (pv.getNomeServico().equals("SEDEX12")) {%> selected <%}%>>SEDEX 12</option>
+                                            <option value="SEDEXHJ" <%if (pv.getNomeServico().equals("SEDEXHJ")) {%> selected <%}%>>SEDEX HOJE</option>
+                                            <option value="MDPB" <%if (pv.getNomeServico().startsWith("MDPB")) {%> selected <%}%>>MDPB</option>
                                         </select>
                                     </td>
                                     <td align="center">
                                         <select name="ar<%= pv.getId()%>">
                                             <option value="1" <%if (pv.getAviso_recebimento() == 1) {%> selected <%}%>>SIM</option>
+                                            <%if(cli.getAr_digital()>0){%><option value="2" <%if (pv.getAviso_recebimento() == 2) {%> selected <%}%>>DIGITAL</option><%}%> 
                                             <option value="0" <%if (pv.getAviso_recebimento() == 0) {%> selected <%}%>>NÃO</option>
                                         </select>
                                     </td>
@@ -281,11 +284,10 @@
                                 </dd>
                             </li>
                         </ul>
-                    </form>
-                                        
-                            <%} else {%>
-                            Nenhum Pedido
-                            <%}%>
+                    </form>                                        
+                    <%} else {%>
+                    Nenhum Pedido
+                    <%}%>
                     <img width="100%" src="../../imagensNew/linha.jpg"/>
 
                 </div>
