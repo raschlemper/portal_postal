@@ -22,10 +22,7 @@
             if (nomeBD != null) {            
                 int cep = Integer.parseInt(request.getParameter("cep").replace("-", "").replace(".", ""));
                 String servico = request.getParameter("servico");        
-                resultado = servico;         
-                if(ContrServicoAbrangencia.verificaByCepServico(cep, servico, nomeBD)){
-                    resultado = "aceita";
-                }     
+                resultado = "aceita";  
                 for (int cs : CEPS_SUSPENSOS) {
                     if (!servico.equals("CARTA") && cs == cep) {
                         resultado = "MSGRIO";

@@ -479,50 +479,50 @@ WHERE qtdTotal > 0;]]>
 	<pageFooter>
 		<band height="145" splitType="Stretch">
 			<rectangle>
-				<reportElement x="0" y="1" width="575" height="30" uuid="3f18da95-a37a-48c4-a5aa-13d0d3aa0776"/>
+				<reportElement x="0" y="1" width="461" height="30" uuid="3f18da95-a37a-48c4-a5aa-13d0d3aa0776"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="0" y="31" width="143" height="113" uuid="da79666a-9d1f-4239-a79b-0b3f4190a0ab"/>
+				<reportElement x="0" y="31" width="121" height="113" uuid="da79666a-9d1f-4239-a79b-0b3f4190a0ab"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="143" y="31" width="197" height="34" uuid="dea60334-abbc-40d6-9f5d-a977ac1ad350"/>
+				<reportElement x="121" y="31" width="174" height="34" uuid="dea60334-abbc-40d6-9f5d-a977ac1ad350"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="143" y="65" width="197" height="79" uuid="b5b23930-b73c-433d-bcea-441287ad24f1"/>
+				<reportElement x="121" y="65" width="174" height="79" uuid="b5b23930-b73c-433d-bcea-441287ad24f1"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="340" y="65" width="235" height="79" uuid="7ae75f20-2d15-474b-ad59-9f4eb34634ea"/>
+				<reportElement x="295" y="65" width="166" height="79" uuid="7ae75f20-2d15-474b-ad59-9f4eb34634ea"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="340" y="131" width="235" height="14" uuid="1dfc5b3d-209d-4223-a65e-75050b88bfb6"/>
+				<reportElement x="295" y="131" width="166" height="14" uuid="1dfc5b3d-209d-4223-a65e-75050b88bfb6"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ASSINATURA E MATRÍCULA - CONFERENTE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="143" y="131" width="197" height="14" uuid="1dfc5b3d-209d-4223-a65e-75050b88bfb6"/>
+				<reportElement x="121" y="131" width="174" height="14" uuid="1dfc5b3d-209d-4223-a65e-75050b88bfb6"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ASSINATURA E MATRÍCULA - COLETOR]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="147" y="65" width="193" height="20" uuid="8252b5e6-1c8d-4113-a993-5248aede7b09"/>
+				<reportElement x="125" y="65" width="170" height="20" uuid="8252b5e6-1c8d-4113-a993-5248aede7b09"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Declaro que recebi " + $F{qtdTotal} + " objetos."]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="31" width="133" height="20" uuid="954068aa-7583-464d-b4db-fddb701ac9dd"/>
+				<reportElement x="5" y="31" width="116" height="20" uuid="954068aa-7583-464d-b4db-fddb701ac9dd"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[CARIMBO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="147" y="31" width="133" height="20" uuid="954068aa-7583-464d-b4db-fddb701ac9dd"/>
+				<reportElement x="125" y="31" width="133" height="20" uuid="954068aa-7583-464d-b4db-fddb701ac9dd"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -547,15 +547,19 @@ WHERE qtdTotal > 0;]]>
 				<textFieldExpression><![CDATA[$F{qtdTotal}]]></textFieldExpression>
 			</textField>
 			<rectangle>
-				<reportElement x="340" y="31" width="235" height="34" uuid="7aa2e034-52ce-466e-bf8a-e37fb0253375"/>
+				<reportElement x="295" y="31" width="166" height="34" uuid="7aa2e034-52ce-466e-bf8a-e37fb0253375"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="345" y="31" width="133" height="20" uuid="b7becc47-128c-4d85-8ba0-77546b8b4a1f"/>
+				<reportElement x="300" y="31" width="133" height="20" uuid="b7becc47-128c-4d85-8ba0-77546b8b4a1f"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[NÚMERO DO DOCUMENTO]]></text>
 			</staticText>
+			<image hAlign="Center" vAlign="Middle" onErrorType="Blank">
+				<reportElement x="463" y="1" width="112" height="144" uuid="cf4d725b-15c6-4390-b485-0ea3231591bf"/>
+				<imageExpression><![CDATA["https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl="+$P{idOs}]]></imageExpression>
+			</image>
 		</band>
 	</pageFooter>
 </jasperReport>

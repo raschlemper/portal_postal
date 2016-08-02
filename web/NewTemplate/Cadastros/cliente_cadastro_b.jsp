@@ -234,31 +234,27 @@
               }else if(!$('#cep').val()){
                   alert('Preencha o CEP');
                   return false;
-              }else if(!$('#logradouro_').val()){
+              }else if(!$('#logradouro').val()){
                   alert('Preencha a rua ');
                   return false;
-              }else if(!$('#numero_').val()){
+              }else if(!$('#numero').val()){
                   alert('Preencha o numero');
                   return false;
               }else if(!$('#bairro').val()){
                   alert('Preencha o bairro');
                   return false;
-              }else if(!$('#cidade_').val()){
+              }else if(!$('#cidade').val()){
                   alert('Preencha a cidade ');
                   return false;
-              }else if(!$('#uf_').val()){
+              }else if(!$('#uf').val()){
                   alert('escolha o estado');
                   return false;
               }else {
                   document.form1.submit();
               }                
-            }
-            
+            }            
             
         </script>
-
-
-
     </head>        
     <body>   
         <script type="text/javascript">

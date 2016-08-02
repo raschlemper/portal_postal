@@ -170,23 +170,32 @@
 
                                                             String cnpj = cli.getCnpj().trim();
                                                             String cnpjSara = c[2].trim();
-
-                                                            String codAdm = Integer.parseInt(cli.getCodAdministrativo().trim()) + "";
-                                                            String codAdmSara = Integer.parseInt(c[3].trim()) + "";
-
-                                                            String dtVg = sdf.format(cli.getDtVigenciaFimContrato());
+                                                            
+                                                            String codAdm = cli.getCodAdministrativo();
+                                                            try{
+                                                                codAdm = Integer.parseInt(cli.getCodAdministrativo().trim()) + "";
+                                                            }catch(Exception e){}
+                                                            String codAdmSara = c[3];
+                                                            try{
+                                                                codAdmSara = Integer.parseInt(c[3].trim()) + "";
+                                                            }catch(Exception e){}
+                                                            String dtVg = cli.getDtVigenciaFimContrato()+"";
+                                                            try{
+                                                                dtVg = sdf.format(cli.getDtVigenciaFimContrato());
+                                                            }catch(Exception e){}
+                                                                                                                        
                                                             String dataVg = c[5];
                                                             //String ano = c[6];
                                                             //String uf = c[7];
                                                             String msgm = "";
                                                             String cor = " style='color:green;'";
-                                                            if (!dtVg.equals(dataVg)) {
+                                                            if (dtVg != null && !dtVg.equals(dataVg)) { 
                                                                 msgm += "<br/>Data de Vigência cadastrada diferente do SARA!<br/>"
                                                                         + "<b>Data Vigência SARA: </b>" + dataVg
                                                                         + "<br/><b>Data Vigência Portal Postal: </b>" + dtVg;
                                                                 cor = " style='color:red;'";
                                                             }
-                                                            if (!codAdm.equals(codAdmSara)) {
+                                                            if (codAdm != null && !codAdm.equals(codAdmSara)) { 
                                                                 msgm += "<br/>Cód. Adm. cadastrado diferente do SARA!<br/>"
                                                                         + "<b>Cód Adm. SARA: </b>" + codAdmSara
                                                                         + "<br/><b>Cód. Adm. Portal Postal: </b>" + codAdm;

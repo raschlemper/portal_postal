@@ -4,6 +4,7 @@
  */
 package Controle;
 
+import Entidade.Clientes;
 import Entidade.Usuario;
 import java.sql.Connection;
 import Util.Conexao;
@@ -48,13 +49,59 @@ public class contrLogin {
             Conexao.desconectar(con);
         }
     }
+
+    public static Clientes loginWS(String login, String senha, String nomeBD) {
+        Connection con = Conexao.conectar(nomeBD);
+        String sql = "SELECT cliente.* FROM cliente "
+                + " JOIN cliente_usuarios AS u"
+                + " ON u.codigo = cliente.codigo"
+                + " WHERE u.login = ? AND u.senha = ? AND u.nivel = 99; ";
+        try {
+            PreparedStatement valores = con.prepareStatement(sql);
+            valores.setString(1, login);
+            valores.setString(2, senha);
+            ResultSet result = (ResultSet) valores.executeQuery();
+
+            Clientes cli = null;
+            if (result.next()) {
+                cli = new Clientes(result);
+            }
+
+            return cli;
+        } catch (SQLException e) {
+            return null;
+        } finally {
+            Conexao.desconectar(con);
+        }
+    }
+
+    public static String cnpjEmpresa(int idEmpresa) {
+        Connection con = Conexao.conectarGeral();
+        String sql = "SELECT cnpj FROM empresas WHERE idEmpresa = ?";
+        try {
+            PreparedStatement valores = con.prepareStatement(sql);
+            valores.setInt(1, idEmpresa);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            if (result.next()) {
+                String empresa = result.getString("cnpj");
+                return empresa;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            return null;
+        } finally {
+            Conexao.desconectar(con);
+        }
+    }
+
     public static Usuario pegaLoginAdm(String idEmp) {
         Usuario user = null;
         Connection con = Conexao.conectarGeral();
-        String sql = "SELECT * FROM usuarios WHERE idEmpresa = "+idEmp+" AND idNivel = 1 AND ativo = 1";
+        String sql = "SELECT * FROM usuarios WHERE idEmpresa = " + idEmp + " AND idNivel = 1 AND ativo = 1";
         try {
             PreparedStatement valores = con.prepareStatement(sql);
-           
+
             ResultSet result = (ResultSet) valores.executeQuery();
             if (result.next()) {
                 int idEmpresa = result.getInt("idEmpresa");

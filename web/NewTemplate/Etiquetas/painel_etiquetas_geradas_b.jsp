@@ -17,11 +17,11 @@
         Date dataAtual = new Date();
         String vDataAtual = sdf.format(dataAtual);
         String dataAnterior = Util.SomaData.SomarDiasDatas(dataAtual, -30);
-        if (request.getParameter("dataFim") != null) {
-            vDataAtual = request.getParameter("dataFim");
+        if (request.getParameter("dateFin") != null) {
+            vDataAtual = request.getParameter("dateFin");
         }
-        if (request.getParameter("dataIni") != null) {
-            dataAnterior = request.getParameter("dataIni");
+        if (request.getParameter("dateIni") != null) {
+            dataAnterior = request.getParameter("dateIni");
         }
 
         String vDataInicio = Util.FormatarData.DateToBD(dataAnterior);
@@ -97,10 +97,11 @@
                                                         <th>Serviço</th>
                                                         <th>Inicial</th>
                                                         <th>Final</th>
-                                                        <th>Utilizadas</th>
-                                                        <th>Restam</th>
+                                                        <th>Quantidade</th>
                                                         <th>Usuário</th>
                                                         <th>Inserção</th>
+                                                        <th>Método</th>
+                                                        <th>Uso</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -108,7 +109,7 @@
                                                         SimpleDateFormat sdf3 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                                                         for (int i = 0; i < listaLog.size(); i++) {
                                                             ClienteLogEtiqueta log = listaLog.get(i);
-                                                            int qtdUt = ContrClienteEtiquetas.contaQtdUtilizadaPorIdLog(log.getIdLog(), 1, nomeBD);
+                                                            int qtdUt = 0;//ContrClienteEtiquetas.contaQtdUtilizadaPorIdLog(log.getIdLog(), 1, nomeBD);
                                                             String nomeServ = log.getServico() + "";
                                                             String cli = log.getNomeServico();
                                                     %>
@@ -118,11 +119,11 @@
                                                         <td style="min-width: 90px;"><%= nomeServ%></td>
                                                         <td><%= log.getFaixaIni()%></td>
                                                         <td><%= log.getFaixaFim()%></td>
-                                                        <td style="min-width: 120px;"><%= qtdUt%> / <%= log.getQtd()%></td>
-
-                                                        <td style="min-width: 90px;"><%= log.getQtd() - qtdUt%></td>
+                                                        <td style="min-width: 120px;"><%= log.getQtd()%></td>
                                                         <td style="min-width: 90px;"><%= log.getNomeUsuario()%></td>
                                                         <td style="min-width: 95px;"><%= sdf3.format(log.getDataHora())%></td>
+                                                        <td style="min-width: 95px;"><%= log.getTipoGeracao() %></td>
+                                                        <td style="min-width: 95px;"><%= log.getTipoUso() %></td>
                                                     </tr>
                                                     <%}%>
                                                 </tbody>

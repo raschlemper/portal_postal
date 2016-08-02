@@ -6,14 +6,9 @@
 package Servlet;
 
 import Controle.ContrClienteContrato;
-import Controle.contrCliente;
-import br.com.correios.scol.webservice.RetornoFaixaNumericaTO;
+import Controle.ContrClientePrefixoAR;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -63,6 +58,19 @@ public class ServClienteOutrosServ extends HttpServlet {
                     }
                 }
             }
+            
+            ContrClientePrefixoAR.updateClienteAR(idCliente, 0, nomeBD);
+            ContrClientePrefixoAR.excluir(idCliente, nomeBD);
+            if(request.getParameter("toggleBtn")!=null){
+                try{
+                    int ar_digital = Integer.parseInt(request.getParameter("ar_digital"));
+                    ContrClientePrefixoAR.updateClienteAR(idCliente, ar_digital, nomeBD);
+                    for (String srv : request.getParameterValues("habilitados")) {
+                        String pref = request.getParameter("prefixo_"+srv);
+                        ContrClientePrefixoAR.inserir(idCliente, srv, pref.toUpperCase().trim(), nomeBD);
+                    }            
+                }catch(Exception e){}            
+            }            
 
             sessao.setAttribute("msg", "Serviços do Cliente Alterado com Sucesso!");
             //response.sendRedirect("Agencia/Configuracao/cliente_outros_serv.jsp?idCliente=" + idCliente);

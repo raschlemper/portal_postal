@@ -211,8 +211,6 @@
                                         <option value="41211">PAC AGRUPADO | 41.211</option>
                                         <%} else if(listaContrato.contains(41491)){%>
                                         <option value="41491">PAC AGRUPADO | 41.491</option>
-                                        <%}else{%>
-                                        <option value="41106">PAC AGRUPADO</option>  
                                         <%}%>
                                         
                                         <%if(listaContrato.contains(41068)){%>

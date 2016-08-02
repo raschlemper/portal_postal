@@ -34,6 +34,7 @@ public class VeiculoCombustivelService {
     } 
     
     public VeiculoCombustivel update(VeiculoCombustivel veiculo) throws Exception {
+        init();
         return veiculoCombustivelDAO.update(veiculo);
     } 
     

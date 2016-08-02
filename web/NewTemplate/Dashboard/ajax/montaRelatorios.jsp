@@ -51,11 +51,11 @@
                     break;
                 case "2":
                     sql = "SELECT m.codCliente AS COD, nome AS NOME_CLIENTE, "
-                            + "  REPLACE(REPLACE(REPLACE(FORMAT(SUM(CASE WHEN MONTH(dataPostagem) = " + primMes + " THEN valorServico ELSE 0 END), 2),'.',';'),',','.'),';',',') AS " + "$" + Util.FormatarData.nomeMes(primMes) + ","
-                            + "  REPLACE(REPLACE(REPLACE(FORMAT(SUM(CASE WHEN MONTH(dataPostagem) = " + segMes + " THEN valorServico ELSE 0 END), 2),'.',';'),',','.'),';',',') AS " + "$" + Util.FormatarData.nomeMes(segMes) + ","
-                            + "  REPLACE(REPLACE(REPLACE(FORMAT(SUM(CASE WHEN MONTH(dataPostagem) = " + termMes + " THEN valorServico ELSE 0 END), 2),'.',';'),',','.'),';',',') AS " + "$" + Util.FormatarData.nomeMes(termMes) + ","
-                            + "  REPLACE(REPLACE(REPLACE(FORMAT(SUM(CASE WHEN MONTH(dataPostagem) = " + esteMes + " THEN valorServico ELSE 0 END), 2),'.',';'),',','.'),';',',') AS " + "$" + Util.FormatarData.nomeMes(esteMes) + ","
-                            + "  REPLACE(REPLACE(REPLACE(FORMAT(SUM(COALESCE(valorServico,0)), 2),'.',';'),',','.'),';',',') AS $TOTAL"
+                            + " REPLACE(REPLACE(REPLACE(FORMAT(SUM(CASE WHEN MONTH(dataPostagem) = " + primMes + " THEN valorServico ELSE 0 END), 2),'.',';'),',','.'),';',',') AS " + "$" + Util.FormatarData.nomeMes(primMes) + ","
+                            + " REPLACE(REPLACE(REPLACE(FORMAT(SUM(CASE WHEN MONTH(dataPostagem) = " + segMes + " THEN valorServico ELSE 0 END), 2),'.',';'),',','.'),';',',') AS " + "$" + Util.FormatarData.nomeMes(segMes) + ","
+                            + " REPLACE(REPLACE(REPLACE(FORMAT(SUM(CASE WHEN MONTH(dataPostagem) = " + termMes + " THEN valorServico ELSE 0 END), 2),'.',';'),',','.'),';',',') AS " + "$" + Util.FormatarData.nomeMes(termMes) + ","
+                            + " REPLACE(REPLACE(REPLACE(FORMAT(SUM(CASE WHEN MONTH(dataPostagem) = " + esteMes + " THEN valorServico ELSE 0 END), 2),'.',';'),',','.'),';',',') AS " + "$" + Util.FormatarData.nomeMes(esteMes) + ","
+                            + " REPLACE(REPLACE(REPLACE(FORMAT(SUM(COALESCE(valorServico,0)), 2),'.',';'),',','.'),';',',') AS $TOTAL"
                             + " FROM movimentacao AS m"
                             + " LEFT JOIN cliente ON codigo = codCliente"
                             + " WHERE dataPostagem >= '" + priAno + "-" + primMes + "-01' AND  dataPostagem <= '" + esteAno + "-" + esteMes + "-31' "
@@ -66,7 +66,7 @@
 
                 case "3":
                     sql = "SELECT codigoECT AS COD_ECT, descServico AS SERVICO, SUM(quantidade) AS QTD , "
-                            + " CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(SUM(valorServico), 2),'.',';'),',','.'),';',',')) AS $TOTAL  "
+                            + " REPLACE(REPLACE(REPLACE(FORMAT(SUM(valorServico), 2),'.',';'),',','.'),';',',') AS $TOTAL  "
                             + " FROM movimentacao"
                             + " WHERE dataPostagem >= '" + dataIni + "' "
                             + " AND dataPostagem <= '" + dataFim + "' "
@@ -76,19 +76,19 @@
 
                 case "4":
                     sql = "SELECT codigoECT AS COD_ECT, descServico AS SERVICO, "
-                            + "  CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(SUM(CASE WHEN MONTH(dataPostagem) = " + primMes + " THEN valorServico ELSE 0 END), 2),'.',';'),',','.'),';',',')) AS " + "$" + Util.FormatarData.nomeMes(primMes) + ","
-                            + "  CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(SUM(CASE WHEN MONTH(dataPostagem) = " + segMes + " THEN valorServico ELSE 0 END), 2),'.',';'),',','.'),';',',')) AS " + "$" + Util.FormatarData.nomeMes(segMes) + ","
-                            + "  CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(SUM(CASE WHEN MONTH(dataPostagem) = " + termMes + " THEN valorServico ELSE 0 END), 2),'.',';'),',','.'),';',',')) AS " + "$" + Util.FormatarData.nomeMes(termMes) + ","
-                            + "  CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(SUM(CASE WHEN MONTH(dataPostagem) = " + esteMes + " THEN valorServico ELSE 0 END), 2),'.',';'),',','.'),';',',')) AS " + "$" + Util.FormatarData.nomeMes(esteMes) + ","
-                            + "  CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(SUM(COALESCE(valorServico,0)), 2),'.',';'),',','.'),';',',')) AS $TOTAL"
+                            + " REPLACE(REPLACE(REPLACE(FORMAT(SUM(CASE WHEN MONTH(dataPostagem) = " + primMes + " THEN valorServico ELSE 0 END), 2),'.',';'),',','.'),';',',') AS " + "$" + Util.FormatarData.nomeMes(primMes) + ","
+                            + " REPLACE(REPLACE(REPLACE(FORMAT(SUM(CASE WHEN MONTH(dataPostagem) = " + segMes + " THEN valorServico ELSE 0 END), 2),'.',';'),',','.'),';',',') AS " + "$" + Util.FormatarData.nomeMes(segMes) + ","
+                            + " REPLACE(REPLACE(REPLACE(FORMAT(SUM(CASE WHEN MONTH(dataPostagem) = " + termMes + " THEN valorServico ELSE 0 END), 2),'.',';'),',','.'),';',',') AS " + "$" + Util.FormatarData.nomeMes(termMes) + ","
+                            + " REPLACE(REPLACE(REPLACE(FORMAT(SUM(CASE WHEN MONTH(dataPostagem) = " + esteMes + " THEN valorServico ELSE 0 END), 2),'.',';'),',','.'),';',',') AS " + "$" + Util.FormatarData.nomeMes(esteMes) + ","
+                            + " REPLACE(REPLACE(REPLACE(FORMAT(SUM(COALESCE(valorServico,0)), 2),'.',';'),',','.'),';',',') AS $TOTAL"
                             + " FROM movimentacao"
                             + " WHERE dataPostagem >= '" + priAno + "-" + primMes + "-01' AND  dataPostagem <= '" + esteAno + "-" + esteMes + "-31' "
-                            + " GROUP BY codigoECT ;";
+                            + " GROUP BY codigoECT; ";
                     break;
 
                 case "5":
                     sql = "SELECT codCliente AS COD, nome AS NOME_CLIENTE, "
-                            + " CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(SUM(valorServico), 2),'.',';'),',','.'),';',',')) AS $TOTAL "
+                            + " REPLACE(REPLACE(REPLACE(FORMAT(SUM(valorServico), 2),'.',';'),',','.'),';',',') AS $TOTAL "
                             + " FROM movimentacao"
                             + " LEFT JOIN cliente ON codCliente = codigo"
                             + " WHERE dataPostagem >= '" + dataIni + "' "
@@ -97,7 +97,7 @@
                             + " GROUP BY codCliente "
                             + " UNION"
                             + " SELECT ' ', 'TOTAL GERAL', "
-                            + " CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(SUM(valorServico), 2),'.',';'),',','.'),';',','))"
+                            + " REPLACE(REPLACE(REPLACE(FORMAT(SUM(valorServico), 2),'.',';'),',','.'),';',',')"
                             + " FROM movimentacao"
                             + " WHERE dataPostagem >= '" + dataIni + "' "
                             + " AND dataPostagem <= '" + dataFim + "' "
@@ -106,7 +106,7 @@
 
                 case "6":
                     sql = "SELECT codCliente AS COD, nome AS NOME_CLIENTE,"
-                            + " CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(SUM(valorServico), 2),'.',';'),',','.'),';',',')) AS $TOTAL "
+                            + " REPLACE(REPLACE(REPLACE(FORMAT(SUM(valorServico), 2),'.',';'),',','.'),';',',') AS $TOTAL "
                             + " FROM movimentacao"
                             + " LEFT JOIN cliente ON codCliente = codigo"
                             + " WHERE dataPostagem >= '" + dataIni + "' "
@@ -115,16 +115,16 @@
                             + " GROUP BY codCliente"
                             + " UNION"
                             + " SELECT ' ', 'TOTAL GERAL', "
-                            + " CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(SUM(valorServico), 2),'.',';'),',','.'),';',','))"
+                            + " REPLACE(REPLACE(REPLACE(FORMAT(SUM(valorServico), 2),'.',';'),',','.'),';',',')"
                             + " FROM movimentacao"
                             + " WHERE dataPostagem >= '" + dataIni + "' "
                             + " AND dataPostagem <= '" + dataFim + "' "
-                            + " AND contratoEct <> '' AND contratoEct <> 0 ;";
+                            + " AND contratoEct <> '' AND contratoEct <> 0; ";
                     break;
 
                 case "7":
                     sql = "SELECT CONCAT('<a href=\"#\" onclick= pesqSro(\"',numObjeto,'\");>', numObjeto, '</a>') "
-                            + "AS SRO, "
+                            + " AS SRO, "
                             + " nome AS CLIENTE, "
                             + " cep_destino AS CEP, "
                             + " data_postagem AS DATA_POSTAGEM, "
@@ -133,14 +133,14 @@
                             + " FROM movimentacao_tracking "
                             + " LEFT JOIN cliente "
                             + " ON idCliente = codigo "
-                            + " WHERE prazo_cumprido > prazo_estimado ;";
+                            + " WHERE prazo_cumprido > prazo_estimado; ";
                     break;
 
                 default:
                     sql = "";
 
             }
-           System.out.println(sql);
+           //System.out.println(sql);
             String jsn = Controle.contrRelatorios.montaJson(sql, sdf, nomeBd);
 
 
