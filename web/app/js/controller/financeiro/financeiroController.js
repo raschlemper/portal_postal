@@ -79,7 +79,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                     conta.numeroCartaoCredito = conta.cartaoCredito.numeroFinal;
                 }
                 conta.tipo = conta.tipo.id;
-                conta.saldo += conta.valorSaldoAbertura;
+                conta.saldo += conta.valorSaldoAbertura || 0;
                 $scope.saldoTotal += conta.saldo;
                 return _.pick(conta, 'idConta', 'tipo', 'nome', 'banco', 'agencia', 'bandeira', 'numeroCartaoCredito', 'contaCorrente', 'saldo');
             })

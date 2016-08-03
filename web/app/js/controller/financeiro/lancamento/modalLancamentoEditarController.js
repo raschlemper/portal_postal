@@ -71,26 +71,26 @@ app.controller('ModalLancamentoEditarController',
                     if($scope.lancamento.centroCusto && $scope.lancamento.centroCusto.idCentroCusto) {
                         $scope.lancamento.centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, $scope.lancamento.centroCusto.idCentroCusto);
                     } 
-                    favorecidos();
+//                    favorecidos();
                 })
                 .catch(function (e) {
                     console.log(e);
                 });
         };
         
-        var favorecidos = function() {
-            FavorecidoService.getAll()
-                .then(function (data) {
-                    $scope.favorecidos = data;
-                })
-                .catch(function (e) {
-                    console.log(e);
-                });
-        };
+//        var favorecidos = function() {
+//            FavorecidoService.getAll()
+//                .then(function (data) {
+//                    $scope.favorecidos = data;
+//                })
+//                .catch(function (e) {
+//                    console.log(e);
+//                });
+//        };
         
-        $scope.selectFavorecido = function(favorecido) {
-            $scope.lancamento.favorecido = favorecido;
-        }
+//        $scope.selectFavorecido = function(favorecido) {
+//            $scope.lancamento.favorecido = favorecido;
+//        }
         
         var criarPlanoContasLista = function(data) {
             return _.filter(data, function(planoConta) { 

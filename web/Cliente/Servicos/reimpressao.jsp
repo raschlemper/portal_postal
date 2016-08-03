@@ -18,6 +18,7 @@
         response.sendRedirect("../../index.jsp?msg=Sua sessao expirou! Para voltar ao Portal faça seu login novamente!");
     } else {
 
+        ArrayList<Integer> permissoes = (ArrayList<Integer>) session.getAttribute("acessos");
         int idCli = Integer.parseInt(String.valueOf(session.getAttribute("idCliente")));
         String nomeCli = contrCliente.consultaNomeById(idCli, nomeBD);
         int nivel = (Integer) session.getAttribute("nivelUsuarioEmp");
@@ -136,8 +137,17 @@
             });
 
             function validaData() {
-                if ($("#dataIni").val() > $("#dataFim").val()) {
+                var data1 = $("#dataIni").val();
+                var data2 = $("#dataFim").val();
+                //console.log(data1);
+                //console.log(data2);
+                var nova_data1 = parseInt(data1.split("/")[2].toString() + data1.split("/")[1].toString() + data1.split("/")[0].toString());
+                var nova_data2 = parseInt(data2.split("/")[2].toString() + data2.split("/")[1].toString() + data2.split("/")[0].toString());
+                //console.log(nova_data1);
+                //console.log(nova_data2);
+                if (nova_data2 < nova_data1)    {               
                     alert('Data inicial não pode ser maior que data final');
+                    return false;
                 } else {
                     $('#pesq').submit();
                 }
@@ -181,7 +191,7 @@
                                     <label>Periodo de Data</label>
                                     <input type="text" style="width:60px;" name="dataIni" id="dataIni" value="<%= dataAnterior%>" maxlength="10" onkeypress="mascara(this, maskData);" />
                                     até
-                                    <input type="text" style="width:60px;" name="dataFim" id="dataFim" value="<%=vDataAtual%>" maxlength="10" onkeypress="mascara(this, maskData);" />
+                                    <input type="text" style="width:60px;" name="dataFim" id="dataFim" value="<%=dataFim%>" maxlength="10" onkeypress="mascara(this, maskData);" />
                                 </dd>
                             </li>
                             <li>
@@ -264,7 +274,7 @@
                                 %>
                                 <tr style="cursor:default;">
                                     <td align="center">
-                                        <%if (des.getUserConsolidado() == 0 && vDataAtual.equals(sdf.format(des.getDataImpresso()))) {%>
+                                        <%if (des.getUserConsolidado() == 0 && (vDataAtual.equals(sdf.format(des.getDataImpresso())) || permissoes.contains(9))) {%>
                                         <input type="checkbox" name="ids" value="<%= des.getId()%>" />
                                         <input type="hidden" name="os_<%= des.getId()%>" value="<%= des.getIdOs()%>" />
                                         <%}%>
