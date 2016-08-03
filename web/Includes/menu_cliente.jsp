@@ -120,6 +120,8 @@
                     <%if (acessosMn.contains(6)) {%><li><a href="../../Cliente/Cadastros/cadastro.jsp">Dados da Empresa</a></li><%}%>
                     <%if (nvMenu == 1 || nvMenu == 100) {%><li><a href="../../Cliente/Cadastros/usuario_lista.jsp">Usuários</a></li><%}%>
                     <%if (acessosMn.contains(7)) {%><li><a href="../../Cliente/Cadastros/destinatario_lista.jsp">Destinatários</a></li><%}%>
+                    <%if (acessosMn.contains(7)) {%><li><a href="../../Cliente/Cadastros/codigos_edi.jsp">Cod. EDI</a></li><%}%>
+                    <%if (acessosMn.contains(7)) {%><li><a href="../../Cliente/Cadastros/sro_edi.jsp">SRO x EDI</a></li><%}%>
                 </ul>
             </li>            
             <%}%>
