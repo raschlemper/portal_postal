@@ -121,26 +121,26 @@ app.controller('ModalLancamentoProgramadoEditarController',
                 .then(function (data) {
                     $scope.formaPagamentos = data;
                     $scope.lancamentoProgramado.formaPagamento = $scope.lancamentoProgramado.formaPagamento || $scope.formaPagamentos[1];
-                    favorecidos();
+//                    favorecidos();
                 })
                 .catch(function (e) {
                     console.log(e);
                 });
         };
         
-        var favorecidos = function() {
-            FavorecidoService.getAll()
-                .then(function (data) {
-                    $scope.favorecidos = data;
-                })
-                .catch(function (e) {
-                    console.log(e);
-                });
-        };
+//        var favorecidos = function() {
+//            FavorecidoService.getAll()
+//                .then(function (data) {
+//                    $scope.favorecidos = data;
+//                })
+//                .catch(function (e) {
+//                    console.log(e);
+//                });
+//        };
         
-        $scope.selectFavorecido = function(favorecido) {
-            $scope.lancamentoProgramado.favorecido = favorecido;
-        }
+//        $scope.selectFavorecido = function(favorecido) {
+//            $scope.lancamentoProgramado.favorecido = favorecido;
+//        }
         
         $scope.setDataCompetencia = function(lancamentoProgramado) {
             if(lancamentoProgramado.dataCompetencia) return;

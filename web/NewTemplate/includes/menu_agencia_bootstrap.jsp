@@ -82,7 +82,7 @@
             </ul>
         </li>
         
-        <%if(empMenu.getIdEmpresa() == 4 || empMenu.getIdEmpresa() == 64){%>
+        <%if(empMenu.getIdEmpresa() == 4 || empMenu.getIdEmpresa() == 64 || empMenu.getIdEmpresa() == 91){%>
         <li>
             <a href="#">
                 <span class="fa-stack fa-lg pull-left"><i class="fa fa-car fa-stack-1x "></i></span> Veículos <span style="margin: 5px 20px 0 0;" class="fa-stack fa-fw pull-right"><i id="arrow" class="fa fa-chevron-down fa-stack-1x "></i></span>

@@ -48,7 +48,7 @@
 
                                                         <label>Período:</label>
                                                         <select class="form-control spc-right" ng-model="periodo" ng-change="changePeriodo(periodo, vencidos)"
-                                                            ng-options="periodo.descricao for periodo in periodos track by periodo.id">    
+                                                            ng-options="periodo.descricao for periodo in periodos track by periodo.id">  
                                                         </select>   
 
                                                         <label style="margin-right: 10px;">
@@ -58,13 +58,13 @@
                                                         <br/>
                                                         <label>Data:</label>
                                                         <div class="input-group spc-right">
-                                                            <input type="text" autocomplete="off" class="form-control" ng-model="lancSearch.dataInicio" style="width: 120px;"
+                                                            <input type="text" autocomplete="off" id="dataInicio" class="form-control" ng-model="dataInicio" style="width: 120px;" ng-change="filterByData(dataInicio, dataFim)"
                                                                 datepicker-popup="{{datepickerDataInicio.format}}" is-open="datepickerDataInicio.opened" ng-required="true"
                                                                 current-text="{{datepickerDataInicio.today}}" clear-text="{{datepickerDataInicio.clear}}" close-text="{{datepickerDataInicio.close}}"
-                                                                placeholder="Data início" ng-model-options='{ debounce: 1000 }'/>
+                                                                placeholder="Data início" ng-model-options='{ debounce: 1000 }' init-date="dataInicio"/>
                                                             <span class="input-group-addon" ng-click="datepickerDataInicio.open($event)"><i class="fa fa-calendar"></i></span>
                                                             <span class="input-group-addon">-</span>
-                                                            <input type="text" autocomplete="off" class="form-control" ng-model="lancSearch.dataFim" style="width: 120px;"
+                                                            <input type="text" autocomplete="off" id="dataFim" class="form-control" ng-model="dataFim" style="width: 120px;" ng-change="filterByData(dataInicio, dataFim)"
                                                                    datepicker-popup="{{datepickerDataFim.format}}" is-open="datepickerDataFim.opened" ng-required="true"
                                                                    current-text="{{datepickerDataFim.today}}" clear-text="{{datepickerDataFim.clear}}" close-text="{{datepickerDataFim.close}}"
                                                                    placeholder="Data final" ng-model-options='{ debounce: 1000 }'/>
