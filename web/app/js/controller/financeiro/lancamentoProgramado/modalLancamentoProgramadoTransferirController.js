@@ -1,14 +1,13 @@
 'use strict';
 
 app.controller('ModalLancamentoProgramadoTransferirController', 
-    ['$scope', '$modalInstance', 'lancamentoTransferencia', 'ContaService', 'DatePickerService', 'LISTAS', 'MESSAGES',
-    function ($scope, $modalInstance, lancamentoTransferencia, ContaService, DatePickerService, LISTAS, MESSAGES) {
+    ['$scope', '$modalInstance', 'lancamentoTransferencia', 'ContaService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'MESSAGES',
+    function ($scope, $modalInstance, lancamentoTransferencia, ContaService, TipoDocumentoService, TipoFormaPagamentoService, MESSAGES) {
 
         var init = function () { 
-            $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
-            $scope.datepickerLancamento = angular.copy(DatePickerService.default); 
-            $scope.situacoes = LISTAS.situacaoLancamento;
-            $scope.lancamentoTransferencia = lancamentoTransferencia || {};              
+            $scope.lancamentoTransferencia = lancamentoTransferencia || {};       
+            $scope.lancamentoTransferencia.tipo = ($scope.lancamentoTransferencia && $scope.lancamentoTransferencia.tipo) || $scope.tipo;
+            $scope.lancamentoTransferencia.frequencia = ($scope.lancamentoTransferencia && $scope.lancamentoTransferencia.frequencia) || $scope.frequencias[0];
             getTitle(lancamentoTransferencia);
             contas();
         };
@@ -29,6 +28,31 @@ app.controller('ModalLancamentoProgramadoTransferirController',
                     $scope.contas = data;
                     $scope.lancamentoTransferencia.contaOrigem = $scope.contas[0];
                     $scope.lancamentoTransferencia.contaDestino = $scope.contas[0];
+                    tipoDocumento();
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+        
+        var tipoDocumento = function() {
+            TipoDocumentoService.getAll()
+                .then(function (data) {
+                    $scope.documentos = data;
+                    $scope.lancamentoTransferencia.documento = $scope.lancamentoTransferencia.documento || $scope.documentos[1];                    
+                    tipoFormaPagamento();
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+        
+        var tipoFormaPagamento = function() { 
+            TipoFormaPagamentoService.getAll()
+                .then(function (data) {
+                    $scope.formaPagamentos = data;
+                    $scope.lancamentoTransferencia.formaPagamento = $scope.lancamentoTransferencia.formaPagamento || $scope.formaPagamentos[1];
+//                    favorecidos();
                 })
                 .catch(function (e) {
                     console.log(e);

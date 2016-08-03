@@ -1,5 +1,5 @@
 <form name="lancamentoTransferenciaForm" novalidate>
-    <div class="modal-header">
+    <div class="modal-header bg-modal-success">
         <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
         <h4 class="modal-title">{{title}}</h4>
     </div>
@@ -26,6 +26,30 @@
                             </div>
                         </div> 
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Documento</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                <select class="form-control" name="documento"
+                                        ng-options="documento.descricao for documento in documentos track by documento.idTipoDocumento" ng-model="lancamentoTransferencia.documento"></select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Forma Pagamento</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                <select class="form-control" name="formaPagamento"
+                                        ng-options="formaPagamento.descricao for formaPagamento in formaPagamentos track by formaPagamento.idTipoFormaPagamento" ng-model="lancamentoTransferencia.formaPagamento"></select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Frequência</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                <select class="form-control" name="frequencia"
+                                        ng-options="frequencia.descricao for frequencia in frequencias track by frequencia.id" ng-model="lancamentoTransferencia.frequencia"></select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                             <label class="small">Número</label>
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
@@ -35,13 +59,11 @@
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                             <label class="small">Data</label>
-                            <div class="input-group">
-                                <input type="text" autocomplete="off" name="data" class="form-control" ng-model="lancamentoTransferencia.data" 
-                                       datepicker-popup="{{datepicker.format}}" is-open="datepicker.opened" ng-required="true"
-                                       current-text="{{datepicker.today}}" clear-text="{{datepicker.clear}}" close-text="{{datepicker.close}}"
-                                       placeholder="Data do lançamento"/>
-                                <span class="input-group-addon" ng-click="datepicker.open($event)"><i class="fa fa-calendar"></i></span>
-                            </div>
+                            <app-datepicker class="input-group" name="dataVencimento" datepicker-model="lancamentoTransferencia.dataVencimento" ev-onblur="setDataCompetencia(lancamentoTransferencia)"></app-datepicker>
+                        </div> 
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Data Competência</label>
+                            <app-datepicker class="input-group" name="dataCompetencia" datepicker-model="lancamentoTransferencia.dataCompetencia"></app-datepicker>
                         </div>   
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                             <label class="small">Valor</label>
@@ -58,6 +80,10 @@
                                 <input class="form-control" type="text" name="historico" ng-model="lancamentoTransferencia.historico" 
                                        placeholder="Histórico do lançamento"  ng-required="true"/>  
                             </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <label class="small">Observação</label>
+                            <textarea class="form-control" rows="3" name="observacao" placeholder="" ng-model="lancamentoTransferencia.observacao"></textarea>       
                         </div>
                     </div>
                 </li>
