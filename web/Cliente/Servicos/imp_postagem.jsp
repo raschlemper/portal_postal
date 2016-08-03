@@ -20,7 +20,7 @@
         int idEmp = (Integer) session.getAttribute("idEmpresa");
         int idCli = Integer.parseInt(String.valueOf(session.getAttribute("idCliente")));
         ArrayList<Integer> dps = (ArrayList<Integer>) session.getAttribute("departamentos");
-        String nomeCli = contrCliente.consultaNomeById(idCli, nomeBD);
+        Clientes cli = contrCliente.consultaClienteById(idCli, nomeBD);
         int nivel = (Integer) session.getAttribute("nivelUsuarioEmp");
         int idUser = (Integer) session.getAttribute("idUsuarioEmp");
 %>
@@ -69,9 +69,13 @@
                     fecharTelaEspera();
                     alert("Escolha o arquivo a ser importado!");
                     return false;
-                }else if($('#tipo_serv option:selected').text() === 'SELECOINE UM SERVICO'){;
+                }else if($('#tipo_serv option:selected').text() === 'SELECOINE UM SERVICO'){
                     fecharTelaEspera();
                     alert(" --- Por favor, escolha um serviço para as NF-E ! --- No caso de varios, você poderá alterar-los depois !");
+                    return false;
+                }else if($('#departamento').val() === '-1'){
+                    fecharTelaEspera();
+                     alert(" --- Por favor, selecione um departamento !");
                     return false;
                 }else{
                     var indexA = form.arquivo.value.lastIndexOf(".");
@@ -188,8 +192,8 @@
                                         <option value="EDI">ARQUIVO EDI</option>
                                         <option value="LINX">ARQUIVO LINX</option>
                                         <option value="WEBVENDAS">ARQUIVO WEBVENDAS</option>
-                                        <option value="PS">ARQUIVO PS SERVICE EXCELL</option>
-                                        <option value="PSN">ARQUIVO PS SERVICE NOVO</option>
+                                        <!-- <option value="PS">ARQUIVO PS SERVICE EXCELL</option> -->
+                                        <option value="PSN">ARQUIVO PS SERVICE</option>
                                         <%if(idEmp == 236505){%><option value="LADOAVESSO">ARQUIVO LADOAVESSO</option><%}%>
                                         <%if(idEmp == 236505){%><option value="INTERLOGIC">ARQUIVO INTERLOGIC</option><%}%>
                                     </select>
@@ -214,6 +218,8 @@
                                         <option value="SIMPLES">CARTA SIMPLES</option>
                                         <option value="SEDEX10">SEDEX 10</option>
                                         <option value="SEDEX12">SEDEX 12</option>
+                                        <option value="SEDEXHJ">SEDEX HOJE</option>
+                                        <option value="MDPB">MDPB</option>
                                     </select>
                                 </dd>
                                 <dd id="dd_vd" class="esconder">
@@ -227,17 +233,26 @@
                                     <label>A.R.?</label>
                                     <select style="width: 100px;" name="ar">
                                         <option value="0">NÃO</option>
+                                        <%if(cli.getAr_digital()>0){%>
+                                        <option value="1">NORMAL</option>                                            
+                                        <option value="2">DIGITAL</option>                                            
+                                        <%}else{%>
                                         <option value="1">SIM</option>
+                                        <%}%>
                                     </select>
                                 </dd>
                             </li>
                             <li>
                                 <dd>
                                     <label>Departamento</label>
-                                    <select style="width: 300px;" name="departamento">
-                                        <option value="">NENHUM DEPARTAMENTO</option>
+                                    <select style="width: 300px;" name="departamento" id="departamento">
                                         <%
-                                            ArrayList<ClientesDeptos> listaDep = ContrClienteDeptos.consultaDeptos(idCli, nomeBD);
+                                            ArrayList<ClientesDeptos> listaDep = ContrClienteDeptos.consultaDeptos(idCli, nomeBD); 
+                                            if(listaDep.size() > 0){%>
+                                            <option value="-1">SELECIONE UM DEPARTAMENTO</option>
+                                            <%}else{%>
+                                        <option value="">NENHUM DEPARTAMENTO</option>
+                                        <%}
                                             for (int i = 0; i < listaDep.size(); i++) {
                                                 ClientesDeptos cd = listaDep.get(i);
                                                 String cartao = "0";

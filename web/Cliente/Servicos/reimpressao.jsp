@@ -18,23 +18,27 @@
         response.sendRedirect("../../index.jsp?msg=Sua sessao expirou! Para voltar ao Portal faça seu login novamente!");
     } else {
 
+        ArrayList<Integer> permissoes = (ArrayList<Integer>) session.getAttribute("acessos");
         int idCli = Integer.parseInt(String.valueOf(session.getAttribute("idCliente")));
         String nomeCli = contrCliente.consultaNomeById(idCli, nomeBD);
         int nivel = (Integer) session.getAttribute("nivelUsuarioEmp");
         int idUser = (Integer) session.getAttribute("idUsuarioEmp");
-                
+
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String vDataAtual = sdf.format(new Date());
         String dataAnterior = vDataAtual;
+        String dataFim = vDataAtual;
         if (request.getParameter("dataFim") != null) {
-            vDataAtual = request.getParameter("dataFim");
+            dataFim = request.getParameter("dataFim");
         }
         if (request.getParameter("dataIni") != null) {
             dataAnterior = request.getParameter("dataIni");
         }
 
         String vDataInicio = Util.FormatarData.DateToBD(dataAnterior);
-        String vDataFinal = Util.FormatarData.DateToBD(vDataAtual);
+        String vDataFinal = Util.FormatarData.DateToBD(dataFim);
+        ArrayList<PreVenda> lista = ContrPreVenda.consultaVendasReimpressao(idCli, 1, -1, nivel, idUser, true, vDataInicio, vDataFinal, nomeBD);
+
 %>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -65,58 +69,57 @@
         <!-- TableSorter -->
 
         <script type="text/javascript">
-            function chamaDivProtecao(){
+            function chamaDivProtecao() {
                 var classe = document.getElementById("divProtecao").className;
-                if(classe == "esconder"){
+                if (classe == "esconder") {
                     document.getElementById("divProtecao").className = "mostrar";
                     document.getElementById("divInteracao").className = "mostrar";
-                }else{
+                } else {
                     document.getElementById("divProtecao").className = "esconder";
                     document.getElementById("divInteracao").className = "esconder";
                 }
             }
-            
-            function verificaSelecao(formato){
-                if(formato == 'OS'){
+
+            function verificaSelecao(formato) {
+                if (formato == 'OS') {
                     document.getElementById('formi').action = 'ordem_servico.jsp';
                     var flag = true;
-                    $("[name='ids']:checked").each(function(){
+                    $("[name='ids']:checked").each(function () {
                         flag = false;
                     });
                     var flag2 = true;
-                    $("[name='ids2']:checked").each(function(){
+                    $("[name='ids2']:checked").each(function () {
                         flag2 = false;
                     });
-                    if(flag && flag2){
+                    if (flag && flag2) {
                         alert("Selecione alguma etiqueta para gerar a Ordem de Serviço!");
                         return false;
-                    }            
-                    if (confirm('Tem certeza que deseja gerar a OS com as etiquetas selecionadas?')){
+                    }
+                    if (confirm('Tem certeza que deseja gerar a OS com as etiquetas selecionadas?')) {
                         return true;
-                    }else{
+                    } else {
                         return false;
                     }
-                }else{
+                } else {
                     document.getElementById('formi').action = 'reimpressao_etq.jsp';
                     //document.getElementById('formato').value = formato;
                     var flag = true;
-                    $("[name='ids']:checked").each(function(){
+                    $("[name='ids']:checked").each(function () {
                         flag = false;
-                    });                
-                    if(flag){
+                    });
+                    if (flag) {
                         alert("Selecione alguma etiqueta para reimprimir!");
                         return false;
-                    }                
-                    if (confirm('Tem certeza que deseja reimprimir as etiquetas selecionadas?')){
+                    }
+                    if (confirm('Tem certeza que deseja reimprimir as etiquetas selecionadas?')) {
                         return true;
-                    }else{
+                    } else {
                         return false;
                     }
                 }
             }
-            
-            
-            $(function() {
+
+            $(function () {
                 $("#dataIni").datepicker({
                     maxDate: '<%= vDataAtual%>',
                     showOn: "button",
@@ -132,6 +135,23 @@
                     showAnim: "slideDown"
                 });
             });
+
+            function validaData() {
+                var data1 = $("#dataIni").val();
+                var data2 = $("#dataFim").val();
+                //console.log(data1);
+                //console.log(data2);
+                var nova_data1 = parseInt(data1.split("/")[2].toString() + data1.split("/")[1].toString() + data1.split("/")[0].toString());
+                var nova_data2 = parseInt(data2.split("/")[2].toString() + data2.split("/")[1].toString() + data2.split("/")[0].toString());
+                //console.log(nova_data1);
+                //console.log(nova_data2);
+                if (nova_data2 < nova_data1)    {               
+                    alert('Data inicial não pode ser maior que data final');
+                    return false;
+                } else {
+                    $('#pesq').submit();
+                }
+            }
         </script>
 
         <title>Portal Postal | Etiquetas Impressas</title>
@@ -162,8 +182,8 @@
                             </dd>
                         </li>
                     </ul>
-                    
-                    <form action="reimpressao.jsp" method="post">
+
+                    <form id="pesq" action="reimpressao.jsp" method="post">
                         <ul class="ul_formulario" >
                             <li class="titulo"><dd><span>SELECIONE O PERIODO</span></dd></li>
                             <li>
@@ -171,13 +191,13 @@
                                     <label>Periodo de Data</label>
                                     <input type="text" style="width:60px;" name="dataIni" id="dataIni" value="<%= dataAnterior%>" maxlength="10" onkeypress="mascara(this, maskData);" />
                                     até
-                                    <input type="text" style="width:60px;" name="dataFim" id="dataFim" value="<%=vDataAtual%>" maxlength="10" onkeypress="mascara(this, maskData);" />
+                                    <input type="text" style="width:60px;" name="dataFim" id="dataFim" value="<%=dataFim%>" maxlength="10" onkeypress="mascara(this, maskData);" />
                                 </dd>
                             </li>
                             <li>
                                 <dd>
                                     <div class="buttons">
-                                        <button type="submit" class="regular"><img src="../../imagensNew/lupa.png"/> PESQUISAR</button>
+                                        <button type="button" class="regular" onclick="validaData();"><img src="../../imagensNew/lupa.png"/> PESQUISAR</button>
                                     </div>
                                 </dd>
                             </li>
@@ -191,19 +211,21 @@
                         .barraArqTable a:hover{background: #2d89ef; border: 1px solid white; border-bottom: none; color: white;}
                     </style>
                     <div id="titulo2">                        
-                        Lista de Etiquetas Geradas/Impressas Hoje                    
+                        Lista de Etiquetas Geradas/Impressas - [<span style="color: yellow;"><%=lista.size()%> </span>etiqueta(s)]                  
                         <div class="barraArqTable">
-                            <a href="#" onclick="document.formEXP.action='../AjaxPages/xls_etq_geradas.jsp'; document.formEXP.submit();">
+                            <a href="#" onclick="document.formEXP.action = '../AjaxPages/xls_etq_geradas.jsp';
+                                    document.formEXP.submit();">
                                 <img class="link_img" src="../../imagensNew/excel.png" />EXPORTAR COMO .XLS
                             </a>
-                            <a href="#" onclick="document.formEXP.action='../AjaxPages/csv_etq_geradas.jsp'; document.formEXP.submit();">
+                            <a href="#" onclick="document.formEXP.action = '../AjaxPages/csv_etq_geradas.jsp';
+                                    document.formEXP.submit();">
                                 <img class="link_img" src="../../imagensNew/csv.png" />EXPORTAR COMO .CSV
                             </a>
                             <form name="formEXP" action="#">
                                 <input type="hidden" name="idCli" value="<%= idCli%>" />
                                 <input type="hidden" name="nomeBD" value="<%= nomeBD%>" />
-                                <input type="hidden" name="dataIni" value="<%= vDataInicio %>" />
-                                <input type="hidden" name="dataFim" value="<%= vDataFinal %>" />
+                                <input type="hidden" name="dataIni" value="<%= vDataInicio%>" />
+                                <input type="hidden" name="dataFim" value="<%= vDataFinal%>" />
                             </form>
                         </div>
                     </div>
@@ -233,7 +255,6 @@
                             </thead>
                             <tbody>
                                 <%
-                                    ArrayList<PreVenda> lista = ContrPreVenda.consultaVendasReimpressao(idCli, 1, -1, nivel, idUser, true, vDataInicio, vDataFinal, nomeBD);
                                     for (int i = 0; i < lista.size(); i++) {
                                         PreVenda des = lista.get(i);
                                         String numObj = des.getNumObjeto();
@@ -241,33 +262,35 @@
                                             numObj = "- - -";
                                         }
                                         String ar = "SIM";
-                                        if(des.getAviso_recebimento() == 0){
-                                         ar = "NÃO";
+                                        if (des.getAviso_recebimento() == 2) {
+                                            ar = "DIGITAL";
+                                        } else if (des.getAviso_recebimento() == 0) {
+                                            ar = "NÃO";
                                         }
                                         String os = "- - -";
-                                        if(des.getIdOs() > 0){
-                                            os = "<a href='ordem_servico.jsp?idOs="+des.getIdOs()+"'>"+des.getIdOs()+"</a>";
+                                        if (des.getIdOs() > 0) {
+                                            os = "<a href='ordem_servico.jsp?idOs=" + des.getIdOs() + "'>" + des.getIdOs() + "</a>";
                                         }
                                 %>
                                 <tr style="cursor:default;">
                                     <td align="center">
-                                        <%if(des.getUserConsolidado() == 0 && vDataAtual.equals(sdf.format(des.getDataImpresso()))){%>
-                                            <input type="checkbox" name="ids" value="<%= des.getId()%>" />
-                                            <input type="hidden" name="os_<%= des.getId()%>" value="<%= des.getIdOs()%>" />
+                                        <%if (des.getUserConsolidado() == 0 && (vDataAtual.equals(sdf.format(des.getDataImpresso())) || permissoes.contains(9))) {%>
+                                        <input type="checkbox" name="ids" value="<%= des.getId()%>" />
+                                        <input type="hidden" name="os_<%= des.getId()%>" value="<%= des.getIdOs()%>" />
                                         <%}%>
                                     </td>
-                                    <td><%= des.getId() %></td>
+                                    <td><%= des.getId()%></td>
                                     <td align="center"><%= numObj%></td>
-                                    <td align="center"><%= os %></td>
+                                    <td align="center"><%= os%></td>
                                     <td><%= des.getNomeServico()%></td>
                                     <td><%= des.getNomeDes()%></td>
                                     <td><%= des.getEnderecoDes() + ", " + des.getNumeroDes()%></td>
                                     <td><%= des.getCidadeDes() + " / " + des.getUfDes()%></td>
-                                    <td><%= des.getCepDes() %></td>
-                                    <td><%= des.getNotaFiscal() %></td>
-                                    <td><%= des.getNomePreVenda() %></td>
-                                    <td><%= des.getNomeImpresso() %></td>
-                                    <td><%= des.getDataImpressoFormatada() %></td>
+                                    <td><%= des.getCepDes()%></td>
+                                    <td><%= des.getNotaFiscal()%></td>
+                                    <td><%= des.getNomePreVenda()%></td>
+                                    <td><%= des.getNomeImpresso()%></td>
+                                    <td><%= des.getDataImpressoFormatada()%></td>
                                     <td><%= ar%></td>
                                     <td align="center"><a onclick="verVenda(<%= des.getId()%>);" style="cursor:pointer;" ><img src="../../imagensNew/lupa.png" /></a></td>
                                 </tr>
@@ -275,19 +298,19 @@
                             </tbody>
                         </table>
                         <script type="text/javascript">
-                            var sorter2 = new TINY.table.sorter('sorter2','table2',{
-                                headclass:'head',
-                                ascclass:'asc',
-                                descclass:'desc',
-                                evenclass:'evenrow',
-                                oddclass:'oddrow',
-                                evenselclass:'evenselected',
-                                oddselclass:'oddselected',
-                                paginate:false,
-                                hoverid:'selectedrowDefault',
-                                sortcolumn:10,
-                                sortdir:1,
-                                init:true
+                            var sorter2 = new TINY.table.sorter('sorter2', 'table2', {
+                                headclass: 'head',
+                                ascclass: 'asc',
+                                descclass: 'desc',
+                                evenclass: 'evenrow',
+                                oddclass: 'oddrow',
+                                evenselclass: 'evenselected',
+                                oddselclass: 'oddselected',
+                                paginate: false,
+                                hoverid: 'selectedrowDefault',
+                                sortcolumn: 10,
+                                sortdir: 1,
+                                init: true
                             });
                         </script>
                         <%if (lista.size() > 0) {%>
@@ -345,7 +368,7 @@
                             <button type="submit" class="negative" onClick="return verificaSelecao('OS');"><img src="../../imagensNew/printer.png" /> GERAR ORDEM DE SERVIÇO</button>
                         </div>--%>
                         <%}%>
-                            
+
                     </form>
 
                 </div>

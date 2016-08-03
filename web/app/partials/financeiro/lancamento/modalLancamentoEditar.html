@@ -28,16 +28,16 @@
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
-                                <label class="small">Favorecido</label>
+                                <favorecido favorecido-model="lancamento.favorecido"></favorecido>
+<!--                                <label class="small">Favorecido</label>
                                 <div class="input-group">
                                     <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                    <!--<input class="form-control" type="text" name="favorecido" ng-model="lancamento.favorecido" 
-                                           placeholder="Favorecido do lançamento"/> -->
                                     <input class="form-control" type="text" name="favorecido" ng-model="lancamento.favorecido.nome" placeholder="Favorecido do lançamento"
                                             autocomplete="off" 
+                                            typeahead-template-url="favorecidoTemplate.html"
                                             typeahead-on-select="selectFavorecido($item)" 
-                                            typeahead="favorecido.nome for favorecido in favorecidos | filter:$viewValue | limitTo:10">
-                                </div>
+                                            typeahead="favorecido.nome for favorecido in favorecidos | filter:{nome:$viewValue} | limitTo:10">
+                                </div>-->
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
                                 <label class="small">Histórico</label>

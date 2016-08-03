@@ -31,7 +31,8 @@ app.controller('LancamentoProgramadoController',
                 {label: 'Vencimento', column: 'dataVencimento', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
                 {label: 'Número', column: 'numero'},         
                 {label: 'Plano Conta', column: 'planoConta'},   
-                {label: 'Centro Custo', column: 'centroCusto', showColumn: true, selected: false},             
+                {label: 'Centro Custo', column: 'centroCusto', showColumn: true, selected: false},  
+                {label: 'Usuário', column: 'usuario', showColumn: true, selected: false},           
                 {label: 'Favorecido', column: 'favorecido'},  
                 {label: 'Valor', column: 'valor', headerClass: 'no-sort', filter: {name: 'currency', args: ''}},              
                 {label: 'Situação', column: 'situacao'},  
@@ -196,7 +197,7 @@ app.controller('LancamentoProgramadoController',
                 if(lancamentoProgramado.favorecido) { lancamentoProgramado.favorecido = lancamentoProgramado.favorecido.nome; }
                 
                 return _.pick(lancamentoProgramado, 'idLancamentoProgramado', 'conta', 'tipo', 'tipoLancamento', 'dataVencimento', 'numero', 
-                'planoConta', 'centroCusto', 'favorecido', 'valor', 'situacao', 'frequencia', 'existeLancamento');
+                'planoConta', 'centroCusto', 'usuario', 'favorecido', 'valor', 'situacao', 'frequencia', 'existeLancamento');
             })
         };
         

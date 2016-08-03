@@ -37,7 +37,7 @@
 
                         <jsp:include page="cliente_menu_b.jsp" >
                             <jsp:param name="nomeBDTab" value="<%= nomeBD%>" />
-                            <jsp:param name="activeTab" value="2" />
+                            <jsp:param name="activeTab" value="3" />
                             <jsp:param name="idClienteTab" value="<%= idClienteInc%>" />
                             <jsp:param name="temContratoTab" value="<%= cliInc.getTemContrato()%>" />
                             <jsp:param name="nomeClienteTab" value="<%= cliInc.getNomeFantasia()%>" />
@@ -92,7 +92,7 @@
                                             <div class="row form-horizontal">
                                                 <div class="col-sm-12 col-md-4 col-lg-4">
                                                     <label class="small">
-                                                        ACESSOS:<br/>
+                                                        PERMISSÕES:<br/>
                                                         <a style="color:blue;font-size: 9px;" onclick="selectAllCombo(document.getElementById('acessos'), true);">MARCAR TUDO</a><br/>
                                                         <a style="color:red;font-size: 9px;" onclick="selectAllCombo(document.getElementById('acessos'), false);">DESMARCAR TUDO</a>
                                                     </label>
@@ -105,6 +105,7 @@
                                                         <option value="6" >VER DADOS DA EMPRESA</option>
                                                         <option value="7" >CADASTRO DE DESTINATÁRIOS</option>
                                                         <option value="8" >VISUALIZAR PRAZOS ESTIMADOS</option>
+                                                        <option value="9" >REIMPRIMIR ETIQUETAS ANTIGAS</option>
                                                     </select>
                                                     <script language="">
                                                         function selectAllCombo(combo, flag) {

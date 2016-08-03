@@ -12,9 +12,11 @@ app.controller('FluxoCaixaController',
             $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
             $scope.datepickerDataFim = angular.copy(DatePickerService.default);   
             $scope.vencidos = false;
+            $scope.dataInicio = null;
+            $scope.dataFim = null;
             $scope.lancSearch = {};
             getTitle();
-            periodos();
+            periodos(3);
             initTable();
         };  
 
@@ -42,26 +44,25 @@ app.controller('FluxoCaixaController',
             $scope.events = { 
                 table: function(lancamentos) {
                     calculateSaldo(lancamentos);
+                    initChartFluxoCaixa(lancamentos);
                 }
             }
         };
 
         $scope.filter = function(lista, search) { 
-//            lista = _.filter(lista, function(item) {
-//                return filterByData(item, search);
-//            });    
             lista = filterConta(lista, search);
+            if(!_.isEmpty(search)) { initChartFluxoCaixa(lista); }
             return lista;
         };
 
-//        var filterByData = function(item, search) {
-//            var dataInicio = moment(search.dataInicio);
-//            var dataFim = moment(search.dataFim);
-//            if((!search.dataInicio || !dataInicio.isValid()) || (!search.dataFim || !dataFim.isValid())) return true;
-//            var data = moment(item.dataLancamento);
-//            return (data.isBefore(search.dataFim) && data.isAfter(search.dataInicio) 
-//                    || (data.isSame(search.dataInicio) || data.isSame(search.dataFim)));
-//        }; 
+        $scope.filterByData = function(dataInicio, dataFim) {
+            dataInicio = moment(dataInicio);
+            dataFim = moment(dataFim);
+            if(dataInicio && dataInicio.isValid() && dataFim && dataFim.isValid()) {
+                periodos(0);
+                todos(dataInicio, dataFim, $scope.vencidos)
+            }
+        }; 
         
         var filterConta = function(lista, search) {          
             if(!search.conta) return lista;
@@ -78,15 +79,16 @@ app.controller('FluxoCaixaController',
 //            $scope.title = MESSAGES.lancamento.title.LISTA; 
         };
         
-        var periodos = function() {
+        var periodos = function(index) {
             $scope.periodos = [];
+            $scope.periodos.push({'id': -1, 'codigo': -1, 'descricao': "Selecione o Período"});
             for(var i=0; i<12; i++) {
-                var numeroPeriodo = i+1;
+                    var numeroPeriodo = i+1;
                 var descricao = "Próximo " + numeroPeriodo + " mês";
                 if(numeroPeriodo > 1) { descricao = "Próximos " + numeroPeriodo + " meses"; }
                 $scope.periodos.push({'id': i, 'codigo': numeroPeriodo, 'descricao': descricao});
             }
-            $scope.periodo = $scope.periodos[2]
+            $scope.periodo = $scope.periodos[index]
             contas();
         }
         
@@ -107,26 +109,33 @@ app.controller('FluxoCaixaController',
                     $scope.planoContas = data;
                     PlanoContaService.estrutura($scope.planoContas);
                     $scope.planoContas = PlanoContaService.flatten($scope.planoContas);                 
-                    todos($scope.periodo.codigo, $scope.vencidos);
+                    todosByPeriodo($scope.periodo.codigo, $scope.vencidos);
                 })
                 .catch(function (e) {
                     console.log(e);
                 });
         };
 
-        var todos = function(periodos, vencidos) {
+        var todosByPeriodo = function(periodos, vencidos) {
+            if(periodos == -1) return;
             var dataInicio = moment().format('YYYY-MM-DD');
             var dataFim = moment().add(periodos, 'months').format('YYYY-MM-DD');
+            todos(dataInicio, dataFim, vencidos);
+        };
+
+        var todos = function(dataInicio, dataFim, vencidos) {
             LancamentoProgramadoService.getAllAtivo()
                 .then(function (data) {
                     $scope.lancamentos = getLancamentos(angular.copy(data), dataInicio, dataFim, vencidos);
                     $scope.lancamentos.sort(compareData);
                     $scope.lancamentosLista = criarLancamentosLista(angular.copy($scope.lancamentos));
+                    $scope.lancamentosLista = filterConta($scope.lancamentosLista, $scope.lancSearch);
+                    if(!_.isEmpty($scope.lancSearch)) { initChartFluxoCaixa($scope.lancamentosLista); }
                 })
                 .catch(function(e) {
                     console.log(e);
                 });
-        };
+        };       
         
         var getLancamentos = function(programados, dataInicio, dataFim, vencidos) {
             var resultado = [];
@@ -163,11 +172,7 @@ app.controller('FluxoCaixaController',
                 if(lancamento.quantidadeParcela) { 
                     lancamento.tipo.modelo = $scope.modelos[4];
                     lancamento.valor = lancamento.valor / lancamento.quantidadeParcela;
-                }                
-                
-//                if(lancamento.tipo.modelo.id === $scope.modelos[3].id) { lancamento.tipoLancamento = $scope.modelos[3].codigo; }
-//                else if(lancamento.tipo.id === $scope.tipos[0].id) { lancamento.tipoLancamento = lancamento.tipo.codigo; }
-//                else if(lancamento.tipo.id === $scope.tipos[1].id) { lancamento.tipoLancamento = lancamento.tipo.codigo; }
+                }     
                 
                 if(lancamento.planoConta && lancamento.planoConta.idPlanoConta) { 
                     var planoConta = ListaService.getPlanoContaValue($scope.planoContas, lancamento.planoConta.idPlanoConta); 
@@ -175,11 +180,6 @@ app.controller('FluxoCaixaController',
                 } else {
                     lancamento.planoConta = null;
                 }
-                
-//                lancamento.tipo.modelo = $scope.modelos;
-//                if(lancamento.lancamentos && lancamento.lancamentos.length) {
-//                    lancamento.lancamentos = lancamento.lancamentos.length;
-//                }
 
                 if(lancamento.rateios && lancamento.rateios.length) {
                     lancamento.planoConta = "Diversos";
@@ -206,12 +206,73 @@ app.controller('FluxoCaixaController',
         };
         
         $scope.changePeriodo = function(periodo, vencidos) {
-            todos(periodo.codigo, vencidos);
+            angular.element("#dataInicio").val(null);
+            angular.element("#dataFim").val(null);
+            todosByPeriodo(periodo.codigo, vencidos);
         }
         
         $scope.pesquisar = function(periodo, vencidos) {
-            todos(periodo.codigo, vencidos);
+            todosByPeriodo(periodo.codigo, vencidos);
+        };
+
+        // ***** GRÁFICO ***** //
+        
+        var initChartFluxoCaixa = function(lancamentos) {
+            var categorias = getDataChartSaldo(lancamentos, 'dataVencimento');
+            var valores = getDataChartSaldo(lancamentos, 'saldo');
+            if($scope.configChartFluxoCaixa) { changeChartFluxoCaixa(lancamentos); }
+            else { configChartFluxoCaixa(categorias, valores); }
         }
+        
+        var changeChartFluxoCaixa = function(lancamentos) {
+            var categorias = getDataChartSaldo(lancamentos, 'dataVencimento');
+            var valores = getDataChartSaldo(lancamentos, 'saldo');
+            $scope.configChartFluxoCaixa.xAxis.categories = categorias;
+            $scope.configChartFluxoCaixa.series[0].data = valores;
+        }
+        
+        var configChartFluxoCaixa = function(categorias, valores) {        
+            $scope.configChartFluxoCaixa = {
+                title: " ",     
+                options: { 
+                    chart: { type: "area" },           
+                    plotOptions: {
+                        area: {
+                            marker: {
+                                enabled: false,
+                                symbol: 'circle',
+                                radius: 2,
+                                states: {
+                                    hover: {
+                                        enabled: true
+                                    }
+                                }
+                            }
+                        }
+                    },
+                },
+                xAxis: {
+                    categories: categorias,
+                    title: { enabled: false }
+                },
+                yAxis: {
+                    title: { text: ' ' }
+                },
+                series: [{  
+                    name: 'Saldos',    
+                    data: valores
+                }],         
+                legend: { enabled: false },
+                credits: {
+                    enabled: false
+                }
+            };
+        };   
+        
+        var getDataChartSaldo = function(saldos, field) {  
+            var values = _.pluck(saldos, field);
+            return _.values(values);
+        };
 
         // ***** VALIDAR ***** //
 

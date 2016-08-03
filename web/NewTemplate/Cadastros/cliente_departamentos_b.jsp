@@ -60,7 +60,7 @@
 
                         <jsp:include page="cliente_menu_b.jsp" >
                             <jsp:param name="nomeBDTab" value="<%= agf_empresa.getCnpj()%>" />
-                            <jsp:param name="activeTab" value="1" />
+                            <jsp:param name="activeTab" value="2" />
                             <jsp:param name="idClienteTab" value="<%= idClienteInc%>" />
                             <jsp:param name="temContratoTab" value="<%= cliInc.getTemContrato()%>" />
                             <jsp:param name="nomeClienteTab" value="<%= cliInc.getNomeFantasia()%>" />

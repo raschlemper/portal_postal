@@ -16,27 +16,31 @@ import javax.swing.text.MaskFormatter;
  */
 public class FormataString {
     
-    
-    public static String preencheCom(String linha_a_preencher, String letra, int tamanho, int direcao){
+    /**
+     * 
+     * @param texto String a ser completada.
+     * @param letra Caracter para preenchimento dos espaços faltantes.
+     * @param tamanho Tamanho que deve ter a String final.
+     * @param direcao 1 = Preenche a direita, -1 = Preenche a esquerda.
+     * @return 
+     */
+    public static String preencheStringCom(String texto, String letra, int tamanho, int direcao) {
         //Checa se Linha a preencher é nula ou branco
-        if (linha_a_preencher == null || linha_a_preencher.trim() == "" ) {
-            linha_a_preencher = "";
-        }     
+        if (texto == null || "".equals(texto.trim())) {
+            texto = "";
+        }
+        texto = texto.trim();
+        texto = texto.replaceAll("&", "");
 
-        //Enquanto Linha a preencher possuir 2 espaços em branco seguidos, substitui por 1 espaço apenas
-        while (linha_a_preencher.contains(" ")) {
-            linha_a_preencher = linha_a_preencher.replaceAll(" "," ").trim();
-        }       
-
-        //Retira caracteres estranhos
-        linha_a_preencher = linha_a_preencher.replaceAll("[./-]","");
-        StringBuffer sb = new StringBuffer(linha_a_preencher);
-        if (direcao==1){ //a Esquerda
-            for (int i=sb.length() ; i<tamanho ; i++){
-                sb.insert(0,letra);
+        StringBuilder sb = new StringBuilder(texto);
+        if (sb.length() > tamanho) {
+            sb = new StringBuilder(sb.substring(0, tamanho));
+        } else if (direcao == -1) { //a Esquerda
+            for (int i = sb.length(); i < tamanho; i++) {
+                sb.insert(0, letra);
             }
-        } else if (direcao==2) {//a Direita
-            for (int i=sb.length() ; i<tamanho ; i++){
+        } else if (direcao == 1) {//a Direita
+            for (int i = sb.length(); i < tamanho; i++) {
                 sb.append(letra);
             }
         }
@@ -44,6 +48,37 @@ public class FormataString {
         return sb.toString();
 
     }
+    
+    public static String preencheCom(String linha_a_preencher, String letra, int tamanho, int direcao){
+        try{
+            //Checa se Linha a preencher é nula ou branco
+            if (linha_a_preencher == null || linha_a_preencher.trim().equals("")) {
+                linha_a_preencher = "";
+            }     
+
+            //Enquanto Linha a preencher possuir 2 espaços em branco seguidos, substitui por 1 espaço apenas
+            while (linha_a_preencher.contains(" ")) {
+                linha_a_preencher = linha_a_preencher.replaceAll(" "," ").trim();
+            }       
+
+            //Retira caracteres estranhos
+            linha_a_preencher = linha_a_preencher.replaceAll("[./-]","");
+            StringBuilder sb = new StringBuilder(linha_a_preencher);
+            if (direcao==1){ //a Esquerda
+                for (int i=sb.length() ; i<tamanho ; i++){
+                    sb.insert(0,letra);
+                }
+            } else if (direcao==2) {//a Direita
+                for (int i=sb.length() ; i<tamanho ; i++){
+                    sb.append(letra);
+                }
+            }
+
+            return sb.toString();
+        }catch(Exception e){
+            return linha_a_preencher;
+        }
+    } 
     
     public static String getGrupoServ(int codEct){
         switch(codEct){

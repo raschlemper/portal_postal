@@ -1,3 +1,6 @@
+<%@page import="java.util.Map"%>
+<%@page import="Controle.ContrClientePrefixoAR"%>
+<%@page import="Entidade.ClientePrefixoAR"%>
 <%@page import="Controle.ContrClienteContrato"%>
 <%@page import="Controle.ContrServicoECT"%>
 <%@page import="Entidade.ServicoECT"%>
@@ -5,7 +8,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <%
-    
+
     Usuario usrSessao = (Usuario) session.getAttribute("agf_usuario");
     if (usrSessao == null) {
         response.sendRedirect("../../index.jsp?msgLog=3");
@@ -35,7 +38,7 @@
 
                         <jsp:include page="cliente_menu_b.jsp" >
                             <jsp:param name="nomeBDTab" value="<%= nomeBD%>" />
-                            <jsp:param name="activeTab" value="5" />
+                            <jsp:param name="activeTab" value="6" />
                             <jsp:param name="idClienteTab" value="<%= idClienteInc%>" />
                             <jsp:param name="temContratoTab" value="<%= cliInc.getTemContrato()%>" />
                             <jsp:param name="nomeClienteTab" value="<%= cliInc.getNomeFantasia()%>" />
@@ -102,49 +105,62 @@
                                                 </li>
                                             </ul>
                                         </li>
-                                                 
-                                                            
+
+
                                         <li class="list-group-item">
                                             <div class="row form-horizontal">
                                                 <div class="col-sm-12 col-md-12 col-lg-12">
-                                                    <label class="small">Este utiliza AR Digital?</label>
+                                                    <label class="small">Este cliente utiliza AR Digital?</label>
                                                     <div class="input-group">
-                                                        <input type="checkbox" name="toggleBtn" id="radioContrato" value="1" <%if (cliInc.getTemContrato() == 0) {%> checked="false" disabled <%}%> data-toggle="toggle" data-on="<i class='fa fa-check-circle fa-spc fa-lg'></i>SIM" data-off="<i class='fa fa-times-circle fa-spc fa-lg'></i>NÃO" data-onstyle="success" data-offstyle="danger" />
-                                                        <input type="hidden" name="contrato" id="radio_1" value="<%=cliInc.getTemContrato()%>" />
+                                                        <input type="checkbox" name="toggleBtn" id="radioContrato" value="1" <%if (cliInc.getAr_digital() > 0) {%> checked="true" <%}else if (cliInc.getTemContrato() == 0) {%> disabled <%}%> data-toggle="toggle" data-on="<i class='fa fa-check-circle fa-spc fa-lg'></i>SIM" data-off="<i class='fa fa-times-circle fa-spc fa-lg'></i>NÃO" data-onstyle="success" data-offstyle="danger" />
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row form-horizontal">
+                                            <div id='divArDigital' class="row form-horizontal" >
+                                                <div class="col-sm-3 col-md-2 col-lg-2">
+                                                    <br/>       
+                                                    <label class="small">CÓDIGO DO CLIENTE<br/>(FORNECIDO PELA ECT):</label>
+                                                    <input type="text"  class='form-control' name="ar_digital" id="ar_digital" value="<%= cliInc.getAr_digital() %>" />
+                                                </div>
                                                 <div class="col-sm-12 col-md-12 col-lg-12">
-                                                    <label class="small">PREFIXOS DOS SERVIÇOS INCLUSOS NO AR DIGITAL:</label>
-                                                        <table style="width: 320px;" class="table table-striped table-bordered table-hover table-condensed" id="table" name="table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>HAB.</th>
-                                                                    <th>SERVIÇO</th>
-                                                                    <th>PREFIXO DO AR</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <%
-                                                                    ArrayList<ServicoECT> listaServAD = ContrServicoECT.consultaGruposServicosByTAG(0, 1, "ARD");
-                                                                    if (listaServAD != null) {
-                                                                        for (int i = 0; i < listaServAD.size(); i++) {
-                                                                            ServicoECT sv = listaServAD.get(i);
+                                                    <label class="small">PREFIXOS DOS SERVIÇOS INCLUSOS NO AR DIGITAL:</label>                                                    
+                                                    <table style="width: 320px;" class="table table-striped table-bordered table-hover table-condensed" id="table" name="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>HAB.</th>
+                                                                <th>SERVIÇO</th>
+                                                                <th>PREFIXO DO AR</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <%
+                                                                Map<String, String> listaPref = ContrClientePrefixoAR.consultaMapPorCliente(cliInc.getCodigo(), nomeBD);
+                                                                ArrayList<ServicoECT> listaServAD = ContrServicoECT.consultaGruposServicosByTAG(0, 1, "ARD");
+                                                                if (listaServAD != null) {
+                                                                    for (int i = 0; i < listaServAD.size(); i++) {
+                                                                        ServicoECT sv = listaServAD.get(i);
+                                                                        if (listaPref.containsKey(sv.getGrupoServico())) {
+                                                                            out.println("<tr>");
+                                                                            out.println("<td><input type='checkbox' name='habilitados' checked value='" + sv.getGrupoServico() + "' /></td>");
+                                                                            out.println("<td>" + sv.getGrupoServico() + "</td>");
+                                                                            out.println("<td><input class='form-control' maxlength='2' type='text' size='3' name='prefixo_" + sv.getGrupoServico() + "' value='" + listaPref.get(sv.getGrupoServico()) + "' /></td>");
+                                                                            out.println("</tr>");
+                                                                        } else {
                                                                             out.println("<tr>");
                                                                             out.println("<td><input type='checkbox' name='habilitados' value='" + sv.getGrupoServico() + "' /></td>");
-                                                                            out.println("<td>"+ sv.getGrupoServico() + "</td>");
+                                                                            out.println("<td>" + sv.getGrupoServico() + "</td>");
                                                                             out.println("<td><input class='form-control' maxlength='2' type='text' size='3' name='prefixo_" + sv.getGrupoServico() + "' value='' /></td>");
                                                                             out.println("</tr>");
                                                                         }
                                                                     }
-                                                                %>
-                                                            </tbody>
-                                                        </table>
+                                                                }
+                                                            %>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
                                         </li>                    
-                                                            
+
                                         <li class="list-group-item">
                                             <input type="hidden" name="idCliente" id="idCliente" value="<%= idClienteInc%>" />
                                             <input type="hidden" name="servicos" id="servicos" value="" />
@@ -164,84 +180,90 @@
         <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet" />
         <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
         <script type="text/javascript">
-            function trocaServ(listRemove, listAdiciona) {
-                var selIndex = document.getElementById(listRemove).selectedIndex;
-                var idServ = document.getElementById(listRemove).options[selIndex].value;
-                var nomeServ = document.getElementById(listRemove).options[selIndex].text;
+                                                function trocaServ(listRemove, listAdiciona) {
+                                                    var selIndex = document.getElementById(listRemove).selectedIndex;
+                                                    var idServ = document.getElementById(listRemove).options[selIndex].value;
+                                                    var nomeServ = document.getElementById(listRemove).options[selIndex].text;
 
-                document.getElementById(listRemove).remove(selIndex);
+                                                    document.getElementById(listRemove).remove(selIndex);
 
-                var novaOpcao = new Option(nomeServ, idServ);
-                document.getElementById(listAdiciona).options[document.getElementById(listAdiciona).length] = novaOpcao;
+                                                    var novaOpcao = new Option(nomeServ, idServ);
+                                                    document.getElementById(listAdiciona).options[document.getElementById(listAdiciona).length] = novaOpcao;
 
-                OrdenarLista(listRemove);
-                OrdenarLista(listAdiciona);
+                                                    OrdenarLista(listRemove);
+                                                    OrdenarLista(listAdiciona);
 
-                document.getElementById(listRemove).focus();
-                if (document.getElementById(listRemove).length == selIndex) {
-                    document.getElementById(listRemove).selectedIndex = selIndex - 1;
-                } else {
-                    document.getElementById(listRemove).selectedIndex = selIndex;
-                }
-            }
+                                                    document.getElementById(listRemove).focus();
+                                                    if (document.getElementById(listRemove).length == selIndex) {
+                                                        document.getElementById(listRemove).selectedIndex = selIndex - 1;
+                                                    } else {
+                                                        document.getElementById(listRemove).selectedIndex = selIndex;
+                                                    }
+                                                }
 
-            function OrdenarLista(combo) {
-                var lb = document.getElementById(combo);
-                arrTexts = new Array();
+                                                function OrdenarLista(combo) {
+                                                    var lb = document.getElementById(combo);
+                                                    arrTexts = new Array();
 
-                for (i = 0; i < lb.length; i++) {
-                    arrTexts[i] = lb.options[i].text + "@" + lb.options[i].value;
-                }
+                                                    for (i = 0; i < lb.length; i++) {
+                                                        arrTexts[i] = lb.options[i].text + "@" + lb.options[i].value;
+                                                    }
 
-                arrTexts.sort();
+                                                    arrTexts.sort();
 
-                for (i = 0; i < lb.length; i++) {
-                    var aux = arrTexts[i].split("@");
-                    lb.options[i].text = aux[0];
-                    lb.options[i].value = aux[1];
-                }
-            }
+                                                    for (i = 0; i < lb.length; i++) {
+                                                        var aux = arrTexts[i].split("@");
+                                                        lb.options[i].text = aux[0];
+                                                        lb.options[i].value = aux[1];
+                                                    }
+                                                }
 
-            function preencherCampos() {
-                var form = document.form1;
+                                                function preencherCampos() {
+                                                    var form = document.form1;
 
-                var lb = document.getElementById('servico_2');
-                var servicos = "";
-                for (i = 0; i < lb.length; i++) {
-                    if (i == 0) {
-                        servicos += lb.options[i].value;
-                    } else {
-                        servicos += "@" + lb.options[i].value;
-                    }
-                }
-                document.getElementById('servicos').value = servicos;
+                                                    var lb = document.getElementById('servico_2');
+                                                    var servicos = "";
+                                                    for (i = 0; i < lb.length; i++) {
+                                                        if (i == 0) {
+                                                            servicos += lb.options[i].value;
+                                                        } else {
+                                                            servicos += "@" + lb.options[i].value;
+                                                        }
+                                                    }
+                                                    document.getElementById('servicos').value = servicos;
 
-                if (servicos == "") {
-                    alert('Selecione algum serviço para o Contrato do Cliente!');
-                    return false;
-                }
+                                                    if (servicos == "") {
+                                                        alert('Selecione algum serviço para o Contrato do Cliente!');
+                                                        return false;
+                                                    }
 
-                form.submit();
-            }
+                                                    form.submit();
+                                                }
 
-            /************************************/
+                                                /************************************/
 
-            $(document).ready(function() {
-                fechaMsg();
-            });
+                                                $(document).ready(function () {
+                                                    if($('#radioContrato').prop('checked')) {
+                                                        //$('#radio_1').val('1');
+                                                    } else {
+                                                        $('#divArDigital').slideToggle();
+                                                        //$('#radio_1').val('0');
+                                                    }
+                                                    fechaMsg();
+                                                });
 
 
-            $(function() {
-                $('#radioContrato').change(function() {
-                    if ($(this).prop('checked')) {
-                        mostraEsconde();
-                        $('#radio_1').val('1');
-                    } else {
-                        mostraEsconde();
-                        $('#radio_1').val('0');
-                    }
-                });
-            });
+                                                $(function () {
+                                                    $('#radioContrato').change(function () {
+                                                        if ($(this).prop('checked')) {
+                                                            $('#divArDigital').slideToggle();
+                                                            //$('#radio_1').val('1');
+                                                        } else {
+                                                            $('#divArDigital').slideToggle();
+                                                            //$('#radio_1').val('0');
+                                                        }
+                                                    });
+                                                });
         </script>
 
     </body>

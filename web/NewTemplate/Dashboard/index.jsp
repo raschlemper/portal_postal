@@ -26,7 +26,7 @@
         DecimalFormat df = new DecimalFormat("0.00");
 
         empresas empr = (empresas) session.getAttribute("emp");
-        
+
         Date dataAtual = new Date();
         String vDataAtual = sdf.format(dataAtual);
         String dataAnterior = Util.SomaData.SomarDiasDatas(dataAtual, -30);
@@ -39,50 +39,50 @@
 
         String vDataInicio = Util.FormatarData.DateToBD(dataAnterior);
         String vDataFinal = Util.FormatarData.DateToBD(vDataAtual);
-        
+
         ArrayList<Movimentacao> listaInativos = ContrDashboard.consultaClientesInativos(vDataInicio, nomeBD);
         ArrayList<Movimentacao> listaClientes = ContrDashboard.consultaFaturaPorClientes(vDataInicio, vDataFinal, nomeBD);
         ArrayList<Movimentacao> listaEtiquetas = ContrDashboard.consultaEtiquetasPorClientes(vDataInicio, vDataFinal, nomeBD);
-        
+
         ArrayList<Movimentacao> listaFaturamento = ContrDashboard.consultaFaturaPorData(vDataInicio, vDataFinal, nomeBD);
         String grafico1 = "['Data', 'Faturamento (R$)']";
-        if(listaFaturamento.size()==0){
-            grafico1+=",['Nenhum Movimento no Periodo Selecionado',0]";
-        }else{
-            for(Movimentacao m: listaFaturamento){
-                grafico1 += ",['"+sdf2.format(m.getDataPostagem())+"', "+m.getValorServico()+"]";            
+        if (listaFaturamento.size() == 0) {
+            grafico1 += ",['Nenhum Movimento no Periodo Selecionado',0]";
+        } else {
+            for (Movimentacao m : listaFaturamento) {
+                grafico1 += ",['" + sdf2.format(m.getDataPostagem()) + "', " + m.getValorServico() + "]";
             }
         }
-        
+
         Map<String, Movimentacao> mapServFat = ContrDashboard.consultaFaturamentoPorServico(vDataInicio, vDataFinal, nomeBD);
         float qtdtotal = 0;
         float valorTotal = 0;
         String tabelaTicket = "";
-        String grafico2 = "['Serviços', 'Faturamento (R$)']";                    
-        for (String key : mapServFat.keySet()) { 
+        String grafico2 = "['Serviços', 'Faturamento (R$)']";
+        for (String key : mapServFat.keySet()) {
             //Capturamos o valor a partir da chave 
-            Movimentacao m = mapServFat.get(key); 
+            Movimentacao m = mapServFat.get(key);
             //System.out.println(key + " = " + m.getValorServico()+" - "+m.getQuantidade()); 
-            if(key.equals("PAC") || key.equals("SEDEX") || key.equals("SEDEX 10") || key.equals("SEDEX 12") || key.equals("E-SEDEX") || key.equals("PPI") || key.equals("INTERNACIONAL")){
+            if (key.equals("PAC") || key.equals("SEDEX") || key.equals("SEDEX 10") || key.equals("SEDEX 12") || key.equals("E-SEDEX") || key.equals("PPI") || key.equals("INTERNACIONAL")) {
                 qtdtotal += m.getQuantidade();
                 valorTotal += m.getValorServico();
-                tabelaTicket+="<tr><td>"+key+"</td><td>R$ "+df.format(m.getValorServico()/m.getQuantidade())+"</td></tr>";
-                grafico2+=",['"+key+"', "+m.getValorServico()+"]";          
-            }else if(key.equals("CARTA REG.") || key.equals("CARTA SIMPLES") || key.equals("MDPB") || key.equals("TELEGRAMA")){
-                tabelaTicket+="<tr><td>"+key+"</td><td>R$ "+df.format(m.getValorServico()/m.getQuantidade())+"</td></tr>";
-                grafico2+=",['"+key+"', "+m.getValorServico()+"]";          
-                
-            }  
+                tabelaTicket += "<tr><td>" + key + "</td><td>R$ " + df.format(m.getValorServico() / m.getQuantidade()) + "</td></tr>";
+                grafico2 += ",['" + key + "', " + m.getValorServico() + "]";
+            } else if (key.equals("CARTA REG.") || key.equals("CARTA SIMPLES") || key.equals("MDPB") || key.equals("TELEGRAMA")) {
+                tabelaTicket += "<tr><td>" + key + "</td><td>R$ " + df.format(m.getValorServico() / m.getQuantidade()) + "</td></tr>";
+                grafico2 += ",['" + key + "', " + m.getValorServico() + "]";
+
+            }
         }
-        
+
         VeiculoManutencaoService manutencaoService = new VeiculoManutencaoService(nomeBD);
         VeiculoSeguroService seguroService = new VeiculoSeguroService(nomeBD);
-        Calendar dataInicio = Calendar.getInstance();       
+        Calendar dataInicio = Calendar.getInstance();
         dataInicio.set(Calendar.HOUR_OF_DAY, 00);
         dataInicio.set(Calendar.MINUTE, 00);
-        dataInicio.set(Calendar.SECOND, 00);    
+        dataInicio.set(Calendar.SECOND, 00);
         Calendar dataFinal = Calendar.getInstance();
-        dataFinal.add(Calendar.DAY_OF_MONTH, 30);      
+        dataFinal.add(Calendar.DAY_OF_MONTH, 30);
         dataFinal.set(Calendar.HOUR_OF_DAY, 23);
         dataFinal.set(Calendar.MINUTE, 59);
         dataFinal.set(Calendar.SECOND, 59);
@@ -113,43 +113,43 @@
                         <!-- Indica o Local Da Página -->
                         <div class="row">
                             <div class="col-md-12">                       
-                                <h4 class="page-header"><b class="text-primary"><i class="fa fa-dashboard"></i> Dashboard</b> > <small><%= empr.getEmpresa() %></small></h4>
+                                <h4 class="page-header"><b class="text-primary"><i class="fa fa-dashboard"></i> Dashboard</b> > <small><%= empr.getEmpresa()%></small></h4>
                             </div>
                         </div>
 
                         <div class="row">
                             <!-- Mostra Aviso na tela -->
                             <div class="col-lg-12" id="msg" style="display: block">
-                                <%                                
+                                <%
                                     ArrayList<ClienteLogEtiqueta> lista = Controle.ContrClienteEtiquetas.consultaQtdEtiquetasRestantes(200, nomeBD);
-                                   int listaTele = ContrTelegramaPostal.consultaQtdNaoEnviados(nomeBD);
+                                    int listaTele = ContrTelegramaPostal.consultaQtdNaoEnviados(nomeBD);
                                     ArrayList<Clientes> listaContr = contrCliente.getClientesComContratoVencendo(90, nomeBD);
-                                    if(lista.size() > 0){
+                                    if (lista.size() > 0) {
                                 %>
                                 <div class="alert alert-danger no-margin">
                                     <a href="#" class="close" data-dismiss="alert">&times;</a>
                                     <a class="text-danger" href="../Etiquetas/painel_etiquetas_b.jsp"><strong>ATENÇÃO!</strong> Existem clientes com poucas etiquetas.</a>
                                 </div>
                                 <%}%>
-                                <%if(listaTele > 0){ %>
+                                <%if (listaTele > 0) {%>
                                 <div class="alert alert-danger no-margin">
                                     <a href="#" class="close" data-dismiss="alert">&times;</a>
-                                    <a class="text-danger" href="../Telegrama/telegrama_naoenviados_b.jsp"><strong>ATENÇÃO!</strong> Existem <%= listaTele %> Telegramas para enviar.</a>
+                                    <a class="text-danger" href="../Telegrama/telegrama_naoenviados_b.jsp"><strong>ATENÇÃO!</strong> Existem <%= listaTele%> Telegramas para enviar.</a>
                                 </div>
                                 <%}%>
-                                <%if(listaContr.size()>0){%>
+                                <%if (listaContr.size() > 0) {%>
                                 <div class="alert alert-danger no-margin">
                                     <a href="#" class="close" data-dismiss="alert">&times;</a>
                                     <strong>ATENÇÃO!</strong> Existem clientes com o contrato a vencer em menos de 90 Dias:<br/>
                                     <%
-                                        for(int i=0; i<listaContr.size(); i++){
+                                        for (int i = 0; i < listaContr.size(); i++) {
                                             Clientes cli = listaContr.get(i);
                                     %>
-                                        <a href="../Cadastros/cliente_contrato_b.jsp?idCliente=<%= cli.getCodigo() %>">- <%= cli.getNome() %> - Contrato vence no dia <%= sdf.format(cli.getDtVigenciaFimContrato()) %></a><br/>
+                                    <a href="../Cadastros/cliente_contrato_b.jsp?idCliente=<%= cli.getCodigo()%>">- <%= cli.getNome()%> - Contrato vence no dia <%= sdf.format(cli.getDtVigenciaFimContrato())%></a><br/>
                                     <%}%>                                    
                                 </div>
                                 <%}%>
-                                <%if(!listaVeiculoManutencao.isEmpty()){ %>
+                                <%if (!listaVeiculoManutencao.isEmpty()) { %>
                                 <div class="alert alert-danger no-margin">
                                     <a href="#" class="close" data-dismiss="alert">&times;</a>
                                     <a class="text-danger" href="${pageContext.request.contextPath}/app/veiculo/manutencao">
@@ -159,40 +159,46 @@
                                         Integer quantidadeTrocaOleo = 0;
                                         Integer quantidadeProgramada = 0;
                                         Integer quantidadeRotina = 0;
-                                        for(int i = 0; i < listaVeiculoManutencao.size(); i++){
+                                        for (int i = 0; i < listaVeiculoManutencao.size(); i++) {
                                             VeiculoManutencao veiculoManutencao = listaVeiculoManutencao.get(i);
-                                            if(veiculoManutencao.getTipo() == TipoManutencaoVeiculo.TROCA_OLEO) { quantidadeTrocaOleo++; }
-                                            if(veiculoManutencao.getTipo() == TipoManutencaoVeiculo.PROGRAMADA) { quantidadeProgramada++; }
-                                            if(veiculoManutencao.getTipo() == TipoManutencaoVeiculo.ROTINA) { quantidadeRotina++; }
+                                            if (veiculoManutencao.getTipo() == TipoManutencaoVeiculo.TROCA_OLEO) {
+                                                quantidadeTrocaOleo++;
+                                            }
+                                            if (veiculoManutencao.getTipo() == TipoManutencaoVeiculo.PROGRAMADA) {
+                                                quantidadeProgramada++;
+                                            }
+                                            if (veiculoManutencao.getTipo() == TipoManutencaoVeiculo.ROTINA) {
+                                                quantidadeRotina++;
+                                            }
                                         }
                                     %>
-                                    <%if(quantidadeTrocaOleo > 0){ %>
+                                    <%if (quantidadeTrocaOleo > 0) {%>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <%= quantidadeTrocaOleo.toString() %>
-                                            <%if(quantidadeTrocaOleo > 1) { %> Trocas de óleo agendadas <% } else { %> Troca de óleo agendada <% } %>
+                                            <%= quantidadeTrocaOleo.toString()%>
+                                            <%if (quantidadeTrocaOleo > 1) { %> Trocas de óleo agendadas <% } else { %> Troca de óleo agendada <% } %>
                                         </div>
                                     </div>
                                     <%}%>
-                                    <%if(quantidadeProgramada > 0){ %>
+                                    <%if (quantidadeProgramada > 0) {%>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <%= quantidadeProgramada.toString() %>
-                                            <%if(quantidadeProgramada > 1) { %> Manuteções programada agendadas <% } else { %> Manuteção programada agendada <% } %>
+                                            <%= quantidadeProgramada.toString()%>
+                                            <%if (quantidadeProgramada > 1) { %> Manuteções programada agendadas <% } else { %> Manuteção programada agendada <% } %>
                                         </div>
                                     </div>
                                     <%}%>
-                                    <%if(quantidadeRotina > 0){ %>
+                                    <%if (quantidadeRotina > 0) {%>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <%= quantidadeRotina.toString() %>
-                                            <%if(quantidadeRotina > 1) { %> Manuteções de rotina agendadas <% } else { %> Manuteção de rotina agendada <% } %>
+                                            <%= quantidadeRotina.toString()%>
+                                            <%if (quantidadeRotina > 1) { %> Manuteções de rotina agendadas <% } else { %> Manuteção de rotina agendada <% } %>
                                         </div>
                                     </div>
                                     <%}%>
                                 </div>
                                 <%}%>
-                                <%if(!listaVeiculoSeguro.isEmpty()){ %>
+                                <%if (!listaVeiculoSeguro.isEmpty()) { %>
                                 <div class="alert alert-danger no-margin">
                                     <a href="#" class="close" data-dismiss="alert">&times;</a>
                                     <a class="text-danger" href="${pageContext.request.contextPath}/app/veiculo/seguro">
@@ -234,7 +240,7 @@
                                                 <i class="fa fa-dollar fa-5x"></i>
                                             </div>
                                             <div class="col-xs-9 text-right">
-                                                <div class="huge">R$ <%= df.format(valorTotal/qtdtotal) %></div>
+                                                <div class="huge">R$ <%= df.format(valorTotal / qtdtotal)%></div>
                                                 <div>Ticket Médio das Encomendas</div>
                                             </div>
                                         </div>
@@ -248,7 +254,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <%= tabelaTicket %>
+                                                <%= tabelaTicket%>
                                             </tbody>
                                         </table>
                                     </div>
@@ -267,7 +273,7 @@
                                                 <i class="fa fa-users fa-5x"></i>
                                             </div>
                                             <div class="col-xs-9 text-right">
-                                                <div class="huge"><%= listaClientes.size() %></div>
+                                                <div class="huge"><%= listaClientes.size()%></div>
                                                 <div>Clientes Ativos</div>
                                             </div>
                                         </div>
@@ -283,12 +289,12 @@
                                             </thead>
                                             <tbody>
                                                 <%
-                                                    for(Movimentacao m : listaClientes){
+                                                    for (Movimentacao m : listaClientes) {
                                                 %>
                                                 <tr>
-                                                    <td><%= m.getDescServico() %></td>
-                                                    <td align="right"><%= (int) m.getQuantidade() %></td>
-                                                    <td align="right">R$<%= df.format(m.getValorServico()/m.getQuantidade()) %></td>
+                                                    <td><%= m.getDescServico()%></td>
+                                                    <td align="right"><%= (int) m.getQuantidade()%></td>
+                                                    <td align="right">R$<%= df.format(m.getValorServico() / m.getQuantidade())%></td>
                                                 </tr>
                                                 <%}%>
                                             </tbody>
@@ -309,7 +315,7 @@
                                                 <i class="fa fa-warning fa-5x"></i>
                                             </div>
                                             <div class="col-xs-9 text-right">
-                                                <div class="huge"><%= listaInativos.size() %></div>
+                                                <div class="huge"><%= listaInativos.size()%></div>
                                                 <div>Clientes Inativos</div>
                                             </div>
                                         </div>
@@ -324,11 +330,11 @@
                                             </thead>
                                             <tbody>
                                                 <%
-                                                    for(Movimentacao m : listaInativos){
+                                                    for (Movimentacao m : listaInativos) {
                                                 %>
                                                 <tr>
-                                                    <td><%= m.getDescServico() %></td>
-                                                    <td><b><%= sdf.format(m.getDataPostagem()) %></b></td>
+                                                    <td><%= m.getDescServico()%></td>
+                                                    <td><b><%= sdf.format(m.getDataPostagem())%></b></td>
                                                 </tr>
                                                 <%}%>
                                             </tbody>
@@ -349,7 +355,7 @@
                                                 <i class="fa fa-barcode fa-5x"></i>
                                             </div>
                                             <div class="col-xs-9 text-right">
-                                                <div class="huge"><%= listaEtiquetas.size() %></div>
+                                                <div class="huge"><%= listaEtiquetas.size()%></div>
                                                 <div>Clientes com Pre-Postagem</div>
                                             </div>
                                         </div>
@@ -364,11 +370,11 @@
                                             </thead>
                                             <tbody>
                                                 <%
-                                                    for(Movimentacao m : listaEtiquetas){
+                                                    for (Movimentacao m : listaEtiquetas) {
                                                 %>
                                                 <tr>
-                                                    <td><%= m.getDescServico() %></td>
-                                                    <td align="right"><%= (int) m.getQuantidade() %></td>
+                                                    <td><%= m.getDescServico()%></td>
+                                                    <td align="right"><%= (int) m.getQuantidade()%></td>
                                                 </tr>
                                                 <%}%>
                                             </tbody>
@@ -384,10 +390,10 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-7 col-lg-8">                                
-                                        <div id="linechart" style="min-height: 250px;"></div>
+                                <div id="linechart" style="min-height: 250px;"></div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
-                                        <div id="donutchart" style="min-height: 250px;"></div>
+                                <div id="donutchart" style="min-height: 250px;"></div>
                             </div>
                         </div>
 
@@ -399,72 +405,100 @@
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         <script type="text/javascript">
 
-            function mostraDetalhes(id) {
-                $("#detalhes-" + id).slideToggle("slow", function() {
-                    if ($("#detalhes-" + id).css('display') === 'none') {
-                        $("#botao-txt-" + id).html('Mostrar Detalhes');
-                        $("#botao-img-" + id).attr('class', 'fa fa-plus-circle');
-                    } else {
-                        $("#botao-txt-" + id).html('Minimizar Detalhes');
-                        $("#botao-img-" + id).attr('class', 'fa fa-minus-circle');
-                    }
-                });
-            }
+                                        function mostraDetalhes(id) {
+                                            $("#detalhes-" + id).slideToggle("slow", function () {
+                                                if ($("#detalhes-" + id).css('display') === 'none') {
+                                                    $("#botao-txt-" + id).html('Mostrar Detalhes');
+                                                    $("#botao-img-" + id).attr('class', 'fa fa-plus-circle');
+                                                } else {
+                                                    $("#botao-txt-" + id).html('Minimizar Detalhes');
+                                                    $("#botao-img-" + id).attr('class', 'fa fa-minus-circle');
+                                                }
+                                            });
+                                        }
 
-            google.load("visualization", "1", {packages: ["corechart"]});
-            google.setOnLoadCallback(drawChart);
-            function drawChart() {
-                var data = google.visualization.arrayToDataTable([<%= grafico2 %>]);
-                var options = {
-                    allowHtml: true,
-                    width: '100%',
-                    height: '100%',
-                    tooltip: {isHtml: true},
-                    //legend: {position: 'top'},
-                    pieHole: 0.4
+                                        google.load("visualization", "1", {packages: ["corechart"]});
+                                        google.setOnLoadCallback(drawChart);
+                                        function drawChart() {
+                                            var data = google.visualization.arrayToDataTable([<%= grafico2%>]);
+                                            var options = {
+                                                allowHtml: true,
+                                                width: '100%',
+                                                height: '100%',
+                                                tooltip: {isHtml: true},
+                                                //legend: {position: 'top'},
+                                                pieHole: 0.4
+                                            };
+                                            var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+                                            var formatter = new google.visualization.NumberFormat({decimalSymbol: ',', groupingSymbol: '.', negativeColor: 'red', negativeParens: false, prefix: 'R$'});
+                                            formatter.format(data, 1);
+                                            chart.draw(data, options);
+
+                                            /**************************************************************/
+
+                                            var data2 = google.visualization.arrayToDataTable([<%=grafico1%>]);
+                                            var options2 = {
+                                                allowHtml: true,
+                                                width: '100%',
+                                                height: '100%',
+                                                tooltip: {isHtml: true},
+                                                legend: {position: 'top'}
+                                            };
+                                            var chart2 = new google.visualization.LineChart(document.getElementById('linechart'));
+                                            var formatter = new google.visualization.NumberFormat({decimalSymbol: ',', groupingSymbol: '.', negativeColor: 'red', negativeParens: false, prefix: 'R$'});
+                                            formatter.format(data2, 1);
+
+                                            chart2.draw(data2, options2);
+                                        }
+
+
+                                        $(document).ready(function () {
+                                            $("#dateIni").datepicker({
+                                                showAnim: 'slideDown',
+                                                maxDate: new Date(),
+                                                numberOfMonths: 3,
+                                                onClose: function (selectedDate) {
+                                                    $("#dateFim").datepicker("option", "minDate", selectedDate);
+                                                }
+                                            });
+                                            $("#dateFim").datepicker({
+                                                showAnim: 'slideDown',
+                                                maxDate: new Date(),
+                                                numberOfMonths: 3,
+                                                onClose: function (selectedDate) {
+                                                    $("#dateIni").datepicker("option", "maxDate", selectedDate);
+                                                }
+                                            });
+                                            fechaMsg();
+                                        });
+        </script>
+
+        <%
+            String nomeContato = (String) session.getAttribute("nome");
+        %>
+        <script type="text/javascript">
+            (function (d, src, c) {
+                var t = d.scripts[d.scripts.length - 1], s = d.createElement('script');
+                s.id = 'la_x2s6df8d';
+                s.async = true;
+                s.src = src;
+                s.onload = s.onreadystatechange = function () {
+                    var rs = this.readyState;
+                    if (rs && (rs !== 'complete') && (rs !== 'loaded')) {
+                        return;
+                    }
+                    c(this);
                 };
-                var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
-                var formatter = new google.visualization.NumberFormat({decimalSymbol: ',', groupingSymbol: '.', negativeColor: 'red', negativeParens: false, prefix: 'R$'});
-                formatter.format(data, 1);
-                chart.draw(data, options);
-
-                /**************************************************************/
-
-                var data2 = google.visualization.arrayToDataTable([<%=grafico1%>]);
-                var options2 = {
-                    allowHtml: true,
-                    width: '100%',
-                    height: '100%',
-                    tooltip: {isHtml: true},
-                    legend: {position: 'top'}
-                };
-                var chart2 = new google.visualization.LineChart(document.getElementById('linechart'));
-                var formatter = new google.visualization.NumberFormat({decimalSymbol: ',', groupingSymbol: '.', negativeColor: 'red', negativeParens: false, prefix: 'R$'});
-                formatter.format(data2, 1);
-
-                chart2.draw(data2, options2);
-            }
-                                        
-                                        
-            $(document).ready(function () {
-                $("#dateIni").datepicker({
-                    showAnim: 'slideDown',
-                    maxDate: new Date(),
-                    numberOfMonths: 3,
-                    onClose: function (selectedDate) {
-                        $("#dateFim").datepicker("option", "minDate", selectedDate);
-                    }
-                });
-                $("#dateFim").datepicker({
-                    showAnim: 'slideDown',
-                    maxDate: new Date(),
-                    numberOfMonths: 3,
-                    onClose: function (selectedDate) {
-                        $("#dateIni").datepicker("option", "maxDate", selectedDate);
-                    }
-                });
-                fechaMsg();
-            });
+                t.parentElement.insertBefore(s, t.nextSibling);
+            })(document,
+                    'https://scc4.ladesk.com/scripts/track.js',
+                    function (e) {
+                        LiveAgent.setUserDetails('<%=empr.getEmail()%>', '<%=empr.getEmpresa() %>', '[<%=empr.getCidade()+ "/" + empr.getUf()%>]', '<%=empr.getTelefone()%>');
+                        LiveAgent.addContactField('usuario', ' <%=nomeContato%>');
+                        LiveAgent.addContactField('telefone', ' <%=empr.getTelefone()%>');
+                        LiveAgent.addContactField('sistema', '<%=empr.getTipo_sistema()%>');
+                        LiveAgent.createButton('897d8114', e);
+                    });
         </script>
     </body>
 
