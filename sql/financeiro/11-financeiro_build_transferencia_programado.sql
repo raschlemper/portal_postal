@@ -10,9 +10,12 @@ CREATE TABLE `lancamento_programado_transferencia` (
    `idTipoDocumento`                     INT NULL,
    `idTipoFormaPagamento`                INT NULL,
    `frequencia`                          INT NOT NULL,
+   `dataCompetencia`                     DATETIME NOT NULL,
    `dataEmissao`                         DATETIME NOT NULL,
+   `dataVencimento`                      DATETIME NOT NULL,
    `valor`                               DECIMAL(13,2) NOT NULL,
    `historico`                           VARCHAR(254) NOT NULL,
+   `observacao`                          LONGTEXT DEFAULT NULL,
    `usuario`                             VARCHAR(100) DEFAULT NULL,
    PRIMARY KEY (`idLancamentoProgramadoTransferencia`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

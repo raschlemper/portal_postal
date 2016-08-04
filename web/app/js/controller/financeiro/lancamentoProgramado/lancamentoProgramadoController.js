@@ -1,17 +1,19 @@
 'use strict';
 
 app.controller('LancamentoProgramadoController', 
-    ['$scope', '$filter', '$state', 'LancamentoProgramadoService', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'ReportService', 'ModalService', 
-     'DatePickerService', 'LancamentoProgramadoHandler', 'LancamentoProgramadoParcelaHandler', 'LancamentoProgramadoRateioHandler', 'ListaService', 'LISTAS', 'MESSAGES',
-    function ($scope, $filter, $state, LancamentoProgramadoService, ContaService, PlanoContaService, CentroCustoService, ReportService, ModalService, 
-        DatePickerService, LancamentoProgramadoHandler, LancamentoProgramadoParcelaHandler, LancamentoProgramadoRateioHandler, ListaService, 
-        LISTAS, MESSAGES) {
+    ['$scope', '$filter', '$state', 'LancamentoProgramadoService', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoProgramadoTransferenciaService',
+     'ReportService', 'ModalService', 'DatePickerService', 'LancamentoProgramadoHandler', 'LancamentoProgramadoParcelaHandler', 'LancamentoProgramadoRateioHandler', 
+     'LancamentoProgramadoTransferenciaHandler', 'FinanceiroValidation', 'ListaService', 'LISTAS', 'MESSAGES',
+    function ($scope, $filter, $state, LancamentoProgramadoService, ContaService, PlanoContaService, CentroCustoService, LancamentoProgramadoTransferenciaService,
+        ReportService, ModalService, DatePickerService, LancamentoProgramadoHandler, LancamentoProgramadoParcelaHandler, LancamentoProgramadoRateioHandler, 
+        LancamentoProgramadoTransferenciaHandler, FinanceiroValidation, ListaService, LISTAS, MESSAGES) {
 
         var init = function () {
             $scope.lancamentoProgramados = [];
             $scope.lancamentoProgramadosLista = [];
             $scope.tipos = LISTAS.lancamento;
             $scope.modelos = LISTAS.modeloLancamento;
+            $scope.situacoes = LISTAS.situacaoLancamentoProgramado;
             $scope.tiposLancamento = [];
             $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
             $scope.datepickerDataFim = angular.copy(DatePickerService.default);    
@@ -406,19 +408,52 @@ app.controller('LancamentoProgramadoController',
         
         // ***** TRANSFERIR ***** //
 
-//        $scope.transferir = function(conta) {
-//            modalTransferir().then(function(result) {
-//                result = ajustarDadosTransferencia(result);
-//                LancamentoProgramadoTransferenciaService.save(result)
-//                    .then(function(data) {  
-//                        modalMessage("Lançamento Programado Transferido com sucesso!");
-//                        todos(conta);
-//                    })
-//                    .catch(function(e) {
-//                        modalMessage(e);
-//                    });
-//            });
-//        };
+        $scope.transferir = function(lancamentoTransferencia) {
+            if(!lancamentoTransferencia) {
+                transferir(lancamentoTransferencia);
+            } else {
+                LancamentoProgramadoTransferenciaService.get(lancamentoTransferencia.idLancamentoTransferencia)
+                    .then(function(lancamentoTransferencia) {
+                        transferir(lancamentoTransferencia);
+                    })
+                    .catch(function(e) {
+                        modalMessage(e.error);
+                    });
+            }            
+        };
+
+        var transferir = function(lancamentoTransferencia) {
+            modalTransferir(lancamentoTransferencia).then(function(result) {
+                result = ajustarDadosTransferencia(result);
+                if(lancamentoTransferencia) {  
+                    updateTransferencia(result);
+                } else {
+                    saveTransferencia(result);
+                }
+            });
+        }
+
+        var saveTransferencia = function(lancamentoTransferencia) {
+            LancamentoProgramadoTransferenciaService.save(lancamentoTransferencia)
+                .then(function(data) {  
+                    modalMessage(MESSAGES.lancamento.transferir.sucesso.INSERIDO_SUCESSO);
+                    todos();
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });        
+        }
+
+        var updateTransferencia = function(lancamentoTransferencia) {
+            LancamentoProgramadoTransferenciaService.update(lancamentoTransferencia.idLancamentoTransferencia, lancamentoTransferencia)
+                .then(function(data) {  
+                    modalMessage(MESSAGES.lancamento.transferir.sucesso.ALTERADO_SUCESSO);
+                    todos();
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });        
+        }
 
         // ***** REPORT ***** //
         
@@ -458,31 +493,20 @@ app.controller('LancamentoProgramadoController',
             return lancamentoList;
         }
         
-//        var ajustarDadosTransferencia = function(data) {                 
-//            var lancamentoProgramadoTransferencia = { 
-//                idLancamentoProgramadoTransferencia: null,
-//                lancamentoProgramadoOrigem: getLancamentoProgramado(data.contaOrigem, data),
-//                lancamentoProgramadoDestino: getLancamentoProgramado(data.contaDestino, data)
-//            }; 
-//            lancamentoProgramadoTransferencia.lancamentoProgramadoOrigem.tipo = $scope.tipos[1].id;
-//            lancamentoProgramadoTransferencia.lancamentoProgramadoDestino.tipo = $scope.tipos[0].id;    
-//            return lancamentoProgramadoTransferencia;
-//        }
-        
-//        var getLancamentoProgramado = function(conta, data) {
-//            return {
-//                idLancamentoProgramado: null,
-//                planoConta: null,
-//                centroCusto: null,
-//                favorecido: null,
-//                numero: data.numero,
-//                data: data.data,
-//                valor: data.valor,       
-//                situacao: data.situacao.id,
-//                historico: data.historico,
-//                conta: { idConta: conta.idConta }
-//            }
-//        }
+        var ajustarDadosTransferencia = function(data) {  
+            var lancamentoProgramadoTransferencia = LancamentoProgramadoTransferenciaHandler.handle(data); 
+            lancamentoProgramadoTransferencia.lancamentoProgramadoOrigem = getLancamentoProgramado(data.contaOrigem, $scope.tipos[1], data, data.lancamentoProgramadoOrigem);
+            lancamentoProgramadoTransferencia.lancamentoProgramadoDestino = getLancamentoProgramado(data.contaDestino, $scope.tipos[0], data, data.lancamentoProgramadoDestino);
+            return lancamentoProgramadoTransferencia;
+        }
+
+        var getLancamentoProgramado = function(conta, tipo, data, lancamentoProgramadoOriginal) {
+            data.idLancamentoProgramado = (lancamentoProgramadoOriginal && lancamentoProgramadoOriginal.idLancamentoProgramado) || null;
+            data.conta = conta;
+            data.tipo = tipo;
+            data.situacao = (data && data.situacao) || $scope.situacoes[0];
+            return LancamentoProgramadoHandler.handle(data);
+        };
         
         // ***** MODAL ***** //
         
@@ -516,10 +540,15 @@ app.controller('LancamentoProgramadoController',
             return modalInstance.result;
         };
         
-//        var modalTransferir = function() {
-//            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamentoProgramado/modalLancamentoProgramadoTransferir.html', 'ModalLancamentoProgramadoTransferirController', 'lg');
-//            return modalInstance.result;
-//        };
+        var modalTransferir = function(lancamentoTransferencia) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamentoProgramado/modalLancamentoProgramadoTransferir.html', 'ModalLancamentoProgramadoTransferirController', 'lg', 
+                {
+                    lancamentoTransferencia: function() {
+                        return lancamentoTransferencia;
+                    }
+                });
+            return modalInstance.result;
+        };
         
         var modalExcluir = function(message) {
             var modalInstance = ModalService.modalExcluir(MESSAGES.lancamento.programar.info.ALERT_EXCLUIR, message);

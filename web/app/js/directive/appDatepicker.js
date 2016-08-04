@@ -3,7 +3,7 @@ app.directive('appDatepicker', function(DatePickerService) {
     return {
         restrict: 'E',
         templateUrl: "js/directive/html/appDatepicker.html",
-        scope: { datepickerModel: '=', evtOnblur: evtOnblur },
+        scope: { datepickerModel: '=', events: '=' },
         link: function($scope, element, attr, controller) {  
             
             var init = function() {

@@ -90,6 +90,7 @@
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/handler/lancamentoProgramadoHandler.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/handler/lancamentoProgramadoParcelaHandler.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/handler/lancamentoProgramadoRateioHandler.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/handler/lancamentoProgramadoTransferenciaHandler.js"></script>
         
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/validation/financeiroValidation.js"></script>
         

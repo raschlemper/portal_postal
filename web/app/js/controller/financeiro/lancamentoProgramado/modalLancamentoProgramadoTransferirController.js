@@ -1,10 +1,11 @@
 'use strict';
 
 app.controller('ModalLancamentoProgramadoTransferirController', 
-    ['$scope', '$modalInstance', 'lancamentoTransferencia', 'ContaService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'MESSAGES',
-    function ($scope, $modalInstance, lancamentoTransferencia, ContaService, TipoDocumentoService, TipoFormaPagamentoService, MESSAGES) {
+    ['$scope', '$modalInstance', 'lancamentoTransferencia', 'ContaService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'LISTAS', 'MESSAGES',
+    function ($scope, $modalInstance, lancamentoTransferencia, ContaService, TipoDocumentoService, TipoFormaPagamentoService, LISTAS, MESSAGES) {
 
         var init = function () { 
+            $scope.frequencias = LISTAS.frequencia;
             $scope.lancamentoTransferencia = lancamentoTransferencia || {};       
             $scope.lancamentoTransferencia.tipo = ($scope.lancamentoTransferencia && $scope.lancamentoTransferencia.tipo) || $scope.tipo;
             $scope.lancamentoTransferencia.frequencia = ($scope.lancamentoTransferencia && $scope.lancamentoTransferencia.frequencia) || $scope.frequencias[0];
@@ -59,9 +60,11 @@ app.controller('ModalLancamentoProgramadoTransferirController',
                 });
         };
         
-        $scope.setDataCompetencia = function(lancamentoTransferencia) {
-            if(lancamentoTransferencia.dataCompetencia) return;
-            lancamentoTransferencia.dataCompetencia = lancamentoTransferencia.dataLancamento;
+        $scope.events = {
+            onblur : function() {
+                if($scope.lancamentoTransferencia.dataCompetencia) return;
+                $scope.lancamentoTransferencia.dataCompetencia = $scope.lancamentoTransferencia.dataVencimento;
+            }
         };
         
         $scope.ok = function(form, lancamentoTransferencia) {

@@ -12,7 +12,7 @@ import org.sql2o.ResultSetHandler;
 public class LancamentoProgramadoTransferenciaHandler extends GenericHandler implements ResultSetHandler<LancamentoProgramadoTransferencia> {
         
     public LancamentoProgramadoTransferenciaHandler() {
-        super("lancamento_transferencia_programado");
+        super("lancamento_programado_transferencia");
     }
     
     public LancamentoProgramadoTransferenciaHandler(String table) {

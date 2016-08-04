@@ -16,7 +16,7 @@ app.factory('LancamentoProgramadoTransferenciaHandler', function() {
         lancamentoProgramadoTransferenciaHandle.numero = getNumero(lancamentoProgramadoTransferencia); 
         lancamentoProgramadoTransferenciaHandle.documento = getDocumento(lancamentoProgramadoTransferencia); 
         lancamentoProgramadoTransferenciaHandle.formaPagamento = getFormaPagamento(lancamentoProgramadoTransferencia); 
-        lancamentoProgramadoTransferenciaHandle.frequencia = getFrequencia(lancamentoProgramadoTransferenciaHandle);
+        lancamentoProgramadoTransferenciaHandle.frequencia = getFrequencia(lancamentoProgramadoTransferencia);
         lancamentoProgramadoTransferenciaHandle.dataCompetencia = getDataCompetencia(lancamentoProgramadoTransferencia);
         lancamentoProgramadoTransferenciaHandle.dataEmissao = getDataEmissao(lancamentoProgramadoTransferencia);
         lancamentoProgramadoTransferenciaHandle.dataVencimento = getDataVencimento(lancamentoProgramadoTransferencia);
