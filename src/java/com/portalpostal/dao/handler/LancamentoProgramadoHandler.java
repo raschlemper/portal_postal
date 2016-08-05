@@ -4,11 +4,13 @@ import com.portalpostal.model.CentroCusto;
 import com.portalpostal.model.Conta;
 import com.portalpostal.model.Favorecido;
 import com.portalpostal.model.LancamentoProgramado;
+import com.portalpostal.model.LancamentoProgramadoTransferencia;
 import com.portalpostal.model.PlanoConta;
 import com.portalpostal.model.TipoDocumento;
 import com.portalpostal.model.TipoFormaPagamento;
 import com.portalpostal.model.dd.TipoFrequencia;
 import com.portalpostal.model.dd.TipoLancamento;
+import com.portalpostal.model.dd.TipoModeloLancamento;
 import com.portalpostal.model.dd.TipoSituacaoLancamentoProgramado;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,6 +32,7 @@ public class LancamentoProgramadoHandler extends GenericHandler implements Resul
         lancamentoProgramado.setConta(getConta(result));
         lancamentoProgramado.setPlanoConta(getPlanoConta(result));
         lancamentoProgramado.setCentroCusto(getCentroCusto(result));
+        lancamentoProgramado.setLancamentoProgramadoTransferencia(getLancamentoTransferencia(result));
         lancamentoProgramado.setTipo(TipoLancamento.values()[getInt(result, "tipo")]);
         lancamentoProgramado.setFavorecido(getFavorecido(result));
         lancamentoProgramado.setNumero(getString(result, "numero"));
@@ -43,6 +46,7 @@ public class LancamentoProgramadoHandler extends GenericHandler implements Resul
         lancamentoProgramado.setDataVencimento(getDate(result, "dataVencimento"));
         lancamentoProgramado.setValor(getDouble(result, "valor"));
         lancamentoProgramado.setSituacao(TipoSituacaoLancamentoProgramado.values()[getInt(result, "situacao")]);
+        lancamentoProgramado.setModelo(TipoModeloLancamento.values()[getInt(result, "modelo")]);
         lancamentoProgramado.setHistorico(getString(result, "historico"));
         lancamentoProgramado.setObservacao(getString(result, "observacao"));
         lancamentoProgramado.setUsuario(getString(result, "usuario"));
@@ -63,6 +67,15 @@ public class LancamentoProgramadoHandler extends GenericHandler implements Resul
         if(!existColumn(result, "centro_custo.idCentroCusto")) return null;
         return new CentroCustoHandler().handle(result); 
     }
+        
+    private LancamentoProgramadoTransferencia getLancamentoTransferencia(ResultSet result) throws SQLException {
+        if(!existColumn(result, "lancamento_programado_transferencia.idLancamentoProgramadoTransferencia")) return null;
+        if(!existFKValue(result, "lancamento_programado_transferencia.idLancamentoProgramadoTransferencia")) return null;
+        Integer id = getInt(result, "idLancamentoProgramadoTransferencia", "lancamento_programado_transferencia");
+        LancamentoProgramadoTransferencia transferencia = new LancamentoProgramadoTransferencia();
+        transferencia.setIdLancamentoProgramadoTransferencia(id);
+        return transferencia;
+    } 
     
     private TipoDocumento getTipoDocumento(ResultSet result) throws SQLException {
         if(!existColumn(result, "tipo_documento.idTipoDocumento")) return null;

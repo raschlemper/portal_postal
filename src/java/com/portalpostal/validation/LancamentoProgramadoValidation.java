@@ -1,5 +1,6 @@
 package com.portalpostal.validation;
 
+import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoProgramado;
 
 public class LancamentoProgramadoValidation extends Validation<LancamentoProgramado>{
@@ -15,7 +16,8 @@ public class LancamentoProgramadoValidation extends Validation<LancamentoProgram
         if(!validarDataEmissao(lancamentoProgramado)) return false;    
         if(!validarDataVencimento(lancamentoProgramado)) return false;  
         if(!validarValor(lancamentoProgramado)) return false;   
-        if(!validarSituacao(lancamentoProgramado)) return false;  
+        if(!validarSituacao(lancamentoProgramado)) return false;
+        if(!validarModelo(lancamentoProgramado)) return false;  
         if(!validarHistorico(lancamentoProgramado)) return false;   
         return true;
     }    
@@ -79,7 +81,13 @@ public class LancamentoProgramadoValidation extends Validation<LancamentoProgram
         if(campoNotNull(lancamentoProgramado.getSituacao())) return true; 
         setMsg("Preencha a situação do lançamento programado!");  
         return false;        
-    }   
+    }      
+
+    public boolean validarModelo(LancamentoProgramado lancamentoProgramado) {        
+        if(campoNotNull(lancamentoProgramado.getModelo())) return true; 
+        setMsg("Preencha o modelo do lançamento programado!");  
+        return false;        
+    }  
 
     public boolean validarHistorico(LancamentoProgramado lancamentoProgramado) {          
         if(campoNotNull(lancamentoProgramado.getHistorico())) return true; 

@@ -20,6 +20,7 @@ app.controller('ModalLancamentoProgramadoEditarController',
             $scope.lancamentoProgramado.tipo = ($scope.lancamentoProgramado && $scope.lancamentoProgramado.tipo) || $scope.tipo;
             $scope.lancamentoProgramado.frequencia = ($scope.lancamentoProgramado && $scope.lancamentoProgramado.frequencia) || $scope.frequencias[0];
             $scope.lancamentoProgramado.situacao = ($scope.lancamentoProgramado && $scope.lancamentoProgramado.situacao) || $scope.situacoes[0];
+            $scope.lancamentoProgramado.modelo = ($scope.lancamentoProgramado && $scope.lancamentoProgramado.modelo) || $scope.modelos[0];
             $scope.lancamentoProgramado.numeroParcela = getNumeroParcela($scope.lancamentoProgramado); 
 //            $scope.lancamento = $scope.getLancamento($scope.lancamentoProgramado, null, $scope.modelos[2]);
             getTitle($scope.lancamentoProgramado);

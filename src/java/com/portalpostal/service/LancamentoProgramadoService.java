@@ -5,6 +5,9 @@ import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.model.LancamentoProgramadoParcela;
 import com.portalpostal.model.LancamentoProgramadoRateio;
+import com.portalpostal.model.LancamentoProgramadoTransferencia;
+import com.portalpostal.model.LancamentoTransferencia;
+import com.portalpostal.model.dd.TipoModeloLancamento;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +17,7 @@ public class LancamentoProgramadoService {
     
     private LancamentoProgramadoDAO lancamentoProgramadoDAO;    
     private LancamentoService lancamentoService;  
+    private LancamentoProgramadoTransferenciaService lancamentoProgramadoTransferenciaService;
     private LancamentoProgramadoParcelaService lancamentoProgramadoParcelaService;
     private LancamentoProgramadoRateioService lancamentoProgramadoRateioService;
 
@@ -24,6 +28,7 @@ public class LancamentoProgramadoService {
     public void init() {
         lancamentoProgramadoDAO = new LancamentoProgramadoDAO(nomeBD);
         lancamentoService = new LancamentoService(nomeBD);
+        lancamentoProgramadoTransferenciaService = new LancamentoProgramadoTransferenciaService(nomeBD);
         lancamentoProgramadoParcelaService = new LancamentoProgramadoParcelaService(nomeBD);
         lancamentoProgramadoRateioService = new LancamentoProgramadoRateioService(nomeBD);
     }
@@ -130,6 +135,7 @@ public class LancamentoProgramadoService {
         init();
         if(!podeExcluir(idLancamentoProgramado)) throw new Exception("Este lançamento não pode ser excluído!"); 
         LancamentoProgramado lancamentoProgramado = find(idLancamentoProgramado);
+        removerLancamentoTransferencia(lancamentoProgramado);
         removerLancamentoParcela(lancamentoProgramado, null);
         removerLancamentoRateio(lancamentoProgramado, null);
         return lancamentoProgramadoDAO.remove(idLancamentoProgramado);
@@ -178,7 +184,23 @@ public class LancamentoProgramadoService {
         return lancamentoProgramado;
     }
     
-    // ***** PARCELAS ***** //
+    // ***** TRANSFERENCIA ***** //
+    
+    private void removerLancamentoTransferencia(LancamentoProgramado lancamentoProgramado) throws Exception {
+        if(lancamentoProgramado.getModelo() == TipoModeloLancamento.TRANSFERENCIA) {
+            LancamentoProgramadoTransferencia lancamentoTransferencia = lancamentoProgramadoTransferenciaService
+                    .findByLancamento(lancamentoProgramado.getIdLancamentoProgramado());
+            lancamentoProgramadoTransferenciaService.delete(lancamentoTransferencia.getIdLancamentoProgramadoTransferencia());
+            if(lancamentoTransferencia.getLancamentoProgramadoOrigem() != null) {
+                lancamentoProgramadoDAO.remove(lancamentoTransferencia.getLancamentoProgramadoOrigem().getIdLancamentoProgramado());
+            }
+            if(lancamentoTransferencia.getLancamentoProgramadoDestino() != null) {
+                lancamentoProgramadoDAO.remove(lancamentoTransferencia.getLancamentoProgramadoDestino().getIdLancamentoProgramado());
+            }
+        }
+    }
+    
+    // ***** * ***** //
     
     private LancamentoProgramado setLancamentos(LancamentoProgramado lancamentoProgramado) throws Exception {
         if(lancamentoProgramado.getParcelas() != null && !lancamentoProgramado.getParcelas().isEmpty()) return lancamentoProgramado;

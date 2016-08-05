@@ -2,9 +2,9 @@ package com.portalpostal.controller;
 
 import Controle.ContrErroLog;
 import com.portalpostal.validation.Validation;
-import com.portalpostal.model.LancamentoTransferenciaProgramado;
-import com.portalpostal.service.LancamentoTransferenciaProgramadoService;
-import com.portalpostal.validation.LancamentoTransferenciaProgramadoValidation;
+import com.portalpostal.model.LancamentoProgramadoTransferencia;
+import com.portalpostal.service.LancamentoProgramadoTransferenciaService;
+import com.portalpostal.validation.LancamentoProgramadoTransferenciaValidation;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,7 +22,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/financeiro/lancamento/programado/transferencia")
-public class LancamentoTransferenciaProgramadoController {
+public class LancamentoProgramadoTransferenciaController {
     
     @Context
     private HttpServletRequest request;
@@ -31,34 +31,34 @@ public class LancamentoTransferenciaProgramadoController {
     private String nomeBD;
     private String usuario;
     
-    private LancamentoTransferenciaProgramadoService lancamentoTransferenciaProgramadoService;
+    private LancamentoProgramadoTransferenciaService lancamentoProgramadoTransferenciaService;
 
     private void init() {
         sessao = request.getSession();
         nomeBD = (String) sessao.getAttribute("nomeBD");
         usuario = (String) sessao.getAttribute("usuario");  
-        lancamentoTransferenciaProgramadoService = new LancamentoTransferenciaProgramadoService(nomeBD);
+        lancamentoProgramadoTransferenciaService = new LancamentoProgramadoTransferenciaService(nomeBD);
     }
     
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<LancamentoTransferenciaProgramado> findAll() {
+    public List<LancamentoProgramadoTransferencia> findAll() {
         try {
             init();    
-            return lancamentoTransferenciaProgramadoService.findAll();
+            return lancamentoProgramadoTransferenciaService.findAll();
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     }  
     
     @GET
-    @Path("/{idLancamentoTransferenciaProgramado}")
+    @Path("/{idLancamentoProgramadoTransferencia}")
     @Produces(MediaType.APPLICATION_JSON)
-    public LancamentoTransferenciaProgramado find(@PathParam("idLancamentoTransferenciaProgramado") Integer idLancamentoTransferenciaProgramado) {
+    public LancamentoProgramadoTransferencia find(@PathParam("idLancamentoProgramadoTransferencia") Integer idLancamentoProgramadoTransferencia) {
         try {
             init();    
-            return lancamentoTransferenciaProgramadoService.find(idLancamentoTransferenciaProgramado);
+            return lancamentoProgramadoTransferenciaService.find(idLancamentoProgramadoTransferencia);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -68,54 +68,54 @@ public class LancamentoTransferenciaProgramadoController {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public LancamentoTransferenciaProgramado save(LancamentoTransferenciaProgramado lancamentoTransferenciaProgramado) {
+    public LancamentoProgramadoTransferencia save(LancamentoProgramadoTransferencia lancamentoProgramadoTransferencia) {
         try {
             init();
-            validation(lancamentoTransferenciaProgramado);
-            lancamentoTransferenciaProgramado.setUsuario(usuario);
-            return lancamentoTransferenciaProgramadoService.save(lancamentoTransferenciaProgramado);
+            validation(lancamentoProgramadoTransferencia);
+            lancamentoProgramadoTransferencia.setUsuario(usuario);
+            return lancamentoProgramadoTransferenciaService.save(lancamentoProgramadoTransferencia);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     } 
     
     @PUT
-    @Path("/{idLancamentoTransferenciaProgramado}")
+    @Path("/{idLancamentoProgramadoTransferencia}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public LancamentoTransferenciaProgramado update(LancamentoTransferenciaProgramado lancamentoTransferenciaProgramado) {
+    public LancamentoProgramadoTransferencia update(LancamentoProgramadoTransferencia lancamentoProgramadoTransferencia) {
         try {
             init();
-            validation(lancamentoTransferenciaProgramado);
-            lancamentoTransferenciaProgramado.setUsuario(usuario);
-            return lancamentoTransferenciaProgramadoService.update(lancamentoTransferenciaProgramado);
+            validation(lancamentoProgramadoTransferencia);
+            lancamentoProgramadoTransferencia.setUsuario(usuario);
+            return lancamentoProgramadoTransferenciaService.update(lancamentoProgramadoTransferencia);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     } 
     
     @DELETE
-    @Path("/{idLancamentoTransferenciaProgramado}")
+    @Path("/{idLancamentoProgramadoTransferencia}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public LancamentoTransferenciaProgramado delete(@PathParam("idLancamentoTransferenciaProgramado") Integer idLancamentoTransferenciaProgramado) {
+    public LancamentoProgramadoTransferencia delete(@PathParam("idLancamentoProgramadoTransferencia") Integer idLancamentoProgramadoTransferencia) {
         try {
             init();
-            return lancamentoTransferenciaProgramadoService.delete(idLancamentoTransferenciaProgramado);
+            return lancamentoProgramadoTransferenciaService.delete(idLancamentoProgramadoTransferencia);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     } 
     
-    private void validation(LancamentoTransferenciaProgramado lancamentoTransferenciaProgramado) throws Exception {  
-        Validation validacao = new LancamentoTransferenciaProgramadoValidation();
-        if(!validacao.validar(lancamentoTransferenciaProgramado)) {
+    private void validation(LancamentoProgramadoTransferencia lancamentoProgramadoTransferencia) throws Exception {  
+        Validation validacao = new LancamentoProgramadoTransferenciaValidation();
+        if(!validacao.validar(lancamentoProgramadoTransferencia)) {
             throw new WebApplicationException(getMessageError(validacao.getMsg()));
         } 
     }  
     
     private Response getMessageError(String msg) {  
-        int idErro = ContrErroLog.inserir("Portal Postal - ServLancamentoTransferenciaProgramado", "Exception", null, msg);
+        int idErro = ContrErroLog.inserir("Portal Postal - ServLancamentoProgramadoTransferencia", "Exception", null, msg);
         return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN)
                 .entity("SYSTEM ERROR Nº: " + idErro + "<br/> Ocorreu um erro inesperado!").build();
     }
