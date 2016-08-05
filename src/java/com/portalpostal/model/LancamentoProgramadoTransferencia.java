@@ -3,27 +3,30 @@ package com.portalpostal.model;
 import com.portalpostal.model.dd.TipoFrequencia;
 import java.util.Date;
 
-public class LancamentoTransferenciaProgramado {
+public class LancamentoProgramadoTransferencia {
     
-    private Integer idLancamentoTransferenciaProgramado;
+    private Integer idLancamentoProgramadoTransferencia;
     private LancamentoProgramado lancamentoProgramadoOrigem;
     private LancamentoProgramado lancamentoProgramadoDestino;
     private String numero;
     private TipoDocumento documento;
     private TipoFormaPagamento formaPagamento;  
     private TipoFrequencia frequencia; 
+    private Date dataCompetencia;
     private Date dataEmissao;
+    private Date dataVencimento;
     private Double valor;
     private String historico;
+    private String observacao;
     private String usuario;
 
-    public Integer getIdLancamentoTransferenciaProgramado() {
-        return idLancamentoTransferenciaProgramado;
+    public Integer getIdLancamentoProgramadoTransferencia() {
+        return idLancamentoProgramadoTransferencia;
     }
 
-    public void setIdLancamentoTransferenciaProgramado(Integer idLancamentoTransferenciaProgramado) {
-        this.idLancamentoTransferenciaProgramado = idLancamentoTransferenciaProgramado;
-    }
+    public void setIdLancamentoProgramadoTransferencia(Integer idLancamentoProgramadoTransferencia) {
+        this.idLancamentoProgramadoTransferencia = idLancamentoProgramadoTransferencia;
+    }    
 
     public LancamentoProgramado getLancamentoProgramadoOrigem() {
         return lancamentoProgramadoOrigem;
@@ -73,12 +76,28 @@ public class LancamentoTransferenciaProgramado {
         this.frequencia = frequencia;
     }
 
+    public Date getDataCompetencia() {
+        return dataCompetencia;
+    }
+
+    public void setDataCompetencia(Date dataCompetencia) {
+        this.dataCompetencia = dataCompetencia;
+    }
+
     public Date getDataEmissao() {
         return dataEmissao;
     }
 
     public void setDataEmissao(Date dataEmissao) {
         this.dataEmissao = dataEmissao;
+    } 
+
+    public Date getDataVencimento() {
+        return dataVencimento;
+    }
+
+    public void setDataVencimento(Date dataVencimento) {
+        this.dataVencimento = dataVencimento;
     }
 
     public Double getValor() {
@@ -95,6 +114,14 @@ public class LancamentoTransferenciaProgramado {
 
     public void setHistorico(String historico) {
         this.historico = historico;
+    }
+
+    public String getObservacao() {
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
     }
 
     public String getUsuario() {

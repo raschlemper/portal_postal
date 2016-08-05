@@ -1,6 +1,8 @@
 'use strict';
 
-app.factory('LancamentoProgramadoHandler', function() {
+app.factory('LancamentoProgramadoHandler', function(LISTAS) {
+    
+    var modelos = LISTAS.modeloLancamento;
     
     var handleList = function(lancamentoProgramadoList) { 
         return _.map(lancamentoProgramadoList, function(lancamentoProgramado) {
@@ -27,6 +29,7 @@ app.factory('LancamentoProgramadoHandler', function() {
         lancamentoProgramadoHandle.dataVencimento = getDataVencimento(lancamentoProgramado);
         lancamentoProgramadoHandle.valor = getValor(lancamentoProgramado);
         lancamentoProgramadoHandle.situacao = getSituacao(lancamentoProgramado);
+        lancamentoProgramadoHandle.modelo = getModelo(lancamentoProgramado); 
         lancamentoProgramadoHandle.historico = getHistorico(lancamentoProgramado);
         lancamentoProgramadoHandle.observacao = getObservacao(lancamentoProgramado);
         lancamentoProgramadoHandle.usuario = getUsuario(lancamentoProgramado);
@@ -108,6 +111,11 @@ app.factory('LancamentoProgramadoHandler', function() {
     var getSituacao = function(lancamentoProgramado) {
         if(!lancamentoProgramado.situacao) return lancamentoProgramado.situacao;
         return lancamentoProgramado.situacao.id; 
+    };
+    
+    var getModelo = function(lancamentoProgramado) {
+        if(!lancamentoProgramado.modelo) return modelos[0].id;
+        return lancamentoProgramado.modelo.id; 
     };
     
     var getHistorico = function(lancamentoProgramado) {

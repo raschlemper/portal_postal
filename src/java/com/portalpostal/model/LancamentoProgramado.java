@@ -2,6 +2,7 @@ package com.portalpostal.model;
 
 import com.portalpostal.model.dd.TipoFrequencia;
 import com.portalpostal.model.dd.TipoLancamento;
+import com.portalpostal.model.dd.TipoModeloLancamento;
 import com.portalpostal.model.dd.TipoSituacaoLancamentoProgramado;
 import java.util.Date;
 import java.util.List;
@@ -12,6 +13,7 @@ public class LancamentoProgramado {
     private Conta conta;
     private PlanoConta planoConta;
     private CentroCusto centroCusto;
+    private LancamentoProgramadoTransferencia lancamentoProgramadoTransferencia;
     private TipoLancamento tipo;
     private Favorecido favorecido;
     private String numero;
@@ -27,6 +29,7 @@ public class LancamentoProgramado {
     private Date dataVencimento;
     private Double valor;
     private TipoSituacaoLancamentoProgramado situacao;
+    private TipoModeloLancamento modelo;
     private String historico;
     private String observacao;
     private String usuario;
@@ -65,6 +68,14 @@ public class LancamentoProgramado {
 
     public void setCentroCusto(CentroCusto centroCusto) {
         this.centroCusto = centroCusto;
+    }
+
+    public LancamentoProgramadoTransferencia getLancamentoProgramadoTransferencia() {
+        return lancamentoProgramadoTransferencia;
+    }
+
+    public void setLancamentoProgramadoTransferencia(LancamentoProgramadoTransferencia lancamentoProgramadoTransferencia) {
+        this.lancamentoProgramadoTransferencia = lancamentoProgramadoTransferencia;
     }
 
     public TipoLancamento getTipo() {
@@ -186,6 +197,14 @@ public class LancamentoProgramado {
 
     public void setSituacao(TipoSituacaoLancamentoProgramado situacao) {
         this.situacao = situacao;
+    }
+
+    public TipoModeloLancamento getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(TipoModeloLancamento modelo) {
+        this.modelo = modelo;
     }
 
     public String getHistorico() {

@@ -1,7 +1,7 @@
 package com.portalpostal.dao.handler;
 
 import com.portalpostal.model.LancamentoProgramado;
-import com.portalpostal.model.LancamentoTransferenciaProgramado;
+import com.portalpostal.model.LancamentoProgramadoTransferencia;
 import com.portalpostal.model.TipoDocumento;
 import com.portalpostal.model.TipoFormaPagamento;
 import com.portalpostal.model.dd.TipoFrequencia;
@@ -9,28 +9,31 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.sql2o.ResultSetHandler;
 
-public class LancamentoTransferenciaProgramadoHandler extends GenericHandler implements ResultSetHandler<LancamentoTransferenciaProgramado> {
+public class LancamentoProgramadoTransferenciaHandler extends GenericHandler implements ResultSetHandler<LancamentoProgramadoTransferencia> {
         
-    public LancamentoTransferenciaProgramadoHandler() {
-        super("lancamento_transferencia");
+    public LancamentoProgramadoTransferenciaHandler() {
+        super("lancamento_programado_transferencia");
     }
     
-    public LancamentoTransferenciaProgramadoHandler(String table) {
+    public LancamentoProgramadoTransferenciaHandler(String table) {
         super(table);
     }
 
-    public LancamentoTransferenciaProgramado handle(ResultSet result) throws SQLException {
-        LancamentoTransferenciaProgramado lancamento = new LancamentoTransferenciaProgramado();
-        lancamento.setIdLancamentoTransferenciaProgramado(getInt(result, "idLancamentoTransferenciaProgramado"));
+    public LancamentoProgramadoTransferencia handle(ResultSet result) throws SQLException {
+        LancamentoProgramadoTransferencia lancamento = new LancamentoProgramadoTransferencia();
+        lancamento.setIdLancamentoProgramadoTransferencia(getInt(result, "idLancamentoProgramadoTransferencia"));
         lancamento.setLancamentoProgramadoOrigem(getLancamentoProgramadoOrigem(result));
         lancamento.setLancamentoProgramadoDestino(getLancamentoProgramadoDestino(result));
         lancamento.setNumero(getString(result, "numero"));
         lancamento.setDocumento(getTipoDocumento(result));
         lancamento.setFormaPagamento(getTipoFormaPagamento(result));
         lancamento.setFrequencia(TipoFrequencia.values()[getInt(result, "frequencia")]);
+        lancamento.setDataCompetencia(getDate(result, "dataCompetencia"));
         lancamento.setDataEmissao(getDate(result, "dataEmissao"));
+        lancamento.setDataVencimento(getDate(result, "dataVencimento"));
         lancamento.setValor(getDouble(result, "valor"));
         lancamento.setHistorico(getString(result, "historico"));
+        lancamento.setObservacao(getString(result, "observacao"));
         lancamento.setUsuario(getString(result, "usuario"));
         return lancamento;
     }
