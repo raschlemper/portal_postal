@@ -54,6 +54,10 @@ public class LancamentoProgramadoTransferenciaService {
     
     public LancamentoProgramadoTransferencia update(LancamentoProgramadoTransferencia lancamentoProgramadoTransferencia) throws Exception {
         init();
+        LancamentoProgramado origem = lancamentoProgramadoService.update(lancamentoProgramadoTransferencia.getLancamentoProgramadoOrigem());
+        LancamentoProgramado destino = lancamentoProgramadoService.update(lancamentoProgramadoTransferencia.getLancamentoProgramadoDestino());
+        lancamentoProgramadoTransferencia.setLancamentoProgramadoOrigem(origem);
+        lancamentoProgramadoTransferencia.setLancamentoProgramadoDestino(destino);
         return lancamentoProgramadoTransferenciaDAO.update(lancamentoProgramadoTransferencia);
     } 
     

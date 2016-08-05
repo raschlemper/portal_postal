@@ -78,12 +78,12 @@ public class LancamentoProgramadoTransferenciaDAO extends GenericDAO {
 
     public LancamentoProgramadoTransferencia update(LancamentoProgramadoTransferencia lancamentoProgramadoTransferencia) throws Exception {
         String sql = "UPDATE lancamento_programado_transferencia "
-                   + "SET idLancamentoProgramadoOrigem = :idLancamentoProgramadoOrigem, idLancamentoProgramadoDestino = :idLancamentoProgramadoDestino "
+                   + "SET idLancamentoProgramadoOrigem = :idLancamentoProgramadoOrigem, idLancamentoProgramadoDestino = :idLancamentoProgramadoDestino, "
                    + "numero = :numero, idTipoDocumento = :idTipoDocumento, idTipoFormaPagamento = :idTipoFormaPagamento, frequencia = :frequencia, "
                    + "dataCompetencia = :dataCompetencia, dataEmissao = :dataEmissao, dataVencimento = :dataVencimento, valor = :valor, historico = :historico, usuario = :usuario "
                    + "WHERE idLancamentoProgramadoTransferencia = :idLancamentoProgramadoTransferencia ";        
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("idLancamentoTransferenciaProgramado", lancamentoProgramadoTransferencia.getIdLancamentoProgramadoTransferencia());
+        params.put("idLancamentoProgramadoTransferencia", lancamentoProgramadoTransferencia.getIdLancamentoProgramadoTransferencia());
         params.put("idLancamentoProgramadoOrigem", lancamentoProgramadoTransferencia.getLancamentoProgramadoOrigem().getIdLancamentoProgramado());
         params.put("idLancamentoProgramadoDestino", lancamentoProgramadoTransferencia.getLancamentoProgramadoDestino().getIdLancamentoProgramado());
         params.put("numero", lancamentoProgramadoTransferencia.getNumero());               

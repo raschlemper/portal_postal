@@ -14,7 +14,7 @@ app.controller('ModalLancamentoProgramadoVisualizarController',
         // ***** CONTROLLER ***** //    
         
         var getTitle = function() {
-            $scope.title = MESSAGES.lancamento.programar.title.VISUALIZAR; 
+            $scope.title = MESSAGES.lancamento.programar.title.VISUALIZAR + ' ' + lancamentoProgramado.modelo.descricao;
         };
         
         var planoContas = function() {

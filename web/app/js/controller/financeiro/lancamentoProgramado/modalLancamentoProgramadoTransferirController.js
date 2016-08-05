@@ -1,22 +1,22 @@
 'use strict';
 
 app.controller('ModalLancamentoProgramadoTransferirController', 
-    ['$scope', '$modalInstance', 'lancamentoTransferencia', 'ContaService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'LISTAS', 'MESSAGES',
-    function ($scope, $modalInstance, lancamentoTransferencia, ContaService, TipoDocumentoService, TipoFormaPagamentoService, LISTAS, MESSAGES) {
+    ['$scope', '$modalInstance', 'lancamentoProgramadoTransferencia', 'ContaService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'LISTAS', 'MESSAGES',
+    function ($scope, $modalInstance, lancamentoProgramadoTransferencia, ContaService, TipoDocumentoService, TipoFormaPagamentoService, LISTAS, MESSAGES) {
 
         var init = function () { 
             $scope.frequencias = LISTAS.frequencia;
-            $scope.lancamentoTransferencia = lancamentoTransferencia || {};       
-            $scope.lancamentoTransferencia.tipo = ($scope.lancamentoTransferencia && $scope.lancamentoTransferencia.tipo) || $scope.tipo;
-            $scope.lancamentoTransferencia.frequencia = ($scope.lancamentoTransferencia && $scope.lancamentoTransferencia.frequencia) || $scope.frequencias[0];
-            getTitle(lancamentoTransferencia);
+            $scope.lancamentoProgramadoTransferencia = lancamentoProgramadoTransferencia || {};       
+            $scope.lancamentoProgramadoTransferencia.tipo = ($scope.lancamentoProgramadoTransferencia && $scope.lancamentoProgramadoTransferencia.tipo) || $scope.tipo;
+            $scope.lancamentoProgramadoTransferencia.frequencia = ($scope.lancamentoProgramadoTransferencia && $scope.lancamentoProgramadoTransferencia.frequencia) || $scope.frequencias[0];
+            getTitle(lancamentoProgramadoTransferencia);
             contas();
         };
                 
         // ***** CONTROLLER ***** //   
         
-        var getTitle = function(lancamentoTransferencia) {
-            if(lancamentoTransferencia && lancamentoTransferencia.idLancamentoTransferencia) { 
+        var getTitle = function(lancamentoProgramadoTransferencia) {
+            if(lancamentoProgramadoTransferencia && lancamentoProgramadoTransferencia.idLancamentoProgramadoTransferencia) { 
                 $scope.title = MESSAGES.lancamento.transferir.title.EDITAR; 
             } else { 
                 $scope.title = MESSAGES.lancamento.transferir.title.INSERIR; 
@@ -27,8 +27,10 @@ app.controller('ModalLancamentoProgramadoTransferirController',
             ContaService.getAll()
                 .then(function (data) {
                     $scope.contas = data;
-                    $scope.lancamentoTransferencia.contaOrigem = $scope.contas[0];
-                    $scope.lancamentoTransferencia.contaDestino = $scope.contas[0];
+                    $scope.lancamentoProgramadoTransferencia.contaOrigem = 
+                            ($scope.lancamentoProgramadoTransferencia.lancamentoProgramadoOrigem && $scope.lancamentoProgramadoTransferencia.lancamentoProgramadoOrigem.conta) || $scope.contas[0];
+                    $scope.lancamentoProgramadoTransferencia.contaDestino = 
+                            ($scope.lancamentoProgramadoTransferencia.lancamentoProgramadoDestino && $scope.lancamentoProgramadoTransferencia.lancamentoProgramadoDestino.conta) || $scope.contas[0];
                     tipoDocumento();
                 })
                 .catch(function (e) {
@@ -40,7 +42,7 @@ app.controller('ModalLancamentoProgramadoTransferirController',
             TipoDocumentoService.getAll()
                 .then(function (data) {
                     $scope.documentos = data;
-                    $scope.lancamentoTransferencia.documento = $scope.lancamentoTransferencia.documento || $scope.documentos[1];                    
+                    $scope.lancamentoProgramadoTransferencia.documento = $scope.lancamentoProgramadoTransferencia.documento || $scope.documentos[1];                    
                     tipoFormaPagamento();
                 })
                 .catch(function (e) {
@@ -52,7 +54,7 @@ app.controller('ModalLancamentoProgramadoTransferirController',
             TipoFormaPagamentoService.getAll()
                 .then(function (data) {
                     $scope.formaPagamentos = data;
-                    $scope.lancamentoTransferencia.formaPagamento = $scope.lancamentoTransferencia.formaPagamento || $scope.formaPagamentos[1];
+                    $scope.lancamentoProgramadoTransferencia.formaPagamento = $scope.lancamentoProgramadoTransferencia.formaPagamento || $scope.formaPagamentos[1];
 //                    favorecidos();
                 })
                 .catch(function (e) {
@@ -62,14 +64,14 @@ app.controller('ModalLancamentoProgramadoTransferirController',
         
         $scope.events = {
             onblur : function() {
-                if($scope.lancamentoTransferencia.dataCompetencia) return;
-                $scope.lancamentoTransferencia.dataCompetencia = $scope.lancamentoTransferencia.dataVencimento;
+                if($scope.lancamentoProgramadoTransferencia.dataCompetencia) return;
+                $scope.lancamentoProgramadoTransferencia.dataCompetencia = $scope.lancamentoProgramadoTransferencia.dataVencimento;
             }
         };
         
-        $scope.ok = function(form, lancamentoTransferencia) {
+        $scope.ok = function(form, lancamentoProgramadoTransferencia) {
             if (!validarForm(form)) return;
-            $modalInstance.close(lancamentoTransferencia);            
+            $modalInstance.close(lancamentoProgramadoTransferencia);            
         };
         
         $scope.cancel = function () {
