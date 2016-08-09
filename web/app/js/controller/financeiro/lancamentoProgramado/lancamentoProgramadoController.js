@@ -2,11 +2,11 @@
 
 app.controller('LancamentoProgramadoController', 
     ['$scope', '$filter', '$state', 'LancamentoProgramadoService', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoProgramadoTransferenciaService',
-     'ReportService', 'ModalService', 'DatePickerService', 'LancamentoProgramadoHandler', 'LancamentoProgramadoParcelaHandler', 'LancamentoProgramadoRateioHandler', 
-     'LancamentoProgramadoTransferenciaHandler', 'FinanceiroValidation', 'ListaService', 'LISTAS', 'MESSAGES',
+     'FrequenciaLancamentoService', 'ReportService', 'ModalService', 'DatePickerService', 'LancamentoProgramadoHandler', 'LancamentoProgramadoParcelaHandler', 
+     'LancamentoProgramadoRateioHandler', 'LancamentoProgramadoTransferenciaHandler', 'FinanceiroValidation', 'ListaService', 'LISTAS', 'MESSAGES',
     function ($scope, $filter, $state, LancamentoProgramadoService, ContaService, PlanoContaService, CentroCustoService, LancamentoProgramadoTransferenciaService,
-        ReportService, ModalService, DatePickerService, LancamentoProgramadoHandler, LancamentoProgramadoParcelaHandler, LancamentoProgramadoRateioHandler, 
-        LancamentoProgramadoTransferenciaHandler, FinanceiroValidation, ListaService, LISTAS, MESSAGES) {
+        FrequenciaLancamentoService, ReportService, ModalService, DatePickerService, LancamentoProgramadoHandler, LancamentoProgramadoParcelaHandler, 
+        LancamentoProgramadoRateioHandler, LancamentoProgramadoTransferenciaHandler, FinanceiroValidation, ListaService, LISTAS, MESSAGES) {
 
         var init = function () {
             $scope.lancamentoProgramados = [];
@@ -332,9 +332,17 @@ app.controller('LancamentoProgramadoController',
             }
         };
         
+        var criarLancamentoTransferencia = function(conta, lancamentoProgramadoTransferencia) { 
+            criarLancamento(conta, lancamentoProgramadoTransferencia.lancamentoProgramadoOrigem);
+            criarLancamento(conta, lancamentoProgramadoTransferencia.lancamentoProgramadoDestino);
+        };
+        
         var create = function(conta, lancamentoProgramado) { 
+            var isParcela = (lancamentoProgramado.parcelas && lancamentoProgramado.parcelas.length);
+            lancamentoProgramado = ajustarLancamentoProgramadoFrequencia(lancamentoProgramado, isParcela);
             LancamentoProgramadoService.create(lancamentoProgramado)
                 .then(function(data) {  
+                    encerrarLancamentoProgramado(lancamentoProgramado, lancamentoProgramado.lancamentos[0]); 
                     modalMessage(MESSAGES.lancamento.sucesso.INSERIDO_SUCESSO);
                     todos(conta);                        
                 })
@@ -418,13 +426,13 @@ app.controller('LancamentoProgramadoController',
         
         // ***** TRANSFERIR ***** //
 
-        $scope.transferir = function(lancamentoProgramadoTransferencia) {
+        $scope.transferir = function(conta, lancamentoProgramadoTransferencia) {
             if(!lancamentoProgramadoTransferencia) {
-                transferir(lancamentoProgramadoTransferencia);
+                transferir(conta, lancamentoProgramadoTransferencia);
             } else {
                 LancamentoProgramadoTransferenciaService.get(lancamentoProgramadoTransferencia.idLancamentoProgramadoTransferencia)
                     .then(function(lancamentoProgramadoTransferencia) {
-                        transferir(lancamentoProgramadoTransferencia);
+                        transferir(conta, lancamentoProgramadoTransferencia);
                     })
                     .catch(function(e) {
                         modalMessage(e.error);
@@ -432,39 +440,55 @@ app.controller('LancamentoProgramadoController',
             }            
         };
 
-        var transferir = function(lancamentoProgramadoTransferencia) {
+        var transferir = function(conta, lancamentoProgramadoTransferencia) {
             modalTransferir(lancamentoProgramadoTransferencia).then(function(result) {
+                var gerarLancamento = result.gerarLancamento;
                 result = ajustarDadosTransferencia(result);
                 if(lancamentoProgramadoTransferencia) {  
-                    updateTransferencia(result);
+                    updateTransferencia(conta, result, gerarLancamento);
                 } else {
-                    saveTransferencia(result);
+                    saveTransferencia(conta, result, gerarLancamento);
                 }
             });
         }
 
-        var saveTransferencia = function(lancamentoProgramadoTransferencia) {
-            LancamentoProgramadoTransferenciaService.save(lancamentoProgramadoTransferencia)
-                .then(function(data) {  
-                    modalMessage(MESSAGES.lancamento.transferir.sucesso.INSERIDO_SUCESSO);
-                    todos();
-                })
-                .catch(function(e) {
-                    modalMessage(e);
-                });        
+        var saveTransferencia = function(conta, lancamentoProgramadoTransferencia, gerarLancamento) {
+            if(gerarLancamento) { criarLancamentoTransferencia(conta, lancamentoProgramadoTransferencia); } 
+            else { 
+                LancamentoProgramadoTransferenciaService.save(lancamentoProgramadoTransferencia)
+                    .then(function(data) {  
+                        modalMessage(MESSAGES.lancamento.transferir.sucesso.INSERIDO_SUCESSO);
+                        todos();
+                    })
+                    .catch(function(e) {
+                        modalMessage(e);
+                    });  
+            }
         }
 
-        var updateTransferencia = function(lancamentoProgramadoTransferencia) {
-            LancamentoProgramadoTransferenciaService
-                    .update(lancamentoProgramadoTransferencia.idLancamentoProgramadoTransferencia, lancamentoProgramadoTransferencia)
-                .then(function(data) {  
-                    modalMessage(MESSAGES.lancamento.transferir.sucesso.ALTERADO_SUCESSO);
-                    todos();
-                })
-                .catch(function(e) {
-                    modalMessage(e);
-                });        
+        var updateTransferencia = function(conta, lancamentoProgramadoTransferencia, gerarLancamento) {
+            if(gerarLancamento) { criarLancamentoTransferencia(conta, lancamentoProgramadoTransferencia); } 
+            else { 
+                LancamentoProgramadoTransferenciaService
+                        .update(lancamentoProgramadoTransferencia.idLancamentoProgramadoTransferencia, lancamentoProgramadoTransferencia)
+                    .then(function(data) {  
+                        modalMessage(MESSAGES.lancamento.transferir.sucesso.ALTERADO_SUCESSO);
+                        todos();
+                    })
+                    .catch(function(e) {
+                        modalMessage(e);
+                    });        
+            }
         }
+        
+        var encerrarLancamentoProgramado = function(lancamentoProgramado, lancamento) {
+            if(lancamentoProgramado.frequencia.codigo === 'unico') { 
+                lancamentoProgramado.situacao = $scope.situacoes[2];
+            }
+            if(lancamento.numeroParcela === lancamentoProgramado.quantidadeParcela) {
+                lancamentoProgramado.situacao = $scope.situacoes[2];                
+            }            
+        };
 
         // ***** REPORT ***** //
         
@@ -519,6 +543,14 @@ app.controller('LancamentoProgramadoController',
             data.modelo = modelo;
             data.situacao = (data && data.situacao) || $scope.situacoes[0];
             return LancamentoProgramadoHandler.handle(data);
+        };
+        
+        var ajustarLancamentoProgramadoFrequencia = function(lancamentoProgramado, isParcelas) {             
+            if(!isParcelas) {
+                lancamentoProgramado.dataCompetencia = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataCompetencia) || moment();
+                lancamentoProgramado.dataVencimento = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataVencimento) || moment();
+            }
+            return lancamentoProgramado;
         };
         
         // ***** MODAL ***** //
