@@ -74,8 +74,7 @@ app.controller('ModalLancamentoProgramadoTransferirController',
         $scope.gerar = function(form, lancamentoProgramadoTransferencia) {
             if(!$scope.validarForm(form)) return;  
             lancamentoProgramadoTransferencia.gerarLancamento = true;
-            $scope.close(lancamentoProgramadoTransferencia);      
-            transferir()
+            $modalInstance.close(lancamentoProgramadoTransferencia); 
         };
         
         $scope.ok = function(form, lancamentoProgramadoTransferencia) {

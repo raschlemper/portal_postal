@@ -201,8 +201,8 @@ app.controller('LancamentoController',
                     lancamento.centroCusto = null;
                 }
 
-                if(lancamento.modelo.id === $scope.modelos[1].id) { 
-                    lancamento.planoConta = $scope.modelos[1].descricao;
+                if(lancamento.modelo.id === $scope.modelos[1].id || lancamento.modelo.id === $scope.modelos[3].id) { 
+                    lancamento.planoConta = lancamento.modelo.descricao;
                 }
 
                 lancamento.tipo.modelo = lancamento.modelo;

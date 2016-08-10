@@ -87,7 +87,7 @@ public class ServPreVendaImportar extends HttpServlet {
                             }
                         }
                     }
-                    System.out.println("chegou aqui");
+                    //System.out.println("chegou aqui");
 
                     if (fileItem == null || (!fileItem.getName().toUpperCase().endsWith(".CSV") && !fileItem.getName().toUpperCase().endsWith(".XML") && !fileItem.getName().toUpperCase().endsWith(".TXT") && !fileItem.getName().toUpperCase().endsWith(".XLS"))) {
                         response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=Escolha um arquivo para importacao !");
