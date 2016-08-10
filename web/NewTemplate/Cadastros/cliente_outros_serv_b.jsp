@@ -232,10 +232,10 @@
                                                     }
                                                     document.getElementById('servicos').value = servicos;
 
-                                                    if (servicos == "") {
+                                                   /* if (servicos == "") {
                                                         alert('Selecione algum serviço para o Contrato do Cliente!');
                                                         return false;
-                                                    }
+                                                    }*/
 
                                                     form.submit();
                                                 }

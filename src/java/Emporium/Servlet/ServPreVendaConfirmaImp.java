@@ -141,10 +141,16 @@ public class ServPreVendaConfirmaImp extends HttpServlet {
             
             //VERIFICAR SE CEP POSSUI ESEDEX CASO O SERVICO ESCOLHIDO SEJA ESEDEX.
             //SE NAO POSSUIR O ESEDEX TROCAR PARA SEDEX.
-            if (servico.equals("ESEDEX")) {
-                int cep2 = Integer.parseInt(cep.replace("-", "").trim());
+            int cep2 = Integer.parseInt(cep.replace("-", "").trim());
+            if (servico.equals("ESEDEX") || servico.equals("SEDEX10") || servico.equals("SEDEX12") || servico.equals("SEDEXHJ")) {
                 if (!ContrServicoAbrangencia.verificaByCepServico(cep2, servico, nomeBD)) {
                     servico = "SEDEX";
+                }
+            } else if (servico.startsWith("MDPB")) {
+                servico = "CARTA";                    
+                String resultado = ContrServicoAbrangencia.verificaMDPBxCep(cep2, nomeBD);
+                if(resultado != null && !resultado.equals("erro")){
+                    servico = resultado;
                 }
             }
 

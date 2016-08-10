@@ -26,6 +26,9 @@
                 String uf = cli.getUf();
                 int cep = cli.getCep();
                 String numero = cli.getNumero();
+                if(numero == null || numero.equals("")){
+                    numero = "";
+                }
                 String url_logo = cli.getUrl_logo();
                 if(url_logo != null && !url_logo.equals("") && !url_logo.startsWith("http")){
                     url_logo = "http://www.portalpostal.com.br" + url_logo;
@@ -160,6 +163,10 @@
                                     <label>Endereço</label>
                                     <input readonly type="text" name="endereco" size="50" value="<%= endereco%>" />
                                     <input type="hidden" value="<%= numero%>" name="numero" onkeypress="mascara(this, maskNumero)"/>
+                                </dd>
+                                 <dd>
+                                    <label>Numero</label>
+                                    <input readonly type="text" name="complemento" value="<%=numero%>" />
                                 </dd>
                                 <dd>
                                     <label>Complemento</label>

@@ -2,11 +2,11 @@
 
 app.controller('LancamentoProgramadoController', 
     ['$scope', '$filter', '$state', 'LancamentoProgramadoService', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoProgramadoTransferenciaService',
-     'ReportService', 'ModalService', 'DatePickerService', 'LancamentoProgramadoHandler', 'LancamentoProgramadoParcelaHandler', 'LancamentoProgramadoRateioHandler', 
-     'LancamentoProgramadoTransferenciaHandler', 'FinanceiroValidation', 'ListaService', 'LISTAS', 'MESSAGES',
+     'FrequenciaLancamentoService', 'ReportService', 'ModalService', 'DatePickerService', 'LancamentoProgramadoHandler', 'LancamentoProgramadoParcelaHandler', 
+     'LancamentoProgramadoRateioHandler', 'LancamentoProgramadoTransferenciaHandler', 'LancamentoHandler', 'FinanceiroValidation', 'ListaService', 'LISTAS', 'MESSAGES',
     function ($scope, $filter, $state, LancamentoProgramadoService, ContaService, PlanoContaService, CentroCustoService, LancamentoProgramadoTransferenciaService,
-        ReportService, ModalService, DatePickerService, LancamentoProgramadoHandler, LancamentoProgramadoParcelaHandler, LancamentoProgramadoRateioHandler, 
-        LancamentoProgramadoTransferenciaHandler, FinanceiroValidation, ListaService, LISTAS, MESSAGES) {
+        FrequenciaLancamentoService, ReportService, ModalService, DatePickerService, LancamentoProgramadoHandler, LancamentoProgramadoParcelaHandler, 
+        LancamentoProgramadoRateioHandler, LancamentoProgramadoTransferenciaHandler, LancamentoHandler, FinanceiroValidation, ListaService, LISTAS, MESSAGES) {
 
         var init = function () {
             $scope.lancamentoProgramados = [];
@@ -195,8 +195,8 @@ app.controller('LancamentoProgramadoController',
                 
                 if(lancamentoProgramado.favorecido) { lancamentoProgramado.favorecido = lancamentoProgramado.favorecido.nome; }
 
-                if(lancamentoProgramado.modelo.id === $scope.modelos[1].id) { 
-                    lancamentoProgramado.planoConta = $scope.modelos[1].descricao;
+                if(lancamentoProgramado.modelo.id === $scope.modelos[3].id) { 
+                    lancamentoProgramado.planoConta = $scope.modelos[3].descricao;
                 }
                                 
                 lancamentoProgramado.situacao = lancamentoProgramado.situacao.descricao;
@@ -262,7 +262,7 @@ app.controller('LancamentoProgramadoController',
         };
         
         var save = function(conta, lancamentoProgramado, gerarLancamento) {
-            if(gerarLancamento) { criarLancamento(conta, lancamentoProgramado); } 
+            if(gerarLancamento) { criarLancamento(conta, lancamentoProgramado, true); } 
             else { 
                 LancamentoProgramadoService.save(lancamentoProgramado)
                     .then(function(data) { 
@@ -281,7 +281,7 @@ app.controller('LancamentoProgramadoController',
             LancamentoProgramadoService.get(lancamentoProgramado.idLancamentoProgramado)
                 .then(function(result) {
                     if(result.lancamentoProgramadoTransferencia) {
-                        $scope.transferir(result.lancamentoProgramadoTransferencia);
+                        $scope.transferir(conta, result.lancamentoProgramadoTransferencia);
                     } else {   
                         editar(conta, result);
                     }
@@ -296,7 +296,7 @@ app.controller('LancamentoProgramadoController',
                 .then(function(result) {
                     var gerarLancamento = result.gerarLancamento;
                     result = ajustarDados(result);
-                    if(gerarLancamento) { criarLancamento(conta, result); } 
+                    if(gerarLancamento) { criarLancamento(conta, result, true); } 
                     else { update(conta, result); }
                 });            
         };
@@ -314,29 +314,39 @@ app.controller('LancamentoProgramadoController',
         
         // ***** CREATE ***** //
         
-        var criarLancamento = function(conta, lancamentoProgramado) { 
+        var criarLancamento = function(conta, lancamentoProgramado, showMsg) { 
             if(lancamentoProgramado.idLancamentoProgramado) {
                 LancamentoProgramadoService.getByNumeroParcela(lancamentoProgramado.idLancamentoProgramado, lancamentoProgramado.numeroParcela)
                     .then(function(data) {  
                         if(data) {
                             modalMessage(MESSAGES.lancamento.programar.info.PARCELA_EXISTENTE);
                         } else {
-                            create(conta, lancamentoProgramado);
+                            create(conta, lancamentoProgramado, showMsg);
                         }
                     })
                     .catch(function(e) {
                         modalMessage(e);
                     });
             } else {
-                create(conta, lancamentoProgramado);
+                create(conta, lancamentoProgramado, showMsg);
             }
         };
         
-        var create = function(conta, lancamentoProgramado) { 
+        var criarLancamentoTransferencia = function(conta, lancamentoProgramadoTransferencia) { 
+            criarLancamento(conta, lancamentoProgramadoTransferencia.lancamentoProgramadoOrigem, false);
+            criarLancamento(conta, lancamentoProgramadoTransferencia.lancamentoProgramadoDestino, true);
+        };
+        
+        var create = function(conta, lancamentoProgramado, showMsg) { 
+            var isParcela = (lancamentoProgramado.parcelas && lancamentoProgramado.parcelas.length);
+            lancamentoProgramado = ajustarLancamentoProgramadoFrequencia(lancamentoProgramado, isParcela);
             LancamentoProgramadoService.create(lancamentoProgramado)
                 .then(function(data) {  
-                    modalMessage(MESSAGES.lancamento.sucesso.INSERIDO_SUCESSO);
-                    todos(conta);                        
+                    encerrarLancamentoProgramado(lancamentoProgramado, lancamentoProgramado.lancamentos[0]); 
+                    if(showMsg) {
+                        modalMessage(MESSAGES.lancamento.sucesso.INSERIDO_SUCESSO);
+                        todos(conta);                        
+                    }
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -418,13 +428,13 @@ app.controller('LancamentoProgramadoController',
         
         // ***** TRANSFERIR ***** //
 
-        $scope.transferir = function(lancamentoProgramadoTransferencia) {
+        $scope.transferir = function(conta, lancamentoProgramadoTransferencia) {
             if(!lancamentoProgramadoTransferencia) {
-                transferir(lancamentoProgramadoTransferencia);
+                transferir(conta, lancamentoProgramadoTransferencia);
             } else {
                 LancamentoProgramadoTransferenciaService.get(lancamentoProgramadoTransferencia.idLancamentoProgramadoTransferencia)
                     .then(function(lancamentoProgramadoTransferencia) {
-                        transferir(lancamentoProgramadoTransferencia);
+                        transferir(conta, lancamentoProgramadoTransferencia);
                     })
                     .catch(function(e) {
                         modalMessage(e.error);
@@ -432,39 +442,55 @@ app.controller('LancamentoProgramadoController',
             }            
         };
 
-        var transferir = function(lancamentoProgramadoTransferencia) {
+        var transferir = function(conta, lancamentoProgramadoTransferencia) {
             modalTransferir(lancamentoProgramadoTransferencia).then(function(result) {
+                var gerarLancamento = result.gerarLancamento;
                 result = ajustarDadosTransferencia(result);
                 if(lancamentoProgramadoTransferencia) {  
-                    updateTransferencia(result);
+                    updateTransferencia(conta, result, gerarLancamento);
                 } else {
-                    saveTransferencia(result);
+                    saveTransferencia(conta, result, gerarLancamento);
                 }
             });
         }
 
-        var saveTransferencia = function(lancamentoProgramadoTransferencia) {
-            LancamentoProgramadoTransferenciaService.save(lancamentoProgramadoTransferencia)
-                .then(function(data) {  
-                    modalMessage(MESSAGES.lancamento.transferir.sucesso.INSERIDO_SUCESSO);
-                    todos();
-                })
-                .catch(function(e) {
-                    modalMessage(e);
-                });        
+        var saveTransferencia = function(conta, lancamentoProgramadoTransferencia, gerarLancamento) {
+            if(gerarLancamento) { criarLancamentoTransferencia(conta, lancamentoProgramadoTransferencia); } 
+            else { 
+                LancamentoProgramadoTransferenciaService.save(lancamentoProgramadoTransferencia)
+                    .then(function(data) {  
+                        modalMessage(MESSAGES.lancamento.transferir.sucesso.INSERIDO_SUCESSO);
+                        todos();
+                    })
+                    .catch(function(e) {
+                        modalMessage(e);
+                    });  
+            }
         }
 
-        var updateTransferencia = function(lancamentoProgramadoTransferencia) {
-            LancamentoProgramadoTransferenciaService
-                    .update(lancamentoProgramadoTransferencia.idLancamentoProgramadoTransferencia, lancamentoProgramadoTransferencia)
-                .then(function(data) {  
-                    modalMessage(MESSAGES.lancamento.transferir.sucesso.ALTERADO_SUCESSO);
-                    todos();
-                })
-                .catch(function(e) {
-                    modalMessage(e);
-                });        
+        var updateTransferencia = function(conta, lancamentoProgramadoTransferencia, gerarLancamento) {
+            if(gerarLancamento) { criarLancamentoTransferencia(conta, lancamentoProgramadoTransferencia); } 
+            else { 
+                LancamentoProgramadoTransferenciaService
+                        .update(lancamentoProgramadoTransferencia.idLancamentoProgramadoTransferencia, lancamentoProgramadoTransferencia)
+                    .then(function(data) {  
+                        modalMessage(MESSAGES.lancamento.transferir.sucesso.ALTERADO_SUCESSO);
+                        todos();
+                    })
+                    .catch(function(e) {
+                        modalMessage(e);
+                    });        
+            }
         }
+        
+        var encerrarLancamentoProgramado = function(lancamentoProgramado, lancamento) {
+            if(lancamentoProgramado.frequencia.codigo === 'unico') { 
+                lancamentoProgramado.situacao = $scope.situacoes[2];
+            }
+            if(lancamento.numeroParcela === lancamentoProgramado.quantidadeParcela) {
+                lancamentoProgramado.situacao = $scope.situacoes[2];                
+            }            
+        };
 
         // ***** REPORT ***** //
         
@@ -505,7 +531,7 @@ app.controller('LancamentoProgramadoController',
         }
         
         var ajustarDadosTransferencia = function(data) {  
-            var modelo = $scope.modelos[1];
+            var modelo = $scope.modelos[3];
             var lancamentoProgramadoTransferencia = LancamentoProgramadoTransferenciaHandler.handle(data); 
             lancamentoProgramadoTransferencia.lancamentoProgramadoOrigem = getLancamentoProgramado(data.contaOrigem, $scope.tipos[1], modelo, data, data.lancamentoProgramadoOrigem);
             lancamentoProgramadoTransferencia.lancamentoProgramadoDestino = getLancamentoProgramado(data.contaDestino, $scope.tipos[0], modelo, data, data.lancamentoProgramadoDestino);
@@ -518,7 +544,27 @@ app.controller('LancamentoProgramadoController',
             data.tipo = tipo;
             data.modelo = modelo;
             data.situacao = (data && data.situacao) || $scope.situacoes[0];
-            return LancamentoProgramadoHandler.handle(data);
+            data.numeroParcela = data.numeroParcela || 0;
+            data.dataLancamento = data.dataVencimento;
+            setLancamentoTransferencia(data);
+            var lancamentoProgramadoHandle = LancamentoProgramadoHandler.handle(data);
+            lancamentoProgramadoHandle.lancamentos = data.lancamentos;
+            return lancamentoProgramadoHandle;
+        };
+        
+        var setLancamentoTransferencia = function(lancamentoProgramado) { 
+//            lancamentoProgramado.historico = '(' + lancamentoProgramado.modelo.descricao + ') ' + lancamentoProgramado.historico || "";
+            var lancamentoHandle = LancamentoHandler.handle(lancamentoProgramado);
+            lancamentoProgramado.lancamentos = [];
+            lancamentoProgramado.lancamentos.push(lancamentoHandle);
+        };
+        
+        var ajustarLancamentoProgramadoFrequencia = function(lancamentoProgramado, isParcelas) {             
+            if(!isParcelas) {
+                lancamentoProgramado.dataCompetencia = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataCompetencia) || moment();
+                lancamentoProgramado.dataVencimento = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataVencimento) || moment();
+            }
+            return lancamentoProgramado;
         };
         
         // ***** MODAL ***** //

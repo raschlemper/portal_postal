@@ -201,8 +201,8 @@ app.controller('LancamentoController',
                     lancamento.centroCusto = null;
                 }
 
-                if(lancamento.modelo.id === $scope.modelos[1].id) { 
-                    lancamento.planoConta = $scope.modelos[1].descricao;
+                if(lancamento.modelo.id === $scope.modelos[1].id || lancamento.modelo.id === $scope.modelos[3].id) { 
+                    lancamento.planoConta = lancamento.modelo.descricao;
                 }
 
                 lancamento.tipo.modelo = lancamento.modelo;
@@ -441,7 +441,7 @@ app.controller('LancamentoController',
                     saveTransferencia(conta, result);
                 }
             });
-        }
+        };
 
         var saveTransferencia = function(conta, lancamentoTransferencia) {
             LancamentoTransferenciaService.save(lancamentoTransferencia)
@@ -452,7 +452,7 @@ app.controller('LancamentoController',
                 .catch(function(e) {
                     modalMessage(e);
                 });        
-        }
+        };
 
         var updateTransferencia = function(conta, lancamentoTransferencia) {
             LancamentoTransferenciaService.update(lancamentoTransferencia.idLancamentoTransferencia, lancamentoTransferencia)
@@ -463,7 +463,7 @@ app.controller('LancamentoController',
                 .catch(function(e) {
                     modalMessage(e);
                 });        
-        }
+        };
 
         // ***** RECONCILIAR ***** //
 

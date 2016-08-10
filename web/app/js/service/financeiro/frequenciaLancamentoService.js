@@ -65,7 +65,7 @@ app.factory('FrequenciaLancamentoService', function(LISTAS) {
     }
     
     var addData = function (frequencia, data) {
-        switch (frequencia.id) {
+        switch (frequencia) {
             case frequencias[0].id: 
                 return data;
             case frequencias[1].id: 

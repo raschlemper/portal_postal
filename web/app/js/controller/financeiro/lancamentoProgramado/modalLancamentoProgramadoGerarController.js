@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('ModalLancamentoProgramadoGerarController', 
-    ['$scope', 'LancamentoConciliadoService', 'FavorecidoService', 'FrequenciaLancamentoService', 'ListaService', 'ModalService', 'LancamentoHandler', 'LancamentoRateioHandler', 'LISTAS', 'MESSAGES',
-    function ($scope, LancamentoConciliadoService, FavorecidoService, FrequenciaLancamentoService, ListaService, ModalService, LancamentoHandler, LancamentoRateioHandler, LISTAS, MESSAGES) {
+    ['$scope', 'LancamentoConciliadoService', 'FavorecidoService', 'ListaService', 'ModalService', 'LancamentoHandler', 'LancamentoRateioHandler', 'LISTAS', 'MESSAGES',
+    function ($scope, LancamentoConciliadoService, FavorecidoService, ListaService, ModalService, LancamentoHandler, LancamentoRateioHandler, LISTAS, MESSAGES) {
 
         var init = function () {  
             getTitle();
@@ -59,33 +59,13 @@ app.controller('ModalLancamentoProgramadoGerarController',
         };
         
         var lancar = function(lancamentoProgramado, lancamento) {  
-            var isParcela = ($scope.lancamentoProgramado.parcelas && $scope.lancamentoProgramado.parcelas.length);
-            lancamentoProgramado = ajustarLancamentoProgramado(lancamentoProgramado, isParcela);
             lancamentoProgramado.gerarLancamento = true;
             lancamentoProgramado.lancamentos = [];
             lancamentoProgramado.lancamentos.push(lancamento);
-            encerrarLancamentoProgramado(lancamentoProgramado, lancamento); 
             $scope.close(lancamentoProgramado);           
         };
         
-        var encerrarLancamentoProgramado = function(lancamentoProgramado, lancamento) {
-            if(lancamentoProgramado.frequencia.codigo === 'unico') { 
-                lancamentoProgramado.situacao = $scope.situacoes[2];
-            }
-            if(lancamento.numeroParcela === lancamentoProgramado.quantidadeParcela) {
-                lancamentoProgramado.situacao = $scope.situacoes[2];                
-            }            
-        };
-        
         // ***** AJUSTAR ***** //
-        
-        var ajustarLancamentoProgramado = function(lancamentoProgramado, isParcelas) {             
-            if(!isParcelas) {
-                lancamentoProgramado.dataCompetencia = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataCompetencia) || moment();
-                lancamentoProgramado.dataVencimento = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataVencimento) || moment();
-            }
-            return lancamentoProgramado;
-        };
         
         var ajustarLancamento = function(lancamento) { 
             lancamento.historico = '(' + lancamento.modelo.descricao + ') ' + lancamento.historico || "";

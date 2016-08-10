@@ -1,8 +1,10 @@
 'use strict';
 
 app.controller('ModalLancamentoProgramadoTransferirController', 
-    ['$scope', '$modalInstance', 'lancamentoProgramadoTransferencia', 'ContaService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'LISTAS', 'MESSAGES',
-    function ($scope, $modalInstance, lancamentoProgramadoTransferencia, ContaService, TipoDocumentoService, TipoFormaPagamentoService, LISTAS, MESSAGES) {
+    ['$scope', '$modalInstance', 'lancamentoProgramadoTransferencia', 'LancamentoProgramadoTransferenciaService', 'ContaService', 'TipoDocumentoService', 
+     'TipoFormaPagamentoService', 'FrequenciaLancamentoService', 'LISTAS', 'MESSAGES',
+    function ($scope, $modalInstance, lancamentoProgramadoTransferencia, LancamentoProgramadoTransferenciaService, ContaService, TipoDocumentoService, 
+    TipoFormaPagamentoService, FrequenciaLancamentoService, LISTAS, MESSAGES) {
 
         var init = function () { 
             $scope.frequencias = LISTAS.frequencia;
@@ -69,16 +71,27 @@ app.controller('ModalLancamentoProgramadoTransferirController',
             }
         };
         
+        $scope.gerar = function(form, lancamentoProgramadoTransferencia) {
+            if(!$scope.validarForm(form)) return;  
+            lancamentoProgramadoTransferencia.gerarLancamento = true;
+            $modalInstance.close(lancamentoProgramadoTransferencia); 
+        };
+        
         $scope.ok = function(form, lancamentoProgramadoTransferencia) {
-            if (!validarForm(form)) return;
+            if (!$scope.validarForm(form)) return;
             $modalInstance.close(lancamentoProgramadoTransferencia);            
         };
         
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
+        
+        // ***** AJUSTAR ***** //
 
-        var validarForm = function (form) {
+
+        // ***** VALIDAR ***** //
+
+        $scope.validarForm = function (form) {
             if(form.contaOrigem.$modelValue === form.contaDestino.$modelValue) {
                 alert(MESSAGES.lancamento.transferir.validacao.CONTA_DIFERENTE);
                 return false;                
@@ -108,8 +121,8 @@ app.controller('ModalLancamentoProgramadoTransferirController',
                 return false;
             }
             return true;
-        }      
-
+        };
+        
         init();
 
     }]);
