@@ -3243,3 +3243,7 @@ table.table-condensed tbody tr td.cel-menu {
 .pull-top {
     margin-top: -10px;
 }
+
+.bold {
+    font-weight: bold;
+}

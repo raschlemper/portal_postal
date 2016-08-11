@@ -8,7 +8,10 @@ app.factory('loadingInterceptor', ['$rootScope', '$q', '$timeout',
                 if($rootScope.requestInProgress <= 0) {                     
                     if(config.url.indexOf("partials/modal/modalExcluir.html") >= 0 || 
                        config.url.indexOf("partials/modal/modalMessage.html") >= 0 || 
-                       config.url.indexOf("template/typeahead/typeahead-match.html") >= 0) { 
+                       config.url.indexOf("template/typeahead/typeahead-match.html") >= 0 || 
+                       config.url.indexOf("favorecidoTemplate.html") >= 0 || 
+                       config.url.indexOf("planoContaTemplate.html") >= 0 || 
+                       config.url.indexOf("centroCustoTemplate.html") >= 0) { 
                         $rootScope.requestInProgress++;
                         return config; 
                     }

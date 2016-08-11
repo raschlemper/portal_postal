@@ -161,7 +161,8 @@ app.controller('LancamentoProgramadoController',
                 
                 var complementoDescricaoFrequencia = '';
                 if(lancamentoProgramado.quantidadeParcela) { 
-                    complementoDescricaoFrequencia = ' - ' + lancamentoProgramado.quantidadeParcelaAbertas + 'x (' + $filter('currency')(lancamentoProgramado.valor, 'R$ ') + ')';
+                    var saldo = getSaldoLancamentoProgramadoParcelado(lancamentoProgramado);
+                    complementoDescricaoFrequencia = ' - ' + lancamentoProgramado.quantidadeParcelaAbertas + 'x (' + $filter('currency')(saldo, 'R$ ') + ')';
 //                    lancamentoProgramado.tipo.modelo = $scope.modelos[4];
                     lancamentoProgramado.valor = lancamentoProgramado.valor / lancamentoProgramado.quantidadeParcela;
                 }                
@@ -208,6 +209,14 @@ app.controller('LancamentoProgramadoController',
                 'planoConta', 'centroCusto', 'usuario', 'favorecido', 'valor', 'situacao', 'frequencia', 'existeLancamento');
             })
         };
+        
+        var getSaldoLancamentoProgramadoParcelado = function(lancamentoProgramado) {
+            var saldo = 0;
+            _.map(lancamentoProgramado.parcelas, function(parcela) {  
+                if(!parcela.lancamento) { saldo += parcela.valor; }
+            });   
+            return saldo;
+        }
         
         var getLancamentoProgramadosSelecionados = function(lancamentosProgramados) {            
             var lancamentosProgramadosSelecionados = [];
