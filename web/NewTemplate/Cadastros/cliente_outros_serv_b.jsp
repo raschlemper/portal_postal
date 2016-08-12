@@ -62,8 +62,12 @@
                                                         <li class="list-group-item list-group-item-danger">
                                                             <select class="form-control" style="width:300px;" name="servico_1" id="servico_1" size="10">
                                                                 <%
+                                                                    int avista = 1;
+                                                                    if(cliInc.getTemContrato() == 1){
+                                                                        avista = 2;
+                                                                    }
                                                                     ArrayList<Integer> listaOutros = ContrClienteContrato.consultaOutrosServicosCliente(idClienteInc, nomeBD);
-                                                                    ArrayList<ServicoECT> listaServ = ContrServicoECT.consultaServicos(0, 1, "OSV");
+                                                                    ArrayList<ServicoECT> listaServ = ContrServicoECT.consultaServicos(avista, 1, "OSV");
                                                                     if (listaServ != null) {
                                                                         for (int i = 0; i < listaServ.size(); i++) {
                                                                             ServicoECT sv = listaServ.get(i);

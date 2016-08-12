@@ -28,6 +28,8 @@ public class ContrServicoECT {
             sql += " WHERE ativo = " + atv + " AND tipo = 'SERVICO' AND tipo_agencia LIKE '%" + tipo_agencia + "%' AND faturar = 1";
         } else if (avista == 1) {
             sql += " WHERE ativo = " + atv + " AND tipo = 'SERVICO' AND tipo_agencia LIKE '%" + tipo_agencia + "%' AND avista >= 1";
+        } else {
+            sql += " WHERE ativo = " + atv + " AND tipo = 'SERVICO' AND tipo_agencia LIKE '%" + tipo_agencia + "%'";
         }
         sql += " ORDER BY nomeServico";
 

@@ -51,8 +51,14 @@ app.controller('ContaCorrenteController',
         var criarContaCorrentesLista = function(contaCorrentes) {
             return _.map(contaCorrentes, function(contaCorrente) {
                 contaCorrente.banco = contaCorrente.banco.nome;
-                contaCorrente.agencia = $filter('number')(contaCorrente.agencia) + '-' + contaCorrente.agenciaDv;
-                contaCorrente.contaCorrente = $filter('number')(contaCorrente.contaCorrente) + '-' + contaCorrente.contaCorrenteDv;
+                contaCorrente.agencia = $filter('number')(contaCorrente.agencia);
+                if(contaCorrente.agenciaDv || contaCorrente.agenciaDv == 0) { 
+                    contaCorrente.agencia += '-' + contaCorrente.agenciaDv; 
+                }
+                contaCorrente.contaCorrente = $filter('number')(contaCorrente.contaCorrente);
+                if(contaCorrente.contaCorrenteDv || contaCorrente.contaCorrenteDv == 0) { 
+                    contaCorrente.contaCorrente += '-' + contaCorrente.contaCorrenteDv; 
+                }
                 return _.pick(contaCorrente, 'idContaCorrente', 'nome', 'banco', 'agencia', 'contaCorrente');
             })
         };

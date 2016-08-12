@@ -221,6 +221,7 @@ app.controller('LancamentoController',
         var calculateSaldo = function(lancamentos) {
             var saldo = 0;
             $scope.saldoTotal = 0;
+            $scope.saldoTotal += ($scope.conta && $scope.conta.valorSaldoAbertura) || 0;
             return _.map(lancamentos, function(lancamento) {
                 if(lancamento.pagamento) { 
                     saldo += lancamento.pagamento;

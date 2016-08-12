@@ -57,7 +57,7 @@ app.controller('ModalContaCorrenteEditarController',
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
             ContaCorrenteService.getByContaCorrente($scope.contaCorrente.banco.idBanco, $scope.contaCorrente.agencia, 
-                $scope.contaCorrente.agenciaDv, $scope.contaCorrente.contaCorrente, $scope.contaCorrente.contaCorrenteDv)
+                $scope.contaCorrente.agenciaDv || 0, $scope.contaCorrente.contaCorrente, $scope.contaCorrente.contaCorrenteDv || 0)
                 .then(function(contaCorrente) {
                     if(!contaCorrente) { $modalInstance.close($scope.contaCorrente); }
                     else if(contaCorrente.idContaCorrente == $scope.contaCorrente.idContaCorrente) { $modalInstance.close($scope.contaCorrente); }
@@ -83,26 +83,26 @@ app.controller('ModalContaCorrenteEditarController',
                 alert('Preencha a agência da conta corrente!');
                 return false;
             }
-            if (form.agenciaDv.$error.required) {
-                alert('Preencha o dígito verificador (DV) da agência da conta corrente!');
-                return false;
-            }
-            if (form.agenciaDv.$error.min || form.agenciaDv.$error.max) {
-                alert('Preencha o dígito verificador (DV) da agência da conta corrente com no máximo 2 dígitos!');
-                return false;
-            }
+//            if (form.agenciaDv.$error.required) {
+//                alert('Preencha o dígito verificador (DV) da agência da conta corrente!');
+//                return false;
+//            }
+//            if (form.agenciaDv.$error.min || form.agenciaDv.$error.max) {
+//                alert('Preencha o dígito verificador (DV) da agência da conta corrente com no máximo 2 dígitos!');
+//                return false;
+//            }
             if (form.contaCorrente.$error.required) {
                 alert('Preencha a conta corrente!');
                 return false;
             }
-            if (form.contaCorrenteDv.$error.required) {
-                alert('Preencha o dígito verificador (DV) da conta corrente!');
-                return false;
-            }
-            if (form.contaCorrenteDv.$error.min || form.contaCorrenteDv.$error.max) {
-                alert('Preencha o dígito verificador (DV) da conta corrente com no máximo 2 dígitos!');
-                return false;
-            }
+//            if (form.contaCorrenteDv.$error.required) {
+//                alert('Preencha o dígito verificador (DV) da conta corrente!');
+//                return false;
+//            }
+//            if (form.contaCorrenteDv.$error.min || form.contaCorrenteDv.$error.max) {
+//                alert('Preencha o dígito verificador (DV) da conta corrente com no máximo 2 dígitos!');
+//                return false;
+//            }
             return true;
         };
                 
