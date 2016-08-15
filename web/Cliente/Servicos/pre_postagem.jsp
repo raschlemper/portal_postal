@@ -275,7 +275,6 @@
                     return false;
                 }
 
-
                 if (form.obs.value.length > 100) {
                     alert('Tamanho máximo de 100 caracteres para a Observação!');
                     return false;
@@ -318,6 +317,9 @@
                 if (form.servico.value === 'MDPB' && form.tipoRg.value === '') {
                     alert('Escolha o Tipo de Registro!');
                     return false;
+                } else if (form.servico.value === 'IMPRESSO' && form.tipoRg.value === '') {
+                    alert('Escolha o Tipo de Registro!');
+                    return false;
                 }
 
                 if (form.servico.value === 'OUTROS') {
@@ -337,14 +339,47 @@
                     form.vd.value = '0.00';
                 }
 
-                if (form.vd.value > 0 && form.vd.value < 17) {
+                if (form.servico.value === 'SEDEX10' && (form.vd.value > 0 &&form.vd.value <= 75)) {
+                    alert('Para valores inferiores a R$75,00 este serviço já dispõe de seguro automatico!');
+                    document.getElementById("vd").focus();
+                    return false;
+                } else if (form.servico.value === 'SEDEX12' && (form.vd.value > 0 &&form.vd.value <= 75)) {
+                    alert('Para valores inferiores a R$75,00 este serviço já dispõe de seguro automatico!');
+                    document.getElementById("vd").focus();
+                    return false;
+                } else if (form.servico.value === 'SEDEXHJ' && (form.vd.value > 0 &&form.vd.value <= 75)) {
+                    alert('Para valores inferiores a R$75,00 este serviço já dispõe de seguro automatico!');
+                    document.getElementById("vd").focus();
+                    return false;
+                } else if (form.servico.value === 'SEDEX' && (form.vd.value > 0 &&form.vd.value <= 50)) {
+                    alert('Para valores inferiores a R$50,00 este serviço já dispõe de seguro automatico!');
+                    document.getElementById("vd").focus();
+                    return false;
+                } else if (form.servico.value === 'ESEDEX' && (form.vd.value > 0 &&form.vd.value <= 50)) {
+                    alert('Para valores inferiores a R$50,00 este serviço já dispõe de seguro automatico!');
+                    document.getElementById("vd").focus();
+                    return false;
+                } else if (form.servico.value === 'PAC' && (form.vd.value > 0 &&form.vd.value <= 50)) {
+                    alert('Para valores inferiores a R$50,00 este serviço já dispõe de seguro automatico!');
+                    document.getElementById("vd").focus();
+                    return false;
+                } else if (form.vd.value > 0 && form.vd.value < 17) {
                     alert('O Valor Declarado minimo é de R$ 17,00!');
+                    document.getElementById("vd").focus();
                     return false;
                 } else if (form.servico.value === 'CARTA' && form.vd.value > 500) {
                     alert('O Valor Declarado Maximo de Cartas é de R$ 500,00!');
+                    document.getElementById("vd").focus();
                     return false;
+                /* A PARTIR DE 22/08/2016
+                 } else if (form.servico.value === 'PAC' && form.vd.value > 3000) {
+                    alert('O Valor Declarado Maximo do PAC é de R$ 3.000,00!');
+                    document.getElementById("vd").focus();
+                    return false;
+                */
                 } else if (form.vd.value > 10000) {
                     alert('O Valor Declarado Maximo de Encomendas é de R$ 10.000,00!');
+                    document.getElementById("vd").focus();
                     return false;
                 }
 
@@ -768,6 +803,10 @@
                 var codECT = aux[0];
                 var grupoServ = aux[1];
                 var tipoPostagem = aux[2];
+                
+                if (grupoServ === 'IMPRESSO') {                    
+                    document.getElementById("tipoRegis").className = 'mostrar';
+                }                
                 if (grupoServ === 'PPI') {
                     document.getElementById('labelObs').innerHTML = "Nº do Processo<span style='color:red;'>(APARECE SOMENTE NA ETIQUETA)</span>";
                 } else {
@@ -1275,8 +1314,8 @@
                                         <dd>
                                             <label>Serviço<b class="obg">*</b></label>
                                             <select style="width: 220px;" name="servico_1" id="servico_1" onchange="alteraOutroServ(this.value);">
-                                                <%
-                                                    ArrayList<ServicoECT> listaServ = ContrServicoECT.consultaServicos(0, 1, "OSV");
+                                                <%                                                    
+                                                    ArrayList<ServicoECT> listaServ = ContrServicoECT.consultaServicos(2, 1, "OSV");
                                                     if (listaServ != null) {
                                                         for (int i = 0; i < listaServ.size(); i++) {
                                                             ServicoECT sv = listaServ.get(i);

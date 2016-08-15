@@ -9,9 +9,9 @@ public class ContaCorrenteValidation extends Validation<ContaCorrente>{
         if(!validarNome(contaCorrente)) return false;   
         if(!validarBanco(contaCorrente)) return false;   
         if(!validarAgencia(contaCorrente)) return false;    
-        if(!validarAgenciaDv(contaCorrente)) return false;    
+//        if(!validarAgenciaDv(contaCorrente)) return false;    
         if(!validarContaCorrente(contaCorrente)) return false;   
-        if(!validarContaCorrenteDv(contaCorrente)) return false;  
+//        if(!validarContaCorrenteDv(contaCorrente)) return false;  
         return true;
     }
 

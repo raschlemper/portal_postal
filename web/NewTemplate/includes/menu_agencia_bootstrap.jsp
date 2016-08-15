@@ -82,32 +82,47 @@
             </ul>
         </li>
         
-        <%if(empMenu.getIdEmpresa() == 4 || empMenu.getIdEmpresa() == 64 || empMenu.getIdEmpresa() == 91){%>
+        <%if (
+                usrMenu.getListaAcessosPortalPostal().contains(501) || 
+                usrMenu.getListaAcessosPortalPostal().contains(502) || 
+                usrMenu.getListaAcessosPortalPostal().contains(503) || 
+                usrMenu.getListaAcessosPortalPostal().contains(504) || 
+                usrMenu.getListaAcessosPortalPostal().contains(505) ||
+                usrMenu.getListaAcessosPortalPostal().contains(506)
+                ) {%>
         <li>
             <a href="#">
                 <span class="fa-stack fa-lg pull-left"><i class="fa fa-car fa-stack-1x "></i></span> Veículos <span style="margin: 5px 20px 0 0;" class="fa-stack fa-fw pull-right"><i id="arrow" class="fa fa-chevron-down fa-stack-1x "></i></span>
             </a>
             <ul class="nav-pills nav-stacked" style="list-style-type:none;">
-                <li><a href="${pageContext.request.contextPath}/app/veiculo/cadastro">Cadastro</a></li>
-                <li><a href="${pageContext.request.contextPath}/app/veiculo/manutencao">Manutenção</a></li>
-                <li><a href="${pageContext.request.contextPath}/app/veiculo/combustivel">Combustível</a></li>
-                <li><a href="${pageContext.request.contextPath}/app/veiculo/multa">Multa</a></li>
-                <li><a href="${pageContext.request.contextPath}/app/veiculo/seguro">Seguro</a></li>
-                <li><a href="${pageContext.request.contextPath}/app/veiculo/sinistro">Sinistro</a></li>
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(501)) {%><li><a href="${pageContext.request.contextPath}/app/veiculo/cadastro">Cadastro</a></li><%}%>
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(502)) {%><li><a href="${pageContext.request.contextPath}/app/veiculo/manutencao">Manutenção</a></li><%}%>
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(503)) {%><li><a href="${pageContext.request.contextPath}/app/veiculo/combustivel">Combustível</a></li><%}%>
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(504)) {%><li><a href="${pageContext.request.contextPath}/app/veiculo/multa">Multa</a></li><%}%>
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(505)) {%><li><a href="${pageContext.request.contextPath}/app/veiculo/seguro">Seguro</a></li><%}%>
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(506)) {%><li><a href="${pageContext.request.contextPath}/app/veiculo/sinistro">Sinistro</a></li><%}%>
             </ul>
         </li> 
-
+        <%}%>
+        
+        <%if (
+                usrMenu.getListaAcessosPortalPostal().contains(601) || 
+                usrMenu.getListaAcessosPortalPostal().contains(602) || 
+                usrMenu.getListaAcessosPortalPostal().contains(603) || 
+                usrMenu.getListaAcessosPortalPostal().contains(604) || 
+                usrMenu.getListaAcessosPortalPostal().contains(605)
+                ) {%>
         <li>
             <a href="#">
                 <span class="fa-stack fa-lg pull-left"><i class="fa fa-money fa-stack-1x "></i></span> Financeiro <span style="margin: 5px 20px 0 0;" class="fa-stack fa-fw pull-right"><i id="arrow" class="fa fa-chevron-down fa-stack-1x "></i></span>
             </a>
             <ul class="nav-pills nav-stacked" style="list-style-type:none;">
-                <li><a href="${pageContext.request.contextPath}/app/financeiro/">Inicio</a></li>
-                <li><a href="${pageContext.request.contextPath}/app/financeiro/lancamento">Lançamento</a></li>
-                <li><a href="${pageContext.request.contextPath}/app/financeiro/lancamento/programado">Programação</a></li>
-                <li><a href="${pageContext.request.contextPath}/app/financeiro/demonstrativo">Demonstrativo</a></li>
-                <li><a href="${pageContext.request.contextPath}/app/financeiro/fluxocaixa">Fluxo de Caixa</a></li>
-                <li>
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(601)) {%><li><a href="${pageContext.request.contextPath}/app/financeiro/">Inicio</a></li><%}%>
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(602)) {%><li><a href="${pageContext.request.contextPath}/app/financeiro/lancamento">Lançamento</a></li><%}%>
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(603)) {%><li><a href="${pageContext.request.contextPath}/app/financeiro/lancamento/programado">Programação</a></li><%}%>
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(604)) {%><li><a href="${pageContext.request.contextPath}/app/financeiro/demonstrativo">Demonstrativo</a></li><%}%>
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(604)) {%><li><a href="${pageContext.request.contextPath}/app/financeiro/fluxocaixa">Fluxo de Caixa</a></li><%}%>
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(605)) {%><li>
                     <a href="#">
                         Cadastros <span style="margin: 5px 20px 0 0;" class="fa-stack fa-fw pull-right"><i id="arrow" class="fa fa-chevron-down fa-stack-1x "></i></span>
                     </a> 
@@ -123,9 +138,11 @@
                         <li><a href="${pageContext.request.contextPath}/app/financeiro/conta">Conta</a></li>
                     </ul>
                 </li>
+                <%}%>
             </ul>
         </li>
-        <%}%>
+                <%}%>
+        
         <li>
             <a class="danger" href="${pageContext.request.contextPath}/ServLogout"><span class="fa-stack fa-lg pull-left"><i class="fa fa-power-off fa-stack-1x "></i></span> Sair</a>
         </li>

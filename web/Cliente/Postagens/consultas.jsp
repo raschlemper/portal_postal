@@ -15,7 +15,7 @@
             if (nomeBD == null) {
                 response.sendRedirect("../../index.jsp?msg=Sua sessao expirou! Para voltar ao Portal faça seu login novamente!");
             } else {
-                 ArrayList<Integer> acessosUs = (ArrayList<Integer>) session.getAttribute("acessos");
+                ArrayList<Integer> acessosUs = (ArrayList<Integer>) session.getAttribute("acessos");
                 String numCliente = String.valueOf(session.getAttribute("idCliente"));
                 int idCliente = (Integer) session.getAttribute("idCliente");
                 int nivel = (Integer) session.getAttribute("nivelUsuarioEmp");
@@ -24,7 +24,7 @@
                 String vDataAtual = sdf.format(dataAtual);
                 String dataOntem = Util.SomaData.SomarDiasDatas(dataAtual, -1);
                 String dataInicioCalendario = Util.SomaData.SomarDiasDatas(dataAtual, -180); // diminui 2 meses
-        %>
+%>
         <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
         <title>Portal Postal | Pesquisa de Objetos</title>
         <meta name="keywords" content="" />
@@ -55,8 +55,8 @@
 
 
         <script type="text/javascript" charset="utf-8">
-            
-               function chamaDivProtecao() {
+
+            function chamaDivProtecao() {
                 var classe = document.getElementById("divProtecao").className;
                 if (classe === 'esconder') {
                     document.getElementById("divProtecao").className = "mostrar";
@@ -171,12 +171,48 @@
                 options.series[0].data = dados;
                 chart = new Highcharts.Chart(options);
             }
+
+            function validaDataSint() {
+                var data1 = $("#dataIni").val();
+                var data2 = $("#dataFim").val();
+                //console.log(data1);
+                //console.log(data2);
+                var nova_data1 = parseInt(data1.split("/")[2].toString() + data1.split("/")[1].toString() + data1.split("/")[0].toString());
+                var nova_data2 = parseInt(data2.split("/")[2].toString() + data2.split("/")[1].toString() + data2.split("/")[0].toString());
+                //console.log(nova_data1);
+                //console.log(nova_data2);
+                if (nova_data2 < nova_data1) {
+                    alert('Data inicial não pode ser maior que data final');
+                    return false;
+                } else {
+                    pesquisaSintetica('<%=numCliente%>', '<%=nomeBD%>');
+                    return true;
+                }
+            }
+            function validaDataAna() {
+                var data1 = $("#dataIni").val();
+                var data2 = $("#dataFim").val();
+                //console.log(data1);
+                //console.log(data2);
+                var nova_data1 = parseInt(data1.split("/")[2].toString() + data1.split("/")[1].toString() + data1.split("/")[0].toString());
+                var nova_data2 = parseInt(data2.split("/")[2].toString() + data2.split("/")[1].toString() + data2.split("/")[0].toString());
+                //console.log(nova_data1);
+                //console.log(nova_data2);
+                if (nova_data2 < nova_data1) {
+                    alert('Data inicial não pode ser maior que data final');
+                    return false;
+                } else {
+                    pesquisaAnalitica('<%=numCliente%>', '<%=nomeBD%>');
+                    return true;
+                }
+            }
+
         </script>
 
     </head>
     <body>
-       <div id="divInteracao" class="esconder" style="top:10%; left:10%; right:10%; bottom:10%;" align="center"><input id="textointeracao" /></div>
-       <div id="divProtecao" class="esconder"></div>
+        <div id="divInteracao" class="esconder" style="top:10%; left:10%; right:10%; bottom:10%;" align="center"><input id="textointeracao" /></div>
+        <div id="divProtecao" class="esconder"></div>
 
         <%@ include file="../../Includes/telaMsg.jsp" %>
         <%@ include file="../../Includes/menu_cliente.jsp" %>
@@ -338,22 +374,22 @@
                                     <option value=" AND contratoEct = ''">FATURADO AGF</option> 
                                 </select>
                             </dd>
-                             <%if (acessosUs.contains(8)) {%>
+                            <%if (acessosUs.contains(8)) {%>
                             <dd>
                                 <br/>
                                 <input style="position : relative ; top:3px;" name="atrasado" id="atrasado" value="1" type="checkbox" /><b> SOMENTE COM ATRASO
-                               
+
                             </dd>
                             <%}else{%>
                             <input style="display: none;" name="atrasado" id="atrasado" value="0" type="checkbox" />
-                               
+
                             <%}%>
                         </li>
                         <li>
                             <dd style="width: 500px;">
                                 <div class="buttons">
-                                    <button type="button" class="regular" onclick="pesquisaSintetica('<%=numCliente%>', '<%=nomeBD%>');"><img src="../../imagensNew/lupa.png"/> PESQUISA SINTÉTICA</button>
-                                    <button type="button" class="positive" onclick="pesquisaAnalitica('<%=numCliente%>', '<%=nomeBD%>');"><img src="../../imagensNew/lupa_mais.png"/> PESQUISA ANALÍTICA</button>
+                                    <button type="button" class="regular" onclick="validaDataSint()(); "><img src="../../imagensNew/lupa.png"/> PESQUISA SINTÉTICA</button>
+                                    <button type="button" class="positive" onclick="validaDataAna();"><img src="../../imagensNew/lupa_mais.png"/> PESQUISA ANALÍTICA</button>
                                     <%--<button type="button" class="negative" onclick="teste();"><img src="../../imagensNew/broom.png"/> LIMPAR CAMPOS</button>--%>
                                 </div>
                             </dd>

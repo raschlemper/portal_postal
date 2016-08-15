@@ -1,6 +1,6 @@
 <form name="lancamentoProgramadoForm" novalidate>
     <div class="modal-header" ng-class="{'bg-modal-primary': lancamentoProgramado.tipo.codigo === 'receita', 
-                                         'bg-modal-danger': lancamentoProgramado.tipo.codigo === 'despesa'}">
+                                         'bg-modal-danger': lancamentoProgramado.tancamentoProgramado.tipoipo.codigo === 'despesa'}">
         <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
         <h4 class="modal-title">{{title}}</h4>
     </div>
@@ -69,22 +69,24 @@
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"> 
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12" ng-hide="showRatear">
-                                <label class="small">Plano de Conta</label>
+                                <plano-conta plano-conta-model="lancamentoProgramado.planoConta" tipo="lancamentoProgramado.tipo"></plano-conta>
+<!--                                <label class="small">Plano de Conta</label>
                                 <div class="input-group">
                                     <span class="input-group-addon" ><i class="fa fa-info"></i></span>
                                     <select class="form-control" name="planoConta" ng-change="validarPlanoConta(lancamentoProgramado.planoConta)" 
                                             ng-options="planoConta.descricao for planoConta in planoContas track by planoConta.idPlanoConta" ng-model="lancamentoProgramado.planoConta"></select>
-                                </div>
+                                </div>-->
                             </div> 
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12" ng-hide="showRatear">
-                                <label class="small">Centro de Custo</label>
+                                <centro-custo centro-custo-model="lancamentoProgramado.centroCusto"></centro-custo>
+<!--                                <label class="small">Centro de Custo</label>
                                 <div class="input-group">
                                     <span class="input-group-addon" ><i class="fa fa-info"></i></span>
                                     <select class="form-control" name="centroCusto" ng-change="validarCentroCusto(lancamentoProgramado.centroCusto)"
                                             ng-options="centroCusto.descricao for centroCusto in centroCustos track by centroCusto.idCentroCusto" ng-model="lancamentoProgramado.centroCusto">
                                             <option value=""></option>
                                     </select>
-                                </div>
+                                </div>-->
                             </div> 
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
                                 <label class="small">Frequência</label>

@@ -146,6 +146,11 @@ public class ServPreVenda extends HttpServlet {
             tipoPost = aux[2];
             servico = aux[1];
             codECTsolicitado = Integer.parseInt(aux[0]);
+            ServicoECT se = ContrServicoECT.consultaByCodigoECT(codECTsolicitado);
+            if(se.getFaturar() == 0){
+                contrato = "";
+                cartaoPostagem = "";
+            }
         }
 
         //DADOS DO DESTINATARIO
@@ -235,18 +240,20 @@ public class ServPreVenda extends HttpServlet {
                 
                 //VERIFICA A EXISTENCIA DE COMBO PARA O SERVIÇO
                 //codECT = ContrServicoCombo.consultaCodCombo(codECT, ar, mp, vd);
-                
-                //INSERE PRE VENDA  
+                 
                 int posta_restante = 0;
                 int registro_modico = 0;
-                if(servico.startsWith("MDPB")){
+                if(servico.startsWith("MDPB") || servico.equals("IMPRESSO")){
                     String val = request.getParameter("tipoRg");
                     //System.out.println("tipoRg >"+val);
                     if(val != null && val.trim().equals("1")){                        
-                    registro_modico = 1;
+                        registro_modico = 1;
+                    }else{
+                        registro = 1;
                     }
                 }          
                 
+                //INSERE PRE VENDA 
                 ContrPreVenda.inserir(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD,posta_restante,registro_modico);
 
             } else {

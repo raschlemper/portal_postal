@@ -40,6 +40,7 @@ app.factory('ContaCorrenteHandler', function() {
     };
     
     var getAgenciaDv = function(contaCorrente) {
+        if(contaCorrente.agenciaDv == 0) return 0;
         return contaCorrente.agenciaDv || null; 
     };
     
@@ -48,6 +49,7 @@ app.factory('ContaCorrenteHandler', function() {
     }
     
     var getContaCorrenteDv = function(contaCorrente) {
+        if(contaCorrente.contaCorrenteDv == 0) return 0;
         return contaCorrente.contaCorrenteDv || null; 
     }
     
