@@ -38,49 +38,49 @@
         <!-- TableSorter -->
 
         <script type="text/javascript">
-            function preencherCampos(){
+            function preencherCampos() {
                 var form = document.form1;
-                if(form.nivel.value==""){
+                if (form.nivel.value == "") {
                     alert('Preencha o nivel do usuário!');
                     return false;
                 }
-                if(form.login.value==""){
+                if (form.login.value == "") {
                     alert('Insira um login para o usuário!');
                     return false;
                 }
-                if(document.getElementById('foo').innerHTML.indexOf('w') == -1){
+                if (document.getElementById('foo').innerHTML.indexOf('w') == -1) {
                     alert('O login digitado é inválido ou já existente!\n Favor escolha outro!');
                     return false;
                 }
-                if(form.senha.value==""){
+                if (form.senha.value == "") {
                     alert('Insira uma senha para o usuário!');
                     return false;
                 }
-                if(form.senha.value!=form.senha2.value){
+                if (form.senha.value != form.senha2.value) {
                     alert('As senhas digitadas não conferem!');
                     return false;
                 }
                 form.submit();
             }
 
-            function preencherCamposEdit(){
+            function preencherCamposEdit() {
                 var form = document.form5;
-                if(form.nivel.value==''){
+                if (form.nivel.value == '') {
                     alert('Preencha o nivel do usuário!');
                     return false;
                 }
-                if(form.login.value==''){
+                if (form.login.value == '') {
                     alert('Insira um login para o usuário!');
                     return false;
                 }
-                if(form.login.value != form.loginaux.value){
-                    if(document.getElementById('fooEditar').innerHTML.indexOf('w') == -1){
+                if (form.login.value != form.loginaux.value) {
+                    if (document.getElementById('fooEditar').innerHTML.indexOf('w') == -1) {
                         alert('O login digitado é inválido ou já existente!\n\nFavor escolha outro!');
                         return false;
                     }
                 }
-                if(form.senha.value!=''){
-                    if(form.senha.value!=form.senha2.value){
+                if (form.senha.value != '') {
+                    if (form.senha.value != form.senha2.value) {
                         alert('As senhas digitadas não conferem!');
                         return false;
                     }
@@ -88,12 +88,12 @@
                 form.submit();
             }
 
-            function chamaDivProtecao(){
+            function chamaDivProtecao() {
                 var classe = document.getElementById("divProtecao").className;
-                if(classe == "esconder"){
+                if (classe == "esconder") {
                     document.getElementById("divProtecao").className = "mostrar";
                     document.getElementById("divInteracao").className = "mostrar";
-                }else{
+                } else {
                     document.getElementById("divProtecao").className = "esconder";
                     document.getElementById("divInteracao").className = "esconder";
                 }
@@ -163,6 +163,10 @@
                             <li>
                                 <dd>
                                     <label>ACESSOS:</label>
+                                      <label class="small">                                                       
+                                        <a style="color:blue;font-size: 9px; float: left;" onclick="selectAllCombo(document.getElementById('acessos'), true);">MARCAR TUDO</a><br/>
+                                        <a style="color:red;font-size: 9px; float: left;" onclick="selectAllCombo(document.getElementById('acessos'), false);">DESMARCAR TUDO</a>
+                                    </label>
                                     <select style="width: 206px;" name=acessos id=acessos multiple onclick="controleCombobox0(this)" size=10 >
                                         <option value="1" >PESQUISAS / RELATÓRIOS</option>
                                         <option value="2" >CONTROLE DE A.R.</option>
@@ -173,14 +177,19 @@
                                         <option value="7" >CADASTRO DE DESTINATÁRIOS</option>
                                     </select>
                                     <script language="">
+                                            function selectAllCombo(combo, flag) {
+                                                            for (i = 0; i < combo.length; i++) {
+                                                                combo.options[i].selected = flag;
+                                                            }
+                                                        }
                                         function controleCombobox0(combo) {
                                             combo_aux0[combo.selectedIndex] = !combo_aux0[combo.selectedIndex];
-                                            for (i=0; i < combo.length; i++ ){
+                                            for (i = 0; i < combo.length; i++) {
                                                 combo.options[i].selected = combo_aux0[i];
                                             }
                                         }
                                         var combo_aux0 = new Array(document.getElementById("acessos").options.length);
-                                        for (i=0; i < document.getElementById("acessos").options.length; i++ ) {
+                                        for (i = 0; i < document.getElementById("acessos").options.length; i++) {
                                             combo_aux0[i] = document.getElementById("acessos").options[i].selected;
                                         }
 
@@ -188,6 +197,10 @@
                                 </dd>
                                 <dd>
                                     <label>DEPARTAMENTOS:</label>
+                                    <label class="small">                                                       
+                                        <a style="color:blue;font-size: 9px; float: left;" onclick="selectAllCombo(document.getElementById('departamentos'), true);">MARCAR TUDO</a><br/>
+                                        <a style="color:red;font-size: 9px; float: left;" onclick="selectAllCombo(document.getElementById('departamentos'), false);">DESMARCAR TUDO</a>
+                                    </label>
                                     <select style="width: 206px;" name=departamentos id=departamentos multiple onclick="controleCombobox1(this)" size=10 >
                                         <%
                                             ArrayList<ClientesDeptos> listaDep = ContrClienteDeptos.consultaDeptos(idCli, nomeBD);
@@ -200,12 +213,12 @@
                                     <script language="">
                                         function controleCombobox1(combo) {
                                             combo_aux1[combo.selectedIndex] = !combo_aux1[combo.selectedIndex];
-                                            for (i=0; i < combo.length; i++ ){
+                                            for (i = 0; i < combo.length; i++) {
                                                 combo.options[i].selected = combo_aux1[i];
                                             }
                                         }
                                         var combo_aux1 = new Array(document.getElementById("departamentos").options.length);
-                                        for (i=0; i < document.getElementById("departamentos").options.length; i++ ) {
+                                        for (i = 0; i < document.getElementById("departamentos").options.length; i++) {
                                             combo_aux1[i] = document.getElementById("departamentos").options[i].selected;
                                         }
 
@@ -213,6 +226,10 @@
                                 </dd>
                                 <dd>
                                     <label>SERVIÇOS:</label>
+                                         <label class="small">                                                       
+                                        <a style="color:blue;font-size: 9px; float: left;" onclick="selectAllCombo(document.getElementById('servicos'), true);">MARCAR TUDO</a><br/>
+                                        <a style="color:red;font-size: 9px;  float: left;" onclick="selectAllCombo(document.getElementById('servicos'), false);">DESMARCAR TUDO</a>
+                                    </label>
                                     <select style="width: 206px;" name=servicos id=servicos multiple onclick="controleCombobox2(this)" size=10 >
                                         <option value="1" >PAC</option>
                                         <option value="2" >SEDEX</option>
@@ -225,12 +242,12 @@
                                     <script language="">
                                         function controleCombobox2(combo) {
                                             combo_aux2[combo.selectedIndex] = !combo_aux2[combo.selectedIndex];
-                                            for (i=0; i < combo.length; i++ ){
+                                            for (i = 0; i < combo.length; i++) {
                                                 combo.options[i].selected = combo_aux2[i];
                                             }
                                         }
                                         var combo_aux2 = new Array(document.getElementById("servicos").options.length);
-                                        for (i=0; i < document.getElementById("servicos").options.length; i++ ) {
+                                        for (i = 0; i < document.getElementById("servicos").options.length; i++) {
                                             combo_aux2[i] = document.getElementById("servicos").options[i].selected;
                                         }
 
@@ -270,7 +287,7 @@
                         <thead>
                             <tr>
                                 <th><h3>Login</h3></th>
-                               <!-- <th><h3>Senha</h3></th> -->
+                                <!-- <th><h3>Senha</h3></th> -->
                                 <th><h3>Nivel</h3></th>
                                 <th class="nosort" width="60"><h3>Alterar</h3></th>
                                 <th class="nosort" width="60"><h3>Excluir</h3></th>
@@ -286,29 +303,33 @@
                                     int nivel = sc3.getNivel();
                                     int id = sc3.getId();
                                     String nomeNivel = Controle.contrNivel.consultaNomeByIdNivel(nivel, nomeBD);
-                                                if(nivel == 99 ){
-                                                    nomeNivel = "WEB SERVICE";
-                                                }
-                                                  if(nivel == 100 ){
-                                                    nomeNivel = "OPERADOR MASTER";
-                                                }
+                                    if (nivel == 99) {
+                                        nomeNivel = "WEB SERVICE";
+                                    }
+                                    if (nivel == 100) {
+                                        nomeNivel = "OPERADOR MASTER";
+                                    }
                             %>
                             <tr style="cursor:default;">
                                 <td><%= loginSc%></td>
-                              <%--   <td><%= senhaSc%></td> --%>
+                                <%--   <td><%= senhaSc%></td> --%>
                                 <td><%= nomeNivel%></td>
                                 <td align="center">
-                                    <%if(nivel < 99){%>
+                                    <%if (nivel < 99) {%>
                                     <a onclick="verEditarLoginPortal(<%= id%>, 2);" style="cursor:pointer;" ><img src="../../imagensNew/pencil.png" /></a>
                                     <%}%>
                                 </td>                                    
                                 <td align="center">
-                                    <%if(nivel < 99){%>
+                                    <%if (nivel < 99) {%>
                                     <form action="../../ServExcluirLoginPortal" method="post" name="formDel">
                                         <input type="hidden" name="idCliente" value="<%= idCli%>" />
                                         <input type="hidden" name="login" value="<%= loginSc%>" />
                                         <input type="hidden" name="senha" value="<%= senhaSc%>" />
-                                        <input type="image" src="../../imagensNew/cancel.png" border="0" onClick="javascript:if (confirm('Tem certeza que deseja excluir?')){return true;}else{return false;}" />
+                                        <input type="image" src="../../imagensNew/cancel.png" border="0" onClick="javascript:if (confirm('Tem certeza que deseja excluir?')) {
+                                                    return true;
+                                                } else {
+                                                    return false;
+                                                }" />
                                     </form>
                                     <%}%>
                                 </td>
@@ -329,10 +350,10 @@
                         </div>
                         <div id="tablenav2" class="tablenav">
                             <div>
-                                <img src="../../javascript/plugins/TableSorter/images/left_end.png" width="20" height="20" alt="First Page" onclick="sorter2.move(-1,true)" />
+                                <img src="../../javascript/plugins/TableSorter/images/left_end.png" width="20" height="20" alt="First Page" onclick="sorter2.move(-1, true)" />
                                 <img src="../../javascript/plugins/TableSorter/images/left.png" width="20" height="20" alt="First Page" onclick="sorter2.move(-1)" />
                                 <img src="../../javascript/plugins/TableSorter/images/right.png" width="20" height="20" alt="First Page" onclick="sorter2.move(1)" />
-                                <img src="../../javascript/plugins/TableSorter/images/right_end.png" width="20" height="20" alt="Last Page" onclick="sorter2.move(1,true)" />
+                                <img src="../../javascript/plugins/TableSorter/images/right_end.png" width="20" height="20" alt="Last Page" onclick="sorter2.move(1, true)" />
                                 <select style="margin-left:5px;" id="pagedropdown2"></select>
                                 <a style="margin-left:10px;" href="javascript:sorter2.showall()">Ver Tudo</a>
                             </div>
@@ -342,28 +363,28 @@
                         </div>
                     </div>
                     <script type="text/javascript">
-                        var sorter2 = new TINY.table.sorter('sorter2','table2',{
-                            headclass:'head',
-                            ascclass:'asc',
-                            descclass:'desc',
-                            evenclass:'evenrow',
-                            oddclass:'oddrow',
-                            evenselclass:'evenselected',
-                            oddselclass:'oddselected',
-                            paginate:true,
-                            size:20,
-                            colddid:'columns2',
-                            currentid:'currentpage2',
-                            totalid:'totalpages2',
-                            startingrecid:'startrecord2',
-                            endingrecid:'endrecord2',
-                            totalrecid:'totalrecords2',
-                            hoverid:'selectedrowDefault',
-                            pageddid:'pagedropdown2',
-                            navid:'tablenav2',
-                            sortcolumn:0,
-                            sortdir:1,
-                            init:true
+                        var sorter2 = new TINY.table.sorter('sorter2', 'table2', {
+                            headclass: 'head',
+                            ascclass: 'asc',
+                            descclass: 'desc',
+                            evenclass: 'evenrow',
+                            oddclass: 'oddrow',
+                            evenselclass: 'evenselected',
+                            oddselclass: 'oddselected',
+                            paginate: true,
+                            size: 20,
+                            colddid: 'columns2',
+                            currentid: 'currentpage2',
+                            totalid: 'totalpages2',
+                            startingrecid: 'startrecord2',
+                            endingrecid: 'endrecord2',
+                            totalrecid: 'totalrecords2',
+                            hoverid: 'selectedrowDefault',
+                            pageddid: 'pagedropdown2',
+                            navid: 'tablenav2',
+                            sortcolumn: 0,
+                            sortdir: 1,
+                            init: true
                         });
                     </script>
                 </div>

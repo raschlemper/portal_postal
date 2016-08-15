@@ -20,7 +20,7 @@ public class LancamentoProgramadoTransferenciaDAO extends GenericDAO {
                    + "lancamento_programado lancamentoProgramadoOrigem, lancamento_programado lancamentoProgramadoDestino "
                    + "WHERE lancamento_programado_transferencia.idLancamentoProgramadoOrigem = lancamentoProgramadoOrigem.idLancamentoProgramado "
                    + "AND lancamento_programado_transferencia.idLancamentoProgramadoDestino = lancamentoProgramadoDestino.idLancamentoProgramado "
-                   + "ORDER BY lancamento_programado_transferencia.idLancamentoTransferenciaProgramado";        
+                   + "ORDER BY lancamento_programado_transferencia.idLancamentoProgramadoTransferencia";        
         return findAll(sql, null, lancamentoProgramadoTransferenciaHandler);
     }
 
@@ -72,8 +72,8 @@ public class LancamentoProgramadoTransferenciaDAO extends GenericDAO {
         params.put("valor", lancamentoProgramadoTransferencia.getValor());   
         params.put("historico", lancamentoProgramadoTransferencia.getHistorico());                
         params.put("usuario", lancamentoProgramadoTransferencia.getUsuario());
-        Integer idLancamentoTransferenciaProgramado = save(sql, params, lancamentoProgramadoTransferenciaHandler);
-        return find(idLancamentoTransferenciaProgramado);
+        Integer idLancamentoProgramadoTransferencia = save(sql, params, lancamentoProgramadoTransferenciaHandler);
+        return find(idLancamentoProgramadoTransferencia);
     }
 
     public LancamentoProgramadoTransferencia update(LancamentoProgramadoTransferencia lancamentoProgramadoTransferencia) throws Exception {

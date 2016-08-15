@@ -71,6 +71,8 @@
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/appParcelar.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/appDatepicker.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/favorecido.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/planoConta.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/centroCusto.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/fileModel.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/compile.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/trim.js"></script>

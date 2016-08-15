@@ -27,7 +27,7 @@
                 }
                 if (!idsDepto.equals("")) {
                     idsDepto = idsDepto.substring(0, idsDepto.lastIndexOf(","));
-                    sql += " AND m.idDepartamento IN (" + idsDepto + ") ";
+                    sql += " AND (m.idDepartamento IN (" + idsDepto + ") OR m.idDepartamento = 0) ";
                 }
             }
         }

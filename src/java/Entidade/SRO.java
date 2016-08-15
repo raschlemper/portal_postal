@@ -23,8 +23,7 @@ public class SRO {
         this.tipo = tipo;
         this.descricao = descricao;
         this.agrupamento = agrupamento;
-    }
-    
+    }    
 
     public int getIdSRO() {
         return idSRO;

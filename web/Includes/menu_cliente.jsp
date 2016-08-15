@@ -60,6 +60,7 @@
                     <%if (acessosMn.contains(1)) {%><li><a href="../../Cliente/Postagens/relatorios.jsp">Relatórios</a></li><%}%>
                     <%if (acessosMn.contains(1)) {%><li><a href="../../Cliente/Postagens/graf_objetos.jsp">Situação dos Objetos</a></li><%}%>
                     <%if (acessosMn.contains(3)) {%><li><a href="../../Cliente/Postagens/graf_despesas.jsp">Evolução das Despesas</a></li><%}%>
+                    <%if (acessosMn.contains(2)) {%><li><a href="../../Cliente/Postagens/arquivos_ocorrencia.jsp">Arquivo de Ocorrências</a></li><%}%>
                 </ul>
             </li>
             <%}%>

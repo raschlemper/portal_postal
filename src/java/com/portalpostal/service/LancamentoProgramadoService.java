@@ -168,6 +168,7 @@ public class LancamentoProgramadoService {
     
     private LancamentoProgramado setLancamentoNaParcela(LancamentoProgramado lancamentoProgramado) {
         List<LancamentoProgramadoParcela> parcelasLancamento = new ArrayList<LancamentoProgramadoParcela>();
+        if(lancamentoProgramado.getParcelas() == null) return lancamentoProgramado;
         for (LancamentoProgramadoParcela parcela : lancamentoProgramado.getParcelas()) {
             for (Lancamento lancamento : lancamentoProgramado.getLancamentos()) {
                 if(lancamento.getNumeroParcela() == parcela.getNumero()) { parcela.setLancamento(lancamento); }
