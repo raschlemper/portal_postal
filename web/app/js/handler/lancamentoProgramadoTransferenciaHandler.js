@@ -17,9 +17,11 @@ app.factory('LancamentoProgramadoTransferenciaHandler', function() {
         lancamentoProgramadoTransferenciaHandle.documento = getDocumento(lancamentoProgramadoTransferencia); 
         lancamentoProgramadoTransferenciaHandle.formaPagamento = getFormaPagamento(lancamentoProgramadoTransferencia); 
         lancamentoProgramadoTransferenciaHandle.frequencia = getFrequencia(lancamentoProgramadoTransferencia);
-        lancamentoProgramadoTransferenciaHandle.dataCompetencia = getDataCompetencia(lancamentoProgramadoTransferencia);
         lancamentoProgramadoTransferenciaHandle.dataEmissao = getDataEmissao(lancamentoProgramadoTransferencia);
-        lancamentoProgramadoTransferenciaHandle.dataVencimento = getDataVencimento(lancamentoProgramadoTransferencia);
+        lancamentoProgramadoTransferenciaHandle.dataCompetenciaOrigem = getDataCompetenciaOrigem(lancamentoProgramadoTransferencia);
+        lancamentoProgramadoTransferenciaHandle.dataCompetenciaDestino = getDataCompetenciaDestino(lancamentoProgramadoTransferencia);
+        lancamentoProgramadoTransferenciaHandle.dataVencimentoOrigem = getDataVencimentoOrigem(lancamentoProgramadoTransferencia);
+        lancamentoProgramadoTransferenciaHandle.dataVencimentoDestino = getDataVencimentoDestino(lancamentoProgramadoTransferencia);
         lancamentoProgramadoTransferenciaHandle.valor = getValor(lancamentoProgramadoTransferencia);
         lancamentoProgramadoTransferenciaHandle.historico = getHistorico(lancamentoProgramadoTransferencia);
         lancamentoProgramadoTransferenciaHandle.observacao = getObservacao(lancamentoProgramadoTransferencia);
@@ -60,16 +62,24 @@ app.factory('LancamentoProgramadoTransferenciaHandler', function() {
         return lancamentoProgramadoTransferencia.frequencia.id;
     };
     
-    var getDataCompetencia = function(lancamentoProgramadoTransferencia) {
-        return lancamentoProgramadoTransferencia.dataCompetencia || moment(); 
-    };
-    
     var getDataEmissao = function(lancamentoProgramadoTransferencia) {
         return lancamentoProgramadoTransferencia.dataEmissao || moment(); 
     };
     
-    var getDataVencimento = function(lancamentoProgramadoTransferencia) {
-        return lancamentoProgramadoTransferencia.dataVencimento || moment(); 
+    var getDataCompetenciaOrigem = function(lancamentoProgramadoTransferencia) {
+        return lancamentoProgramadoTransferencia.dataCompetenciaOrigem || moment(); 
+    };
+    
+    var getDataCompetenciaDestino = function(lancamentoProgramadoTransferencia) {
+        return lancamentoProgramadoTransferencia.dataCompetenciaDestino || moment(); 
+    };
+    
+    var getDataVencimentoOrigem = function(lancamentoProgramadoTransferencia) {
+        return lancamentoProgramadoTransferencia.dataVencimentoOrigem || moment(); 
+    };
+    
+    var getDataVencimentoDestino = function(lancamentoProgramadoTransferencia) {
+        return lancamentoProgramadoTransferencia.dataVencimentoDestino || moment(); 
     };
     
     var getValor = function(lancamentoProgramadoTransferencia) {

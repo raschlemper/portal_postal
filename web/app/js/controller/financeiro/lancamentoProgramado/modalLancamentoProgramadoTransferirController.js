@@ -66,9 +66,25 @@ app.controller('ModalLancamentoProgramadoTransferirController',
         
         $scope.events = {
             onblur : function() {
-                if($scope.lancamentoProgramadoTransferencia.dataCompetencia) return;
-                $scope.lancamentoProgramadoTransferencia.dataCompetencia = $scope.lancamentoProgramadoTransferencia.dataVencimento;
+                setDataCompetenciaOrigem($scope.lancamentoProgramadoTransferencia);
+                setDataVencimentoDestino($scope.lancamentoProgramadoTransferencia);
+                setDataCompetenciaDestino($scope.lancamentoProgramadoTransferencia);
             }
+        };
+        
+        var setDataCompetenciaOrigem = function(lancamentoProgramadoTransferencia){
+            if(lancamentoProgramadoTransferencia.dataCompetenciaOrigem) return;
+            lancamentoProgramadoTransferencia.dataCompetenciaOrigem = lancamentoProgramadoTransferencia.dataVencimentoOrigem;            
+        };
+        
+        var setDataVencimentoDestino = function(lancamentoProgramadoTransferencia){
+            if(lancamentoProgramadoTransferencia.dataVencimentoDestino) return;
+            lancamentoProgramadoTransferencia.dataVencimentoDestino = lancamentoProgramadoTransferencia.dataVencimentoOrigem;            
+        };
+        
+        var setDataCompetenciaDestino = function(lancamentoProgramadoTransferencia){
+            if(lancamentoProgramadoTransferencia.dataCompetenciaDestino) return;
+            lancamentoProgramadoTransferencia.dataCompetenciaDestino = lancamentoProgramadoTransferencia.dataVencimentoOrigem;            
         };
         
         $scope.gerar = function(form, lancamentoProgramadoTransferencia) {
@@ -96,20 +112,36 @@ app.controller('ModalLancamentoProgramadoTransferirController',
                 alert(MESSAGES.lancamento.transferir.validacao.CONTA_DIFERENTE);
                 return false;                
             }
-            if (form.dataCompetencia.$error.required) {
-                alert(MESSAGES.lancamento.transferir.validacao.DATA_COMPETENCIA_REQUERIDA);
+            if (form.dataCompetenciaOrigem.$error.required) {
+                alert(MESSAGES.lancamento.transferir.validacao.DATA_COMPETENCIA_ORIGEM_REQUERIDA);
                 return false;
             }        
-            if (form.dataCompetencia.$modelValue && !moment(form.dataCompetencia.$modelValue).isValid()) {
-                alert(MESSAGES.lancamento.transferir.validacao.DATA_COMPETENCIA_VALIDA);
+            if (form.dataCompetenciaOrigem.$modelValue && !moment(form.dataCompetenciaOrigem.$modelValue).isValid()) {
+                alert(MESSAGES.lancamento.transferir.validacao.DATA_COMPETENCIA_ORIGEM_VALIDA);
                 return false;
-            }    
-            if (form.dataVencimento.$error.required) {
-                alert(MESSAGES.lancamento.transferir.validacao.DATA_VENCIMENTO_REQUERIDA);
+            }   
+            if (form.dataCompetenciaDestino.$error.required) {
+                alert(MESSAGES.lancamento.transferir.validacao.DATA_COMPETENCIA_DESTINO_REQUERIDA);
+                return false;
+            }        
+            if (form.dataCompetenciaDestino.$modelValue && !moment(form.dataCompetenciaDestino.$modelValue).isValid()) {
+                alert(MESSAGES.lancamento.transferir.validacao.DATA_COMPETENCIA_DESTINO_VALIDA);
+                return false;
+            }   
+            if (form.dataVencimentoOrigem.$error.required) {
+                alert(MESSAGES.lancamento.transferir.validacao.DATA_VENCIMENTO_ORIGEM_REQUERIDA);
                 return false;
             }       
-            if (form.dataVencimento.$modelValue && !moment(form.dataVencimento.$modelValue).isValid()) {
-                alert(MESSAGES.lancamento.transferir.validacao.DATA_VENCIMENTO_VALIDA);
+            if (form.dataVencimentoOrigem.$modelValue && !moment(form.dataVencimentoOrigem.$modelValue).isValid()) {
+                alert(MESSAGES.lancamento.transferir.validacao.DATA_VENCIMENTO_ORIGEM_VALIDA);
+                return false;
+            }    
+            if (form.dataVencimentoDestino.$error.required) {
+                alert(MESSAGES.lancamento.transferir.validacao.DATA_VENCIMENTO_DESTINO_REQUERIDA);
+                return false;
+            }       
+            if (form.dataVencimentoDestino.$modelValue && !moment(form.dataVencimentoDestino.$modelValue).isValid()) {
+                alert(MESSAGES.lancamento.transferir.validacao.DATA_VENCIMENTO_DESTINO_VALIDA);
                 return false;
             }    
             if (form.valor.$error.required) {

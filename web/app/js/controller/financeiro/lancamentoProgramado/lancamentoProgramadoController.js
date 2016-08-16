@@ -542,19 +542,22 @@ app.controller('LancamentoProgramadoController',
         var ajustarDadosTransferencia = function(data) {  
             var modelo = $scope.modelos[3];
             var lancamentoProgramadoTransferencia = LancamentoProgramadoTransferenciaHandler.handle(data); 
-            lancamentoProgramadoTransferencia.lancamentoProgramadoOrigem = getLancamentoProgramado(data.contaOrigem, $scope.tipos[1], modelo, data, data.lancamentoProgramadoOrigem);
-            lancamentoProgramadoTransferencia.lancamentoProgramadoDestino = getLancamentoProgramado(data.contaDestino, $scope.tipos[0], modelo, data, data.lancamentoProgramadoDestino);
+            lancamentoProgramadoTransferencia.lancamentoProgramadoOrigem = getLancamentoProgramado(data.contaOrigem, $scope.tipos[1], modelo, 
+                data.dataVencimentoOrigem, data.dataCompetenciaOrigem, data, data.lancamentoProgramadoOrigem);
+            lancamentoProgramadoTransferencia.lancamentoProgramadoDestino = getLancamentoProgramado(data.contaDestino, $scope.tipos[0], modelo, 
+                data.dataVencimentoDestino, data.dataCompetenciaDestino, data, data.lancamentoProgramadoDestino);
             return lancamentoProgramadoTransferencia;
         }
 
-        var getLancamentoProgramado = function(conta, tipo, modelo, data, lancamentoProgramadoOriginal) {
+        var getLancamentoProgramado = function(conta, tipo, modelo, dataLancamento, dataCompetencia, data, lancamentoProgramadoOriginal) {
             data.idLancamentoProgramado = (lancamentoProgramadoOriginal && lancamentoProgramadoOriginal.idLancamentoProgramado) || null;
             data.conta = conta;
             data.tipo = tipo;
             data.modelo = modelo;
             data.situacao = (data && data.situacao) || $scope.situacoes[0];
             data.numeroParcela = data.numeroParcela || 0;
-            data.dataLancamento = data.dataVencimento;
+            data.dataLancamento = dataLancamento;
+            data.dataCompetencia = dataCompetencia;
             setLancamentoTransferencia(data);
             var lancamentoProgramadoHandle = LancamentoProgramadoHandler.handle(data);
             lancamentoProgramadoHandle.lancamentos = data.lancamentos;
