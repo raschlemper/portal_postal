@@ -111,7 +111,12 @@ app.controller('LancamentoController',
                 return item.tipo.id === tipo.id;
             });
             return lista;
-        }
+        };
+        
+        $scope.filterByDays = function(days) {
+            $scope.lancSearch.dataInicio = moment().add(days, 'days').format('YYYY-MM-DD');
+            $scope.lancSearch.dataFim = moment().add(days, 'days').format('YYYY-MM-DD');
+        };
 
         // ***** CONTROLLER ***** //
 
