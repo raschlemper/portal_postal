@@ -22,9 +22,11 @@ public class LancamentoTransferenciaHandler extends GenericHandler implements Re
         lancamento.setLancamentoOrigem(getLancamentoOrigem(result));
         lancamento.setLancamentoDestino(getLancamentoDestino(result));
         lancamento.setNumero(getString(result, "numero"));
-        lancamento.setDataCompetencia(getDate(result, "dataCompetencia"));
         lancamento.setDataEmissao(getDate(result, "dataEmissao"));
-        lancamento.setDataLancamento(getDate(result, "dataLancamento"));
+        lancamento.setDataCompetenciaOrigem(getDate(result, "dataCompetenciaOrigem"));
+        lancamento.setDataCompetenciaDestino(getDate(result, "dataCompetenciaDestino"));
+        lancamento.setDataLancamentoOrigem(getDate(result, "dataLancamentoOrigem"));
+        lancamento.setDataLancamentoDestino(getDate(result, "dataLancamentoDestino"));
         lancamento.setValor(getDouble(result, "valor"));
         lancamento.setHistorico(getString(result, "historico"));
         lancamento.setObservacao(getString(result, "observacao"));

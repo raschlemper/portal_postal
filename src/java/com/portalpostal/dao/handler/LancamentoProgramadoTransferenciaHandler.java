@@ -28,9 +28,11 @@ public class LancamentoProgramadoTransferenciaHandler extends GenericHandler imp
         lancamento.setDocumento(getTipoDocumento(result));
         lancamento.setFormaPagamento(getTipoFormaPagamento(result));
         lancamento.setFrequencia(TipoFrequencia.values()[getInt(result, "frequencia")]);
-        lancamento.setDataCompetencia(getDate(result, "dataCompetencia"));
         lancamento.setDataEmissao(getDate(result, "dataEmissao"));
-        lancamento.setDataVencimento(getDate(result, "dataVencimento"));
+        lancamento.setDataCompetenciaOrigem(getDate(result, "dataCompetenciaOrigem"));
+        lancamento.setDataCompetenciaDestino(getDate(result, "dataCompetenciaDestino"));
+        lancamento.setDataVencimentoOrigem(getDate(result, "dataVencimentoOrigem"));
+        lancamento.setDataVencimentoDestino(getDate(result, "dataVencimentoDestino"));
         lancamento.setValor(getDouble(result, "valor"));
         lancamento.setHistorico(getString(result, "historico"));
         lancamento.setObservacao(getString(result, "observacao"));

@@ -8,9 +8,11 @@ public class LancamentoTransferencia {
     private Lancamento lancamentoOrigem;
     private Lancamento lancamentoDestino;
     private String numero;
-    private Date dataCompetencia;
     private Date dataEmissao;
-    private Date dataLancamento;
+    private Date dataCompetenciaOrigem;
+    private Date dataCompetenciaDestino;
+    private Date dataLancamentoOrigem;
+    private Date dataLancamentoDestino;
     private Double valor;
     private String historico;
     private String observacao;
@@ -48,14 +50,6 @@ public class LancamentoTransferencia {
         this.numero = numero;
     }
 
-    public Date getDataCompetencia() {
-        return dataCompetencia;
-    }
-
-    public void setDataCompetencia(Date dataCompetencia) {
-        this.dataCompetencia = dataCompetencia;
-    }
-
     public Date getDataEmissao() {
         return dataEmissao;
     }
@@ -64,12 +58,36 @@ public class LancamentoTransferencia {
         this.dataEmissao = dataEmissao;
     }
 
-    public Date getDataLancamento() {
-        return dataLancamento;
+    public Date getDataCompetenciaOrigem() {
+        return dataCompetenciaOrigem;
     }
 
-    public void setDataLancamento(Date dataLancamento) {
-        this.dataLancamento = dataLancamento;
+    public void setDataCompetenciaOrigem(Date dataCompetenciaOrigem) {
+        this.dataCompetenciaOrigem = dataCompetenciaOrigem;
+    }
+
+    public Date getDataCompetenciaDestino() {
+        return dataCompetenciaDestino;
+    }
+
+    public void setDataCompetenciaDestino(Date dataCompetenciaDestino) {
+        this.dataCompetenciaDestino = dataCompetenciaDestino;
+    }
+
+    public Date getDataLancamentoOrigem() {
+        return dataLancamentoOrigem;
+    }
+
+    public void setDataLancamentoOrigem(Date dataLancamentoOrigem) {
+        this.dataLancamentoOrigem = dataLancamentoOrigem;
+    }
+
+    public Date getDataLancamentoDestino() {
+        return dataLancamentoDestino;
+    }
+
+    public void setDataLancamentoDestino(Date dataLancamentoDestino) {
+        this.dataLancamentoDestino = dataLancamentoDestino;
     }
 
     public Double getValor() {

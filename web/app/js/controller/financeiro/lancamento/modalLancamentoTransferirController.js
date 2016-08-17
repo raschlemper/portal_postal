@@ -50,7 +50,7 @@ app.controller('ModalLancamentoTransferirController',
         
         var setDataCompetenciaOrigem = function(lancamentoTransferencia){
             if(lancamentoTransferencia.dataCompetenciaOrigem) return;
-            lancamentoTransferencia.dataCompetenciaOrigem = lancamentoTransferencia.dataVencimentoOrigem;            
+            lancamentoTransferencia.dataCompetenciaOrigem = lancamentoTransferencia.dataLancamentoOrigem;            
         };
         
         var setDataVencimentoDestino = function(lancamentoTransferencia){
@@ -60,7 +60,7 @@ app.controller('ModalLancamentoTransferirController',
         
         var setDataCompetenciaDestino = function(lancamentoTransferencia){
             if(lancamentoTransferencia.dataCompetenciaDestino) return;
-            lancamentoTransferencia.dataCompetenciaDestino = lancamentoTransferencia.dataVencimentoOrigem;            
+            lancamentoTransferencia.dataCompetenciaDestino = lancamentoTransferencia.dataLancamentoOrigem;            
         };
         
         $scope.ok = function(form, lancamentoTransferencia) {
