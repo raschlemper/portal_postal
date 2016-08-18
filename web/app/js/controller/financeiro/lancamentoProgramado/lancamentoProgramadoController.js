@@ -144,7 +144,7 @@ app.controller('LancamentoProgramadoController',
         };
 
         var todos = function() {
-            LancamentoProgramadoService.getAll()
+            LancamentoProgramadoService.getAll(null, null)
                 .then(function (data) {
                     $scope.lancamentoProgramados = data;
                     $scope.lancamentoProgramadosLista = criarLancamentoProgramadosLista($scope.lancamentoProgramados);

@@ -2,6 +2,7 @@ package com.portalpostal.dao;
 
 import com.portalpostal.dao.handler.LancamentoProgramadoHandler;
 import com.portalpostal.model.LancamentoProgramado;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,7 @@ public class LancamentoProgramadoDAO extends GenericDAO {
         this.lancamentoProgramadoHandler = new LancamentoProgramadoHandler();
     } 
 
-    public List<LancamentoProgramado> findAll() throws Exception {
+    public List<LancamentoProgramado> findAll(Date dataInicio, Date dataFim) throws Exception {
         String sql = "SELECT * FROM conta, tipo_documento, tipo_forma_pagamento, lancamento_programado "
                    + "LEFT OUTER JOIN favorecido ON(lancamento_programado.idFavorecido = favorecido.idFavorecido) "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento_programado.idPlanoConta = plano_conta.idPlanoConta) "
@@ -26,11 +27,16 @@ public class LancamentoProgramadoDAO extends GenericDAO {
                    + "WHERE lancamento_programado.idConta = conta.idConta "
                    + "AND lancamento_programado.idTipoDocumento = tipo_documento.idTipoDocumento " 
                    + "AND lancamento_programado.idTipoFormaPagamento = tipo_forma_pagamento.idTipoFormaPagamento " 
-                   + "ORDER BY lancamento_programado.dataVencimento";        
-        return findAll(sql, null, lancamentoProgramadoHandler);
+                   + "AND DATE(lancamento_programado.dataVencimento) "
+                   + "BETWEEN IFNULL(:dataInicio, DATE(lancamento_programado.dataVencimento)) AND IFNULL(:dataFim, DATE(lancamento_programado.dataVencimento)) "
+                   + "ORDER BY lancamento_programado.dataVencimento"; 
+        Map<String, Object> params = new HashMap<String, Object>();        
+        params.put("dataInicio", dataInicio);       
+        params.put("dataFim", dataFim);           
+        return findAll(sql, params, lancamentoProgramadoHandler);
     }
 
-    public List<LancamentoProgramado> findAllAtivo() throws Exception {
+    public List<LancamentoProgramado> findAllAtivo(Date dataInicio, Date dataFim) throws Exception {
         String sql = "SELECT * FROM conta, lancamento_programado "
                    + "LEFT OUTER JOIN favorecido ON(lancamento_programado.idFavorecido = favorecido.idFavorecido) "
                    + "LEFT OUTER JOIN plano_conta ON(lancamento_programado.idPlanoConta = plano_conta.idPlanoConta) "
@@ -38,8 +44,13 @@ public class LancamentoProgramadoDAO extends GenericDAO {
                                 + "ON(lancamento_programado.idLancamentoProgramado = lancamento_programado_transferencia.idLancamentoProgramadoOrigem OR "
                                    + "lancamento_programado.idLancamentoProgramado = lancamento_programado_transferencia.idLancamentoProgramadoDestino) "
                    + "WHERE lancamento_programado.idConta = conta.idConta "
-                   + "AND lancamento_programado.situacao = 0 ";
-        return findAll(sql, null, lancamentoProgramadoHandler);
+                   + "AND DATE(lancamento_programado.dataVencimento) "
+                   + "BETWEEN IFNULL(:dataInicio, DATE(lancamento_programado.dataVencimento)) AND IFNULL(:dataFim, DATE(lancamento_programado.dataVencimento)) "
+                   + "AND lancamento_programado.situacao = 0 ";    
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("dataInicio", dataInicio);       
+        params.put("dataFim", dataFim);        
+        return findAll(sql, params, lancamentoProgramadoHandler);
     }
 
     public LancamentoProgramado find(Integer idLancamentoProgramado) throws Exception {
@@ -59,7 +70,7 @@ public class LancamentoProgramadoDAO extends GenericDAO {
         return (LancamentoProgramado) find(sql, params, lancamentoProgramadoHandler);
     }
 
-    public List<LancamentoProgramado> findByConta(Integer idConta) throws Exception {
+    public List<LancamentoProgramado> findByConta(Integer idConta, Date dataInicio, Date dataFim) throws Exception {
         String sql = "SELECT lancamento_programado.*, plano_conta.*, tipo_documento.*, tipo_forma_pagamento.*, centro_custo.*, favorecido.* "
                    + "FROM conta, tipo_documento, tipo_forma_pagamento, lancamento_programado "
                    + "LEFT OUTER JOIN favorecido ON(lancamento_programado.idFavorecido = favorecido.idFavorecido) "
@@ -72,9 +83,13 @@ public class LancamentoProgramadoDAO extends GenericDAO {
                    + "AND lancamento_programado.idTipoDocumento = tipo_documento.idTipoDocumento " 
                    + "AND lancamento_programado.idTipoFormaPagamento = tipo_forma_pagamento.idTipoFormaPagamento " 
                    + "AND conta.idConta = :idConta "
+                   + "AND DATE(lancamento_programado.dataVencimento) "
+                   + "BETWEEN IFNULL(:dataInicio, DATE(lancamento_programado.dataVencimento)) AND IFNULL(:dataFim, DATE(lancamento_programado.dataVencimento)) "
                    + "ORDER BY lancamento_programado.dataVencimento";        
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("idConta", idConta);       
+        params.put("idConta", idConta);
+        params.put("dataInicio", dataInicio);       
+        params.put("dataFim", dataFim);               
         return findAll(sql, params, lancamentoProgramadoHandler);
     }
 

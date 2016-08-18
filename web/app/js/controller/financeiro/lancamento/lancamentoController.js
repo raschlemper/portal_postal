@@ -168,7 +168,7 @@ app.controller('LancamentoController',
         };
 
         var todos = function(conta) {
-            ContaService.getLancamento(conta.idConta)
+            ContaService.getLancamento(conta.idConta, null, null)
                 .then(function (data) {
                     $scope.lancamentos = angular.copy(data.lancamentos);
                     $scope.lancamentosLista = criarLancamentosLista(data);

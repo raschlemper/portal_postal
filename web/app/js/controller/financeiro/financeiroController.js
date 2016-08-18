@@ -319,7 +319,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
         var chartSaldo = function() {
             var dataInicio = moment().format('YYYY-MM-DD');
             var dataFim = moment().add(3, 'months').format('YYYY-MM-DD');
-            $q.all([LancamentoProgramadoService.getAllAtivo(),
+            $q.all([LancamentoProgramadoService.getAllAtivo(null, null),
                     LancamentoService.getSaldo(dataInicio, dataFim),
                     ContaCorrenteService.getAll()])
                .then(function(values) { 
@@ -428,7 +428,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
         // Saldos Programados /////
         
         var initSaldoProgramado = function() {
-            LancamentoProgramadoService.getAllAtivo()
+            LancamentoProgramadoService.getAllAtivo(null, null)
                .then(function(data) {
                     var dataAtual = moment().format('YYYY-MM-DD');
                     var dataDiaSeguinte = moment().add(1, "d");

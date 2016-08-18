@@ -6,7 +6,9 @@ import com.portalpostal.model.Conta;
 import com.portalpostal.service.ContaService;
 import com.portalpostal.service.LancamentoService;
 import com.portalpostal.validation.ContaValidation;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -74,8 +76,7 @@ public class ContaController {
             @QueryParam("data") String data) {
         try {
             init(); 
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            return contaService.findSaldoLancamento(idConta, format.parse(data));
+            return contaService.findSaldoLancamento(idConta, formatDate(data));
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -96,10 +97,13 @@ public class ContaController {
     @GET
     @Path("/{idConta}/lancamento")
     @Produces(MediaType.APPLICATION_JSON)
-    public Conta findLancamento(@PathParam("idConta") Integer idConta) {
+    public Conta findLancamento(@PathParam("idConta") Integer idConta, 
+            @QueryParam("dataInicio") String dataInicio, @QueryParam("dataFim") String dataFim) {
         try {
-            init();    
-            return contaService.findLancamento(idConta);
+            init();  
+            Date inicio = formatDate(dataInicio);
+            Date fim = formatDate(dataFim);   
+            return contaService.findLancamento(idConta, inicio, fim);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -108,10 +112,13 @@ public class ContaController {
     @GET
     @Path("/{idConta}/lancamento/programado")
     @Produces(MediaType.APPLICATION_JSON)
-    public Conta findLancamentoProgramado(@PathParam("idConta") Integer idConta) {
+    public Conta findLancamentoProgramado(@PathParam("idConta") Integer idConta, 
+            @QueryParam("dataInicio") String dataInicio, @QueryParam("dataFim") String dataFim) {
         try {
-            init();    
-            return contaService.findLancamentoProgramado(idConta);
+            init();   
+            Date inicio = formatDate(dataInicio);
+            Date fim = formatDate(dataFim);    
+            return contaService.findLancamentoProgramado(idConta, inicio, fim);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -169,5 +176,11 @@ public class ContaController {
         int idErro = ContrErroLog.inserir("Portal Postal - ServConta", "Exception", null, msg);
         return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN)
                 .entity("SYSTEM ERROR Nº: " + idErro + "<br/> Ocorreu um erro inesperado!").build();
+    }
+        
+    private Date formatDate(String data) throws ParseException {
+        if(data == null) return null;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.parse(data);
     }
 }

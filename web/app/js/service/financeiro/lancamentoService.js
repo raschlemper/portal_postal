@@ -36,9 +36,10 @@ app.factory('LancamentoService', function($http, PromiseService) {
 
     return {
 
-        getAll: function() {
-            return PromiseService.execute(
-                    $http.get(_contextPath + "/api/financeiro/lancamento/"));
+        getAll: function(dataInicio, dataFim) {
+            var url = _contextPath + "/api/financeiro/lancamento/";
+            if(dataInicio && dataFim) { url += "?dataInicio=" + dataInicio + "&dataFim=" + dataFim; }
+            return PromiseService.execute($http.get(url));
         },
 
         getSaldo: function(dataInicio, dataFim) {

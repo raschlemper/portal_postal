@@ -124,7 +124,7 @@ app.controller('FluxoCaixaController',
         };
 
         var todos = function(dataInicio, dataFim, vencidos) {
-            LancamentoProgramadoService.getAllAtivo()
+            LancamentoProgramadoService.getAllAtivo(null, null)
                 .then(function (data) {
                     $scope.lancamentos = getLancamentos(angular.copy(data), dataInicio, dataFim, vencidos);
                     $scope.lancamentos.sort(compareData);

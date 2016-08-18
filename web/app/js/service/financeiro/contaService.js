@@ -24,14 +24,16 @@ app.factory('ContaService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/conta/" + idConta + "/saldo/lancamento?data=" + data));
         },
 
-        getLancamento: function(idConta) {
-            return PromiseService.execute(
-                    $http.get(_contextPath + "/api/financeiro/conta/" + idConta + "/lancamento"));
+        getLancamento: function(idConta, dataInicio, dataFim) {
+            var url = _contextPath + "/api/financeiro/conta/" + idConta + "/lancamento";
+            if(dataInicio && dataFim) { url += "?dataInicio=" + dataInicio + "&dataFim=" + dataFim; }
+            return PromiseService.execute($http.get(url));
         },
 
-        getLancamentoProgramado: function(idConta) {
-            return PromiseService.execute(
-                    $http.get(_contextPath + "/api/financeiro/conta/" + idConta + "/lancamento/programado"));
+        getLancamentoProgramado: function(idConta, dataInicio, dataFim) {
+            var url = _contextPath + "/api/financeiro/conta/" + idConta + "/lancamento/programado";
+            if(dataInicio && dataFim) { url += "?dataInicio=" + dataInicio + "&dataFim=" + dataFim; }
+            return PromiseService.execute($http.get(url));
         },
 
         save: function(data) {
