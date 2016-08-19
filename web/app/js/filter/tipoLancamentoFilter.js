@@ -8,7 +8,7 @@ app.filter('tipoLancamento', function(LISTAS) {
     return function(input, item) {
         if(!input) return input;
         
-        if(input.modelo.id === modelos[1].id) {
+        if(input.modelo.id === modelos[1].id || input.modelo.id === modelos[3].id) {
             return '<span title="Lançamento Transferência" class="col-transferencia"><i class="fa fa-exchange"></i></span>'; 
         }         
         if(input.id === tipos[0].id) { 

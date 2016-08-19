@@ -519,6 +519,7 @@
                 document.getElementById('SEDEXC').className = "";
                 document.getElementById('SEDEX10').className = "";
                 document.getElementById('SEDEX12').className = "";
+                document.getElementById('SEDEXHJ').className = "";
                 document.getElementById('ESEDEX').className = "";
                 document.getElementById('CARTA').className = "";
                 document.getElementById('PAC_COB').className = "";
@@ -569,6 +570,11 @@
                     document.getElementById("tipo").selectedIndex = 2;
                     document.getElementById("alertWrap").className = 'mostrar';
                     document.getElementById("alertMsg").innerHTML = 'O peso maximo aceito neste serviço é de 10Kg!';
+                } else if (serv === 'SEDEXHJ') { 
+                     document.getElementById("tipoPacote").className = 'esconder';
+                    document.getElementById("tipo").selectedIndex = 2;
+                    document.getElementById("alertWrap").className = 'mostrar';
+                    document.getElementById("alertMsg").innerHTML = 'Este serviço possui horario limite de postagem diferenciado (antecipado)! Entre em contato com sua agência para maiores informações';
                 } else if (serv === 'SEDEXC' || serv === 'PAC_COB') {
                     document.getElementById("tipoPacote").className = 'esconder';
                     document.getElementById("tipo").selectedIndex = 2;
@@ -1377,12 +1383,15 @@
                                             <option value="">NENHUM DEPARTAMENTO</option>
                                             <%}%>
                                         </select>
+                                    </dd>                                        
+                                    <dd>
+                                        <label>Setor <span style="color:red;">(APARECE SOMENTE NA ETIQUETA)</span></label>
+                                        <input type="text" name="setor" size="25" value="" />
                                     </dd>
-                                    <dd style="margin-left: 390px;">
+                                    <dd style="float:right;">
                                         <label>TARIFAR ENCOMENDAS</label>
                                         <input style="margin-left: 115px;" type="checkbox" id="chk_cotacao" name="chk_cotacao" onchange="habilitaMedidas()">
                                     </dd>
-
                                 </li>
                                 <li class="titulo">
                                     <dd style="font-size: 11px;">DADOS DO DESTINATÁRIO<%-- - <a style="color: blue" onClick="verPesquisarDestinatario('multi');"><img src="../../imagensNew/users.png" /> INSERIR MÚLTIPLOS DESTINATÁRIOS</a>--%></dd>

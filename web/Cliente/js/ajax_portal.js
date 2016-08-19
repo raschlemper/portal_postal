@@ -538,7 +538,7 @@ function darBaixaAr(numObjeto) {
 }
 
 // funcao que retorna as interacoes da ocorrencia solicitada
-function darBaixaAr2() {
+/*function darBaixaAr2() {
     var dataInicio = document.getElementById("dataIni").value;
     var dataFinal = document.getElementById("dataFim").value;
     var nome = retirarAcentos(document.getElementById("nomeRecebedor").value);
@@ -563,7 +563,7 @@ function darBaixaAr2() {
         http.onreadystatechange = handleHttpResponseAr;
         http.send(null);
     }
-}
+}*/
 
 
 

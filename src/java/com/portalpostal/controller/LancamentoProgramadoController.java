@@ -7,6 +7,9 @@ import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.service.LancamentoProgramadoService;
 import com.portalpostal.service.LancamentoService;
 import com.portalpostal.validation.LancamentoProgramadoValidation;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -51,8 +54,10 @@ public class LancamentoProgramadoController {
     public List<LancamentoProgramado> findAll(@QueryParam("dataInicio") String dataInicio, 
             @QueryParam("dataFim") String dataFim) {
         try {
-            init();   
-            return lancamentoProgramadoService.findAll();
+            init();    
+            Date inicio = formatDate(dataInicio);
+            Date fim = formatDate(dataFim);   
+            return lancamentoProgramadoService.findAll(inicio, fim);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -61,10 +66,13 @@ public class LancamentoProgramadoController {
     @GET
     @Path("/ativo")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<LancamentoProgramado> findAllAtivo() {
+    public List<LancamentoProgramado> findAllAtivo(@QueryParam("dataInicio") String dataInicio, 
+            @QueryParam("dataFim") String dataFim) {
         try {
-            init(); 
-            return lancamentoProgramadoService.findAllAtivo();
+            init();  
+            Date inicio = formatDate(dataInicio);
+            Date fim = formatDate(dataFim);   
+            return lancamentoProgramadoService.findAllAtivo(inicio, fim);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -201,5 +209,11 @@ public class LancamentoProgramadoController {
         int idErro = ContrErroLog.inserir("Portal Postal - ServLancamentoProgramado", "Exception", null, msg);
         return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN)
                 .entity("SYSTEM ERROR Nº: " + idErro + "<br/> Ocorreu um erro inesperado!").build();
+    }
+        
+    private Date formatDate(String data) throws ParseException {
+        if(data == null) return null;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.parse(data);
     }
 }

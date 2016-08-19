@@ -17,11 +17,11 @@ import java.util.ArrayList;
  */
 public class ContrPreVenda {
 
-    public static boolean inserir(int idCliente, String numObjeto, int idDestinatario, int idRemetente, int codECT, String contrato, String departamento, String aosCuidados, String obs, String conteudo, int peso, int altura, int largura, int comprimento, float vd, int ar, int mp, String siglaAmarracao, String nomeServico, String notaFiscal, float valor_cobrar, String tipo, int idDepartamento, String cartaoPostagem, int idUser, int registro, String nomePreVenda, String email_destinatario, String tipo_etiqueta, String siglaPais, String destino_postagem, String nomeBD, int posta_restante, int registro_modico) {
+    public static boolean inserir(int idCliente, String numObjeto, int idDestinatario, int idRemetente, int codECT, String contrato, String departamento, String aosCuidados, String obs, String conteudo, int peso, int altura, int largura, int comprimento, float vd, int ar, int mp, String siglaAmarracao, String nomeServico, String notaFiscal, float valor_cobrar, String tipo, int idDepartamento, String cartaoPostagem, int idUser, int registro, String nomePreVenda, String email_destinatario, String tipo_etiqueta, String siglaPais, String destino_postagem, String nomeBD, int posta_restante, int registro_modico, String setor) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "INSERT INTO pre_venda (id, numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, userPreVenda, registro, nomePreVenda, email_destinatario, tipo_etiqueta, sigla_pais, destino_postagem, posta_restante, registro_modico) values(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW(),?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO pre_venda (id, numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, userPreVenda, registro, nomePreVenda, email_destinatario, tipo_etiqueta, sigla_pais, destino_postagem, posta_restante, registro_modico, setor) values(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW(),?,?,?,?,?,?,?,?,?,?,?)";
         if (numObjeto.equals("avista")) {
-            sql = "INSERT INTO pre_venda (numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, userPreVenda, registro, nomePreVenda, email_destinatario, tipo_etiqueta, sigla_pais, destino_postagem, posta_restante, registro_modico) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW(),?,?,?,?,?,?,?,?,?,?)";
+            sql = "INSERT INTO pre_venda (numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, userPreVenda, registro, nomePreVenda, email_destinatario, tipo_etiqueta, sigla_pais, destino_postagem, posta_restante, registro_modico, setor) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW(),?,?,?,?,?,?,?,?,?,?,?)";
         }
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
@@ -58,6 +58,7 @@ public class ContrPreVenda {
             valores.setString(31, destino_postagem);
             valores.setInt(32, posta_restante);
             valores.setInt(33, registro_modico);
+            valores.setString(34, setor);
             valores.executeUpdate();
             valores.close();
             return true;
@@ -70,9 +71,9 @@ public class ContrPreVenda {
         }
     }
 
-    public static boolean alterar(int idCliente, String numObjeto, int idDestinatario, int idRemetente, int codECT, String contrato, String departamento, String aosCuidados, String obs, String conteudo, int peso, int altura, int largura, int comprimento, float vd, int ar, int mp, String siglaAmarracao, String nomeServico, String notaFiscal, float valor_cobrar, String tipo, int idDepartamento, String cartaoPostagem, int idUser, int id, int registro, String nomePreVenda, String tipo_etiqueta, String email, String nomeBD) {
+    public static boolean alterar(int idCliente, String numObjeto, int idDestinatario, int idRemetente, int codECT, String contrato, String departamento, String aosCuidados, String obs, String conteudo, int peso, int altura, int largura, int comprimento, float vd, int ar, int mp, String siglaAmarracao, String nomeServico, String notaFiscal, float valor_cobrar, String tipo, int idDepartamento, String cartaoPostagem, int idUser, int id, int registro, String nomePreVenda, String tipo_etiqueta, String email, int rm, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "UPDATE pre_venda SET numObjeto=?, idCliente=?, idDestinatario=?, idRemetente=?, codECT=?, contrato=?, departamento=?, aos_cuidados=?, observacoes=?, conteudo=?, peso=?, altura=?, largura=?, comprimento=?, valor_declarado=?, aviso_recebimento=?, mao_propria=?, siglaAmarracao=?, nomeServico=?, notaFiscal=?, valor_cobrar=?, tipoEncomenda=?, idDepartamento=?, dataPreVenda=NOW(), cartaoPostagem=?, userPreVenda=?, registro=?, nomePreVenda=?, tipo_etiqueta=?, email_destinatario=? WHERE id = ?;";
+        String sql = "UPDATE pre_venda SET numObjeto=?, idCliente=?, idDestinatario=?, idRemetente=?, codECT=?, contrato=?, departamento=?, aos_cuidados=?, observacoes=?, conteudo=?, peso=?, altura=?, largura=?, comprimento=?, valor_declarado=?, aviso_recebimento=?, mao_propria=?, siglaAmarracao=?, nomeServico=?, notaFiscal=?, valor_cobrar=?, tipoEncomenda=?, idDepartamento=?, dataPreVenda=NOW(), cartaoPostagem=?, userPreVenda=?, registro=?, nomePreVenda=?, tipo_etiqueta=?, email_destinatario=?, registro_modico = ? WHERE id = ?;";
 
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
@@ -105,7 +106,8 @@ public class ContrPreVenda {
             valores.setString(27, nomePreVenda);
             valores.setString(28, tipo_etiqueta);
             valores.setString(29, email);
-            valores.setInt(30, id);
+            valores.setInt(30, rm);
+            valores.setInt(31, id);
             valores.executeUpdate();
             valores.close();
             return true;

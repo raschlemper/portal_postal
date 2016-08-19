@@ -21,7 +21,7 @@
                 String vDataAtual = sdf.format(dataAtual);
                 String dataOntem = Util.SomaData.SomarDiasDatas(dataAtual, -1);
                 String dataInicioCalendario = Util.SomaData.SomarDiasDatas(dataAtual, -150); // diminui 5 meses                       
-        %>
+%>
         <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
         <title>Portal Postal | Controle de AR</title>
         <meta name="keywords" content="" />
@@ -52,66 +52,67 @@
 
         <script type="text/javascript" charset="utf-8">
 
-            $(document).ready(function(){
+            $(document).ready(function () {
                 pesquisaAr('<%=numCliente%>', '<%=nomeBD%>');
             });
 
-            $(function() {
+            $(function () {
                 $("#dataIni").datepicker({
-                    minDate:'<%=dataInicioCalendario%>',
-                    maxDate:'<%= vDataAtual%>',
+                    minDate: '<%=dataInicioCalendario%>',
+                    maxDate: '<%= vDataAtual%>',
                     showOn: "button",
                     buttonImage: "../../imagensNew/calendario.png",
                     buttonImageOnly: true,
                     showAnim: "slideDown"
                 });
                 $("#dataFim").datepicker({
-                    minDate:'<%=dataInicioCalendario%>',
-                    maxDate:'<%= vDataAtual%>',
+                    minDate: '<%=dataInicioCalendario%>',
+                    maxDate: '<%= vDataAtual%>',
                     showOn: "button",
                     buttonImage: "../../imagensNew/calendario.png",
                     buttonImageOnly: true,
                     showAnim: "slideDown"
                 });
             });
-             
-            function chamaJanelaBaixaAr(numeroRegistro){
+
+            function chamaJanelaBaixaAr(numeroRegistro) {
                 var baixa = document.getElementById(numeroRegistro).value;
-                if(baixa==1){
+                if (baixa == 1) {
                     document.getElementById("numObjetoAr").value = numeroRegistro;
+                    document.getElementById("numAr").innerHTML = numeroRegistro;
                     document.getElementById("nomeRecebedor").value = "";
                     document.getElementById("dataRecebimento").value = "<%= sdf.format(new Date())%>";
                     chamaDivProtecao();
-                }else{
+                } else {
                     darBaixaAr(numeroRegistro);
                 }
             }
 
 
-            var sorter2 = new TINY.table.sorter('sorter2','table2',{
-                headclass:'head',
-                ascclass:'asc',
-                descclass:'desc',
-                evenclass:'evenrow',
-                oddclass:'oddrow',
-                evenselclass:'evenselected',
-                oddselclass:'oddselected',
-                paginate:true,
-                size:20,
-                colddid:'columns2',
-                currentid:'currentpage2',
-                totalid:'totalpages2',
-                startingrecid:'startrecord2',
-                endingrecid:'endrecord2',
-                totalrecid:'totalrecords2',
-                hoverid:'selectedrowDefault',
-                pageddid:'pagedropdown2',
-                navid:'tablenav2',
-                sortcolumn:2,
-                sortdir:-1,
-                init:false
+            var sorter2 = new TINY.table.sorter('sorter2', 'table2', {
+                headclass: 'head',
+                ascclass: 'asc',
+                descclass: 'desc',
+                evenclass: 'evenrow',
+                oddclass: 'oddrow',
+                evenselclass: 'evenselected',
+                oddselclass: 'oddselected',
+                paginate: true,
+                size: 20,
+                colddid: 'columns2',
+                currentid: 'currentpage2',
+                totalid: 'totalpages2',
+                startingrecid: 'startrecord2',
+                endingrecid: 'endrecord2',
+                totalrecid: 'totalrecords2',
+                hoverid: 'selectedrowDefault',
+                pageddid: 'pagedropdown2',
+                navid: 'tablenav2',
+                sortcolumn: 2,
+                sortdir: -1,
+                init: false
             });
-            
+
             var chart;
             var options = {
                 chart: {
@@ -124,8 +125,8 @@
                     text: 'RETORNOS DE A.R.'
                 },
                 tooltip: {
-                    formatter: function() {
-                        return '<b>'+ this.point.name +'</b>: '+ this.y +'';
+                    formatter: function () {
+                        return '<b>' + this.point.name + '</b>: ' + this.y + '';
                     }
                 },
                 plotOptions: {
@@ -136,7 +137,7 @@
                             enabled: false
                         },
                         showInLegend: true,
-                        size:125
+                        size: 125
                     }
                 },
                 legend: {
@@ -146,7 +147,7 @@
                     x: -10,
                     y: 40,
                     borderWidth: 0,
-                    labelFormatter: function() {
+                    labelFormatter: function () {
                         return this.name + ': ' + this.y;
                     }
                 },
@@ -157,10 +158,10 @@
                     }]
             };
 
-            function teste(){
+            function teste() {
                 var dados = [];
                 var aux = document.getElementById("dadosGrafico").value.split(";");
-                for(var i=0; i<aux.length; i++){
+                for (var i = 0; i < aux.length; i++) {
                     var aux2 = aux[i].split(",");
                     dados.push([aux2[0], parseInt(aux2[1])]);
                 }
@@ -169,59 +170,87 @@
                 chart = new Highcharts.Chart(options);
             }
 
-            function chamaDivProtecao(){
+            function chamaDivProtecao() {
                 var classe = document.getElementById("divProtecao").className;
-                if(classe == "esconder"){
+                if (classe == "esconder") {
                     document.getElementById("divProtecao").className = "mostrar";
                     document.getElementById("divInteracao").className = "mostrar";
-                }else{
+                } else {
                     document.getElementById("divProtecao").className = "esconder";
                     document.getElementById("divInteracao").className = "esconder";
                 }
             }
-            
-            $(function() {
-                $( "#dataRecebimento" ).datepicker({
+
+            $(function () {
+                $("#dataRecebimento").datepicker({
                     showOn: "button",
                     buttonImage: "../../imagensNew/calendario.png",
                     buttonImageOnly: true,
                     showAnim: "slideDown"
                 });
             });
+
+            function darBaixaAr2() {
+                var form = document.formSro;
+                if (form.dataRecebimento.value === "") {
+                    alert("Preencha a Data de recebimento do AR!");
+                    return false;
+                } else if (form.nomeRecebedor.value === "") {
+                    alert("Preencha o nome do recebedor do AR");
+                    return false;
+                } else if (form.arquivoRec.value !== ""){
+                    var indexA = form.arquivoRec.value.lastIndexOf(".");
+                    var indexB = form.arquivoRec.value.length;
+                    var ext = form.arquivoRec.value.substring(indexA, indexB).toUpperCase();
+                    if (ext !== ".JPG" && ext !== ".JPEG" && ext !== ".PNG" && ext !== ".GIF") {
+                        alert("O arquivo a ser importado deve ser .JPG, .JPEG, .PNG ou .GIF !");
+                        return false;
+                    }
+                }
+                // waitMsg();
+                form.submit();
+            }
+
         </script>
     </head>
     <body>
-        <div id="divInteracao" class="esconder" style="top:25%; left:30%; right:30%; bottom:25%;" align="center">
+        <div id="divInteracao" class="esconder" style="top:15%; left:20%; right:20%; bottom:25%;" align="center">
             <div style="width: 100%; margin: 15px;">
                 <div style="width: 95%; text-align: left;">
                     <div style='float:right;'><a onclick='chamaDivProtecao();' href='#' class='botaoClose'>Fechar</a></div>
-                    <div id='titulo1'>Insira os Dados do AR</div>
+                    <div id='titulo1'><span id="numAr"></span> - Insira os Dados do AR</div>
                 </div>
                 <img style="margin-bottom: 25px;" width="100%" src="../../imagensNew/linha.jpg"/>
-
-                <form name='formObs' action='../../ServAlterarObsColeta' method='post'>
+                <form  name="formSro" action="../../ServSalvarArImg" method="post" enctype="multipart/form-data">
+                    <!--   <form name='formObs' action='../../ServAlterarObsColeta' method='post'> -->
                     <ul style="width: 95%; text-align: left;" class="ul_formulario">
                         <li>
                             <dd>
                                 <label>Data Recebimento</label>
-                                <input type="text" name="dataRecebimento" id="dataRecebimento"  value="" maxlength="10" onKeyPress="mascara(this,maskData)" />
+                                <input type="text" name="dataRec" id="dataRecebimento"  value="" maxlength="10" onKeyPress="mascara(this, maskData)" />
                             </dd>
                         </li>
                         <li>
                             <dd>
                                 <label>Nome do Recebedor</label>
-                                <input style="width: 220px;" type="text" name="nomeRecebedor" id="nomeRecebedor" />
+                                <input style="width: 220px;" type="text" name="nomeRec" id="nomeRecebedor" />
                             </dd>
                         </li>
+                        <li>
+                            <label>Escolha a imagem do AR para importar</label><br/>
+                            <span class="btn btn-default btn-file"><i class="fa fa-folder-open"></i> Selecionar imagem <input type="file" name="arquivoRec" /></span>
+                            <input type="hidden" id="tipoForm" name="tipoFormRec" value="imagem" /></br>
+                            <label class="small" style="color: red;">*O arquivo a ser importado deve ser JPG, JPEG, PNG ou GIF !</label><br/>
+                            <label class="small" style="color: red;">*O tamanho máximo deve ser de 500 BK !</label>
+                        </li>
                     </ul>
-                    
                     <div class="buttons">
-                        <input type="hidden" name="numObjetoAr" id="numObjetoAr" value=""/>
+                        <input type="hidden" name="sroRec" id="numObjetoAr" value=""/>
+                        <input type="hidden" name="codCli" id="codCli" value="<%=idCliente%>"/>
                         <button type="button" class="positive" onclick="darBaixaAr2();" ><img src="../../imagensNew/tick_circle.png" /> SALVAR DADOS</button>
                         <button type="button" class="negative" onClick='chamaDivProtecao();'><img src="../../imagensNew/cross_circle.png" /> CANCELAR</button>
                     </div>
                 </form>
-
             </div>
         </div>
         <div id="divProtecao" class="esconder"></div>
@@ -241,9 +270,9 @@
                             <li>
                                 <dd>
                                     <label>PERIODO DA PESQUISA</label>
-                                    <input type="text" style="width:65px;" name="dataIni" id="dataIni" value="<%= dataOntem%>" onkeypress="mascara(this,maskData);" />
+                                    <input type="text" style="width:65px;" name="dataIni" id="dataIni" value="<%= dataOntem%>" onkeypress="mascara(this, maskData);" />
                                     até
-                                    <input type="text" style="width:65px;" name="dataFim" id="dataFim" value="<%=vDataAtual%>" onkeypress="mascara(this,maskData);" />
+                                    <input type="text" style="width:65px;" name="dataFim" id="dataFim" value="<%=vDataAtual%>" onkeypress="mascara(this, maskData);" />
                                 </dd>
                                 <dd>
                                     <label>Somente Objetos com A.R.</label>
@@ -265,10 +294,11 @@
                                             for (int i = 0; i < listaDep.size(); i++) {
                                                 ClientesDeptos cd = listaDep.get(i);
                                                 String depto = FormataString.removeAccentsToUpper(cd.getNomeDepartamento());
-                                                if(dpsUser.contains(cd.getIdDepartamento())){                                                    
+                                                if (dpsUser.contains(cd.getIdDepartamento())) {
                                         %>
                                         <option value="<%=depto%>"><%= cd.getNomeDepartamento()%></option>
-                                        <%}}%>
+                                        <%}
+                                            }%>
                                     </select>
                                 </dd>
                             </li>

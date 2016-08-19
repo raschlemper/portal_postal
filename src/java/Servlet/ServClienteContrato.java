@@ -6,7 +6,8 @@ package Servlet;
 
 import Controle.ContrClienteContrato;
 import Controle.contrCliente;
-import br.com.correios.scol.webservice.RetornoFaixaNumericaTO;
+import br.com.correios.logisticareversa.service.ComponenteException;
+import br.com.correios.logisticareversa.service.RetornoFaixaNumerica;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -164,17 +165,28 @@ public class ServClienteContrato extends HttpServlet {
              * ****************************** SALVA SENHA LOGISTICA REVERSA ***************************
              */
             
-            String login_reversa = request.getParameter("login_reversa").trim();
-            String senha_reversa = request.getParameter("senha_reversa").trim();
+            final String login_reversa = request.getParameter("login_reversa").trim();
+            final String senha_reversa = request.getParameter("senha_reversa").trim();
             String cartao_reversa = request.getParameter("cartao_reversa").trim();
 
             if(!login_reversa.equals("") && !senha_reversa.equals("") && !cartao_reversa.equals("")){
-                //SOLICITA NUMERO PARA SOLICITACAO DE REVERSA        
-                RetornoFaixaNumericaTO ret = solicitarRange(login_reversa, senha_reversa, Integer.parseInt(codAdm), numContrato, "AP", "", 1);
-                if (ret.getCodErro().equals("0")) {
-                    contrCliente.alterarLoginReversa(login_reversa, senha_reversa, cartao_reversa, idCliente, nomeBD);
-                } else {
-                    msg += "<br/><br/>Não foi possivel salvar o login da reversa:<br/>"+ret.getMsgErro();                
+                //SOLICITA NUMERO PARA SOLICITACAO DE REVERSA                        
+                try {
+                    java.net.Authenticator.setDefault(new java.net.Authenticator() {
+                        @Override
+                        protected java.net.PasswordAuthentication getPasswordAuthentication() {
+                            return new java.net.PasswordAuthentication(login_reversa, senha_reversa.toCharArray());
+                        }
+                    });
+
+                    RetornoFaixaNumerica ret = solicitarRange(codAdm, "AP", "", "1");
+                    if (ret.getCodErro().equals("0")) {
+                        contrCliente.alterarLoginReversa(login_reversa, senha_reversa, cartao_reversa, idCliente, nomeBD);
+                    } else {
+                        msg += "<br/><br/>Não foi possivel salvar o login da reversa:<br/>" + ret.getMsgErro();
+                    }
+                } catch (ComponenteException ex) {
+                    msg += "<br/><br/>Não foi validar o login da reversa:<br/>" + ex.getMessage();
                 }
             }
 
@@ -199,16 +211,10 @@ public class ServClienteContrato extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    /*private static RetornoFaixaNumericaTO solicitarRange(java.lang.String usuario, java.lang.String senha, java.lang.Integer codAdministrativo, java.lang.Long contrato, java.lang.String tipo, java.lang.String servico, java.lang.Integer quantidade) {
-        br.com.correios.scol.webservice.WebServiceScol_Service service = new br.com.correios.scol.webservice.WebServiceScol_Service();
-        br.com.correios.scol.webservice.WebServiceScol port = service.getWebServiceScolPort();
-        return port.solicitarRange(usuario, senha, codAdministrativo, contrato, tipo, servico, quantidade);
-    }*/
-
-    private static RetornoFaixaNumericaTO solicitarRange(java.lang.String usuario, java.lang.String senha, java.lang.Integer codAdministrativo, java.lang.String contrato, java.lang.String tipo, java.lang.String servico, java.lang.Integer quantidade) {
-        br.com.correios.scol.webservice.WebServiceScol_Service service = new br.com.correios.scol.webservice.WebServiceScol_Service();
-        br.com.correios.scol.webservice.WebServiceScol port = service.getWebServiceScolPort();
-        return port.solicitarRange(usuario, senha, codAdministrativo, new Long(contrato), tipo, servico, quantidade); 
+    private static RetornoFaixaNumerica solicitarRange(java.lang.String codAdministrativo, java.lang.String tipo, java.lang.String servico, java.lang.String quantidade) throws ComponenteException {
+        br.com.correios.logisticareversa.service.LogisticaReversaService service = new br.com.correios.logisticareversa.service.LogisticaReversaService();
+        br.com.correios.logisticareversa.service.LogisticaReversaWS port = service.getLogisticaReversaWSPort();
+        return port.solicitarRange(codAdministrativo, tipo, servico, quantidade);
     }
 
 }

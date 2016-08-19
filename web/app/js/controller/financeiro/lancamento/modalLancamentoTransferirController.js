@@ -5,8 +5,8 @@ app.controller('ModalLancamentoTransferirController',
     function ($scope, $modalInstance, lancamentoTransferencia, ContaService, DatePickerService, LISTAS, MESSAGES) {
 
         var init = function () {  
-            $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
-            $scope.datepickerLancamento = angular.copy(DatePickerService.default); 
+//            $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
+//            $scope.datepickerLancamento = angular.copy(DatePickerService.default); 
             $scope.situacoes = LISTAS.situacaoLancamento;
             $scope.lancamentoTransferencia = lancamentoTransferencia || {};             
             getTitle(lancamentoTransferencia);
@@ -35,9 +35,32 @@ app.controller('ModalLancamentoTransferirController',
                 });
         };
         
-        $scope.setDataCompetencia = function(lancamentoTransferencia) {
-            if(lancamentoTransferencia.dataCompetencia) return;
-            lancamentoTransferencia.dataCompetencia = lancamentoTransferencia.dataLancamento;
+//        $scope.setDataCompetencia = function(lancamentoTransferencia) {
+//            if(lancamentoTransferencia.dataCompetencia) return;
+//            lancamentoTransferencia.dataCompetencia = lancamentoTransferencia.dataLancamento;
+//        };
+        
+        $scope.events = {
+            onblur : function() {
+                setDataCompetenciaOrigem($scope.lancamentoTransferencia);
+                setDataVencimentoDestino($scope.lancamentoTransferencia);
+                setDataCompetenciaDestino($scope.lancamentoTransferencia);
+            }
+        };
+        
+        var setDataCompetenciaOrigem = function(lancamentoTransferencia){
+            if(lancamentoTransferencia.dataCompetenciaOrigem) return;
+            lancamentoTransferencia.dataCompetenciaOrigem = lancamentoTransferencia.dataLancamentoOrigem;            
+        };
+        
+        var setDataVencimentoDestino = function(lancamentoTransferencia){
+            if(lancamentoTransferencia.dataLancamentoDestino) return;
+            lancamentoTransferencia.dataLancamentoDestino = lancamentoTransferencia.dataLancamentoOrigem;            
+        };
+        
+        var setDataCompetenciaDestino = function(lancamentoTransferencia){
+            if(lancamentoTransferencia.dataCompetenciaDestino) return;
+            lancamentoTransferencia.dataCompetenciaDestino = lancamentoTransferencia.dataLancamentoOrigem;            
         };
         
         $scope.ok = function(form, lancamentoTransferencia) {
@@ -56,22 +79,38 @@ app.controller('ModalLancamentoTransferirController',
                 alert(MESSAGES.lancamento.transferir.validacao.CONTA_DIFERENTE);
                 return false;                
             }
-            if (form.dataCompetencia.$error.required) {
-                alert(MESSAGES.lancamento.transferir.validacao.DATA_COMPETENCIA_REQUERIDA);
+            if (form.dataCompetenciaOrigem.$error.required) {
+                alert(MESSAGES.lancamento.transferir.validacao.DATA_COMPETENCIA_ORIGEM_REQUERIDA);
                 return false;
             }        
-            if (form.dataCompetencia.$modelValue && !moment(form.dataCompetencia.$modelValue).isValid()) {
-                alert(MESSAGES.lancamento.transferir.validacao.DATA_COMPETENCIA_VALIDA);
+            if (form.dataCompetenciaOrigem.$modelValue && !moment(form.dataCompetenciaOrigem.$modelValue).isValid()) {
+                alert(MESSAGES.lancamento.transferir.validacao.DATA_COMPETENCIA_ORIGEM_VALIDA);
+                return false;
+            }   
+            if (form.dataCompetenciaDestino.$error.required) {
+                alert(MESSAGES.lancamento.transferir.validacao.DATA_COMPETENCIA_DESTINO_REQUERIDA);
+                return false;
+            }        
+            if (form.dataCompetenciaDestino.$modelValue && !moment(form.dataCompetenciaDestino.$modelValue).isValid()) {
+                alert(MESSAGES.lancamento.transferir.validacao.DATA_COMPETENCIA_DESTINO_VALIDA);
                 return false;
             }    
-            if (form.dataLancamento.$error.required) {
-                alert(MESSAGES.lancamento.transferir.validacao.DATA_LANCAMENTO_REQUERIDA);
+            if (form.dataLancamentoOrigem.$error.required) {
+                alert(MESSAGES.lancamento.transferir.validacao.DATA_LANCAMENTO_ORIGEM_REQUERIDA);
                 return false;
             }       
-            if (form.dataLancamento.$modelValue && !moment(form.dataLancamento.$modelValue).isValid()) {
-                alert(MESSAGES.lancamento.transferir.validacao.DATA_LANCAMENTO_VALIDA);
+            if (form.dataLancamentoOrigem.$modelValue && !moment(form.dataLancamentoOrigem.$modelValue).isValid()) {
+                alert(MESSAGES.lancamento.transferir.validacao.DATA_LANCAMENTO_ORIGEM_VALIDA);
                 return false;
-            }    
+            }       
+            if (form.dataLancamentoDestino.$error.required) {
+                alert(MESSAGES.lancamento.transferir.validacao.DATA_LANCAMENTO_DESTINO_REQUERIDA);
+                return false;
+            }       
+            if (form.dataLancamentoDestino.$modelValue && !moment(form.dataLancamentoDestino.$modelValue).isValid()) {
+                alert(MESSAGES.lancamento.transferir.validacao.DATA_LANCAMENTO_DESTINO_VALIDA);
+                return false;
+            }   
             if (form.valor.$error.required) {
                 alert(MESSAGES.lancamento.transferir.validacao.VALOR_REQUERIDA);
                 return false;

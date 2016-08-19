@@ -254,18 +254,28 @@
                                                 if (listaServ != null) {
                                                     for (int i = 0; i < listaServ.size(); i++) {
                                                         ServicoECT sv = listaServ.get(i);
+                                                       if(sv.getGrupoServico().equals("SEDEX")||sv.getGrupoServico().equals("PAC")||sv.getGrupoServico().equals("CARTA") 
+                                                               || sv.getGrupoServico().equals("SEDEX10") || sv.getGrupoServico().equals("SEDEX12")|| sv.getGrupoServico().equals("SEDEXHJ")
+                                                               || sv.getGrupoServico().equals("ESEDEX")|| sv.getGrupoServico().equals("PAX")){
+                                                        
+                                                   
                                                         if (!sv.getGrupoServico().equals("SEDEXC")) {
                                                             out.println("<option value='" + sv.getCodECT() + ";" + sv.getGrupoServico() + ";NAC'>" + sv.getNomeServico() + "</option>");
-                                                        }
+                                                        } 
+                                                       }
                                                     }
                                                     for (int i = 0; i < listaServ1.size(); i++) {
                                                         ServicoECT sv = listaServ1.get(i);
+                                                         if(sv.getGrupoServico().equals("SEDEX")||sv.getGrupoServico().equals("PAC")||sv.getGrupoServico().equals("CARTA") 
+                                                               || sv.getGrupoServico().equals("SEDEX10") || sv.getGrupoServico().equals("SEDEX12")|| sv.getGrupoServico().equals("SEDEXHJ")
+                                                               || sv.getGrupoServico().equals("ESEDEX")|| sv.getGrupoServico().equals("PAX")){
                                                         if (listaOutrosServ.contains(sv.getCodECT()) && !sv.getGrupoServico().equals("PPI")) {
                                                             String tipoPost = "NAC";
                                                             if (sv.getTipo_agencia().contains("INT")) {
                                                                 tipoPost = "INT";
                                                             }
                                                             out.println("<option value='" + sv.getCodECT() + ";" + sv.getGrupoServico() + ";" + tipoPost + "'>" + sv.getNomeServico() + "</option>");
+                                                        }
                                                         }
                                                     }
                                                 }

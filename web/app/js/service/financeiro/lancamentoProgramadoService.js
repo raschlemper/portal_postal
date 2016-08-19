@@ -80,14 +80,16 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
 
     return {
 
-        getAll: function() {
-            return PromiseService.execute(
-                    $http.get(_contextPath + "/api/financeiro/lancamento/programado/"));
+        getAll: function(dataInicio, dataFim) {
+            var url = _contextPath + "/api/financeiro/lancamento/programado/";
+            if(dataInicio && dataFim) { url += "?dataInicio=" + dataInicio + "&dataFim=" + dataFim; }
+            return PromiseService.execute($http.get(url));
         },
 
         getAllAtivo: function(dataInicio, dataFim) {
-            return PromiseService.execute(
-                    $http.get(_contextPath + "/api/financeiro/lancamento/programado/ativo"));
+            var url = _contextPath + "/api/financeiro/lancamento/programado/ativo";
+            if(dataInicio && dataFim) { url += "?dataInicio=" + dataInicio + "&dataFim=" + dataFim; }
+            return PromiseService.execute($http.get(url));
         },
 
         get: function(idLancamentoProgramado) {

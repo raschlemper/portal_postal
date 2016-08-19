@@ -89,7 +89,10 @@
                                                            current-text="{{datepickerDataFim.today}}" clear-text="{{datepickerDataFim.clear}}" close-text="{{datepickerDataFim.close}}"
                                                            placeholder="Data final" ng-model-options='{ debounce: 1000 }'/>
                                                     <span class="input-group-addon" ng-click="datepickerDataFim.open($event)"><i class="fa fa-calendar"></i></span>
-                                                </div>
+                                                </div>  
+                                                
+                                                <button class="btn btn-sm btn-default" ng-click="filterByDays(-1)">Ontem</button> 
+                                                <button class="btn btn-sm btn-default" ng-click="filterByDays(0)">Hoje</button> 
                                                 
                                             </div>                                             
                                             

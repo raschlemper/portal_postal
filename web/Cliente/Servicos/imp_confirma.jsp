@@ -157,6 +157,7 @@
                                     <th>AR</th>
                                     <th>MP</th>
                                     <th>VD</th>
+                                    <th>REG.</th>
                                     <th>OBS</th>
                                     <th>CONTEÚDO</th>
                                     <th>CELULAR</th>
@@ -244,6 +245,12 @@
                                         </select>
                                     </td>
                                     <td><input type="text" name="vd<%= pv.getId()%>" size="5" value="<%= pv.getValor_declarado()%>" maxlength="8" onkeypress="mascara(this, maskReal);" /></td>
+                                    <td align="center">
+                                        <select readonly name="rm<%= pv.getId()%>">
+                                            <option value="0" <%if (pv.getRegistro_modico() == 0) {%> selected <%}%>>NORMAL</option>
+                                            <option value="1" <%if (pv.getRegistro_modico() == 1) {%> selected <%}%>>MÓDICO</option>
+                                        </select>
+                                    </td>
                                     <td><input type="text" name="obs<%= pv.getId()%>" value="<%= pv.getObservacoes()%>"  maxlength="100" /></td>
                                     <td><input type="text" name="conteudo<%= pv.getId()%>" value="<%= pv.getConteudo()%>"  maxlength="200" /></td>
                                     <td><input type="text" name="celular<%= pv.getId()%>" value="<%= pv.getCelularDes()%>"  maxlength="15" /></td>

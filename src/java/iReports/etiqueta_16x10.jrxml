@@ -147,6 +147,15 @@
 	<field name="vd" class="java.lang.Float">
 		<fieldDescription><![CDATA[vd]]></fieldDescription>
 	</field>
+	<field name="pr" class="java.lang.Integer">
+		<fieldDescription><![CDATA[pr]]></fieldDescription>
+	</field>
+	<field name="rg" class="java.lang.Integer">
+		<fieldDescription><![CDATA[rg]]></fieldDescription>
+	</field>
+	<field name="rm" class="java.lang.Integer">
+		<fieldDescription><![CDATA[rm]]></fieldDescription>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -287,7 +296,7 @@
 				<text><![CDATA[PESO (Kg):]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="137" y="289" width="29" height="18" uuid="b6530c8f-54c0-4b8d-b476-259434e6bd8c">
+				<reportElement x="120" y="288" width="25" height="18" uuid="b6530c8f-54c0-4b8d-b476-259434e6bd8c">
 					<printWhenExpression><![CDATA[$F{ar} == 1]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -296,7 +305,7 @@
 				<textFieldExpression><![CDATA["AR"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="137" y="306" width="29" height="18" uuid="21aed67b-cd0a-42e9-a466-0791ea705380">
+				<reportElement x="120" y="306" width="25" height="18" uuid="21aed67b-cd0a-42e9-a466-0791ea705380">
 					<printWhenExpression><![CDATA[$F{mp} == 1]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -309,7 +318,7 @@
 				<textElement>
 					<font size="7"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{remetente_departamento}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{remetente_departamento}+" - "+$F{remetente_complemento}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="2" y="242" width="245" height="11" uuid="d80c38a4-9717-4ca7-a60e-d95d6116bad9">
@@ -423,7 +432,7 @@
 				<textFieldExpression><![CDATA[$F{destinatario_celular}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="137" y="272" width="29" height="18" uuid="708ffae5-52be-4c20-89be-1100a64bf600">
+				<reportElement x="134" y="270" width="29" height="18" uuid="708ffae5-52be-4c20-89be-1100a64bf600">
 					<printWhenExpression><![CDATA[$F{vd} > 0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -433,7 +442,8 @@
 			</textField>
 			<textField>
 				<reportElement x="161" y="27" width="86" height="9" uuid="69f84d9f-2091-4105-ba71-f22dba24c4e9">
-					<printWhenExpression><![CDATA[!$F{contrato_ect}.equals("") && $F{sro}.length() == 13]]></printWhenExpression>
+					<printWhenExpression><![CDATA[!$F{contrato_ect}.equals("") && $F{sro}.length() == 13
+&& !$F{grupo_servico}.equals("CARTA") && !$F{grupo_servico}.startsWith("MDPB")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center">
 					<font size="6"/>
@@ -442,7 +452,8 @@
 			</textField>
 			<textField>
 				<reportElement x="161" y="34" width="86" height="9" uuid="0d7ca476-4182-40d3-9fa9-8d96fd6c1ad0">
-					<printWhenExpression><![CDATA[!$F{contrato_ect}.equals("") && $F{sro}.length() == 13]]></printWhenExpression>
+					<printWhenExpression><![CDATA[!$F{contrato_ect}.equals("") && $F{sro}.length() == 13
+&& !$F{grupo_servico}.equals("CARTA") && !$F{grupo_servico}.startsWith("MDPB")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6" isBold="true"/>
@@ -466,6 +477,24 @@
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA["A COBRAR: R$ " + $F{valor_cobrar}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="288" width="25" height="18" uuid="1ce9d215-cab1-42ab-bfd9-a09cca7e3ed2">
+					<printWhenExpression><![CDATA[$F{rm} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["RM"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="306" width="25" height="18" uuid="5746a420-3906-4fe1-af2e-15ec510d184e">
+					<printWhenExpression><![CDATA[$F{pr} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["PR"]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

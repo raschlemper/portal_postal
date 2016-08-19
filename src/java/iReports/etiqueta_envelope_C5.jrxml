@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" printOrder="Horizontal" pageWidth="648" pageHeight="459" columnWidth="632" leftMargin="8" rightMargin="8" topMargin="8" bottomMargin="8" uuid="a6600087-3a8d-456c-bdc8-19dcbb299119">
-	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="646"/>
-	<property name="ireport.y" value="124"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="idCliente" class="java.lang.String"/>
 	<parameter name="enderecoCli" class="java.lang.String"/>
 	<parameter name="bairroCli" class="java.lang.String"/>
@@ -159,6 +159,15 @@
 	<field name="vd" class="java.lang.Float">
 		<fieldDescription><![CDATA[vd]]></fieldDescription>
 	</field>
+	<field name="pr" class="java.lang.Integer">
+		<fieldDescription><![CDATA[pr]]></fieldDescription>
+	</field>
+	<field name="rg" class="java.lang.Integer">
+		<fieldDescription><![CDATA[rg]]></fieldDescription>
+	</field>
+	<field name="rm" class="java.lang.Integer">
+		<fieldDescription><![CDATA[rm]]></fieldDescription>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -194,7 +203,7 @@
 				<textFieldExpression><![CDATA[$F{remetente_nome}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="493" y="326" width="128" height="10" uuid="c648c419-1415-4bef-be84-ddf99a7f9982">
+				<reportElement x="516" y="326" width="105" height="10" uuid="c648c419-1415-4bef-be84-ddf99a7f9982">
 					<printWhenExpression><![CDATA[!$F{contrato_ect}.equals("")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right">
@@ -282,7 +291,7 @@
 				<text><![CDATA[PESO (g):]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="487" y="87" width="29" height="14" uuid="5f7b02b5-15bb-49e4-8751-d54ecc9f9498">
+				<reportElement x="482" y="87" width="20" height="14" uuid="5f7b02b5-15bb-49e4-8751-d54ecc9f9498">
 					<printWhenExpression><![CDATA[$F{ar} == 1]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -291,7 +300,7 @@
 				<textFieldExpression><![CDATA["AR"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="487" y="100" width="29" height="14" uuid="a0ed8ecb-4e47-4fda-96ea-3fb911b21d00">
+				<reportElement x="482" y="100" width="20" height="14" uuid="a0ed8ecb-4e47-4fda-96ea-3fb911b21d00">
 					<printWhenExpression><![CDATA[$F{mp} == 1]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -300,11 +309,11 @@
 				<textFieldExpression><![CDATA["MP"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="357" y="326" width="136" height="10" uuid="57359e53-b644-4a3d-a6f3-39d97fdc5fe0"/>
+				<reportElement x="357" y="326" width="159" height="10" uuid="57359e53-b644-4a3d-a6f3-39d97fdc5fe0"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{remetente_departamento}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{remetente_departamento}+" - "+$F{remetente_complemento}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="447" y="275" width="176" height="11" uuid="2ad18aea-3cca-4082-b0d2-9fe2971350c7">
@@ -430,7 +439,8 @@
 			</staticText>
 			<textField>
 				<reportElement x="551" y="98" width="70" height="9" uuid="bdba4eae-3c12-4d01-8645-98c747304505">
-					<printWhenExpression><![CDATA[!$F{contrato_ect}.equals("") && $F{sro}.length() == 13]]></printWhenExpression>
+					<printWhenExpression><![CDATA[!$F{contrato_ect}.equals("") && $F{sro}.length() == 13
+&& !$F{grupo_servico}.equals("CARTA") && !$F{grupo_servico}.startsWith("MDPB")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center">
 					<font fontName="SansSerif" size="5"/>
@@ -439,7 +449,8 @@
 			</textField>
 			<textField>
 				<reportElement x="551" y="103" width="70" height="9" uuid="4b0d5243-3e92-4c8b-b42c-f344bb651a2f">
-					<printWhenExpression><![CDATA[!$F{contrato_ect}.equals("") && $F{sro}.length() == 13]]></printWhenExpression>
+					<printWhenExpression><![CDATA[!$F{contrato_ect}.equals("") && $F{sro}.length() == 13
+&& !$F{grupo_servico}.equals("CARTA") && !$F{grupo_servico}.startsWith("MDPB")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="5" isBold="true"/>
@@ -458,6 +469,24 @@
 			<line>
 				<reportElement x="351" y="126" width="278" height="1" uuid="685ac0ce-e1f8-4377-8a91-96caf615f96f"/>
 			</line>
+			<textField>
+				<reportElement x="502" y="87" width="20" height="14" uuid="b953823b-f30f-418a-8ef5-b4f744c0153a">
+					<printWhenExpression><![CDATA[$F{rm} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["RM"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="502" y="100" width="20" height="14" uuid="7a706434-1640-41e5-b0ab-1a7ab4fe771c">
+					<printWhenExpression><![CDATA[$F{pr} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["PR"]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

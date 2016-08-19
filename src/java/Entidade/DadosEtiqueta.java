@@ -23,7 +23,10 @@ public class DadosEtiqueta {
     
     private int ar;        
     private int mp;    
-    private float vd;   
+    private int rg;
+    private int rm;
+    private int pr;
+    private float vd;
     private float valor_cobrar;   
     
     private float peso;    
@@ -149,6 +152,30 @@ public class DadosEtiqueta {
 
     public float getVd() {
         return vd;
+    }
+
+    public int getRg() {
+        return rg;
+    }
+
+    public void setRg(int rg) {
+        this.rg = rg;
+    }
+
+    public int getRm() {
+        return rm;
+    }
+
+    public void setRm(int rm) {
+        this.rm = rm;
+    }
+
+    public int getPr() {
+        return pr;
+    }
+
+    public void setPr(int pr) {
+        this.pr = pr;
     }
 
     public void setVd(float vd) {

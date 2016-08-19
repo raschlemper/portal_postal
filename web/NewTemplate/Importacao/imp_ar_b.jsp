@@ -96,6 +96,7 @@
                                             <label>Escolha a imagem do AR para importar</label><br/>
                                             <span class="btn btn-default btn-file"><i class="fa fa-folder-open"></i> Selecionar imagem <input type="file" name="arquivoRec" /></span>
                                             <input type="hidden" id="tipoForm" name="tipoFormRec" value="imagem" /></br>
+                                            <input type="hidden" id="codCli" name="codCli" value="" />
                                             <label class="small" style="color: red;">*O arquivo a ser importado deve ser JPG, JPEG, PNG ou GIF !</label><br/>
                                             <label class="small" style="color: red;">*O tamanho máximo deve ser de 500 BK !</label>
                                         </li>
@@ -394,6 +395,7 @@
                             $("#nomeRec").prop("readonly", false);
                             $("#dataRec").prop("readonly", false);
                             $('#nomeCli').html(data);
+                            $('#codCli').val(data.split(' - ')[0].trim());
                             $('#nomeRec').focus();
                         }
                     });

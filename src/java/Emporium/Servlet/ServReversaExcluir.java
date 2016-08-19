@@ -7,9 +7,9 @@
 package Emporium.Servlet;
 
 import Emporium.Controle.ContrLogisticaReversa;
-import br.com.correios.scol.webservice.RetornoCancelamentoTO;
+import br.com.correios.logisticareversa.service.ComponenteException;
+import br.com.correios.logisticareversa.service.RetornoCancelamento;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,21 +33,33 @@ public class ServReversaExcluir extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String nomeBD = request.getParameter("nomeBD");
-        String usuario = request.getParameter("loginRev");
-        String senha = request.getParameter("senhaRev");
-        String codAdm = request.getParameter("codAdm").trim();
-        String codigoAP = request.getParameter("codAP").trim();
-        int idRev = Integer.parseInt(request.getParameter("idRev").trim());
-        
-        RetornoCancelamentoTO ret = cancelarPedido(usuario, senha, Integer.parseInt(codAdm), codigoAP, "A");
-        if(ret.getCodErro() == null || Integer.parseInt(ret.getCodErro().trim())==0){
-            ContrLogisticaReversa.alterarCancelado(1, idRev, nomeBD);
-            response.sendRedirect("Cliente/Servicos/lista_reversa.jsp?msg=Reversa Excluida com Sucesso!");
-        }else{
-            response.sendRedirect("Cliente/Servicos/lista_reversa.jsp?msg=Falha ao Excluir Reversa!");
-        }        
-           
+        try {
+            String nomeBD = request.getParameter("nomeBD");
+            final String usuario = request.getParameter("loginRev");
+            final String senha = request.getParameter("senhaRev");
+
+            java.net.Authenticator.setDefault(new java.net.Authenticator() {
+                @Override
+                protected java.net.PasswordAuthentication getPasswordAuthentication() {
+                    return new java.net.PasswordAuthentication(usuario, senha.toCharArray());
+                }
+            });
+
+            String codAdm = request.getParameter("codAdm").trim();
+            String codigoAP = request.getParameter("codAP").trim();
+            int idRev = Integer.parseInt(request.getParameter("idRev").trim());
+
+            RetornoCancelamento ret = cancelarPedido(codAdm, codigoAP, "A");
+            if (ret.getCodErro() == null || Integer.parseInt(ret.getCodErro().trim()) == 0) {
+                ContrLogisticaReversa.alterarCancelado(1, idRev, nomeBD);
+                response.sendRedirect("Cliente/Servicos/lista_reversa.jsp?msg=Reversa Excluida com Sucesso!");
+            } else {
+                response.sendRedirect("Cliente/Servicos/lista_reversa.jsp?msg=Falha ao Excluir Reversa!");
+            }
+        } catch (ComponenteException ex) {
+            response.sendRedirect("Cliente/Servicos/lista_reversa.jsp?msg=Falha ao Excluir Reversa! " + ex.getMessage());
+        }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -89,10 +101,15 @@ public class ServReversaExcluir extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private static RetornoCancelamentoTO cancelarPedido(java.lang.String usuario, java.lang.String senha, java.lang.Integer codAdministrativo, java.lang.String numeroPedido, java.lang.String tipo) {
+    /*private static RetornoCancelamentoTO cancelarPedido(java.lang.String usuario, java.lang.String senha, java.lang.Integer codAdministrativo, java.lang.String numeroPedido, java.lang.String tipo) {
         br.com.correios.scol.webservice.WebServiceScol_Service service = new br.com.correios.scol.webservice.WebServiceScol_Service();
         br.com.correios.scol.webservice.WebServiceScol port = service.getWebServiceScolPort();
         return port.cancelarPedido(usuario, senha, codAdministrativo, numeroPedido, tipo);
+    }*/
+    private static RetornoCancelamento cancelarPedido(java.lang.String codAdministrativo, java.lang.String numeroPedido, java.lang.String tipo) throws ComponenteException {
+        br.com.correios.logisticareversa.service.LogisticaReversaService service = new br.com.correios.logisticareversa.service.LogisticaReversaService();
+        br.com.correios.logisticareversa.service.LogisticaReversaWS port = service.getLogisticaReversaWSPort();
+        return port.cancelarPedido(codAdministrativo, numeroPedido, tipo);
     }
 
 }

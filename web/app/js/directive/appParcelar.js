@@ -46,7 +46,7 @@ app.directive('appParcelar', function(DatePickerService, FrequenciaLancamentoSer
 //                    if(parcela.lancamento) { parcela.lancamento = LancamentoHandler.handle(parcela.lancamento); }
                     parcela = getParcela(parcela.idLancamentoProgramadoParcela, lancamentoParcelar, parcela.lancamento, parcela.numero, parcela.dataVencimento, parcela.dataVencimento);
                     lancamentoParcelar.parcelas.push(parcela);
-                    dataVencimento = FrequenciaLancamentoService.addData(frequencia, dataVencimento);
+                    dataVencimento = FrequenciaLancamentoService.addData(frequencia.id, dataVencimento);
                 });
             };
 
@@ -61,7 +61,7 @@ app.directive('appParcelar', function(DatePickerService, FrequenciaLancamentoSer
                     var parcela = getParcela(null, lancamentoParcelar, null, numeroLancamento, dataVencimento, dataVencimento);
                     lancamentoParcelar.parcelas.push(parcela);
 //                    dataCompetencia = FrequenciaLancamentoService.addData(frequencia, dataCompetencia);
-                    dataVencimento = FrequenciaLancamentoService.addData(frequencia, dataVencimento);
+                    dataVencimento = FrequenciaLancamentoService.addData(frequencia.id, dataVencimento);
                 }
             };
             

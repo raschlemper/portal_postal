@@ -36,9 +36,9 @@ public class LancamentoService {
         lancamentoprogramadoParcelaService = new LancamentoProgramadoParcelaService(nomeBD);
     }
     
-    public List<Lancamento> findAll() throws Exception {
+    public List<Lancamento> findAll(Date dataInicio, Date dataFim) throws Exception {
         init();
-        List<Lancamento> lancamentos = lancamentoDAO.findAll();
+        List<Lancamento> lancamentos = lancamentoDAO.findAll(dataInicio, dataFim);
         lancamentos = setRateios(lancamentos);
         return lancamentos;
     }   
@@ -57,9 +57,9 @@ public class LancamentoService {
         return lancamentos;
     }
     
-    public List<Lancamento> findByConta(Integer idConta) throws Exception {
+    public List<Lancamento> findByConta(Integer idConta, Date dataInicio, Date dataFim) throws Exception {
         init();
-        List<Lancamento> lancamentos = lancamentoDAO.findByConta(idConta);
+        List<Lancamento> lancamentos = lancamentoDAO.findByConta(idConta, dataInicio, dataFim);
         lancamentos = setRateios(lancamentos);
         return lancamentos;
     } 

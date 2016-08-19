@@ -55,16 +55,20 @@ public class LancamentoTransferenciaDAO extends GenericDAO {
 
     public LancamentoTransferencia save(LancamentoTransferencia lancamentoTransferencia) throws Exception {  
         String sql = "INSERT INTO lancamento_transferencia (idLancamentoOrigem, idLancamentoDestino, numero, "
-                   + "dataCompetencia, dataEmissao, dataLancamento, valor, historico, observacao, usuario) "
-                   + "VALUES(:idLancamentoOrigem, :idLancamentoDestino, :numero, :dataCompetencia, :dataEmissao, "
-                   + ":dataLancamento, :valor, :historico, :observacao, :usuario)";        
+                   + "dataEmissao, dataCompetenciaOrigem, dataCompetenciaDestino, dataLancamentoOrigem, dataLancamentoDestino, "
+                   + "valor, historico, observacao, usuario) "
+                   + "VALUES(:idLancamentoOrigem, :idLancamentoDestino, :numero, :dataEmissao, :dataCompetenciaOrigem, "
+                   + ":dataCompetenciaDestino, :dataLancamentoOrigem, :dataLancamentoDestino, :valor, :historico, :observacao, "
+                   + ":usuario)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamentoOrigem", lancamentoTransferencia.getLancamentoOrigem().getIdLancamento());
         params.put("idLancamentoDestino", lancamentoTransferencia.getLancamentoDestino().getIdLancamento()); 
-        params.put("numero", lancamentoTransferencia.getNumero());                 
-        params.put("dataCompetencia", lancamentoTransferencia.getDataCompetencia());       
-        params.put("dataEmissao", lancamentoTransferencia.getDataEmissao());       
-        params.put("dataLancamento", lancamentoTransferencia.getDataLancamento());      
+        params.put("numero", lancamentoTransferencia.getNumero());              
+        params.put("dataEmissao", lancamentoTransferencia.getDataEmissao());                
+        params.put("dataCompetenciaOrigem", lancamentoTransferencia.getDataCompetenciaOrigem()); 
+        params.put("dataCompetenciaDestino", lancamentoTransferencia.getDataCompetenciaDestino()); 
+        params.put("dataLancamentoOrigem", lancamentoTransferencia.getDataLancamentoOrigem());     
+        params.put("dataLancamentoDestino", lancamentoTransferencia.getDataLancamentoDestino());      
         params.put("valor", lancamentoTransferencia.getValor());   
         params.put("historico", lancamentoTransferencia.getHistorico());  
         params.put("observacao", lancamentoTransferencia.getObservacao());              
@@ -76,18 +80,21 @@ public class LancamentoTransferenciaDAO extends GenericDAO {
     public LancamentoTransferencia update(LancamentoTransferencia lancamentoTransferencia) throws Exception {
         String sql = "UPDATE lancamento_transferencia "
                    + "SET idLancamentoOrigem = :idLancamentoOrigem, idLancamentoDestino = :idLancamentoDestino, "
-                   + "numero = :numero, dataCompetencia = :dataCompetencia, dataEmissao = :dataEmissao, "
-                   + "dataLancamento = :dataLancamento, valor = :valor, historico = :historico, observacao = :observacao, "
-                   + "usuario = :usuario "
+                   + "numero = :numero, dataEmissao = :dataEmissao, dataCompetenciaOrigem = :dataCompetenciaOrigem, "
+                   + "dataCompetenciaDestino= :dataCompetenciaDestino, dataLancamentoOrigem = :dataLancamentoOrigem, "
+                   + "dataLancamentoDestino = :dataLancamentoDestino, valor = :valor, historico = :historico, "
+                   + "observacao = :observacao, usuario = :usuario "
                    + "WHERE idLancamentoTransferencia = :idLancamentoTransferencia ";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idLancamentoTransferencia", lancamentoTransferencia.getIdLancamentoTransferencia());
         params.put("idLancamentoOrigem", lancamentoTransferencia.getLancamentoOrigem().getIdLancamento());
         params.put("idLancamentoDestino", lancamentoTransferencia.getLancamentoDestino().getIdLancamento());
-        params.put("numero", lancamentoTransferencia.getNumero());              
-        params.put("dataCompetencia", lancamentoTransferencia.getDataCompetencia());            
+        params.put("numero", lancamentoTransferencia.getNumero());                         
         params.put("dataEmissao", lancamentoTransferencia.getDataEmissao());      
-        params.put("dataLancamento", lancamentoTransferencia.getDataLancamento());           
+        params.put("dataCompetenciaOrigem", lancamentoTransferencia.getDataCompetenciaOrigem()); 
+        params.put("dataCompetenciaDestino", lancamentoTransferencia.getDataCompetenciaDestino()); 
+        params.put("dataLancamentoOrigem", lancamentoTransferencia.getDataLancamentoOrigem());     
+        params.put("dataLancamentoDestino", lancamentoTransferencia.getDataLancamentoDestino());         
         params.put("valor", lancamentoTransferencia.getValor());   
         params.put("historico", lancamentoTransferencia.getHistorico());  
         params.put("observacao", lancamentoTransferencia.getObservacao());             
