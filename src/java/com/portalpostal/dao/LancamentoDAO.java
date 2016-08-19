@@ -20,7 +20,7 @@ public class LancamentoDAO extends GenericDAO {
         this.saldoHandler = new SaldoHandler();
     } 
 
-    public List<Lancamento> findAll() throws Exception {
+    public List<Lancamento> findAll(Date dataInicio, Date dataFim) throws Exception {
         String sql = "SELECT *, (SELECT count(1) FROM lancamento_anexo WHERE lancamento.idLancamento = lancamento_anexo.idLancamento) as anexos "
                    + "FROM conta, lancamento "
                    + "LEFT OUTER JOIN favorecido ON(lancamento.idFavorecido = favorecido.idFavorecido) "
@@ -30,8 +30,13 @@ public class LancamentoDAO extends GenericDAO {
                                                                + "lancamento.idLancamento = lancamento_transferencia.idLancamentoDestino) "
                    + "LEFT OUTER JOIN lancamento_programado ON(lancamento.idLancamentoProgramado = lancamento_programado.idLancamentoProgramado) "
                    + "WHERE lancamento.idConta = conta.idConta "
-                   + "ORDER BY lancamento.dataLancamento";        
-        return findAll(sql, null, lancamentoHandler);
+                   + "AND DATE(lancamento.dataLancamento) "
+                   + "BETWEEN IFNULL(:dataInicio, DATE(lancamento.dataLancamento)) AND IFNULL(:dataFim, DATE(lancamento.dataLancamento)) "
+                   + "ORDER BY lancamento.dataLancamento"; 
+        Map<String, Object> params = new HashMap<String, Object>();  
+        params.put("dataInicio", dataInicio);       
+        params.put("dataFim", dataFim);        
+        return findAll(sql, params, lancamentoHandler);
     }
 
     public Lancamento find(Integer idLancamento) throws Exception {
@@ -57,7 +62,7 @@ public class LancamentoDAO extends GenericDAO {
         return findAll(sql, params, lancamentoHandler);
     }
 
-    public List<Lancamento> findByConta(Integer idConta) throws Exception {
+    public List<Lancamento> findByConta(Integer idConta, Date dataInicio, Date dataFim) throws Exception {
         String sql = "SELECT lancamento.*, plano_conta.*, centro_custo.*, lancamento_transferencia.*, lancamento_programado.*, favorecido.*, "
                    + "(SELECT count(1) FROM lancamento_anexo WHERE lancamento.idLancamento = lancamento_anexo.idLancamento) as anexos "
                    + "FROM conta, lancamento "
@@ -69,9 +74,13 @@ public class LancamentoDAO extends GenericDAO {
                    + "LEFT OUTER JOIN lancamento_programado ON(lancamento.idLancamentoProgramado = lancamento_programado.idLancamentoProgramado) "
                    + "WHERE conta.idConta = lancamento.idConta "
                    + "AND conta.idConta = :idConta "
+                   + "AND DATE(lancamento.dataLancamento) "
+                   + "BETWEEN IFNULL(:dataInicio, DATE(lancamento.dataLancamento)) AND IFNULL(:dataFim, DATE(lancamento.dataLancamento)) "
                    + "ORDER BY lancamento.dataLancamento";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idConta", idConta);       
+        params.put("dataInicio", dataInicio);       
+        params.put("dataFim", dataFim);        
         return findAll(sql, params, lancamentoHandler);
     }
 

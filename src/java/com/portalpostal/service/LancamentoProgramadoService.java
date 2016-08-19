@@ -6,9 +6,9 @@ import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.model.LancamentoProgramadoParcela;
 import com.portalpostal.model.LancamentoProgramadoRateio;
 import com.portalpostal.model.LancamentoProgramadoTransferencia;
-import com.portalpostal.model.LancamentoTransferencia;
 import com.portalpostal.model.dd.TipoModeloLancamento;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class LancamentoProgramadoService {
@@ -33,9 +33,9 @@ public class LancamentoProgramadoService {
         lancamentoProgramadoRateioService = new LancamentoProgramadoRateioService(nomeBD);
     }
     
-    public List<LancamentoProgramado> findAll() throws Exception {
+    public List<LancamentoProgramado> findAll(Date dataInicio, Date dataFim) throws Exception {
         init();
-        List<LancamentoProgramado> lancamentoProgramados = lancamentoProgramadoDAO.findAll();
+        List<LancamentoProgramado> lancamentoProgramados = lancamentoProgramadoDAO.findAll(dataInicio, dataFim);
         for (LancamentoProgramado lancamentoProgramado : lancamentoProgramados) {
             lancamentoProgramado = setParcelas(lancamentoProgramado);
             lancamentoProgramado = setRateios(lancamentoProgramado);
@@ -62,9 +62,9 @@ public class LancamentoProgramadoService {
         return lancamentoProgramado;
     } 
     
-    public List<LancamentoProgramado> findByConta(Integer idConta) throws Exception {
+    public List<LancamentoProgramado> findByConta(Integer idConta, Date dataInicio, Date dataFim) throws Exception {
         init();
-        return lancamentoProgramadoDAO.findByConta(idConta);
+        return lancamentoProgramadoDAO.findByConta(idConta, dataInicio, dataFim);
     } 
 
     public List<LancamentoProgramado> findByPlanoConta(Integer idPlanoConta) throws Exception {
@@ -77,9 +77,9 @@ public class LancamentoProgramadoService {
         return lancamentoProgramadoDAO.findByCentroCusto(idCentroCusto);
     }
     
-    public List<LancamentoProgramado> findAllAtivo() throws Exception {
+    public List<LancamentoProgramado> findAllAtivo(Date dataInicio, Date dataFim) throws Exception {
         init();
-        List<LancamentoProgramado> lancamentoProgramados = lancamentoProgramadoDAO.findAllAtivo();
+        List<LancamentoProgramado> lancamentoProgramados = lancamentoProgramadoDAO.findAllAtivo(dataInicio, dataFim);
         for (LancamentoProgramado lancamentoProgramado : lancamentoProgramados) {
             lancamentoProgramado = setParcelas(lancamentoProgramado);
         }

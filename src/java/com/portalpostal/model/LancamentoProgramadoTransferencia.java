@@ -12,9 +12,11 @@ public class LancamentoProgramadoTransferencia {
     private TipoDocumento documento;
     private TipoFormaPagamento formaPagamento;  
     private TipoFrequencia frequencia; 
-    private Date dataCompetencia;
     private Date dataEmissao;
-    private Date dataVencimento;
+    private Date dataCompetenciaOrigem;
+    private Date dataCompetenciaDestino;
+    private Date dataVencimentoOrigem;
+    private Date dataVencimentoDestino;
     private Double valor;
     private String historico;
     private String observacao;
@@ -76,14 +78,6 @@ public class LancamentoProgramadoTransferencia {
         this.frequencia = frequencia;
     }
 
-    public Date getDataCompetencia() {
-        return dataCompetencia;
-    }
-
-    public void setDataCompetencia(Date dataCompetencia) {
-        this.dataCompetencia = dataCompetencia;
-    }
-
     public Date getDataEmissao() {
         return dataEmissao;
     }
@@ -92,12 +86,36 @@ public class LancamentoProgramadoTransferencia {
         this.dataEmissao = dataEmissao;
     } 
 
-    public Date getDataVencimento() {
-        return dataVencimento;
+    public Date getDataCompetenciaOrigem() {
+        return dataCompetenciaOrigem;
     }
 
-    public void setDataVencimento(Date dataVencimento) {
-        this.dataVencimento = dataVencimento;
+    public void setDataCompetenciaOrigem(Date dataCompetenciaOrigem) {
+        this.dataCompetenciaOrigem = dataCompetenciaOrigem;
+    }
+
+    public Date getDataCompetenciaDestino() {
+        return dataCompetenciaDestino;
+    }
+
+    public void setDataCompetenciaDestino(Date dataCompetenciaDestino) {
+        this.dataCompetenciaDestino = dataCompetenciaDestino;
+    }
+
+    public Date getDataVencimentoOrigem() {
+        return dataVencimentoOrigem;
+    }
+
+    public void setDataVencimentoOrigem(Date dataVencimentoOrigem) {
+        this.dataVencimentoOrigem = dataVencimentoOrigem;
+    }
+
+    public Date getDataVencimentoDestino() {
+        return dataVencimentoDestino;
+    }
+
+    public void setDataVencimentoDestino(Date dataVencimentoDestino) {
+        this.dataVencimentoDestino = dataVencimentoDestino;
     }
 
     public Double getValor() {

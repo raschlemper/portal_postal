@@ -7,9 +7,8 @@ package Servlet;
 
 import Controle.ContrClienteDeptos;
 import Controle.ContrErroLog;
-import Controle.ContrGrupoFaturamento;
+import Controle.contrSenhaCliente;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -58,7 +57,11 @@ public class ServInserirDepto extends HttpServlet {
                 }
                 int idCli = Integer.parseInt(request.getParameter("idCliente"));
                 String cod_ref = request.getParameter("cod_ref").trim();
-                ContrClienteDeptos.inserirDepto(nomeBD, idCli, nome, cartao, cod_ref);
+                int idDepto = ContrClienteDeptos.inserirDepto(nomeBD, idCli, nome, cartao, cod_ref);
+
+                if (request.getParameter("permissao") != null && idDepto > 0) {
+                    contrSenhaCliente.adicionarNovoDepartamento(idCli, idDepto, nomeBD);
+                }
                 
                 sessao.setAttribute("msg", "Departamento inserido com sucesso!");
                 //response.sendRedirect("Agencia/Coleta/tipo_coleta_lista.jsp");

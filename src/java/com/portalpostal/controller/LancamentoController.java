@@ -14,6 +14,7 @@ import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataParam;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -59,10 +60,13 @@ public class LancamentoController {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Lancamento> findAll() {
+    public List<Lancamento> findAll(@QueryParam("dataInicio") String dataInicio, 
+            @QueryParam("dataFim") String dataFim) {
         try {
             init();    
-            return lancamentoService.findAll();
+            Date inicio = formatDate(dataInicio);
+            Date fim = formatDate(dataFim);
+            return lancamentoService.findAll(inicio, fim);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -75,9 +79,8 @@ public class LancamentoController {
             @QueryParam("dataFim") String dataFim) {
         try {
             init(); 
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date inicio = format.parse(dataInicio);
-            Date fim = format.parse(dataFim);
+            Date inicio = formatDate(dataInicio);
+            Date fim = formatDate(dataFim);
             return lancamentoService.findSaldo(inicio, fim);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
@@ -91,9 +94,8 @@ public class LancamentoController {
             @QueryParam("dataFim") String dataFim) {
         try {
             init(); 
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date inicio = format.parse(dataInicio);
-            Date fim = format.parse(dataFim);
+            Date inicio = formatDate(dataInicio);
+            Date fim = formatDate(dataFim);
             return lancamentoService.findSaldoPlanoConta(inicio, fim);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
@@ -107,9 +109,8 @@ public class LancamentoController {
             @QueryParam("dataFim") String dataFim) {
         try {
             init(); 
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date inicio = format.parse(dataInicio);
-            Date fim = format.parse(dataFim);
+            Date inicio = formatDate(dataInicio);
+            Date fim = formatDate(dataFim);
             return lancamentoService.findSaldoCentroCusto(inicio, fim);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
@@ -123,9 +124,8 @@ public class LancamentoController {
             @QueryParam("dataFim") String dataFim) {
         try {
             init(); 
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date inicio = format.parse(dataInicio);
-            Date fim = format.parse(dataFim);
+            Date inicio = formatDate(dataInicio);
+            Date fim = formatDate(dataFim);
             return lancamentoService.findSaldoPlanoContaCompetencia(inicio, fim);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
@@ -139,9 +139,8 @@ public class LancamentoController {
             @QueryParam("dataFim") String dataFim) {
         try {
             init(); 
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date inicio = format.parse(dataInicio);
-            Date fim = format.parse(dataFim);
+            Date inicio = formatDate(dataInicio);
+            Date fim = formatDate(dataFim);
             return lancamentoService.findSaldoCentroCustoCompetencia(inicio, fim);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
@@ -155,9 +154,8 @@ public class LancamentoController {
             @QueryParam("dataFim") String dataFim) {
         try {
             init(); 
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date inicio = format.parse(dataInicio);
-            Date fim = format.parse(dataFim);
+            Date inicio = formatDate(dataInicio);
+            Date fim = formatDate(dataFim);
             return lancamentoService.findSaldoTipo(inicio, fim);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
@@ -321,5 +319,11 @@ public class LancamentoController {
         int idErro = ContrErroLog.inserir("Portal Postal - ServLancamento", "Exception", null, msg);
         return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN)
                 .entity("SYSTEM ERROR Nº: " + idErro + "<br/> Ocorreu um erro inesperado!").build();
+    }
+    
+    private Date formatDate(String data) throws ParseException {
+        if(data == null) return null;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.parse(data);
     }
 }

@@ -10,10 +10,12 @@ public class LancamentoProgramadoTransferenciaValidation extends Validation<Lanc
         if(!validarLancamentoDestino(lancamento)) return false; 
         if(!validarDocumento(lancamento)) return false;   
         if(!validarFormaPagamento(lancamento)) return false;   
-        if(!validarFrequencia(lancamento)) return false;      
-        if(!validarDataCompetencia(lancamento)) return false;   
-        if(!validarDataEmissao(lancamento)) return false;   
-        if(!validarDataLancamento(lancamento)) return false;   
+        if(!validarFrequencia(lancamento)) return false;     
+        if(!validarDataEmissao(lancamento)) return false;      
+        if(!validarDataCompetenciaOrigem(lancamento)) return false;  
+        if(!validarDataCompetenciaDestino(lancamento)) return false;  
+        if(!validarDataLancamentoOrigem(lancamento)) return false;   
+        if(!validarDataLancamentoDestino(lancamento)) return false;   
         if(!validarValor(lancamento)) return false;   
         if(!validarHistorico(lancamento)) return false;   
         return true;
@@ -47,13 +49,7 @@ public class LancamentoProgramadoTransferenciaValidation extends Validation<Lanc
         if(campoNotNull(lancamento.getFrequencia())) return true; 
         setMsg("Preencha a frequência do lançamento programado!");
         return false;        
-    } 
-
-    public boolean validarDataCompetencia(LancamentoProgramadoTransferencia lancamento) {          
-        if(campoNotNull(lancamento.getDataCompetencia())) return true; 
-        setMsg("Preencha a data de competência do lançamento!");
-        return false;        
-    }    
+    }     
 
     public boolean validarDataEmissao(LancamentoProgramadoTransferencia lancamento) {          
         if(campoNotNull(lancamento.getDataEmissao())) return true; 
@@ -61,9 +57,27 @@ public class LancamentoProgramadoTransferenciaValidation extends Validation<Lanc
         return false;        
     }
 
-    public boolean validarDataLancamento(LancamentoProgramadoTransferencia lancamento) {          
-        if(campoNotNull(lancamento.getDataVencimento())) return true; 
-        setMsg("Preencha a data do vencimento!");
+    public boolean validarDataCompetenciaOrigem(LancamentoProgramadoTransferencia lancamento) {          
+        if(campoNotNull(lancamento.getDataCompetenciaOrigem())) return true; 
+        setMsg("Preencha a data de competência de origem do lançamento!");
+        return false;        
+    }
+
+    public boolean validarDataCompetenciaDestino(LancamentoProgramadoTransferencia lancamento) {          
+        if(campoNotNull(lancamento.getDataCompetenciaDestino())) return true; 
+        setMsg("Preencha a data de competência de destino do lançamento!");
+        return false;        
+    }
+
+    public boolean validarDataLancamentoOrigem(LancamentoProgramadoTransferencia lancamento) {          
+        if(campoNotNull(lancamento.getDataVencimentoOrigem())) return true; 
+        setMsg("Preencha a data de origem do vencimento!");
+        return false;        
+    }
+
+    public boolean validarDataLancamentoDestino(LancamentoProgramadoTransferencia lancamento) {          
+        if(campoNotNull(lancamento.getDataVencimentoDestino())) return true; 
+        setMsg("Preencha a data de destino do vencimento!");
         return false;        
     }
 

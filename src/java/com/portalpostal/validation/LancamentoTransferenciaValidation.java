@@ -7,10 +7,12 @@ public class LancamentoTransferenciaValidation extends Validation<LancamentoTran
     @Override
     public boolean validar(LancamentoTransferencia lancamento) {
         if(!validarLancamentoOrigem(lancamento)) return false;   
-        if(!validarLancamentoDestino(lancamento)) return false;    
-        if(!validarDataCompetencia(lancamento)) return false;   
-        if(!validarDataEmissao(lancamento)) return false;   
-        if(!validarDataLancamento(lancamento)) return false;   
+        if(!validarLancamentoDestino(lancamento)) return false;   
+        if(!validarDataEmissao(lancamento)) return false;      
+        if(!validarDataCompetenciaOrigem(lancamento)) return false; 
+        if(!validarDataCompetenciaDestino(lancamento)) return false; 
+        if(!validarDataLancamentoOrigem(lancamento)) return false;    
+        if(!validarDataLancamentoDestino(lancamento)) return false;   
         if(!validarValor(lancamento)) return false;   
         if(!validarHistorico(lancamento)) return false;   
         return true;
@@ -26,23 +28,35 @@ public class LancamentoTransferenciaValidation extends Validation<LancamentoTran
         if(campoNotNull(lancamento.getLancamentoDestino())) return true; 
         setMsg("Preencha a conta de destino do lançamento!");
         return false;        
-    }    
-
-    public boolean validarDataCompetencia(LancamentoTransferencia lancamento) {          
-        if(campoNotNull(lancamento.getDataCompetencia())) return true; 
-        setMsg("Preencha a data de competência do lançamento!");
-        return false;        
-    }    
+    }     
 
     public boolean validarDataEmissao(LancamentoTransferencia lancamento) {          
         if(campoNotNull(lancamento.getDataEmissao())) return true; 
         setMsg("Preencha a data de emissão do lançamento!");
         return false;        
+    }  
+
+    public boolean validarDataCompetenciaOrigem(LancamentoTransferencia lancamento) {          
+        if(campoNotNull(lancamento.getDataCompetenciaOrigem())) return true; 
+        setMsg("Preencha a data de competência de origem do lançamento!");
+        return false;        
+    } 
+
+    public boolean validarDataCompetenciaDestino(LancamentoTransferencia lancamento) {          
+        if(campoNotNull(lancamento.getDataCompetenciaDestino())) return true; 
+        setMsg("Preencha a data de competência de destino do lançamento!");
+        return false;        
+    } 
+
+    public boolean validarDataLancamentoOrigem(LancamentoTransferencia lancamento) {          
+        if(campoNotNull(lancamento.getDataLancamentoOrigem())) return true; 
+        setMsg("Preencha a data de origem do lançamento!");
+        return false;        
     }
 
-    public boolean validarDataLancamento(LancamentoTransferencia lancamento) {          
-        if(campoNotNull(lancamento.getDataLancamento())) return true; 
-        setMsg("Preencha a data do lançamento!");
+    public boolean validarDataLancamentoDestino(LancamentoTransferencia lancamento) {          
+        if(campoNotNull(lancamento.getDataLancamentoDestino())) return true; 
+        setMsg("Preencha a data de destino do lançamento!");
         return false;        
     }
 

@@ -14,9 +14,11 @@ app.factory('LancamentoTransferenciaHandler', function() {
         lancamentoTransferenciaHandle.lancamentoOrigem = getLancamentoOrigem(lancamentoTransferencia);  
         lancamentoTransferenciaHandle.lancamentoDestino = getLancamentoDestino(lancamentoTransferencia);  
         lancamentoTransferenciaHandle.numero = getNumero(lancamentoTransferencia); 
-        lancamentoTransferenciaHandle.dataCompetencia = getDataCompetencia(lancamentoTransferencia);
         lancamentoTransferenciaHandle.dataEmissao = getDataEmissao(lancamentoTransferencia);
-        lancamentoTransferenciaHandle.dataLancamento = getDataLancamento(lancamentoTransferencia);
+        lancamentoTransferenciaHandle.dataCompetenciaOrigem = getDataCompetenciaOrigem(lancamentoTransferencia);
+        lancamentoTransferenciaHandle.dataCompetenciaDestino = getDataCompetenciaDestino(lancamentoTransferencia);
+        lancamentoTransferenciaHandle.dataLancamentoOrigem = getDataLancamentoOrigem(lancamentoTransferencia);
+        lancamentoTransferenciaHandle.dataLancamentoDestino = getDataLancamentoDestino(lancamentoTransferencia);
         lancamentoTransferenciaHandle.valor = getValor(lancamentoTransferencia);
         lancamentoTransferenciaHandle.historico = getHistorico(lancamentoTransferencia);
         lancamentoTransferenciaHandle.observacao = getObservacao(lancamentoTransferencia);
@@ -42,16 +44,24 @@ app.factory('LancamentoTransferenciaHandler', function() {
         return lancamentoTransferencia.numero || null;
     };
     
-    var getDataCompetencia = function(lancamentoTransferencia) {
-        return lancamentoTransferencia.dataCompetencia || moment(); 
-    };
-    
     var getDataEmissao = function(lancamentoTransferencia) {
         return lancamentoTransferencia.dataEmissao || moment(); 
     };
     
-    var getDataLancamento = function(lancamentoTransferencia) {
-        return lancamentoTransferencia.dataLancamento || moment(); 
+    var getDataCompetenciaOrigem = function(lancamentoTransferencia) {
+        return lancamentoTransferencia.dataCompetenciaOrigem || moment(); 
+    };
+    
+    var getDataCompetenciaDestino = function(lancamentoTransferencia) {
+        return lancamentoTransferencia.dataCompetenciaDestino || moment(); 
+    };
+    
+    var getDataLancamentoOrigem = function(lancamentoTransferencia) {
+        return lancamentoTransferencia.dataLancamentoOrigem || moment(); 
+    };
+    
+    var getDataLancamentoDestino = function(lancamentoTransferencia) {
+        return lancamentoTransferencia.dataLancamentoDestino || moment(); 
     };
     
     var getValor = function(lancamentoTransferencia) {

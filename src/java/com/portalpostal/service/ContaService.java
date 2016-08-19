@@ -60,17 +60,17 @@ public class ContaService {
         return contaDAO.findSaldoLancamento(idConta, data);
     }  
     
-    public Conta findLancamento(Integer idConta) throws Exception {
+    public Conta findLancamento(Integer idConta, Date dataInicio, Date dataFim) throws Exception {
         init();
         Conta conta = find(idConta);
-        conta.setLancamentos(lancamentoService.findByConta(idConta));
+        conta.setLancamentos(lancamentoService.findByConta(idConta, dataInicio, dataFim));
         return conta;
     } 
     
-    public Conta findLancamentoProgramado(Integer idConta) throws Exception {
+    public Conta findLancamentoProgramado(Integer idConta, Date dataInicio, Date dataFim) throws Exception {
         init();
         Conta conta = find(idConta);
-        conta.setLancamentosProgramados(lancamentoProgramadoService.findByConta(idConta));
+        conta.setLancamentosProgramados(lancamentoProgramadoService.findByConta(idConta, dataInicio, dataFim));
         return conta;
     } 
     
@@ -91,9 +91,9 @@ public class ContaService {
     }     
     
     private boolean podeExcluir(Integer idConta) throws Exception {
-        List<Lancamento> lancamentos = lancamentoService.findByConta(idConta);
+        List<Lancamento> lancamentos = lancamentoService.findByConta(idConta, null, null);
         if(!lancamentos.isEmpty()) return false;
-        List<LancamentoProgramado> lancamentoProgramados = lancamentoProgramadoService.findByConta(idConta);
+        List<LancamentoProgramado> lancamentoProgramados = lancamentoProgramadoService.findByConta(idConta, null, null);
         if(!lancamentoProgramados.isEmpty()) return false;
         return true;                
     }  

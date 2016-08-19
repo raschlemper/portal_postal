@@ -104,6 +104,14 @@
                 return true;
             }
             
+            function mudaServiceOpts(tipo){
+                if (tipo === 'MDPB'){               
+                    document.getElementById('dd_rm').className = 'mostrar';                     
+                }else{
+                    document.getElementById('dd_rm').className = 'esconder';                      
+                }
+            }
+            
             function mudaFileOpts(tipo){
                 if(tipo == 'CSV' || tipo == 'INTERLOGIC' || tipo == 'WEBVENDAS'){
                     document.getElementById('arquivo').accept = '.csv';
@@ -208,7 +216,7 @@
                             <li>
                                 <dd>
                                     <label>SERVIÇO:</label>
-                                    <select style="width: 300px;" name="servico" id="tipo_serv">
+                                    <select style="width: 300px;" name="servico" id="tipo_serv"  onchange="mudaServiceOpts(this.value);">
                                        <option value="ARQUIVO">DEFINIDO NO ARQUIVO</option>
                                         <option value="PAC">PAC</option>
                                         <option value="PAX">PAC GRANDES FORMATOS</option>
@@ -239,6 +247,13 @@
                                         <%}else{%>
                                         <option value="1">SIM</option>
                                         <%}%>
+                                    </select>
+                                </dd>
+                                <dd id="dd_rm" class="esconder">
+                                    <label>TIPO REGISTRO?</label>
+                                    <select style="width: 100px;" name="rm">
+                                        <option value="0">NORMAL</option>
+                                        <option value="1">MÓDICO</option>
                                     </select>
                                 </dd>
                             </li>

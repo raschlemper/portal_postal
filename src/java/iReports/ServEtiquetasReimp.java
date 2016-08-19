@@ -150,10 +150,14 @@ public class ServEtiquetasReimp extends HttpServlet {
                         + " valor_declarado,"
                         + " aviso_recebimento,"
                         + " mao_propria,"
+                        + " registro,"
+                        + " registro_modico,"
+                        + " posta_restante,"
                         + " notaFiscal, "
                         + " departamento, "
                         + " valor_cobrar, "
                         + " conteudo, "
+                        + " setor, "
                         + " SUBSTRING(d.nome_sa, 1, 30) AS nomeDesCompacto, "
                         + " d.*, "
                         + " dep.* "
@@ -210,6 +214,9 @@ public class ServEtiquetasReimp extends HttpServlet {
                         
                         d.setAr(r.getInt("aviso_recebimento"));
                         d.setMp(r.getInt("mao_propria"));
+                        d.setRg(r.getInt("registro"));
+                        d.setRm(r.getInt("registro_modico"));
+                        d.setPr(r.getInt("posta_restante"));
                         d.setVd(r.getFloat("valor_declarado"));
                         d.setValor_cobrar(r.getFloat("valor_cobrar"));
                         
@@ -244,7 +251,7 @@ public class ServEtiquetasReimp extends HttpServlet {
                             d.setRemetente_departamento(r.getString("departamento"));
                             d.setRemetente_logradouro(logradouro);
                             d.setRemetente_numero("");
-                            d.setRemetente_complemento("");
+                            d.setRemetente_complemento(r.getString("setor"));
                             d.setRemetente_bairro(bairro);
                             d.setRemetente_cidade(cidade);
                             d.setRemetente_uf(uf);

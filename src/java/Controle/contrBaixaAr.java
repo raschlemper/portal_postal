@@ -121,11 +121,11 @@ public class contrBaixaAr {
     }
 
     //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
-    public static String salvarAR(InputStream inputStream, Date dataRec, String numObjeto, String nomeRec, int idUsuario, String nomeBD) throws SQLException {
+    public static String salvarAR(InputStream inputStream, Date dataRec, String numObjeto, String nomeRec, int idUsuario, String nomeBD, int idCliente) throws SQLException {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
 
         String sqlBase = "REPLACE INTO movimentacao_ar (numObjeto, dataBaixaAr, nomeRecebAr, daraRecebRem, tipoRetorno, codCliente"
-                + ", codigoSTO, valorReceber, destinatarioDoDoc, loteDevolucao, imagemAr) VALUES (?,?,?,NOW(),1,0,0,0,0,0,?) ";
+                + ", codigoSTO, valorReceber, destinatarioDoDoc, loteDevolucao, imagemAr) VALUES (?,?,?,NOW(),?,0,0,0,0,0,?) ";
 
         try {
             //IMPORTA OS OBJETOS DO ARQUIVO
@@ -133,7 +133,8 @@ public class contrBaixaAr {
             valores1.setString(1, numObjeto);
             valores1.setDate(2, (java.sql.Date) dataRec);
             valores1.setString(3, nomeRec);
-            valores1.setBlob(4, inputStream);
+            valores1.setInt(4, idCliente);
+            valores1.setBlob(5, inputStream);
 
             valores1.executeUpdate();
             valores1.close();

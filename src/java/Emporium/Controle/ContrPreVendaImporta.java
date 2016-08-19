@@ -34,17 +34,17 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.XPath;
 import org.dom4j.io.SAXReader;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 
 /**
  *
@@ -58,7 +58,7 @@ public class ContrPreVendaImporta {
     private static final int MAX_ALLOWED = 1000;
     private static final Integer[] CEPS_SUSPENSOS = {
         20271080, 20271090, 20271100, 20550140, 20271150, 
-        /*20271110, 20271111, 20271130, 20271160, 20271260, 20550170, dia 12*/
+        20271110, 20271111, 20271130, 20271160, 20271260, 20550170,
         20756120, 20756121, 20770001,
         20770002, 20755330, 20756116, 20756115, 20760225, 20760226, 20770061,
         20770062, 20770010, 20770006, 20770060, 20755310, 20755320, 20756085,
@@ -104,6 +104,15 @@ public class ContrPreVendaImporta {
                 String servico = "";
                 if (!servicoEscolhido.equals("ARQUIVO")) {
                     servico = servicoEscolhido;
+                    if (servico.startsWith("MDPB")) {
+                        servico = "CARTA";
+                        String resultado = ContrServicoAbrangencia.verificaMDPBxCep(cepInteiro, nomeBD);
+                        if (resultado != null && resultado.equals("erro")) {
+                            AVISO += "<br/>Linha n." + linha + " - CEP " + ai.getCep() + " nao aceita MDPB! O servico foi alterado para CARTA!";
+                        } else {
+                            servico = resultado;
+                        }
+                    }
                 } else if (ai.getServico().startsWith("PAC")) {
                     servico = "PAC";
                 } else if (ai.getServico().startsWith("CARTA")) {
@@ -234,13 +243,18 @@ public class ContrPreVendaImporta {
     }
 
     public static String montaSqlPedido(ArrayList<ArquivoImportacao> listaAi, String nomeBD) {
-        String sql = "INSERT INTO pre_venda (numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, registro, chave, metodo_insercao) VALUES ";
+        String sql = "INSERT INTO pre_venda (numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, registro, chave, metodo_insercao, registro_modico) VALUES ";
         for (ArquivoImportacao ai : listaAi) {
 
             //verifica se tem registo para carta a vista
             int registro = 0;
-            if (ai.getCodECT() == 10014 && ai.getServico().equals("CARTA")) {
+            int registro_modico = 0;
+            if ((ai.getCodECT() == 10014 && ai.getServico().equals("CARTA")) || ai.getServico().startsWith("MDPB")) {
                 registro = 1;
+            }
+            if (ai.getRm() != null && ai.getRm().equals("1") && (ai.getServico().equals("CARTA") || ai.getServico().startsWith("MDPB"))) {
+                registro = 0;
+                registro_modico = 1;
             }
 
             //consulta a amarração do objeto
@@ -257,7 +271,7 @@ public class ContrPreVendaImporta {
             //INSERE O DESTINATARIO
             int idDestinatario = ContrPreVendaDest.inserir(ai.getIdCliente(), ai.getNome(), ai.getCpf(), ai.getEmpresa(), ai.getCep(), ai.getEndereco(), ai.getNumero(), ai.getComplemento(), ai.getBairro(), ai.getCidade(), ai.getUf(), ai.getEmail(), ai.getCelular(), "Brasil", nomeBD);
             //MONTA SQL PRE_VENDA
-            sql += "\n('" + ai.getNrObjeto() + "', " + ai.getIdCliente() + ", " + idDestinatario + ", " + idRemetente + ", '" + ai.getCodECT() + "', '" + ai.getContrato() + "', '" + ai.getDepartamento() + "', '" + ai.getAosCuidados() + "', '" + ai.getObs() + "', '" + ai.getConteudo() + "', " + ai.getPeso() + ", " + ai.getAltura() + ", " + ai.getLargura() + ", " + ai.getComprimento() + ", " + ai.getVd() + ", " + ai.getAr() + ", " + ai.getMp() + ", '" + siglaAmarracao + "', '" + ai.getServico() + "', '" + ai.getNotaFiscal() + "', " + vlrCobrar + ", '" + tipo + "', " + ai.getIdDepartamento() + ", NOW(), '" + ai.getCartaoPostagem() + "', " + registro + ", '" + ai.getChave() + "', '" + ai.getMetodoInsercao() + "'),";
+            sql += "\n('" + ai.getNrObjeto() + "', " + ai.getIdCliente() + ", " + idDestinatario + ", " + idRemetente + ", '" + ai.getCodECT() + "', '" + ai.getContrato() + "', '" + ai.getDepartamento() + "', '" + ai.getAosCuidados() + "', '" + ai.getObs() + "', '" + ai.getConteudo() + "', " + ai.getPeso() + ", " + ai.getAltura() + ", " + ai.getLargura() + ", " + ai.getComprimento() + ", " + ai.getVd() + ", " + ai.getAr() + ", " + ai.getMp() + ", '" + siglaAmarracao + "', '" + ai.getServico() + "', '" + ai.getNotaFiscal() + "', " + vlrCobrar + ", '" + tipo + "', " + ai.getIdDepartamento() + ", NOW(), '" + ai.getCartaoPostagem() + "', " + registro + ", '" + ai.getChave() + "', '" + ai.getMetodoInsercao() + "', " + registro_modico + "),";
 
         }
         return sql.substring(0, sql.lastIndexOf(","));
@@ -270,7 +284,7 @@ public class ContrPreVendaImporta {
      * *************************************
      */
     //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
-    public static String importaPedido(FileItem item, int idCliente, int idDepartamento, String departamento, String contrato, String cartaoPostagem, String servicoEscolhido, String nomeBD) {
+    public static String importaPedido(FileItem item, int idCliente, int idDepartamento, String departamento, String contrato, String cartaoPostagem, String servicoEscolhido, int rm, String nomeBD) {
 
         try {
             //CONTADOR DE LINHA
@@ -387,6 +401,18 @@ public class ContrPreVendaImporta {
                         ai.setVd(aux[14].trim());
                     } else {
                         ai.setVd("0");
+                    }
+
+                    if (aux[13].trim().toUpperCase().contains("RM") || rm == 1) {
+                        ai.setRm("1");
+                    } else {
+                        ai.setRm("0");
+                    }
+
+                    if (aux[13].trim().toUpperCase().contains("PR")) {
+                        ai.setPr("1");
+                    } else {
+                        ai.setPr("0");
                     }
 
                     listaAi.add(ai);

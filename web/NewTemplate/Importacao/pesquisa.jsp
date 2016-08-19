@@ -15,7 +15,7 @@
         } else if (!cli.getEmail().contains("AR")) {
             out.println("ERRO: Postagem sem AR!");
         } else {
-            out.println(cli.getNome());
+            out.println(cli.getCodigo()+" - "+cli.getNome());
         }
 
     }

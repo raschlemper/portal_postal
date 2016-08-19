@@ -370,8 +370,8 @@
                                 <label>Faturamento</label>
                                 <select style="width: 120px;" id="tipoFat" name="tipoFat">
                                     <option selected value="">-- TODOS --</option>
-                                    <option value=" AND contratoEct <> ''">CONTRATO ECT</option>
-                                    <option value=" AND contratoEct = ''">FATURADO AGF</option> 
+                                    <option value=" AND contratoEct <> '' AND contratoEct <> '0'">CONTRATO ECT</option>
+                                    <option value=" AND (contratoEct = '' OR contratoEct = '0')">FATURADO AGF</option> 
                                 </select>
                             </dd>
                             <%if (acessosUs.contains(8)) {%>

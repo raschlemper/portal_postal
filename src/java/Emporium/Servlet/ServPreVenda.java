@@ -13,7 +13,6 @@ import Entidade.ServicoECT;
 import Util.FormataString;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -96,6 +95,7 @@ public class ServPreVenda extends HttpServlet {
         int idRemetente = 0;
         int idCliente = Integer.parseInt(request.getParameter("idCliente"));
         int idUser = Integer.parseInt(request.getParameter("idUser"));
+        String setor = request.getParameter("setor");
         String nomeUser = request.getParameter("nomeUser");
         int flagMulti = Integer.parseInt(request.getParameter("flagMulti"));
         int qtdPostagem = Integer.parseInt(request.getParameter("quantidade"));
@@ -254,7 +254,7 @@ public class ServPreVenda extends HttpServlet {
                 }          
                 
                 //INSERE PRE VENDA 
-                ContrPreVenda.inserir(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD,posta_restante,registro_modico);
+                ContrPreVenda.inserir(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD, posta_restante, registro_modico, setor);
 
             } else {
                 //response.sendRedirect("Cliente/Servicos/pre_postagem.jsp?Falha ao inserir o destinatario!");                

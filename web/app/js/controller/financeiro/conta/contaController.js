@@ -132,8 +132,8 @@ app.controller('ContaController',
         // ***** EXCLUIR ***** //
 
         $scope.excluir = function(conta) {
-            $q.all([ContaService.getLancamento(conta.idConta),
-                    ContaService.getLancamentoProgramado(conta.idConta)])
+            $q.all([ContaService.getLancamento(conta.idConta, null, null),
+                    ContaService.getLancamentoProgramado(conta.idConta, null, null)])
                 .then(function(values) {   
                     if(values[0].lancamentos.length || values[1].lancamentosProgramados.length) {
                         modalMessage("Esta conta não pode ser excluída! <br/> Existem Lançamentos vinculados a esta conta.");

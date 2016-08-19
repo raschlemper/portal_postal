@@ -6,9 +6,10 @@
 package Emporium.Servlet;
 
 import Emporium.Controle.ContrLogisticaReversa;
-import br.com.correios.scol.webservice.ColetasSolicitadasTO;
-import br.com.correios.scol.webservice.ObjetoPostalTO;
-import br.com.correios.scol.webservice.RetornoAcompanhamentoTO;
+import br.com.correios.logisticareversa.service.ColetasSolicitadas;
+import br.com.correios.logisticareversa.service.ComponenteException;
+import br.com.correios.logisticareversa.service.ObjetoPostal;
+import br.com.correios.logisticareversa.service.RetornoAcompanhamento;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,10 +37,18 @@ public class ServReversaAtualizar extends HttpServlet {
             throws ServletException, IOException {
 
         String nomeBD = request.getParameter("nomeBD");
-        String usuario = request.getParameter("usuario");//"jonathan@wi2be.com";
-        String senha = request.getParameter("senha");//"cs5b72";
+        final String usuario = request.getParameter("usuario");//"jcsbrasil";
+        final String senha = request.getParameter("senha");//"jcs.123";
+
+        java.net.Authenticator.setDefault(new java.net.Authenticator() {
+            @Override
+            protected java.net.PasswordAuthentication getPasswordAuthentication() {
+                return new java.net.PasswordAuthentication(usuario, senha.toCharArray());
+            }
+        });
+
         int idCli = Integer.parseInt(request.getParameter("idCli").trim());//10399127;
-        int codAdm = Integer.parseInt(request.getParameter("codAdm").trim());//10399127;
+        String codAdm = request.getParameter("codAdm").trim();//10399127;
         String tipoBusca = "U"; //<!-- H (Todos) - U (Último) -->
         String tipoSolicitacao = "A";//<!-- L (Domiciliar) - A (Autorização) - C (Coleta) -->
         List<String> listaAP = ContrLogisticaReversa.consultaReversasPendByCliente(idCli, nomeBD);
@@ -50,9 +59,9 @@ public class ServReversaAtualizar extends HttpServlet {
 
                 //System.out.println("entroo " + (i + 1));
                 try {
-                    RetornoAcompanhamentoTO ret = acompanharPedido(usuario, senha, codAdm, tipoBusca, tipoSolicitacao, listaAP_30);
+                    RetornoAcompanhamento ret = acompanharPedido(codAdm, tipoBusca, tipoSolicitacao, listaAP_30);
                     //System.out.println(ret.getCodErro() + " = " + ret.getMsgErro());
-                    for (ColetasSolicitadasTO c : ret.getColeta()) {
+                    for (ColetasSolicitadas c : ret.getColeta()) {
                         //System.out.println(c.getNumeroPedido());
                         int idRev = 0;
                         String obj = "- - -";
@@ -61,7 +70,7 @@ public class ServReversaAtualizar extends HttpServlet {
                         String data = "";
                         String hora = "";
 
-                        for (ObjetoPostalTO o : c.getObjeto()) {
+                        for (ObjetoPostal o : c.getObjeto()) {
                             //System.out.println("Obj: " + o.getNumeroEtiqueta());
                             //System.out.println("ID2: " + o.getControleObjetoCliente());
                             //System.out.println("Data: " + o.getDataUltimaAtualizacao());
@@ -139,10 +148,15 @@ public class ServReversaAtualizar extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private static RetornoAcompanhamentoTO acompanharPedido(java.lang.String usuario, java.lang.String senha, java.lang.Integer codAdministrativo, java.lang.String tipoBusca, java.lang.String tipoSolicitacao, java.util.List<java.lang.String> numeroPedido) {
+    /*private static RetornoAcompanhamentoTO acompanharPedido(java.lang.String usuario, java.lang.String senha, java.lang.Integer codAdministrativo, java.lang.String tipoBusca, java.lang.String tipoSolicitacao, java.util.List<java.lang.String> numeroPedido) {
         br.com.correios.scol.webservice.WebServiceScol_Service service = new br.com.correios.scol.webservice.WebServiceScol_Service();
         br.com.correios.scol.webservice.WebServiceScol port = service.getWebServiceScolPort();
         return port.acompanharPedido(usuario, senha, codAdministrativo, tipoBusca, tipoSolicitacao, numeroPedido);
+    }*/
+    private static RetornoAcompanhamento acompanharPedido(java.lang.String codAdministrativo, java.lang.String tipoBusca, java.lang.String tipoSolicitacao, java.util.List<java.lang.String> numeroPedido) throws ComponenteException {
+        br.com.correios.logisticareversa.service.LogisticaReversaService service = new br.com.correios.logisticareversa.service.LogisticaReversaService();
+        br.com.correios.logisticareversa.service.LogisticaReversaWS port = service.getLogisticaReversaWSPort();
+        return port.acompanharPedido(codAdministrativo, tipoBusca, tipoSolicitacao, numeroPedido);
     }
 
 }

@@ -111,7 +111,12 @@ app.controller('LancamentoController',
                 return item.tipo.id === tipo.id;
             });
             return lista;
-        }
+        };
+        
+        $scope.filterByDays = function(days) {
+            $scope.lancSearch.dataInicio = moment().add(days, 'days').format('YYYY-MM-DD');
+            $scope.lancSearch.dataFim = moment().add(days, 'days').format('YYYY-MM-DD');
+        };
 
         // ***** CONTROLLER ***** //
 
@@ -163,7 +168,7 @@ app.controller('LancamentoController',
         };
 
         var todos = function(conta) {
-            ContaService.getLancamento(conta.idConta)
+            ContaService.getLancamento(conta.idConta, null, null)
                 .then(function (data) {
                     $scope.lancamentos = angular.copy(data.lancamentos);
                     $scope.lancamentosLista = criarLancamentosLista(data);
@@ -575,25 +580,30 @@ app.controller('LancamentoController',
         var ajustarDadosTransferencia = function(data) { 
             var modelo = $scope.modelos[1];
             var lancamentoTransferencia = LancamentoTransferenciaHandler.handle(data);
-            lancamentoTransferencia.lancamentoOrigem = getLancamento(data.contaOrigem, null, null, $scope.tipos[1], modelo, data, data.lancamentoOrigem);
-            lancamentoTransferencia.lancamentoDestino = getLancamento(data.contaDestino, null, null,  $scope.tipos[0], modelo, data, data.lancamentoDestino);
+            lancamentoTransferencia.lancamentoOrigem = getLancamento(data.contaOrigem, null, null, $scope.tipos[1], modelo, 
+                data.dataLancamentoOrigem, data.dataCompetenciaOrigem, data, data.lancamentoOrigem);
+            lancamentoTransferencia.lancamentoDestino = getLancamento(data.contaDestino, null, null,  $scope.tipos[0], modelo, 
+                data.dataLancamentoDestino, data.dataCompetenciaDestino, data, data.lancamentoDestino);
             return lancamentoTransferencia;
         };
 
         var ajustarDadosConciliado = function(conta, data) {    
-            var lancamento = getLancamento(conta, data.planoConta, data.centroCusto, data.tipo, $scope.modelos[5], data, null);
+            var lancamento = getLancamento(conta, data.planoConta, data.centroCusto, data.tipo, $scope.modelos[5], 
+                data.dataLancamento, data.dataCompetencia, data, null);
             var lancamentoConciliado = LancamentoConciliadoHandler.handle(data);
             lancamentoConciliado.lancamento = lancamento;
             return lancamentoConciliado;
         };
 
-        var getLancamento = function(conta, planoConta, centroCusto, tipo, modelo, data, lancamentoOriginal) {
+        var getLancamento = function(conta, planoConta, centroCusto, tipo, modelo, dataLancamento, dataCompetencia, data, lancamentoOriginal) {
             data.idLancamento = (lancamentoOriginal && lancamentoOriginal.idLancamento) || null;
             data.conta = conta;
             data.planoConta = planoConta;
             data.centroCusto = centroCusto;
             data.tipo = tipo;
             data.modelo = modelo;
+            data.dataLancamento = dataLancamento;
+            data.dataCompetencia = dataCompetencia;
             data.situacao = (data && data.situacao) || $scope.situacoes[0];
             return LancamentoHandler.handle(data);
         };

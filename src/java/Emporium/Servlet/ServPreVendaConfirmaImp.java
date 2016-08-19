@@ -189,8 +189,9 @@ public class ServPreVendaConfirmaImp extends HttpServlet {
 
             int mp = Integer.parseInt(request.getParameter("mp"+id));
             int ar = Integer.parseInt(request.getParameter("ar"+id));
+            int rm = Integer.parseInt(request.getParameter("rm" + id));
             float vd = Float.parseFloat(request.getParameter("vd"+id));
-            float vlrCobrar = 0;                        
+            float vlrCobrar = 0;
 
             int codECT = ContrClienteContrato.consultaContratoClienteGrupoServ(idCliente, servico, nomeBD);
             int registro = 0;
@@ -199,6 +200,12 @@ public class ServPreVendaConfirmaImp extends HttpServlet {
             String tipoEtiqueta = "MANUAL";
             if(nObj != null){
                 numObjeto = nObj;
+            }
+
+            if (servico.startsWith("MDPB")) {
+                if (rm == 0) {
+                    registro = 1;
+                }
             }
             
             if(codECT != 0 && nObj == null){
@@ -218,8 +225,12 @@ public class ServPreVendaConfirmaImp extends HttpServlet {
             } else if ( codECT == 0){
                 ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico);
                 codECT = se.getCodECT();
-                if(servico.equals("CARTA") && codECT == 10014){
-                    registro = 1;
+                if (servico.equals("CARTA") && codECT == 10014) {
+                    if (rm == 0) {
+                        registro = 1;
+                    } else {
+                        registro = 0;
+                    }
                 }
                 contrato = "";
             }
@@ -227,7 +238,7 @@ public class ServPreVendaConfirmaImp extends HttpServlet {
             //VERIFICA A EXISTENCIA DE COMBO PARA O SERVIÇO
             //codECT = ContrServicoCombo.consultaCodCombo(codECT, ar, mp, vd);
             
-            ContrPreVenda.alterar(idCliente, numObjeto, idDest, 0, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, vid, registro, nomeUser, tipoEtiqueta, email, nomeBD);
+            ContrPreVenda.alterar(idCliente, numObjeto, idDest, 0, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, vid, registro, nomeUser, tipoEtiqueta, email, rm, nomeBD);
                     
         }
         
