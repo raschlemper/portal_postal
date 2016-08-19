@@ -14,11 +14,11 @@
         String vDepartamento = request.getParameter("departamento");
         String dataInicio = Util.FormatarData.DateToBD(request.getParameter("dataIni"));
         String dataFinal = Util.FormatarData.DateToBD(request.getParameter("dataFim"));
-        
+
         String sql = "";
         if (!vDepartamento.equals("0")) {
             sql += " AND m.departamento LIKE '" + vDepartamento + "'";
-        }else{
+        } else {
             ArrayList<Integer> dptosSessaoUsuario = (ArrayList<Integer>) session.getAttribute("departamentos");
             if (dptosSessaoUsuario != null && dptosSessaoUsuario.size() > 0) {
                 String idsDepto = "";
@@ -46,9 +46,9 @@
         <%--<b style="margin:0 12px 0 10px;">|</b>
         <a target="_blank" href="../AjaxPages/pdf_analitico.jsp?sql=<%= sql%>"><img class="link_img" src="../../imagensNew/pdf.png" /> EXPORTAR .PDF</a>--%>
 </div>
- <form name="frmSRO" id="frmSRO" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
+<form name="frmSRO" id="frmSRO" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
     <input type="hidden" name="objetos" id="objetos" value="" />
- </form> 
+</form> 
 
 <table id="barraAtendimento" border="0">
     <tr>
@@ -69,66 +69,66 @@
     <thead>
         <tr>
             <th class='nosort'><h3>RETORNOU?</h3></th>
-<th><h3>RECEBIDO POR</h3></th>
-<th><h3>DATA RECEB.</h3></th>
-<th><h3>DOCUMENTO</h3></th>
-<th><h3>DATA POSTAGEM</h3></th>
-<th><h3>DESTINATÁRIO</h3></th>
-<th><h3>CEP</h3></th>
-<th><h3>SITUAÇÃO</h3></th>
-<th><h3>DEPARTAMENTO</h3></th>
-</tr>
-</thead>
-<tbody>
-    <%
-        for (int i = 0; i < movimentacao.size(); i++) {
-            Entidade.Movimentacao mov = (Entidade.Movimentacao) movimentacao.get(i);
+            <th><h3>RECEBIDO POR</h3></th>
+            <th><h3>DATA RECEB.</h3></th>
+            <th><h3>DOCUMENTO</h3></th>
+            <th><h3>DATA POSTAGEM</h3></th>
+            <th><h3>DESTINATÁRIO</h3></th>
+            <th><h3>CEP</h3></th>
+            <th><h3>SITUAÇÃO</h3></th>
+            <th><h3>DEPARTAMENTO</h3></th>
+            </tr>
+            </thead>
+            <tbody>
+                <%
+                    for (int i = 0; i < movimentacao.size(); i++) {
+                        Entidade.Movimentacao mov = (Entidade.Movimentacao) movimentacao.get(i);
 
-            Date data = mov.getDataPostagem();
-            String vData = sdf.format(data);
-            String numeroRegistro = mov.getNumObjeto();
-            String destinatario = mov.getDestinatario();
-            String cepDestino = mov.getCep();
-            String departamento = mov.getDepartamento();
-            String status = mov.getStatus();
-            String nomeRecebAr = mov.getNomeRecebAr();
-            String dataRecebAr = mov.getDataBaixaAr();
-            int baixaAr = mov.getBaixaAr();
-            if (baixaAr == 1) {
-                qtdSim++;
-            } else {
-                qtdNao++;
-            }
-    %>
-    <tr align='center' style="font-size: 11px;">
-        <%if (baixaAr == 0) {%>
-        <td>
-            <img id='img<%=numeroRegistro%>' style='cursor:pointer;' src='../../imagensNew/cross_circle.png' onclick="chamaJanelaBaixaAr('<%=numeroRegistro%>');" />
-            <input type='hidden' name='<%=numeroRegistro%>' id='<%=numeroRegistro%>' value='1' />
-        </td>
-        <%} else {%>
-        <td>
-            <img id='img<%=numeroRegistro%>' style='cursor:pointer;' src='../../imagensNew/tick_circle.png' onclick="javascript:if (confirm('Você tem certeza que deseja marcar este objeto como não entregue?')) {
-                        chamaJanelaBaixaAr('<%=numeroRegistro%>');
-                    } else {
-                        return false;
-                    }" />
-            <input type='hidden' name='<%=numeroRegistro%>' id='<%=numeroRegistro%>' value='0' />
-        </td>
-        <%}%>
-        <td><div id='nome<%= numeroRegistro%>'><a href="../../ImagemAR?sro=<%=numeroRegistro%>" target="_blank"><%=nomeRecebAr%></a></div></td>
-        <td><div id='data<%= numeroRegistro%>'><%=dataRecebAr%></div></td>
-        <td>
-         <a href='#' onclick="pesqSro('<%= numeroRegistro %>');"><%= numeroRegistro%></a> 
-        </td>
-        <td><%= vData%></td>
-        <td><%= destinatario%></td>
-        <td><%= cepDestino%></td>
-        <td><%= status%></td>
-        <td><%= departamento%></td>
-    </tr>
-    <%}%>
-</tbody>
+                        Date data = mov.getDataPostagem();
+                        String vData = sdf.format(data);
+                        String numeroRegistro = mov.getNumObjeto();
+                        String destinatario = mov.getDestinatario();
+                        String cepDestino = mov.getCep();
+                        String departamento = mov.getDepartamento();
+                        String status = mov.getStatus();
+                        String nomeRecebAr = mov.getNomeRecebAr();
+                        String dataRecebAr = mov.getDataBaixaAr();
+                        int baixaAr = mov.getBaixaAr();
+                        if (baixaAr == 1) {
+                            qtdSim++;
+                        } else {
+                            qtdNao++;
+                        }
+                %>
+                <tr align='center' style="font-size: 11px;">
+                    <%if (baixaAr == 0) {%>
+                    <td>
+                        <img id='img<%=numeroRegistro%>' style='cursor:pointer;' src='../../imagensNew/cross_circle.png' onclick="chamaJanelaBaixaAr('<%=numeroRegistro%>');" />
+                        <input type='hidden' name='<%=numeroRegistro%>' id='<%=numeroRegistro%>' value='1' />
+                    </td>
+                    <%} else {%>
+                    <td>
+                        <img id='img<%=numeroRegistro%>' style='cursor:pointer;' src='../../imagensNew/tick_circle.png' onclick="javascript:if (confirm('Você tem certeza que deseja marcar este objeto como não entregue?')) {
+                                    chamaJanelaBaixaAr('<%=numeroRegistro%>');
+                                } else {
+                                    return false;
+                                }" />
+                        <input type='hidden' name='<%=numeroRegistro%>' id='<%=numeroRegistro%>' value='0' />
+                    </td>
+                    <%}%>
+                    <td><div id='nome<%= numeroRegistro%>'><a href="../../ImagemAR?sro=<%=numeroRegistro%>" target="_blank"><%=nomeRecebAr%></a></div></td>
+                    <td><div id='data<%= numeroRegistro%>'><%=dataRecebAr%></div></td>
+                    <td>
+                        <a href='#' onclick="pesqSro('<%= numeroRegistro%>');"><%= numeroRegistro%></a> 
+                    </td>
+                    <td><%= vData%></td>
+                    <td><%= destinatario%></td>
+                    <td><%= cepDestino%></td>
+                    <td><%= status%></td>
+                    <td><%= departamento%></td>
+                </tr>
+                <%}%>
+            </tbody>
 </table>
 <div id="tablefooter" align='center'>
     <div align="left" style='float:left; width:20%;'>

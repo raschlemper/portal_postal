@@ -123,6 +123,10 @@
                                                         <input type="text" name="cod_ref" maxlength="40" class="form-control"  onkeypress="mascara(this, maskNumero)" placeholder="Código referência"  />
                                                     </div>
                                                 </div>                                                
+                                                <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6">
+                                                    <label class="small">Adicionar para os usuários do Portal Postal?</label><br/>
+                                                    <input type="checkbox" name="permissao" value='1' maxlength="40"  /> Permitir que todos os usuários deste cliente acessem este depto.                                                    
+                                                </div>                                                
                                             </div>
                                         </li>
                                         <li class="list-group-item">

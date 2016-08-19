@@ -5,6 +5,7 @@
     SimpleDateFormat sdf2 = new SimpleDateFormat("ddMMHHmm");
     SimpleDateFormat sdf3 = new SimpleDateFormat("ddMMyyyyHHmm");
     SimpleDateFormat sdf4 = new SimpleDateFormat("ddMMyyyyHHmmsss");
+    SimpleDateFormat sdf5 = new SimpleDateFormat("ddMMyyyy");
 
     response.setContentType("text/plain");
     response.setHeader("Content-disposition", "attachment; filename=OCORENCORREIOS" + sdf4.format(new Date()) + ".txt");
@@ -141,6 +142,68 @@
             out.print(Util.FormataString.preencheStringCom("549", " ", 3, 1)); //codigo da linha
             out.print(Util.FormataString.preencheStringCom(contador + "", "0", 4, -1)); // quantidade do arquivo
             out.print(Util.FormataString.preencheStringCom(" ", " ", 243, 1)); // FILLER
+        } else if (modelo.equals("EDI_EMBARC_3.0")) {
+            //HEADER 1
+            out.print("000"); //codigo da linha
+            out.print(Util.FormataString.preencheStringCom("EMPRESA DE TRANSPORTES", " ", 35, 1));//nome transportadora
+            out.print(Util.FormataString.preencheStringCom(cli.getNome(), " ", 35, 1));//nome cliente
+            out.print(sdf1.format(new Date()));//data atual 
+            out.print("CON");
+            out.print(sdf2.format(new Date()));//data atual
+            out.print("0");
+            out.println(Util.FormataString.preencheStringCom("", " ", 585, 1)); // FILLER ATE 680
+            //HEADER 2
+            out.print("320"); //codigo da linha
+            out.print("CONHE");
+            out.print(sdf2.format(new Date()));//data atual
+            out.print("0");
+            out.println(Util.FormataString.preencheStringCom("", " ", 663, 1)); // FILLER ATE 680
+            //HEADER 3
+            out.print("321"); //codigo da linha
+            out.print("99999999999999");//cnpj transportadora
+            out.print(Util.FormataString.preencheStringCom("EMPRESA DE TRANSPORTES", " ", 50, 1)); //nome transportadora
+            out.println(Util.FormataString.preencheStringCom("", " ", 623, 1)); // FILLER ATE 680
+
+            int contador = 0;
+            while (result.next()) {
+                contador++;
+                Timestamp date = result.getTimestamp("t.last_status_date");
+                int code = result.getInt("t.last_status_code");
+                String type = result.getString("t.last_status_type");
+                String nf = result.getString("m.notaFiscal");
+                int edi_code = 0;
+                if (mapOcor.containsKey(code + ";" + type)) {
+                    edi_code = mapOcor.get(code + ";" + type);
+                }
+
+                //BODY EDI 5.0
+                out.print("322"); //codigo da linha
+                out.print(Util.FormataString.preencheStringCom("", "0", 10, 1));//mcu agencia
+                out.print(Util.FormataString.preencheStringCom("U", " ", 5, 1));//cnpj do cliente
+                out.print(Util.FormataString.preencheStringCom(nf, "0", 12, -1)); //Numero objeto
+                out.print(Util.FormataString.preencheStringCom(sdf5.format(date), "0", 8, -1)); //Data Ocorrencia 
+                out.print(Util.FormataString.preencheStringCom("C", "", 1, -1)); //Codigo da OBS
+                out.print(Util.FormataString.preencheStringCom("1", "0", 7, -1)); //peso
+                out.print(Util.FormataString.preencheStringCom("1", "0", 15, -1)); //valor
+                out.print(Util.FormataString.preencheStringCom("0", "0", 34, -1)); 
+                out.print(Util.FormataString.preencheStringCom("1", "0", 15, -1)); //valor
+                out.print(Util.FormataString.preencheStringCom("1", "0", 15, -1)); //valor
+                out.print(Util.FormataString.preencheStringCom("0", "0", 75, -1)); 
+                out.print(Util.FormataString.preencheStringCom("2", "0", 1, -1)); 
+                out.print(Util.FormataString.preencheStringCom("0", "3", 1, -1)); 
+                out.print(Util.FormataString.preencheStringCom("99999999000199", "14", 1, -1)); //cnpj agf
+                out.print(Util.FormataString.preencheStringCom("99999999000199", "14", 1, -1)); //cnpj cliente
+                out.print(Util.FormataString.preencheStringCom("2", "0", 3, -1)); //serie nf 2
+                out.print(Util.FormataString.preencheStringCom(nf, "0", 8, -1)); //nf
+                out.print(Util.FormataString.preencheStringCom("", "   00000000", 429, -1)); //serie + nf - 39 vezes
+                out.print(Util.FormataString.preencheStringCom("I", "", 1, -1)); //serie + nf - 39 vezes
+                out.print(Util.FormataString.preencheStringCom("N", "", 1, -1)); //serie + nf - 39 vezes
+                out.print(Util.FormataString.preencheStringCom("0000", "", 1, -1)); //sect preencheu com 5352
+            }
+            out.print(Util.FormataString.preencheStringCom("323", " ", 3, 1)); //codigo da linha
+            out.print(Util.FormataString.preencheStringCom(contador + "", "0", 4, -1)); // quantidade do arquivo
+            out.print(Util.FormataString.preencheStringCom("0", "0", 15, -1)); //valor total
+            out.print(Util.FormataString.preencheStringCom(" ", " ", 658, 1)); // FILLER ATE 680
         }
 
         valores.close();

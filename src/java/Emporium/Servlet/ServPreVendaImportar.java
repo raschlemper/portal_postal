@@ -54,7 +54,7 @@ public class ServPreVendaImportar extends HttpServlet {
                     List items = upload.parseRequest(request);
                     Iterator iter = items.iterator();
                     FileItem fileItem = null;
-                    int vd = 0, ar = 0;
+                    int vd = 0, ar = 0, rm = 0;
 
                     while (iter.hasNext()) {
                         FileItem item = (FileItem) iter.next();
@@ -76,6 +76,9 @@ public class ServPreVendaImportar extends HttpServlet {
                             }
                             if (item.getFieldName().equals("ar")) {
                                 ar = Integer.parseInt(item.getString());
+                            }
+                            if (item.getFieldName().equals("rm")) {
+                                rm = Integer.parseInt(item.getString());
                             }
                         }
 
@@ -149,7 +152,7 @@ public class ServPreVendaImportar extends HttpServlet {
                                 String condicao = ContrPreVendaImporta.importaPedidoPSN(fileItem, idCliente, idDepartamento, departamento, contrato, cartaoPostagem, servico, nomeBD);
                                 response.sendRedirect("Cliente/Servicos/imp_confirma.jsp?msg=" + condicao);
                             } else { // ARQUIVO TIPO .CSV -> SISTEMA PORTAL POSTAL                            
-                                String condicao = ContrPreVendaImporta.importaPedido(fileItem, idCliente, idDepartamento, departamento, contrato, cartaoPostagem, servico, nomeBD);
+                                String condicao = ContrPreVendaImporta.importaPedido(fileItem, idCliente, idDepartamento, departamento, contrato, cartaoPostagem, servico, rm, nomeBD);
                                 response.sendRedirect("Cliente/Servicos/imp_confirma.jsp?msg=" + condicao);
                             }
                         } else {

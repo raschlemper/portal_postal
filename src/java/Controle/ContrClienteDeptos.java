@@ -75,23 +75,28 @@ public class ContrClienteDeptos {
         }
     }
     
-    public static boolean inserirDepto(String nomeBD, int idCliente, String nome, String cartao, String cod_ref) {
+    public static int inserirDepto(String nomeBD, int idCliente, String nome, String cartao, String cod_ref) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "INSERT INTO cliente_departamentos (idCliente,nomeDepartamento,cartaoPostagem,codReferencia,ativo) \n" +
                     " VALUES (?,?,?,?,1) ;";
         try {
-            PreparedStatement valores = conn.prepareStatement(sql);
+            PreparedStatement valores = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             valores.setInt(1, idCliente);
             valores.setString(2, nome);
             valores.setString(3, cartao);
             valores.setString(4, cod_ref);
             valores.executeUpdate();
+            int autoIncrementKey = 0;
+            ResultSet rs = valores.getGeneratedKeys();
+            if (rs.next()) {
+                autoIncrementKey = rs.getInt(1);
+            }
             valores.close();
-            return true;
+            return autoIncrementKey;
         } catch (SQLException e) {
             System.out.println(e);
             ContrErroLog.inserir("HOITO - contrMovimentacao", "SQLException", sql, e.toString());
-            return false;
+            return 0;
         } finally {
             Conexao.desconectar(conn);
         }

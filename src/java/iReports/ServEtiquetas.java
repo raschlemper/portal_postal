@@ -144,10 +144,14 @@ public class ServEtiquetas extends HttpServlet {
                         + " valor_declarado,"
                         + " aviso_recebimento,"
                         + " mao_propria,"
+                        + " registro,"
+                        + " registro_modico,"
+                        + " posta_restante,"
                         + " notaFiscal, "
                         + " departamento, "
                         + " valor_cobrar, "
                         + " conteudo, "
+                        + " setor, "
                         + " SUBSTRING(d.nome_sa, 1, 30) AS nomeDesCompacto, "
                         + " d.*, "
                         + " dep.* "
@@ -204,6 +208,9 @@ public class ServEtiquetas extends HttpServlet {
                         
                         d.setAr(r.getInt("aviso_recebimento"));
                         d.setMp(r.getInt("mao_propria"));
+                        d.setRg(r.getInt("registro"));
+                        d.setRm(r.getInt("registro_modico"));
+                        d.setPr(r.getInt("posta_restante"));
                         d.setVd(r.getFloat("valor_declarado"));
                         d.setValor_cobrar(r.getFloat("valor_cobrar"));
                         
@@ -238,7 +245,7 @@ public class ServEtiquetas extends HttpServlet {
                             d.setRemetente_departamento(r.getString("departamento"));
                             d.setRemetente_logradouro(logradouro);
                             d.setRemetente_numero("");
-                            d.setRemetente_complemento("");
+                            d.setRemetente_complemento(r.getString("setor"));
                             d.setRemetente_bairro(bairro);
                             d.setRemetente_cidade(cidade);
                             d.setRemetente_uf(uf);
@@ -248,9 +255,7 @@ public class ServEtiquetas extends HttpServlet {
                         dados.add(d);
                     }
                     valores.close();
-                    
-                    
-                    
+
                     try {
                         Map parametros = new HashMap();
                         InputStream in = getClass().getResourceAsStream(url_jrxml);
@@ -267,46 +272,6 @@ public class ServEtiquetas extends HttpServlet {
                     Conexao.desconectar(conn);
                 }
 
-
-                // mapa de parâmetros do relatório (ainda vamos aprender a usar)
-                /* Map parametros = new HashMap();
-                parametros.put("idCliente", idCliente);
-                parametros.put("ids", param);
-                
-                parametros.put("enderecoCli", logradouro); //MAX DE CARACTERES '40'
-                parametros.put("bairroCli", bairro);
-                parametros.put("cidadeCli", cidade + " / " + uf);
-                parametros.put("cepCli", cli.getCep() + "");                
-                parametros.put("contratoCli", contrato);                
-                parametros.put("nomeCli", nome);
-                
-                parametros.put("nomeBD", nomeBD);
-                parametros.put("urlLogoCli", url);    
-                parametros.put("responsavel", ""); 
-                parametros.put("nomeChancela", cli.getNomeContrato());
-                
-
-                byte[] bytes = null;
-                try {
-                    InputStream in = getClass().getResourceAsStream(url_jrxml);
-                    JasperDesign jasperDesign = JRXmlLoader.load(in);                    
-                    
-                    JRDesignQuery query = new JRDesignQuery();
-                    query.setText(sql_query);
-                    jasperDesign.setQuery(query);
-                    
-                    JasperReport jr = JasperCompileManager.compileReport(jasperDesign);
-                    JasperPrint impressao = JasperFillManager.fillReport(jr, parametros, conn);
-                    Conexao.desconectar(conn);
-                    bytes = JasperExportManager.exportReportToPdf(impressao);
-
-                } catch (Exception e) {                    
-                    Conexao.desconectar(conn);
-                    System.out.println(e);
-                    e.printStackTrace();
-                    return;
-                }*/
-                //  
                 if (bytes != null && bytes.length > 0) {
                     ContrPreVenda.setarImpresso(nomeBD, param, idUser, nomeUser);
                     response.setContentType("application/pdf");

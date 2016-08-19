@@ -22,9 +22,10 @@
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Date dataAtual = new Date();
         String vDataAtual = sdf.format(dataAtual);
+        String dataF = sdf.format(dataAtual);
         String dataI = Util.SomaData.SomarDiasDatas(dataAtual, -60);
         String dataInicioCalendario = Util.SomaData.SomarDiasDatas(dataAtual, -180); // diminui 2 meses
-
+        
         String where = "";
 
         String w_nome = request.getParameter("nome");
@@ -34,11 +35,13 @@
         String w_dataI = request.getParameter("dataIni");
         String w_dataF = request.getParameter("dataFim");
         if (w_dataI != null) {
+            dataI = w_dataI;         
             w_dataI = Util.FormatarData.DateToBD(w_dataI);
         } else {
             w_dataI = Util.FormatarData.DateToBD(dataI);
         }
         if (w_dataF != null) {
+            dataF = w_dataF;   
             w_dataF = Util.FormatarData.DateToBD(w_dataF);
         } else {
             w_dataF = Util.FormatarData.DateToBD(vDataAtual);
@@ -203,14 +206,13 @@
                     <form action="../../ServImportaVpne" method="post"  id="formArq" name="formArq" accept-charset="ISO-8859-1" enctype="multipart/form-data">
                         <ul class="ul_formulario">
                             <li class="titulo">
-                                <dd>IMPORTAR ARQUIVO DE RETONRO DO VPNe</dd>
+                                <dd>IMPORTAR ARQUIVO DE RETORNO DO VPNe</dd>
                             </li>
                             <li>
                                 <dd>
                                     <label>ESCOLHA UM ARQUIVO PARA IMPORTAR:</label>
                                     <input style="width:300px;" type="file" name="arquivo" id="arquivo" accept=".txt" multiple=""/>
                                 </dd>
-
                             </li>
                             <li>                                
                                 <dd>
@@ -251,7 +253,7 @@
                                     <label>Periodo de Data</label>
                                     <input type="text" style="width:60px;" name="dataIni" id="dataIni" value="<%= dataI%>" maxlength="10" onkeypress="mascara(this, maskData);" />
                                     até
-                                    <input type="text" style="width:60px;" name="dataFim" id="dataFim" value="<%=vDataAtual%>" maxlength="10" onkeypress="mascara(this, maskData);" />
+                                    <input type="text" style="width:60px;" name="dataFim" id="dataFim" value="<%= dataF%>" maxlength="10" onkeypress="mascara(this, maskData);" />
                                 </dd>
                                 <dd>
                                     <label>Nome / Razão Social<b class="obg">*</b></label>

@@ -41,6 +41,9 @@ public class ArquivoImportacao {
     private String ar;
     private String mp;
     private String vd;
+    private String rg;
+    private String rm;
+    private String pr;
     private int codECT;
     private int idCliente;
     private int idDepartamento;
@@ -323,6 +326,31 @@ public class ArquivoImportacao {
     public void setVd(String vd) {
         this.vd = vd;
     }
+
+    public String getRg() {
+        return rg;
+    }
+
+    public void setRg(String rg) {
+        this.rg = rg;
+    }
+
+    public String getRm() {
+        return rm;
+    }
+
+    public void setRm(String rm) {
+        this.rm = rm;
+    }
+
+    public String getPr() {
+        return pr;
+    }
+
+    public void setPr(String pr) {
+        this.pr = pr;
+    }
+
     
     
 }

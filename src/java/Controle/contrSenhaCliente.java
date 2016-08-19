@@ -64,7 +64,26 @@ public class contrSenhaCliente {
             Conexao.desconectar(conn);
         }
     }
-    
+
+    public static boolean adicionarNovoDepartamento(int idCliente, int idDepto, String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "UPDATE cliente_usuarios SET departamentos = CONCAT(departamentos,?) WHERE codigo = ?";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.setString(1, ";" + idDepto);
+            valores.setInt(2, idCliente);
+            //System.out.println(valores.toString());
+            valores.executeUpdate();
+            valores.close();
+            return true;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrSenhaCliente", "SQLException", sql, e.toString());
+            return false;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+
     public static boolean alterarPriemiroAcesso(String login, String senha, int idCliente,  String nomeBD, String novaSenha) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "UPDATE cliente_usuarios SET isFirst = 1, senha = '"+novaSenha+"' WHERE codigo = "+idCliente+" AND senha = '"+senha+"' AND login = '"+login+"' ;";

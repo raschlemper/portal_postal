@@ -9,4 +9,5 @@
     <system systemId="http://webservicescolhomologacao.correios.com.br:80/ScolWeb/WebServiceScol?xsd=1" uri="wsdl/webservicescolhomologacao.correios.com.br_80/ScolWeb/WebServiceScol.xsd_1.xsd"/>
     <system systemId="http://webservicescol.correios.com.br/ScolWeb/WebServiceScol?wsdl" uri="wsdl/webservicescol.correios.com.br/ScolWeb/WebServiceScol.wsdl"/>
     <system systemId="http://webservicescol.correios.com.br:80/ScolWeb/WebServiceScol?xsd=1" uri="wsdl/webservicescol.correios.com.br_80/ScolWeb/WebServiceScol.xsd_1.xsd"/>
+    <system systemId="https://cws.correios.com.br/logisticaReversaWS/logisticaReversaService/logisticaReversaWS?wsdl" uri="wsdl/cws.correios.com.br/logisticaReversaWS/logisticaReversaService/logisticaReversaWS.wsdl"/>
 </catalog>

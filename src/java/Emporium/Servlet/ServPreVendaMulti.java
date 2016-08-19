@@ -6,11 +6,9 @@
 package Emporium.Servlet;
 
 import Controle.ContrAmarracao;
-import Controle.ContrClienteContrato;
 import Controle.ContrClienteEtiquetas;
 import Controle.ContrServicoECT;
 import Controle.contrCliente;
-import Controle.contrDestinatario;
 import Emporium.Controle.ContrPreVenda;
 import Emporium.Controle.ContrPreVendaDest;
 import Entidade.Amarracao;
@@ -19,7 +17,6 @@ import Entidade.ServicoECT;
 import Util.FormataString;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -216,7 +213,7 @@ public class ServPreVendaMulti extends HttpServlet {
                 int resgistro_modico = 0;
                 int posta_restante = 0;
                 //INSERE PRE VENDA         
-                ContrPreVenda.inserir(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD,posta_restante, resgistro_modico);
+                ContrPreVenda.inserir(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD, posta_restante, resgistro_modico, "");
             }
         }
 
