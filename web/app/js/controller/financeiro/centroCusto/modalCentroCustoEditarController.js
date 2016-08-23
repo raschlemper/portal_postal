@@ -43,7 +43,7 @@ app.controller('ModalCentroCustoEditarController',
                     $scope.grupos = data;
                     CentroCustoService.estrutura($scope.grupos);
                     $scope.gruposList = CentroCustoService.flatten($scope.grupos);
-                    $scope.gruposList = $filter('orderBy')($scope.gruposList, 'descricao', false);
+                    $scope.gruposList = $filter('orderBy')($scope.gruposList, ['codigo','descricao'], false);
                     if($scope.centroCusto.grupo) { 
                         $scope.centroCusto.grupo = ListaService.getCentroCustoValue($scope.gruposList, $scope.centroCusto.grupo.idCentroCusto);
                     }

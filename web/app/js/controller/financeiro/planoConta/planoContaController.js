@@ -79,7 +79,7 @@ app.controller('PlanoContaController',
             var grupo = planoConta || result.grupo;
             PlanoContaService.getByTipoGrupoCodigo(result.tipo.id, grupo.idPlanoConta, result.codigo)
                 .then(function(data) {
-                    if(data) { modalMessage(MESSAGES.planoConta.info.NAO_PERMITE_ADD_GRUPO); } 
+                    if(data) { modalMessage(MESSAGES.planoConta.info.PLANO_CONTA_EXISTENTE); } 
                     else { return result; }
                 }).then(function(result) {   
                     if(!result) return;

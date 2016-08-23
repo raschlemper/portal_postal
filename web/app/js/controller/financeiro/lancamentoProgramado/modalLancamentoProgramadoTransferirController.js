@@ -120,14 +120,14 @@ app.controller('ModalLancamentoProgramadoTransferirController',
                 alert(MESSAGES.lancamento.transferir.validacao.DATA_COMPETENCIA_ORIGEM_VALIDA);
                 return false;
             }   
-            if (form.dataCompetenciaDestino.$error.required) {
-                alert(MESSAGES.lancamento.transferir.validacao.DATA_COMPETENCIA_DESTINO_REQUERIDA);
-                return false;
-            }        
-            if (form.dataCompetenciaDestino.$modelValue && !moment(form.dataCompetenciaDestino.$modelValue).isValid()) {
-                alert(MESSAGES.lancamento.transferir.validacao.DATA_COMPETENCIA_DESTINO_VALIDA);
-                return false;
-            }   
+//            if (form.dataCompetenciaDestino.$error.required) {
+//                alert(MESSAGES.lancamento.transferir.validacao.DATA_COMPETENCIA_DESTINO_REQUERIDA);
+//                return false;
+//            }        
+//            if (form.dataCompetenciaDestino.$modelValue && !moment(form.dataCompetenciaDestino.$modelValue).isValid()) {
+//                alert(MESSAGES.lancamento.transferir.validacao.DATA_COMPETENCIA_DESTINO_VALIDA);
+//                return false;
+//            }   
             if (form.dataVencimentoOrigem.$error.required) {
                 alert(MESSAGES.lancamento.transferir.validacao.DATA_VENCIMENTO_ORIGEM_REQUERIDA);
                 return false;
@@ -136,14 +136,14 @@ app.controller('ModalLancamentoProgramadoTransferirController',
                 alert(MESSAGES.lancamento.transferir.validacao.DATA_VENCIMENTO_ORIGEM_VALIDA);
                 return false;
             }    
-            if (form.dataVencimentoDestino.$error.required) {
-                alert(MESSAGES.lancamento.transferir.validacao.DATA_VENCIMENTO_DESTINO_REQUERIDA);
-                return false;
-            }       
-            if (form.dataVencimentoDestino.$modelValue && !moment(form.dataVencimentoDestino.$modelValue).isValid()) {
-                alert(MESSAGES.lancamento.transferir.validacao.DATA_VENCIMENTO_DESTINO_VALIDA);
-                return false;
-            }    
+//            if (form.dataVencimentoDestino.$error.required) {
+//                alert(MESSAGES.lancamento.transferir.validacao.DATA_VENCIMENTO_DESTINO_REQUERIDA);
+//                return false;
+//            }       
+//            if (form.dataVencimentoDestino.$modelValue && !moment(form.dataVencimentoDestino.$modelValue).isValid()) {
+//                alert(MESSAGES.lancamento.transferir.validacao.DATA_VENCIMENTO_DESTINO_VALIDA);
+//                return false;
+//            }    
             if (form.valor.$error.required) {
                 alert(MESSAGES.lancamento.transferir.validacao.VALOR_REQUERIDA);
                 return false;

@@ -261,7 +261,7 @@ app.controller('FluxoCaixaController',
                 series: [{  
                     name: 'Saldos',    
                     data: valores
-                }],         
+                }],                         
                 legend: { enabled: false },
                 credits: {
                     enabled: false
