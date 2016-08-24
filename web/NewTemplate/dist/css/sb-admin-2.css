@@ -3247,3 +3247,28 @@ table.table-condensed tbody tr td.cel-menu {
 .bold {
     font-weight: bold;
 }
+.tab-content > .tab-pane,
+.pill-content > .pill-pane {
+    display: block;     
+    height: 0;          
+    overflow-y: hidden; 
+}
+
+.tab-content > .active,
+.pill-content > .active {
+    height: auto;       
+} 
+
+.show-list {
+    display: block;
+}
+
+.hide-list {
+    display: none;
+}
+
+.typeahead-content {
+    max-height: 300px;
+    min-width: 100%;
+    overflow-y: scroll;
+}

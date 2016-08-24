@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import sun.net.www.protocol.http.AuthCacheImpl;
+import sun.net.www.protocol.http.AuthCacheValue;
 
 /**
  *
@@ -172,6 +174,7 @@ public class ServClienteContrato extends HttpServlet {
             if(!login_reversa.equals("") && !senha_reversa.equals("") && !cartao_reversa.equals("")){
                 //SOLICITA NUMERO PARA SOLICITACAO DE REVERSA                        
                 try {
+                    AuthCacheValue.setAuthCache(new AuthCacheImpl());
                     java.net.Authenticator.setDefault(new java.net.Authenticator() {
                         @Override
                         protected java.net.PasswordAuthentication getPasswordAuthentication() {

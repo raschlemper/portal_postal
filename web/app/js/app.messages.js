@@ -13,7 +13,7 @@ app.constant('MESSAGES', {
             INSERIDO_SUCESSO: "Plano de Conta {0} Inserido com sucesso!"
         },
         info: {
-            PLANO_CONTA_EXISTENTE: "Este Plano de Conta já existe!",
+            PLANO_CONTA_EXISTENTE: "Este Plano de Conta já existe! Confira se o código já foi utilizado neste grupo.",
             NAO_PERMITE_ADD_GRUPO: "Não é permitido adicionar contas a um plano de conta que possua lançamentos vinculados.",
             NAO_PERMITE_GRUPO: "Só é permitido realizar lançamentos em plano de conta que não possuam planos de conta vinculados!"
         }
@@ -47,7 +47,8 @@ app.constant('MESSAGES', {
             CONFIRMAR_EXCLUIR_TODOS: "Deseja realmente excluir estes lançamentos?",
             CONFIRMAR_EXCLUIR_PROGRAMADOS_TODOS: "Deseja realmente excluir estes lançamentos? <br/> Alguns lançamentos parcelados não poderão ser excluídos. É necessário excluir todos os lançamentos posteriores!",
             EXCLUIR_POSTERIOR: "Este lançamento não pode ser excluído. É necessário excluir todos os lançamentos posteriores!",
-            SEM_LANCAMENTO_SELECIONADO: "Nenhum lançamento foi selecionado!"
+            SEM_LANCAMENTO_SELECIONADO: "Nenhum lançamento foi selecionado!",
+            FAVORECIDO_NAO_CADASTRADO: "Este favorecido não esta cadastrado!"
         },
         validacao: {
             DATA_LANCAMENTO_REQUERIDA: "Preencha a data do lançamento!",

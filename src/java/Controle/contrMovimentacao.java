@@ -404,8 +404,9 @@ public class contrMovimentacao {
                 String last_status_name = result.getString("last_status_name");
                 Date prazo_estimado = result.getDate("prazo_estimado");
                 Timestamp prazo_cumprido = result.getTimestamp("prazo_cumprido");
+                String obs = result.getString("obs");
 
-                Movimentacao mov = new Movimentacao(id, dataPostagem, descServico, numObjeto, destinatario1, peso, cep1, valorServico, quantidade, departamentos, status, dataEntrega, notaFiscal, numVenda, numCaixa, valorDeclarado, valorDestino, paisDestino, contratoEct, conteudoObjeto, siglaServAdicionais, codStatus, altura, largura, comprimento, idPre_venda, idOS, last_status_date, last_status_code, last_status_type, last_status_name, prazo_estimado, prazo_cumprido);
+                Movimentacao mov = new Movimentacao(id, dataPostagem, descServico, numObjeto, destinatario1, peso, cep1, valorServico, quantidade, departamentos, status, dataEntrega, notaFiscal, numVenda, numCaixa, valorDeclarado, valorDestino, paisDestino, contratoEct, conteudoObjeto, siglaServAdicionais, codStatus, altura, largura, comprimento, idPre_venda, idOS, last_status_date, last_status_code, last_status_type, last_status_name, prazo_estimado, prazo_cumprido, obs);
                 movimentacao.add(mov);
             }
             valores.close();

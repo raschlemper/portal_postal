@@ -50,6 +50,7 @@
             <th><h5>CONTEÚDO</h5></th>
             <th><h5>CONTRATO ECT</h5></th>
             <th><h5>DESTINO</h5></th>
+            <th><h5>OBS</h5></th>
         </tr>
     </thead>
     <tbody>
@@ -149,6 +150,7 @@
             <td><%= mov.getConteudoObjeto()%></td>
             <td><%= mov.getContratoEct()%></td>
             <td><%= mov.getPaisDestino()%></td>
+            <td><%= mov.getObs()%></td>
         </tr>
         <%}%>
     </tbody>

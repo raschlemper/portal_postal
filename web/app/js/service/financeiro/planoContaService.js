@@ -43,6 +43,7 @@ app.factory('PlanoContaService', function($http, PromiseService) {
                 nivel: estrutura.nivel, 
                 ehGrupo: (estrutura.contas ? true : false),
                 idGrupo: (estrutura.grupo ? estrutura.grupo.idPlanoConta : null),
+                codigo: estrutura.estrutura,
                 descricao: estrutura.descricao 
             });
             if(estrutura.contas) { flatten(estrutura.contas, estruturasLista); }

@@ -47,6 +47,7 @@ public class LancamentoProgramadoService {
     public LancamentoProgramado find(Integer idLancamentoProgramado) throws Exception {
         init();
         LancamentoProgramado lancamentoProgramado = lancamentoProgramadoDAO.find(idLancamentoProgramado);
+        if(lancamentoProgramado == null) return lancamentoProgramado;
         lancamentoProgramado = setParcelas(lancamentoProgramado);
         lancamentoProgramado = setRateios(lancamentoProgramado);
         lancamentoProgramado = setLancamentos(lancamentoProgramado);
@@ -135,6 +136,7 @@ public class LancamentoProgramadoService {
         init();
         if(!podeExcluir(idLancamentoProgramado)) throw new Exception("Este lançamento não pode ser excluído!"); 
         LancamentoProgramado lancamentoProgramado = find(idLancamentoProgramado);
+        if(lancamentoProgramado == null) return lancamentoProgramado;
         removerLancamentoTransferencia(lancamentoProgramado);
         removerLancamentoParcela(lancamentoProgramado, null);
         removerLancamentoRateio(lancamentoProgramado, null);
@@ -188,7 +190,7 @@ public class LancamentoProgramadoService {
     // ***** TRANSFERENCIA ***** //
     
     private void removerLancamentoTransferencia(LancamentoProgramado lancamentoProgramado) throws Exception {
-        if(lancamentoProgramado.getModelo() == TipoModeloLancamento.TRANSFERENCIA) {
+        if(lancamentoProgramado.getModelo() == TipoModeloLancamento.TRANSFERENCIA_PROGRAMADO) {
             LancamentoProgramadoTransferencia lancamentoTransferencia = lancamentoProgramadoTransferenciaService
                     .findByLancamento(lancamentoProgramado.getIdLancamentoProgramado());
             lancamentoProgramadoTransferenciaService.delete(lancamentoTransferencia.getIdLancamentoProgramadoTransferencia());

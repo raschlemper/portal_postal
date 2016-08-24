@@ -76,6 +76,29 @@ public class ContrCep {
             Conexao.desconectar(con);
         }
     }
+    public static String estadoCep(String cep) {
+        Connection con = Conexao.conectarCep();
+        int c = Integer.parseInt(cep);
+        try {         
+            
+            String sql = "SELECT ufe_sg FROM log_faixa_uf WHERE ufe_cep_ini <= "+c+" AND ufe_cep_fim >= "+c+"";
+           
+            PreparedStatement valores = con.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            String uf = "";
+            if (result.next()) {
+                
+                uf = result.getString("ufe_sg");
+             
+            }
+            return uf;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("ContrCep", "SQLException", "estadoCep", e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(con);
+        }
+    }
     
     
     public static ArrayList<Endereco> pesquisaPaises(String servico) {

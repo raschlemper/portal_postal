@@ -1,4 +1,4 @@
-<script type="text/ng-template" id="planoContaTemplate.html">
+<!--<script type="text/ng-template" id="planoContaTemplate.html">
   <a>
       <span bind-html-unsafe="match.label" ng-class="{'bold': match.model.ehGrupo}"></span>
   </a>
@@ -12,4 +12,13 @@
             typeahead-template-url="planoContaTemplate.html"            
             typeahead-on-select="selectPlanoConta($item)" 
             typeahead="planoConta.descricao for planoConta in planoContas | filter:{descricao:$viewValue} | limitTo:10">
-</div>
+</div>-->
+<label class="small">Plano de Conta</label>
+<app-typeahead item-model="planoContaModel" 
+               items="planoContas" 
+               filter="filter"
+               events="events"
+               field="descricao"
+               placeholder="Plano de conta" 
+               name="planoConta">                      
+</app-typeahead>

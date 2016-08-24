@@ -30,6 +30,17 @@ app.factory('FinanceiroValidation', function(ModalService, LISTAS, MESSAGES) {
         return true;
     };
 
+    var favorecidoResultado = function(favorecidos, favorecidoSelected) {
+        var result = _.find(favorecidos, function(favorecido) { 
+            return favorecido.nome == favorecidoSelected; 
+        });
+        if(!result) {
+            modalMessage(MESSAGES.lancamento.info.FAVORECIDO_NAO_CADASTRADO);
+            return false;
+        };
+        return true;
+    };
+
     var rateioSaldo = function(valor, rateios) {
         var saldo = saldoRateio(rateios)
         if(!valor || !saldo) return true;
@@ -59,6 +70,7 @@ app.factory('FinanceiroValidation', function(ModalService, LISTAS, MESSAGES) {
         contaEncerrada: contaEncerrada,
         planoContaResultado: planoContaResultado,
         centroCustoResultado: centroCustoResultado,
+        favorecidoResultado: favorecidoResultado,
         rateioSaldo: rateioSaldo
         
     }

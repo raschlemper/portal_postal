@@ -1,4 +1,4 @@
-app.directive('centroCusto', function(CentroCustoService, ListaService) {
+app.directive('centroCusto', function(CentroCustoService, ListaService, FinanceiroValidation) {
     
     return {
         restrict: 'E',
@@ -7,6 +7,8 @@ app.directive('centroCusto', function(CentroCustoService, ListaService) {
         link: function($scope, element, attr, controller) {  
             
             var init = function() {
+                $scope.filter = { name: 'centroCusto', args: null };
+                $scope.events = { 'selectItem': selectCentroCusto };
                 centroCustos(); 
             }        
         
@@ -29,9 +31,14 @@ app.directive('centroCusto', function(CentroCustoService, ListaService) {
                 }                 
             }
         
-            $scope.selectCentroCusto = function(centroCusto) {
+            var selectCentroCusto = function(centroCusto) {
+                if(!validarCentroCusto(centroCusto)) return;
                 $scope.centroCustoModel = centroCusto;
-            }
+            };
+        
+            var validarCentroCusto = function(centroCusto) {
+                return FinanceiroValidation.centroCustoResultado(centroCusto);
+            };
             
             init();
         }

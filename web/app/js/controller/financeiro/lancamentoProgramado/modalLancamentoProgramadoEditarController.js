@@ -7,6 +7,7 @@ app.controller('ModalLancamentoProgramadoEditarController',
         ModalService, DatePickerService, LancamentoHandler, ListaService, FinanceiroValidation, LISTAS, MESSAGES) {
 
         var init = function () {  
+            $scope.favorecidos = [];
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
             $scope.datepickerVencimento = angular.copy(DatePickerService.default); 
             $scope.datepickerLancamento = angular.copy(DatePickerService.default); 
@@ -206,6 +207,10 @@ app.controller('ModalLancamentoProgramadoEditarController',
         $scope.validarCentroCusto = function(centroCusto) {
             return FinanceiroValidation.centroCustoResultado(centroCusto);
         };  
+        
+        $scope.validarFavorecido = function(favorecido) {
+            return FinanceiroValidation.favorecidoResultado($scope.favorecidos, favorecido);
+        }; 
 
         $scope.validarRateio = function(valor, lancamentoProgramado) {
             if (!lancamentoProgramado.rateios || !lancamentoProgramado.rateios.length) return true;
@@ -231,6 +236,9 @@ app.controller('ModalLancamentoProgramadoEditarController',
                     return false;
                 }
             } 
+            if (!$scope.validarFavorecido(form.favorecido.$modelValue)) {
+                return false;
+            }  
             if (form.dataCompetencia.$error.required) {
                 alert(MESSAGES.lancamento.programar.validacao.DATA_COMPETENCIA_REQUERIDA);
                 return false;

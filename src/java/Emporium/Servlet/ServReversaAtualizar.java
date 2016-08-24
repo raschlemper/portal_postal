@@ -17,6 +17,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import sun.net.www.protocol.http.AuthCacheImpl;
+import sun.net.www.protocol.http.AuthCacheValue;
 
 /**
  *
@@ -40,6 +42,7 @@ public class ServReversaAtualizar extends HttpServlet {
         final String usuario = request.getParameter("usuario");//"jcsbrasil";
         final String senha = request.getParameter("senha");//"jcs.123";
 
+        AuthCacheValue.setAuthCache(new AuthCacheImpl());
         java.net.Authenticator.setDefault(new java.net.Authenticator() {
             @Override
             protected java.net.PasswordAuthentication getPasswordAuthentication() {

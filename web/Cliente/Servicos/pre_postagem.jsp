@@ -371,12 +371,12 @@
                     alert('O Valor Declarado Maximo de Cartas é de R$ 500,00!');
                     document.getElementById("vd").focus();
                     return false;
-                /* A PARTIR DE 22/08/2016
+                /* A PARTIR DE 22/08/2016*/
                  } else if (form.servico.value === 'PAC' && form.vd.value > 3000) {
                     alert('O Valor Declarado Maximo do PAC é de R$ 3.000,00!');
                     document.getElementById("vd").focus();
                     return false;
-                */
+                
                 } else if (form.vd.value > 10000) {
                     alert('O Valor Declarado Maximo de Encomendas é de R$ 10.000,00!');
                     document.getElementById("vd").focus();
