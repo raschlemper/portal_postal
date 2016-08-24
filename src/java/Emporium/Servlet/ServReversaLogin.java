@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import sun.net.www.protocol.http.AuthCacheImpl;
+import sun.net.www.protocol.http.AuthCacheValue;
 
 /**
  *
@@ -40,7 +42,8 @@ public class ServReversaLogin extends HttpServlet {
             
             final String usuario = request.getParameter("login").trim();
             final String senha = request.getParameter("senha").trim();
-            
+
+        AuthCacheValue.setAuthCache(new AuthCacheImpl());
             java.net.Authenticator.setDefault(new java.net.Authenticator() {
                 @Override
                 protected java.net.PasswordAuthentication getPasswordAuthentication() {

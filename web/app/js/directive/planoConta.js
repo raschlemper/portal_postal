@@ -7,6 +7,8 @@ app.directive('planoConta', function(PlanoContaService, ListaService, Financeiro
         link: function($scope, element, attr, controller) {  
             
             var init = function() {
+                $scope.filter = { name: 'planoConta', args: null };
+                $scope.events = { 'selectItem': selectPlanoConta };
                 if($scope.tipo) {
                     planoContasByTipo($scope.tipo);
                 } else {
@@ -43,7 +45,7 @@ app.directive('planoConta', function(PlanoContaService, ListaService, Financeiro
                 }                 
             }
         
-            $scope.selectPlanoConta = function(planoConta) {
+            var selectPlanoConta = function(planoConta) {
                 if(!validarPlanoConta(planoConta)) return;
                 $scope.planoContaModel = planoConta;
             }

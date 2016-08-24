@@ -7,6 +7,7 @@ app.controller('ModalLancamentoEditarController',
         ModalService, DatePickerService, ListaService, FinanceiroValidation, LISTAS, MESSAGES) {
 
         var init = function () {  
+            $scope.favorecidos = [];
             $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
             $scope.datepickerLancamento = angular.copy(DatePickerService.default); 
             $scope.modelos = LISTAS.modeloLancamento;
@@ -149,6 +150,10 @@ app.controller('ModalLancamentoEditarController',
         $scope.validarCentroCusto = function(centroCusto) {
             return FinanceiroValidation.centroCustoResultado(centroCusto);
         }; 
+        
+        $scope.validarFavorecido = function(favorecido) {
+            return FinanceiroValidation.favorecidoResultado($scope.favorecidos, favorecido);
+        }; 
 
         var validarRateio = function(lancamento) {
             if (!lancamento.rateios || !lancamento.rateios.length) return true;
@@ -169,6 +174,9 @@ app.controller('ModalLancamentoEditarController',
                     return false;
                 }
             } 
+            if (!$scope.validarFavorecido(form.favorecido.$modelValue)) {
+                return false;
+            }  
             if (form.dataCompetencia.$error.required) {
                 alert(MESSAGES.lancamento.validacao.DATA_COMPETENCIA_REQUERIDA);
                 return false;

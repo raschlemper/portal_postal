@@ -5,6 +5,7 @@
 package Emporium.Controle;
 
 import Controle.*;
+import static Controle.ContrCep.estadoCep;
 import Entidade.Amarracao;
 import Entidade.ArquivoImportacao;
 import Entidade.Clientes;
@@ -27,6 +28,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -35,6 +37,9 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.pdfbox.text.PDFTextStripperByArea;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -56,21 +61,20 @@ public class ContrPreVendaImporta {
     private static String FALHA = "";
     private static String AVISO = "";
     private static final int MAX_ALLOWED = 1000;
-    private static final Integer[] CEPS_SUSPENSOS = {
-        20271080, 20271090, 20271100, 20550140, 20271150, 
-        20271110, 20271111, 20271130, 20271160, 20271260, 20550170,
-        20756120, 20756121, 20770001,
-        20770002, 20755330, 20756116, 20756115, 20760225, 20760226, 20770061,
-        20770062, 20770010, 20770006, 20770060, 20755310, 20755320, 20756085,
-        20755300, 20755290, 20755280, 20770100, 20770080, 20770070, 20770210,
-        20770120, 20770090, 20755250, 22780160, 22783127, 22783119, 22783135,
-        22783145, 22790714, 22775023, 22775024, 22775025, 22775026, 22775027, 
-        22775028, 22775029, 22775030, 22775031, 22775032, 22775033, 22775034, 
-        22775035, 22775036, 22775037, 22775038, 22775039, 22775040, 
-        22775060, 22775120, 22775051,
-        21615220, 21615310, 21615435, 21745590, 21745520, 21745420, 21750330,
-        21750320, 21735035, 21620070, 21853000
-    };
+    private static final Integer[] CEPS_SUSPENSOS = {-1};
+
+    private static float verificaVD(float vd, String servico) {
+        if (vd > 0 && vd < 17) {
+            return 17;
+        } else if ((servico.startsWith("IMPRESSO") || servico.startsWith("MDPB") || servico.equals("CARTA")) && vd > 500) {
+            return 500;
+        } else if ((servico.startsWith("PAC") || servico.equals("PAX")) && vd > 500) {
+            return 3000;
+        } else if (vd > 10000) {
+            return 10000;
+        }
+        return vd;
+    }
 
     public static ArrayList<ArquivoImportacao> validaDadosArquivo(ArrayList<ArquivoImportacao> listaAi, int idCliente, String servicoEscolhido, String nomeBD) {
         AVISO = "";
@@ -162,11 +166,11 @@ public class ContrPreVendaImporta {
                 } else if (ai.getServico().startsWith("SEDEX")) {
                     servico = "SEDEX";
                 } else if (ai.getServico().startsWith("MDPB")) {
-                    servico = "CARTA";                    
+                    servico = "CARTA";
                     String resultado = ContrServicoAbrangencia.verificaMDPBxCep(cepInteiro, nomeBD);
-                    if(resultado != null && resultado.equals("erro")){
+                    if (resultado != null && resultado.equals("erro")) {
                         AVISO += "<br/>Linha n." + linha + " - CEP " + ai.getCep() + " nao aceita MDPB! O servico foi alterado para CARTA!";
-                    }else{
+                    } else {
                         servico = resultado;
                     }
                 }
@@ -174,9 +178,7 @@ public class ContrPreVendaImporta {
                 float vd = 0;
                 try {
                     vd = Float.parseFloat(ai.getVd().replace(",", ".").trim());
-                    if (vd > 0 && vd < 12) {
-                        vd = 12;
-                    }
+                    vd = verificaVD(vd, servico);
                 } catch (NumberFormatException e) {
                     FALHA += "<br/>Linha n." + ai.getNrLinha() + " - Valor Declr. " + ai.getVd() + " invalido!";
                 }
@@ -185,11 +187,11 @@ public class ContrPreVendaImporta {
                     if (!servico.equals("CARTA") && cs == cepInteiro) {
                         servico = "MSGRIO";
                     }
-                } 
-                
+                }
+
                 if (servico.equals("MSGRIO")) {
                     FALHA += "<br/>Linha n." + linha + " <br/>Os envios para o CEP " + ai.getCep() + " estao suspensao ate 20/08/2016!<br/>Motivo: Jogos Olimpicos Rio 2016!<br/>Remova este objeto do arquivo para importar.";
-                }else if (servico.equals("")) {
+                } else if (servico.equals("")) {
                     FALHA += "<br/>Linha n." + ai.getNrLinha() + " - Servico " + ai.getServico() + " invalido!";
                 } else if (!ai.getNrObjeto().equals("avista") && !CalculoEtiqueta.validaNumObjeto(ai.getNrObjeto())) {
                     FALHA += "<br/>Linha n." + ai.getNrLinha() + " - Etiqueta " + ai.getNrObjeto() + " invalida!";
@@ -706,6 +708,226 @@ public class ContrPreVendaImporta {
 
         } catch (IOException e) {
             return "Não foi possivel ler o arquivo: " + e;
+        } catch (Exception e) {
+            return "Falha na importacao dos pedidos: " + e;
+        }
+
+    }
+
+    private static String getNomeDestinatario(String dests[], int position) {
+
+        return (dests[position]).split("\r\n")[2].replace(" ", " ");
+    }
+
+    private static String getLinhaEndereco(String dests[], int position) {
+        String lines[] = (dests[position]).split("\r\n");
+        int pos = 0;
+        for (int i = 0; i < lines.length; i++) {
+            if (lines[i].contains("pedido")) {
+                pos = i;
+            }
+        }
+        String[] arr2 = Arrays.copyOfRange(lines, 3, pos - 2);
+        String res = "";
+        for (String linha : arr2) {
+            res += " " + linha.trim();
+        }
+
+        return res.trim().replace(" ", " ");
+    }
+
+    private static String getEndereco(String linhaEnd) {
+        String res[] = linhaEnd.split(",");
+        return res[0].trim().replace(" ", " ");
+
+    }
+
+    private static String getComplemento(String linhaEnd) {
+        String res[] = linhaEnd.split(",");
+        String retorno = "";
+        for (int i = 1; i < res.length - 2; i++) {
+            retorno += res[i].trim() + " ";
+        }
+        return retorno.trim().replace(" ", " ");
+
+    }
+
+    private static String getCidade(String linhaEnd) {
+        String res[] = linhaEnd.split(",");
+        return res[(res.length) - 2].trim().replace(" ", " ");
+
+    }
+
+    private static String getCep(String dests[], int position) {
+        String lines[] = (dests[position]).split("\r\n");
+        String cep = "";
+        for (String line : lines) {
+            if (!line.contains("pedido")) {
+                line = replaceNonDigits(line);
+                if (line.length() == 8) {
+                    cep = line;
+                }
+            }
+        }
+
+        return cep;
+    }
+
+    private static String getNumPedido(String dests[], int position) {
+        String lines[] = (dests[position]).split("\r\n");
+        String res = "";
+        for (String line : lines) {
+            if (line.contains("pedido")) {
+                res = line.split(":")[1].trim();
+            }
+        }
+        return res;
+    }
+
+    private static String getEnvio(String dests[], int position) {
+        String lines[] = (dests[position]).split("\r\n");
+        String res = "";
+        String aux = "";
+        for (String line : lines) {
+            if (line.contains("envio")) {
+                aux = line.split("envio")[1].trim();
+                if (aux.contains("Impresso")) {
+                    res = "MDPB";
+                } else {
+                    res = "1";
+                }
+            }
+        }
+        return res;
+    }
+
+    private static String getTipoReg(String dests[], int position) {
+        String lines[] = (dests[position]).split("\r\n");
+        String res = "";
+        String aux = "";
+        for (String line : lines) {
+            if (line.contains("envio")) {
+                aux = line.split("envio")[1].trim();
+                if (aux.contains("módico")) {
+                    res = "RM";
+                } else {
+                    res = "0";
+                }
+            }
+
+        }
+        return res;
+    }
+
+    public static String replaceNonDigits(String string) {
+        if (string == null || string.length() == 0) {
+            return "0";
+        }
+        String ret = string.replaceAll("[^0-9]+", "");
+        if (ret.equals("")) {
+            return "0";
+        } else {
+            return ret;
+        }
+    }
+
+    public static String importaPedidoEV(FileItem item, int idCliente, int idDepartamento, String departamento, String contrato, String cartaoPostagem, String servicoEscolhido, String nomeBD) {
+
+        ArrayList<ArquivoImportacao> listaAi = new ArrayList<ArquivoImportacao>();
+        PDDocument document = null;
+        try {
+            document = PDDocument.load(item.getInputStream());
+            document.getClass();
+            if (!document.isEncrypted()) {
+                PDFTextStripperByArea stripper = new PDFTextStripperByArea();
+                stripper.setSortByPosition(true);
+                PDFTextStripper Tstripper = new PDFTextStripper();
+                String st = Tstripper.getText(document);
+                document.close();
+                String dests[] = st.split("Destinatário");
+                if (dests.length > MAX_ALLOWED) {
+                    return "Quantidade maxima de importacao de " + MAX_ALLOWED + " objetos por importacao!";
+                } else {
+                    for (int i = 1; i < dests.length; i++) {                       
+                        ArquivoImportacao ai = new ArquivoImportacao();
+                        ai.setIdCliente(idCliente);
+                        ai.setIdDepartamento(idDepartamento);
+                        ai.setDepartamento(departamento);
+                        ai.setContrato(contrato);
+                        ai.setCartaoPostagem(cartaoPostagem);
+                        ai.setMetodoInsercao("IMPORTACAO_EV");
+                        ai.setCodECT(0);
+                        ai.setNrLinha(i + "");
+
+                        ai.setNrObjeto("avista");
+                        ai.setNome(getNomeDestinatario(dests, i));
+                        ai.setEmpresa("");
+                        ai.setCpf("");
+                        ai.setCep(getCep(dests, i));
+                        ai.setEndereco(getEndereco(getLinhaEndereco(dests, i)));
+                        ai.setNumero("");
+                        ai.setComplemento(getComplemento(getLinhaEndereco(dests, i)));
+                        ai.setBairro("");
+                        ai.setCidade(getCidade(getLinhaEndereco(dests, i)));
+
+                        ai.setUf(estadoCep(getCep(dests, i)));
+                        ai.setEmail("");
+                        ai.setCelular("");
+                        ai.setAosCuidados("");
+                        ai.setNotaFiscal(getNumPedido(dests, i));
+                        String serv = getEnvio(dests, i);
+                        if (serv.equals("MDPB")) {
+                            ai.setServico("MDPB");
+                        } else {
+                            ai.setServico("SEDEX");
+                        }
+                        String rg = getTipoReg(dests, i);
+                        if (serv.equals("0")) {
+                            ai.setRm("0");
+                        } else {
+                            ai.setRm("1");
+                        }
+                        ai.setObs("");
+                        ai.setConteudo("");
+                        ai.setChave("");
+                        ai.setPeso("0");
+                        ai.setAltura("4");
+                        ai.setLargura("11");
+                        ai.setComprimento("24");
+                        ai.setAr("0");
+                        ai.setMp("0");
+                        ai.setVd("0");
+                        listaAi.add(ai);
+                    }
+
+                    if (listaAi.size() > 0) {
+                        //valida os dados do arquivo para efetuar a importacao
+                        listaAi = validaDadosArquivo(listaAi, idCliente, servicoEscolhido, nomeBD);
+                        if (!FALHA.equals("")) {
+                            //retorna mensagem de FALHA
+                            return FALHA;
+                        } else {
+                            //MONTA SQL
+                            String sql = montaSqlPedido(listaAi, nomeBD);
+                            boolean flag = inserir(sql, nomeBD);
+                            if (flag) {
+                                return "Pedidos Importados Com Sucesso!<br/>" + AVISO;
+                            } else {
+                                return "Falha ao importar Pedidos!";
+                            }
+                        }
+                    } else {
+                        return "Nenhum pedido no arquivo para importar!";
+                    }
+
+                }
+
+            } else {
+                return "Falha ao importar Pedidos!";
+            }
+
+        } catch (IOException ex) {
+            return "Não foi possivel ler o arquivo: " + ex;
         } catch (Exception e) {
             return "Falha na importacao dos pedidos: " + e;
         }

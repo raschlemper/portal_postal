@@ -5,6 +5,7 @@ app.controller('ModalLancamentoProgramadoGerarController',
     function ($scope, LancamentoConciliadoService, FavorecidoService, ListaService, ModalService, LancamentoHandler, LancamentoRateioHandler, LISTAS, MESSAGES) {
 
         var init = function () {  
+            $scope.favorecidos = [];
             getTitle();
             initStep($scope.lancamento);
             favorecidos();
@@ -85,6 +86,9 @@ app.controller('ModalLancamentoProgramadoGerarController',
                     return false;
                 }
             } 
+            if (!$scope.validarFavorecido(form.favorecido.$modelValue)) {
+                return false;
+            }  
             if (form.dataCompetencia.$error.required) {
                 alert(MESSAGES.lancamento.validacao.DATA_COMPETENCIA_REQUERIDA);
                 return false;

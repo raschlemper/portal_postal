@@ -39,7 +39,7 @@ app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES
                     return;
                 }
                 rateio.percentual = calculatePercentual(lancamentoRatear, rateio);
-                $scope.lancamentoRatear.rateios.push(rateio);
+                $scope.lancamentoRatear.rateios.push(angular.copy(rateio));
                 setRateioDefault(lancamentoRatear, rateio);
             };
 

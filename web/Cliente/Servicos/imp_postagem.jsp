@@ -98,6 +98,10 @@
                         fecharTelaEspera();
                         alert("O arquivo a ser importado deve ser '.XLS' !");
                         return false;
+                    }else if((tipo === 'EV') && ext !== ".PDF") {                
+                        fecharTelaEspera();
+                        alert("O arquivo a ser importado deve ser '.PDF' !");
+                        return false;
                     }
                 }
                 form.submit();
@@ -113,53 +117,60 @@
             }
             
             function mudaFileOpts(tipo){
-                if(tipo == 'CSV' || tipo == 'INTERLOGIC' || tipo == 'WEBVENDAS'){
+                if(tipo === 'CSV' || tipo === 'INTERLOGIC' || tipo === 'WEBVENDAS'){
                     document.getElementById('arquivo').accept = '.csv';
                     document.getElementById('arquivo').multiple = false;               
                     document.getElementById('dd_vd').className = 'esconder'; 
                     document.getElementById('dd_ar').className = 'esconder'; 
                     document.getElementById('form1').action = '../../ServPreVendaImportar'; 
                     $('#tipo_serv option[value="ARQUIVO"]').text("DEFINIDO NO ARQUIVO");
-                }else if (tipo == 'NFE'){ 
+                }else if (tipo === 'NFE'){ 
                     document.getElementById('arquivo').accept = '.xml'; 
                     document.getElementById('arquivo').multiple = true;                   
                     document.getElementById('dd_vd').className = 'mostrar'; 
                     document.getElementById('dd_ar').className = 'mostrar'; 
                     document.getElementById('form1').action = '../../ServPreVendaImportarNFe';   
                     $('#tipo_serv option[value="ARQUIVO"]').text("SELECOINE UM SERVICO");    
-                }else if (tipo == 'TRAY' || tipo == 'LINX'){
+                }else if (tipo === 'TRAY' || tipo === 'LINX'){
                     document.getElementById('arquivo').accept = '.csv'; 
                     document.getElementById('arquivo').multiple = false;                   
                     document.getElementById('dd_vd').className = 'mostrar'; 
                     document.getElementById('dd_ar').className = 'mostrar'; 
                     document.getElementById('form1').action = '../../ServPreVendaImportar';   
                     $('#tipo_serv option[value="ARQUIVO"]').text("DEFINIDO NO ARQUIVO");
-                }else if (tipo == 'EDI'){
+                }else if (tipo === 'EDI'){
                     document.getElementById('arquivo').accept = '.txt'; 
                     document.getElementById('arquivo').multiple = false;                   
                     document.getElementById('dd_vd').className = 'mostrar'; 
                     document.getElementById('dd_ar').className = 'mostrar'; 
                     document.getElementById('form1').action = '../../ServPreVendaImportar';  
                     $('#tipo_serv option[value="ARQUIVO"]').text("DEFINIDO NO ARQUIVO");
-                }else if (tipo == 'XML' || tipo == 'PLP'){
+                }else if (tipo === 'XML' || tipo === 'PLP'){
                     document.getElementById('arquivo').accept = '.xml';
                     document.getElementById('arquivo').multiple = false;               
                     document.getElementById('dd_vd').className = 'esconder'; 
                     document.getElementById('dd_ar').className = 'esconder';  
                     document.getElementById('form1').action = '../../ServPreVendaImportar';     
                     $('#tipo_serv option[value="ARQUIVO"]').text("DEFINIDO NO ARQUIVO");
-                }else if (tipo == 'LADOAVESSO'){
+                }else if (tipo === 'LADOAVESSO'){
                     document.getElementById('arquivo').accept = '.txt'; 
                     document.getElementById('arquivo').multiple = false;               
                     document.getElementById('dd_vd').className = 'esconder';  
                     document.getElementById('dd_ar').className = 'esconder';  
                     document.getElementById('form1').action = '../../ServPreVendaImportar';  
                     $('#tipo_serv option[value="ARQUIVO"]').text("DEFINIDO NO ARQUIVO");
-                }else if (tipo == 'PS'){
+                }else if (tipo === 'PS'){
                     document.getElementById('arquivo').accept = '.xls'; 
                     document.getElementById('arquivo').multiple = false;               
                     document.getElementById('dd_vd').className = 'esconder';  
                     document.getElementById('dd_ar').className = 'esconder';  
+                    document.getElementById('form1').action = '../../ServPreVendaImportar';  
+                    $('#tipo_serv option[value="ARQUIVO"]').text("DEFINIDO NO ARQUIVO");
+                }else if (tipo === 'EV'){
+                    document.getElementById('arquivo').accept = '.pdf'; 
+                    document.getElementById('arquivo').multiple = false;               
+                    document.getElementById('dd_vd').className = 'mostrar';  
+                    document.getElementById('dd_ar').className = 'mostrar';  
                     document.getElementById('form1').action = '../../ServPreVendaImportar';  
                     $('#tipo_serv option[value="ARQUIVO"]').text("DEFINIDO NO ARQUIVO");
                 }
@@ -200,6 +211,7 @@
                                         <option value="EDI">ARQUIVO EDI</option>
                                         <option value="LINX">ARQUIVO LINX</option>
                                         <option value="WEBVENDAS">ARQUIVO WEBVENDAS</option>
+                                        <option value="EV">ARQUIVO ESTANTE VIRTUAL</option>
                                         <!-- <option value="PS">ARQUIVO PS SERVICE EXCELL</option> -->
                                         <option value="PSN">ARQUIVO PS SERVICE</option>
                                         <%if(idEmp == 236505){%><option value="LADOAVESSO">ARQUIVO LADOAVESSO</option><%}%>

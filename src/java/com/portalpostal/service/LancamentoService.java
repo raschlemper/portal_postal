@@ -277,7 +277,10 @@ public class LancamentoService {
     private void removerLancamentoProgramado(Lancamento lancamento) throws Exception {
         LancamentoProgramado lancamentoProgamado = lancamento.getLancamentoProgramado();
         if(lancamentoProgamado != null) {
-            Integer numeroParcela = lancamento.getNumeroParcela() - 1;
+            Integer numeroParcela = 0;
+            if(lancamento.getNumeroParcela() != null) {
+                numeroParcela = lancamento.getNumeroParcela() - 1;
+            }
             lancamentoProgamado.setNumeroParcela(numeroParcela);
             updateSituacaoLancamentoProgramadoEncerrado(lancamentoProgamado);    
             lancamentoProgramadoService.updateNumeroParcela(lancamentoProgamado);            

@@ -40,7 +40,7 @@
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/moment/moment-with-locales.min.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/highcharts-ng/highcharts.src.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/highcharts-ng/highcharts-ng.min.js"></script> 
-        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-file-upload/angular-file-upload.min.js"></script>         
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-file-upload/angular-file-upload.min.js"></script>    
         
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/app.js"></script>         
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/app.config.js"></script>  
@@ -61,6 +61,9 @@
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/conciliadoLancamentoFilter.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/saldoLancamentoFilter.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/numeroCartaoCreditoFilter.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/planoContaFilter.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/centroCustoFilter.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/filter/favorecidoFilter.js"></script>
         
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/animate/listOrdered.js"></script>
         
@@ -70,6 +73,7 @@
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/appRatear.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/appParcelar.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/appDatepicker.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/appTypeahead.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/favorecido.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/planoConta.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/directive/centroCusto.js"></script>

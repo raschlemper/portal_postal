@@ -14,6 +14,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import sun.net.www.protocol.http.AuthCacheImpl;
+import sun.net.www.protocol.http.AuthCacheValue;
 
 /**
  *
@@ -38,6 +40,7 @@ public class ServReversaExcluir extends HttpServlet {
             final String usuario = request.getParameter("loginRev");
             final String senha = request.getParameter("senhaRev");
 
+            AuthCacheValue.setAuthCache(new AuthCacheImpl());
             java.net.Authenticator.setDefault(new java.net.Authenticator() {
                 @Override
                 protected java.net.PasswordAuthentication getPasswordAuthentication() {

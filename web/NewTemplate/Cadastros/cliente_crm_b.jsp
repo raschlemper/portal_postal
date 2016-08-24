@@ -223,7 +223,17 @@
                                     </li>
                                     <li class="list-group-item" >
                                         <table class="table table-condensed">
-                                            <thead><tr><th>Nome</th><th>e-mail</th><th>Telefone</th><th>Setor</th><th>Aniver.</th><th>Relacionamento</th><th>Excluir</th></tr></thead>
+                                            <thead>
+                                                <tr>
+                                                    <th>Nome</th>
+                                                    <th>e-mail</th>
+                                                    <th>Telefone</th>
+                                                    <th>Setor</th>
+                                                    <th>Aniver.</th>
+                                                    <th>Relacionamento</th>
+                                                    <th>Excluir</th>
+                                                </tr>
+                                            </thead>
                                             <tbody>    
 
                                                 <%
@@ -264,7 +274,7 @@
 
                                                 %>
                                                 <tr>
-                                                    <td rowspan ="3" class="<%=odeve%>"><a href="#" class="edita" data-type="text" data-pk="<%=contato.getIdContato()%>" data-name="nome" data-url="ajax/editContato.jsp" ><%=contato.getContato()%></a></td>
+                                                    <td rowspan ="3" class="<%=odeve%>"><a href="#" class="edita" data-type="text" data-pk="<%=contato.getIdContato()%>" data-name="contato" data-url="ajax/editContato.jsp" ><%=contato.getContato()%></a></td>
                                                     <td class="<%=odeve%>"></td>
                                                     <td class="<%=odeve%>"></td>
                                                     <td class="<%=odeve%>"></td>
