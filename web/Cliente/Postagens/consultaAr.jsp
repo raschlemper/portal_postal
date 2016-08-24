@@ -17,10 +17,30 @@
                 String numCliente = String.valueOf(session.getAttribute("idCliente"));
                 int idCliente = Integer.parseInt(numCliente);
 
+                System.out.println(request.getParameter("dataIni"));
+                System.out.println(request.getParameter("dataFim"));
+                System.out.println(request.getParameter("comAr"));
+                System.out.println(request.getParameter("depto"));
+                
                 Date dataAtual = new Date();
                 String vDataAtual = sdf.format(dataAtual);
+                String dataFim = sdf.format(dataAtual); 
                 String dataOntem = Util.SomaData.SomarDiasDatas(dataAtual, -1);
                 String dataInicioCalendario = Util.SomaData.SomarDiasDatas(dataAtual, -150); // diminui 5 meses                       
+                if (request.getParameter("dataFim") != null) {
+                    dataFim = request.getParameter("dataFim");
+                }
+                if (request.getParameter("dataIni") != null) {
+                    dataOntem = request.getParameter("dataIni");
+                }
+                String iddepto = ""; 
+                if(request.getParameter("depto") != null){
+                    iddepto = request.getParameter("depto");
+                }
+                int comAr = 2; 
+                if(request.getParameter("comAr") != null){
+                    comAr = Integer.parseInt(request.getParameter("comAr"));
+                }
 %>
         <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
         <title>Portal Postal | Controle de AR</title>
@@ -191,7 +211,14 @@
             });
 
             function darBaixaAr2() {
+                var formPesquisa = document.formPesquisa;
                 var form = document.formSro;
+                
+                form.dataI.value = formPesquisa.dataIni.value;
+                form.dataF.value = formPesquisa.dataFim.value;
+                form.idDepto.value = formPesquisa.departamento.value;
+                form.comAr.value = formPesquisa.ar.value;
+                
                 if (form.dataRecebimento.value === "") {
                     alert("Preencha a Data de recebimento do AR!");
                     return false;
@@ -207,21 +234,24 @@
                         return false;
                     }
                 }
-                // waitMsg();
+                                
+                //waitMsg();
                 form.submit();
             }
 
         </script>
     </head>
     <body>
+        
+        
         <div id="divInteracao" class="esconder" style="top:15%; left:20%; right:20%; bottom:25%;" align="center">
-            <div style="width: 100%; margin: 15px;">
+            <div style="width: 100%; margin: 15px 0;">
                 <div style="width: 95%; text-align: left;">
                     <div style='float:right;'><a onclick='chamaDivProtecao();' href='#' class='botaoClose'>Fechar</a></div>
                     <div id='titulo1'><span id="numAr"></span> - Insira os Dados do AR</div>
                 </div>
                 <img style="margin-bottom: 25px;" width="100%" src="../../imagensNew/linha.jpg"/>
-                <form  name="formSro" action="../../ServSalvarArImg" method="post" enctype="multipart/form-data">
+                <form  name="formSro" action="../../ServBaixaAr" method="post" enctype="multipart/form-data">
                     <!--   <form name='formObs' action='../../ServAlterarObsColeta' method='post'> -->
                     <ul style="width: 95%; text-align: left;" class="ul_formulario">
                         <li>
@@ -245,6 +275,11 @@
                         </li>
                     </ul>
                     <div class="buttons">
+                        <input type="hidden" name="dataI" id="dataI" value=""/>
+                        <input type="hidden" name="dataF" id="dataF" value=""/>
+                        <input type="hidden" name="idDepto" id="idDepto" value=""/>
+                        <input type="hidden" name="comAr" id="comAr" value=""/>
+                        
                         <input type="hidden" name="sroRec" id="numObjetoAr" value=""/>
                         <input type="hidden" name="codCli" id="codCli" value="<%=idCliente%>"/>
                         <button type="button" class="positive" onclick="darBaixaAr2();" ><img src="../../imagensNew/tick_circle.png" /> SALVAR DADOS</button>
@@ -254,6 +289,10 @@
             </div>
         </div>
         <div id="divProtecao" class="esconder"></div>
+        
+        
+        
+        
 
         <%@ include file="../../Includes/telaMsg.jsp" %>
         <%@ include file="../../Includes/menu_cliente.jsp" %>
@@ -263,7 +302,7 @@
                 <div id="conteudo">
 
                     <ul class="ul_formulario" style="width: 620px; height: 180px; margin-right: 0; border-right: 1px solid silver;">
-                        <form action="baixaAr2.jsp" method="post">
+                        <form action="baixaAr2.jsp" name="formPesquisa" method="post">
                             <li class="titulo">
                                 <dd>Pesquisar Objetos Com A. R.</dd>
                             </li>
@@ -272,14 +311,14 @@
                                     <label>PERIODO DA PESQUISA</label>
                                     <input type="text" style="width:65px;" name="dataIni" id="dataIni" value="<%= dataOntem%>" onkeypress="mascara(this, maskData);" />
                                     até
-                                    <input type="text" style="width:65px;" name="dataFim" id="dataFim" value="<%=vDataAtual%>" onkeypress="mascara(this, maskData);" />
+                                    <input type="text" style="width:65px;" name="dataFim" id="dataFim" value="<%= dataFim %>" onkeypress="mascara(this, maskData);" />
                                 </dd>
                                 <dd>
                                     <label>Somente Objetos com A.R.</label>
                                     <select id="ar" name="ar" style="width:200px;">
-                                        <option selected value="2">Todos</option>
-                                        <option value="0">Que Não Retornou</option>
-                                        <option value="1">Que Já Retornou</option>
+                                        <option <%if(comAr==2){%>selected<%}%> value="2">Todos</option>
+                                        <option <%if(comAr==0){%>selected<%}%> value="0">Que Não Retornou</option>
+                                        <option <%if(comAr==1){%>selected<%}%> value="1">Que Já Retornou</option>
                                     </select>
                                 </dd>
                             </li>
@@ -287,7 +326,7 @@
                                 <dd>
                                     <label>Escolha o Departamento</label>
                                     <select name="departamento" id="departamento" style="width:216px;">
-                                        <option selected value="0">Todos os Departamentos</option>
+                                        <option value="0">Todos os Departamentos</option>
                                         <%
                                             ArrayList<ClientesDeptos> listaDep = ContrClienteDeptos.consultaDeptos(idCliente, nomeBD);
                                             ArrayList<Integer> dpsUser = (ArrayList<Integer>) session.getAttribute("departamentos");
@@ -296,7 +335,7 @@
                                                 String depto = FormataString.removeAccentsToUpper(cd.getNomeDepartamento());
                                                 if (dpsUser.contains(cd.getIdDepartamento())) {
                                         %>
-                                        <option value="<%=depto%>"><%= cd.getNomeDepartamento()%></option>
+                                        <option value="<%=depto%>" <%if(iddepto.equals("depto")){%>selected<%}%>><%= cd.getNomeDepartamento()%></option>
                                         <%}
                                             }%>
                                     </select>

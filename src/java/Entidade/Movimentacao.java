@@ -57,19 +57,10 @@ public class Movimentacao {
     private int last_status_code;
     private String last_status_type;
     private String last_status_name;
+    private String obs;
     private Date prazo_estimado;
     private Timestamp prazo_cumprido;
 
-    /*<th><h3>Cliente</h3></th>
-     <th><h3>Nº do Objeto</h3></th>
-     <th><h3>Serviço</h3></th>                                        
-     <th><h3>Destinatário</h3></th>
-     <th><h3>CEP</h3></th>                                        
-     <th width="40"><h3>AR</h3></th>                                        
-     <th><h3>Impressa em</h3></th>
-     <th><h3>Postada em</h3></th>
-     <th width="120"><h3>Ultimo status</h3></th>
-     <th class="nosort" width="40"><h3>PI</h3></th>*/
     public Movimentacao(Date dataPostagem, String descServico, String numObjeto, String destinatario, String cep, float valorServico, float valorDeclarado, String codCliente, String cliente, String contratoEct, String codigoEct, int codStatus, String status) {
         this.dataPostagem = dataPostagem;
         this.descServico = descServico;
@@ -173,7 +164,8 @@ public class Movimentacao {
             String notaFiscal, String numVenda, String numCaixa, float valorDeclarado, float valorDestino,
             String paisDestino, String contratoEct, String conteudoObjeto, String siglaServAdicionais,
             int codStatus, float altura, float largura, float comprimento, int idPre_venda, int idOS, 
-            Date last_status_date, int last_status_code, String last_status_type, String last_status_name, Date prazo_estimado, Timestamp prazo_cumprido) {
+            Date last_status_date, int last_status_code, String last_status_type, String last_status_name, Date prazo_estimado, Timestamp prazo_cumprido,
+            String obs) {
         this.id = id;
         this.dataPostagem = dataPostagem;
         this.descServico = descServico;
@@ -207,6 +199,7 @@ public class Movimentacao {
         this.last_status_name = last_status_name;
         this.prazo_estimado = prazo_estimado;
         this.prazo_cumprido = prazo_cumprido;
+        this.obs = obs;
     }
 
     public Movimentacao(String seqVenda, Date dataPostagem, String descServico, String numObjeto, String destinatario, String notaFiscal, float peso, String cep, float valorServico, float valorDestino, float quantidade, float valorDeclarado, String contratoEct, float altura, float largura, float comprimento, String siglaServAdicionais, String paisDestino, String codigoEct) {
@@ -596,5 +589,14 @@ public class Movimentacao {
     public void setCliente(String cliente) {
         this.cliente = cliente;
     }
+
+    public String getObs() {
+        return obs;
+    }
+
+    public void setObs(String obs) {
+        this.obs = obs;
+    }
+
 
 }

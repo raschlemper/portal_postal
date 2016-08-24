@@ -56,9 +56,6 @@ public class ServSalvarARImg extends HttpServlet {
                 Part filePart = request.getPart("arquivoRec"); // Retrieves <input type="file" name="file"> 
                 if (filePart != null) {
                     //prints out some information for debugging
-                    System.out.println(filePart.getName());
-                    System.out.println(filePart.getSize());
-                    System.out.println(filePart.getContentType());
                     if (filePart.getSize()>0 && !filePart.getContentType().equals("image/jpeg") && !filePart.getContentType().equals("image/gif") && !filePart.getContentType().equals("image/png")) {
                         sessao.setAttribute("msg", "O Arquivo deve ser um arquivo de imagem .JPG ou .PNG!");
                     } else {

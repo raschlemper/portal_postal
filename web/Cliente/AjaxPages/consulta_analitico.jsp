@@ -42,7 +42,7 @@
         String sql = "SELECT id, descServico, peso, quantidade, valorServico, dataPostagem, codStatus,"
                 + " movimentacao.numObjeto, destinatario, cep, departamento, status, dataEntrega, notaFiscal, numVenda, numCaixa,"
                 + " siglaServAdicionais, contratoEct, valorDestino, valorDeclarado, paisDestino, conteudoObjeto,"
-                + " altura, largura, comprimento, idPre_venda ,idOS, "
+                + " altura, largura, comprimento, idPre_venda ,idOS, obs, "
                 + " last_status_date, last_status_name, last_status_code, last_status_type, prazo_estimado, prazo_cumprido"
                 + " FROM movimentacao"
                 + " LEFT JOIN movimentacao_tracking AS mt ON movimentacao.numObjeto = mt.numObjeto"
@@ -194,6 +194,7 @@
         <th width='50'><h3>PRAZO EST.</h3></th>
         <th width='50'><h3>PRAZO REAL</h3></th>
         <%}%>
+        <th width='100'><h3>OBS.</h3></th>
         </tr>
         </thead>
         <tbody>
@@ -328,6 +329,7 @@
                 <td><%= pz_estimado%></td>
                 <td><%= pz_cumprido%></td>
                 <%}%>
+                <td><%= mov.getObs() %></td>
             </tr>
             <%}%>
         </tbody>
@@ -341,7 +343,7 @@
                 <td nowrap="true">R$ <%= Util.FormatarDecimal.formatarFloat(vlrDecTotal.floatValue())%></td>
                 <td nowrap="true">R$ <%= Util.FormatarDecimal.formatarFloat(vlrCobTotal.floatValue())%></td>
                 <%}%>
-                <td colspan="14"></td>
+                <td colspan="15"></td>
             </tr>
         </tfoot>
     </table>

@@ -1,6 +1,4 @@
-<%@page import="Entidade.empresas"%>
-<%@page import="Entidade.ClientesUsuario"%>
-<%@page import="Util.FormataString"%><%@ page import="java.sql.*, javax.swing.*, java.util.*, java.text.SimpleDateFormat, java.text.DecimalFormat, java.util.Date" %><%
+<%@page import="Entidade.empresas"%><%@page import="Entidade.ClientesUsuario"%><%@page import="Util.FormataString"%><%@ page import="java.sql.*, javax.swing.*, java.util.*, java.text.SimpleDateFormat, java.text.DecimalFormat, java.util.Date" %><%
     response.setContentType("application/xls");
     response.setHeader("Content-disposition", "attachment; filename=relatorio_analitico.csv");
     response.setHeader("Cache-Control", "no-cache");
@@ -17,9 +15,9 @@
 
         if (movimentacao.size() >= 1) {
             if (us.getAcessos().contains(3)) {
-                out.println("OBJETO;SERVIÇO;PESO;QTD;POSTAGEM;VALOR;DECLARADO;A COBRAR;DESTINATÁRIO;CEP;SITUAÇÃO;DATA SIT.;NF;DEPARTAMENTO;ADICIONAIS;CONTEÚDO;CONTRATO ECT;DESTINO");
+                out.println("OBJETO;SERVIÇO;PESO;QTD;POSTAGEM;VALOR;DECLARADO;A COBRAR;DESTINATÁRIO;CEP;SITUAÇÃO;DATA SIT.;NF;DEPARTAMENTO;ADICIONAIS;CONTEÚDO;CONTRATO ECT;DESTINO;OBS");
             } else {
-                out.println("OBJETO;SERVIÇO;PESO;QTD;POSTAGEM;DESTINATÁRIO;CEP;SITUAÇÃO;DATA SIT.;NF;DEPARTAMENTO;ADICIONAIS;CONTEÚDO;CONTRATO ECT;DESTINO");
+                out.println("OBJETO;SERVIÇO;PESO;QTD;POSTAGEM;DESTINATÁRIO;CEP;SITUAÇÃO;DATA SIT.;NF;DEPARTAMENTO;ADICIONAIS;CONTEÚDO;CONTRATO ECT;DESTINO;OBS");
             }
 
             for (int i = 0; i < movimentacao.size(); i++) {
@@ -43,6 +41,7 @@
                 String cepDestino = FormataString.formataCep(mov.getCep());
                 String departamento2 = mov.getDepartamento();
                 String status = mov.getStatus();
+                String obs = mov.getObs();
 
                 Date dataSit = mov.getDataEntrega();
                 String dtSit = sdf.format(mov.getDataPostagem());
@@ -51,9 +50,9 @@
                 }
 
                 if (us.getAcessos().contains(3)) {
-                    out.println(numeroRegistro + ";" + servico2 + ";" + peso + ";" + qtd + ";" + vData + ";" + vValor + ";" + vValorDec + ";" + vValorCob + ";" + destinatario + ";" + cepDestino + ";" + status + ";" + dtSit + ";" + notaFiscal + ";" + departamento2 + ";" + mov.getSiglaServAdicionais() + ";" + mov.getConteudoObjeto() + ";" + mov.getContratoEct() + ";" + mov.getPaisDestino());
+                    out.println(numeroRegistro + ";" + servico2 + ";" + peso + ";" + qtd + ";" + vData + ";" + vValor + ";" + vValorDec + ";" + vValorCob + ";" + destinatario + ";" + cepDestino + ";" + status + ";" + dtSit + ";" + notaFiscal + ";" + departamento2 + ";" + mov.getSiglaServAdicionais() + ";" + mov.getConteudoObjeto() + ";" + mov.getContratoEct() + ";" + mov.getPaisDestino()+";"+obs);
                 } else {
-                    out.println(numeroRegistro + ";" + servico2 + ";" + peso + ";" + qtd + ";" + vData + ";" + destinatario + ";" + cepDestino + ";" + status + ";" + dtSit + ";" + notaFiscal + ";" + departamento2 + ";" + mov.getSiglaServAdicionais() + ";" + mov.getConteudoObjeto() + ";" + mov.getContratoEct() + ";" + mov.getPaisDestino());
+                    out.println(numeroRegistro + ";" + servico2 + ";" + peso + ";" + qtd + ";" + vData + ";" + destinatario + ";" + cepDestino + ";" + status + ";" + dtSit + ";" + notaFiscal + ";" + departamento2 + ";" + mov.getSiglaServAdicionais() + ";" + mov.getConteudoObjeto() + ";" + mov.getContratoEct() + ";" + mov.getPaisDestino()+";"+obs);
                 }
             }
         } else {

@@ -678,6 +678,10 @@
         <servlet-name>LinkImpressaoAR</servlet-name>
         <servlet-class>iReports.LinkImpressaoAR</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ServBaixaAr</servlet-name>
+        <servlet-class>Emporium.Servlet.ServBaixaAr</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ServLogin</servlet-name>
         <url-pattern>/ServLogin</url-pattern>
@@ -1326,6 +1330,10 @@
     <servlet-mapping>
         <servlet-name>LinkImpressaoAR</servlet-name>
         <url-pattern>/LinkImpressaoAR</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServBaixaAr</servlet-name>
+        <url-pattern>/ServBaixaAr</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
