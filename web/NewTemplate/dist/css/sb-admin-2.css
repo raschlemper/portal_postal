@@ -3141,6 +3141,10 @@ div.list-category div.list-group-item {
 .col-tipo {
     padding: 2px !important;
 }
+.col-anexo {
+    color: #444;
+    padding: 2px !important;
+}
 .col-compensado {
     color: #9853C3;
     padding: 2px !important;

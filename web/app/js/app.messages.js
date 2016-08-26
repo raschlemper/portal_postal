@@ -154,8 +154,14 @@ app.constant('MESSAGES', {
             title: {
                 INSERIR: "Inserir Anexo"
             },
+            sucesso: {
+                INSERIDO_SUCESSO: "Anexo Inserido com sucesso!",
+                ALTERADO_SUCESSO: "Anexo Alterado com sucesso!",
+                REMOVIDO_SUCESSO: "Anexo Removido com sucesso!"
+            },
             validacao: {
-                ARQUIVO_REQUERIDA: "Selecione o arquivo!"
+                ARQUIVO_REQUERIDA: "Selecione o arquivo!",
+                ARQUIVO_NAO_PERMITIDO: "Este tipo de arquivo não é permitido!"
             }
         },
         compensar: {

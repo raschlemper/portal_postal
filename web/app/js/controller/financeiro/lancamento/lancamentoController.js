@@ -29,7 +29,7 @@ app.controller('LancamentoController',
         var initTable = function() {            
             $scope.colunas = [              
                 {label: '', column: 'tipo', headerClass: 'no-sort', dataClass:'text-center col-tipo', filter: {name: 'tipoLancamento', args: ''}},               
-    //                {label: '', column: 'anexos', headerClass: 'no-sort', dataClass:'text-center col-defualt', filter: {name: 'anexo', args: '', callback: 'linha.events.anexar(item)'}},           
+                {label: '', column: 'anexos', headerClass: 'no-sort', dataClass:'text-center col-anexo', filter: {name: 'anexo', args: '', callback: 'linha.events.anexar(item)'}},           
                 {label: '', column: 'situacao.descricao', headerClass: 'no-sort', dataClass:'text-center col-compensado', filter: {name: 'situacaoLancamento', args: '', callback: 'linha.events.compensar(item)'}}, 
                 {label: '', column: 'numeroLoteConciliado', headerClass: 'no-sort', dataClass:'text-center col-reconciliado', filter: {name: 'conciliadoLancamento', args: ''}},         
                 {label: 'Data', column: 'dataLancamento', dataClass: 'text-center cel-data', filter: {name: 'date', args: 'dd/MM/yy'}},                
@@ -73,10 +73,10 @@ app.controller('LancamentoController',
                         $scope.visualizar($scope.conta, lancamento);
                     },
                     compensar: function(lancamento) {
-                        $scope.compensar($scope.conta, lancamento, true);
+                        $scope.compensar($scope.conta, lancamento, false);
                     },
                     anexar: function(lancamento) {
-                        $scope.editar($scope.conta, lancamento.idLancamento, lancamento.tipo, true);
+                        $scope.editar($scope.conta, lancamento, true);
                     }
                 }
             };
