@@ -161,7 +161,8 @@ app.constant('MESSAGES', {
             },
             validacao: {
                 ARQUIVO_REQUERIDA: "Selecione o arquivo!",
-                ARQUIVO_NAO_PERMITIDO: "Este tipo de arquivo não é permitido!"
+                ARQUIVO_NAO_PERMITIDO: "Este tipo de arquivo não é permitido!",
+                ARQUIVO_ACIMA_TAMANHO_PERMITIDO: "Este arquivo esta acima do tamanho permitido!"
             }
         },
         compensar: {

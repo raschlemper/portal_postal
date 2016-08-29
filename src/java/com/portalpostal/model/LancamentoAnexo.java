@@ -1,21 +1,18 @@
 package com.portalpostal.model;
 
-import com.portalpostal.model.dd.TipoFile;
 import com.portalpostal.model.serializer.JsonInputStreamSerializer;
-import java.awt.image.BufferedImage;
 import java.io.InputStream;
-import javax.ws.rs.core.StreamingOutput;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class LancamentoAnexo {
     
     private Integer idLancamentoAnexo;
     private Lancamento lancamento;
-    private TipoFile tipo;
+    private String tipo;
     private String nome;
+    private Integer size;
     @JsonSerialize(using=JsonInputStreamSerializer.class)
     private InputStream anexo;
-    private StreamingOutput file;
     private String usuario;
 
     public Integer getIdLancamentoAnexo() {
@@ -34,11 +31,11 @@ public class LancamentoAnexo {
         this.lancamento = lancamento;
     }
 
-    public TipoFile getTipo() {
+    public String getTipo() {
         return tipo;
     }
 
-    public void setTipo(TipoFile tipo) {
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
 
@@ -50,6 +47,14 @@ public class LancamentoAnexo {
         this.nome = nome;
     }
 
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
+    }
+
     public InputStream getAnexo() {
         return anexo;
     }
@@ -57,14 +62,6 @@ public class LancamentoAnexo {
     public void setAnexo(InputStream anexo) {
         this.anexo = anexo;
     } 
-
-    public StreamingOutput getFile() {
-        return file;
-    }
-
-    public void setFile(StreamingOutput file) {
-        this.file = file;
-    }
 
     public String getUsuario() {
         return usuario;

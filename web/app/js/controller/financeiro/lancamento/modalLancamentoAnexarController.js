@@ -2,10 +2,6 @@
 
 app.controller('ModalLancamentoAnexarController', ['$scope', 'LancamentoAnexoService', 'ModalService', 'MESSAGES',
     function ($scope, LancamentoAnexoService, ModalService, MESSAGES) {
-        
-        // TODO: Não mostrar o icone de anexo quando for transferência
-        //       Colocar o nome acima da imagem do anexo selecionado
-        //       Diminuir o tamanho do arquivo ou validar o tamanho para não permitir inserir arquivos muito grande
 
         var init = function () {  
             $scope.fileURL = "";
@@ -44,6 +40,7 @@ app.controller('ModalLancamentoAnexarController', ['$scope', 'LancamentoAnexoSer
         $scope.anexar = function(lancamento, anexoFile) {  
             if(!validarForm(anexoFile)) return; 
             if(!validarType(anexoFile[0])) return; 
+            if(!validarSize(anexoFile[0])) return; 
             LancamentoAnexoService.upload(lancamento.idLancamento, anexoFile[0])
                 .done(function (data) {
                     anexoFile = null;
@@ -65,27 +62,13 @@ app.controller('ModalLancamentoAnexarController', ['$scope', 'LancamentoAnexoSer
                 });       
         };
         
-//        $scope.visualizar = function(anexo) {          
-//            LancamentoAnexoService.getFile(anexo.idLancamentoAnexo)
-//                .then(function(data) {
-//                    anexo.file = data;
-//                    visualizar(anexo);    
-//                })
-//                .catch(function(e) {
-//                    modalMessage(e);
-//                });       
-//        };
-        
         $scope.visualizar = function(anexo) {     
             $scope.file = {
+                name: anexo.nome,
                 type: getType(anexo.nome),
                 image: anexo.anexo,
                 icon: getIcon(anexo.nome)
             };
-//            var file = new Blob([anexo.anexo], { type: type });
-//            $scope.anexoFile = anexo;  
-//            $scope.anexoFile.fileURL = URL.createObjectURL(file);
-//            $scope.anexoFile.fileType = type;
         };
         
         $scope.download = function(anexo) {    
@@ -116,8 +99,8 @@ app.controller('ModalLancamentoAnexarController', ['$scope', 'LancamentoAnexoSer
             return 'fa-file-text-o';
         }
         
-        $scope.ok = function(form) {
-            $scope.close(lancamento);        
+        $scope.ok = function() {
+            $scope.close();        
         };  
                 
         // ***** VALIDAR ***** //
@@ -136,15 +119,15 @@ app.controller('ModalLancamentoAnexarController', ['$scope', 'LancamentoAnexoSer
                 return false;
             }   
             return true;
-        }; 
+        };  
 
-//        var validarFormAnexo = function (form) {
-//            if (form.file.$error.required) {
-//                alert(MESSAGES.lancamento.anexar.validacao.ARQUIVO_REQUERIDA);
-//                return false;
-//            }   
-//            return true;
-//        }; 
+        var validarSize = function(anexo) {
+            if (anexo.size > 102400) {
+                alert(MESSAGES.lancamento.anexar.validacao.ARQUIVO_ACIMA_TAMANHO_PERMITIDO);
+                return false;
+            }   
+            return true;
+        }; 
                 
         // ***** MODAL ***** //
 

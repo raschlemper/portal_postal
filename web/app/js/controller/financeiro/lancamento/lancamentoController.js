@@ -29,7 +29,7 @@ app.controller('LancamentoController',
         var initTable = function() {            
             $scope.colunas = [              
                 {label: '', column: 'tipo', headerClass: 'no-sort', dataClass:'text-center col-tipo', filter: {name: 'tipoLancamento', args: ''}},               
-                {label: '', column: 'anexos', headerClass: 'no-sort', dataClass:'text-center col-anexo', filter: {name: 'anexo', args: '', callback: 'linha.events.anexar(item)'}},           
+                {label: '', column: 'anexo', headerClass: 'no-sort', dataClass:'text-center col-anexo', filter: {name: 'anexo', args: '', callback: 'linha.events.anexar(item)'}},           
                 {label: '', column: 'situacao.descricao', headerClass: 'no-sort', dataClass:'text-center col-compensado', filter: {name: 'situacaoLancamento', args: '', callback: 'linha.events.compensar(item)'}}, 
                 {label: '', column: 'numeroLoteConciliado', headerClass: 'no-sort', dataClass:'text-center col-reconciliado', filter: {name: 'conciliadoLancamento', args: ''}},         
                 {label: 'Data', column: 'dataLancamento', dataClass: 'text-center cel-data', filter: {name: 'date', args: 'dd/MM/yy'}},                
@@ -211,6 +211,7 @@ app.controller('LancamentoController',
                 }
 
                 lancamento.tipo.modelo = lancamento.modelo;
+                lancamento.anexo = { exists: lancamento.anexos, modelo: lancamento.modelo };
 
                 if(lancamento.rateios && lancamento.rateios.length) {
                     lancamento.planoConta = "Diversos";
@@ -219,7 +220,7 @@ app.controller('LancamentoController',
                 
                 if(lancamento.favorecido) { lancamento.favorecido = lancamento.favorecido.nome; }
 
-                return _.pick(lancamento, 'idLancamento', 'tipo', 'anexos', 'dataLancamento', 'numero', 'planoConta', 'centroCusto', 'usuario', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico', 'situacao', 'numeroLoteConciliado');
+                return _.pick(lancamento, 'idLancamento', 'tipo', 'anexo', 'dataLancamento', 'numero', 'planoConta', 'centroCusto', 'usuario', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico', 'situacao', 'numeroLoteConciliado');
             })
         };
 
@@ -326,6 +327,7 @@ app.controller('LancamentoController',
         var editar = function(conta, lancamento, goToAnexo) {                   
             modalSalvar(conta, lancamento, lancamento.tipo, goToAnexo)
                 .then(function(result) {
+                    if(!result) return;
                     result = ajustarDados(result);
                     update(conta, result);
                 });            
