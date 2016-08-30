@@ -48,7 +48,7 @@ public class PlanoContaReportController {
     private StreamingOutput getReport(Collection collection) throws Exception {
         return ReportService.create(nameReport)
                     .collection(collection)
-                    .report(); 
+                    .report(TypeReport.PDF); 
     }
             
     private Response getMessageError(String msg) {  

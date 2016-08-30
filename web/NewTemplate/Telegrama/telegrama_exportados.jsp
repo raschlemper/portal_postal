@@ -1,4 +1,6 @@
 
+
+
 <%@page import="Entidade.Endereco"%>
 <%@page import="Entidade.TelegramaPostal"%>
 <%@page import="Emporium.Controle.ContrTelegramaPostal"%>
@@ -14,12 +16,13 @@
     } else {
         Usuario user = (Usuario) session.getAttribute("agf_usuario");
         empresas agf = (empresas) session.getAttribute("agf_empresa");
-    
-    ArrayList<TelegramaPostal> lista = ContrTelegramaPostal.consultaNaoEnviados(agf.getCnpj());
-    boolean isPossuiTelegrama = false;
-        if (lista != null && lista.size() > 0) {
-            isPossuiTelegrama = true;
+        String codigoTelegramas="";
+        ArrayList<TelegramaPostal> lista = ContrTelegramaPostal.consultaExportados(agf.getCnpj());
+        boolean isPossuiTelegrama=false;
+        if(lista!=null && lista.size()>0){
+            isPossuiTelegrama=true;
         }
+            
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -31,7 +34,7 @@
     </head>
     <body>   
         <script type="text/javascript">
-            waitMsg();
+           waitMsg();
         </script>         
         <jsp:include page="../includes/navBarTop.jsp"></jsp:include>
             <div id="wrapper">
@@ -42,7 +45,7 @@
                     <div id="page-wrapper">
                         <div class="row">
                             <div class="col-md-12">
-                                <h4 class="page-header"><b class="text-primary"><i class="fa fa-file-text"></i> Telegramas</b> > <small>Telegramas não enviados</small></h4>
+                                <h4 class="page-header"><b class="text-primary"><i class="fa fa-file-text"></i> Telegramas</b> > <small>Telegramas exportados/não enviados</small></h4>
                             </div>
                         </div>
                         <div class="row">
@@ -53,33 +56,37 @@
                                         <i class="fa fa-folder-open"></i> Selecionar arquivo 
                                         <input name="fileImportacao" id="fileImportacao" type="file"/>
                                     </span>
-                                    <button style="margin-left:10px;" onclick="return validaImportacao();" class="btn btn-success"><i class="fa fa-cloud-upload fa-spc"></i> IMPORTAR</button>
+                                    <button style="margin-left:10px;" onclick="return validaImportacao()" class="btn btn-success"><i class="fa fa-cloud-upload fa-spc"></i> IMPORTAR</button>
                                 </form>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">                        
                                 <div id="ow-server-footer">
-                                    <a href="telegrama_naoenviados_b.jsp" class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-center btn-danger "><i class="fa fa-lg fa-file-text"></i> <span>TELEGRAMAS<br/>SOLICITADOS<br/><br/></span></a>
-                                    <a href="telegrama_exportados.jsp" style="color: gray;" class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-center btn-default "><i class="fa fa-lg fa-file-text"></i> <span>TELEGRAMAS<br/>EXPORTADOS/NÃO ENVIADOS</span></a>
+                                    <a href="telegrama_naoenviados_b.jsp" style="color: gray;" class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-center btn-default"><i class="fa fa-lg fa-file-text"></i> <span>TELEGRAMAS<br/>SOLICITADOS<br/><br/></span></a>
+                                    <a href="telegrama_exportados.jsp"  class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-center btn-info  "><i class="fa fa-lg fa-file-text"></i> <span>TELEGRAMAS<br/>EXPORTADOS/NÃO ENVIADOS</span></a>
                                     <a href="telegrama_enviados_b.jsp" style="color: gray;" class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-center btn-default"><i class="fa fa-lg fa-file-text"></i> <span>TELEGRAMAS<br/>ENVIADOS<br/><br/></span></a>
                                 </div>
                             </div>
                         </div>
+
                         <div style="width: 100%;clear: both;"></div>
                         <% if(isPossuiTelegrama){ %>
                         <div style="row">
                             <form action="../../ServTelegramaExportacao" method="post">
-                                <button style="float:right;margin-bottom: 5px;width: 200px;" class="btn btn-success">Exportar Telegramas</button> 
+                                <button style="float:right;margin-bottom:5px; width: 200px;" class="btn btn-success" type="submit" onclick="return exportarTelegramas()">Reexportar Telegramas</button> 
+                                <input type="hidden" name="inputTelegramasMarcados" id="inputTelegramasMarcados"/>
                             </form>
                         </div>
                         <% } %>
                         <div class="row">
                             <div class="col-lg-12">
+
                                 <%
                                     for (TelegramaPostal t : lista) {
                                         Endereco ed = t.getEnderecoDes();
                                         Endereco er = t.getEnderecoRem();
+                                        codigoTelegramas+=t.getId()+",";
                                         String adicionais = "";
                                         if (t.getAdicionais().contains("AR")) {
                                             adicionais = "<br/>- PEDIDO DE CONFIRMAÇÃO";
@@ -103,7 +110,7 @@
                                                     <%= er.getCep()%>
                                                 </div>
                                                 <div class="col-xs-6">
-                                                    <b>Destinatario:</b><br/>
+                                                    <b>Destinatario:</b><span style="float:right"><input id="check<%=t.getId()%>" type="checkbox"/> </span><br/>
                                                     <%= ed.getNome()%><br/>
                                                     <%= ed.getLogradouro() + " " + ed.getNumero()%><br/>
                                                     <%= ed.getComplemento()%><br/>
@@ -153,10 +160,53 @@
         <script type="text/javascript">
             $(document).ready(function() {
                 fechaMsg();
+                
                 alert($.session.get('nomeBD'));
+                //$.session.remove('msg');
+                //alert($.session.get('msg'));
             });
+           var arrayCheckBox = new Array(<%= !codigoTelegramas.isEmpty() ? codigoTelegramas.substring(0,codigoTelegramas.length()-1) : ""%>);
+           
+           function marcarTodos(marcar){
+                for(var contador=0;contador<arrayCheckBox.length;contador++){
+                    document.getElementById("check"+arrayCheckBox[contador]).checked=marcar;
+                    console.log("check"+arrayCheckBox[contador]);
+                }
+            }
             
-            function validaImportacao(){
+            function exportarTelegramas(){
+                carregaCodigosMarcados();
+                return verificaTelegramaSelecionado();
+            }
+            
+            function verificaTelegramaSelecionado(){
+                var inputTelegramasMarcados = document.getElementById('inputTelegramasMarcados');
+                if(inputTelegramasMarcados.value.trim().length<1){
+                    alert('Não foi possivel exportar.\nNenhum telegrama selecionado.');
+                    return false;
+                }
+                return true;
+            }
+            
+            function carregaCodigosMarcados(){
+                var telegramasMarcados = "";
+                for(var contador=0;contador<arrayCheckBox.length;contador++){
+                    var elemento = document.getElementById("check"+arrayCheckBox[contador]);
+                    if(elemento.checked){
+                        telegramasMarcados+=arrayCheckBox[contador]+",";
+                    }
+                }
+                inputTelegramasMarcados.value=removeUltimoCaracter(telegramasMarcados);
+            }
+            
+            function removeUltimoCaracter(string){
+                if(string.length>1){
+                    return string.substring(0,string.length-1);
+                }
+                return "";
+            }
+            
+             function validaImportacao(){
                 if(fileImportacao.value==""){
                     alert('Selecione um arquivo para importação');
                     return false;
@@ -169,7 +219,7 @@
                 
                 return true;
             }            
-           
+            
         </script>
     </body>
 </html>

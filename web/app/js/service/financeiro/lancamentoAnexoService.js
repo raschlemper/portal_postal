@@ -1,6 +1,6 @@
 'use strict';
 
-app.factory('LancamentoAnexoService', function($http, PromiseService, FileUploader) {
+app.factory('LancamentoAnexoService', function($http, PromiseService, FileUploader, DownloadService) {
 
     return {
         
@@ -49,7 +49,7 @@ app.factory('LancamentoAnexoService', function($http, PromiseService, FileUpload
         
         download: function(idLancamentoAnexo, type) {
             var url = _contextPath + "/api/financeiro/lancamento/anexo/" + idLancamentoAnexo + "/download/" + type;
-            window.open(url);    
+            DownloadService.execute(url);    
         },
         
         upload: function(idLancamento, anexo) {

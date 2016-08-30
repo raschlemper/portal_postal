@@ -32,6 +32,7 @@
                             if (t.getAdicionais().contains("CP")) {
                                 adicionais += "<br/>- CÓPIA DE TELEGRAMA - VIA " + t.getEnvioCopia() + ": " + t.getEmailCopia();
                             }
+                            String msg = t.getMensagem().replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").replace("\n", "<br/>"); 
                     %>
                     <table width="100%" cellpadding="0" cellspacing="0" border="0">
                         <tbody>     
@@ -70,7 +71,7 @@
                                     <b>N° do Telegrama:</b> <%= t.getSro() %><br/><br/>
                                     <b>Adicionais:</b> <%= adicionais%><br/><br/>
                                     <b>Mensagem:</b><br/>
-                                    <%= t.getMensagem()%>                                    
+                                    <%= msg %>                                    
                                 </td>
                             </tr>
                         </tbody>

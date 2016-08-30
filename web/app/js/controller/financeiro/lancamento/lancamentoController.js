@@ -525,6 +525,11 @@ app.controller('LancamentoController',
             var params = LancamentoService.report(lancamentos);   
             ReportService.pdf('lancamento', params);
         };
+        
+        $scope.export = function(lancamentos) {
+            var params = LancamentoService.report(lancamentos);   
+            ReportService.excel('lancamento', params);
+        };
 
         // ***** VALIDAR ***** //
 

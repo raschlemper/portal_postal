@@ -43,9 +43,13 @@
                 <label>Data da Solicitação</label>
                 <%= pv.getDataSolicitacao() %>
             </dd>
-            <dd>
+            <dd  style="width: 200px;">
                 <label>Usuário que Solicitou</label>
                 <%= pv.getUserSolicitacao() %>
+            </dd>
+            <dd>
+                <label>Departamento</label>
+                <%= pv.getNomeDepto()%>
             </dd>
         </li>
         <li>
@@ -63,6 +67,10 @@
             </dd>
         </li>
         <li>
+             <dd  style="width: 200px;">
+                <label>Cartão Postagem</label>
+                <%= pv.getCartao() %>
+            </dd>
             <dd>
                 <label>Serviços Adicionais</label>
                 <b>VD:</b> R$ <%= pv.getVd() %>

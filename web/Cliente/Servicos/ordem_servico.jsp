@@ -86,7 +86,7 @@
                         <li>
                             <dd style="color: red;">
                                 <b>ATENÇÃO !!!</b><br/><br/>
-                                Esta ordem de serviço deve ser entrague ao motorista da agência!<br/>
+                                Esta ordem de serviço deve ser entregue ao motorista da agência!<br/>
                             </dd>
                         </li>
                     </ul>

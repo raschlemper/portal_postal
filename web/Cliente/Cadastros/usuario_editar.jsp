@@ -96,7 +96,7 @@
                         <option value="2" <%if(listAcc.contains("2")){%> selected <%}%> >CONTROLE DE A.R.</option>
                         <option value="3" <%if(listAcc.contains("3")){%> selected <%}%> >VISUALIZA VALORES / DESPESAS</option>
                         <option value="4" <%if(listAcc.contains("4")){%> selected <%}%> >SOLICITAÇÃO DE COLETA</option>
-                        <option value="5" <%if(listAcc.contains("5")){%> selected <%}%> >GERAR ETQIUETAS</option>
+                        <option value="5" <%if(listAcc.contains("5")){%> selected <%}%> >GERAR ETIQUETAS</option>
                         <option value="6" <%if(listAcc.contains("6")){%> selected <%}%> >VER DADOS DA EMPRESA</option>
                         <option value="7" <%if(listAcc.contains("7")){%> selected <%}%> >CADASTRO DE DESTINATÁRIOS</option>
                     </select>

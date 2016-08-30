@@ -597,6 +597,43 @@ public class contrCliente {
             Conexao.desconectar(conn);
         }
     }
+    public static ArrayList<Clientes> consultaDestinatarioLR(String nomeBD) {
+        
+        Connection conn = (Connection) Conexao.conectar(nomeBD);
+        String sql = "SELECT * "
+                + " FROM cliente_remetente ;";
+        //System.out.println(sql);
+        try {
+          
+            PreparedStatement valores = conn.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            ArrayList<Clientes> lista = new ArrayList<Clientes>();
+            while (result.next()) {
+                
+                String nome = result.getString("nome");
+                nome = Util.FormataString.removeAccentsToUpper(nome).replace(".", "").replace(" / ", " ").replace("/", " ").replace(" - ", " ").replace("-", " ");
+                String cep = result.getString("cep").trim();
+                if(cep.contains("-")){
+                cep=cep.replace("-","");
+                }
+                int c = Integer.parseInt(cep);
+                String endereco = result.getString("endereco");
+                String numero = result.getString("numero");
+                String bairro = result.getString("bairro");
+                String cidade = result.getString("cidade");
+                String uf = result.getString("uf");
+                String complemento = result.getString("complemento");
+                Clientes cli = new Clientes(nome, endereco, bairro, cidade, uf, c, numero, complemento);
+                lista.add(cli);
+            }
+            return lista;
+        } catch (Exception e) {
+            ContrErroLog.inserir("Portal Postal - contrCliente", "SQLException", sql, e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
     
     public static ArrayList<Clientes> getNomeCodigoMetodo(String nomeBD, boolean showInativo) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
