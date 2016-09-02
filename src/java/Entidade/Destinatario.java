@@ -71,6 +71,20 @@ public class Destinatario {
         this.celular = celular;
         this.tags = tags;
     }
+    public Destinatario(int idDestinatario, int idCliente, String nome, String cpf_cnpj, String empresa, String cep, String endereco, String numero, String complemento, String bairro, String cidade, String uf) {
+        this.idDestinatario = idDestinatario;
+        this.idCliente = idCliente;
+        this.nome = nome;
+        this.cpf_cnpj = cpf_cnpj;
+        this.empresa = empresa;
+        this.cep = cep;
+        this.endereco = endereco;
+        this.numero = numero;
+        this.complemento = complemento;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.uf = uf;
+    }
     
 
     public String getTags() {

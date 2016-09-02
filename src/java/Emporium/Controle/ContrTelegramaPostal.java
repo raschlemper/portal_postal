@@ -146,6 +146,28 @@ public class ContrTelegramaPostal {
         }
     }
     
+    public static ArrayList<TelegramaPostal> consultaExportados(String nomeBD) {
+        Connection conn = (Connection) Conexao.conectar(nomeBD);
+        String sql = "SELECT * FROM telegrama_postal WHERE status = -1;";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            ArrayList<TelegramaPostal> lista = new ArrayList<TelegramaPostal>();
+            while(result.next()) {
+                lista.add(new TelegramaPostal(result));
+            }
+            valores.close();
+            return lista;
+        } catch (SQLException e) {
+            System.out.println(e);
+            ContrErroLog.inserir("PortalPostal - ContrImpressaoPLP", "SQLException", sql, e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(conn);
+            
+        }
+    }
+
     public static int consultaQtdNaoEnviados(String nomeBD) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         String sql = "SELECT COUNT(*) AS qtd FROM telegrama_postal WHERE status = 0;";
@@ -200,12 +222,32 @@ public class ContrTelegramaPostal {
             valores.close();
             return lista;
         } catch (SQLException e) {
-            System.out.println(e);
             ContrErroLog.inserir("PortalPostal - ContrImpressaoPLP", "SQLException", sql, e.toString());
             return null;
         } finally {
             Conexao.desconectar(conn);
         }
     }
-    
+ 
+     public static ArrayList<TelegramaPostal> consultaEnviadosFilter(String dataHora, String dataHora2,String filterData, String nomeBD){
+        Connection conn = (Connection) Conexao.conectar(nomeBD);
+        String sql = "SELECT * FROM telegrama_postal WHERE status = 1 AND DATE("+filterData+") BETWEEN '"+dataHora+"' AND  '"+dataHora2+"' ;";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            ArrayList<TelegramaPostal> lista = new ArrayList<TelegramaPostal>();
+            while(result.next()) {
+                lista.add(new TelegramaPostal(result));
+            }
+            valores.close();
+            return lista;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("PortalPostal - ContrImpressaoPLP", "SQLException", sql, e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+     
+     }
+
 }

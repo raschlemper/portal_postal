@@ -147,7 +147,9 @@ function pesquisarDestinatario(nomeBD, multi) {
     http.send(null);
 }
 
-function copiaDadosDest(id, nome, empresa, cpf, cidade, uf, bairro, endereco, numero, complemento, cep) {
+function copiaDadosDest(id, nome, empresa, cpf, cidade, uf, bairro, endereco, numero, complemento, cep, celular, email) {
+    
+    
     document.getElementById('idDestinatario').value = id;
     document.getElementById('nome').value = nome;
     document.getElementById('nomeOrig').value = nome;
@@ -161,6 +163,9 @@ function copiaDadosDest(id, nome, empresa, cpf, cidade, uf, bairro, endereco, nu
     document.getElementById('numero').value = numero;
     document.getElementById('complemento').value = complemento;
     document.getElementById('cep').value = cep;
+    document.getElementById('celular').value = celular;
+    document.getElementById('email_destinatario').value = email;
+    
 
     document.getElementById('obs').focus();
     chamaDivProtecao();

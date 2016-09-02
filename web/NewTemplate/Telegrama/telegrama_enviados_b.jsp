@@ -24,7 +24,12 @@
         if (request.getParameter("data2") != null) {
             vData2 = request.getParameter("data2");
         }
-
+        
+        String filterData = "dataHoraEnviado";
+        if (request.getParameter("filterData") != null) {
+            filterData = request.getParameter("filterData");
+        }
+        
         String dataBD = Util.FormatarData.DateToBD(vDataAtual);
         String dataBD2 = Util.FormatarData.DateToBD(vData2);
 %>
@@ -49,14 +54,27 @@
                     <div id="page-wrapper">
                         <div class="row">
                             <div class="col-md-12">
-                                <h4 class="page-header"><b class="text-primary"><i class="fa fa-file-text"></i> Telegramas</b> > <small>Telegramas não enviados</small></h4>
+                                <h4 class="page-header"><b class="text-primary"><i class="fa fa-file-text"></i> Telegramas</b> > <small>Telegramas enviados</small></h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div  class="well well-md">  
+                                <h4 class="subtitle">Selecionar aquivo para importação</h4>
+                                <form action="../../ServTelegramaImportacao" method="post" enctype="multipart/form-data">
+                                    <span    class="btn btn-default btn-file">
+                                        <i class="fa fa-folder-open"></i> Selecionar arquivo 
+                                        <input name="fileImportacao" id="fileImportacao" type="file"/>
+                                    </span>
+                                    <button style="margin-left:10px;" onclick="return validaImportacao();" class="btn btn-success"><i class="fa fa-cloud-upload fa-spc"></i> IMPORTAR</button>
+                                </form>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">                        
                                 <div id="ow-server-footer">
-                                    <a href="telegrama_naoenviados_b.jsp" style="color: gray;" class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-center btn-default "><i class="fa fa-lg fa-file-text"></i> <span>TELEGRAMAS<br/>NÃO ENVIADOS</span></a>
-                                    <a href="telegrama_enviados_b.jsp" class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-center btn-success"><i class="fa fa-lg fa-file-text"></i> <span>TELEGRAMAS<br/>ENVIADOS</span></a>
+                                    <a href="telegrama_naoenviados_b.jsp" style="color: gray;" class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-center btn-default "><i class="fa fa-lg fa-file-text"></i> <span>TELEGRAMAS<br/>SOLICITADOS<br/><br/></span></a>
+                                    <a href="telegrama_exportados.jsp" style="color: gray;" class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-center btn-default "><i class="fa fa-lg fa-file-text"></i> <span>TELEGRAMAS<br/>EXPORTADOS/NÃO ENVIADOS</span></a>
+                                    <a href="telegrama_enviados_b.jsp" class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-center btn-success"><i class="fa fa-lg fa-file-text"></i> <span>TELEGRAMAS<br/>ENVIADOS<br/><br/></span></a>
                                 </div>
                             </div>
                         </div>
@@ -78,6 +96,10 @@
                                             <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                             <input class="form-control" size="8" type="text" id="data2" name="data2" value="<%= vData2%>" onkeypress="mascara(this, maskData);" />
                                         </div>
+                                        <select class="form-control" name="filterData">
+                                            <option value="dataHoraEnviado" <%= filterData.equals("dataHoraEnviado") ? "selected" : "" %>>Data envio</option>
+                                            <option value="dataHora" <%= !filterData.equals("dataHoraEnviado") ? "selected" : "" %>>Data solicitação</option>
+                                        </select>
                                         <button type="submit" class="btn btn-sm btn-primary form-control" onclick="waitMsg()"><i class="fa fa-lg fa-search"></i></button>
                                     </div>
                                 </form>
@@ -86,7 +108,7 @@
                         <div class="row">                            
                             <div class="col-lg-12">
                                 <%
-                                    ArrayList<TelegramaPostal> lista = ContrTelegramaPostal.consultaEnviados(dataBD, dataBD2, agf.getCnpj());
+                                    ArrayList<TelegramaPostal> lista = ContrTelegramaPostal.consultaEnviadosFilter(dataBD, dataBD2,filterData, agf.getCnpj());
                                     for (TelegramaPostal t : lista) {
                                         Endereco ed = t.getEnderecoDes();
                                         Endereco er = t.getEnderecoRem();
@@ -97,6 +119,7 @@
                                         if (t.getAdicionais().contains("CP")) {
                                             adicionais += "<br/>- CÓPIA DE TELEGRAMA - VIA " + t.getEnvioCopia() + ": " + t.getEmailCopia();
                                         }
+                                        String msga = t.getMensagem().replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").replace("\n", "<br/>"); 
                                 %>
                                 <form action="../../ServTelegramaEnvia">
                                     <ul class="list-unstyled">
@@ -131,7 +154,7 @@
                                             <a href='#' onclick="pesqSro('<%= t.getSro()%>');"><%= t.getSro()%></a>                                          <br/><br/>
                                             <b>Adicionais:</b> <%= adicionais%><br/><br/>
                                             <b>Mensagem:</b><br/>
-                                            <%= t.getMensagem()%>   
+                                            <%= msga%>   
                                         </li>
                                         <li class="list-group-item">
                                             <div class="row">
@@ -190,6 +213,21 @@
                 $('#objetos').val(param);
                 $('#frmSRO').submit();
             }
+            
+            function validaImportacao(){
+                if(fileImportacao.value==""){
+                    alert('Selecione um arquivo para importação');
+                    return false;
+                }
+                
+                if(fileImportacao.value.indexOf(".txt")<1 && fileImportacao.value.indexOf(".TXT") < 1){
+                    alert('Selecione um arquivo no formato .txt');
+                    return false;
+                }
+                
+                return true;
+            }            
+
         </script>
     </body>
 </html>

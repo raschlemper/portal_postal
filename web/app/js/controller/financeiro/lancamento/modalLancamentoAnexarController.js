@@ -1,10 +1,10 @@
 'use strict';
 
-app.controller('ModalLancamentoAnexarController', ['$scope', '$modalInstance', '$sce', 'lancamento', 'LancamentoAnexoService', 'ModalService', 'MESSAGES',
-    function ($scope, $modalInstance, conta, lancamento, LancamentoAnexoService, ModalService, MESSAGES) {
+app.controller('ModalLancamentoAnexarController', ['$scope', 'LancamentoAnexoService', 'ModalService', 'MESSAGES',
+    function ($scope, LancamentoAnexoService, ModalService, MESSAGES) {
 
         var init = function () {  
-            $scope.lancamento = lancamento;
+            $scope.fileURL = "";
             $scope.lancamentoAnexo = {};
             getTitle();
             anexos();
@@ -17,95 +17,123 @@ app.controller('ModalLancamentoAnexarController', ['$scope', '$modalInstance', '
         };
         
         var anexos = function() {
-            LancamentoAnexoService.getAll()
+            LancamentoAnexoService.getLancamento($scope.lancamento.idLancamento)
                 .then(function (data) {
-                    $scope.anexos = data;
+                    $scope.anexos = createAnexos(data);
                 })
                 .catch(function (e) {
                     console.log(e);
                 });
         };
+        
+        var createAnexos = function(data) {
+            return _.map(data, function(anexo) { 
+                anexo.type = getType(anexo.nome);
+                anexo.icon = getIcon(anexo.nome);
+                anexo.modelo = getModelo(anexo.nome);
+                return anexo;
+            });
+        };
                 
         // ***** ANEXAR ***** //
         
-        $scope.anexar = function(lancamento) {            
-            LancamentoAnexoService.upload(lancamento.idLancamento, $scope.anexo[0]);            
+        $scope.anexar = function(lancamento, anexoFile) {  
+            if(!validarForm(anexoFile)) return; 
+            if(!validarType(anexoFile[0])) return; 
+            if(!validarSize(anexoFile[0])) return; 
+            LancamentoAnexoService.upload(lancamento.idLancamento, anexoFile[0])
+                .done(function (data) {
+                    anexoFile = null;
+                    modalMessage(MESSAGES.lancamento.anexar.sucesso.INSERIDO_SUCESSO);
+                    anexos(lancamento.idLancamento);
+                }).fail(function (e) {
+                    console.log(e);
+                });        
         };
         
-        $scope.visualizar = function(anexo) {
-            $scope.contentFile = anexo.anexo;            
+        $scope.remover = function(lancamento, anexo) { 
+            LancamentoAnexoService.delete(anexo.idLancamentoAnexo)
+                .then(function(data) {  
+                    modalMessage(MESSAGES.lancamento.anexar.sucesso.REMOVIDO_SUCESSO);
+                    anexos(lancamento.idLancamento);    
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });       
         };
         
-        $scope.ok = function(form) {
-            if (!validarForm(form)) return;
-            modalSalvar(conta, lancamento);
-            $modalInstance.close($scope.lancamentoAnexo);            
-        };       
-                
-        // ***** ANEXAR ***** //  
-
-//        $scope.anexar = function(form, lancamento) {
-//            if(!validaConta(lancamento.conta)) return;
-//            if (!validarForm(form)) return;         
-//            $scope.stepFrom = 'editar'; 
-//            $scope.stepTo = 'anexar'; 
-//            anexos(lancamento.idLancamento);
-//        };
+        $scope.visualizar = function(anexo) {     
+            $scope.file = {
+                name: anexo.nome,
+                type: getType(anexo.nome),
+                image: anexo.anexo,
+                icon: getIcon(anexo.nome)
+            };
+        };
         
-//        $scope.setAnexo = function(lancamento, anexo) {            
-//            LancamentoAnexoService.upload(lancamento.idLancamento, anexo[0])
-//                .done(function (data) {
-//                    $scope.anexoFile = null;
-//                    anexos(lancamento.idLancamento);
-//                }).fail(function (e) {
-//                    console.log(e);
-//                });
-//            anexos(lancamento.idLancamento);           
-//        };
+        $scope.download = function(anexo) {    
+            var modelo = getModelo(anexo.nome);
+            LancamentoAnexoService.download(anexo.idLancamentoAnexo, modelo);
+        };
         
-//        $scope.removeAnexo = function(anexo) {            
-//            LancamentoAnexoService.delete(anexo.idLancamentoAnexo);      
-//            anexos(lancamento.idLancamento);      
-//        };
+        var getModelo = function(fileName) {
+            if(fileName.toLowerCase().indexOf('.png') > -1) return 'image';             
+            if(fileName.toLowerCase().indexOf('.jpg') > -1) return 'image';           
+            if(fileName.toLowerCase().indexOf('.gif') > -1) return 'image'; 
+            if(fileName.toLowerCase().indexOf('.pdf') > -1) return 'pdf';  
+            return null;
+        };
         
-//        $scope.visualizarAnexo = function(anexo) {
-//            $scope.contentFile = anexo.anexo;            
-//        }
+        var getType = function(fileName) {
+            if(fileName.toLowerCase().indexOf('.png') > -1) return 'image/png';             
+            if(fileName.toLowerCase().indexOf('.jpg') > -1) return 'image/jpg';           
+            if(fileName.toLowerCase().indexOf('.gif') > -1) return 'image/gif';
+            return null;
+        };
         
-//        $scope.voltar = function() {
-//            $scope.stepFrom = 'anexar'; 
-//            $scope.stepTo = 'editar';             
-//        }
+        var getIcon = function(fileName) {
+            if(fileName.toLowerCase().indexOf('.png') > -1) return 'fa-file-image-o';   
+            if(fileName.toLowerCase().indexOf('.jpg') > -1) return 'fa-file-image-o';  
+            if(fileName.toLowerCase().indexOf('.gif') > -1) return 'fa-file-image-o';  
+            if(fileName.toLowerCase().indexOf('.pdf') > -1) return 'fa-file-pdf-o';  
+            return 'fa-file-text-o';
+        }
         
-//        var anexos = function(idLancamento) {
-//            LancamentoAnexoService.getLancamento(idLancamento)
-//                .then(function (data) {
-//                    $scope.anexos = data;
-//                })
-//                .catch(function (e) {
-//                    modalMessage(e);
-//                });
-//        }
+        $scope.ok = function() {
+            $scope.close();        
+        };  
                 
         // ***** VALIDAR ***** //
 
-        var validarForm = function (form) {
-            if (form.file.$error.required) {
+        var validarForm = function(anexo) {
+            if (!anexo || !anexo.length) {
                 alert(MESSAGES.lancamento.anexar.validacao.ARQUIVO_REQUERIDA);
                 return false;
             }   
             return true;
         }; 
 
-//        var validarFormAnexo = function (form) {
-//            if (form.file.$error.required) {
-//                alert(MESSAGES.lancamento.anexar.validacao.ARQUIVO_REQUERIDA);
-//                return false;
-//            }   
-//            return true;
-//        }; 
+        var validarType = function(anexo) {
+            if (!getModelo(anexo.name)) {
+                alert(MESSAGES.lancamento.anexar.validacao.ARQUIVO_NAO_PERMITIDO);
+                return false;
+            }   
+            return true;
+        };  
+
+        var validarSize = function(anexo) {
+            if (anexo.size > 102400) {
+                alert(MESSAGES.lancamento.anexar.validacao.ARQUIVO_ACIMA_TAMANHO_PERMITIDO);
+                return false;
+            }   
+            return true;
+        }; 
                 
         // ***** MODAL ***** //
+
+        var modalMessage = function(message) {
+            ModalService.modalMessage(message);
+        };
         
         var modalSalvar = function(conta, lancamento) {
             var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamento.html', 'ModalLancamentoEditarController', 'lg',

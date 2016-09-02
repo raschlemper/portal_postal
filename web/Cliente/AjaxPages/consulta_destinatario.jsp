@@ -89,6 +89,8 @@
                     String bairro = FormataString.removeAccentsToUpper(dest.getBairro());
                     String complemento = FormataString.removeAccentsToUpper(dest.getComplemento());
                     String cep = dest.getCep();
+                    String celular = dest.getCelular();
+                    String email = dest.getEmail();
                     String tag = "";
                     if (dest.getTags() != null) {
                         tag = dest.getTags();
@@ -121,10 +123,12 @@
                     <input type="hidden" name="uf_multi_<%= id%>" id="uf_multi_<%= id%>" value="<%= uf%>" />
                     <input type="hidden" name="cpf_multi_<%= id%>" id="cpf_multi_<%= id%>" value="<%= cpf%>" />
                     <input type="hidden" name="cep_multi_<%= id%>" id="cep_multi_<%= id%>" value="<%= cep%>" />
+                    <input type="hidden" name="celular_multi_<%= id%>" id="celular_multi_<%= id%>" value="<%= cep%>" />
+                    <input type="hidden" name="email_multi_<%= id%>" id="email_multi_<%= id%>" value="<%= cep%>" />
                     <input type="hidden" name="tags_multi_<%= id%>" id="tags_multi_<%= id%>" value="<%= tag%>" />
                 </td>
                 <%} else {%>
-                <td><img style="cursor: pointer;" class="link_img" src="../../imagensNew/user_plus.png" onclick="copiaDadosDest('<%= dest.getIdDestinatario()%>', '<%= nome%>', '<%= empresa%>', '<%= cpf%>', '<%= cidade%>', '<%= uf%>', '<%= bairro%>', '<%= endereco%>', '<%= numero%>', '<%= complemento%>', '<%= cep%>');" /></td>
+                <td><img style="cursor: pointer;" class="link_img" src="../../imagensNew/user_plus.png" onclick="copiaDadosDest('<%= dest.getIdDestinatario()%>', '<%= nome%>', '<%= empresa%>', '<%= cpf%>', '<%= cidade%>', '<%= uf%>', '<%= bairro%>', '<%= endereco%>', '<%= numero%>', '<%= complemento%>', '<%= cep%>', '<%=celular %>', '<%= email%>');" /></td>
                 <%}%>
                 <td><%= dest.getIdDestinatario()%></td>
                 <td><%= nome%></td>

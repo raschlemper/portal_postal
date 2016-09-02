@@ -80,6 +80,11 @@
                     alert('Escolha o Departamento/Centro de Custo para a Postagem!\n\nCaso não exista o departameto desejado,\npeça para a agência incluir no cadastro!');
                     return false;
                 }
+                
+                if(!validaFormulario()){
+                        return false;
+                }
+                    
                 if(form.ckEnvio === 1){
                     if (form.dataColeta.value === "") {
                         alert('Preencha a Data da Coleta!');
@@ -91,10 +96,81 @@
                     if (!valida_hora(form.horaColeta)) {
                         return false;
                     }
+                    
                 }
+                
 
                 form.submit();
             }       
+            
+            function validaFormulario(){
+                 var form = document.form1;
+                 if(form.nomeCli.value.trim()==""){
+                     alert("O nome do remetente deve ser preenchido.");
+                     form.nomeCli.focus();
+                     return false;
+                 }
+                 
+                 if(form.cepCli.value.trim()==""){
+                    alert("O cep do remetente deve ser preenchido.");
+                    form.cepCli.focus();
+                    return false;
+                 }
+                 
+                 if(form.enderecoCli.value.trim()==""){
+                     alert("O endereço do remetente deve ser preenchido.");
+                     form.enderecoCli.focus();
+                     return false;
+                 }
+                 
+                 if(form.numeroCli.value.trim()==""){
+                     alert("O número do remetente deve ser preenchido.");
+                     form.numeroCli.focus();
+                     return false;
+                 }
+                 
+                 if(form.cidadeCli.value.trim()==""){
+                     alert("A cidade do remetente deve ser preenchida.");
+                     form.cidadeCli.focus();
+                     return false;
+                 }
+                 
+                 if(form.ufCli.value.trim()==""){
+                     alert("O estado do remetente deve ser preenchido.");
+                     form.ufCli.focus();
+                     return false;
+                 }
+                 
+                 if(form.nome.value.trim()==""){
+                     alert("O nome do destinatário deve ser preenchido.");
+                     form.nome.focus();
+                     return false;
+                 }
+                 
+                 if(form.cep.value.trim().length!=9){
+                     alert("O cep do destinatário deve ser preenchido.");
+                     form.cep.focus();
+                     return false;
+                 }
+                 
+                 if(form.numero.value.trim()==""){
+                     alert("O número do destinatário deve ser preenchido.");
+                     form.numero.focus();
+                     return false;
+                 }
+                 
+                 if(form.cidade.value.trim()==""){
+                     alert("A cidade do destinatário deve ser preenchida.");
+                     form.cidade.focus();
+                     return false;
+                 }
+                 if(form.obs.value.trim().length<5){
+                     alert("A mensagem do telegrama deve ser preenchida.");
+                     form.obs.focus();
+                     return false;
+                 }
+                 return true;
+            }
             
             $(function() {
                 $("#nome").autocomplete({

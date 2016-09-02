@@ -39,16 +39,29 @@ public class LancamentoReportController {
     public Response pdf(List<LancamentoReportDTO> params) {
         try {
             init(); 
-            return Response.ok(getReport(params)).build();
+            return Response.ok(getReport(params, TypeReport.PDF)).build();
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     }  
     
-    private StreamingOutput getReport(Collection collection) throws Exception {
+    @POST
+    @Path("/excel")
+    @Produces("application/vnd.ms-excel")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response excel(List<LancamentoReportDTO> params) {
+        try {
+            init(); 
+            return Response.ok(getReport(params, TypeReport.EXCEL)).build();
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }  
+    
+    private StreamingOutput getReport(Collection collection, TypeReport type) throws Exception {
         return ReportService.create(nameReport)
                     .collection(collection)
-                    .report(); 
+                    .report(type); 
     }
             
     private Response getMessageError(String msg) {  

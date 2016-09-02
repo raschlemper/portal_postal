@@ -6,12 +6,17 @@
     SimpleDateFormat sdf3 = new SimpleDateFormat("ddMMyyyyHHmm");
     SimpleDateFormat sdf4 = new SimpleDateFormat("ddMMyyyyHHmmsss");
     SimpleDateFormat sdf5 = new SimpleDateFormat("ddMMyyyy");
+    
+    String modelo = request.getParameter("modelo");
+    String nomeArquivo = "OCORENCORREIOS" + sdf4.format(new Date()) + ".txt";
+    if (modelo.equals("EDI_EMBARC_3.0")) {
+        nomeArquivo = "CONEMBCORREIOS" + sdf4.format(new Date()) + ".txt";     
+    }
 
     response.setContentType("text/plain");
-    response.setHeader("Content-disposition", "attachment; filename=OCORENCORREIOS" + sdf4.format(new Date()) + ".txt");
+    response.setHeader("Content-disposition", "attachment; filename=" + nomeArquivo);
     response.setHeader("Cache-Control", "no-cache");
 
-    String modelo = request.getParameter("modelo");
     String tipoPesquisa = request.getParameter("tipoPesquisa");
     String nomeBD = request.getParameter("nomeBD");
     int idCliente = Integer.parseInt(request.getParameter("idCliente"));

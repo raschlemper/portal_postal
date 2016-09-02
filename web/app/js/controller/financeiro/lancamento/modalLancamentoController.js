@@ -14,7 +14,8 @@ app.controller('ModalLancamentoController', ['$scope', '$modalInstance', 'conta'
         // ***** NAVEGAR ***** //  
                 
         var initStep = function() {  
-            $scope.goToEditar();
+            if(anexo) { $scope.goToAnexar(); }
+            else { $scope.goToEditar(); }
         };
         
         $scope.goToEditar = function() {

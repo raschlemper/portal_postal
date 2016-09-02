@@ -66,6 +66,8 @@ public class ServReversaGerar extends HttpServlet {
             String codAdm = request.getParameter("codAdm").trim();
             //String contrato = request.getParameter("contratoEct").trim();
             String cartao = request.getParameter("cartaoPostagem").trim();
+            
+            
             String validade = request.getParameter("dataAgendamento").trim();
             String caixa = request.getParameter("caixa").trim();
             String[] prod = null;
@@ -105,6 +107,18 @@ public class ServReversaGerar extends HttpServlet {
             String bairro_destinatario = request.getParameter("bairroCli");
             String cidade_destinatario = request.getParameter("cidadeCli");
             String uf_destinatario = request.getParameter("ufCli");
+            String departamento = request.getParameter("departamento");
+            int idDepto = 0;
+            String nomeDpto = "";
+            if(!departamento.trim().equals("")){
+                idDepto = Integer.parseInt(departamento.split(";")[0].trim());
+                nomeDpto = departamento.split(";")[1].trim();
+                String caux = departamento.split(";")[2].trim();
+                if(!caux.equals("0")&&caux.equals("")){
+                   cartao = departamento.split(";")[2].trim(); 
+                }
+            }
+            
             String cklist = request.getParameter("cklist");
 
             /*
@@ -186,8 +200,10 @@ public class ServReversaGerar extends HttpServlet {
                     //rem.setCelular("88334437");
                     rem.setSms("N");
                     c.setRemetente(rem);
-
-                    int idRev = ContrLogisticaReversa.inserir(idCliente, dv.getNumero(), 0, "", tipo_ap, tipo_serv, ar, vd, nome_destinatario, endereco_destinatario, numero_destinatario, complemento_destinatario, bairro_destinatario, cidade_destinatario, uf_destinatario, cep_destinatario, "", nome_remetente, endereco_remetente, numero_remetente, complemento_remetente, bairro_remetente, cidade_remetente, uf_remetente, cep_remetente, email_remetente, "", "", "N", nomeUser, qtdObjetos, nomeBD);
+                    
+                    //incluir o departamento na tabela  
+                    int idRev = ContrLogisticaReversa.inserir(idCliente, dv.getNumero(), 0, "", tipo_ap, tipo_serv, ar, vd, nome_destinatario, endereco_destinatario, numero_destinatario, complemento_destinatario, bairro_destinatario, cidade_destinatario, uf_destinatario, cep_destinatario, "", nome_remetente, endereco_remetente, numero_remetente, complemento_remetente, bairro_remetente, 
+                            cidade_remetente, uf_remetente, cep_remetente, email_remetente, "", "", "N", nomeUser, qtdObjetos, nomeBD, idDepto, nomeDpto, cartao);
 
                     //DEFINE QUANTIDADE DE OBJETOS DA SOLICITACAO
                     for (int i = 1; i <= qtdObjetos; i++) {
@@ -210,13 +226,28 @@ public class ServReversaGerar extends HttpServlet {
                     lista.add(c);
 
                     //FAZ A SOLICIACAO DA REVERSA
+                    String numAutorização = "";
                     RetornoPostagem ap = solicitarPostagemReversa(codAdm, codServ, cartao, d, lista);
                     if (Integer.parseInt(ap.getCodErro()) == 0) {
                         List<ResultadoSolicitacao> listaR = ap.getResultadoSolicitacao();
                         for (ResultadoSolicitacao res : listaR) {
                             ContrLogisticaReversa.alterarCodigoAP(Integer.parseInt(res.getNumeroColeta()), 0, idRev, nomeBD);
+                            numAutorização = res.getNumeroColeta();
+                            
                         }
-                        sessao.setAttribute("msg", "Autorização solicitada com Sucesso!<br/>Para visualizar as autorizações solicitadas vá em 'Logística Reversa >> Autorizações Geradas'.");
+                        
+                        sessao.setAttribute("msg", "Autorização solicitada com Sucesso!<br/>"
+                                + "<br/>"
+                                + "<b>Autorizaçao n. "+numAutorização+"</b>"
+                                + "<br/>"
+                                + nome_remetente
+                                + "<br/>"
+                                + cep_remetente
+                                + "<br/>"
+                                + email_remetente
+                                + "<br/>"
+                                + "<br/>"
+                                + "*Para visualizar todas as autorizações geradas vá em 'Logística Reversa >> Autorizações Geradas'.");
                         response.sendRedirect("Cliente/Servicos/logistica_reversa.jsp");
                     } else {
                         sessao.setAttribute("msg", "Falha ao solicitar Autorizacao de Postagem!<br/><br/>Mensagem dos Correios:<br/>" + ap.getMsgErro());

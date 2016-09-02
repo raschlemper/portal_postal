@@ -18,8 +18,7 @@
         <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
         <title>Telegrama Postal</title>
     </head>
-    <body onload="window.print();">
-        
+    <body onload="window.print();">        
         <%                                
                         TelegramaPostal t = ContrTelegramaPostal.consultaById(id, nomeBD);
                         if (t != null) {
@@ -32,6 +31,8 @@
                             if (t.getAdicionais().contains("CP")) {
                                 adicionais += "<br/>- CÓPIA DE TELEGRAMA - VIA " + t.getEnvioCopia() + ": " + t.getEmailCopia();
                             }
+                            
+                            String msg = t.getMensagem().replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").replace("\n", "<br/>"); 
                     %>
                     <table width="100%" cellpadding="0" cellspacing="0" border="0">
                         <tbody>     
@@ -70,7 +71,7 @@
                                     <b>N° do Telegrama:</b> <%= t.getSro() %><br/><br/>
                                     <b>Adicionais:</b> <%= adicionais%><br/><br/>
                                     <b>Mensagem:</b><br/>
-                                    <%= t.getMensagem()%>                                    
+                                    <%= msg %>                                    
                                 </td>
                             </tr>
                         </tbody>

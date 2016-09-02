@@ -12,7 +12,7 @@
 
     String nomeBD = (String) session.getAttribute("empresa");
     if (nomeBD != null) {
-        String multi = request.getParameter("multi");       
+        String multi = request.getParameter("multi");
 %>
 <div style="width: 100%; margin-top: 15px; margin-bottom: 100px;">
     <div style="width: 95%; text-align: left;">
@@ -36,7 +36,7 @@
                     <label>Empresa</label>
                     <input name="empresa_d" id="empresa_d" size="25" />
                 </dd>
-                </li>
+            </li>
             <li>
                 <dd>
                     <label>Endereço</label>
@@ -50,7 +50,7 @@
                     <label>TAGS</label>
                     <input name="tags_d" id="tags_d" size="39" />
                 </dd>
-            
+
                 <dd>
                     <div class="buttons" style="margin-top: -7px;">
                         <button type="button" class="regular" onclick="pesquisarDestinatario('<%=nomeBD%>', '<%=multi%>');"><img src="../../imagensNew/lupa.png"/> PESQUISAR</button>
@@ -59,9 +59,9 @@
             </li>
         </ul>
     </form>
-                
+
     <img width="100%" src="../../imagensNew/linha.jpg"/>
-    
+
     <div id="divLoad" class="esconder" style="width: 100%; text-align: center; font-size: 18px; font-weight: bold;"><p><br/><br/><img src="../../imagensNew/loader.gif" border="0" /><br/><br/>PESQUISANDO... AGUARDE!</p></div>
     <div id="resultadoPesq" style="width: 95%;"></div>                    
 
