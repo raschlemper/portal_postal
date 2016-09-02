@@ -1,6 +1,3 @@
-
-
-
 <%@page import="Entidade.Endereco"%>
 <%@page import="Entidade.TelegramaPostal"%>
 <%@page import="Emporium.Controle.ContrTelegramaPostal"%>

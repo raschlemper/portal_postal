@@ -159,7 +159,7 @@ public class LancamentoDAO extends GenericDAO {
                    + "FROM lancamento "
                    + "LEFT OUTER JOIN lancamento_rateio ON(lancamento.idLancamento = lancamento_rateio.idLancamento) "
                    + "WHERE dataLancamento is not null AND DATE(dataLancamento) BETWEEN :dataInicio AND :dataFim "
-                   + "AND lancamento.modelo <> 1 "
+                   + "AND lancamento.modelo NOT IN(1,3) "
                    + "GROUP BY id, data "
                    + "ORDER BY id, data";            
         Map<String, Object> params = new HashMap<String, Object>();
@@ -175,7 +175,7 @@ public class LancamentoDAO extends GenericDAO {
                    + "FROM lancamento "
                    + "LEFT OUTER JOIN lancamento_rateio ON(lancamento.idLancamento = lancamento_rateio.idLancamento) "
                    + "WHERE dataLancamento is not null AND DATE(dataLancamento) BETWEEN :dataInicio AND :dataFim "
-                   + "AND lancamento.modelo <> 1 "
+                   + "AND lancamento.modelo NOT IN(1,3) "
                    + "GROUP BY id, data "
                    + "ORDER BY id, data";            
         Map<String, Object> params = new HashMap<String, Object>();
@@ -191,7 +191,7 @@ public class LancamentoDAO extends GenericDAO {
                    + "FROM lancamento "
                    + "LEFT OUTER JOIN lancamento_rateio ON(lancamento.idLancamento = lancamento_rateio.idLancamento) "
                    + "WHERE dataCompetencia is not null AND DATE(dataCompetencia) BETWEEN :dataInicio AND :dataFim "
-                   + "AND lancamento.modelo <> 1 "
+                   + "AND lancamento.modelo NOT IN(1,3) "
                    + "GROUP BY id, data "
                    + "ORDER BY id, data";            
         Map<String, Object> params = new HashMap<String, Object>();
@@ -207,7 +207,7 @@ public class LancamentoDAO extends GenericDAO {
                    + "FROM lancamento "
                    + "LEFT OUTER JOIN lancamento_rateio ON(lancamento.idLancamento = lancamento_rateio.idLancamento) "
                    + "WHERE dataCompetencia is not null AND DATE(dataCompetencia) BETWEEN :dataInicio AND :dataFim "
-                   + "AND lancamento.modelo <> 1 "
+                   + "AND lancamento.modelo NOT IN(1,3) "
                    + "GROUP BY id, data "
                    + "ORDER BY id, data";            
         Map<String, Object> params = new HashMap<String, Object>();
@@ -222,7 +222,7 @@ public class LancamentoDAO extends GenericDAO {
                    + "FROM lancamento "
                    + "LEFT OUTER JOIN lancamento_rateio ON(lancamento.idLancamento = lancamento_rateio.idLancamento) "
                    + "WHERE DATE(dataLancamento) BETWEEN :dataInicio AND :dataFim "
-                   + "AND lancamento.modelo <> 1 "
+                   + "AND lancamento.modelo NOT IN(1,3) "
                    + "GROUP BY lancamento.tipo, data " 
                    + "ORDER BY lancamento.tipo, data";     
         Map<String, Object> params = new HashMap<String, Object>();

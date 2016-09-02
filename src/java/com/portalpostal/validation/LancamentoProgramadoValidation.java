@@ -18,7 +18,7 @@ public class LancamentoProgramadoValidation extends Validation<LancamentoProgram
         if(!validarValor(lancamentoProgramado)) return false;   
         if(!validarSituacao(lancamentoProgramado)) return false;
         if(!validarModelo(lancamentoProgramado)) return false;  
-        if(!validarHistorico(lancamentoProgramado)) return false;   
+        //if(!validarHistorico(lancamentoProgramado)) return false;   
         return true;
     }    
 

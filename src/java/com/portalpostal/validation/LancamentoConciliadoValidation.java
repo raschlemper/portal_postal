@@ -13,7 +13,7 @@ public class LancamentoConciliadoValidation extends Validation<LancamentoConcili
         if(!validarDataEmissao(lancamentoConciliado)) return false;  
         if(!validarDataLancamento(lancamentoConciliado)) return false;   
         if(!validarValor(lancamentoConciliado)) return false;    
-        if(!validarHistorico(lancamentoConciliado)) return false;  
+        //if(!validarHistorico(lancamentoConciliado)) return false;  
         return true;
     }    
 

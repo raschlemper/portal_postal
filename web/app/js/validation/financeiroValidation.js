@@ -53,6 +53,26 @@ app.factory('FinanceiroValidation', function(ModalService, LISTAS, MESSAGES) {
         return true;
     };    
 
+    var parcelaSaldo = function(valor, parcelas) {
+        var saldo = saldoParcela(parcelas)
+        if(!valor || !saldo) return true;
+        saldo = parseFloat(saldo.toFixed(2));
+        valor = parseFloat(valor.toFixed(2));
+        if(saldo !== valor) {
+            alert(MESSAGES.lancamento.parcelar.validacao.SALDO_INCORRETO);
+            return false;                    
+        }
+        return true;
+    }; 
+
+    var saldoParcela = function(parcelas) {            
+        var saldo = 0;
+        _.map(parcelas, function(parcela) {
+            saldo += parcela.valor;
+        });
+        return saldo;
+    };
+
     var saldoRateio = function(rateios) {            
         var saldo = 0;
         _.map(rateios, function(rateio) {
@@ -71,6 +91,7 @@ app.factory('FinanceiroValidation', function(ModalService, LISTAS, MESSAGES) {
         planoContaResultado: planoContaResultado,
         centroCustoResultado: centroCustoResultado,
         favorecidoResultado: favorecidoResultado,
+        parcelaSaldo: parcelaSaldo,
         rateioSaldo: rateioSaldo
         
     }

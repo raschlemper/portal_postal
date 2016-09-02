@@ -89,14 +89,15 @@ public class ContrLogisticaReversa {
     }
     
     
-    public static boolean alterarCodigoAP(int codAP, int cancelado, int idRev, String nomeBD) {
+    public static boolean alterarCodigoAP(int codAP, int cancelado, int idRev, String dataVal, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "UPDATE logistica_reversa SET cod_ap = ?, cancelado = ? WHERE id = ? ";
+        String sql = "UPDATE logistica_reversa SET cod_ap = ?, cancelado = ?, validade = ? WHERE id = ? ";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setInt(1, codAP);
             valores.setInt(2, cancelado);
-            valores.setInt(3, idRev);
+            valores.setString(3, dataVal);
+            valores.setInt(4, idRev);
             valores.executeUpdate();
             valores.close();
             return true;
@@ -171,17 +172,30 @@ public class ContrLogisticaReversa {
             Conexao.desconectar(conn);
         }
     }
-    public static ArrayList<LogisticaReversa> pesqReversas(int idCliente, String nomeBD, String dataIni, String dataFim, String idDeptos) {
+    public static ArrayList<LogisticaReversa> pesqReversas(int idCliente, String nomeBD, String dataIni, String dataFim, String idDeptos, String filtro) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         
         String whereDeptos = "";
         if(!idDeptos.equals("")){
-          whereDeptos =  " AND idDepartamento IN ("+idDeptos+") ;";
+          whereDeptos =  " AND idDepartamento IN ("+idDeptos+") ";
         }
+        String whereFiltro = "AND cancelado  = 0 AND (numObjeto = '' OR REPLACE(REPLACE(numObjeto,'<br/>',''),'\\n','') = '') ";
+        
+        if(filtro.equals("3")){
+            whereFiltro =  " AND cancelado <> 0 ";
+        }else if(filtro.equals("4")){
+            whereFiltro =  " ";
+        }else if(filtro.equals("1")){
+            whereFiltro =  " AND cancelado = 0 AND numObjeto <> '' AND REPLACE(REPLACE(numObjeto,'<br/>',''),'\\n','') <> '' ";
+        }else if(filtro.equals("2")){
+            whereFiltro =  " AND cancelado = 0 ";
+        }  
                 
         String sql = "SELECT * FROM logistica_reversa WHERE idCliente = "+idCliente+" "
                 + " AND DATE(dataSolicitacao) >= DATE('"+dataIni+"') AND DATE(dataSolicitacao)<= DATE('"+dataFim+"')"
-                + whereDeptos;
+                + whereDeptos
+                + whereFiltro
+                + " ;";
                 
                 
             System.out.println(sql);

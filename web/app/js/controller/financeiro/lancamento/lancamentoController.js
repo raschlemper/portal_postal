@@ -297,7 +297,7 @@ app.controller('LancamentoController',
         var save = function(conta, lancamento) {
             LancamentoService.save(lancamento)
                 .then(function(data) {  
-                    modalMessage(MESSAGES.lancamento.sucesso.INSERIDO_SUCESSO);
+                    //modalMessage(MESSAGES.lancamento.sucesso.INSERIDO_SUCESSO);
                     todos(conta);
                 })
                 .catch(function(e) {

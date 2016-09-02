@@ -15,7 +15,7 @@ public class LancamentoValidation extends Validation<Lancamento>{
         if(!validarValor(lancamento)) return false;   
         if(!validarSituacao(lancamento)) return false;
         if(!validarModelo(lancamento)) return false;
-        if(!validarHistorico(lancamento)) return false;   
+        //if(!validarHistorico(lancamento)) return false;   
         return true;
     }    
 

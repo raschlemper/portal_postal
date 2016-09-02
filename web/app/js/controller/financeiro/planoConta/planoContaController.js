@@ -86,7 +86,7 @@ app.controller('PlanoContaController',
                     result = ajustarDados(result, result.grupo);
                     PlanoContaService.save(result)
                         .then(function(data) {  
-                            modalMessage(StringService.format(MESSAGES.planoConta.sucesso.INSERIDO_SUCESSO, data.nome));
+                            //modalMessage(StringService.format(MESSAGES.planoConta.sucesso.INSERIDO_SUCESSO, data.nome));
                             todos();
                         })
                         .catch(function(e) {

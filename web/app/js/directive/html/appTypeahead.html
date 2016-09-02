@@ -5,7 +5,8 @@
            placeholder="{{placeholder}}" name="{{name}}"
            ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 100, 'blur': 0 } }"
            ng-model="itemModel[field]" 
-           ng-click="setVisible(!dropdownVisible)">
+           ng-click="setVisible(!dropdownVisible)"
+           ng-change="selectItemEmpty(this.value)">
     <ul class="dropdown-menu typeahead-content"
         ng-class=" { 'show-list': dropdownVisible, 'hide-list': !dropdownVisible } ">
         <li ng-repeat="item in itemsFiltered = filterList(items, itemModel[field])">

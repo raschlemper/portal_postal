@@ -68,7 +68,7 @@ public class ContrPreVendaImporta {
             return 17;
         } else if ((servico.startsWith("IMPRESSO") || servico.startsWith("MDPB") || servico.equals("CARTA")) && vd > 500) {
             return 500;
-        } else if ((servico.startsWith("PAC") || servico.equals("PAX")) && vd > 500) {
+        } else if ((servico.startsWith("PAC") || servico.equals("PAX")) && vd > 3000) {
             return 3000;
         } else if (vd > 10000) {
             return 10000;
@@ -165,6 +165,8 @@ public class ContrPreVendaImporta {
                     }
                 } else if (ai.getServico().startsWith("SEDEX")) {
                     servico = "SEDEX";
+                } else if (ai.getServico().startsWith("IMPRESSO")) {
+                    servico = "IMPRESSO";
                 } else if (ai.getServico().startsWith("MDPB")) {
                     servico = "CARTA";
                     String resultado = ContrServicoAbrangencia.verificaMDPBxCep(cepInteiro, nomeBD);
@@ -217,7 +219,7 @@ public class ContrPreVendaImporta {
                     int codECT = 0;
                     if (ai.getContrato().equals("") || !listaContratoCli.containsKey(servico)) {
                         codECT = listaServAvista.get(servico).getCodECT();
-                        if (servico.equals("SIMPLES")) {
+                        if (servico.equals("SIMPLES") || servico.equals("CARTA_MOD")) {
                             codECT = listaServAvista.get("CARTA").getCodECT();
                         }
                     } else {
@@ -251,10 +253,10 @@ public class ContrPreVendaImporta {
             //verifica se tem registo para carta a vista
             int registro = 0;
             int registro_modico = 0;
-            if ((ai.getCodECT() == 10014 && ai.getServico().equals("CARTA")) || ai.getServico().startsWith("MDPB")) {
+            if (ai.getServico().equals("CARTA") || ai.getServico().startsWith("MDPB") || ai.getServico().startsWith("IMPRESSO")) {
                 registro = 1;
             }
-            if (ai.getRm() != null && ai.getRm().equals("1") && (ai.getServico().equals("CARTA") || ai.getServico().startsWith("MDPB"))) {
+            if (ai.getRm() != null && ai.getRm().equals("1") && (ai.getServico().startsWith("CARTA") || ai.getServico().startsWith("MDPB") || ai.getServico().startsWith("IMPRESSO"))) {
                 registro = 0;
                 registro_modico = 1;
             }
@@ -2352,8 +2354,8 @@ public class ContrPreVendaImporta {
     /**
      * ***************************************************************************
      */
-    public static String importaPedidoNFe(ArrayList<FileItem> listaFiles, int idCliente, String departamento, String servico, int vd, int ar, String nomeBD) {
-        String sql = "INSERT INTO pre_venda (numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, registro, metodo_insercao) VALUES ";
+    public static String importaPedidoNFe(ArrayList<FileItem> listaFiles, int idCliente, String departamento, String servico, int vd, int ar, int rm, int tipoEntrega, String nomeBD) {
+        String sql = "INSERT INTO pre_venda (numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, registro, metodo_insercao, registro_modico) VALUES ";
 
         try {
 
@@ -2380,7 +2382,7 @@ public class ContrPreVendaImporta {
              * ******************************************************************
              */
             for (FileItem item : listaFiles) {
-                sql += lerNotaFiscal(item, idCliente, idDepartamento, departamento, servico, cartaoPostagem, contrato, vd, ar, nomeBD);
+                sql += lerNotaFiscal(item, idCliente, idDepartamento, departamento, servico, cartaoPostagem, contrato, vd, ar, rm, tipoEntrega, nomeBD);
 
             }
             /**
@@ -2407,7 +2409,7 @@ public class ContrPreVendaImporta {
 
     }
 
-    public static String lerNotaFiscal(FileItem item, int idCli, int idDepto, String depto, String serv, String cartaoPostagem, String contrato, int temvd, int temar, String nomeBD) throws FileNotFoundException, UnsupportedEncodingException, IOException, DocumentException {
+    public static String lerNotaFiscal(FileItem item, int idCli, int idDepto, String depto, String serv, String cartaoPostagem, String contrato, int temvd, int temar, int temrm, int tipoEndereco, String nomeBD) throws FileNotFoundException, UnsupportedEncodingException, IOException, DocumentException {
 
         SAXReader reader = new SAXReader();
         Document doc = reader.read(item.getInputStream());
@@ -2425,15 +2427,29 @@ public class ContrPreVendaImporta {
         String nNF = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
         //System.out.println(nNF);
 
-        xPath = doc.createXPath(basePath + "nfe:dest/nfe:CNPJ");
-        xPath.setNamespaceURIs(uris);
-        Element ecnpj = (Element) xPath.selectSingleNode(doc.getRootElement());
-        if (ecnpj == null) {
-            xPath = doc.createXPath(basePath + "nfe:dest/nfe:CPF");
+        String cnpj;
+        if (tipoEndereco == 1) {
+            xPath = doc.createXPath(basePath + "nfe:entrega/nfe:CNPJ");
             xPath.setNamespaceURIs(uris);
-            ecnpj = (Element) xPath.selectSingleNode(doc.getRootElement());
+            Element ecnpj = (Element) xPath.selectSingleNode(doc.getRootElement());
+            if (ecnpj == null) {
+                xPath = doc.createXPath(basePath + "nfe:entrega/nfe:CPF");
+                xPath.setNamespaceURIs(uris);
+                ecnpj = (Element) xPath.selectSingleNode(doc.getRootElement());
+            }
+            cnpj = elementToText(ecnpj);
+        } else {
+            xPath = doc.createXPath(basePath + "nfe:dest/nfe:CNPJ");
+            xPath.setNamespaceURIs(uris);
+            Element ecnpj = (Element) xPath.selectSingleNode(doc.getRootElement());
+            if (ecnpj == null) {
+                xPath = doc.createXPath(basePath + "nfe:dest/nfe:CPF");
+                xPath.setNamespaceURIs(uris);
+                ecnpj = (Element) xPath.selectSingleNode(doc.getRootElement());
+            }
+            cnpj = elementToText(ecnpj);
         }
-        String cnpj = elementToText(ecnpj);
+
         //System.out.println(cnpj);
 
         xPath = doc.createXPath(basePath + "nfe:dest/nfe:xNome");
@@ -2450,37 +2466,84 @@ public class ContrPreVendaImporta {
         String fone = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
         //System.out.println(fone);
 
-        xPath = doc.createXPath(basePath + "nfe:dest/nfe:enderDest/nfe:xLgr");
-        xPath.setNamespaceURIs(uris);
-        String lgr = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        String lgr;
+        if (tipoEndereco == 1) {
+            xPath = doc.createXPath(basePath + "nfe:entrega/nfe:xLgr");
+            xPath.setNamespaceURIs(uris);
+            lgr = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        } else {
+            xPath = doc.createXPath(basePath + "nfe:dest/nfe:enderDest/nfe:xLgr");
+            xPath.setNamespaceURIs(uris);
+            lgr = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        }
         //System.out.println(lgr);
 
-        xPath = doc.createXPath(basePath + "nfe:dest/nfe:enderDest/nfe:nro");
-        xPath.setNamespaceURIs(uris);
-        String nro = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
-        //System.out.println(nro);
+        String nro;
+        if (tipoEndereco == 1) {
+            xPath = doc.createXPath(basePath + "nfe:entrega/nfe:nro");
+            xPath.setNamespaceURIs(uris);
+            nro = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        } else {
+            xPath = doc.createXPath(basePath + "nfe:dest/nfe:enderDest/nfe:nro");
+            xPath.setNamespaceURIs(uris);
+            nro = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        }
 
-        xPath = doc.createXPath(basePath + "nfe:dest/nfe:enderDest/nfe:xCpl");
-        xPath.setNamespaceURIs(uris);
-        String cpl = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        //System.out.println(nro);
+        String cpl;
+        if (tipoEndereco == 1) {
+            xPath = doc.createXPath(basePath + "nfe:entrega/nfe:cpl");
+            xPath.setNamespaceURIs(uris);
+            cpl = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        } else {
+            xPath = doc.createXPath(basePath + "nfe:dest/nfe:enderDest/nfe:xCpl");
+            xPath.setNamespaceURIs(uris);
+            cpl = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        }
         //System.out.println(cpl);
 
-        xPath = doc.createXPath(basePath + "nfe:dest/nfe:enderDest/nfe:xBairro");
-        xPath.setNamespaceURIs(uris);
-        String bairro = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        String bairro;
+        if (tipoEndereco == 1) {
+            xPath = doc.createXPath(basePath + "nfe:entrega/nfe:xBairro");
+            xPath.setNamespaceURIs(uris);
+            bairro = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        } else {
+            xPath = doc.createXPath(basePath + "nfe:dest/nfe:enderDest/nfe:xBairro");
+            xPath.setNamespaceURIs(uris);
+            bairro = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        }
         //System.out.println(bairro);
 
-        xPath = doc.createXPath(basePath + "nfe:dest/nfe:enderDest/nfe:xMun");
-        xPath.setNamespaceURIs(uris);
-        String municipio = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        String municipio;
+        if (tipoEndereco == 1) {
+            xPath = doc.createXPath(basePath + "nfe:entrega/nfe:xMun");
+            xPath.setNamespaceURIs(uris);
+            municipio = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        } else {
+            xPath = doc.createXPath(basePath + "nfe:dest/nfe:enderDest/nfe:xMun");
+            xPath.setNamespaceURIs(uris);
+            municipio = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        }
 
-        xPath = doc.createXPath(basePath + "nfe:dest/nfe:enderDest/nfe:UF");
-        xPath.setNamespaceURIs(uris);
-        String uf = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        String uf;
+        if (tipoEndereco == 1) {
+            xPath = doc.createXPath(basePath + "nfe:entrega/nfe:UF");
+            xPath.setNamespaceURIs(uris);
+            uf = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        } else {
+            xPath = doc.createXPath(basePath + "nfe:dest/nfe:enderDest/nfe:UF");
+            xPath.setNamespaceURIs(uris);
+            uf = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        }
 
-        xPath = doc.createXPath(basePath + "nfe:dest/nfe:enderDest/nfe:CEP");
-        xPath.setNamespaceURIs(uris);
-        String cep = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        String cep;
+        if (tipoEndereco == 1) {
+            cep = "0";
+        } else {
+            xPath = doc.createXPath(basePath + "nfe:dest/nfe:enderDest/nfe:CEP");
+            xPath.setNamespaceURIs(uris);
+            cep = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
+        }
 
         xPath = doc.createXPath(basePath + "nfe:total/nfe:ICMSTot/nfe:vNF");
         xPath.setNamespaceURIs(uris);
@@ -2507,6 +2570,7 @@ public class ContrPreVendaImporta {
 
         String servico = "";
         int registro = 0;
+
         if (serv.trim().toUpperCase().startsWith("PAC")) {
             servico = "PAC";
         } else if (serv.trim().toUpperCase().replace("-", "").replace(" ", "").startsWith("ESEDEX")) {
@@ -2517,12 +2581,32 @@ public class ContrPreVendaImporta {
             servico = "SEDEX12";
         } else if (serv.trim().toUpperCase().startsWith("SEDEX")) {
             servico = "SEDEX";
-        } else if (serv.trim().toUpperCase().startsWith("CARTA")) {
+        } else if (serv.trim().toUpperCase().startsWith("CARTA") && temrm == 0) {
             servico = "CARTA";
+            registro = 1;
+        } else if (serv.trim().toUpperCase().startsWith("CARTA") && temrm == 1) {
+            servico = "CARTA";
+            registro = 0;
+        } else if (serv.trim().toUpperCase().startsWith("IMPRESSO") && temrm == 0) {
+            servico = "IMPRESSO";
+            registro = 1;
+        } else if (serv.trim().toUpperCase().startsWith("IMPRESSO") && temrm == 1) {
+            servico = "IMPRESSO";
+            registro = 0;
         } else if (serv.trim().toUpperCase().startsWith("SIMPLES")) {
             servico = "SIMPLES";
         } else if (serv.trim().toUpperCase().startsWith("PAX")) {
             servico = "PAX";
+        } else if (serv.trim().toUpperCase().startsWith("MDPB")) {
+            servico = "CARTA";
+            if (temrm == 0) {
+                registro = 1;
+            }
+            int cepInteiro = Integer.parseInt(Util.FormataString.replaceNonDigits(cep));
+            String resultado = ContrServicoAbrangencia.verificaMDPBxCep(cepInteiro, nomeBD);
+            if (resultado != null && !resultado.equals("erro")) {
+                servico = resultado;
+            }
         }
 
         String sql = "";
@@ -2585,12 +2669,15 @@ public class ContrPreVendaImporta {
                     //numObjeto = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServ(idCliente, servico, nomeBD);
                     //ContrClienteEtiquetas.alteraUtilizadaEtiqueta(numObjeto, 1, nomeBD);
                 } else if (codECT == 0 || servico.equals("CARTA")) {
+                    if (servico.equals("CARTA_MOD")) {
+                        servico = "CARTA";
+                    }
                     ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico);
                     codECT = se.getCodECT();
                     contrato = "";
-                    if (codECT == 10014 && servico.equals("CARTA")) {
+                    /*if (codECT == 10014 && servico.equals("CARTA")) {
                         registro = 1;
-                    }
+                    }*/
                 }
 
                 /**
@@ -2599,7 +2686,7 @@ public class ContrPreVendaImporta {
                 if (obs.length() > 50) {
                     obs = obs.substring(0, 49);
                 }
-                sql += "\n('" + numObjeto + "', " + idCliente + ", " + idDestinatario + ", " + idRemetente + ", '" + codECT + "', '" + contrato + "', '" + departamento + "', '" + aosCuidados + "', '" + obs + "', '" + conteudo + "', " + peso + ", " + altura + ", " + largura + ", " + comprimento + ", " + vd + ", " + ar + ", " + mp + ", '" + siglaAmarracao + "', '" + servico + "', '" + nNF + "', " + vlrCobrar + ", '" + tipo + "', " + idDepartamento + ", NOW(), '" + cartaoPostagem + "', " + registro + ", 'IMPORTACAO_NFE'),";
+                sql += "\n('" + numObjeto + "', " + idCliente + ", " + idDestinatario + ", " + idRemetente + ", '" + codECT + "', '" + contrato + "', '" + departamento + "', '" + aosCuidados + "', '" + obs + "', '" + conteudo + "', " + peso + ", " + altura + ", " + largura + ", " + comprimento + ", " + vd + ", " + ar + ", " + mp + ", '" + siglaAmarracao + "', '" + servico + "', '" + nNF + "', " + vlrCobrar + ", '" + tipo + "', " + idDepartamento + ", NOW(), '" + cartaoPostagem + "', " + registro + ", 'IMPORTACAO_NFE', " + temrm + "),";
                 TEM_PEDIDO = true;
             }
         }
