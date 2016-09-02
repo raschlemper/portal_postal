@@ -23,11 +23,17 @@ import java.util.logging.Logger;
  */
 public class ContrLogisticaReversa {
     
-    public static int inserir(int idCliente, int range, int cod_ap, String numObjeto, String tipo_ap, String tipo_serv, int ar, float vd, String nome_des, String endereco_des, String numero_des, String complemento_des, String bairro_des, String cidade_des, String uf_des, String cep_des, String email_des, String nome_rem, String endereco_rem, String numero_rem, String complemento_rem, String bairro_rem, String cidade_rem, String uf_rem, String cep_rem, String email_rem, String ddd_rem, String celular_rem, String sms_rem, String userSolicitacao, int qtdObjeto, String nomeBD) {
+    public static int inserir(int idCliente, int range, int cod_ap, String numObjeto, String tipo_ap, String tipo_serv, int ar, 
+            float vd, String nome_des, String endereco_des, String numero_des, String complemento_des, String bairro_des, 
+            String cidade_des, String uf_des, String cep_des, String email_des, String nome_rem, String endereco_rem, 
+            String numero_rem, String complemento_rem, String bairro_rem, String cidade_rem, String uf_rem, String cep_rem, 
+            String email_rem, String ddd_rem, String celular_rem, String sms_rem, String userSolicitacao, int qtdObjeto, 
+            String nomeBD, int idDepartamento, String nomeDepto, String cartaoPost) {
+        
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "INSERT INTO logistica_reversa (idCliente, range_rev, cod_ap, numObjeto, tipo_ap, tipo_serv, ar, vd, nome_des, endereco_des, numero_des, complemento_des, bairro_des, cidade_des, uf_des, cep_des, email_des,"
-                + " nome_rem, endereco_rem, numero_rem, complemento_rem, bairro_rem, cidade_rem, uf_rem, cep_rem, email_rem, ddd_rem, celular_rem, sms_rem, dataSolicitacao, userSolicitacao, cancelado, qtdObjeto)"
-                + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW(),?,-1,?);";
+                + " nome_rem, endereco_rem, numero_rem, complemento_rem, bairro_rem, cidade_rem, uf_rem, cep_rem, email_rem, ddd_rem, celular_rem, sms_rem, dataSolicitacao, userSolicitacao, cancelado, qtdObjeto, idDepartamento, nomeDepto, cartaoPost)"
+                + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW(),?,-1,?,?,?,?);";
         try {
             PreparedStatement valores = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             valores.setInt(1, idCliente);
@@ -61,6 +67,9 @@ public class ContrLogisticaReversa {
             valores.setString(29, sms_rem);
             valores.setString(30, userSolicitacao);
             valores.setInt(31, qtdObjeto);
+            valores.setInt(32, idDepartamento);            
+            valores.setString(33, nomeDepto);            
+            valores.setString(34, cartaoPost);
             valores.executeUpdate();
             
             int autoIncrementKey = 0;
@@ -80,14 +89,15 @@ public class ContrLogisticaReversa {
     }
     
     
-    public static boolean alterarCodigoAP(int codAP, int cancelado, int idRev, String nomeBD) {
+    public static boolean alterarCodigoAP(int codAP, int cancelado, int idRev, String dataVal, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "UPDATE logistica_reversa SET cod_ap = ?, cancelado = ? WHERE id = ? ";
+        String sql = "UPDATE logistica_reversa SET cod_ap = ?, cancelado = ?, validade = ? WHERE id = ? ";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setInt(1, codAP);
             valores.setInt(2, cancelado);
-            valores.setInt(3, idRev);
+            valores.setString(3, dataVal);
+            valores.setInt(4, idRev);
             valores.executeUpdate();
             valores.close();
             return true;
@@ -145,6 +155,50 @@ public class ContrLogisticaReversa {
     public static ArrayList<LogisticaReversa> consultaReversasByCliente(int idCliente, String nomeBD) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         String sql = "SELECT * FROM logistica_reversa WHERE idCliente = "+idCliente;
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            ArrayList<LogisticaReversa> lista = new ArrayList<LogisticaReversa>();
+            while (result.next()) {
+                lista.add(new LogisticaReversa(result));
+            }
+            
+            return lista;
+        } catch (Exception e) {
+            System.out.println(e);
+            //ContrErroLog.inserir("HOITO - contrCliente", "SQLException", sql, e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+    public static ArrayList<LogisticaReversa> pesqReversas(int idCliente, String nomeBD, String dataIni, String dataFim, String idDeptos, String filtro) {
+        Connection conn = (Connection) Conexao.conectar(nomeBD);
+        
+        String whereDeptos = "";
+        if(!idDeptos.equals("")){
+          whereDeptos =  " AND idDepartamento IN ("+idDeptos+") ";
+        }
+        String whereFiltro = "AND cancelado  = 0 AND (numObjeto = '' OR REPLACE(REPLACE(numObjeto,'<br/>',''),'\\n','') = '') ";
+        
+        if(filtro.equals("3")){
+            whereFiltro =  " AND cancelado <> 0 ";
+        }else if(filtro.equals("4")){
+            whereFiltro =  " ";
+        }else if(filtro.equals("1")){
+            whereFiltro =  " AND cancelado = 0 AND numObjeto <> '' AND REPLACE(REPLACE(numObjeto,'<br/>',''),'\\n','') <> '' ";
+        }else if(filtro.equals("2")){
+            whereFiltro =  " AND cancelado = 0 ";
+        }  
+                
+        String sql = "SELECT * FROM logistica_reversa WHERE idCliente = "+idCliente+" "
+                + " AND DATE(dataSolicitacao) >= DATE('"+dataIni+"') AND DATE(dataSolicitacao)<= DATE('"+dataFim+"')"
+                + whereDeptos
+                + whereFiltro
+                + " ;";
+                
+                
+            System.out.println(sql);
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();

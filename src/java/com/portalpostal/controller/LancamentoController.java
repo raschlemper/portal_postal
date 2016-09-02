@@ -288,6 +288,8 @@ public class LancamentoController {
             LancamentoAnexo lancamentoAnexo = new LancamentoAnexo();
             lancamentoAnexo.setLancamento(getLancamento(idLancamento));
             lancamentoAnexo.setNome(fileInputDetails.getFileName());
+            lancamentoAnexo.setTipo(bodyPart.getMediaType().getSubtype());
+            lancamentoAnexo.setSize(request.getContentLength());
             lancamentoAnexo.setAnexo(
                     imageService.trataInputStream(bodyPart.getMediaType().getSubtype(), fileInputString, 200, 300));
             validation(lancamentoAnexo);

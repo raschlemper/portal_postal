@@ -154,6 +154,17 @@ public class ServPreVendaConfirmaImp extends HttpServlet {
                 }
             }
 
+            int registro = 0;
+            int rm = Integer.parseInt(request.getParameter("rm" + id));
+            if (servico.startsWith("MDPB") || servico.startsWith("CARTA") || servico.startsWith("IMPRESSO")) {
+                if (rm == 0) {
+                    registro = 1;
+                }
+                if (servico.startsWith("CARTA") && rm == 1) {
+                    servico = "CARTA_MOD";
+                }
+            }
+
             Amarracao am = ContrAmarracao.consultaAmarracaoByCep(cep, servico, nomeBD);
             String siglaAmarracao = "- - -";
             if(am != null){
@@ -188,24 +199,16 @@ public class ServPreVendaConfirmaImp extends HttpServlet {
             }
 
             int mp = Integer.parseInt(request.getParameter("mp"+id));
-            int ar = Integer.parseInt(request.getParameter("ar"+id));
-            int rm = Integer.parseInt(request.getParameter("rm" + id));
+            int ar = Integer.parseInt(request.getParameter("ar" + id));
             float vd = Float.parseFloat(request.getParameter("vd"+id));
             float vlrCobrar = 0;
 
             int codECT = ContrClienteContrato.consultaContratoClienteGrupoServ(idCliente, servico, nomeBD);
-            int registro = 0;
 
             String numObjeto = "avista";
             String tipoEtiqueta = "MANUAL";
             if(nObj != null){
                 numObjeto = nObj;
-            }
-
-            if (servico.startsWith("MDPB")) {
-                if (rm == 0) {
-                    registro = 1;
-                }
             }
             
             if(codECT != 0 && nObj == null){
@@ -222,16 +225,19 @@ public class ServPreVendaConfirmaImp extends HttpServlet {
                         tipoEtiqueta = aux[1];
                     }
                 }
-            } else if ( codECT == 0){
+            } else if (codECT == 0) {
+                if (servico.equals("CARTA_MOD")) {
+                    servico = "CARTA";
+                }
                 ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico);
                 codECT = se.getCodECT();
-                if (servico.equals("CARTA") && codECT == 10014) {
+                /*if (servico.equals("CARTA") && codECT == 10014) {
                     if (rm == 0) {
                         registro = 1;
                     } else {
                         registro = 0;
                     }
-                }
+                }*/
                 contrato = "";
             }
             

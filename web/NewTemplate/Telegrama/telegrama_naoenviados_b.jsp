@@ -14,6 +14,12 @@
     } else {
         Usuario user = (Usuario) session.getAttribute("agf_usuario");
         empresas agf = (empresas) session.getAttribute("agf_empresa");
+    
+    ArrayList<TelegramaPostal> lista = ContrTelegramaPostal.consultaNaoEnviados(agf.getCnpj());
+    boolean isPossuiTelegrama = false;
+        if (lista != null && lista.size() > 0) {
+            isPossuiTelegrama = true;
+        }
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -34,28 +40,43 @@
             <div id="page-content-wrapper">
                 <div class="container-fluid">
                     <div id="page-wrapper">
-                        
                         <div class="row">
                             <div class="col-md-12">
                                 <h4 class="page-header"><b class="text-primary"><i class="fa fa-file-text"></i> Telegramas</b> > <small>Telegramas não enviados</small></h4>
                             </div>
                         </div>
                         <div class="row">
+                            <div  class="well well-md">  
+                                <h4 class="subtitle">Selecionar aquivo para importação</h4>
+                                <form action="../../ServTelegramaImportacao" method="post" enctype="multipart/form-data">
+                                    <span    class="btn btn-default btn-file">
+                                        <i class="fa fa-folder-open"></i> Selecionar arquivo 
+                                        <input name="fileImportacao" id="fileImportacao" type="file"/>
+                                    </span>
+                                    <button style="margin-left:10px;" onclick="return validaImportacao();" class="btn btn-success"><i class="fa fa-cloud-upload fa-spc"></i> IMPORTAR</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">                        
                                 <div id="ow-server-footer">
-                                    <a href="telegrama_naoenviados_b.jsp" class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-center btn-danger "><i class="fa fa-lg fa-file-text"></i> <span>TELEGRAMAS<br/>NÃO ENVIADOS</span></a>
-                                    <a href="telegrama_enviados_b.jsp" style="color: gray;" class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-center btn-default"><i class="fa fa-lg fa-file-text"></i> <span>TELEGRAMAS<br/>ENVIADOS</span></a>
+                                    <a href="telegrama_naoenviados_b.jsp" class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-center btn-danger "><i class="fa fa-lg fa-file-text"></i> <span>TELEGRAMAS<br/>SOLICITADOS<br/><br/></span></a>
+                                    <a href="telegrama_exportados.jsp" style="color: gray;" class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-center btn-default "><i class="fa fa-lg fa-file-text"></i> <span>TELEGRAMAS<br/>EXPORTADOS/NÃO ENVIADOS</span></a>
+                                    <a href="telegrama_enviados_b.jsp" style="color: gray;" class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-center btn-default"><i class="fa fa-lg fa-file-text"></i> <span>TELEGRAMAS<br/>ENVIADOS<br/><br/></span></a>
                                 </div>
                             </div>
                         </div>
-
                         <div style="width: 100%;clear: both;"></div>
+                        <% if(isPossuiTelegrama){ %>
+                        <div style="row">
+                            <form action="../../ServTelegramaExportacao" method="post">
+                                <button style="float:right;margin-bottom: 5px;width: 200px;" class="btn btn-success">Exportar Telegramas</button> 
+                            </form>
+                        </div>
+                        <% } %>
                         <div class="row">
                             <div class="col-lg-12">
-
-
                                 <%
-                                    ArrayList<TelegramaPostal> lista = ContrTelegramaPostal.consultaNaoEnviados(agf.getCnpj());
                                     for (TelegramaPostal t : lista) {
                                         Endereco ed = t.getEnderecoDes();
                                         Endereco er = t.getEnderecoRem();
@@ -132,11 +153,23 @@
         <script type="text/javascript">
             $(document).ready(function() {
                 fechaMsg();
-                
                 alert($.session.get('nomeBD'));
-                //$.session.remove('msg');
-                //alert($.session.get('msg'));
             });
+            
+            function validaImportacao(){
+                if(fileImportacao.value==""){
+                    alert('Selecione um arquivo para importação');
+                    return false;
+                }
+                
+                if(fileImportacao.value.indexOf(".txt")<1 && fileImportacao.value.indexOf(".TXT") < 1){
+                    alert('Selecione um arquivo no formato .txt');
+                    return false;
+                }
+                
+                return true;
+            }            
+           
         </script>
     </body>
 </html>

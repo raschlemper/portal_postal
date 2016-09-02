@@ -172,7 +172,7 @@
                                         <option value="2" >CONTROLE DE A.R.</option>
                                         <option value="3" >VISUALIZA VALORES / DESPESAS</option>
                                         <option value="4" >SOLICITAÇÃO DE COLETA</option>
-                                        <option value="5" >GERAR ETQIUETAS</option>
+                                        <option value="5" >GERAR ETIQUETAS</option>
                                         <option value="6" >VER DADOS DA EMPRESA</option>
                                         <option value="7" >CADASTRO DE DESTINATÁRIOS</option>
                                     </select>

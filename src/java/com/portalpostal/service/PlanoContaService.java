@@ -129,7 +129,7 @@ public class PlanoContaService {
     private List<PlanoConta> findByGrupo(List<PlanoConta> planoContas, PlanoConta grupo) {
         List<PlanoConta> planos = new ArrayList<PlanoConta>();
         for (PlanoConta planoConta : planoContas) {
-            if(planoConta.getGrupo() != null && planoConta.getGrupo().getIdPlanoConta() == grupo.getIdPlanoConta()) {
+            if(planoConta.getGrupo() != null && planoConta.getGrupo().getIdPlanoConta().equals(grupo.getIdPlanoConta())) {
                 planos.add(planoConta);
             }
         }

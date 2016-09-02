@@ -47,6 +47,13 @@ app.controller('ModalLancamentoVisualizarController',
                 });
         };
         
+        $scope.getTipo = function(lancamento) {
+           if(lancamento.modelo.id == 1) {
+               return lancamento.tipo.descricao + ' (Transferência)';
+           } 
+           return lancamento.tipo.descricao;
+        };
+        
         $scope.editar = function() {
             $modalInstance.close(lancamento);
         };

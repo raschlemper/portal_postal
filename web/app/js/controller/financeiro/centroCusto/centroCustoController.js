@@ -95,7 +95,7 @@ app.controller('CentroCustoController',
                     result = ajustarDados(result, result.grupo);
                     CentroCustoService.save(result)
                     .then(function(data) {  
-                        modalMessage("Centro de Custo " + data.nome +  " Inserido com sucesso!");
+                        //modalMessage("Centro de Custo " + data.nome +  " Inserido com sucesso!");
                         todos();
                     })
                     .catch(function(e) {

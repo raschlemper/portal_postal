@@ -97,7 +97,6 @@ public class ServPreVenda extends HttpServlet {
         int idUser = Integer.parseInt(request.getParameter("idUser"));
         String setor = request.getParameter("setor");
         String nomeUser = request.getParameter("nomeUser");
-        int flagMulti = Integer.parseInt(request.getParameter("flagMulti"));
         int qtdPostagem = Integer.parseInt(request.getParameter("quantidade"));
 
         //DADOS DO DEPARTAMENTO
@@ -122,12 +121,27 @@ public class ServPreVenda extends HttpServlet {
         }
 
         //SERVICOS ADICIONAIS
+        int posta_restante = 0;
+        int registro_modico = 0;
         int registro = 0;
+        String tipoRegistro = request.getParameter("tipoRg");
         if (servico.equals("CARTA")) {
-            int reg = Integer.parseInt(request.getParameter("tipoCarta"));
+            registro = Integer.parseInt(request.getParameter("tipoCarta"));
             //SE O SERVICO DE CARTA NAO TEM REGISTRO ELA É CARTA SIMPLES
-            if (reg == 0) {
+            if (registro == 0) {
                 servico = "SIMPLES";
+            } else if (tipoRegistro.equals("1")) {
+                servico = "CARTA_MOD";
+                registro_modico = 1;
+                registro = 0;
+            }
+        } else if (servico.startsWith("MDPB") || servico.equals("IMPRESSO")) {
+            if (tipoRegistro != null && tipoRegistro.trim().equals("1")) {
+                registro_modico = 1;
+                registro = 0;
+            } else {
+                registro_modico = 0;
+                registro = 1;
             }
         }
 
@@ -230,28 +244,20 @@ public class ServPreVenda extends HttpServlet {
                         tipoEtiqueta = aux[1];
                     }
                 } else if (codECT == 0) {
+                    if (servico.equals("CARTA_MOD")) {
+                        servico = "CARTA";
+                    }
                     ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico);
                     codECT = se.getCodECT();
-                    if (codECT == 10014 && servico.equals("CARTA")) {
+                    /*if (codECT == 10014 && servico.equals("CARTA")) {
                         registro = Integer.parseInt(request.getParameter("tipoCarta"));
-                    }
+                    }*/
                     contrato = "";
                 }
-                
+
+                //System.out.println(codECT + " | " + servico + " - RG = " + registro + " | RM = " + registro_modico);
                 //VERIFICA A EXISTENCIA DE COMBO PARA O SERVIÇO
                 //codECT = ContrServicoCombo.consultaCodCombo(codECT, ar, mp, vd);
-                 
-                int posta_restante = 0;
-                int registro_modico = 0;
-                if(servico.startsWith("MDPB") || servico.equals("IMPRESSO")){
-                    String val = request.getParameter("tipoRg");
-                    //System.out.println("tipoRg >"+val);
-                    if(val != null && val.trim().equals("1")){                        
-                        registro_modico = 1;
-                    }else{
-                        registro = 1;
-                    }
-                }          
                 
                 //INSERE PRE VENDA 
                 ContrPreVenda.inserir(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD, posta_restante, registro_modico, setor);

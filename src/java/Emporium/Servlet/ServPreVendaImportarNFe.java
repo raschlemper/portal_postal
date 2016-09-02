@@ -7,7 +7,6 @@
 package Emporium.Servlet;
 
 import Emporium.Controle.ContrPreVendaImporta;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,7 +22,6 @@ import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FilenameUtils;
 
 /**
  *
@@ -49,7 +47,7 @@ public class ServPreVendaImportarNFe extends HttpServlet {
         boolean isMultiPart = FileUpload.isMultipartContent(request);
                 
         String departamento = "", servico = "", tipo = "";
-        int idCliente = 0, vd = 0, ar = 0;
+        int idCliente = 0, vd = 0, ar = 0, rm = 0, tipoEntrega = 0;
         
         if (nomeBD != null) {
         if (isMultiPart) {
@@ -83,6 +81,12 @@ public class ServPreVendaImportarNFe extends HttpServlet {
                         if (item.getFieldName().equals("ar")) {
                              ar = Integer.parseInt(item.getString());
                         }
+                        if (item.getFieldName().equals("rm")) {
+                            rm = Integer.parseInt(item.getString());
+                        }
+                        if (item.getFieldName().equals("tipoEntrega")) {
+                            tipoEntrega = Integer.parseInt(item.getString());
+                        }
                     }
                     
                     if (!item.isFormField()) {
@@ -98,7 +102,7 @@ public class ServPreVendaImportarNFe extends HttpServlet {
                         response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=Importacao maxima de 200 arquivos de cada vez!");
                 } else {
                     ContrPreVendaImporta.excluirNaoConfirmados(idCliente, nomeBD);
-                    String condicao = ContrPreVendaImporta.importaPedidoNFe(listaArq, idCliente, departamento, servico, vd, ar, nomeBD);
+                    String condicao = ContrPreVendaImporta.importaPedidoNFe(listaArq, idCliente, departamento, servico, vd, ar, rm, tipoEntrega, nomeBD);
                     if(condicao.startsWith("ERRO")){
                         response.sendRedirect("Cliente/Servicos/imp_postagem.jsp?msg=" + condicao);
                     }else{

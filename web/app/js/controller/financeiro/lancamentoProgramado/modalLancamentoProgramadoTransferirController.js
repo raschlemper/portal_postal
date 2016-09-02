@@ -64,10 +64,16 @@ app.controller('ModalLancamentoProgramadoTransferirController',
                 });
         };
         
-        $scope.events = {
+        $scope.eventsOrigem = {
             onblur : function() {
                 setDataCompetenciaOrigem($scope.lancamentoProgramadoTransferencia);
                 setDataVencimentoDestino($scope.lancamentoProgramadoTransferencia);
+                //setDataCompetenciaDestino($scope.lancamentoProgramadoTransferencia);
+            }
+        };
+        
+        $scope.eventsDestino = {
+            onblur : function() {
                 setDataCompetenciaDestino($scope.lancamentoProgramadoTransferencia);
             }
         };
@@ -148,10 +154,10 @@ app.controller('ModalLancamentoProgramadoTransferirController',
                 alert(MESSAGES.lancamento.transferir.validacao.VALOR_REQUERIDA);
                 return false;
             }
-            if (form.historico.$error.required) {
-                alert(MESSAGES.lancamento.transferir.validacao.HISTORICO_REQUERIDA);
-                return false;
-            }
+//            if (form.historico.$error.required) {
+//                alert(MESSAGES.lancamento.transferir.validacao.HISTORICO_REQUERIDA);
+//                return false;
+//            }
             return true;
         };
         

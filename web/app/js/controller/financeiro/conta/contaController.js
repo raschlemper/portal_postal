@@ -89,7 +89,7 @@ app.controller('ContaController',
         var save = function(conta) {
             ContaService.save(conta)
                 .then(function(data) {  
-                    modalMessage("Conta " + data.nome +  " Inserida com sucesso!");
+                    //modalMessage("Conta " + data.nome +  " Inserida com sucesso!");
                     todos();
                 })
                 .catch(function(e) {

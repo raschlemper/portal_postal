@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('FluxoCaixaController', 
-    ['$scope', 'LancamentoProgramadoService', 'ContaService', 'PlanoContaService', 'DatePickerService', 'ListaService', 'LISTAS', 'MESSAGES',
-    function ($scope, LancamentoProgramadoService, ContaService, PlanoContaService, DatePickerService, ListaService, LISTAS, MESSAGES) {
+    ['$scope', 'LancamentoProgramadoService', 'ContaService', 'PlanoContaService', 'ContaCorrenteService', 'DatePickerService', 'ListaService', 'LISTAS', 'MESSAGES',
+    function ($scope, LancamentoProgramadoService, ContaService, PlanoContaService, ContaCorrenteService, DatePickerService, ListaService, LISTAS, MESSAGES) {
 
         var init = function () {
             $scope.lancamentos = [];
@@ -218,10 +218,7 @@ app.controller('FluxoCaixaController',
         // ***** GRÁFICO ***** //
         
         var initChartFluxoCaixa = function(lancamentos) {
-            var categorias = getDataChartSaldo(lancamentos, 'dataVencimento');
-            var valores = getDataChartSaldo(lancamentos, 'saldo');
-            if($scope.configChartFluxoCaixa) { changeChartFluxoCaixa(lancamentos); }
-            else { configChartFluxoCaixa(categorias, valores); }
+            setValoresChart(lancamentos);
         }
         
         var changeChartFluxoCaixa = function(lancamentos) {
@@ -231,7 +228,32 @@ app.controller('FluxoCaixaController',
             $scope.configChartFluxoCaixa.series[0].data = valores;
         }
         
-        var configChartFluxoCaixa = function(categorias, valores) {        
+        var setValoresChart = function(lancamentos) {
+            ContaCorrenteService.getAll()
+               .then(function(data) { 
+                    var categorias = getDataChartSaldo(lancamentos, 'dataVencimento');
+                    var valores = getDataChartSaldo(lancamentos, 'saldo');
+                    var limiteContaCorrente = getSaldoContaCorrente(data);
+                    if($scope.configChartFluxoCaixa) { changeChartFluxoCaixa(lancamentos); }
+                    else { configChartFluxoCaixa(categorias, valores, limiteContaCorrente); }
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+            
+        };
+        
+        var getSaldoContaCorrente = function(contasCorrentes) {
+            var limite = 0;
+            _.map(contasCorrentes, function(contaCorrente) {
+                if(contaCorrente && contaCorrente.limite) {
+                    limite -= contaCorrente.limite;
+                }
+            });
+            return limite;
+        }
+        
+        var configChartFluxoCaixa = function(categorias, valores, limitConta) {        
             $scope.configChartFluxoCaixa = {
                 title: " ",     
                 options: { 
@@ -256,7 +278,19 @@ app.controller('FluxoCaixaController',
                     title: { enabled: false }
                 },
                 yAxis: {
-                    title: { text: ' ' }
+                    title: { text: ' ' },
+                    plotLines: [{
+                        label: {
+                            text: 'Limite Conta Corrente',
+                            style: {
+                                color: '#FF6161'
+                            }
+                        },
+                        dashStyle: 'shortdot',
+                        color: '#FE2E2E',
+                        value: limitConta,
+                        width: 1   
+                    }]
                 },
                 series: [{  
                     name: 'Saldos',    

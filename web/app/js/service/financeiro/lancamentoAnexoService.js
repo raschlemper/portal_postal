@@ -1,6 +1,6 @@
 'use strict';
 
-app.factory('LancamentoAnexoService', function($http, PromiseService, FileUploader) {
+app.factory('LancamentoAnexoService', function($http, PromiseService, FileUploader, DownloadService) {
 
     return {
         
@@ -22,6 +22,11 @@ app.factory('LancamentoAnexoService', function($http, PromiseService, FileUpload
                     $http.get(_contextPath + "/api/financeiro/lancamento/anexo/" + idLancamentoAnexo));
         },
         
+        getFile: function(idLancamentoAnexo) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/lancamento/anexo/" + idLancamentoAnexo + "/file"));
+        },
+        
         getLancamento: function(idLancamento) {
             return PromiseService.execute(
                     $http.get(_contextPath + "/api/financeiro/lancamento/anexo/lancamento/" + idLancamento));
@@ -40,6 +45,11 @@ app.factory('LancamentoAnexoService', function($http, PromiseService, FileUpload
         delete: function(idLancamentoAnexo) {
             return PromiseService.execute(
                     $http.delete(_contextPath + "/api/financeiro/lancamento/anexo/" + idLancamentoAnexo));
+        },
+        
+        download: function(idLancamentoAnexo, type) {
+            var url = _contextPath + "/api/financeiro/lancamento/anexo/" + idLancamentoAnexo + "/download/" + type;
+            DownloadService.execute(url);    
         },
         
         upload: function(idLancamento, anexo) {

@@ -521,6 +521,14 @@
         <servlet-class>Emporium.Servlet.ServTelegramaExcluir</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>ServTelegramaExportacao</servlet-name>
+        <servlet-class>Emporium.Servlet.ServTelegramaExportacao</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServTelegramaImportacao</servlet-name>
+        <servlet-class>Emporium.Servlet.ServTelegramaImportacao</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>ServListaPostagem</servlet-name>
         <servlet-class>iReports.ServListaPostagem</servlet-class>
     </servlet>
@@ -681,6 +689,18 @@
     <servlet>
         <servlet-name>ServBaixaAr</servlet-name>
         <servlet-class>Emporium.Servlet.ServBaixaAr</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServInserirEndercoLR</servlet-name>
+        <servlet-class>Emporium.Servlet.ServInserirEndercoLR</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServEditarEnderecoLR</servlet-name>
+        <servlet-class>Emporium.Servlet.ServEditarEnderecoLR</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServExcluirEnderecoLR</servlet-name>
+        <servlet-class>Emporium.Servlet.ServExcluirEnderecoLR</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ServLogin</servlet-name>
@@ -1312,6 +1332,14 @@
         <url-pattern>/ServInserirClientesVendedor</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>ServTelegramaExportacao</servlet-name>
+        <url-pattern>/ServTelegramaExportacao</url-pattern>
+    </servlet-mapping>
+     <servlet-mapping>
+        <servlet-name>ServTelegramaImportacao</servlet-name>
+        <url-pattern>/ServTelegramaImportacao</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ServArDigital</servlet-name>
         <url-pattern>/ServArDigital</url-pattern>
     </servlet-mapping>
@@ -1334,6 +1362,18 @@
     <servlet-mapping>
         <servlet-name>ServBaixaAr</servlet-name>
         <url-pattern>/ServBaixaAr</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServInserirEndercoLR</servlet-name>
+        <url-pattern>/ServInserirEndercoLR</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServEditarEnderecoLR</servlet-name>
+        <url-pattern>/ServEditarEnderecoLR</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServExcluirEnderecoLR</servlet-name>
+        <url-pattern>/ServExcluirEnderecoLR</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

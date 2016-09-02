@@ -92,7 +92,7 @@ app.controller('FornecedorController',
         var save = function(fornecedor) {
             FornecedorService.save(fornecedor)
                 .then(function(data) {  
-                    modalMessage("Fornecedor " + data.nomeFantasia +  " Inserido com sucesso!");
+                    //modalMessage("Fornecedor " + data.nomeFantasia +  " Inserido com sucesso!");
                     todos();
                 })
                 .catch(function(e) {

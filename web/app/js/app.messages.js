@@ -142,6 +142,14 @@ app.constant('MESSAGES', {
                 HISTORICO_REQUERIDA: "Preencha o histórico do lançamento reconciliado!"
             }
         },
+        parcelar: {
+            title: {
+                INSERIR: "Parcelar Lançamento",
+            },
+            validacao: {
+                SALDO_INCORRETO: "A soma dos valores do parcelamento é diferente ao valor do lançamento!"
+            }
+        },
         ratear: {
             title: {
                 INSERIR: "Ratear Lançamento",
@@ -154,8 +162,15 @@ app.constant('MESSAGES', {
             title: {
                 INSERIR: "Inserir Anexo"
             },
+            sucesso: {
+                INSERIDO_SUCESSO: "Anexo Inserido com sucesso!",
+                ALTERADO_SUCESSO: "Anexo Alterado com sucesso!",
+                REMOVIDO_SUCESSO: "Anexo Removido com sucesso!"
+            },
             validacao: {
-                ARQUIVO_REQUERIDA: "Selecione o arquivo!"
+                ARQUIVO_REQUERIDA: "Selecione o arquivo!",
+                ARQUIVO_NAO_PERMITIDO: "Este tipo de arquivo não é permitido!",
+                ARQUIVO_ACIMA_TAMANHO_PERMITIDO: "Este arquivo esta acima do tamanho permitido!"
             }
         },
         compensar: {

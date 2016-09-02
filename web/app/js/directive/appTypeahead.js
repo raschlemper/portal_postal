@@ -35,6 +35,11 @@ app.directive('appTypeahead', function($filter) {
                 if($scope.events) { $scope.itemModel = $scope.events.selectItem(itemSelected); }
                 else { $scope.itemModel = itemSelected; }
                 $scope.setVisible(false);
+            };                      
+            
+            $scope.selectItemEmpty = function(value) {
+                if(value) return;
+                $scope.itemModel = null;
             };
             
             $scope.filterList = function(lista, search) {
@@ -45,7 +50,7 @@ app.directive('appTypeahead', function($filter) {
                 var value = item[$scope.field];
                 if($scope.filter){ value = $filter($scope.filter.name)(item, $scope.filter.args); }
                 return value;
-            }
+            };
             
             init();
         }

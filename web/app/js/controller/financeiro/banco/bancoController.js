@@ -66,7 +66,7 @@ app.controller('BancoController',
         var save = function(banco) {
             BancoService.save(banco)
                 .then(function(data) {  
-                    modalMessage("Banco " + data.nome +  " Inserido com sucesso!");
+                    //modalMessage("Banco " + data.nome +  " Inserido com sucesso!");
                     todos();
                 })
                 .catch(function(e) {

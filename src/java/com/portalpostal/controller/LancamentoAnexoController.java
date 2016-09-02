@@ -6,7 +6,12 @@ import com.portalpostal.model.LancamentoAnexo;
 import com.portalpostal.service.ImageService;
 import com.portalpostal.service.LancamentoAnexoService;
 import com.portalpostal.validation.LancamentoAnexoValidation;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
@@ -21,6 +26,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
+import sun.misc.BASE64Decoder;
 
 @Path("/financeiro/lancamento/anexo")
 public class LancamentoAnexoController {
@@ -49,7 +56,11 @@ public class LancamentoAnexoController {
     public List<LancamentoAnexo> findAll() {
         try {
             init();    
-            return lancamentoAnexoService.findAll();
+            List<LancamentoAnexo> anexos = lancamentoAnexoService.findAll();
+//            for (LancamentoAnexo anexo : anexos) {
+//                anexo.setFile(toStreamingOutput(anexo.getAnexo()));
+//            }
+            return anexos;
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -61,11 +72,51 @@ public class LancamentoAnexoController {
     public LancamentoAnexo find(@PathParam("idLancamentoAnexo") Integer idLancamentoAnexo) {
         try {
             init();    
-            return lancamentoAnexoService.find(idLancamentoAnexo);
+            LancamentoAnexo anexo = lancamentoAnexoService.find(idLancamentoAnexo);
+            return anexo;
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }   
+    
+    @GET
+    @Path("/{idLancamentoAnexo}/file")
+    @Produces(MediaType.APPLICATION_JSON)
+    public StreamingOutput findFile(@PathParam("idLancamentoAnexo") Integer idLancamentoAnexo) {
+        try {
+            init();    
+            final LancamentoAnexo anexo = lancamentoAnexoService.find(idLancamentoAnexo);
+            return toStreamingOutput(anexo.getAnexo());            
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     }  
+    
+    @GET
+    @Path("/{idLancamentoAnexo}/download/image")
+    @Produces({"image/png", "image/jpg", "image/gif"})
+    public Response downloadImage(@PathParam("idLancamentoAnexo") Integer idLancamentoAnexo) {
+        try {
+            init();    
+            final LancamentoAnexo anexo = lancamentoAnexoService.find(idLancamentoAnexo);            
+            return DownloadHandler.image(anexo.getAnexo(), anexo.getNome());
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    } 
+    
+    @GET
+    @Path("/{idLancamentoAnexo}/download/pdf")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response downloadPdf(@PathParam("idLancamentoAnexo") Integer idLancamentoAnexo) {
+        try {
+            init();    
+            final LancamentoAnexo anexo = lancamentoAnexoService.find(idLancamentoAnexo);            
+            return DownloadHandler.pdf(anexo.getAnexo(), anexo.getNome());
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    } 
     
     @GET
     @Path("/lancamento/{idLancamento}")
@@ -75,7 +126,7 @@ public class LancamentoAnexoController {
             init();    
             List<LancamentoAnexo> anexos = lancamentoAnexoService.findByLancamento(idLancamento);
 //            for (LancamentoAnexo anexo : anexos) {
-//                anexo.setAnexo(imageService.resizeImage(anexo.getAnexo(), 390, 320));
+//                anexo.setFile(toStreamingOutput(anexo.getAnexo()));
 //            }
             return anexos;
         } catch (Exception ex) {
@@ -137,5 +188,23 @@ public class LancamentoAnexoController {
         int idErro = ContrErroLog.inserir("Portal Postal - ServLancamentoAnexo", "Exception", null, msg);
         return Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN)
                 .entity("SYSTEM ERROR Nº: " + idErro + "<br/> Ocorreu um erro inesperado!").build();
+    } 
+    
+    private byte[] toByte(InputStream file) throws IOException {
+        BASE64Decoder decoder = new BASE64Decoder();
+        return decoder.decodeBuffer(file);        
     }
+    
+    private BufferedImage toImage(InputStream file) throws IOException {
+        return ImageIO.read(file);       
+    }
+    
+    private StreamingOutput toStreamingOutput(final InputStream file) throws IOException {
+        return new StreamingOutput() {
+            public void write(OutputStream output) throws IOException, WebApplicationException {
+                output.write(toByte(file));
+            }
+        };      
+    }
+    
 }

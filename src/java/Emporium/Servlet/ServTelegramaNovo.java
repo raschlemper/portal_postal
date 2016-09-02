@@ -9,8 +9,6 @@ package Emporium.Servlet;
 import Emporium.Controle.ContrTelegramaPostal;
 import Entidade.Endereco;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.servlet.ServletException;
@@ -59,8 +57,12 @@ public class ServTelegramaNovo extends HttpServlet {
         String cepDes = request.getParameter("cep");
         Endereco endDes = new Endereco(nomeDes, enderecoDes, numeroDes, complementoDes, bairroDes, cidadeDes, ufDes, cepDes);
         
-        String mensagem = request.getParameter("obs");        
-        String dep = request.getParameter("departamento");        
+        String mensagem = request.getParameter("obs");
+        mensagem = mensagem.replaceAll("\uFFFD", "\"");
+        mensagem = mensagem.replaceAll("\u0093", "\"");
+        mensagem = mensagem.replaceAll("\u0094", "\"");
+        mensagem = mensagem.replaceAll("\u0096", "-");
+        String dep = request.getParameter("departamento");
         int idDepartamento = 0;
         if(!dep.equals("")){
             String aux[] = dep.split(";");

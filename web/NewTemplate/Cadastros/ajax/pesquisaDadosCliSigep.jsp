@@ -108,7 +108,7 @@
                         if( cp.getServicos() != null){
                             List<ServicoERP> listaServico = cp.getServicos();
                             for(ServicoERP s: listaServico){
-                                servicos += "@"+s.getCodigo().trim()+" | "+s.getDescricao();                                
+                                servicos += "@"+s.getCodigo().trim()+" | "+s.getDescricao() +" [" + s.getId()+"]";                                
                                 /*
                                 System.out.println("vvvvvvvvvvvv");
                                 System.out.println(s.getCodigo()+" - "+s.getId()+" | "+s.getDescricao());

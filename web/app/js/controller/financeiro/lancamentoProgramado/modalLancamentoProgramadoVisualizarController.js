@@ -47,6 +47,13 @@ app.controller('ModalLancamentoProgramadoVisualizarController',
                 });
         };
         
+        $scope.getTipo = function(lancamentoProgramado) {
+           if(lancamentoProgramado.modelo.id == 3) {
+               return lancamentoProgramado.tipo.descricao + ' (Transferência)';
+           } 
+           return lancamentoProgramado.tipo.descricao;
+        };
+        
         $scope.editar = function() {
             $modalInstance.close(lancamentoProgramado);
         };

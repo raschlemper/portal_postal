@@ -17,7 +17,7 @@ public class LancamentoProgramadoTransferenciaValidation extends Validation<Lanc
         if(!validarDataLancamentoOrigem(lancamento)) return false;   
         if(!validarDataLancamentoDestino(lancamento)) return false;   
         if(!validarValor(lancamento)) return false;   
-        if(!validarHistorico(lancamento)) return false;   
+        //if(!validarHistorico(lancamento)) return false;   
         return true;
     }    
 

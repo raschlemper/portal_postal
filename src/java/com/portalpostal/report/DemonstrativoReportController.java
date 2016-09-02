@@ -65,7 +65,7 @@ public class DemonstrativoReportController {
     private StreamingOutput getReport(Collection collection) throws Exception {
         return ReportService.create(nameReport)
                     .collection(collection)
-                    .report(); 
+                    .report(TypeReport.PDF); 
     }
     
     private List<Saldo> getCollection(String nomeBD) throws Exception {

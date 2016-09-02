@@ -24,6 +24,7 @@
     } else {
 
         int idCli = Integer.parseInt(String.valueOf(session.getAttribute("idCliente")));
+        ArrayList<Integer> dps = (ArrayList<Integer>) session.getAttribute("departamentos");
 
         Clientes cli = (Clientes) session.getAttribute("cliente");
         int idUser = (Integer) session.getAttribute("idUsuarioEmp");
@@ -32,6 +33,14 @@
         if (cli.getNumero() == null || cli.getNumero().equals("null")) {
             numero = "";
         }
+
+        Clientes cliLR = new Clientes(cli.getNome(), cli.getEndereco(), cli.getBairro(), cli.getCidade(), cli.getUf(), cli.getCep(), cli.getNumero(), cli.getComplemento());
+
+        ArrayList<Clientes> destLR = Controle.contrCliente.consultaDestinatarioLR(nomeBD);
+
+        destLR.add(0, cliLR);
+
+
 %>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -58,164 +67,185 @@
         <!-- TableSorter -->
 
         <script type="text/javascript">
-
-            function preencherCampos() {
-                var form = document.form1;
-
-                if (form.numeroCli.value == "") {
-                    alert('Preencha o NÚMERO do destinatário!');
-                    return false;
-                }
-
-                if (form.nome.value == "") {
-                    alert('Preencha o NOME do remetente!');
-                    return false;
-                }
-                if (form.cep.value == "") {
-                    alert('Preencha o CEP do remetente!');
-                    return false;
-                }
-                if (form.endereco.value == "") {
-                    alert('Preencha o ENDEREÇO do remetente!');
-                    return false;
-                }
-                if (form.numero.value == "") {
-                    alert('Preencha o NÚMERO do remetente!');
-                    return false;
-                }
-                if (form.cidade.value == "") {
-                    alert('Preencha a CIDADE do remetente!');
-                    return false;
-                }
-                if (form.uf.value == "") {
-                    alert('Preencha a UF do remetente!');
-                    return false;
-                }
-                if (form.qtdObjetos.value == "") {
-                    alert('Preencha a Quantidade de Objetos!');
-                    return false;
-                }
-
-                if (form.vd.value == '') {
-                    form.vd.value = '0.00';
-                }
-                if (form.vd.value > 0 && form.vd.value < 12) {
-                    alert('O Valor Declarado minimo é de R$ 12.00!');
-                    return false;
-                } else if (form.vd.value > 10000) {
-                    alert('O Valor Declarado de Encomendas deve ser até R$ 10.000,00!');
-                    return false;
-                }
+            var aux = "";
+                    
+            <% for (Clientes cl : destLR) {%>
+            aux += ',{ "cep":"<%= FormataString.formataCep(cl.getCep() + "")%>" , "endereco":"<%=cl.getEndereco()%>", "numero":"<%=cl.getNumero()%>" , "complemento":"<%=cl.getComplemento()%>" , "bairro":"<%=cl.getBairro()%>" , "cidade":"<%=cl.getCidade()%>" , "uf":"<%=cl.getUf()%>" }';
+            <%}%>;
                 
-                if(form.cklist.value === '5'){
-                    var contSelected = 0;
-                    var inputElements = document.getElementsByName('ckPedido');
-                    for(var i=0; inputElements[i]; ++i){
-                          if(inputElements[i].checked){
-                                contSelected++
-                                if(contSelected > 8){
-                                    alert('Selecione no máximo 8 tipos de documentos');
-                                    return false;
-                                }
-                          }
-                    }
-                    if(contSelected === 0){
-                        alert('Selecione ao menos 1 tipo de documento');                        
-                        return false;
-                    }
-                }
+            var text = '{ "destinatario" : [' + aux.trim().substring(1) + ']}';
+           
+            
+            function preencherCampos() {
+            var form = document.form1;
+            if (form.numeroCli.value === "") {
+            alert('Preencha o NÚMERO do destinatário!');
+            return false;
+            }
+               if (form.departamento.value === "-1") {
+            alert('Selecione um departamento');
+            return false;
+            }
 
-                //PREENCHIMENTO DA CONFIRMAÇÃO                
-                document.getElementById("v_nome").innerHTML = form.nome.value;
-                document.getElementById("v_email").innerHTML = form.email_destinatario.value;
-                document.getElementById("v_celular").innerHTML = form.celular.value;
-                document.getElementById("v_cep").innerHTML = form.cep.value;
-                document.getElementById("v_rua").innerHTML = form.endereco.value + ", " + form.numero.value + ", " + form.complemento.value;
-                document.getElementById("v_bairro").innerHTML = form.bairro.value + " - " + form.cidade.value + " / " + form.uf.value;
-                document.getElementById("v_dest").innerHTML = form.nomeCli.value;
-                document.getElementById("v_cep_dest").innerHTML = form.cepCli.value;
-                document.getElementById("v_rua_dest").innerHTML = form.enderecoCli.value + ", " + form.numeroCli.value + ", " + form.complementoCli.value;
-                document.getElementById("v_bairro_dest").innerHTML = form.bairroCli.value + " - " + form.cidadeCli.value + " / " + form.ufCli.value;
+            if (form.nome.value === "") {
+            alert('Preencha o NOME do remetente!');
+            return false;
+            }
+            if (form.cep.value === "") {
+            alert('Preencha o CEP do remetente!');
+            return false;
+            }
+            if (form.endereco.value === "") {
+            alert('Preencha o ENDEREÇO do remetente!');
+            return false;
+            }
+            if (form.numero.value === "") {
+            alert('Preencha o NÚMERO do remetente!');
+            return false;
+            }
+            if (form.cidade.value === "") {
+            alert('Preencha a CIDADE do remetente!');
+            return false;
+            }
+            if (form.uf.value === "") {
+            alert('Preencha a UF do remetente!');
+            return false;
+            }
+            if (form.qtdObjetos.value === "") {
+            alert('Preencha a Quantidade de Objetos!');
+            return false;
+            }
+         
 
+            if (form.vd.value === '') {
+            form.vd.value = '0.00';
+            }
+            if (form.vd.value > 0 && form.vd.value < 17) {
+            alert('O Valor Declarado minimo é de R$ 17.00!');
+            return false;
+            } else if (form.vd.value > 10000) {
+            alert('O Valor Declarado de Encomendas deve ser até R$ 10.000,00!');
+            return false;
+            }
 
-                document.getElementById("v_vd").innerHTML = "R$ " + form.vd.value;
-                if (form.ar.value == 1) {
-                    document.getElementById("v_ar").innerHTML = "<img width='12' src='../../imagensNew/tick_circle.png' />";
-                } else {
-                    document.getElementById("v_ar").innerHTML = "<img width='12' src='../../imagensNew/cross_circle.png' />";
-                }
+            if (form.cklist.value === '5') {
+            var contSelected = 0;
+            var inputElements = document.getElementsByName('ckPedido');
+            for (var i = 0; inputElements[i]; ++i) {
+            if (inputElements[i].checked) {
+            contSelected++
+                    if (contSelected > 8) {
+            alert('Selecione no máximo 8 tipos de documentos');
+            return false;
+            }
+            }
+            }
+            if (contSelected === 0) {
+            alert('Selecione ao menos 1 tipo de documento');
+            return false;
+            }
+            }
 
-                chamaDivProtecao2();
+            //PREENCHIMENTO DA CONFIRMAÇÃO                
+            document.getElementById("v_nome").innerHTML = form.nome.value;
+            document.getElementById("v_email").innerHTML = form.email_destinatario.value;
+            document.getElementById("v_celular").innerHTML = form.celular.value;
+            document.getElementById("v_cep").innerHTML = form.cep.value;
+            document.getElementById("v_rua").innerHTML = form.endereco.value + ", " + form.numero.value + ", " + form.complemento.value;
+            document.getElementById("v_bairro").innerHTML = form.bairro.value + " - " + form.cidade.value + " / " + form.uf.value;
+            document.getElementById("v_dest").innerHTML = form.nomeCli.value;
+            document.getElementById("v_cep_dest").innerHTML = form.cepCli.value;
+            document.getElementById("v_rua_dest").innerHTML = form.enderecoCli.value + ", " + form.numeroCli.value + ", " + form.complementoCli.value;
+            document.getElementById("v_bairro_dest").innerHTML = form.bairroCli.value + " - " + form.cidadeCli.value + " / " + form.ufCli.value;
+            document.getElementById("v_vd").innerHTML = "R$ " + form.vd.value;
+            if (form.ar.value == 1) {
+            document.getElementById("v_ar").innerHTML = "<img width='12' src='../../imagensNew/tick_circle.png' />";
+            } else {
+            document.getElementById("v_ar").innerHTML = "<img width='12' src='../../imagensNew/cross_circle.png' />";
+            }
 
+            var aux = form.departamento.value.split(';');
+            document.getElementById("v_departamento").innerHTML = aux[1];
+            chamaDivProtecao2();
             }
 
             function chamaDivProtecao() {
-                var classe = document.getElementById("divProtecao").className;
-                if (classe == "esconder") {
-                    document.getElementById("divProtecao").className = "mostrar";
-                    document.getElementById("divInteracao").className = "mostrar";
-                } else {
-                    document.getElementById("divProtecao").className = "esconder";
-                    document.getElementById("divInteracao").className = "esconder";
-                }
+            var classe = document.getElementById("divProtecao").className;
+            if (classe == "esconder") {
+            document.getElementById("divProtecao").className = "mostrar";
+            document.getElementById("divInteracao").className = "mostrar";
+            } else {
+            document.getElementById("divProtecao").className = "esconder";
+            document.getElementById("divInteracao").className = "esconder";
+            }
             }
 
             function chamaDivProtecao2() {
-                var classe = document.getElementById("divProtecao").className;
-                if (classe == "esconder") {
-                    document.getElementById("divProtecao").className = "mostrar";
-                    document.getElementById("divInteracao2").className = "mostrar";
-                } else {
-                    document.getElementById("divProtecao").className = "esconder";
-                    document.getElementById("divInteracao2").className = "esconder";
-                }
+            var classe = document.getElementById("divProtecao").className;
+            if (classe == "esconder") {
+            document.getElementById("divProtecao").className = "mostrar";
+            document.getElementById("divInteracao2").className = "mostrar";
+            } else {
+            document.getElementById("divProtecao").className = "esconder";
+            document.getElementById("divInteracao2").className = "esconder";
+            }
             }
 
             $(document).ready(function () {
-                /* ao pressionar uma tecla em um campo que seja de class="pula" */
-                $('#cep').keypress(function (e) {
-                    /* 
-                     * verifica se o evento é Keycode (para IE e outros browsers)
-                     * se não for pega o evento Which (Firefox)
-                     */
-                    var tecla = (e.keyCode ? e.keyCode : e.which);
-
-                    /* verifica se a tecla pressionada foi o ENTER */
-                    if (tecla == 13) {
-                        verPesquisarCepDest($('#cep').val());
-                    }
-                    /* impede o sumbit caso esteja dentro de um form */
-                    //e.preventDefault(e);
-                    //return false;
-                })
+            /* ao pressionar uma tecla em um campo que seja de class="pula" */
+            $('#cep').keypress(function (e) {
+            /* 
+             * verifica se o evento é Keycode (para IE e outros browsers)
+             * se não for pega o evento Which (Firefox)
+             */
+            var tecla = (e.keyCode ? e.keyCode : e.which);
+            /* verifica se a tecla pressionada foi o ENTER */
+            if (tecla == 13) {
+            verPesquisarCepDest($('#cep').val());
+            }
+            /* impede o sumbit caso esteja dentro de um form */
+            //e.preventDefault(e);
+            //return false;
+            })
             });
-
             function semNumero() {
-                if (document.getElementById("sn").checked) {
-                    document.getElementById("numero").value = "S/N";
-                    document.getElementById("numero").disabled = true;
-                } else {
-                    document.getElementById("numero").value = "";
-                    document.getElementById("numero").disabled = false;
-                }
+            if (document.getElementById("sn").checked) {
+            document.getElementById("numero").value = "S/N";
+            document.getElementById("numero").disabled = true;
+            } else {
+            document.getElementById("numero").value = "";
+            document.getElementById("numero").disabled = false;
+            }
             }
 
             function semNumero2() {
-                if (document.getElementById("sn2").checked) {
-                    document.getElementById("numeroCli").value = "S/N";
-                    document.getElementById("numeroCli").disabled = true;
-                } else {
-                    document.getElementById("numeroCli").value = "";
-                    document.getElementById("numeroCli").disabled = false;
-                }
+            if (document.getElementById("sn2").checked) {
+            document.getElementById("numeroCli").value = "S/N";
+            document.getElementById("numeroCli").disabled = true;
+            } else {
+            document.getElementById("numeroCli").value = "";
+            document.getElementById("numeroCli").disabled = false;
             }
-            
-            function mudaTipoChecklist(tipoChecklist){
-                if(tipoChecklist === '5'){
-                    document.getElementById("tipoDocs").className = 'mostrar';
-                }else{
-                    document.getElementById("tipoDocs").className = 'esconder';                    
-                }
+            }
+
+            function mudaTipoChecklist(tipoChecklist) {
+            if (tipoChecklist === '5') {
+            document.getElementById("tipoDocs").className = 'mostrar';
+            } else {
+            document.getElementById("tipoDocs").className = 'esconder';
+            }
+            }
+
+            function trocaDestinatario(selct) {           
+            console.log(text);
+            var obj = JSON.parse(text);
+            $('#cepCli').val(obj.destinatario[selct.selectedIndex].cep);
+            $('#enderecoCli').val(obj.destinatario[selct.selectedIndex].endereco);
+            $('#numeroCli').val(obj.destinatario[selct.selectedIndex].numero);
+            $('#complementoCli').val(obj.destinatario[selct.selectedIndex].complemento);
+            $('#bairroCli').val(obj.destinatario[selct.selectedIndex].bairro);
+            $('#cidadeCli').val(obj.destinatario[selct.selectedIndex].cidade);
+            $('#ufCli').val(obj.destinatario[selct.selectedIndex].uf);
             }
         </script>
 
@@ -245,6 +275,11 @@
                             <label>Nome / Razão Social</label>
                             <span id="v_nome"></span>
                         </dd>
+                        <dd>
+                            <label>Departamento / Centro de Custo</label>
+                            <span id="v_departamento"></span>
+
+                        </dd>
                         <dd style="width: 40%;">
                             <label>E-mail</label>
                             <span id="v_email"></span>
@@ -268,7 +303,9 @@
                             <span id="v_cep"></span>
                         </dd>
                     </li>
-                    <li><dd class="titulo">Dados do Destinatário</dd></li>
+                    <li>
+                        <dd class="titulo">Dados do Destinatário</dd>
+                    </li>
                     <li>
                         <dd style="width: 40%;">
                             <label>Nome / Razão Social</label>
@@ -292,8 +329,8 @@
                 </ul>                                
                 <div class="buttons">
                     <button type="button" class="positive" onclick="javascript:chamaDivProtecao2();
-                abrirTelaEspera();
-                document.form1.submit();"><img src="../../imagensNew/tick_circle.png" /> CONFIRMAR</button>
+            abrirTelaEspera();
+            document.form1.submit();"><img src="../../imagensNew/tick_circle.png" /> CONFIRMAR</button>
                     <button type="button" class="negative" onclick="chamaDivProtecao2();"><img src="../../imagensNew/cross_circle.png" /> CANCELAR</button>
                 </div>
             </div>
@@ -332,18 +369,57 @@
                                 </li>
                                 <li>
                                     <dd>
-                                        <label>Nome / Razão Social<b class="obg">*</b></label>
-                                        <input readonly type="text" name="nomeCli" size="55" value="<%if (cli.getNome_etq() == 1) {%><%= cli.getNomeFantasia()%><%} else {%><%= cli.getNome()%><%}%>" />
+                                        <label>Nome / Razão Social<b class="obg">*</b></label>                                       
+
+                                        <select name="nomeCli" onchange="trocaDestinatario(this)">                                            
+                                            <option  value="<%if (cli.getNome_etq() == 1) {%><%= cli.getNomeFantasia()%><%} else {%><%= cli.getNome()%><%}%>"><%if (cli.getNome_etq() == 1) {%><%= cli.getNomeFantasia()%><%} else {%><%= cli.getNome()%><%}%></option>
+                                              <% for (int i = 1; i< destLR.size(); i++) {%>
+                                            
+                                              <option><%=destLR.get(i).getNome() %></option>
+                                            <%}%>
+                                        </select>
                                     </dd>
+                                    <dd>
+                                        <label>Departamento / Centro de Custo</label>
+                                        <select name="departamento" style="width: 230px;">
+                                            <%
+                                                ArrayList<ClientesDeptos> listaDep = ContrClienteDeptos.consultaDeptos(idCli, nomeBD);
+                                                if (listaDep != null && listaDep.size() > 0) {
+
+                                                    if (dps.size() != 1) {
+                                                        if (listaDep.size() > 1 || dps.size() == 0) {
+
+
+                                            %>
+                                            <option value="-1">-- SELECIONE UM DEPARTAMENTO --</option>                                    
+                                            <%                                                }
+                                                }
+                                                for (int i = 0; i < listaDep.size(); i++) {
+                                                    ClientesDeptos cd = listaDep.get(i);
+                                                    String cartao = "0";
+                                                    if (cd.getCartaoPostagem() != null && !cd.getCartaoPostagem().trim().equals("")) {
+                                                        cartao = cd.getCartaoPostagem();
+                                                    }
+                                                    if (dps.contains(cd.getIdDepartamento())) {
+                                            %>
+                                            <option value="<%=cd.getIdDepartamento() + ";" + cd.getNomeDepartamento() + ";" + cartao%>"><%= cd.getNomeDepartamento()%></option>
+                                            <%}
+                                                }
+                                            } else {%>
+                                            <option value="">NENHUM DEPARTAMENTO</option>
+                                            <%}%>
+                                        </select>
+                                    </dd>
+
                                 </li>
                                 <li>
                                     <dd>
                                         <label>CEP</label>
-                                        <input readonly type="text" name="cepCli" value="<%= FormataString.formataCep(cli.getCep() + "")%>" maxlength="9" size="8" onkeypress="mascara(this, maskCep)"/>
+                                        <input readonly type="text" name="cepCli" id="cepCli" value="<%= FormataString.formataCep(cli.getCep() + "")%>" maxlength="9" size="8" onkeypress="mascara(this, maskCep)"/>
                                     </dd>
                                     <dd>
                                         <label>Endereço</label>
-                                        <input readonly type="text" name="enderecoCli" size="55" value="<%= cli.getEndereco()%>" />
+                                        <input readonly type="text" name="enderecoCli" id="enderecoCli" size="55" value="<%= cli.getEndereco()%>" />
                                     </dd>
                                     <dd>
                                         <label>Nº<b class="obg">*</b></label>
@@ -352,19 +428,19 @@
                                     </dd>
                                     <dd>
                                         <label>Complemento</label>
-                                        <input readonly type="text" name="complementoCli" size="20" value="<%= cli.getComplemento()%>" />
+                                        <input readonly type="text" name="complementoCli" id="complementoCli" size="20" value="<%= cli.getComplemento()%>" />
                                     </dd>
                                     <dd>
                                         <label>Bairro</label>
-                                        <input readonly type="text" name="bairroCli" value="<%= cli.getBairro()%>" />
+                                        <input readonly type="text" name="bairroCli" id="bairroCli" value="<%= cli.getBairro()%>" />
                                     </dd>
                                     <dd>
                                         <label>Cidade</label>
-                                        <input readonly type="text" name="cidadeCli" value="<%= cli.getCidade()%>" />
+                                        <input readonly type="text" name="cidadeCli" id="cidadeCli" value="<%= cli.getCidade()%>" />
                                     </dd>
                                     <dd>
                                         <label>UF</label>
-                                        <input readonly type="text" name="ufCli" maxlength="2" size="2" value="<%= cli.getUf()%>" />
+                                        <input readonly type="text" name="ufCli" id="ufCli" maxlength="2" size="2" value="<%= cli.getUf()%>" />
                                     </dd>
                                 </li>
 
@@ -380,6 +456,8 @@
                                         <input type="hidden" name="cpf_cnpj" id="cpf_cnpj" value="" maxlength="16" />
                                         <input type="hidden" name="aoscuidados" id="aoscuidados" maxlength="25" value="" />
                                     </dd>
+
+
                                     <dd>
                                         <label>E-mail</label>
                                         <input type="text" name="email_destinatario" id="email_destinatario" size="32" maxlength="100" value="" />
@@ -393,7 +471,7 @@
                                     <dd>
                                         <label>CEP<b class="obg">*</b><a onclick="window.open('http://www.buscacep.correios.com.br', 'CORREIOS');" ><img src="../../imagensNew/question.png" /></a></label>
                                         <input type="text" name="cep" id="cep" size="8" value="" maxlength="9" onkeypress="mascara(this, maskCep);
-                                                handleEnter();" onblur="verPesquisarCepDest(this.value);" />
+                                            handleEnter();" onblur="verPesquisarCepDest(this.value);" />
                                     </dd>
                                     <dd>
                                         <label>Endereço<b class="obg">*</b></label>
@@ -648,27 +726,27 @@
                     <img width="100%" src="../../imagensNew/linha.jpg"/>
                     <script type="text/javascript">
                         var sorterDes = new TINY.table.sorter('sorterDes', 'tableDes', {
-                            headclass: 'head',
-                            ascclass: 'asc',
-                            descclass: 'desc',
-                            evenclass: 'evenrow',
-                            oddclass: 'oddrow',
-                            evenselclass: 'evenselected',
-                            oddselclass: 'oddselected',
-                            paginate: true,
-                            size: 20,
-                            colddid: 'columnsDes',
-                            currentid: 'currentpageDes',
-                            totalid: 'totalpagesDes',
-                            startingrecid: 'startrecordDes',
-                            endingrecid: 'endrecordDes',
-                            totalrecid: 'totalrecordsDes',
-                            hoverid: 'selectedrowDefault',
-                            pageddid: 'pagedropdownDes',
-                            navid: 'tablenavDes',
-                            sortcolumn: 2,
-                            sortdir: 1,
-                            init: false
+                        headclass: 'head',
+                                ascclass: 'asc',
+                                descclass: 'desc',
+                                evenclass: 'evenrow',
+                                oddclass: 'oddrow',
+                                evenselclass: 'evenselected',
+                                oddselclass: 'oddselected',
+                                paginate: true,
+                                size: 20,
+                                colddid: 'columnsDes',
+                                currentid: 'currentpageDes',
+                                totalid: 'totalpagesDes',
+                                startingrecid: 'startrecordDes',
+                                endingrecid: 'endrecordDes',
+                                totalrecid: 'totalrecordsDes',
+                                hoverid: 'selectedrowDefault',
+                                pageddid: 'pagedropdownDes',
+                                navid: 'tablenavDes',
+                                sortcolumn: 2,
+                                sortdir: 1,
+                                init: false
                         });
                     </script>
 

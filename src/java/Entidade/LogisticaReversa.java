@@ -55,6 +55,10 @@ public class LogisticaReversa {
     private String descricaoStatus;
     private String dataStatus;
     private String horaStatus;
+    private int idDepartamento;
+    private String nomeDepto;
+    private String cartao;
+    private String validade;
 
     public LogisticaReversa(ResultSet result) throws SQLException {
         this.id = result.getInt("id");
@@ -95,7 +99,47 @@ public class LogisticaReversa {
         this.dataStatus = result.getString("dataStatus");
         this.horaStatus = result.getString("horaStatus");
         this.qtdObjeto = result.getInt("qtdObjeto");
+        this.idDepartamento = result.getInt("idDepartamento");        
+        this.nomeDepto = result.getString("nomeDepto");        
+        this.cartao = result.getString("cartaoPost");
+        this.validade = result.getString("validade");
     }
+
+    public String getValidade() {
+        return validade;
+    }
+
+    public void setValidade(String validade) {
+        this.validade = validade;
+    }
+    
+    
+
+    public int getIdDepartamento() {
+        return idDepartamento;
+    }
+
+    public void setIdDepartamento(int idDepartamento) {
+        this.idDepartamento = idDepartamento;
+    }
+
+    public String getNomeDepto() {
+        return nomeDepto;
+    }
+
+    public void setNomeDepto(String nomeDepto) {
+        this.nomeDepto = nomeDepto;
+    }
+
+    public String getCartao() {
+        return cartao;
+    }
+
+    public void setCartao(String cartao) {
+        this.cartao = cartao;
+    }
+    
+    
 
     public int getQtdObjeto() {
         return qtdObjeto;

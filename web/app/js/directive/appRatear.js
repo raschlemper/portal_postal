@@ -40,7 +40,7 @@ app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES
                 }
                 rateio.percentual = calculatePercentual(lancamentoRatear, rateio);
                 $scope.lancamentoRatear.rateios.push(angular.copy(rateio));
-                setRateioDefault(lancamentoRatear, rateio);
+                setRateioDefault(lancamentoRatear, null);
             };
 
             $scope.editarRateio = function(lancamentoRatear, rateio, index) {
@@ -51,7 +51,7 @@ app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES
 
             $scope.removerRateio = function(lancamentoRatear, rateio, index) {     
                 lancamentoRatear.rateios.splice(index, 1); 
-                setRateioDefault(lancamentoRatear, rateio);
+                setRateioDefault(lancamentoRatear, null);
             };
 
             var setRateioDefault = function(lancamentoRatear, rateio) {
@@ -97,7 +97,9 @@ app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES
             var updateValueRateio = function(quantidade, valor, rateios) {
 //                var valorParcelado = valor / quantidade;
                 var valorParcelado = valor;
+                var saldo = saldoRateio($scope.lancamentoRatear);
                 return _.map(rateios, function(rateio) { 
+                    rateio.percentual = calculatePercentual(saldo, rateio);
                     rateio.valor =  rateio.percentual * valorParcelado;
                 });
             };      

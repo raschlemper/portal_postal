@@ -388,7 +388,7 @@
                         <li>
                             <dd style="width: 500px;">
                                 <div class="buttons">
-                                    <button type="button" class="regular" onclick="validaDataSint()(); "><img src="../../imagensNew/lupa.png"/> PESQUISA SINTÉTICA</button>
+                                    <button type="button" class="regular" onclick="validaDataSint(); "><img src="../../imagensNew/lupa.png"/> PESQUISA SINTÉTICA</button>
                                     <button type="button" class="positive" onclick="validaDataAna();"><img src="../../imagensNew/lupa_mais.png"/> PESQUISA ANALÍTICA</button>
                                     <%--<button type="button" class="negative" onclick="teste();"><img src="../../imagensNew/broom.png"/> LIMPAR CAMPOS</button>--%>
                                 </div>
