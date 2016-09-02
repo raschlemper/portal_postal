@@ -197,10 +197,10 @@ app.controller('ModalLancamentoEditarController',
                 alert(MESSAGES.lancamento.validacao.VALOR_REQUERIDA);
                 return false;
             }
-            if (form.historico.$error.required) {
-                alert(MESSAGES.lancamento.validacao.HISTORICO_REQUERIDA);
-                return false;
-            }
+//            if (form.historico.$error.required) {
+//                alert(MESSAGES.lancamento.validacao.HISTORICO_REQUERIDA);
+//                return false;
+//            }
             return true;
         }; 
                 

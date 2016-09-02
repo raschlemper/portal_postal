@@ -139,10 +139,10 @@ app.controller('ModalLancamentoConciliarController',
                 alert(MESSAGES.lancamento.conciliar.validacao.DATA_LANCAMENTO_VALIDA);
                 return false;
             }  
-            if (form.historico.$error.required) {
-                alert(MESSAGES.lancamento.conciliar.validacao.HISTORICO_REQUERIDA);
-                return false;
-            }
+//            if (form.historico.$error.required) {
+//                alert(MESSAGES.lancamento.conciliar.validacao.HISTORICO_REQUERIDA);
+//                return false;
+//            }
             return true;
         };
 

@@ -55,7 +55,8 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
             $q.all([PlanoContaService.getStructure(), 
                     LancamentoService.getSaldoPlanoConta(dataInicio, dataFim)])
                .then(function(values) {  
-                    montaListaSaldosEstruturaPlanoConta(values[0], getSaldosPlanoConta(values[1]));
+                    var estruturas = setEstruturaPlanoContaDefault(values[0]);
+                    montaListaSaldosEstruturaPlanoConta(estruturas, getSaldosPlanoConta(values[1]));
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -66,7 +67,7 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
             $q.all([CentroCustoService.getStructure(), 
                     LancamentoService.getSaldoCentroCusto(dataInicio, dataFim)])
                .then(function(values) {  
-                    var estruturas = setEstruturaDefault(values[0]);
+                    var estruturas = setEstruturaCentroCustoDefault(values[0]);
                     montaListaSaldosEstruturaCentroCusto(estruturas, getSaldosCentroCusto(values[1]));
                 })
                 .catch(function(e) {
@@ -78,7 +79,8 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
             $q.all([PlanoContaService.getStructure(), 
                     LancamentoService.getSaldoPlanoContaCompetencia(dataInicio, dataFim)])
                .then(function(values) {  
-                    montaListaSaldosEstruturaPlanoConta(values[0], getSaldosPlanoConta(values[1]));
+                    var estruturas = setEstruturaPlanoContaDefault(values[0]);
+                    montaListaSaldosEstruturaPlanoConta(estruturas, getSaldosPlanoConta(values[1]));
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -89,7 +91,7 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
             $q.all([CentroCustoService.getStructure(), 
                     LancamentoService.getSaldoCentroCustoCompetencia(dataInicio, dataFim)])
                .then(function(values) {  
-                    var estruturas = setEstruturaDefault(values[0]);
+                    var estruturas = setEstruturaCentroCustoDefault(values[0]);
                     montaListaSaldosEstruturaCentroCusto(estruturas, getSaldosCentroCusto(values[1]));
                 })
                 .catch(function(e) {
@@ -97,18 +99,29 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
                 });            
         }
         
-        var setEstruturaDefault = function(estruturas) {
-            estruturas.push({ "idCentroCusto":null,
-                     "codigo": 'X',
-                     "nome":"Não Identificado",
-                     "descricao":null,
-                     "nivel":1,
-                     "estrutura":{"1":'X'},
-                     "grupo":null,
-                     "centros":null,
-                     "lancamentos":null,
-                     "lancamentosProgramados":null });
-                 return estruturas;
+        var setEstruturaPlanoContaDefault = function(estruturas) {
+            var estrutura = { "idPlanoConta": null };
+            estruturas.push(getEstruturaDefault(estrutura));
+            return estruturas;
+        }
+        
+        var setEstruturaCentroCustoDefault = function(estruturas) {
+            var estrutura = { "idCentroCusto": null };
+            estruturas.push(getEstruturaDefault(estrutura));
+            return estruturas;
+        }
+        
+        var getEstruturaDefault = function(estrutura) {
+            estrutura.codigo = 'X';
+            estrutura.nome = "Não Identificado";
+            estrutura.descricao = null;
+            estrutura.nivel = 1;
+            estrutura.estrutura = {"1":'X'};
+            estrutura.grupo = null;
+            estrutura.centros = null;
+            estrutura.lancamentos = null;
+            estrutura.lancamentosProgramados = null;
+            return estrutura;
         }
         
         var montaListaSaldosEstruturaPlanoConta = function(estruturas, saldos) {

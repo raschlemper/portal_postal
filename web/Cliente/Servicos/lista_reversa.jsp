@@ -37,34 +37,36 @@
             dataOntem = Util.SomaData.SomarDiasDatas(dataAtual, -10);
         }
         String dataInicioCalendario = Util.SomaData.SomarDiasDatas(dataAtual, -180);
-        
-        String dep = request.getParameter("dep"); 
-        String idDeptos = "0"; 
+
+        String dep = request.getParameter("dep");
+
+        String idDeptos = "0";
         ArrayList<ClientesDeptos> listaDep = ContrClienteDeptos.consultaDeptos(idCliente, nomeBD);
-        
-        if(dep ==  null || dep.split(";")[0].trim().equals("0")){
-             if (listaDep != null && listaDep.size() > 0) {
-            ArrayList<Integer> dpsUser = (ArrayList<Integer>) session.getAttribute("departamentos");
-            for (int i = 0; i < listaDep.size(); i++) {
-                ClientesDeptos cd = listaDep.get(i);
-                if (dpsUser.contains(cd.getIdDepartamento()) || nivel == 1) {
-                    String depto = FormataString.removeAccentsToUpper(cd.getNomeDepartamento());
-                    if (depto.length() > 20) {
-                        depto = depto.substring(0, 20);
+
+        if (dep == null || dep.split(";")[0].trim().equals("0")) {
+            if (listaDep != null && listaDep.size() > 0) {
+                ArrayList<Integer> dpsUser = (ArrayList<Integer>) session.getAttribute("departamentos");
+                for (int i = 0; i < listaDep.size(); i++) {
+                    ClientesDeptos cd = listaDep.get(i);
+                    if (dpsUser.contains(cd.getIdDepartamento()) || nivel == 1) {
+                        String depto = FormataString.removeAccentsToUpper(cd.getNomeDepartamento());
+                        if (depto.length() > 20) {
+                            depto = depto.substring(0, 20);
+                        }
+                        idDeptos += "," + cd.getIdDepartamento();
                     }
-                    idDeptos += "," + cd.getIdDepartamento();
                 }
             }
-        }
-        }else{
+        } else {
             idDeptos = dep.split(";")[0].trim();
         }
-       
-       
-       
-        //ArrayList<LogisticaReversa> lista = ContrLogisticaReversa.consultaReversasByCliente(cli.getCodigo(), nomeBD);
+        String filtro = request.getParameter("filtro");
 
-        ArrayList<LogisticaReversa> lista = ContrLogisticaReversa.pesqReversas(cli.getCodigo(), nomeBD, Util.FormatarData.DateToBD(dataOntem), Util.FormatarData.DateToBD(vDataAtual), idDeptos);
+        if (filtro == null) {
+            filtro = "0";
+        }
+        //ArrayList<LogisticaReversa> lista = ContrLogisticaReversa.consultaReversasByCliente(cli.getCodigo(), nomeBD);
+        ArrayList<LogisticaReversa> lista = ContrLogisticaReversa.pesqReversas(cli.getCodigo(), nomeBD, Util.FormatarData.DateToBD(dataOntem), Util.FormatarData.DateToBD(vDataAtual), idDeptos, filtro);
 
 %>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -82,7 +84,6 @@
         <script type="text/javascript" src="../../javascript/jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
         <script type="text/javascript" src="../../javascript/jquery/js/jquery.ui.datepicker-pt-BR.js"></script>
 
-
         <!-- Menu -->
         <link rel="stylesheet" href="../../javascript/plugins/dropdown/css/style.css" type="text/css" media="screen, projection"/>
         <script type="text/javascript" language="javascript" src="../../javascript/plugins/dropdown/js/jquery.dropdownPlain.js"></script>
@@ -97,8 +98,6 @@
         <!-- TableSorter -->
 
         <script type="text/javascript">
-
-
             $(function () {
                 $("#dataIni").datepicker({
                     minDate: '<%=dataInicioCalendario%>',
@@ -118,11 +117,11 @@
                 });
             });
 
-
             function validaDataSint() {
                 var data1 = $("#dataIni").val();
                 var data2 = $("#dataFim").val();
                 var dep = $("#departamento").val();
+                var fil = $("#filter").val();
                 //console.log(data1);
                 //console.log(data2);
                 var nova_data1 = parseInt(data1.split("/")[2].toString() + data1.split("/")[1].toString() + data1.split("/")[0].toString());
@@ -134,9 +133,7 @@
                     return false;
                 } else {
                     //atualiza pagina com parametros
-
-                    window.location.replace("lista_reversa.jsp?dataInicial=" + data1 + "&dataFinal=" + data2 + "&dep=" + dep);
-
+                    window.location.replace("lista_reversa.jsp?dataInicial=" + data1 + "&dataFinal=" + data2 + "&dep=" + dep + "&filtro=" + fil);
                     // return true;
                 }
             }
@@ -186,7 +183,7 @@
                     <div id="titulo1">Autorizações Geradas</div>
 
                     <ul class="ul_formulario">
-                        <li class="titulo"><dd><span>MONTE A SUA PESQUISA</span></dd></li>
+                        <li class="titulo"><dd><span>MONTE A SUA PESQUISA - <%=filtro%></span></dd></li>
                         <li>
                             <dd>
                                 <label>Periodo de Data de Geração</label>
@@ -216,6 +213,16 @@
                                         }%>
                                 </select>
                             </dd>
+                            <dd>
+                                <label>Mostrar</label>
+                                <select style="width: 195px;" name="filter" id="filter">
+                                    <option value="0">Somente não postados</option>
+                                    <option value="1">Somente postados</option>
+                                    <option value="2">Postados e não postados</option>
+                                    <option value="3">Somente cancelados</option>
+                                    <option value="4">-- TODOS --</option>
+                                </select>
+                            </dd>
                         </li>
                         <li>
                             <dd style="width: 650px;">
@@ -243,6 +250,7 @@
                     <div id="titulo2">                        
                         Lista de Autorizações Geradas
                     </div>
+                    <div style='max-width:100%;overflow:auto;'>
                     <table cellpadding="0" cellspacing="0" border="0" id="table2" class="tinytable">
                         <thead>
                             <tr>
@@ -257,9 +265,10 @@
                                 <th><h3>Cidade / UF</h3></th>
                                 <th><h3>CEP</h3></th>
                                 <th><h3>Data Geração</h3></th>
+                                <th><h3>Data Validade</h3></th>
                                 <th><h3>Status</h3></th>
                                 <th class="nosort" width="60"><h3>Ver</h3></th>
-                                <th class="nosort" width="60"><h3>Cancelar</h3></th>
+                                <th class="nosort" width="60"><h3>X</h3></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -272,6 +281,9 @@
                                     String obj = "- - -";
                                     if (!l.getNumObjeto().equals("")) {
                                         obj = l.getNumObjeto();
+                                        if(obj.replaceAll("<br/>", "").trim().equals("")){
+                                            obj = obj.replaceAll("<br/>", "<br/> - - -");
+                                        }
                                     }
                                     String status = "CANCELADO";
                                     if (l.getCancelado() == 0) {
@@ -283,20 +295,29 @@
                                 <td><%= l.getNomeDepto()%></td>
                                 <td><%= l.getCartao()%></td>
                                 <td align="center"><%= l.getQtdObjeto()%></td>
-                                <td align="center"><%= obj%></td>
+                                <td>
+                                    <%--<form name="frm<%= numeroRegistro%>" id="frm<%= numeroRegistro%>" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/multResultado.cfm" target="_blank">
+                                    <form name="frm<%= numeroRegistro%>" id="frm<%= numeroRegistro%>" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/newprint.cfm" target="_blank">--%>
+                                    <form name="frm<%= obj%>" id="frm<%= obj%>" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
+                                        <input type="hidden" name="objetos" id="objetos" value="<%= obj%>" />
+                                    </form>                    
+                                    <a href='#' onclick="document.getElementById('frm<%= obj%>').submit();"><%= obj%></a>
+                                </td>  
                                 <td align="center"><%= ar%></td>
                                 <td>R$ <%= l.getVd()%></td>
                                 <td><%= l.getNome_rem()%></td>
                                 <td><%= l.getCidade_rem() + "/" + l.getUf_rem()%></td>
                                 <td><%= l.getCep_rem()%></td>
                                 <td><%= l.getDataSolicitacao()%></td>
+                                <td><%= l.getValidade()%></td>
                                 <td><%= status%></td>
                                 <td align="center"><a onclick="verReversa(<%= l.getId()%>);" style="cursor:pointer;" ><img src="../../imagensNew/lupa.png" /></a></td>
-                                <td align="center"><%if (l.getCancelado() == 0) {%><a onclick="excluirRev(<%= l.getId()%>, <%= l.getCod_ap()%>);" style="cursor:pointer;" ><img src="../../imagensNew/cancel.png" /></a><%}%></td>
+                                <td align="center"><%if (l.getCancelado() == 0 && l.getNumObjeto().equals("")) {%><a onclick="excluirRev(<%= l.getId()%>, <%= l.getCod_ap()%>);" style="cursor:pointer;" ><img src="../../imagensNew/cancel.png" /></a><%}%></td>
                             </tr>
                             <%}%>
                         </tbody>
                     </table>
+                    </div>
                     <script type="text/javascript">
                         var sorter2 = new TINY.table.sorter('sorter2', 'table2', {
                             headclass: 'head',

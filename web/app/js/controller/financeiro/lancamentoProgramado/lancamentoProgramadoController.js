@@ -275,7 +275,7 @@ app.controller('LancamentoProgramadoController',
             else { 
                 LancamentoProgramadoService.save(lancamentoProgramado)
                     .then(function(data) { 
-                        modalMessage(MESSAGES.lancamento.programar.sucesso.INSERIDO_SUCESSO);
+                        //modalMessage(MESSAGES.lancamento.programar.sucesso.INSERIDO_SUCESSO);
                         todos(conta);
                     })
                     .catch(function(e) {

@@ -94,7 +94,7 @@ app.controller('ContaCorrenteController',
         var salvar = function(contaCorrente) {
             ContaCorrenteService.save(contaCorrente)
                 .then(function(data) {  
-                    modalMessage("Conta Corrente " + data.nome +  " Inserida com sucesso!");
+                    //modalMessage("Conta Corrente " + data.nome +  " Inserida com sucesso!");
                     todos();
                 })
                 .catch(function(e) {

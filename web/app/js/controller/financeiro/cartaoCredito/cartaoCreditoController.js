@@ -89,7 +89,7 @@ app.controller('CartaoCreditoController',
         var save = function(cartaoCredito) {
             CartaoCreditoService.save(cartaoCredito)
                 .then(function(data) {  
-                    modalMessage("Cartão de Crédito " + data.nome +  " Inserido com sucesso!");
+                    //modalMessage("Cartão de Crédito " + data.nome +  " Inserido com sucesso!");
                     todos();
                 })
                 .catch(function(e) {

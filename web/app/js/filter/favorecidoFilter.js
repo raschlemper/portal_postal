@@ -7,12 +7,12 @@ app.filter('favorecido', function() {
         if(!input.tipo) return input;
         var result = '';
         if(input.tipo.codigo === 'colaborador') {
-            result += '<i class="fa fa-spc fa-user"></i>'; 
+            result += '<i class="fa fa-spc fa-user fa-fw"></i>'; 
         } else if(input.tipo.codigo === 'fornecedor') {
-            result += '<i class="fa fa-spc fa-truck"></i>'; 
+            result += '<i class="fa fa-spc fa-truck fa-fw"></i>'; 
         } else if(input.tipo.codigo === 'cliente') {
-            result += '<i class="fa fa-spc fa-bank"></i>'; 
+            result += '<i class="fa fa-spc fa-bank fa-fw"></i>'; 
         }    
-        return '<span>' + input.nome + '</span>'; 
+        return '<span>' + result + input.nome + '</span>'; 
     };
 });

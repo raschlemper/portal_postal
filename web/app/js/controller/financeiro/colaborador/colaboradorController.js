@@ -94,7 +94,7 @@ app.controller('ColaboradorController',
         var save = function(colaborador) {
             ColaboradorService.save(colaborador)
                 .then(function(data) {  
-                    modalMessage("Colaborador " + data.nome +  " Inserido com sucesso!");
+                    //modalMessage("Colaborador " + data.nome +  " Inserido com sucesso!");
                     todos();
                 })
                 .catch(function(e) {

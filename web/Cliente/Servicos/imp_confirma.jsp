@@ -229,6 +229,7 @@
                                             <option value="SEDEX12" <%if (pv.getNomeServico().equals("SEDEX12")) {%> selected <%}%>>SEDEX 12</option>
                                             <option value="SEDEXHJ" <%if (pv.getNomeServico().equals("SEDEXHJ")) {%> selected <%}%>>SEDEX HOJE</option>
                                             <option value="MDPB" <%if (pv.getNomeServico().startsWith("MDPB")) {%> selected <%}%>>MDPB</option>
+                                            <option value="IMPRESSO" <%if (pv.getNomeServico().startsWith("IMPRESSO")) {%> selected <%}%>>IMPRESSO</option>
                                         </select>
                                     </td>
                                     <td align="center">

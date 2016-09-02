@@ -58,6 +58,7 @@ public class LogisticaReversa {
     private int idDepartamento;
     private String nomeDepto;
     private String cartao;
+    private String validade;
 
     public LogisticaReversa(ResultSet result) throws SQLException {
         this.id = result.getInt("id");
@@ -101,7 +102,18 @@ public class LogisticaReversa {
         this.idDepartamento = result.getInt("idDepartamento");        
         this.nomeDepto = result.getString("nomeDepto");        
         this.cartao = result.getString("cartaoPost");
+        this.validade = result.getString("validade");
     }
+
+    public String getValidade() {
+        return validade;
+    }
+
+    public void setValidade(String validade) {
+        this.validade = validade;
+    }
+    
+    
 
     public int getIdDepartamento() {
         return idDepartamento;

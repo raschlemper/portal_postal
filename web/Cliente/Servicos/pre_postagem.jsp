@@ -297,6 +297,9 @@
                 
                 if (form.servico.value === 'CARTA' && form.tipoCarta.value === '') {
                     alert('Escolha o Tipo da Carta a ser Postado!');
+                    return false;                    
+                } else if (form.tipoRg.value === '' && form.tipoCarta.value === '1') {
+                    alert('Escolha o Tipo do Registro da Carta a ser Postado!');
                     return false;
                 }
                 if (form.servico.value === 'SEDEXC' || form.servico.value === 'PAC_COB') {
@@ -465,7 +468,7 @@
                 });
                 return strReturn;
             }
-
+            
 
             function chamaDivProtecao() {
                 var classe = document.getElementById("divProtecao").className;
@@ -490,11 +493,15 @@
             }
 
             function trocaTipoCarta(tp) {
-                if (tp === '1') {
+                if (tp === '1') {                    
+                    document.getElementById("tipoRegis").className = 'mostrar';
+                    document.getElementById("tipoRg").selectedIndex = 1;
                     document.getElementById("vlrDecl").className = 'mostrar';
                     document.getElementById("maoProp").className = 'mostrar';
                     document.getElementById("avisoRec").className = 'mostrar';
                 } else {
+                    document.getElementById("tipoRegis").className = 'esconder';
+                    document.getElementById("tipoRg").selectedIndex = 0;
                     document.getElementById("vlrDecl").className = 'esconder';
                     document.getElementById("maoProp").className = 'esconder';
                     document.getElementById("avisoRec").className = 'esconder';
@@ -538,6 +545,10 @@
                 document.getElementById("paisDest").className = 'esconder';
                 document.getElementById("ddUf").className = 'mostrar';
                 document.getElementById("tipo").selectedIndex = 2;
+                
+                document.getElementById("tipoRegis").className = 'esconder';
+                document.getElementById("tipoRg").selectedIndex = 0;
+                
                 $('#cep').attr('onkeypress', 'mascara(this, maskCep);handleEnter();');
                 $('#cep').attr('onblur', 'verPesquisarCepDest(this.value);');
                 $('#cep').attr('onchange', 'mascara(this, maskCep);');
@@ -586,7 +597,7 @@
                     document.getElementById("vlrCobrar").className = 'esconder';
                     document.getElementById("outros_servicos").className = 'mostrar';
                     alteraOutroServ(document.getElementById("servico_1").value);
-                } else if (serv === 'MDPB') {
+                } else if (serv === 'MDPB' || serv === 'IMPRESSO') {
                     document.getElementById("tipoPacote").className = 'esconder';
                     document.getElementById("vlrDecl").className = 'mostrar';
                     document.getElementById("maoProp").className = 'mostrar';
@@ -953,7 +964,7 @@
                                 <%--<dl style='width:105px; border-left: 1px solid #CCC;' id="PAC" <%if (acs.contains(1)) {%> onclick="alteraServ('PAC');" <%} else {%> onclick="alert('Este usuário não tem permisão para utilizar este serviço!');" <%}%>>
                                     <dd><b class='serv'>PAC</b><br/>&nbsp;--<img src="../../imagensNew/pac.png" border="0" />--</dd>                                    --%>
                                 <%
-                                    String tabSize = "75px";
+                                    String tabSize = "70px";
                                     //CONSULTA SE TEM CONTRATO PAC
                                     int codPac = ContrClienteContrato.consultaContratoClienteGrupoServ(idCli, "PAC", nomeBD);
                                     int qtdPac = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ("PAC", 0, idCli, nomeBD);
@@ -1201,6 +1212,35 @@
                                     } else {
                                         out.println("<dl style='width:" + tabSize + ";' id='CARTA' onclick=\"alteraServ('CARTA',0);\" >");
                                         out.println("<dd><b class='servSmall'>CARTAS</b><br/>&nbsp;</dd>");
+                                        out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
+                                        out.println("<input type='hidden' name='cod_carta' value='' />");
+                                        out.println("</dl>");
+                                    }
+
+                                    //CONSULTA SE TEM CONTRATO CARTA
+                                    int codImp = ContrClienteContrato.consultaContratoClienteGrupoServ(idCli, "IMPRESSO", nomeBD);
+                                    int qtdImp = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ("IMPRESSO", 0, idCli, nomeBD);
+                                    if (!acs.contains(6)) {
+                                        out.println("<dl style='width:" + tabSize + "; color:gray;' id='IMPRESSO' onclick=\"alert('Este usuário não tem permisão para utilizar este serviço!');\" >");
+                                        out.println("<dd><b class='servSmall'>IMPRESSO</b><br/>&nbsp;</dd>");//<img src="../../imagensNew/carta.png" border="0" />
+                                        out.println("<dd><p><b style='color:gray;'>BLOQUEADO</b></p></dd>");
+                                        out.println("<input type='hidden' name='cod_carta' value='" + codImp + "' />");
+                                        out.println("</dl>");
+                                    } else if (codImp != 0 && qtdImp > 0) {
+                                        out.println("<dl style='width:" + tabSize + ";' id='IMPRESSO' onclick=\"alteraServ('IMPRESSO',1);\" >");
+                                        out.println("<dd><b class='servSmall'>IMPRESSO</b><br/>&nbsp;</dd>");//<img src="../../imagensNew/carta.png" border="0" />
+                                        out.println("<dd><p>QTD.: <b>" + qtdImp + "</b></p></dd>");
+                                        out.println("<input type='hidden' name='cod_carta' value='" + codImp + "' />");
+                                        out.println("</dl>");
+                                    } else if (codImp != 0) {
+                                        out.println("<dl style='width:" + tabSize + ";' id='IMPRESSO' onclick=\"alteraServ('IMPRESSO',1);\" >");
+                                        out.println("<dd><b class='servSmall'>IMPRESSO</b><br/>&nbsp;</dd>");
+                                        out.println("<dd><p><b>S/ ETIQUETA</b></p></dd>");
+                                        out.println("<input type='hidden' name='cod_carta' value='" + codImp + "' />");
+                                        out.println("</dl>");
+                                    } else {
+                                        out.println("<dl style='width:" + tabSize + ";' id='IMPRESSO' onclick=\"alteraServ('IMPRESSO',0);\" >");
+                                        out.println("<dd><b class='servSmall'>IMPRESSO</b><br/>&nbsp;</dd>");
                                         out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_carta' value='' />");
                                         out.println("</dl>");

@@ -109,14 +109,23 @@
             }
             
             function mudaServiceOpts(tipo){
-                if (tipo === 'MDPB'){               
+                if (tipo === 'MDPB' || tipo === 'CARTA' || tipo === 'IMPRESSO'){               
                     document.getElementById('dd_rm').className = 'mostrar';                     
                 }else{
                     document.getElementById('dd_rm').className = 'esconder';                      
                 }
             }
             
+            function mudaEnderecoNF(tipo){
+                if(tipo === '1'){
+                    document.getElementById('avisoNfe').className = 'mostrar'; 
+                } else {
+                    document.getElementById('avisoNfe').className = 'esconder';                     
+                }
+            }
+            
             function mudaFileOpts(tipo){
+                document.getElementById('dd_endereconf').className = 'esconder'; 
                 if(tipo === 'CSV' || tipo === 'INTERLOGIC' || tipo === 'WEBVENDAS'){
                     document.getElementById('arquivo').accept = '.csv';
                     document.getElementById('arquivo').multiple = false;               
@@ -129,8 +138,9 @@
                     document.getElementById('arquivo').multiple = true;                   
                     document.getElementById('dd_vd').className = 'mostrar'; 
                     document.getElementById('dd_ar').className = 'mostrar'; 
+                    document.getElementById('dd_endereconf').className = 'mostrar'; 
                     document.getElementById('form1').action = '../../ServPreVendaImportarNFe';   
-                    $('#tipo_serv option[value="ARQUIVO"]').text("SELECOINE UM SERVICO");    
+                    $('#tipo_serv option[value="ARQUIVO"]').text("SELECIONE UM SERVIÇO");    
                 }else if (tipo === 'TRAY' || tipo === 'LINX'){
                     document.getElementById('arquivo').accept = '.csv'; 
                     document.getElementById('arquivo').multiple = false;                   
@@ -218,6 +228,14 @@
                                         <%if(idEmp == 236505){%><option value="INTERLOGIC">ARQUIVO INTERLOGIC</option><%}%>
                                     </select>
                                 </dd>
+                                <dd id="dd_endereconf" class="esconder">
+                                    <label>UTILIZAR QUAL ENDEREÇO?</label>
+                                    <select style="width: 120px;" name="tipoEntrega" onchange="mudaEnderecoNF(this.value);">
+                                        <option value="0">DESTINATÁRIO</option>
+                                        <option value="1">ENTREGA</option>
+                                    </select>
+                                    <span id='avisoNfe' class="esconder" style='color:red;'>*ATENÇÃO! Este endereço não possui CEP no arquivo da NF-e, terá que ser preenchido manualmente!</span>
+                                </dd>
                             </li>
                             <li>
                                 <dd>
@@ -240,6 +258,7 @@
                                         <option value="SEDEX12">SEDEX 12</option>
                                         <option value="SEDEXHJ">SEDEX HOJE</option>
                                         <option value="MDPB">MDPB</option>
+                                        <option value="IMPRESSO">IMPRESSO</option>
                                     </select>
                                 </dd>
                                 <dd id="dd_vd" class="esconder">

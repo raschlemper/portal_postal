@@ -167,6 +167,7 @@ app.controller('ModalLancamentoProgramadoEditarController',
         
         $scope.ok = function(form, lancamentoProgramado) {
             if(!$scope.validaConta(lancamentoProgramado.conta)) return;
+            if(!validarParcela(lancamentoProgramado.valor, lancamentoProgramado)) return;  
             if(!$scope.validarRateio(lancamentoProgramado.valor, lancamentoProgramado)) return;  
             if(!$scope.validarForm(form, lancamentoProgramado)) return;
 //            delete lancamentoProgramado.parcelas;
@@ -210,6 +211,12 @@ app.controller('ModalLancamentoProgramadoEditarController',
         
         $scope.validarFavorecido = function(favorecido) {
             return FinanceiroValidation.favorecidoResultado($scope.favorecidos, favorecido);
+        }; 
+
+        var validarParcela = function(valor, lancamentoProgramado) {
+            if (!lancamentoProgramado.parcelas || !lancamentoProgramado.parcelas.length) return true;
+            if(!FinanceiroValidation.parcelaSaldo(valor, lancamentoProgramado.parcelas)) return false;
+            return true;
         }; 
 
         $scope.validarRateio = function(valor, lancamentoProgramado) {
@@ -259,10 +266,10 @@ app.controller('ModalLancamentoProgramadoEditarController',
                 alert(MESSAGES.lancamento.programar.validacao.VALOR_REQUERIDA);
                 return false;
             }
-            if (form.historico.$error.required) {
-                alert(MESSAGES.lancamento.programar.validacao.HISTORICO_REQUERIDA);
-                return false;
-            }
+//            if (form.historico.$error.required) {
+//                alert(MESSAGES.lancamento.programar.validacao.HISTORICO_REQUERIDA);
+//                return false;
+//            }
             return true;
         };
         

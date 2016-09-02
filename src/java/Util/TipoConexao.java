@@ -38,6 +38,18 @@ public enum TipoConexao {
         }
     },
     
+    HOMOLOGATION() {
+        protected String url(String nome) {
+            return String.format(URL, "189.4.65.227", 3306, nome);
+        }
+        protected String username() {
+            return "dev";
+        }
+        protected String password() {
+            return "1234@";
+        }
+    },
+    
     PRODUCTION() {
         protected String url(String nome) {
             return String.format(URL, "scc4.com.br", 3306, nome);

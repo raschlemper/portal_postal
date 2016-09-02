@@ -142,6 +142,14 @@ app.constant('MESSAGES', {
                 HISTORICO_REQUERIDA: "Preencha o histórico do lançamento reconciliado!"
             }
         },
+        parcelar: {
+            title: {
+                INSERIR: "Parcelar Lançamento",
+            },
+            validacao: {
+                SALDO_INCORRETO: "A soma dos valores do parcelamento é diferente ao valor do lançamento!"
+            }
+        },
         ratear: {
             title: {
                 INSERIR: "Ratear Lançamento",

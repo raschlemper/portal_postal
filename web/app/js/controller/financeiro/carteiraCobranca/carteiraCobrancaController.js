@@ -90,7 +90,7 @@ app.controller('CarteiraCobrancaController',
         var save = function(carteiraCobranca) {
             CarteiraCobrancaService.save(carteiraCobranca)
                 .then(function(data) {  
-                    modalMessage("Carteira de Cobrança " + data.nome +  " Inserida com sucesso!");
+                    //modalMessage("Carteira de Cobrança " + data.nome +  " Inserida com sucesso!");
                     todos();
                 })
                 .catch(function(e) {
