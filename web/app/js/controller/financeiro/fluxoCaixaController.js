@@ -167,7 +167,8 @@ app.controller('FluxoCaixaController',
         var criarLancamentosLista = function(lancamentos) {
             return _.map(lancamentos, function(lancamento) {  
                 
-                lancamento.tipo.modelo = $scope.modelos[2];
+                //lancamento.tipo.modelo = $scope.modelos[2];
+                lancamento.tipo.modelo = lancamento.modelo;
                 
                 if(lancamento.quantidadeParcela) { 
                     lancamento.tipo.modelo = $scope.modelos[4];

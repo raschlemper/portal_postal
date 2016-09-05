@@ -597,11 +597,12 @@ public class contrCliente {
             Conexao.desconectar(conn);
         }
     }
-    public static ArrayList<Clientes> consultaDestinatarioLR(String nomeBD) {
+    public static ArrayList<Clientes> consultaDestinatarioLR(int idCliente, String nomeBD) {
         
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         String sql = "SELECT * "
-                + " FROM cliente_remetente ;";
+                + " FROM cliente_remetente "
+                + "WHERE idCliente = "+idCliente+" ;";
         //System.out.println(sql);
         try {
           

@@ -4,6 +4,7 @@ import Controle.ContrErroLog;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.validation.Validation;
 import com.portalpostal.model.LancamentoProgramado;
+import com.portalpostal.model.dd.TipoModeloLancamento;
 import com.portalpostal.service.LancamentoProgramadoService;
 import com.portalpostal.service.LancamentoService;
 import com.portalpostal.validation.LancamentoProgramadoValidation;
@@ -84,7 +85,11 @@ public class LancamentoProgramadoController {
     public LancamentoProgramado find(@PathParam("idLancamentoProgramado") Integer idLancamentoProgramado) {
         try {
             init();    
-            return lancamentoProgramadoService.find(idLancamentoProgramado);
+            LancamentoProgramado lancamentoProgramado = lancamentoProgramadoService.find(idLancamentoProgramado);
+            if(lancamentoProgramado.getModelo() == TipoModeloLancamento.TRANSFERENCIA_PROGRAMADO) {
+                return lancamentoProgramadoService.findTransferencia(idLancamentoProgramado);
+            }
+            return lancamentoProgramado;
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -150,6 +155,7 @@ public class LancamentoProgramadoController {
         try {
             init();
             validation(lancamentoProgramado);
+            lancamentoProgramado.setUsuario(usuario);
             return lancamentoProgramadoService.update(lancamentoProgramado);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
