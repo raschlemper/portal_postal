@@ -24,8 +24,8 @@
 <label class="small" style="width: 100%">Favorecido
     <div class="pull-right">
         <span class="spc-right"><i class="fa fa-bank  fa-spc"></i> Cliente</span>
-        <span class="spc-right"><i class="fa fa-user  fa-spc"></i> Colaborador</span>
-        <span class="spc-right"><i class="fa fa-truck fa-spc"></i> Fornecedor</span>
+        <a class="spc-right" ng-click="salvarColaborador()"><i class="fa fa-user  fa-spc"></i> Colaborador</a>
+        <a class="spc-right" ng-click="salvarFornecedor()"><i class="fa fa-truck fa-spc"></i> Fornecedor</a>
     </div>
 </label>
 <app-typeahead item-model="favorecidoModel" 

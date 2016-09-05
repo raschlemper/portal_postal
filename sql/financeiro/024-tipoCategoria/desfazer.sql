@@ -1,0 +1,1 @@
+DROP TABLE tipo_categoria;
