@@ -51,7 +51,7 @@ app.directive('planoConta', function(PlanoContaService, ListaService, Financeiro
             }
         
             var validarPlanoConta = function(planoConta) {
-                return FinanceiroValidation.planoContaResultado(planoConta);
+                return FinanceiroValidation.planoContaResultado($scope.planoContas, planoConta);
             };
             
             init();

@@ -66,7 +66,7 @@ app.controller('ModalLancamentoTransferirController',
         
         var setDataCompetenciaDestino = function(lancamentoTransferencia){
             if(lancamentoTransferencia.dataCompetenciaDestino) return;
-            lancamentoTransferencia.dataCompetenciaDestino = lancamentoTransferencia.dataLancamentoOrigem;            
+            lancamentoTransferencia.dataCompetenciaDestino = lancamentoTransferencia.dataLancamentoDestino;            
         };
         
         $scope.ok = function(form, lancamentoTransferencia) {

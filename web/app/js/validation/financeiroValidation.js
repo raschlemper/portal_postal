@@ -12,19 +12,33 @@ app.factory('FinanceiroValidation', function(ModalService, LISTAS, MESSAGES) {
         return true;
     }
     
-    var planoContaResultado = function(planoConta) {
-        if(!planoConta) return true;
-        if(planoConta.ehGrupo) {
+    var planoContaResultado = function(planoContas, planoContaSelected) {
+        if(!planoContaSelected) return true;
+        if(planoContaSelected.ehGrupo) {
             modalMessage(MESSAGES.planoConta.info.NAO_PERMITE_GRUPO);
+            return false;
+        };
+        var result = _.find(planoContas, function(planoConta) { 
+            return planoConta.descricao == planoContaSelected.descricao; 
+        });
+        if(!result) {
+            modalMessage(MESSAGES.planoConta.info.PLANO_CONTA_NAO_CADASTRADO);
             return false;
         };
         return true;
     };
 
-    var centroCustoResultado = function(centroCusto) {
-        if(!centroCusto) return true;
-        if(centroCusto.ehGrupo) {
+    var centroCustoResultado = function(centroCustos, centroCustoSelected) {
+        if(!centroCustoSelected) return true;
+        if(centroCustoSelected.ehGrupo) {
             modalMessage(MESSAGES.centroCusto.info.NAO_PERMITE_GRUPO);
+            return false;
+        };
+        var result = _.find(centroCustos, function(centroCusto) { 
+            return centroCusto.descricao == centroCustoSelected.descricao; 
+        });
+        if(!result) {
+            modalMessage(MESSAGES.centroCusto.info.CENTRO_CUSTO_NAO_CADASTRADO);
             return false;
         };
         return true;

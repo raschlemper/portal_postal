@@ -73,6 +73,8 @@ public class LancamentoProgramadoTransferenciaController {
             init();
             validation(lancamentoProgramadoTransferencia);
             lancamentoProgramadoTransferencia.setUsuario(usuario);
+            lancamentoProgramadoTransferencia.getLancamentoProgramadoOrigem().setUsuario(usuario);
+            lancamentoProgramadoTransferencia.getLancamentoProgramadoDestino().setUsuario(usuario);
             return lancamentoProgramadoTransferenciaService.save(lancamentoProgramadoTransferencia);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
@@ -88,6 +90,8 @@ public class LancamentoProgramadoTransferenciaController {
             init();
             validation(lancamentoProgramadoTransferencia);
             lancamentoProgramadoTransferencia.setUsuario(usuario);
+            lancamentoProgramadoTransferencia.getLancamentoProgramadoOrigem().setUsuario(usuario);
+            lancamentoProgramadoTransferencia.getLancamentoProgramadoDestino().setUsuario(usuario);
             return lancamentoProgramadoTransferenciaService.update(lancamentoProgramadoTransferencia);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));

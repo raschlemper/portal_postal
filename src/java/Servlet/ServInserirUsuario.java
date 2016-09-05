@@ -187,7 +187,7 @@ public class ServInserirUsuario extends HttpServlet {
                 if(!acessosConsolidador.equals("")){
                     acessosConsolidador = acessosConsolidador.substring(1);
                 }
-
+                senha = Util.FormataString.encodeSenha(senha);
                 Controle.contrUsuario.inserir(nome, nivel, login, senha, idEmpresa, email, usaPortalPostal, acessosPortalPostal, usaConsolidador, acessosConsolidador);
 
                 sessao.setAttribute("msg", "Usuário Inserido com sucesso!");

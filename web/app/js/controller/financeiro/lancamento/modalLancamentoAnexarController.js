@@ -122,7 +122,7 @@ app.controller('ModalLancamentoAnexarController', ['$scope', 'LancamentoAnexoSer
         };  
 
         var validarSize = function(anexo) {
-            if (anexo.size > 102400) {
+            if (anexo.size > 512000) {
                 alert(MESSAGES.lancamento.anexar.validacao.ARQUIVO_ACIMA_TAMANHO_PERMITIDO);
                 return false;
             }   

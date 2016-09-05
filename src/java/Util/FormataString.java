@@ -14,16 +14,35 @@ import javax.swing.text.MaskFormatter;
  *
  * @author Administrador
  */
-public class FormataString {
+public class FormataString {    
+ 
     
-    /**
-     * 
-     * @param texto String a ser completada.
-     * @param letra Caracter para preenchimento dos espaços faltantes.
-     * @param tamanho Tamanho que deve ter a String final.
-     * @param direcao 1 = Preenche a direita, -1 = Preenche a esquerda.
-     * @return 
-     */
+    public static String encodeSenha(String senha) throws Exception {
+        String inputHash = byteArrayToHexString(computeHash(senha));
+        return inputHash;
+    }
+
+    public static byte[] computeHash(String x) throws Exception {
+        java.security.MessageDigest d = null;
+        d = java.security.MessageDigest.getInstance("SHA-1");
+        d.reset();
+        d.update(x.getBytes());
+        return d.digest();
+    }
+
+    public static String byteArrayToHexString(byte[] b) {
+        StringBuilder sb = new StringBuilder(b.length * 2);
+        for (int i = 0; i < b.length; i++) {
+            int v = b[i] & 0xff;
+            if (v < 16) {
+                sb.append('0');
+            }
+            sb.append(Integer.toHexString(v));
+        }
+        return sb.toString().toUpperCase();
+    }
+    
+    
     public static String preencheStringCom(String texto, String letra, int tamanho, int direcao) {
         //Checa se Linha a preencher é nula ou branco
         if (texto == null || "".equals(texto.trim())) {

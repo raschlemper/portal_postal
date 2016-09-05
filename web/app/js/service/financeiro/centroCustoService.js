@@ -25,6 +25,7 @@ app.factory('CentroCustoService', function($http, PromiseService) {
                 ehGrupo: (estrutura.centros ? true : false),
                 idGrupo: (estrutura.grupo ? estrutura.grupo.idCentroCusto : null),
                 codigo: estrutura.estrutura,
+                keep: (estrutura.centros ? true : false),
                 descricao: estrutura.descricao 
             });
             if(estrutura.centros) { flatten(estrutura.centros, estruturasLista); }
