@@ -4,6 +4,7 @@ import com.portalpostal.dao.handler.LancamentoHandler;
 import com.portalpostal.dao.handler.SaldoHandler;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.Saldo;
+import com.portalpostal.model.dd.TipoLancamento;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -168,6 +169,23 @@ public class LancamentoDAO extends GenericDAO {
         return findAll(sql, params, saldoHandler);
     }  
 
+    public List<Saldo> findSaldoTipoPlanoConta(Date dataInicio, Date dataFim, Integer tipo) throws Exception {
+        String sql = "SELECT IFNULL(lancamento_rateio.idPlanoConta, lancamento.idPlanoConta) as id, "
+                          + "DATE(lancamento.dataLancamento) as data, "
+                          + "SUM(IFNULL(lancamento_rateio.valor, lancamento.valor)) as valor "
+                   + "FROM lancamento "
+                   + "LEFT OUTER JOIN lancamento_rateio ON(lancamento.idLancamento = lancamento_rateio.idLancamento) "
+                   + "WHERE dataLancamento is not null AND DATE(dataLancamento) BETWEEN :dataInicio AND :dataFim "
+                   + "AND lancamento.modelo NOT IN(1,3) AND tipo = :tipo "
+                   + "GROUP BY id, data "
+                   + "ORDER BY id, data";            
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("dataInicio", dataInicio);       
+        params.put("dataFim", dataFim);   
+        params.put("tipo", tipo); 
+        return findAll(sql, params, saldoHandler);
+    }  
+
     public List<Saldo> findSaldoCentroCusto(Date dataInicio, Date dataFim) throws Exception {
         String sql = "SELECT IFNULL(lancamento_rateio.idCentroCusto, lancamento.idCentroCusto) as id, "
                           + "DATE(lancamento.dataLancamento) as data, "
@@ -197,6 +215,23 @@ public class LancamentoDAO extends GenericDAO {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("dataInicio", dataInicio);       
         params.put("dataFim", dataFim);   
+        return findAll(sql, params, saldoHandler);
+    }   
+
+    public List<Saldo> findSaldoTipoPlanoContaCompetencia(Date dataInicio, Date dataFim, Integer tipo) throws Exception {
+        String sql = "SELECT IFNULL(lancamento_rateio.idPlanoConta, lancamento.idPlanoConta) as id, "
+                          + "DATE(lancamento.dataCompetencia) as data, "
+                          + "SUM(IFNULL(lancamento_rateio.valor, lancamento.valor)) as valor "
+                   + "FROM lancamento "
+                   + "LEFT OUTER JOIN lancamento_rateio ON(lancamento.idLancamento = lancamento_rateio.idLancamento) "
+                   + "WHERE dataCompetencia is not null AND DATE(dataCompetencia) BETWEEN :dataInicio AND :dataFim "
+                   + "AND lancamento.modelo NOT IN(1,3) AND tipo = :tipo "
+                   + "GROUP BY id, data "
+                   + "ORDER BY id, data";            
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("dataInicio", dataInicio);       
+        params.put("dataFim", dataFim);   
+        params.put("tipo", tipo); 
         return findAll(sql, params, saldoHandler);
     }  
 

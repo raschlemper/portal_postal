@@ -54,6 +54,14 @@ public class LancamentoProgramadoService {
         return lancamentoProgramado;
     } 
     
+    public LancamentoProgramado findTransferencia(Integer idLancamentoProgramado) throws Exception {
+        init();
+        LancamentoProgramado lancamentoProgramado = find(idLancamentoProgramado);
+        lancamentoProgramado.setLancamentoProgramadoTransferencia(lancamentoProgramadoTransferenciaService.find(
+                lancamentoProgramado.getLancamentoProgramadoTransferencia().getIdLancamentoProgramadoTransferencia()));
+        return lancamentoProgramado;
+    } 
+    
     public LancamentoProgramado findLancamento(Integer idLancamentoProgramado) throws Exception {
         init();
         LancamentoProgramado lancamentoProgramado = find(idLancamentoProgramado);

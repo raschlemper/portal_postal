@@ -5,6 +5,7 @@ import com.portalpostal.validation.Validation;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoAnexo;
 import com.portalpostal.model.Saldo;
+import com.portalpostal.model.dd.TipoModeloLancamento;
 import com.portalpostal.service.ImageService;
 import com.portalpostal.service.LancamentoAnexoService;
 import com.portalpostal.service.LancamentoService;
@@ -100,6 +101,21 @@ public class LancamentoController {
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
+    }   
+    
+    @GET
+    @Path("/planoconta/tipo/{tipo}/saldo")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Saldo> findSaldoTipoPlanoConta(@PathParam("tipo") Integer tipo, @QueryParam("dataInicio") String dataInicio, 
+            @QueryParam("dataFim") String dataFim) {
+        try {
+            init(); 
+            Date inicio = formatDate(dataInicio);
+            Date fim = formatDate(dataFim);
+            return lancamentoService.findSaldoTipoPlanoConta(inicio, fim, tipo);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
     }  
     
     @GET
@@ -127,6 +143,21 @@ public class LancamentoController {
             Date inicio = formatDate(dataInicio);
             Date fim = formatDate(dataFim);
             return lancamentoService.findSaldoPlanoContaCompetencia(inicio, fim);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }
+    
+    @GET
+    @Path("/planoconta/tipo/{tipo}/saldo/competencia")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Saldo> findSaldoTipoPlanoContaCompetencia(@PathParam("tipo") Integer tipo, @QueryParam("dataInicio") String dataInicio, 
+            @QueryParam("dataFim") String dataFim) {
+        try {
+            init(); 
+            Date inicio = formatDate(dataInicio);
+            Date fim = formatDate(dataFim);
+            return lancamentoService.findSaldoTipoPlanoContaCompetencia(inicio, fim, tipo);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -179,8 +210,12 @@ public class LancamentoController {
     @Produces(MediaType.APPLICATION_JSON)
     public Lancamento find(@PathParam("idLancamento") Integer idLancamento) {
         try {
-            init();    
-            return lancamentoService.find(idLancamento);
+            init(); 
+            Lancamento lancamento = lancamentoService.find(idLancamento);
+            if(lancamento.getModelo() == TipoModeloLancamento.TRANSFERENCIA) {
+                return lancamentoService.findTransferencia(idLancamento);
+            }
+            return lancamento;
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }

@@ -20,7 +20,7 @@ public class FavorecidoDAO extends GenericDAO {
                    + "LEFT OUTER JOIN colaborador ON(favorecido.idColaborador = colaborador.idColaborador) "
                    + "LEFT OUTER JOIN fornecedor ON(favorecido.idFornecedor = fornecedor.idFornecedor) "
                    + "LEFT OUTER JOIN cliente ON(favorecido.idCliente = cliente.codigo) "
-                   + "ORDER BY favorecido.idFavorecido";        
+                   + "ORDER BY favorecido.nome";        
         return findAll(sql, null, favorecidoHandler);
     }
 

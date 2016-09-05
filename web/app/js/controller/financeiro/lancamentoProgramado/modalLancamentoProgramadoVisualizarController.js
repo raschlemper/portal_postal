@@ -49,9 +49,20 @@ app.controller('ModalLancamentoProgramadoVisualizarController',
         
         $scope.getTipo = function(lancamentoProgramado) {
            if(lancamentoProgramado.modelo.id == 3) {
-               return lancamentoProgramado.tipo.descricao + ' (Transferência)';
+               var lancamentoProgramadoTransferencia = getLancamentoProgramadoTransferencia(lancamentoProgramado);
+               return lancamentoProgramado.tipo.descricao + ' (Transferência - ' + 
+                       lancamentoProgramadoTransferencia.conta.nome + ')';
            } 
            return lancamentoProgramado.tipo.descricao;
+        };
+        
+        var getLancamentoProgramadoTransferencia = function(lancamentoProgramado) {
+            if(lancamentoProgramado.idLancamentoProgramado === 
+                    lancamentoProgramado.lancamentoProgramadoTransferencia.lancamentoProgramadoOrigem.idLancamentoProgramado) {
+                return lancamentoProgramado.lancamentoProgramadoTransferencia.lancamentoProgramadoDestino;
+            } else {
+                return lancamentoProgramado.lancamentoProgramadoTransferencia.lancamentoProgramadoOrigem;
+            }
         };
         
         $scope.editar = function() {

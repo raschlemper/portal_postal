@@ -353,7 +353,7 @@ app.controller('LancamentoProgramadoController',
                 .then(function(data) {  
                     encerrarLancamentoProgramado(lancamentoProgramado, lancamentoProgramado.lancamentos[0]); 
                     if(showMsg) {
-                        modalMessage(MESSAGES.lancamento.sucesso.INSERIDO_SUCESSO);
+                        //modalMessage(MESSAGES.lancamento.sucesso.INSERIDO_SUCESSO);
                         todos(conta);                        
                     }
                 })
@@ -468,7 +468,7 @@ app.controller('LancamentoProgramadoController',
             else { 
                 LancamentoProgramadoTransferenciaService.save(lancamentoProgramadoTransferencia)
                     .then(function(data) {  
-                        modalMessage(MESSAGES.lancamento.transferir.sucesso.INSERIDO_SUCESSO);
+                        //modalMessage(MESSAGES.lancamento.transferir.sucesso.INSERIDO_SUCESSO);
                         todos();
                     })
                     .catch(function(e) {

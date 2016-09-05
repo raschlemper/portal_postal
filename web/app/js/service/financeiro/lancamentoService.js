@@ -52,6 +52,11 @@ app.factory('LancamentoService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/lancamento/planoconta/saldo?dataInicio=" + dataInicio + "&dataFim=" + dataFim));
         },
 
+        getSaldoTipoPlanoConta: function(dataInicio, dataFim, tipo) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/lancamento/planoconta/tipo/" + tipo + "/saldo?dataInicio=" + dataInicio + "&dataFim=" + dataFim));
+        },
+
         getSaldoCentroCusto: function(dataInicio, dataFim) {
             return PromiseService.execute(
                     $http.get(_contextPath + "/api/financeiro/lancamento/centrocusto/saldo?dataInicio=" + dataInicio + "&dataFim=" + dataFim));
@@ -60,6 +65,11 @@ app.factory('LancamentoService', function($http, PromiseService) {
         getSaldoPlanoContaCompetencia: function(dataInicio, dataFim) {
             return PromiseService.execute(
                     $http.get(_contextPath + "/api/financeiro/lancamento/planoconta/saldo/competencia?dataInicio=" + dataInicio + "&dataFim=" + dataFim));
+        },
+
+        getSaldoTipoPlanoContaCompetencia: function(dataInicio, dataFim, tipo) {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/lancamento/planoconta/tipo/" + tipo + "/saldo/competencia?dataInicio=" + dataInicio + "&dataFim=" + dataFim));
         },
 
         getSaldoCentroCustoCompetencia: function(dataInicio, dataFim) {

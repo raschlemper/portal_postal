@@ -48,6 +48,14 @@ public class LancamentoService {
         Lancamento lancamento = lancamentoDAO.find(idLancamento);
         lancamento = setRateio(lancamento);
         return lancamento;
+    }    
+    
+    public Lancamento findTransferencia(Integer idLancamento) throws Exception {
+        init();
+        Lancamento lancamento = find(idLancamento);
+        lancamento.setLancamentoTransferencia(lancamentoTransferenciaService.find(
+                lancamento.getLancamentoTransferencia().getIdLancamentoTransferencia()));
+        return lancamento;
     }  
 
     public List<Lancamento> findLancamentoNotConciliadoByDataLancamento(Date data) throws Exception {
@@ -116,6 +124,11 @@ public class LancamentoService {
         return lancamentoDAO.findSaldoPlanoConta(dataInicio, dataFim);
     }  
     
+    public List<Saldo> findSaldoTipoPlanoConta(Date dataInicio, Date dataFim, Integer tipo) throws Exception {
+        init();
+        return lancamentoDAO.findSaldoTipoPlanoConta(dataInicio, dataFim, tipo);
+    }  
+    
     public List<Saldo> findSaldoCentroCusto(Date dataInicio, Date dataFim) throws Exception {
         init();
         return lancamentoDAO.findSaldoCentroCusto(dataInicio, dataFim);
@@ -124,6 +137,11 @@ public class LancamentoService {
     public List<Saldo> findSaldoPlanoContaCompetencia(Date dataInicio, Date dataFim) throws Exception {
         init();
         return lancamentoDAO.findSaldoPlanoContaCompetencia(dataInicio, dataFim);
+    }    
+    
+    public List<Saldo> findSaldoTipoPlanoContaCompetencia(Date dataInicio, Date dataFim, Integer tipo) throws Exception {
+        init();
+        return lancamentoDAO.findSaldoTipoPlanoContaCompetencia(dataInicio, dataFim, tipo);
     }  
     
     public List<Saldo> findSaldoCentroCustoCompetencia(Date dataInicio, Date dataFim) throws Exception {

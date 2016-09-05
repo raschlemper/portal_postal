@@ -31,6 +31,7 @@ app.factory('FinanceiroValidation', function(ModalService, LISTAS, MESSAGES) {
     };
 
     var favorecidoResultado = function(favorecidos, favorecidoSelected) {
+        if(!favorecidoSelected) return true;
         var result = _.find(favorecidos, function(favorecido) { 
             return favorecido.nome == favorecidoSelected; 
         });

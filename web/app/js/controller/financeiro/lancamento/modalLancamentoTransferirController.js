@@ -43,7 +43,7 @@ app.controller('ModalLancamentoTransferirController',
         $scope.eventsOrigem = {
             onblur : function() {
                 setDataCompetenciaOrigem($scope.lancamentoTransferencia);
-                setDataVencimentoDestino($scope.lancamentoTransferencia);
+                //setDataVencimentoDestino($scope.lancamentoTransferencia);
                 //setDataCompetenciaDestino($scope.lancamentoTransferencia);
             }
         };

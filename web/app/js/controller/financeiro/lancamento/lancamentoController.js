@@ -454,7 +454,7 @@ app.controller('LancamentoController',
         var saveTransferencia = function(conta, lancamentoTransferencia) {
             LancamentoTransferenciaService.save(lancamentoTransferencia)
                 .then(function(data) {  
-                    modalMessage(MESSAGES.lancamento.transferir.sucesso.INSERIDO_SUCESSO);
+                    //modalMessage(MESSAGES.lancamento.transferir.sucesso.INSERIDO_SUCESSO);
                     todos(conta);
                 })
                 .catch(function(e) {
@@ -485,7 +485,7 @@ app.controller('LancamentoController',
         var conciliar = function(conta, lancamentoConciliado) {
             LancamentoConciliadoService.create(lancamentoConciliado)
                 .then(function(data) {  
-                    modalMessage(MESSAGES.lancamento.conciliar.sucesso.INSERIDO_SUCESSO);
+                    //modalMessage(MESSAGES.lancamento.conciliar.sucesso.INSERIDO_SUCESSO);
                     todos(conta);
                 })
                 .catch(function(e) {
