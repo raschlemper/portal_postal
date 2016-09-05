@@ -6,6 +6,7 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
         var init = function () {
             $scope.meses = LISTAS.meses;
             $scope.mesSelected = $scope.meses[0];
+            $scope.tipos = LISTAS.lancamento;
             $scope.estruturasLista = [];
             $scope.withValues = true;
             $scope.byCompetencia = false;  
@@ -52,11 +53,16 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
         };  
         
         var estruturasPlanoConta = function(dataInicio, dataFim) {
-            $q.all([PlanoContaService.getStructure(), 
-                    LancamentoService.getSaldoPlanoConta(dataInicio, dataFim)])
+            $q.all([PlanoContaService.getStructureByTipo($scope.tipos[0].id), 
+                    PlanoContaService.getStructureByTipo($scope.tipos[1].id),
+                    LancamentoService.getSaldoTipoPlanoConta(dataInicio, dataFim, $scope.tipos[0].id),
+                    LancamentoService.getSaldoTipoPlanoConta(dataInicio, dataFim, $scope.tipos[1].id)])
                .then(function(values) {  
-                    var estruturas = setEstruturaPlanoContaDefault(values[0]);
-                    montaListaSaldosEstruturaPlanoConta(estruturas, getSaldosPlanoConta(values[1]));
+                    var estruturasReceita = setEstruturaPlanoContaDefault(values[0], $scope.tipos[0]);
+                    var estruturasDespesa = setEstruturaPlanoContaDefault(values[1], $scope.tipos[1]);
+                    var estruturasListaReceita = montaListaSaldosEstruturaPlanoConta(estruturasReceita, getSaldosPlanoConta(values[2]));
+                    var estruturasListaDespesa = montaListaSaldosEstruturaPlanoConta(estruturasDespesa, getSaldosPlanoConta(values[3]));
+                    montaListaEstrutura(estruturasListaReceita, estruturasListaDespesa);
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -76,16 +82,21 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
         };
         
         var estruturasPlanoContaCompetencia = function(dataInicio, dataFim) {
-            $q.all([PlanoContaService.getStructure(), 
-                    LancamentoService.getSaldoPlanoContaCompetencia(dataInicio, dataFim)])
+            $q.all([PlanoContaService.getStructureByTipo($scope.tipos[0].id), 
+                    PlanoContaService.getStructureByTipo($scope.tipos[1].id),
+                    LancamentoService.getSaldoTipoPlanoContaCompetencia(dataInicio, dataFim, $scope.tipos[0].id),
+                    LancamentoService.getSaldoTipoPlanoContaCompetencia(dataInicio, dataFim, $scope.tipos[1].id)])
                .then(function(values) {  
-                    var estruturas = setEstruturaPlanoContaDefault(values[0]);
-                    montaListaSaldosEstruturaPlanoConta(estruturas, getSaldosPlanoConta(values[1]));
+                    var estruturasReceita = setEstruturaPlanoContaDefault(values[0], $scope.tipos[0]);
+                    var estruturasDespesa = setEstruturaPlanoContaDefault(values[1], $scope.tipos[1]);
+                    var estruturasListaReceita = montaListaSaldosEstruturaPlanoConta(estruturasReceita, getSaldosPlanoConta(values[2]));
+                    var estruturasListaDespesa = montaListaSaldosEstruturaPlanoConta(estruturasDespesa, getSaldosPlanoConta(values[3]));
+                    montaListaEstrutura(estruturasListaReceita, estruturasListaDespesa);
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });            
-        }
+        };
         
         var estruturasCentroCustoCompetencia = function(dataInicio, dataFim) {
             $q.all([CentroCustoService.getStructure(), 
@@ -97,27 +108,39 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
                 .catch(function(e) {
                     modalMessage(e);
                 });            
+        };
+        
+        var montaListaEstrutura = function(estruturasReceita, estruturasDespesa) {  
+            $scope.estruturasLista = [];
+            estruturasReceita.map(function(receita) {
+                $scope.estruturasLista.push(receita);
+            });
+            estruturasDespesa.map(function(despesa) {
+                $scope.estruturasLista.push(despesa);
+            });
+            $scope.estruturasLista;
         }
         
-        var setEstruturaPlanoContaDefault = function(estruturas) {
+        var setEstruturaPlanoContaDefault = function(estruturas, tipo) {
             var estrutura = { "idPlanoConta": null };
-            estruturas.push(getEstruturaDefault(estrutura));
+            estruturas.push(getEstruturaDefault(estrutura, tipo));
             return estruturas;
         }
         
         var setEstruturaCentroCustoDefault = function(estruturas) {
             var estrutura = { "idCentroCusto": null };
-            estruturas.push(getEstruturaDefault(estrutura));
+            estruturas.push(getEstruturaDefault(estrutura, null));
             return estruturas;
         }
         
-        var getEstruturaDefault = function(estrutura) {
+        var getEstruturaDefault = function(estrutura, tipo) {
             estrutura.codigo = 'X';
             estrutura.nome = "Não Identificado";
             estrutura.descricao = null;
             estrutura.nivel = 1;
             estrutura.estrutura = {"1":'X'};
             estrutura.grupo = null;
+            estrutura.tipo = tipo || null;
             estrutura.centros = null;
             estrutura.lancamentos = null;
             estrutura.lancamentosProgramados = null;
@@ -126,10 +149,11 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
         
         var montaListaSaldosEstruturaPlanoConta = function(estruturas, saldos) {
             PlanoContaService.estrutura(estruturas);
-            $scope.estruturasLista = PlanoContaService.flatten(estruturas);
-            SaldoService.saldoPlanoConta($scope.estruturasLista, saldos, $scope.periodoSelected);
-            $scope.totais = SaldoService.saldoPlanoContaTotalMes($scope.estruturasLista, $scope.periodoSelected);
-            SaldoService.saldoPlanoContaGrupo($scope.estruturasLista);
+            var estruturasLista = PlanoContaService.flatten(estruturas);
+            SaldoService.saldoPlanoConta(estruturasLista, saldos, $scope.periodoSelected);
+            $scope.totais = SaldoService.saldoPlanoContaTotalMes(estruturasLista, $scope.periodoSelected);
+            SaldoService.saldoPlanoContaGrupo(estruturasLista);
+            return estruturasLista;
         }
         
         var montaListaSaldosEstruturaCentroCusto = function(estruturas, saldos) {

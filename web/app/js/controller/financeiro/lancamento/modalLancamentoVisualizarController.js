@@ -49,9 +49,20 @@ app.controller('ModalLancamentoVisualizarController',
         
         $scope.getTipo = function(lancamento) {
            if(lancamento.modelo.id == 1) {
-               return lancamento.tipo.descricao + ' (Transferência)';
+               var lancamentoTransferencia = getLancamentoTransferencia(lancamento);
+               return lancamento.tipo.descricao + ' (Transferência - ' + 
+                       lancamentoTransferencia.conta.nome + ')';
            } 
            return lancamento.tipo.descricao;
+        };
+        
+        var getLancamentoTransferencia = function(lancamento) {
+            if(lancamento.idLancamento === 
+                    lancamento.lancamentoTransferencia.lancamentoOrigem.idLancamento) {
+                return lancamento.lancamentoTransferencia.lancamentoDestino;
+            } else {
+                return lancamento.lancamentoTransferencia.lancamentoOrigem;
+            }
         };
         
         $scope.editar = function() {

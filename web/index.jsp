@@ -44,7 +44,7 @@
             body {
                 border: none;
                 margin: 0;
-                padding: 30px;
+                padding-top: 30px;
                 font: normal 16px/20px Lekton, sans-serif;
             }
 
@@ -93,7 +93,7 @@
             .card {
                 background-color: #F7F7F7;
                 /* just in case there no content*/
-                padding: 20px 25px 30px;
+                padding: 20px 25px;
                 margin: 0 auto 25px;
                 margin-top: 50px;
                 /* shadows and rounded borders */
@@ -245,8 +245,8 @@
             alert("<%= msg2%>");
         </script>                 
         <%}%>
-        <div id="wrapper" style="position:relative; padding:0px 20px 30px 20px;z-index:10">
-            <div class="container">
+        <div id="wrapper" style="position:relative; z-index:10">
+            <div class="container" style=" padding-left: 0px; padding-right: 0px; ">
                 <div class="text-center" style="font-size: 10px;">
                     <a target="_blank" href="http://www.scc4.com.br"><img src="imagensNew/logo_scc4.png" width="150" /></a>
                 </div>

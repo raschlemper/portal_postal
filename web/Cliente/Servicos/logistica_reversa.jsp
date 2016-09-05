@@ -36,7 +36,7 @@
 
         Clientes cliLR = new Clientes(cli.getNome(), cli.getEndereco(), cli.getBairro(), cli.getCidade(), cli.getUf(), cli.getCep(), cli.getNumero(), cli.getComplemento());
 
-        ArrayList<Clientes> destLR = Controle.contrCliente.consultaDestinatarioLR(nomeBD);
+        ArrayList<Clientes> destLR = Controle.contrCliente.consultaDestinatarioLR(idCli, nomeBD);
 
         destLR.add(0, cliLR);
 
