@@ -196,7 +196,7 @@ public class ServEditarUsuario extends HttpServlet {
                 if(!acessosConsolidador.equals("")){
                     acessosConsolidador = acessosConsolidador.substring(1);
                 }
-
+                senha = Util.FormataString.encodeSenha(senha);
                 Controle.contrUsuario.alterar(nome, nivel, login, senha, idEmpresa, idUs, email, usaPortalPostal, acessosPortalPostal, usaConsolidador, acessosConsolidador);
 
                 sessao.setAttribute("msg", "Usuário Alterado com sucesso!");

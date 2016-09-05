@@ -37,7 +37,7 @@ app.directive('centroCusto', function(CentroCustoService, ListaService, Financei
             };
         
             var validarCentroCusto = function(centroCusto) {
-                return FinanceiroValidation.centroCustoResultado(centroCusto);
+                return FinanceiroValidation.centroCustoResultado($scope.centroCustos, centroCusto);
             };
             
             init();

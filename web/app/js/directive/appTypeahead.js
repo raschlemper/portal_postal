@@ -43,8 +43,17 @@ app.directive('appTypeahead', function($filter) {
             };
             
             $scope.filterList = function(lista, search) {
-                return $filter('filter')(lista, search);
+//                return $filter('filter')(lista, search);
+                return filterByExclude(lista, search);
             };
+            
+            var filterByExclude = function(lista, search) {
+                if(!lista || !search) return lista;
+                return lista.filter(function(item) {
+                    if(item.keep) return true;
+                    return (item[$scope.field].indexOf(search) > -1);
+                })
+            }
             
             $scope.getItem = function(item) {
                 var value = item[$scope.field];

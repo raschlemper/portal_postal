@@ -15,13 +15,15 @@ app.constant('MESSAGES', {
         info: {
             PLANO_CONTA_EXISTENTE: "Este Plano de Conta já existe! Confira se o código já foi utilizado neste grupo.",
             NAO_PERMITE_ADD_GRUPO: "Não é permitido adicionar contas a um plano de conta que possua lançamentos vinculados.",
-            NAO_PERMITE_GRUPO: "Só é permitido realizar lançamentos em plano de conta que não possuam planos de conta vinculados!"
+            NAO_PERMITE_GRUPO: "Só é permitido realizar lançamentos em plano de conta que não possuam planos de conta vinculados!",
+            PLANO_CONTA_NAO_CADASTRADO: "Este plano de conta não esta cadastrado!"
         }
     },
 
     centroCusto: { 
         info: {
-            NAO_PERMITE_GRUPO: "Só é permitido realizar lançamentos em centro de custo que não possuam centros de custo vinculados!"
+            NAO_PERMITE_GRUPO: "Só é permitido realizar lançamentos em centro de custo que não possuam centros de custo vinculados!",
+            CENTRO_CUSTO_NAO_CADASTRADO: "Este centro de custo não esta cadastrado!"
         }
     },
 
