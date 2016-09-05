@@ -8,9 +8,13 @@ import Entidade.Clientes;
 import Entidade.Usuario;
 import java.sql.Connection;
 import Util.Conexao;
+import static Util.FormataString.encodeSenha;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -44,6 +48,85 @@ public class contrLogin {
             return user;
         } catch (SQLException e) {
             ContrErroLog.inserir("HOITO - contrLogin", "SQLException", sql, e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(con);
+        }
+    }
+
+   /* private static ArrayList<String> logins() {
+        Connection con = Conexao.conectarGeral();
+        String sql = "SELECT login, senha FROM usuarios ;";
+        ArrayList<String> ls = new ArrayList<String>();
+        try {
+            PreparedStatement valores = con.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            while (result.next()) {
+                String login = result.getString("login");
+                String senha = result.getString("senha");
+                ls.add(login + ";" + senha);
+                System.out.println("login : "+ login);
+                System.out.println("login : "+ login);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return ls;
+    }
+
+    public static void main(String[] args) throws Exception {
+        Connection con = Conexao.conectarGeral();
+        String sql = "";       
+            ArrayList<String> ls = logins();
+            String senha = "";
+            String login = "";
+            for (String l : ls) {
+                login = l.split(";")[0];
+                System.out.println("login > "+ login);
+                senha = l.split(";")[1];System.out.println("login > "+ login);
+                senha = encodeSenha(senha);
+                System.out.println("senhaEncode > "+ senha);
+                sql = "UPDATE usuarios SET senha = '" + senha + "' WHERE login = '" + login + "' ;";
+                System.out.println(sql);
+                PreparedStatement valores = con.prepareStatement(sql);
+                valores.executeUpdate();
+                valores.close();
+            }
+        
+    }*/
+
+    public static Usuario loginMD5(String login, String senha) {
+        Usuario user = null;
+        Connection con = Conexao.conectarGeral();
+        String sql = "SELECT * FROM usuarios WHERE login = ? AND senha = ? AND ativo = 1 AND usaPortalPostal = 1";
+
+        try {
+            senha = encodeSenha(senha);
+            PreparedStatement valores = con.prepareStatement(sql);
+            valores.setString(1, login);
+            valores.setString(2, senha);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            if (result.next()) {
+                int idEmpresa = result.getInt("idEmpresa");
+                int idUsuario = result.getInt("idUsuario");
+                String nome = result.getString("nome");
+                String email = result.getString("email");
+                String cpf = result.getString("cpf");
+                int idNivel = result.getInt("idNivel");
+                int ativo = result.getInt("ativo");
+                int usaPortalPostal = result.getInt("usaPortalPostal");
+                String acessosPortalPostal = result.getString("acessosPortalPostal");
+                int usaConsolidador = result.getInt("usaPortalPostal");
+                String acessosConsolidador = result.getString("acessosConsolidador");
+                user = new Usuario(idUsuario, idEmpresa, nome, login, senha, email, cpf, ativo, idNivel, usaPortalPostal, acessosPortalPostal, usaConsolidador, acessosConsolidador);
+            }
+            return user;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrLogin", "SQLException", sql, e.toString());
+            return null;
+        } catch (Exception ex) {
+            ContrErroLog.inserir("HOITO - contrLogin", "Exception", sql, ex.toString());
             return null;
         } finally {
             Conexao.desconectar(con);

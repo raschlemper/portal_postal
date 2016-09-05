@@ -130,11 +130,11 @@ app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES
             // ***** VALIDAR ***** //  
             
             $scope.validarPlanoConta = function(planoConta) {
-                return FinanceiroValidation.planoContaResultado(planoConta);
+                return FinanceiroValidation.planoContaResultado($scope.planoContas, planoConta);
             };
 
             $scope.validarCentroCusto = function(centroCusto) {
-                return FinanceiroValidation.centroCustoResultado(centroCusto);
+                return FinanceiroValidation.centroCustoResultado($scope.centroCustos, centroCusto);
             };   
             
         }

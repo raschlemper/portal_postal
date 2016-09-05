@@ -298,7 +298,7 @@
                                         <li class="list-group-item" >
                                             <div class="row form-horizontal">
                                                 <div class="col-sm-6 col-md-3 col-lg-3">
-                                                    <label class="small">CNPJ</label>
+                                                    <label class="small">CPF/CNPJ</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-key fa-fw"></i></span>                                                                                                             
                                                         <input class="form-control" type="text" name="cnpj" id="cnpj" value="<%= cnpj%>" maxlength="18" onKeyPress="mascara(this, maskCpfCnpj)"  />

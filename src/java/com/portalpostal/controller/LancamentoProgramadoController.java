@@ -171,6 +171,9 @@ public class LancamentoProgramadoController {
             init();
             validation(lancamentoProgramado);
             lancamentoProgramado.setUsuario(usuario);
+            for (Lancamento lancamento : lancamentoProgramado.getLancamentos()) {
+                lancamento.setUsuario(usuario);
+            }
             return lancamentoProgramadoService.createLancamento(lancamentoProgramado);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));

@@ -115,11 +115,11 @@ app.controller('ModalLancamentoConciliarController',
         // ***** VALIDAR ***** //  
         
         $scope.validarPlanoConta = function(planoConta) {
-            FinanceiroValidation.planoContaResultado(planoConta);
+            FinanceiroValidation.planoContaResultado($scope.planoContas, planoConta);
         };
         
         $scope.validarCentroCusto = function(centroCusto) {
-            FinanceiroValidation.centroCustoResultado(centroCusto);
+            FinanceiroValidation.centroCustoResultado($scope.centroCustos, centroCusto);
         };
 
         var validarForm = function (form) {

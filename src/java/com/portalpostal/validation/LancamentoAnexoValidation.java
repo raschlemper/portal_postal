@@ -27,7 +27,7 @@ public class LancamentoAnexoValidation extends Validation<LancamentoAnexo>{
     }    
 
     public boolean validarTamanho(LancamentoAnexo lancamentoAnexo) {          
-        if(lancamentoAnexo.getSize() <= 102400) return true; 
+        if(lancamentoAnexo.getSize() <= 512000) return true; 
         setMsg("Este arquivo esta acima do tamanho permitido!");
         return false;        
     }    
