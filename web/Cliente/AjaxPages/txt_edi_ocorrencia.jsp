@@ -1,3 +1,4 @@
+<%@page import="Entidade.empresas"%>
 <%@page import="java.util.Date"%><%@page import="java.text.SimpleDateFormat"%><%@page import="java.sql.Timestamp"%><%@page import="java.sql.ResultSet"%><%@page import="java.sql.PreparedStatement"%><%@page import="java.sql.SQLException"%><%@page import="Util.Conexao"%><%@page import="java.sql.Connection"%><%@page import="Controle.ContrlEDI"%><%@page import="java.util.Map"%><%@page import="Controle.contrCliente"%><%@page import="Entidade.Clientes"%><%
 
     //OCORENddMMyyyyHHmmsss
@@ -17,8 +18,12 @@
     response.setHeader("Content-disposition", "attachment; filename=" + nomeArquivo);
     response.setHeader("Cache-Control", "no-cache");
 
+    empresas emp = (empresas) session.getAttribute("agencia");
+    //System.out.println(emp.getCpf_cnpj().replace(".", "").replace("-", "").replace("/", ""));
+    //System.out.println(emp.getEmpresa());
+    String nomeBD = (String) session.getAttribute("empresa");
     String tipoPesquisa = request.getParameter("tipoPesquisa");
-    String nomeBD = request.getParameter("nomeBD");
+    
     int idCliente = Integer.parseInt(request.getParameter("idCliente"));
     String data = Util.FormatarData.DateToBD(request.getParameter("data"));
     String data2 = Util.FormatarData.DateToBD(request.getParameter("data2"));
@@ -27,6 +32,7 @@
     Clientes cli = contrCliente.consultaClienteById(idCliente, nomeBD);
     //Consulta ocorrencias edi vs sro / key = codigo;tipo, Ex.: 1;BDE
     Map<String, Integer> mapOcor = ContrlEDI.consultaSROxEDI(idCliente, nomeBD);
+    Map<Integer, String> mapOcorEdi = ContrlEDI.consultaOcorEDI(idCliente, nomeBD);
 
     //Consulta movimentacao tracking
     Connection conn = Conexao.conectar(nomeBD);
@@ -50,7 +56,7 @@
         if (modelo.equals("EDI_3.0")) {
             //HEADER 1
             out.print("000"); //codigo da linha
-            out.print(Util.FormataString.preencheStringCom("EMPRESA DE TRANSPORTES", " ", 35, 1));//nome transportadora
+            out.print(Util.FormataString.preencheStringCom(emp.getEmpresa(), " ", 35, 1));//nome AGF
             out.print(Util.FormataString.preencheStringCom(cli.getNome(), " ", 35, 1));//nome cliente
             out.print(sdf1.format(new Date()));//data atual 
             out.print("OCO");
@@ -65,8 +71,8 @@
             out.println(Util.FormataString.preencheStringCom("", " ", 103, 1)); // FILLER
             //HEADER 3
             out.print("341"); //codigo da linha
-            out.print("99999999999999");//cnpj transportadora
-            out.print(Util.FormataString.preencheStringCom("EMPRESA DE TRANSPORTES", " ", 50, 1)); //nome transportadora
+            out.print(emp.getCpf_cnpj().replace(".", "").replace("-", "").replace("/", ""));//cnpj AGF
+            out.print(Util.FormataString.preencheStringCom(emp.getEmpresa(), " ", 50, 1)); //nome AGF
             out.println(Util.FormataString.preencheStringCom("", " ", 53, 1)); // FILLER
 
             while (result.next()) {
@@ -82,17 +88,17 @@
                 //BODY EDI 3.0
                 out.print("342"); // codigo da linha
                 out.print(Util.FormataString.preencheStringCom(cli.getCnpj(), " ", 14, 1));//cnpj do cliente
-                out.print(Util.FormataString.preencheStringCom("", " ", 3, 1)); //Serie NF
+                out.print(Util.FormataString.preencheStringCom("2", " ", 3, 1)); //Serie NF
                 out.print(Util.FormataString.preencheStringCom(nf, "0", 8, -1)); //Numero NF
                 out.print(Util.FormataString.preencheStringCom(edi_code + "", "0", 2, -1)); //Código Ocorrencia EDI
                 out.print(Util.FormataString.preencheStringCom(sdf3.format(date), "0", 12, -1)); //Data Ocorrencia
                 out.print(Util.FormataString.preencheStringCom("00", "0", 2, -1)); //
-                out.println(Util.FormataString.preencheStringCom("", " ", 76, 1)); // FILLER
+                out.println(Util.FormataString.preencheStringCom(mapOcorEdi.get(edi_code), " ", 76, 1)); // FILLER
             }
         } else if (modelo.equals("EDI_5.0")) {
             //HEADER 1
             out.print("000"); //codigo da linha
-            out.print(Util.FormataString.preencheStringCom("EMPRESA DE TRANSPORTES", " ", 35, 1));//nome transportadora
+            out.print(Util.FormataString.preencheStringCom(emp.getEmpresa(), " ", 35, 1));//nome AGF
             out.print(Util.FormataString.preencheStringCom(cli.getNome(), " ", 35, 1));//nome cliente
             out.print(sdf1.format(new Date()));//data atual 
             out.print("OCO");
@@ -107,8 +113,8 @@
             out.println(Util.FormataString.preencheStringCom("", " ", 103, 1)); // FILLER
             //HEADER 3
             out.print("541"); //codigo da linha
-            out.print("99999999999999");//cnpj transportadora
-            out.print(Util.FormataString.preencheStringCom("EMPRESA DE TRANSPORTES", " ", 50, 1)); //nome transportadora
+            out.print(emp.getCpf_cnpj().replace(".", "").replace("-", "").replace("/", ""));//cnpj AGF
+            out.print(Util.FormataString.preencheStringCom(emp.getEmpresa(), " ", 50, 1)); //nome AGF
             out.println(Util.FormataString.preencheStringCom("", " ", 53, 1)); // FILLER
 
             int contador = 0;
@@ -150,7 +156,7 @@
         } else if (modelo.equals("EDI_EMBARC_3.0")) {
             //HEADER 1
             out.print("000"); //codigo da linha
-            out.print(Util.FormataString.preencheStringCom("EMPRESA DE TRANSPORTES", " ", 35, 1));//nome transportadora
+            out.print(Util.FormataString.preencheStringCom(emp.getEmpresa(), " ", 35, 1));//nome AGF
             out.print(Util.FormataString.preencheStringCom(cli.getNome(), " ", 35, 1));//nome cliente
             out.print(sdf1.format(new Date()));//data atual 
             out.print("CON");
@@ -165,21 +171,21 @@
             out.println(Util.FormataString.preencheStringCom("", " ", 663, 1)); // FILLER ATE 680
             //HEADER 3
             out.print("321"); //codigo da linha
-            out.print("99999999999999");//cnpj transportadora
-            out.print(Util.FormataString.preencheStringCom("EMPRESA DE TRANSPORTES", " ", 50, 1)); //nome transportadora
+            out.print(emp.getCpf_cnpj().replace(".", "").replace("-", "").replace("/", ""));//cnpj AGF
+            out.print(Util.FormataString.preencheStringCom(emp.getEmpresa(), " ", 50, 1)); //nome AGF
             out.println(Util.FormataString.preencheStringCom("", " ", 623, 1)); // FILLER ATE 680
 
             int contador = 0;
             while (result.next()) {
                 contador++;
                 Timestamp date = result.getTimestamp("t.last_status_date");
-                int code = result.getInt("t.last_status_code");
-                String type = result.getString("t.last_status_type");
+                //int code = result.getInt("t.last_status_code");
+                //String type = result.getString("t.last_status_type");
                 String nf = result.getString("m.notaFiscal");
-                int edi_code = 0;
+                /*int edi_code = 0;
                 if (mapOcor.containsKey(code + ";" + type)) {
                     edi_code = mapOcor.get(code + ";" + type);
-                }
+                }*/
 
                 //BODY EDI 5.0
                 out.print("322"); //codigo da linha
@@ -196,8 +202,8 @@
                 out.print(Util.FormataString.preencheStringCom("0", "0", 75, -1)); 
                 out.print(Util.FormataString.preencheStringCom("2", "0", 1, -1)); 
                 out.print(Util.FormataString.preencheStringCom("0", "3", 1, -1)); 
-                out.print(Util.FormataString.preencheStringCom("99999999000199", "14", 1, -1)); //cnpj agf
-                out.print(Util.FormataString.preencheStringCom("99999999000199", "14", 1, -1)); //cnpj cliente
+                out.print(Util.FormataString.preencheStringCom(emp.getCpf_cnpj().replace(".", "").replace("-", "").replace("/", ""), "14", 1, -1)); //cnpj agf
+                out.print(Util.FormataString.preencheStringCom(cli.getCnpj().replace(".", "").replace("-", "").replace("/", ""), "14", 1, -1)); //cnpj cliente
                 out.print(Util.FormataString.preencheStringCom("2", "0", 3, -1)); //serie nf 2
                 out.print(Util.FormataString.preencheStringCom(nf, "0", 8, -1)); //nf
                 out.print(Util.FormataString.preencheStringCom("", "   00000000", 429, -1)); //serie + nf - 39 vezes

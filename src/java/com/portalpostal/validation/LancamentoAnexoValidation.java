@@ -33,7 +33,7 @@ public class LancamentoAnexoValidation extends Validation<LancamentoAnexo>{
     }    
 
     public boolean validarTipo(LancamentoAnexo lancamentoAnexo) {          
-        if(lancamentoAnexo.getTipo().equals("png") || lancamentoAnexo.getTipo().equals("jpg") || 
+        if(lancamentoAnexo.getTipo().equals("png") || lancamentoAnexo.getTipo().equals("jpg") || lancamentoAnexo.getTipo().equals("jpeg") || 
                 lancamentoAnexo.getTipo().equals("gif") || lancamentoAnexo.getTipo().equals("pdf")) return true; 
         setMsg("Este tipo de arquivo não é permitido!");
         return false;        

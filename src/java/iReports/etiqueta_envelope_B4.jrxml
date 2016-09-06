@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" printOrder="Horizontal" pageWidth="708" pageHeight="1000" columnWidth="692" leftMargin="8" rightMargin="8" topMargin="8" bottomMargin="8" uuid="a6600087-3a8d-456c-bdc8-19dcbb299119">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="332"/>
+	<property name="ireport.y" value="323"/>
 	<parameter name="idCliente" class="java.lang.String"/>
 	<parameter name="enderecoCli" class="java.lang.String"/>
 	<parameter name="bairroCli" class="java.lang.String"/>
@@ -241,7 +241,11 @@
 			</textField>
 			<textField>
 				<reportElement x="365" y="338" width="98" height="49" uuid="5dc1272a-50ae-42e9-b7d7-b9a9cc1d5c02">
-					<printWhenExpression><![CDATA[$F{sro}.length() != 13]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{contrato_ect}.equals("") 
+&& $F{sro}.length() < 13 
+&& !$F{grupo_servico}.equals("SIMPLES") 
+&& !$F{grupo_servico}.equals("CARTA") 
+&& !$F{grupo_servico}.startsWith("MDPB")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="18" isBold="true"/>
@@ -373,7 +377,7 @@
 			</textField>
 			<staticText>
 				<reportElement x="202" y="397" width="133" height="51" uuid="89c81756-3970-4779-b591-d97dc0dd1f89">
-					<printWhenExpression><![CDATA[$F{contrato_ect}.equals("") || $F{sro}.length() < 13]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{contrato_ect}.equals("") && $F{sro}.length() < 13]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font size="32" isBold="true" isUnderline="true"/>

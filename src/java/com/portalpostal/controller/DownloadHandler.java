@@ -11,8 +11,12 @@ import sun.misc.BASE64Decoder;
 public class DownloadHandler {
     
     public static Response image(InputStream inputStream, String name) throws IOException {
-        BufferedImage image = toImage(inputStream);
-        return response(image, name);
+        if(name.contains(".png")) {
+            BufferedImage image = toImage(inputStream);
+            return response(image, name);
+        }
+        ByteArrayOutputStream out = toByteArrayOutputStream(inputStream);
+        return response(out.toByteArray(), name);
     } 
     
     public static Response pdf(InputStream inputStream, String name) throws IOException {
@@ -45,6 +49,6 @@ public class DownloadHandler {
         }
         out.flush();    
         return out;
-    }
+    }            
     
 }

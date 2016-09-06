@@ -138,6 +138,22 @@ public class contrDestinatario {
         }
     }
 
+    public static boolean deletar(String idDestinatario, int idCliente, String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "DELETE FROM cliente_destinatario WHERE idCliente = " + idCliente + " AND idDestinatario IN (" + idDestinatario + ")";
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.executeUpdate();
+            valores.close();
+            return true;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrContato", "SQLException", sql, e.toString());
+            return false;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+
     public static ArrayList<Destinatario> pesquisa(int idCli, String codigo, String nome, String cpf_cnpj, String bairro, String cidade, String cep, String emp, String end, String nomeBD, String tags) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
         

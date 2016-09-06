@@ -94,7 +94,7 @@ public class LancamentoAnexoController {
     
     @GET
     @Path("/{idLancamentoAnexo}/download/image")
-    @Produces({"image/png", "image/jpg", "image/gif"})
+    @Produces({"image/png", "image/jpg", "image/jpeg", "image/gif"})
     public Response downloadImage(@PathParam("idLancamentoAnexo") Integer idLancamentoAnexo) {
         try {
             init();    

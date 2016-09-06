@@ -78,7 +78,8 @@ app.controller('ModalLancamentoAnexarController', ['$scope', 'LancamentoAnexoSer
         
         var getModelo = function(fileName) {
             if(fileName.toLowerCase().indexOf('.png') > -1) return 'image';             
-            if(fileName.toLowerCase().indexOf('.jpg') > -1) return 'image';           
+            if(fileName.toLowerCase().indexOf('.jpg') > -1) return 'image';             
+            if(fileName.toLowerCase().indexOf('.jpeg') > -1) return 'image';           
             if(fileName.toLowerCase().indexOf('.gif') > -1) return 'image'; 
             if(fileName.toLowerCase().indexOf('.pdf') > -1) return 'pdf';  
             return null;
@@ -86,14 +87,16 @@ app.controller('ModalLancamentoAnexarController', ['$scope', 'LancamentoAnexoSer
         
         var getType = function(fileName) {
             if(fileName.toLowerCase().indexOf('.png') > -1) return 'image/png';             
-            if(fileName.toLowerCase().indexOf('.jpg') > -1) return 'image/jpg';           
+            if(fileName.toLowerCase().indexOf('.jpg') > -1) return 'image/jpg';             
+            if(fileName.toLowerCase().indexOf('.jpeg') > -1) return 'image/jpg';           
             if(fileName.toLowerCase().indexOf('.gif') > -1) return 'image/gif';
             return null;
         };
         
         var getIcon = function(fileName) {
             if(fileName.toLowerCase().indexOf('.png') > -1) return 'fa-file-image-o';   
-            if(fileName.toLowerCase().indexOf('.jpg') > -1) return 'fa-file-image-o';  
+            if(fileName.toLowerCase().indexOf('.jpg') > -1) return 'fa-file-image-o';   
+            if(fileName.toLowerCase().indexOf('.jpeg') > -1) return 'fa-file-image-o';  
             if(fileName.toLowerCase().indexOf('.gif') > -1) return 'fa-file-image-o';  
             if(fileName.toLowerCase().indexOf('.pdf') > -1) return 'fa-file-pdf-o';  
             return 'fa-file-text-o';

@@ -1,4 +1,5 @@
 
+<%@page import="Entidade.Clientes"%>
 <%@page import="java.util.Date"%>
 <%@page import="Controle.ContrClienteEtiquetas"%>
 <%@page import="Controle.contrCliente"%>
@@ -23,6 +24,14 @@
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
+        String numObjPesq = "";
+        if (request.getParameter("obj") != null) {
+            numObjPesq = request.getParameter("obj");
+        }
+        int idCliente = 0;
+        if (request.getParameter("idCliente") != null) {
+            idCliente = Integer.parseInt(request.getParameter("idCliente"));
+        }
         Date dataAtual = new Date();
         String vDataAtual = Util.SomaData.SomarDiasDatas(dataAtual, -1);
         String dataAnterior = Util.SomaData.SomarDiasDatas(dataAtual, -6);
@@ -68,7 +77,6 @@
                                     <a href="#" class="close" data-dismiss="alert">&times;</a>
                                 </div>
                             </div>
-
                         </div>
                         <div class="row">
                             <div class="well well-md"> 
@@ -76,24 +84,58 @@
                                     <input type="hidden" name="nomeBD" value="<%= nomeBD%>" />
                                     <button class="btn btn-warning" type="submit" onclick="waitMsg()"><i class="fa fa-lg fa-spc fa-refresh"></i> ATUALIZAR ETIQUETAS POSTADAS</button>
                                 </form>      
-                                <br/>                                        
+                                <br/>  
                                 <div>
-                                    <h4 class="subtitle">Pesquisar etiquetas pendentes por periodo</h4>
-                                </div>                                                
-                                <form class="form-inline" action="painel_etiquetas_pend_b.jsp" method="post"> 
-                                    <div class="form-group" >                                                
-                                        <label for="from">De</label>
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                            <input class="form-control" size="8" type="text" id="dataIni" name="dataIni" value="<%= dataAnterior%>" onkeypress="mascara(this, maskData);"/>
-                                        </div>
-                                        <label for="to">à</label>
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                            <input class="form-control" size="8" type="text" id="dataFim" name="dataFim" value="<%=vDataAtual%>" onkeypress="mascara(this, maskData);" />
-                                        </div>
-                                        <button type="submit" class="btn btn-sm btn-primary form-control" onclick="waitMsg();"><i class="fa fa-lg fa-search"></i></button>
+                                    <h4 class="subtitle">Pesquisar por Etiqueta</h4>
+                                </div>                        
+                                <form class="form-inline" action="painel_etiquetas_pend_b.jsp" method="post">    
+                                    <div class="form-group" >           
+                                        <input id="obj" class="form-control" type="text" name="obj"  maxlength="13" onkeypress="mascara(this, maskObjetoSRO);" placeholder="Digite a etiqueta aqui..." />
+                                        <button type="submit" class="btn btn-sm btn-primary form-control" onclick="waitMsg()"><i class="fa fa-lg fa-search"></i></button>
                                     </div>
+                                </form>
+                                <div>
+                                    <h4 class="subtitle">Pesquisar por Cliente e Periodo</h4>
+                                </div> 
+                                <form class="form-inline" action="painel_etiquetas_pend_b.jsp" method="post"> 
+                                <%--<form action="painel_etiquetas_pesq_b.jsp" method="post" name="form2">--%>
+                                    <div class="row">
+                                        <div class="form-group col-md-5" >
+                                            <label class="small">Selecione um Cliente</label>
+                                            <select class="populate placeholder" name="idCliente" id="idCliente">
+                                                <option value="0">-- Selecione um Cliente --</option>
+                                                <%
+                                                    ArrayList<Clientes> listaCliente = Controle.contrCliente.getNomeCodigoMetodo(nomeBD, false);
+                                                    for (Clientes c : listaCliente) {
+                                                        if (idCliente == c.getCodigo()) { 
+                                                            out.println("<option selected value='" + c.getCodigo() + "'>[" + c.getCodigo() + "] " + c.getNome() + "</option>");
+                                                        } else {
+                                                            out.println("<option value='" + c.getCodigo() + "'>[" + c.getCodigo() + "] " + c.getNome() + "</option>");
+                                                        }
+                                                    }
+                                                %>
+                                            </select>
+                                        </div>  
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-inline col-md-5">
+                                            <label class="small">Selecione o Periodo da Impressão</label>
+                                            <div class="clearfix"></div>
+                                            <label for="data">De</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                            <input class="form-control" size="8" type="text" id="dataIni" name="dataIni" value="<%= dataAnterior%>" onkeypress="mascara(this, maskData);"/>
+                                            </div>
+                                            <label for="data2">à</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <input class="form-control" size="8" type="text" id="dataFim" name="dataFim" value="<%=vDataAtual%>" onkeypress="mascara(this, maskData);" />
+                                            </div>
+                                            <input type="hidden" style="width:100px;" name="obj" />
+                                            <button type="submit" class="btn btn-sm btn-primary form-control" onclick="waitMsg();"><i class="fa fa-lg fa-search"></i></button>
+                                        </div>
+                                    </div>                                             
+                                    
                                 </form>
                             </div>   
                         </div>
@@ -128,7 +170,15 @@
                                                     </thead>
                                                     <tbody>
                                                         <%
-                                                            ArrayList<PreVenda> lista2 = ContrPreVenda.consultaVendasNaoConsolidadas(nomeBD, vDataInicio, vDataFinal, 0);
+                                                            ArrayList<PreVenda> lista2 = new ArrayList<PreVenda>();
+                                                            if (!numObjPesq.equals("")) {
+                                                                PreVenda pv = ContrPreVenda.consultaVendaBySRO(numObjPesq, nomeBD);
+                                                                if(pv != null){
+                                                                    lista2.add(pv);
+                                                                }
+                                                            }else{
+                                                                lista2 = ContrPreVenda.consultaVendasNaoConsolidadas(nomeBD, vDataInicio, vDataFinal, idCliente, 0); 
+                                                            }
                                                             for (int i = 0; i < lista2.size(); i++) {
                                                                 PreVenda des = lista2.get(i);
                                                                 String numObj = des.getNumObjeto();
@@ -189,12 +239,18 @@
 
         <!-- /#wrapper -->
         <script type="text/javascript">
-            function AllTables() {
-                // StartDataTable('dataTables-etqPend');
-                // LoadSelect2Script(MakeSelectDataTable('dataTables-etqPend'));
+            
+            function selectCliente() {
+                $('#idCliente').select2();
             }
+            function AllTables() {
+                //StartDataTable('dataTables-etqPend');
+                //LoadSelect2Script(MakeSelectDataTable('dataTables-etqPend'));
+            }
+            
             $(document).ready(function () {
-                //  LoadDataTablesScripts(AllTables);
+                LoadSelect2Script(selectCliente);
+                //LoadDataTablesScripts(AllTables);
                 $("#dataIni").datepicker({
                     showAnim: 'slideDown',
                     maxDate: new Date(),

@@ -51,7 +51,7 @@ app.directive('appTypeahead', function($filter) {
                 if(!lista || !search) return lista;
                 return lista.filter(function(item) {
                     if(item.keep) return true;
-                    return (item[$scope.field].indexOf(search) > -1);
+                    return (item[$scope.field].toLowerCase().indexOf(search.toLowerCase()) > -1);
                 })
             }
             

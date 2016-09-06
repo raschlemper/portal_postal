@@ -327,7 +327,10 @@ app.controller('LancamentoController',
         var editar = function(conta, lancamento, goToAnexo) {                   
             modalSalvar(conta, lancamento, lancamento.tipo, goToAnexo)
                 .then(function(result) {
-                    if(!result) return;
+                    if(!result) { 
+                        todos(conta); 
+                        return;
+                    }
                     result = ajustarDados(result);
                     update(conta, result);
                 });            

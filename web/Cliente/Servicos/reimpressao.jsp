@@ -152,6 +152,29 @@
                     $('#pesq').submit();
                 }
             }
+            
+            function trocaTamanho(tam){
+                var x = document.getElementById("posicaoInicial");
+                x.selectedIndex = 0;
+                if(tam === 'A4'){
+                    document.getElementById("ddPosicao").className = "mostrar";    
+                    x.remove(5);                
+                    x.remove(4);
+               } else if(tam === 'A4_6'){
+                    document.getElementById("ddPosicao").className = "mostrar";
+                    var option5 = document.createElement("option");
+                    option5.text = "5ª Etiqueta";
+                    option5.value = "5";
+                    x.add(option5);
+                    var option6 = document.createElement("option");
+                    option6.text = "6ª Etiqueta";
+                    option6.value = "6";                    
+                    x.add(option6);
+                } else{
+                    document.getElementById("ddPosicao").className = "esconder";
+                }
+            }
+                
         </script>
 
         <title>Portal Postal | Etiquetas Impressas</title>
@@ -330,7 +353,7 @@
                                 </dd>
                                 <dd>
                                     <label>Tamanho da impressão:</label>
-                                    <select style="width: 220px;" name="formato" id="formato">
+                                    <select style="width: 220px;" name="formato" id="formato" onchange="trocaTamanho(this.value)">
                                         <option value="A4">Folha A4 - 4 por folha</option> 
                                         <option value="A4_6">Folha A4 - 6 por folha</option> 
                                         <option disabled>----------------</option>
@@ -346,6 +369,15 @@
                                         <option value="PIMACO_6288_2">PIMACO 6288 - Inicio 2/4</option> 
                                         <option value="PIMACO_6288_3">PIMACO 6288 - Inicio 3/4</option> 
                                         <option value="PIMACO_6288_4">PIMACO 6288 - Inicio 4/4</option> --%>
+                                    </select>
+                                </dd>
+                                <dd id='ddPosicao' class="mostrar">
+                                    <label>Posição Inicial:</label>
+                                    <select style="width: 120px;" name="posicaoInicial" id="posicaoInicial">
+                                        <option value="1">1ª Etiqueta</option> 
+                                        <option value="2">2ª Etiqueta</option> 
+                                        <option value="3">3ª Etiqueta</option> 
+                                        <option value="4">4ª Etiqueta</option> 
                                     </select>
                                 </dd>
                             </li>
