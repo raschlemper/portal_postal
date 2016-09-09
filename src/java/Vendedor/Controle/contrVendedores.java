@@ -13,11 +13,43 @@ import java.util.ArrayList;
 
 public class contrVendedores {
     
+    
+     public static int excluir(int idColetador, String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "update vendedores set ativo = 0 where idVendedor = ?;";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, idColetador);
+            int i = pstmt.executeUpdate();
+            return i;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrColetador", "SQLException", sql, e.toString());
+            return -1;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+     
+     public static int excluirGeral(int idVendedor, String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "DELETE FROM vendedor_cliente WHERE idVendedor = ?;";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, idVendedor);
+            int i = pstmt.executeUpdate();
+            return i;
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrVendedores.excluirGeral", "SQLException", sql, e.toString());
+            return -1;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+    
      public static void inserir(String nome, String referencia, int idClientes, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "INSERT INTO vendedores (nomeVendedor, referencia, idClientes, data_cadastro, ativo) values(?,?,?,NOW(),1);";
         
-         System.out.println("foi 2");
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setString(1, nome);

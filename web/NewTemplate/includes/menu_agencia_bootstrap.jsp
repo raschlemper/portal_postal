@@ -6,6 +6,10 @@
     if (session.getAttribute("emp") != null) {
         Usuario usrMenu = (Usuario) session.getAttribute("agf_usuario");
         empresas empMenu = (empresas) session.getAttribute("agf_empresa");
+        boolean isMaster = false;
+        if (session.getAttribute("master") != null) {
+            isMaster = (Boolean) session.getAttribute("master");
+        }
         int qtdTelegPend = ContrTelegramaPostal.consultaQtdNaoEnviados(empMenu.getCnpj());
 
         String qtdWeb = contrColeta.consultaQtdColetasSolicitadas(empMenu.getCnpj());
@@ -62,11 +66,11 @@
             <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-cloud-upload fa-stack-1x "></i></span> Importações <span style="margin: 5px 20px 0 0;" class="fa-stack fa-fw pull-right"><i id="arrow" class="fa fa-chevron-down fa-stack-1x "></i></span></a>
             <ul class="nav-pills nav-stacked" style="list-style-type:none;">              
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(302)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Importacao/imp_ar_b.jsp">Arquivo de Retorno de AR</a></li><%}%>
-                <%if (!empMenu.getTipo_sistema().equals("PORTALPOSTAL")) {%>
+                    <%if (!empMenu.getTipo_sistema().equals("PORTALPOSTAL")) {%>
                     <%if (usrMenu.getListaAcessosPortalPostal().contains(301)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Importacao/imp_movimento_b.jsp" >Arquivo de Movimentação</a></li><%}%>
-                    <%if (usrMenu.getListaAcessosPortalPostal().contains(303)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Importacao/imp_cliente_b.jsp">Arquivo de Clientes</a></li><%}%>
-                    <%if (usrMenu.getListaAcessosPortalPostal().contains(304)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Importacao/imp_deptos_b.jsp">Arquivo de Departamentos</a></li><%}%>
-                <%}%>
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(303)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Importacao/imp_cliente_b.jsp">Arquivo de Clientes</a></li><%}%>
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(304)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Importacao/imp_deptos_b.jsp">Arquivo de Departamentos</a></li><%}%>
+                    <%}%>
             </ul>
         </li>
         <li><a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-gears fa-stack-1x "></i></span> Cadastros <span style="margin: 5px 20px 0 0;" class="fa-stack fa-fw pull-right"><i id="arrow" class="fa fa-chevron-down fa-stack-1x "></i></span></a>
@@ -81,15 +85,13 @@
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(408)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Cadastros/vendedor_lista_b.jsp">Vendedores</a></li><%}%>
             </ul>
         </li>
-        
-        <%if (
-                usrMenu.getListaAcessosPortalPostal().contains(501) || 
-                usrMenu.getListaAcessosPortalPostal().contains(502) || 
-                usrMenu.getListaAcessosPortalPostal().contains(503) || 
-                usrMenu.getListaAcessosPortalPostal().contains(504) || 
-                usrMenu.getListaAcessosPortalPostal().contains(505) ||
-                usrMenu.getListaAcessosPortalPostal().contains(506)
-                ) {%>
+
+        <%if (usrMenu.getListaAcessosPortalPostal().contains(501)
+                    || usrMenu.getListaAcessosPortalPostal().contains(502)
+                    || usrMenu.getListaAcessosPortalPostal().contains(503)
+                    || usrMenu.getListaAcessosPortalPostal().contains(504)
+                    || usrMenu.getListaAcessosPortalPostal().contains(505)
+                    || usrMenu.getListaAcessosPortalPostal().contains(506)) {%>
         <li>
             <a href="#">
                 <span class="fa-stack fa-lg pull-left"><i class="fa fa-car fa-stack-1x "></i></span> Veículos <span style="margin: 5px 20px 0 0;" class="fa-stack fa-fw pull-right"><i id="arrow" class="fa fa-chevron-down fa-stack-1x "></i></span>
@@ -104,14 +106,12 @@
             </ul>
         </li> 
         <%}%>
-        
-        <%if (
-                usrMenu.getListaAcessosPortalPostal().contains(601) || 
-                usrMenu.getListaAcessosPortalPostal().contains(602) || 
-                usrMenu.getListaAcessosPortalPostal().contains(603) || 
-                usrMenu.getListaAcessosPortalPostal().contains(604) || 
-                usrMenu.getListaAcessosPortalPostal().contains(605)
-                ) {%>
+
+        <%if (!isMaster && (usrMenu.getListaAcessosPortalPostal().contains(601)
+                    || usrMenu.getListaAcessosPortalPostal().contains(602)
+                    || usrMenu.getListaAcessosPortalPostal().contains(603)
+                    || usrMenu.getListaAcessosPortalPostal().contains(604)
+                    || usrMenu.getListaAcessosPortalPostal().contains(605))) {%>
         <li>
             <a href="#">
                 <span class="fa-stack fa-lg pull-left"><i class="fa fa-money fa-stack-1x "></i></span> Financeiro <span style="margin: 5px 20px 0 0;" class="fa-stack fa-fw pull-right"><i id="arrow" class="fa fa-chevron-down fa-stack-1x "></i></span>
@@ -141,8 +141,8 @@
                 <%}%>
             </ul>
         </li>
-                <%}%>
-        
+        <%}%>
+
         <li>
             <a class="danger" href="${pageContext.request.contextPath}/ServLogout"><span class="fa-stack fa-lg pull-left"><i class="fa fa-power-off fa-stack-1x "></i></span> Sair</a>
         </li>

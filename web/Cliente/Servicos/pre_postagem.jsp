@@ -544,6 +544,7 @@
                 document.getElementById("avisoRec").className = 'mostrar';
                 document.getElementById('labelObs').innerHTML = "Observações<span style='color:red;'>(APARECE SOMENTE NA ETIQUETA)</span>";
                 document.getElementById("cidade").readOnly = true;
+                document.getElementById("vlrCobrar").className = 'esconder';
                 document.getElementById("paisDest").className = 'esconder';
                 document.getElementById("ddUf").className = 'mostrar';
                 document.getElementById("tipo").selectedIndex = 2;
@@ -573,9 +574,16 @@
                 } else if (serv === 'PAX') {
                     document.getElementById("tipoPacote").className = 'esconder';
                     document.getElementById("tipo").selectedIndex = 2;
-                } else if (serv === 'IMPRESSO') {
+                } else if (serv === 'IMPRESSO') {                    
                     document.getElementById("tipoPacote").className = 'esconder';
-                    document.getElementById("tipo").selectedIndex = 2;
+                    document.getElementById("vlrDecl").className = 'mostrar';
+                    document.getElementById("maoProp").className = 'mostrar';
+                    document.getElementById("avisoRec").className = 'mostrar';
+                    document.getElementById("tipoRegis").className = 'mostrar';
+                    document.getElementById("tipoCt").className = 'esconder';
+                    document.getElementById("tipo").selectedIndex = 1;
+                    document.getElementById("tipoCarta").selectedIndex = 1;
+                    
                     document.getElementById("alertWrap").className = 'mostrar';
                     document.getElementById("alertMsg").innerHTML = 'O peso máximo aceito para o IMPRESSO é de 2Kg!';
                 } else if (serv === 'ESEDEX') {
@@ -604,7 +612,7 @@
                     document.getElementById("vlrCobrar").className = 'esconder';
                     document.getElementById("outros_servicos").className = 'mostrar';
                     alteraOutroServ(document.getElementById("servico_1").value);
-                } else if (serv === 'MDPB' || serv === 'IMPRESSO') {
+                } else if (serv === 'MDPB') {
                     document.getElementById("tipoPacote").className = 'esconder';
                     document.getElementById("vlrDecl").className = 'mostrar';
                     document.getElementById("maoProp").className = 'mostrar';
