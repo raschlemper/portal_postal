@@ -1,5 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%
+<%@page import="Util.FormataString"%><%@page contentType="text/html" pageEncoding="UTF-8"%><%
             /*AJAX*/
             request.setCharacterEncoding("ISO-8859-1");
             response.setCharacterEncoding("ISO-8859-1");
@@ -16,6 +15,9 @@
                     String senha = request.getParameter("senha");
                     int nivel = Integer.parseInt(request.getParameter("nivel"));
                     if (!login.equals("") && !senha.equals("")) {
+                        
+                        senha = FormataString.encodeSenha(senha);
+                        
                         if (Controle.contrLogin.verificaLoginSenha(login, senha, nivel, nomeBD)) {
                             resultado = "1";
                         }

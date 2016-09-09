@@ -113,8 +113,8 @@
                                                         <td align="center"><a href="vendedor_clientes_b.jsp?idVendedor=<%= idVendedor%>" class="btn btn-sm btn-info"><span class="fa  fa-users fa-lg"></span></a></td>
                                                         <td align="center"><a href="vendedor_relatorios.jsp?idVendedor=<%= idVendedor%>" class="btn btn-sm btn-warning"><span class="fa fa-bar-chart-o fa-lg"></span></a></td>
                                                         <td align="center">
-                                                            <form action="../../ServExcluirColetador" method="post" name="formDel">
-                                                                <input type="hidden" name="idColetador" value="<%= idVendedor%>" />
+                                                            <form action="../../ServExcluirVendedor" method="post" name="formDel">
+                                                                <input type="hidden" name="idVendedor" value="<%= idVendedor%>" />
                                                                 <button type="button" class="btn btn-sm btn-danger" onClick="confirmExcluir(this);"><span class="fa fa-trash fa-lg"></span></button>
                                                             </form>
                                                         </td>

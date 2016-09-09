@@ -293,7 +293,7 @@
                 <div class="card card-container">                    
                     <img class="profile-img" src="imagensNew/logoNova.png" style="padding-left: 40px;" height="130" alt=""/>
                     <p id="profile-name" class="profile-name-card"></p>
-                    <form action="ServLogin" method="post" class="form-signin">
+                    <form action="ServLoginMaster" method="post" class="form-signin">
                         <span id="reauth-email" class="reauth-email"></span>
                         <!--  <input type="text" name="agenciaHoito" id="inputCodigo" class="form-control" placeholder="Código da Agência" onkeydown="mascara(this, maskNumero);" required autofocus /> -->
                         <select name="agenciaHoito" class="form-control" onchange="getComboA(this);" >

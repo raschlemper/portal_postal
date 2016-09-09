@@ -702,6 +702,14 @@
         <servlet-name>ServExcluirEnderecoLR</servlet-name>
         <servlet-class>Emporium.Servlet.ServExcluirEnderecoLR</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ServLoginMaster</servlet-name>
+        <servlet-class>Servlet.ServLoginMaster</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServExcluirVendedor</servlet-name>
+        <servlet-class>Vendedor.Servlet.ServExcluirVendedor</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ServLogin</servlet-name>
         <url-pattern>/ServLogin</url-pattern>
@@ -1335,7 +1343,7 @@
         <servlet-name>ServTelegramaExportacao</servlet-name>
         <url-pattern>/ServTelegramaExportacao</url-pattern>
     </servlet-mapping>
-     <servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ServTelegramaImportacao</servlet-name>
         <url-pattern>/ServTelegramaImportacao</url-pattern>
     </servlet-mapping>
@@ -1374,6 +1382,14 @@
     <servlet-mapping>
         <servlet-name>ServExcluirEnderecoLR</servlet-name>
         <url-pattern>/ServExcluirEnderecoLR</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServLoginMaster</servlet-name>
+        <url-pattern>/ServLoginMaster</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServExcluirVendedor</servlet-name>
+        <url-pattern>/ServExcluirVendedor</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

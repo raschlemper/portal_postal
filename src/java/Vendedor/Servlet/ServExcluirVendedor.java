@@ -6,10 +6,8 @@
 package Vendedor.Servlet;
 
 import Controle.ContrErroLog;
-import Vendedor.Controle.contrVendedores;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +18,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Fernando
  */
-public class ServInserirClientesVendedor extends HttpServlet {
+public class ServExcluirVendedor extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +37,10 @@ public class ServInserirClientesVendedor extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ServInserirClientesVendedor</title>");
+            out.println("<title>Servlet ServExcluirVendedor</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ServInserirClientesVendedor at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ServExcluirVendedor at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -74,56 +72,26 @@ public class ServInserirClientesVendedor extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession sessao = request.getSession();
+          HttpSession sessao = request.getSession();
         String expira = (String) sessao.getAttribute("empresa");
         if (expira == null) {
-            response.sendRedirect("index.jsp?msgLog=3");
+            response.sendRedirect("/index.jsp?msgLog=3");
         } else {
             try {
-                String nomeBD = (String) sessao.getAttribute("empresa");
-                //contador de itens na tabela da clientes
-                int cont = Integer.parseInt(request.getParameter("contador"));
-                //id do vendedor
-                int idVendedor = Integer.parseInt(request.getParameter("idVendedor"));
-                             
-               
-                ArrayList<String> testa = new ArrayList<>();
-                boolean flag = true;
-                 //for que percorre a quantidade de itens que contem na tabela da clientes e verifica se tem algum duplicado
-                for (int i = 0; i < cont; i++) {
-                    String auxIdCliente = request.getParameter("cliente" + i);
-                    if (!testa.contains(auxIdCliente)) {
-                        testa.add(auxIdCliente);
-                    } else {
-                        flag = false;
-                    }
-                }
-                if (flag) {
-                    // Deleta as lista antiga 
-                contrVendedores.deletarListaCliente(idVendedor, nomeBD);   
-                    //for que percorre a quantidade de itens que contem na tabela da clientes insere no banco
-                    for (int i = 0; i < cont; i++) {
-                        String vIdCliente = request.getParameter("cliente" + i);
-                        if (vIdCliente != null && !vIdCliente.equals("")) {
-                            int idCliente = Integer.parseInt(vIdCliente);
-                            String percentual = request.getParameter("percent" + i);
-                            if (percentual.trim().equals("")) {
-                                percentual = "0";
-                            }
-                            //Insere lista atual                       
-                            contrVendedores.inserirClientesLista(idVendedor, idCliente, percentual, nomeBD);
-                        }
-                    }
-                    sessao.setAttribute("msg", "Lista clientes salva com sucesso!");
-                } else {
-                    sessao.setAttribute("msg", "<b>Erro !!!</b><br/>Existe(m) Cliente(s) Duplicado(s). <br/> Verifique a lista e preencha novamente!");
-                }
 
+                String nomeBD = (String) sessao.getAttribute("empresa");
+                int idVendedor = Integer.parseInt(request.getParameter("idVendedor"));
+
+                Vendedor.Controle.contrVendedores.excluir(idVendedor, nomeBD);
+                Vendedor.Controle.contrVendedores.excluirGeral(idVendedor, nomeBD);
+              //  Vendedor.Controle.contrVendedores.excluirByIdColetador(idColetador, nomeBD);
+
+                sessao.setAttribute("msg", "Vendedor excluido com sucesso!");
                 //response.sendRedirect("Agencia/Coleta/coletador_lista.jsp");
                 response.sendRedirect(request.getHeader("referer"));
 
             } catch (Exception ex) {
-                int idErro = ContrErroLog.inserir("HOITO - ServInserirCleintesVendedor", "Exception", null, ex.toString());
+                int idErro = ContrErroLog.inserir("ServExcluirVendedor", "Exception", null, ex.toString());
                 sessao.setAttribute("msg", "SYSTEM ERROR Nº: " + idErro + ";Ocorreu um erro inesperado!");
                 //response.sendRedirect("Agencia/Coleta/coletador_lista.jsp");
                 response.sendRedirect(request.getHeader("referer"));
@@ -131,6 +99,11 @@ public class ServInserirClientesVendedor extends HttpServlet {
         }
     }
 
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
     @Override
     public String getServletInfo() {
         return "Short description";

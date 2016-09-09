@@ -395,7 +395,7 @@ public class ContrClienteEtiquetas {
                 + " LEFT JOIN cliente ON cliente.codigo = ce.idCliente"
                 + " LEFT JOIN log_etiquetas_cli ON log_etiquetas_cli.id = ce.idImportacao"
                 + " WHERE utilizada = 0"
-                + " GROUP BY ce.idCliente, grupoServico, cliente.nome, dataHora"
+                + " GROUP BY ce.idCliente, grupoServico"
                 + " ORDER BY qtd;";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
@@ -432,7 +432,7 @@ public class ContrClienteEtiquetas {
                 + " LEFT JOIN cliente ON cliente.codigo = ce.idCliente"
                 + " LEFT JOIN log_etiquetas_cli ON log_etiquetas_cli.id = ce.idImportacao"
                 + " WHERE utilizada = 0 AND nome IS NOT NULL AND qtd < " + qtde
-                + " GROUP BY ce.idCliente, grupoServico, cliente.nome, dataHora"
+                + " GROUP BY ce.idCliente, grupoServico"
                 + " ORDER BY qtd;";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
