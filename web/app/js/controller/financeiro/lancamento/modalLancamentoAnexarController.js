@@ -1,11 +1,12 @@
 'use strict';
 
-app.controller('ModalLancamentoAnexarController', ['$scope', 'LancamentoAnexoService', 'ModalService', 'MESSAGES',
-    function ($scope, LancamentoAnexoService, ModalService, MESSAGES) {
+app.controller('ModalLancamentoAnexarController', ['$scope', '$sce', 'LancamentoAnexoService', 'PDFViewerService', 'ModalService', 'MESSAGES',
+    function ($scope, $sce, LancamentoAnexoService, PDFViewerService, ModalService, MESSAGES) {
 
         var init = function () {  
             $scope.fileURL = "";
             $scope.lancamentoAnexo = {};
+            $scope.viewer = PDFViewerService.Instance("viewer");
             getTitle();
             anexos();
         };
@@ -28,9 +29,9 @@ app.controller('ModalLancamentoAnexarController', ['$scope', 'LancamentoAnexoSer
         
         var createAnexos = function(data) {
             return _.map(data, function(anexo) { 
-                anexo.type = getType(anexo.nome);
-                anexo.icon = getIcon(anexo.nome);
-                anexo.modelo = getModelo(anexo.nome);
+                anexo.type = getType(anexo.tipo);
+                anexo.icon = getIcon(anexo.tipo);
+                anexo.modelo = getModelo(anexo.tipo);
                 return anexo;
             });
         };
@@ -62,49 +63,55 @@ app.controller('ModalLancamentoAnexarController', ['$scope', 'LancamentoAnexoSer
                 });       
         };
         
-        $scope.visualizar = function(anexo) {     
+        $scope.visualizar = function(anexo) {  
             $scope.file = {
                 name: anexo.nome,
-                type: getType(anexo.nome),
+                type: getType(anexo.tipo),
                 image: anexo.anexo,
-                icon: getIcon(anexo.nome)
-            };
+                icon: getIcon(anexo.tipo),
+                modelo: getModelo(anexo.tipo)
+            }; 
         };
         
         $scope.download = function(anexo) {    
-            var modelo = getModelo(anexo.nome);
+            var modelo = getModelo(anexo.tipo);
             LancamentoAnexoService.download(anexo.idLancamentoAnexo, modelo);
         };
         
-        var getModelo = function(fileName) {
-            if(fileName.toLowerCase().indexOf('.png') > -1) return 'image';             
-            if(fileName.toLowerCase().indexOf('.jpg') > -1) return 'image';             
-            if(fileName.toLowerCase().indexOf('.jpeg') > -1) return 'image';           
-            if(fileName.toLowerCase().indexOf('.gif') > -1) return 'image'; 
-            if(fileName.toLowerCase().indexOf('.pdf') > -1) return 'pdf';  
+        var getModelo = function(tipo) {
+            if(tipo == 'png' || tipo == 'jpg' || tipo == 'jpeg' || tipo == 'gif') return 'image'; 
+            if(tipo == 'pdf') return 'pdf';  
             return null;
         };
         
-        var getType = function(fileName) {
-            if(fileName.toLowerCase().indexOf('.png') > -1) return 'image/png';             
-            if(fileName.toLowerCase().indexOf('.jpg') > -1) return 'image/jpg';             
-            if(fileName.toLowerCase().indexOf('.jpeg') > -1) return 'image/jpg';           
-            if(fileName.toLowerCase().indexOf('.gif') > -1) return 'image/gif';
+        var getType = function(tipo) {
+            if(tipo == 'png' || tipo == 'pdf') return 'image/png';             
+            if(tipo == 'jpg' || tipo == 'jpeg') return 'image/jpg';            
+            if(tipo == 'gif') return 'image/gif'; 
             return null;
         };
         
-        var getIcon = function(fileName) {
-            if(fileName.toLowerCase().indexOf('.png') > -1) return 'fa-file-image-o';   
-            if(fileName.toLowerCase().indexOf('.jpg') > -1) return 'fa-file-image-o';   
-            if(fileName.toLowerCase().indexOf('.jpeg') > -1) return 'fa-file-image-o';  
-            if(fileName.toLowerCase().indexOf('.gif') > -1) return 'fa-file-image-o';  
-            if(fileName.toLowerCase().indexOf('.pdf') > -1) return 'fa-file-pdf-o';  
+        var getIcon = function(tipo) {
+            if(tipo == 'png' || tipo == 'jpg' || tipo == 'jpeg' || tipo == 'gif') return 'fa-file-image-o';  
+            if(tipo == 'pdf') return 'fa-file-pdf-o';  
             return 'fa-file-text-o';
-        }
+        };
+        
+        var getTypeToSave = function(anexo) {
+            if(anexo.type == 'image/png') return 'png';    
+            if(anexo.type == 'image/jpg' || anexo.type == 'image/jpeg') return 'jpg';   
+            if(anexo.type == 'image/gif') return 'gif';   
+            if(anexo.type == 'application/pdf') return 'pdf'; 
+            return null;
+        };
         
         $scope.ok = function() {
             $scope.close();        
-        };  
+        };                 
+
+        $scope.cancel = function () {
+          $scope.close();      
+        };
                 
         // ***** VALIDAR ***** //
 
@@ -117,7 +124,8 @@ app.controller('ModalLancamentoAnexarController', ['$scope', 'LancamentoAnexoSer
         }; 
 
         var validarType = function(anexo) {
-            if (!getModelo(anexo.name)) {
+            var tipo = getTypeToSave(anexo);
+            if (!getModelo(tipo)) {
                 alert(MESSAGES.lancamento.anexar.validacao.ARQUIVO_NAO_PERMITIDO);
                 return false;
             }   
@@ -138,19 +146,6 @@ app.controller('ModalLancamentoAnexarController', ['$scope', 'LancamentoAnexoSer
             ModalService.modalMessage(message);
         };
         
-        var modalSalvar = function(conta, lancamento) {
-            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamento.html', 'ModalLancamentoEditarController', 'lg',
-                {
-                    lancamento: function() {
-                        return lancamento;
-                    },
-                    conta: function() {
-                        return conta;
-                    }
-                });
-            return modalInstance.result;
-        };
-
         init();
 
     }]);

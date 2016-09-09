@@ -444,7 +444,7 @@ app.controller('LancamentoController',
         };
 
         var transferir = function(conta, lancamentoTransferencia) {
-            modalTransferir(lancamentoTransferencia).then(function(result) {
+            modalTransferir(conta, lancamentoTransferencia).then(function(result) {
                 result = ajustarDadosTransferencia(result);
                 if(lancamentoTransferencia) {  
                     updateTransferencia(conta, result);
@@ -653,11 +653,14 @@ app.controller('LancamentoController',
             return modalInstance.result;
         };
 
-        var modalTransferir = function(lancamentoTransferencia) {
+        var modalTransferir = function(conta, lancamentoTransferencia) {
             var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamentoTransferir.html', 'ModalLancamentoTransferirController', 'lg',
                 {
                     lancamentoTransferencia: function() {
                         return lancamentoTransferencia;
+                    },                    
+                    conta: function() {
+                        return conta;
                     }
                 });
             return modalInstance.result;

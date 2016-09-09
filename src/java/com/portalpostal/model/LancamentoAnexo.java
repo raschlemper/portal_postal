@@ -12,7 +12,7 @@ public class LancamentoAnexo {
     private String nome;
     private Integer size;
     @JsonSerialize(using=JsonInputStreamSerializer.class)
-    private InputStream anexo;
+    private InputStream anexo;   
     private String usuario;
 
     public Integer getIdLancamentoAnexo() {
