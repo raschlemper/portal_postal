@@ -22,7 +22,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-info"></i></span>
                                 <select class="form-control" name="banco" 
-                                        ng-options="banco.nome for banco in bancos track by banco.idBanco" ng-model="contaCorrente.banco"></select>
+                                        ng-options="(banco.numero + ' - ' + banco.nome) for banco in bancos track by banco.idBanco" ng-model="contaCorrente.banco"></select>
 <!--                                <span class="input-group-btn">
                                     <button class="btn btn-lg btn-primary" type="button" ng-click="openBanco()"><i class="fa fa-plus-circle"></i></button>
                                 </span>-->

@@ -389,31 +389,34 @@ public class ContrPreVendaImporta {
                         ai.setComprimento("0");
                     }
 
-                    if (aux[13].trim().toUpperCase().contains("AR")) {
+                    String serv_ad = SeparaServicosAdicionais(aux[13].trim().toUpperCase());
+                    if (serv_ad.contains("AR")) {
                         ai.setAr("1");
+                    } else if (serv_ad.contains("AD")) {
+                        ai.setAr("2");
                     } else {
                         ai.setAr("0");
                     }
 
-                    if (aux[13].trim().toUpperCase().contains("MP")) {
+                    if (serv_ad.contains("MP")) {
                         ai.setMp("1");
                     } else {
                         ai.setMp("0");
                     }
 
-                    if (aux[13].trim().toUpperCase().contains("VD")) {
+                    if (serv_ad.contains("VD")) {
                         ai.setVd(aux[14].trim());
                     } else {
                         ai.setVd("0");
                     }
 
-                    if (aux[13].trim().toUpperCase().contains("RM") || rm == 1) {
+                    if (serv_ad.contains("RM") || rm == 1) {
                         ai.setRm("1");
                     } else {
                         ai.setRm("0");
                     }
 
-                    if (aux[13].trim().toUpperCase().contains("PR")) {
+                    if (serv_ad.contains("PR")) {
                         ai.setPr("1");
                     } else {
                         ai.setPr("0");
@@ -2287,9 +2290,12 @@ public class ContrPreVendaImporta {
                     comprimento = (int) Float.parseFloat(comp.replace(",", ".")); //cm
                 }
 
+                serv_ad = SeparaServicosAdicionais(serv_ad);
                 int ar = 0;
                 if (serv_ad.trim().toUpperCase().contains("AR")) {
                     ar = 1;
+                } else if (serv_ad.trim().toUpperCase().contains("AD")) {
+                    ar = 2;
                 }
                 int mp = 0;
                 if (serv_ad.trim().toUpperCase().contains("MP")) {
@@ -2701,6 +2707,23 @@ public class ContrPreVendaImporta {
         } else {
             return elem.getTextTrim();
         }
+    }
+
+    private static String SeparaServicosAdicionais(String str) {
+        String result = "";
+        str = str.trim();
+        int max = str.length();
+        for (int i = 0; i < max; i += 2) {
+            if (i % 2 == 0 && max >= i + 2) {
+                if (i == 0) {
+                    result += str.substring(i, i + 2);
+                } else {
+                    result += ";" + str.substring(i, i + 2);
+                }
+            }
+        }
+
+        return result;
     }
 
 }

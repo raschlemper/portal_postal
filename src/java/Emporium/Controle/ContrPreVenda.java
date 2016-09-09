@@ -389,10 +389,14 @@ public class ContrPreVenda {
         if (dataIni != null && dataFim != null && !dataIni.equals("NULL") && !dataFim.equals("NULL")) {
             periodo = " AND DATE(dataImpressao) BETWEEN '" + dataIni + "' AND '" + dataFim + "' ";
         }
+        String cliente = "p.idCliente <> 0";
+        if (idCliente != 0) {
+            cliente = "p.idCliente = " + idCliente;
+        }
 
         String sql = "SELECT * FROM pre_venda AS p"
                 + " LEFT JOIN pre_venda_destinatario AS d ON p.idDestinatario = d.idDestinatario"
-                + " WHERE p.idCliente = " + idCliente + " " + periodo;
+                + " WHERE " + cliente + " " + periodo;
 
         System.out.println(sql);
         try {
@@ -830,11 +834,15 @@ public class ContrPreVenda {
         }
     }
 
-    public static ArrayList<PreVenda> consultaVendasNaoConsolidadas(String nomeBD, String dataIni, String dataFim, int inut) {
+    public static ArrayList<PreVenda> consultaVendasNaoConsolidadas(String nomeBD, String dataIni, String dataFim, int idCli, int inut) {
         Connection conn = (Connection) Conexao.conectar(nomeBD);
+        String cliente = "";
+        if (idCli > 0) {
+            cliente = " AND p.idCliente = " + idCli;
+        }
         String sql = "SELECT * FROM pre_venda AS p"
                 + " LEFT JOIN pre_venda_destinatario AS d ON p.idDestinatario = d.idDestinatario"
-                + " WHERE consolidado = 0 AND impresso = 1 AND inutilizada = " + inut + " AND nomeServico <> 'SIMPLES' AND numObjeto <> 'avista' AND DATE(dataImpressao) BETWEEN '" + dataIni + "' AND '" + dataFim + "';";
+                + " WHERE consolidado = 0 AND impresso = 1 AND inutilizada = " + inut + " AND nomeServico <> 'SIMPLES' AND numObjeto <> 'avista' AND DATE(dataImpressao) BETWEEN '" + dataIni + "' AND '" + dataFim + "' " + cliente + ";";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();

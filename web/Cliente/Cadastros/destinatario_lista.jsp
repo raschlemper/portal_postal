@@ -391,6 +391,8 @@
 
 
                     
+                    
+                    
                     <div id="titulo2" style="padding-top: 8px;">
                         Lista de todos os destinatários
                         <div style="float: right;">
@@ -416,9 +418,15 @@
                             </td>
                         </tr>
                     </table>
+                            
+                    <form action="../../ServExcluirDestinatario" method="post"  id="formd" name="formd">
                     <table cellpadding="0" cellspacing="0" border="0" id="table2" class="tinytable">
                         <thead>
                             <tr>
+                                <th align="center" class="nosort" style="width: 20px; padding-left: 5px;">
+                                    <input type=checkbox onClick="CheckAll('idDestinatario', this.checked);" title="Marcar/Desmarcar Todos" />
+                                    <h3 style="display: none;"></h3>
+                                </th>
                                 <th><h3>Cod.</h3></th>
                                 <th><h3>Nome</h3></th>
                                 <th><h3>Empresa</h3></th>
@@ -426,7 +434,6 @@
                                 <th><h3>Bairro</h3></th>
                                 <th><h3>Cidade / UF</h3></th>
                                 <th class="nosort" width="60"><h3>Alterar</h3></th>
-                                <th class="nosort" width="60"><h3>Excluir</h3></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -437,6 +444,7 @@
                                     if (cli.getSeparar_destinatarios() == 0 || des.getIdDepartamento() == 0 || dps.contains(des.getIdDepartamento())) {
                             %>
                             <tr style="cursor:default;">
+                                <td><input type="checkbox" name="idDestinatario" value="<%= des.getIdDestinatario()%>" /></td>
                                 <td><%= des.getIdDestinatario()%></td>
                                 <td><%= des.getNome()%></td>
                                 <td><%= des.getEmpresa()%></td>
@@ -444,7 +452,7 @@
                                 <td><%= des.getBairro()%></td>
                                 <td><%= des.getCidade() + " / " + des.getUf()%></td>
                                 <td align="center"><a onclick="verEditarDestinatario(<%= des.getIdDestinatario()%>, <%= cli.getCodigo()%>);" style="cursor:pointer;" ><img src="../../imagensNew/pencil.png" /></a></td>
-                                <td align="center">
+                                <%--<td align="center">
                                     <form action="../../ServExcluirDestinatario" method="post" name="formDel">
                                         <input type="hidden" name="idCliente" value="<%= cli.getCodigo()%>" />
                                         <input type="hidden" name="idDestinatario" value="<%= des.getIdDestinatario()%>" />
@@ -454,12 +462,14 @@
                                                     return false;
                                                 }" />
                                     </form>
-                                </td>
+                                </td> --%>
                             </tr>
                             <%}
                                 }%>
                         </tbody>
                     </table>
+                        
+                        
                     <div id="tablefooter" align='center'>
                         <div align="left" style='float:left; width:20%;'>
                             <select onchange="sorter2.size(this.value)">
@@ -485,6 +495,11 @@
                             <div class="page">Página <span id="currentpage2"></span> de <span id="totalpages2"></span></div>
                         </div>
                     </div>
+                        <div class="buttons">
+                            <input type="hidden" name="idCliente" value="<%= cli.getCodigo()%>" />
+                            <button type="submit" class="negative" onclick="return true;" ><img src="../../imagensNew/cross_circle.png" /> EXCLUIR DESTINATÁRIOS SELECIONADOS</button>
+                        </div>  
+                    </form>
                     <script type="text/javascript">
                         var sorter2 = new TINY.table.sorter('sorter2', 'table2', {
                             headclass: 'head',

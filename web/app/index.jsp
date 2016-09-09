@@ -41,6 +41,9 @@
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/highcharts-ng/highcharts.src.js"></script>
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/highcharts-ng/highcharts-ng.min.js"></script> 
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular-file-upload/angular-file-upload.min.js"></script>    
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angularjs-pdf/pdf/pdf.js"></script>    
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angularjs-pdf/pdf/pdf-compat.js"></script>    
+        <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angularjs-pdf/ng-pdfviewer.min.js"></script>    
         
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/app.js"></script>         
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/app/js/app.config.js"></script>  

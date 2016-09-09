@@ -615,7 +615,7 @@
                                                         <td>Até</td>
                                                         <td>                                                            
                                                             <input class="form-control" type="input" id="mdpbn_cepFim<%= i + 1%>" name="mdpbn_cepFim<%= i + 1%>" value="<%= cepFinal%>" size="7" maxlength="9" onkeypress="mascara(this, maskCep)" />
-                                                            <input type="hidden" name="mdpbn_suspenso_<%= i + 1%>" id="mdpbl_suspenso_<%= i + 1%>" value="<%= fs%>" />
+                                                            <input type="hidden" name="mdpbn_suspenso_<%= i + 1%>" id="mdpbn_suspenso_<%= i + 1%>" value="<%= fs%>" />
                                                         </td>                                                
                                                         <td align="center">
                                                             <button type="button" class="btn btn-sm btn-danger" onclick="delRow(this, 'mdpbn_');"><i class="fa fa-lg fa-trash"></i></button>
@@ -641,8 +641,8 @@
                                     <input type="hidden" name="sus_sedexhj" id="sus_sedexhj" value="<%= sus_sedexHJ%>" />
                                     <input type="hidden" name="sus_pax" id="sus_pax" value="<%= sus_pax%>" />
                                     <input type="hidden" name="sus_mdpbl" id="sus_mdpbl" value="<%= sus_mdpbL%>" />
-                                    <input type="hidden" name="sus_mdpbe" id="sus_mdpbl" value="<%= sus_mdpbE%>" />
-                                    <input type="hidden" name="sus_mdpbn" id="sus_mdpbl" value="<%= sus_mdpbN%>" />
+                                    <input type="hidden" name="sus_mdpbe" id="sus_mdpbe" value="<%= sus_mdpbE%>" />
+                                    <input type="hidden" name="sus_mdpbn" id="sus_mdpbn" value="<%= sus_mdpbN%>" />
                                 </form>
 
                             </div>

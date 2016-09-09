@@ -15,6 +15,7 @@
         int idCli = Integer.parseInt(String.valueOf(session.getAttribute("idCliente")));
         String formato = request.getParameter("formato");
         String ordem = request.getParameter("ordem");
+        String posicaoInicial = request.getParameter("posicaoInicial");
 
         String aux[] = request.getParameterValues("ids");
         String ids = "";
@@ -75,7 +76,7 @@
                     </ul>
                     <img width="100%" src="../../imagensNew/linha.jpg"/>
                     <center>
-                        <iframe src="<%=request.getContextPath()%>/ServEtiquetasReimp?formato=<%= formato %>&ordem=<%=ordem%>&ids=<%= ids %>" style="overflow: auto;" frameborder="0" scrolling="no" width="46%" height="750"></iframe>
+                        <iframe src="<%=request.getContextPath()%>/ServEtiquetasReimp?formato=<%= formato %>&posicaoInicial=<%=posicaoInicial%>&ordem=<%=ordem%>&ids=<%= ids %>" style="overflow: auto;" frameborder="0" scrolling="no" width="46%" height="750"></iframe>
                         <iframe src="<%=request.getContextPath()%>/ServEtiquetasArReimp?formato=<%= formato %>&ordem=<%=ordem%>&ids=<%= ids %>" style="overflow: auto;" frameborder="0" scrolling="no" width="46%" height="750"></iframe>
                     </center> 
                 </div>

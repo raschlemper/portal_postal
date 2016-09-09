@@ -84,6 +84,11 @@ public class ServEtiquetas extends HttpServlet {
                 url_jrxml = "etiqueta_16x10.jasper";
             }
 
+            int posicaoInicial = 1;
+            if (formato.startsWith("A4") && request.getParameter("posicaoInicial") != null) {
+                posicaoInicial = Integer.parseInt(request.getParameter("posicaoInicial"));
+            }
+
             try {
                 Clientes cli = contrCliente.consultaClienteById(idCliente, nomeBD);
                 String nome = cli.getNome();
@@ -173,7 +178,10 @@ public class ServEtiquetas extends HttpServlet {
                 Connection conn = Conexao.conectar(nomeBD);
                 List dados = new ArrayList();
                 byte[] bytes = null;
-                
+
+                for (int i = 1; i < posicaoInicial; i++) {
+                    dados.add(null);
+                }
                 try {
                     PreparedStatement valores = conn.prepareStatement(sql_query);
                     ResultSet r = (ResultSet) valores.executeQuery();

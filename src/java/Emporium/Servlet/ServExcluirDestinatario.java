@@ -80,12 +80,23 @@ public class ServExcluirDestinatario extends HttpServlet {
             try {
 
                 String nomeBD = (String) sessao.getAttribute("empresa");
-                int idDestinatario = Integer.parseInt(request.getParameter("idDestinatario"));
                 int idCliente = Integer.parseInt(request.getParameter("idCliente"));
+                String[] ids = request.getParameterValues("idDestinatario");
+                String idsSelecionados = "0";
+                if (ids != null && ids.length > 0) {
+                    for (int i = 0; i < ids.length; i++) {
+                        String id = ids[i];
+                        if (id != null) {
+                            idsSelecionados += "," + id;
+                        }
+                    }
 
-                contrDestinatario.deletar(idDestinatario, idCliente, nomeBD);
-                sessao.setAttribute("msg", "Destinatário Excluido com Sucesso!");
-                response.sendRedirect("Cliente/Cadastros/destinatario_lista.jsp");
+                    contrDestinatario.deletar(idsSelecionados, idCliente, nomeBD);
+                    sessao.setAttribute("msg", "Destinatário Excluido com Sucesso!");
+                    response.sendRedirect("Cliente/Cadastros/destinatario_lista.jsp");
+                } else {
+
+                }
 
             } catch (Exception ex) {
                 int idErro = ContrErroLog.inserir("Portal Postal - ServInserirDestinatario", "Exception", null, ex.toString());

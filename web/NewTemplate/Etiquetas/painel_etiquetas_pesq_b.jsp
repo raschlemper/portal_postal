@@ -84,7 +84,7 @@
                                         <div class="form-group col-md-5" >
                                             <label class="small">Selecione um Cliente</label>
                                             <select class="populate placeholder" name="idCliente" id="idCliente">
-                                                <option value="">-- Selecione um Cliente --</option>
+                                                <option value="0">-- Selecione um Cliente --</option>
                                                 <%
                                                     ArrayList<Clientes> listaCliente = Controle.contrCliente.getNomeCodigoMetodo(nomeBD, false);
                                                     for (Clientes c : listaCliente) {

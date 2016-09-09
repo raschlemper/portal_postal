@@ -1,0 +1,1 @@
+ALTER TABLE lancamento_anexo CHANGE `anexo` `anexo` LONGBLOB NOT NULL;

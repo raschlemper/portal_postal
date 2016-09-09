@@ -48,4 +48,9 @@ public class LancamentoAnexoService {
         return lancamentoAnexoDAO.remove(idLancamentoAnexo);
     } 
     
+    public LancamentoAnexo deleteByLancamento(Integer idLancamento) throws Exception {
+        init();
+        return lancamentoAnexoDAO.removeByLancamento(idLancamento);
+    } 
+    
 }

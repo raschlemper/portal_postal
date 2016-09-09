@@ -238,7 +238,11 @@
 			</textField>
 			<textField>
 				<reportElement x="165" y="1" width="98" height="49" uuid="5dc1272a-50ae-42e9-b7d7-b9a9cc1d5c02">
-					<printWhenExpression><![CDATA[$F{sro}.length() != 13]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{contrato_ect}.equals("") 
+&& $F{sro}.length() < 13 
+&& !$F{grupo_servico}.equals("SIMPLES") 
+&& !$F{grupo_servico}.equals("CARTA") 
+&& !$F{grupo_servico}.startsWith("MDPB")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="18" isBold="true"/>
@@ -364,7 +368,7 @@
 			</textField>
 			<staticText>
 				<reportElement x="2" y="57" width="133" height="51" uuid="89c81756-3970-4779-b591-d97dc0dd1f89">
-					<printWhenExpression><![CDATA[$F{contrato_ect}.equals("") || $F{sro}.length() < 13]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{contrato_ect}.equals("") && $F{sro}.length() < 13]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font size="32" isBold="true" isUnderline="true"/>

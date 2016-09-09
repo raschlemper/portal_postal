@@ -6,14 +6,12 @@
 package Controle;
 
 import Entidade.EDI;
-import Entidade.LogColeta;
 import Entidade.SRO;
 import Util.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -194,6 +192,30 @@ public class ContrlEDI {
                     mapOcor.put(idSro+";"+tp, idEdi);
                 }
                 
+            }
+            valores.close();
+
+            return mapOcor;
+
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - consultaSRO", "SQLException", sql, e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+    public static Map<Integer, String> consultaOcorEDI(int idCliente, String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "SELECT * FROM edi WHERE idCliente = ?;";
+        try {
+            Map<Integer, String> mapOcor = new HashMap<>();
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.setInt(1, idCliente);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            while (result.next()) {
+                int idEdi = result.getInt("codigo");
+                String desc = result.getString("descricao");
+                mapOcor.put(idEdi, desc);
             }
             valores.close();
 

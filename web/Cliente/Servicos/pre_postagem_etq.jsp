@@ -15,6 +15,7 @@
 
         int idCli = Integer.parseInt(String.valueOf(session.getAttribute("idCliente")));
         String formato = request.getParameter("formato");
+        String posicaoInicial = request.getParameter("posicaoInicial");
         String ordem = request.getParameter("ordem");
         
         String aux[] = request.getParameterValues("ids");
@@ -98,7 +99,7 @@
                             <a href="../../ServEtiquetas">Etiquetas.pdf</a>
                         </applet>
                         <iframe src="http://docs.google.com/gview?url=http://localhost:8084/ServEtiquetas&embedded=true" style="width:600px; height:500px;" frameborder="0"></iframe>--%>
-                        <iframe src="<%=request.getContextPath()%>/ServEtiquetas?formato=<%= formato %>&ordem=<%=ordem%>&ids=<%= ids %>" style="overflow: auto;" frameborder="0" scrolling="no" width="46%" height="750"></iframe>
+                        <iframe src="<%=request.getContextPath()%>/ServEtiquetas?formato=<%= formato %>&posicaoInicial=<%=posicaoInicial%>&ordem=<%=ordem%>&ids=<%= ids %>" style="overflow: auto;" frameborder="0" scrolling="no" width="46%" height="750"></iframe>
                         <iframe src="<%=request.getContextPath()%>/ServEtiquetasAr?formato=<%= formato %>&ordem=<%=ordem%>&ids=<%= ids %>" style="overflow: auto;" frameborder="0" scrolling="no" width="46%" height="750"></iframe>
                     </center> 
                     <%--<embed src="../../ServEtiquetas" width='500' height='650' />

@@ -10,9 +10,13 @@ import sun.misc.BASE64Decoder;
 
 public class DownloadHandler {
     
-    public static Response image(InputStream inputStream, String name) throws IOException {
-        BufferedImage image = toImage(inputStream);
-        return response(image, name);
+    public static Response image(InputStream inputStream, String tipo, String name) throws IOException {
+        if(tipo == "png") {
+            BufferedImage image = toImage(inputStream);
+            return response(image, name);
+        }
+        ByteArrayOutputStream out = toByteArrayOutputStream(inputStream);
+        return response(out.toByteArray(), name);
     } 
     
     public static Response pdf(InputStream inputStream, String name) throws IOException {
@@ -20,10 +24,22 @@ public class DownloadHandler {
         return response(out.toByteArray(), name);
     } 
     
+    public static Response pdfView(InputStream inputStream, String name) throws IOException {
+        ByteArrayOutputStream out = toByteArrayOutputStream(inputStream);
+        return responseView(out.toByteArray(), name);
+    } 
+    
     private static Response response(Object out, String name) {
         return Response
             .ok(out)
             .header("content-disposition","attachment; filename = " + name)
+            .build();        
+    } 
+    
+    private static Response responseView(Object out, String name) {
+        return Response
+            .ok(out)
+            .header("content-disposition","filename = " + name)
             .build();        
     }
     
@@ -45,6 +61,6 @@ public class DownloadHandler {
         }
         out.flush();    
         return out;
-    }
+    }            
     
 }

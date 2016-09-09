@@ -329,9 +329,10 @@
                     if (auxOutros[1] === 'PPI' && form.obs.value === '') {
                         alert('Preencha o Nº do Processo!');
                         return false;
-                    } else if (auxOutros[1] === 'PPI') {
+                    }/* else if (auxOutros[1] === 'PPI') {
                         form.conteudo.value = form.obs.value;
-                    }
+                    }*/
+            
                     if (auxOutros[3] === 'INT' && form.pais.value === '') {
                         alert('Selecione um país para a postagem!');
                         return false;
@@ -532,6 +533,7 @@
                 document.getElementById('PAC_COB').className = "";
                 document.getElementById('OUTROS').className = "";
                 document.getElementById('MDPB').className = "";
+                document.getElementById('IMPRESSO').className = "";
                 document.getElementById(serv).className = "ativo";
                 document.getElementById("servico").value = serv;
                 document.getElementById("tipoCarta").selectedIndex = 0;
@@ -571,16 +573,21 @@
                 } else if (serv === 'PAX') {
                     document.getElementById("tipoPacote").className = 'esconder';
                     document.getElementById("tipo").selectedIndex = 2;
+                } else if (serv === 'IMPRESSO') {
+                    document.getElementById("tipoPacote").className = 'esconder';
+                    document.getElementById("tipo").selectedIndex = 2;
+                    document.getElementById("alertWrap").className = 'mostrar';
+                    document.getElementById("alertMsg").innerHTML = 'O peso máximo aceito para o IMPRESSO é de 2Kg!';
                 } else if (serv === 'ESEDEX') {
                     document.getElementById("tipoPacote").className = 'esconder';
                     document.getElementById("tipo").selectedIndex = 2;
                     document.getElementById("alertWrap").className = 'mostrar';
-                    document.getElementById("alertMsg").innerHTML = 'O peso maximo aceito para o E-SEDEX é de 15Kg!';
+                    document.getElementById("alertMsg").innerHTML = 'O peso máximo aceito para o E-SEDEX é de 15Kg!<br/>Verifique a disponibilidade do serviço para o endereço do destinatário!';
                 } else if (serv === 'SEDEX10' || serv === 'SEDEX12') {
                     document.getElementById("tipoPacote").className = 'esconder';
                     document.getElementById("tipo").selectedIndex = 2;
                     document.getElementById("alertWrap").className = 'mostrar';
-                    document.getElementById("alertMsg").innerHTML = 'O peso maximo aceito neste serviço é de 10Kg!';
+                    document.getElementById("alertMsg").innerHTML = 'O peso máximo aceito neste serviço é de 10Kg!<br/>Verifique a disponibilidade do serviço para o endereço do destinatário!';
                 } else if (serv === 'SEDEXHJ') { 
                      document.getElementById("tipoPacote").className = 'esconder';
                     document.getElementById("tipo").selectedIndex = 2;
@@ -1745,6 +1752,29 @@
                             </tbody>
                         </table>
                         <script type="text/javascript">
+                            
+                            function trocaTamanho(tam){
+                                var x = document.getElementById("posicaoInicial");
+                                x.selectedIndex = 0;
+                                if(tam === 'A4'){
+                                    document.getElementById("ddPosicao").className = "mostrar";    
+                                    x.remove(5);                
+                                    x.remove(4);
+                               } else if(tam === 'A4_6'){
+                                    document.getElementById("ddPosicao").className = "mostrar";
+                                    var option5 = document.createElement("option");
+                                    option5.text = "5ª Etiqueta";
+                                    option5.value = "5";
+                                    x.add(option5);
+                                    var option6 = document.createElement("option");
+                                    option6.text = "6ª Etiqueta";
+                                    option6.value = "6";                    
+                                    x.add(option6);
+                                } else{
+                                    document.getElementById("ddPosicao").className = "esconder";
+                                }
+                            }
+            
                             var sorter2 = new TINY.table.sorter('sorter2', 'table2', {
                                 headclass: 'head',
                                 ascclass: 'asc',
@@ -1799,7 +1829,7 @@
                                 </dd>
                                 <dd>
                                     <label>Tamanho da impressão:</label>
-                                    <select style="width: 220px;" name="formato" id="formato">
+                                    <select style="width: 220px;" name="formato" id="formato" onchange="trocaTamanho(this.value)">
                                         <option value="A4">Folha A4 - 4 por folha</option> 
                                         <option value="A4_6">Folha A4 - 6 por folha</option> 
                                         <option disabled>----------------</option>
@@ -1811,6 +1841,15 @@
                                         <option value="ENV_C5">Envelope C5 (Direita) - 16,2cm x 22,9cm</option> 
                                         <option value="ENV_C5_ESQ">Envelope C5 (Esquerda) - 16,2cm x 22,9cm</option> 
                                         <option value="ENV_B4">Envelope B4 (Centro) - 35,3cm x 25cm</option>
+                                    </select>
+                                </dd>
+                                <dd id='ddPosicao' class="mostrar">
+                                    <label>Posição Inicial:</label>
+                                    <select style="width: 120px;" name="posicaoInicial" id="posicaoInicial">
+                                        <option value="1">1ª Etiqueta</option> 
+                                        <option value="2">2ª Etiqueta</option> 
+                                        <option value="3">3ª Etiqueta</option> 
+                                        <option value="4">4ª Etiqueta</option> 
                                     </select>
                                 </dd>
                             </li>

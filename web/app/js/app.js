@@ -12,7 +12,8 @@ var app = app || angular.module('App', [
     'datatables',
     'datatables.bootstrap',
     'highcharts-ng',
-    'angularFileUpload'
+    'angularFileUpload',
+    'ngPDFViewer'
 ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',

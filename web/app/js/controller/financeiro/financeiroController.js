@@ -71,8 +71,10 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
             return _.map(contas, function(conta) {  
                 if(conta.contaCorrente && conta.contaCorrente.idContaCorrente) {
                     conta.banco = conta.contaCorrente.banco.numero;
-                    conta.agencia = conta.contaCorrente.agencia + '-' + conta.contaCorrente.agenciaDv;
-                    conta.contaCorrente = conta.contaCorrente.contaCorrente + '-' + conta.contaCorrente.contaCorrenteDv;
+                    conta.agencia = conta.contaCorrente.agencia;
+                    if(conta.contaCorrente.agenciaDv) { conta.agencia += '-' + conta.contaCorrente.agenciaDv; }
+                    conta.contaCorrente = conta.contaCorrente.contaCorrente;
+                    if(conta.contaCorrente.contaCorrenteDv) { conta.contaCorrente += '-' + conta.contaCorrente.contaCorrenteDv; }
                 }
                 if(conta.cartaoCredito && conta.cartaoCredito.idCartaoCredito) {
                     conta.bandeira = conta.cartaoCredito.bandeira;

@@ -90,7 +90,7 @@ public class ServPreVendaConfirmaImp extends HttpServlet {
         String nomeUser = request.getParameter("nomeUser");
         int idUser = Integer.parseInt(request.getParameter("idUser"));
         String[] ids = request.getParameterValues("id");
-        
+
         
         Map<String, Integer> lista = new HashMap<String, Integer>();        
         for (int i = 0; i < ids.length; i++) {
@@ -102,7 +102,7 @@ public class ServPreVendaConfirmaImp extends HttpServlet {
                 lista.put(servico, 1);
             }
         }        
-        
+
         
         for (int i = 0; i < ids.length; i++) {
             String id = ids[i];

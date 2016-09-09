@@ -75,8 +75,8 @@ public class ContrDashboard {
         String sql = "SELECT * FROM " +
                 "     (SELECT codCliente, nomeFantasia, MAX(dataPostagem) AS dataMax " +
                 "     FROM movimentacao " +
-                "     LEFT JOIN cliente ON codCliente = codigo " +
-                "     WHERE nomeFantasia IS NOT NULL " +
+ "     LEFT JOIN cliente ON codCliente = codigo "
+                +                "     WHERE nomeFantasia IS NOT NULL AND ativo = 1 " +
                 "     GROUP BY codCliente) AS res " +
                 " WHERE res.dataMax < '"+dataIni+"' " +
                 " ORDER BY dataMax;";

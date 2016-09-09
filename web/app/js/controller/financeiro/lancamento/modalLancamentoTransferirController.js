@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('ModalLancamentoTransferirController', 
-    ['$scope', '$modalInstance', 'lancamentoTransferencia', 'ContaService', 'DatePickerService', 'LISTAS', 'MESSAGES',
-    function ($scope, $modalInstance, lancamentoTransferencia, ContaService, DatePickerService, LISTAS, MESSAGES) {
+    ['$scope', '$modalInstance', 'conta', 'lancamentoTransferencia', 'ContaService', 'DatePickerService', 'LISTAS', 'MESSAGES',
+    function ($scope, $modalInstance, conta, lancamentoTransferencia, ContaService, DatePickerService, LISTAS, MESSAGES) {
 
         var init = function () {  
 //            $scope.datepickerCompetencia = angular.copy(DatePickerService.default); 
@@ -27,7 +27,7 @@ app.controller('ModalLancamentoTransferirController',
             ContaService.getAll()
                 .then(function (data) {
                     $scope.contas = data;
-                    $scope.lancamentoTransferencia.contaOrigem = ($scope.lancamentoTransferencia.lancamentoOrigem && $scope.lancamentoTransferencia.lancamentoOrigem.conta) || $scope.contas[0];
+                    $scope.lancamentoTransferencia.contaOrigem = ($scope.lancamentoTransferencia.lancamentoOrigem && $scope.lancamentoTransferencia.lancamentoOrigem.conta) || conta || $scope.contas[0];
                     $scope.lancamentoTransferencia.contaDestino = ($scope.lancamentoTransferencia.lancamentoDestino && $scope.lancamentoTransferencia.lancamentoDestino.conta) || $scope.contas[0];
                 })
                 .catch(function (e) {

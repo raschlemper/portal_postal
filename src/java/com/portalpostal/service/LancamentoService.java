@@ -21,6 +21,7 @@ public class LancamentoService {
     private LancamentoTransferenciaService lancamentoTransferenciaService;
     private LancamentoConciliadoService lancamentoConciliadoService;
     private LancamentoRateioService lancamentoRateioService;
+    private LancamentoAnexoService lancamentoAnexoService;
     private LancamentoProgramadoParcelaService lancamentoprogramadoParcelaService;
 
     public LancamentoService(String nomeBD) {
@@ -33,6 +34,7 @@ public class LancamentoService {
         lancamentoTransferenciaService = new LancamentoTransferenciaService(nomeBD);
         lancamentoConciliadoService = new LancamentoConciliadoService(nomeBD);
         lancamentoRateioService = new LancamentoRateioService(nomeBD);
+        lancamentoAnexoService = new LancamentoAnexoService(nomeBD);
         lancamentoprogramadoParcelaService = new LancamentoProgramadoParcelaService(nomeBD);
     }
     
@@ -207,9 +209,10 @@ public class LancamentoService {
         removerLancamentoProgramado(lancamento);
         removerLancamentoConciliado(lancamento);
         removerLancamentoParcela(lancamento);
+        removerLancamentoAnexo(lancamento);
         removerLancamentoRateio(lancamento, null);
         return lancamentoDAO.remove(idLancamento);     
-    } 
+    }     
     
     // ***** RATEIO ***** //
     
@@ -325,6 +328,12 @@ public class LancamentoService {
     
     private void removerLancamentoParcela(Lancamento lancamento) throws Exception {
         lancamentoprogramadoParcelaService.removeLancamento(lancamento.getIdLancamento());
+    }
+    
+    // ***** ANEXO ***** //
+    
+    private void removerLancamentoAnexo(Lancamento lancamento) throws Exception {
+        lancamentoAnexoService.deleteByLancamento(lancamento.getIdLancamento());
     }
     
 }
