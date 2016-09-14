@@ -39,13 +39,15 @@ app.factory('PlanoContaService', function($http, PromiseService) {
         angular.forEach(estruturas, function(estrutura) {
             estruturasLista.push({ 
                 idPlanoConta: estrutura.idPlanoConta,
+                id: estrutura.idPlanoConta,
                 tipo: estrutura.tipo,
                 nivel: estrutura.nivel, 
                 ehGrupo: (estrutura.contas ? true : false),
                 idGrupo: (estrutura.grupo ? estrutura.grupo.idPlanoConta : null),
                 codigo: estrutura.estrutura,
                 keep: (estrutura.contas ? true : false),
-                descricao: estrutura.descricao 
+                descricao: estrutura.descricao,
+                parent: estrutura.parent
             });
             if(estrutura.contas) { flatten(estrutura.contas, estruturasLista); }
         });
@@ -56,6 +58,7 @@ app.factory('PlanoContaService', function($http, PromiseService) {
             estrutura.descricao = getCode(estrutura.estrutura) + ' - ' + estrutura.nome; 
             estrutura.id = estrutura.idPlanoConta; 
             estrutura.grupos = estrutura.contas; 
+            estrutura.parent = (estrutura.grupo && estrutura.grupo.idPlanoConta);
             if(estrutura.contas) { getEstrutura(estrutura.contas); }
         });
     }

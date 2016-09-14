@@ -13,7 +13,7 @@
                             <label class="small">Veículo</label>
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-car"></i></span>
-                                <select class="form-control" name="veiculo" ng-change="getLastVeiculoCombustivel()" 
+                                <select class="form-control" name="veiculo" ng-change="getLastVeiculoCombustivel(veiculoCombustivel)" 
                                         ng-options="veiculo.descricao for veiculo in veiculos track by veiculo.idVeiculo" ng-model="veiculoCombustivel.veiculo"></select>
                             </div>
                         </div>                        

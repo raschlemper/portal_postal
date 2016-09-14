@@ -21,12 +21,14 @@ app.factory('CentroCustoService', function($http, PromiseService) {
         angular.forEach(estruturas, function(estrutura) {
             estruturasLista.push({ 
                 idCentroCusto: estrutura.idCentroCusto,
+                id: estrutura.idCentroCusto,
                 nivel: estrutura.nivel, 
                 ehGrupo: (estrutura.centros ? true : false),
                 idGrupo: (estrutura.grupo ? estrutura.grupo.idCentroCusto : null),
                 codigo: estrutura.estrutura,
                 keep: (estrutura.centros ? true : false),
-                descricao: estrutura.descricao 
+                descricao: estrutura.descricao,
+                parent: estrutura.parent
             });
             if(estrutura.centros) { flatten(estrutura.centros, estruturasLista); }
         });
@@ -37,6 +39,7 @@ app.factory('CentroCustoService', function($http, PromiseService) {
             estrutura.descricao = getCode(estrutura.estrutura) + ' - ' + estrutura.nome; 
             estrutura.id = estrutura.idCentroCusto; 
             estrutura.grupos = estrutura.centros; 
+            estrutura.parent = (estrutura.grupo && estrutura.grupo.idCentroCusto);
             if(estrutura.centros) { getEstrutura(estrutura.centros); }
         });
     }

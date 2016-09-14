@@ -124,7 +124,7 @@
                                     ArrayList<ClienteLogEtiqueta> lista = Controle.ContrClienteEtiquetas.consultaQtdEtiquetasRestantes(200, nomeBD);
                                     int listaTele = ContrTelegramaPostal.consultaQtdNaoEnviados(nomeBD);
                                     ArrayList<Clientes> listaContr = contrCliente.getClientesComContratoVencendo(90, nomeBD);
-                                    if (lista.size() > 0) {
+                                    if (lista != null && lista.size() > 0) {
                                 %>
                                 <div class="alert alert-danger no-margin">
                                     <a href="#" class="close" data-dismiss="alert">&times;</a>
