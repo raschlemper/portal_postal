@@ -10,12 +10,13 @@ app.directive('appTypeahead', function($filter) {
             events: '=?',
             field: "@"
         },
-        link: function($scope, element, attr, controller) {    
+        link: function($scope, element, attr, controller) {                
             
             var init = function () { 
                 $scope.dropdownVisible = false;
                 setPlaceholder();
                 setName();
+                setKeepGroup();
             };
                         
             var setPlaceholder = function() {
@@ -24,6 +25,11 @@ app.directive('appTypeahead', function($filter) {
                         
             var setName = function() {
                 $scope.name = attr.name || "";
+            };
+                        
+            var setKeepGroup = function() {
+                if(attr.keepGroup) { $scope.keepGroup = (attr.keepGroup === "true"); }
+                else { $scope.keepGroup = false; }
             };
             
             $scope.setVisible = function(visible) {
@@ -43,15 +49,28 @@ app.directive('appTypeahead', function($filter) {
             };
             
             $scope.filterList = function(lista, search) {
-//                return $filter('filter')(lista, search);
-                return filterByExclude(lista, search);
+                if($scope.keepGroup) { return filterByExclude(lista, search); }
+                else { return $filter('filter')(lista, search); }
             };
             
             var filterByExclude = function(lista, search) {
                 if(!lista || !search) return lista;
-                return lista.filter(function(item) {
+                var parents = [];
+                var results = lista.filter(function(item) {
                     if(item.keep) return true;
-                    return (item[$scope.field].toLowerCase().indexOf(search.toLowerCase()) > -1);
+                    var parse = (item[$scope.field].toLowerCase().indexOf(search.toLowerCase()) > -1);
+                    if(parse) { parents.push(item.parent); }
+                    return parse;
+                });
+                return ExcludeByEmpty(results, parents);
+            };
+            
+            var ExcludeByEmpty = function(lista, parents) {
+                if(!lista || !parents) return lista;
+                return lista.filter(function(item) {
+                    if(!item.keep) return true;
+                    if(_.contains(parents, item.id)) return true;
+                    return false;
                 })
             }
             

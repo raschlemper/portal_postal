@@ -244,7 +244,7 @@ public class LancamentoAnexoController {
         PDDocument document = PDDocument.load(inputStream);
         PDFRenderer pdfRenderer = new PDFRenderer(document);
         BufferedImage bim = pdfRenderer.renderImageWithDPI(0, 300, ImageType.RGB);
-        ImageIOUtil.writeImage(bim, pdfFilename + "-" + (document.getPage(0)) + ".png", 300);
+//        ImageIOUtil.writeImage(bim, pdfFilename + "-" + (document.getPage(0)) + ".png", 300);
         document.close();
         return bim;
     }

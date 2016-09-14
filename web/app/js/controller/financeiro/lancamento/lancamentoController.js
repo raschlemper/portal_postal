@@ -172,6 +172,7 @@ app.controller('LancamentoController',
                 .then(function (data) {
                     $scope.lancamentos = angular.copy(data.lancamentos);
                     $scope.lancamentosLista = criarLancamentosLista(data);
+                    if(!$scope.lancamentosLista.length) { calculateSaldo($scope.lancamentosLista); }
                 })
                 .catch(function(e) {
                     console.log(e);
