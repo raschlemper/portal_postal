@@ -65,6 +65,7 @@ app.controller('ModalLancamentoAnexarController', ['$scope', '$sce', 'Lancamento
         
         $scope.visualizar = function(anexo) {  
             $scope.file = {
+                id: anexo.idLancamentoAnexo,
                 name: anexo.nome,
                 type: getType(anexo.tipo),
                 image: anexo.anexo,
@@ -76,6 +77,10 @@ app.controller('ModalLancamentoAnexarController', ['$scope', '$sce', 'Lancamento
         $scope.download = function(anexo) {    
             var modelo = getModelo(anexo.tipo);
             LancamentoAnexoService.download(anexo.idLancamentoAnexo, modelo);
+        };
+        
+        $scope.view = function(file) {    
+            LancamentoAnexoService.file(file.id, file.modelo);
         };
         
         var getModelo = function(tipo) {
