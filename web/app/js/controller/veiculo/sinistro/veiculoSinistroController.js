@@ -107,7 +107,7 @@ app.controller('VeiculoSinistroController', ['$scope', '$filter', 'VeiculoSinist
         };
         
         var modalVisualizar = function(veiculoSinistro) {
-            var modalInstance = ModalService.modalDefault('partials/veiculo/modalVisualizarVeiculoSinistro.html', 'ModalVisualizarVeiculoSinistroController', 'md',
+            var modalInstance = ModalService.modalDefault('partials/veiculo/sinistro/modalVisualizarVeiculoSinistro.html', 'ModalVisualizarVeiculoSinistroController', 'md',
                 {
                     veiculoSinistro: function() {
                         return veiculoSinistro;
@@ -117,7 +117,7 @@ app.controller('VeiculoSinistroController', ['$scope', '$filter', 'VeiculoSinist
         };
         
         var modalSalvar = function(veiculoSinistro) {
-            var modalInstance = ModalService.modalDefault('partials/veiculo/modalEditarVeiculoSinistro.html', 'ModalEditarVeiculoSinistroController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/veiculo/sinistro/modalEditarVeiculoSinistro.html', 'ModalEditarVeiculoSinistroController', 'lg',
                 {
                     veiculoSinistro: function() {
                         return veiculoSinistro;

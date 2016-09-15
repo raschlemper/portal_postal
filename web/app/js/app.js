@@ -57,37 +57,37 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
             })
             .state('veiculo.cadastro', {
                 url: '/cadastro',
-                templateUrl: 'partials/veiculo/veiculo.html',
+                templateUrl: 'partials/veiculo/veiculo/veiculo.html',
                 controller: 'VeiculoController',
                 resolve: {}
             })
             .state('veiculo.manutencao', {
                 url: '/manutencao',
-                templateUrl: 'partials/veiculo/veiculoManutencao.html',
+                templateUrl: 'partials/veiculo/manutencao/veiculoManutencao.html',
                 controller: 'VeiculoManutencaoController',
                 resolve: {}
             })
             .state('veiculo.combustivel', {
                 url: '/combustivel',
-                templateUrl: 'partials/veiculo/veiculoCombustivel.html',
+                templateUrl: 'partials/veiculo/combustivel/veiculoCombustivel.html',
                 controller: 'VeiculoCombustivelController',
                 resolve: {}
             })
             .state('veiculo.multa', {
                 url: '/multa',
-                templateUrl: 'partials/veiculo/veiculoMulta.html',
+                templateUrl: 'partials/veiculo/multa/veiculoMulta.html',
                 controller: 'VeiculoMultaController',
                 resolve: {}
             })
             .state('veiculo.seguro', {
                 url: '/seguro',
-                templateUrl: 'partials/veiculo/veiculoSeguro.html',
+                templateUrl: 'partials/veiculo/seguro/veiculoSeguro.html',
                 controller: 'VeiculoSeguroController',
                 resolve: {}
             })
             .state('veiculo.sinistro', {
                 url: '/sinistro',
-                templateUrl: 'partials/veiculo/veiculoSinistro.html',
+                templateUrl: 'partials/veiculo/sinistro/veiculoSinistro.html',
                 controller: 'VeiculoSinistroController',
                 resolve: {}
             })

@@ -131,7 +131,7 @@ app.controller('VeiculoController', ['$scope', '$q', '$filter', 'VeiculoService'
         };
         
         var modalVisualizar = function(veiculo) {
-            var modalInstance = ModalService.modalDefault('partials/veiculo/modalVisualizarVeiculo.html', 'ModalVisualizarVeiculoController', 'md',
+            var modalInstance = ModalService.modalDefault('partials/veiculo/veiculo/modalVisualizarVeiculo.html', 'ModalVisualizarVeiculoController', 'md',
                 {
                     veiculo: function() {
                         return veiculo;
@@ -141,7 +141,7 @@ app.controller('VeiculoController', ['$scope', '$q', '$filter', 'VeiculoService'
         };
         
         var modalSalvar = function(veiculo) {
-            var modalInstance = ModalService.modalDefault('partials/veiculo/modalEditarVeiculo.html', 'ModalEditarVeiculoController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/veiculo/veiculo/modalEditarVeiculo.html', 'ModalEditarVeiculoController', 'lg',
                 {
                     veiculo: function() {
                         return veiculo;

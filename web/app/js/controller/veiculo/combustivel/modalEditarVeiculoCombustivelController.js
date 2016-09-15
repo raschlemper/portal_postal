@@ -6,19 +6,14 @@ app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInst
         var init = function () {
             $scope.tipos = LISTAS.combustivel; 
             $scope.datepicker = DatePickerService.default;           
-            $scope.veiculoCombustivel = {
-                idVeiculoCombustivel: (veiculoCombustivel && veiculoCombustivel.idVeiculoCombustivel) || null,
-                veiculo: (veiculoCombustivel && veiculoCombustivel.veiculo) || { idVeiculo: null },
-                tipo: (veiculoCombustivel && veiculoCombustivel.tipo) || $scope.tipos[0],                
-                data: (veiculoCombustivel && veiculoCombustivel.data) || new Date(),
-                quantidade: (veiculoCombustivel && veiculoCombustivel.quantidade) || null,
-                valorUnitario: (veiculoCombustivel && veiculoCombustivel.valorUnitario) || null,
-                valorTotal: (veiculoCombustivel && veiculoCombustivel.valorTotal) || null,
-                quilometragem: (veiculoCombustivel && veiculoCombustivel.quilometragem) || null
-            }; 
+            $scope.veiculoCombustivel = veiculoCombustivel || {};
+            $scope.veiculoCombustivel.tipo = (veiculoCombustivel && veiculoCombustivel.tipo) || $scope.tipos[0];               
+            $scope.veiculoCombustivel.data = (veiculoCombustivel && veiculoCombustivel.data) || new Date();
             getTitle();
             veiculos();
         };
+
+        // ***** CONTROLLER ***** //
         
         var getTitle = function() {
             if(veiculoCombustivel && veiculoCombustivel.idVeiculoCombustivel) { $scope.title = "Editar Abastecimento Veículo"; }
@@ -28,11 +23,11 @@ app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInst
         var veiculos = function () {
             VeiculoService.getAll()
                 .then(function (data) {
-                    $scope.veiculos = ajustarVeiculos(data);
-                    if($scope.veiculoCombustivel.veiculo && $scope.veiculoCombustivel.veiculo.idVeiculo) {
-                        $scope.veiculoCombustivel.veiculo = ListaService.getVeiculoValue($scope.veiculos, $scope.veiculoCombustivel.veiculo.idVeiculo);
+                    $scope.veiculoLista = ajustarVeiculos(data);
+                    if($scope.veiculoCombustivel.veiculo) {
+                        $scope.veiculoCombustivel.veiculo = ListaService.getVeiculoValue($scope.veiculoLista, $scope.veiculoCombustivel.veiculo.idVeiculo);
                     } else {
-                        if($scope.veiculos && $scope.veiculos.length) { $scope.veiculoCombustivel.veiculo = $scope.veiculos[0]; }
+                        if($scope.veiculoLista && $scope.veiculoLista.length) { $scope.veiculoCombustivel.veiculo = $scope.veiculoLista[0]; }
                     }
                     $scope.veiculoCombustivel.tipo = $scope.veiculoCombustivel.veiculo.combustivel;
                     $scope.getLastVeiculoCombustivel($scope.veiculoCombustivel);
@@ -55,13 +50,6 @@ app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInst
                     console.log(e);
                 });
         };
-        
-        var ajustarVeiculos = function(veiculos) {
-            return _.map(veiculos, function(veiculo) {
-                veiculo.descricao = veiculo.marca + ' / ' + veiculo.modelo + ' (' + $filter('placa')(veiculo.placa) + ')';
-                return veiculo;
-            });
-        }
         
         $scope.setValorTotal = function() {
             if($scope.veiculoCombustivel.quantidade && $scope.veiculoCombustivel.valorUnitario) {
@@ -91,6 +79,17 @@ app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInst
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
+                
+        // ***** AJUSTAR ***** // 
+        
+        var ajustarVeiculos = function(veiculos) {
+            return _.map(veiculos, function(veiculo) {
+                veiculo.descricao = veiculo.marca + ' / ' + veiculo.modelo + ' (' + $filter('placa')(veiculo.placa) + ')';
+                return veiculo;
+            });
+        }
+                
+        // ***** VALIDAR ***** // 
 
         var validarForm = function (form) {
             if (form.quantidade.$error.required) {

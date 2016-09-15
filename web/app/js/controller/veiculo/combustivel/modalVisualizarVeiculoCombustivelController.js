@@ -6,6 +6,8 @@ app.controller('ModalVisualizarVeiculoCombustivelController', ['$scope', '$modal
         var init = function () { 
             $scope.veiculoCombustivel = veiculoCombustivel;
         };
+                
+        // ***** CONTROLLER ***** // 
         
         $scope.editar = function() {
             $modalInstance.close(veiculoCombustivel.idVeiculoCombustivel);
