@@ -32,7 +32,6 @@ import javax.ws.rs.core.StreamingOutput;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
-import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 import sun.misc.BASE64Decoder;
 
 @Path("/financeiro/lancamento/anexo")
@@ -82,14 +81,27 @@ public class LancamentoAnexoController {
         }
     }   
     
+//    @GET
+//    @Path("/{idLancamentoAnexo}/file")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public StreamingOutput findFile(@PathParam("idLancamentoAnexo") Integer idLancamentoAnexo) {
+//        try {
+//            init();    
+//            final LancamentoAnexo anexo = lancamentoAnexoService.find(idLancamentoAnexo);
+//            return toStreamingOutput(anexo.getAnexo());            
+//        } catch (Exception ex) {
+//            throw new WebApplicationException(getMessageError(ex.getMessage()));
+//        }
+//    }     
+    
     @GET
-    @Path("/{idLancamentoAnexo}/file")
-    @Produces(MediaType.APPLICATION_JSON)
-    public StreamingOutput findFile(@PathParam("idLancamentoAnexo") Integer idLancamentoAnexo) {
+    @Path("/{idLancamentoAnexo}/file/image")
+    @Produces({"image/png", "image/jpg", "image/jpeg", "image/gif"})
+    public Response viewImage(@PathParam("idLancamentoAnexo") Integer idLancamentoAnexo) {
         try {
             init();    
-            final LancamentoAnexo anexo = lancamentoAnexoService.find(idLancamentoAnexo);
-            return toStreamingOutput(anexo.getAnexo());            
+            final LancamentoAnexo anexo = lancamentoAnexoService.find(idLancamentoAnexo);  
+            return DownloadHandler.imageView(anexo.getAnexo(), anexo.getTipo(), anexo.getNome());
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -106,26 +118,7 @@ public class LancamentoAnexoController {
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
-    }   
-    
-    @GET
-    @Path("/{idLancamentoAnexo}/file/image")
-    @Produces({"image/png", "image/jpg", "image/jpeg", "image/gif"})
-    public InputStream viewImage(@PathParam("idLancamentoAnexo") Integer idLancamentoAnexo) {
-        try {
-            init();    
-            final LancamentoAnexo anexo = lancamentoAnexoService.find(idLancamentoAnexo);      
-            if(anexo.getTipo().equals("pdf")) {
-                ByteArrayOutputStream os = new ByteArrayOutputStream();
-                ImageIO.write(pdfToImage(anexo.getAnexo(), anexo.getNome()), "png", os);
-                return new ByteArrayInputStream(os.toByteArray());
-            } else {
-                return anexo.getAnexo();                    
-            }
-        } catch (Exception ex) {
-            throw new WebApplicationException(getMessageError(ex.getMessage()));
-        }
-    }  
+    }
     
     @GET
     @Path("/{idLancamentoAnexo}/download/image")

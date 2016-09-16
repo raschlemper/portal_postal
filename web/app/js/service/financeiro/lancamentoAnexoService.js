@@ -52,14 +52,14 @@ app.factory('LancamentoAnexoService', function($http, PromiseService, FileUpload
             DownloadService.execute(url);    
         },
         
-        view: function(idLancamentoAnexo, type) {
-            var url = _contextPath + "/api/financeiro/lancamento/anexo/" + idLancamentoAnexo + "/view/" + type;
-            DownloadService.execute(url);    
-        },
+//        view: function(idLancamentoAnexo, type) {
+//            var url = _contextPath + "/api/financeiro/lancamento/anexo/" + idLancamentoAnexo + "/view/" + type;
+//            DownloadService.execute(url);    
+//        },
         
         file: function(idLancamentoAnexo, type) {
-            return PromiseService.execute(
-                    $http.get(_contextPath + "/api/financeiro/lancamento/anexo/" + idLancamentoAnexo + "/file/" + type));
+            var url = _contextPath + "/api/financeiro/lancamento/anexo/" + idLancamentoAnexo + "/file/" + type;
+            DownloadService.execute(url);    
         },
         
         upload: function(idLancamento, anexo) {
