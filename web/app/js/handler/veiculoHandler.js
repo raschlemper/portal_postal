@@ -28,7 +28,7 @@ app.factory('VeiculoHandler', function() {
     };
     
     var getId = function(veiculo) {
-        return veiculo.idVeiculoCombustivel || null;
+        return veiculo.idVeiculo || null;
     };
     
     var getTipo = function(veiculo) {

@@ -18,17 +18,20 @@ app.controller('VeiculoCombustivelController', ['$scope', '$filter', 'VeiculoCom
                 {label: 'Data', column: 'data', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
                 {label: 'Km', column: 'quilometragem', filter: {name:'number', args: null}},             
                 {label: 'Quantidade', column: 'quantidade', filter: {name:'number', args: null}},            
-                {label: 'Valor Unitário', column: 'valorUnitario', filter: {name:'currency', args: null}},            
-                {label: 'Valor Total', column: 'valorTotal', filter: {name:'currency', args: null}}
+                {label: 'Valor Unitário', column: 'valorUnitario', filter: {name:'currency', args: ''}},            
+                {label: 'Valor Total', column: 'valorTotal', filter: {name:'currency', args: ''}}
             ]            
             $scope.linha = {
                 events: { 
-                    edit: function(banco) {
-                        $scope.editar(banco);
+                    edit: function(veiculoCombustivel) {
+                        $scope.editar(veiculoCombustivel);
                     },
-                    remove: function(banco) {
-                        $scope.excluir(banco);
-                    }
+                    remove: function(veiculoCombustivel) {
+                        $scope.excluir(veiculoCombustivel);
+                    },
+                    view: function(veiculoCombustivel) {
+                        $scope.visualizar(veiculoCombustivel);
+                    },
                 }   
             }          
         };        
@@ -116,7 +119,7 @@ app.controller('VeiculoCombustivelController', ['$scope', '$filter', 'VeiculoCom
             modalSalvar(combustivel)
                 .then(function(result) {
                     result = ajustarDados(result);
-                    update(combustivel);
+                    update(result);
                 }); 
         };
         
@@ -159,7 +162,7 @@ app.controller('VeiculoCombustivelController', ['$scope', '$filter', 'VeiculoCom
                 
         var ajustarDados = function(data) {  
             var combustivel = VeiculoCombustivelHandler.handle(data);
-            combustivel.veiculo = VeiculoHandler.handleList(data.veiculo);  
+            combustivel.veiculo = VeiculoHandler.handle(data.veiculo);  
             return combustivel;
         }
 

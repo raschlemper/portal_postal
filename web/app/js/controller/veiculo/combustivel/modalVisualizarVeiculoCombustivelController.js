@@ -10,7 +10,7 @@ app.controller('ModalVisualizarVeiculoCombustivelController', ['$scope', '$modal
         // ***** CONTROLLER ***** // 
         
         $scope.editar = function() {
-            $modalInstance.close(veiculoCombustivel.idVeiculoCombustivel);
+            $modalInstance.close(veiculoCombustivel);
         };
         
         $scope.cancel = function () {
