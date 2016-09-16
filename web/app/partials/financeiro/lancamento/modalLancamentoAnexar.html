@@ -48,7 +48,8 @@
                     </div>    
                 </div>
            </div>
-           <div class="col-md-6 text-center" style="background-color: #e5e5e5; height: 100%; padding: 20px; padding-bottom: 50px;">
+           <div class="col-md-6 text-center view-report">
+               <div class="view-report-content" ng-show="file" ng-click="view(file)"><i class="fa fa-search-plus"></i></div>
                 <h5>{{file.name}}</h5>
                 <img ng-if="file.image" style="max-width:100%; max-height:100%; height: auto; width:auto;" data-ng-src="data:{{file.type}};base64,{{file.image}}">
                 <i ng-if="!file.modelo" class="fa {{file.icon}}" style="font-size: 160pt; padding-top: 30px;"></i>

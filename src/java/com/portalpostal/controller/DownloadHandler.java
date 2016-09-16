@@ -11,13 +11,23 @@ import sun.misc.BASE64Decoder;
 public class DownloadHandler {
     
     public static Response image(InputStream inputStream, String tipo, String name) throws IOException {
-        if(tipo == "png") {
+        if("png".equals(tipo)) {
             BufferedImage image = toImage(inputStream);
             return response(image, name);
         }
         ByteArrayOutputStream out = toByteArrayOutputStream(inputStream);
         return response(out.toByteArray(), name);
-    } 
+    }  
+    
+    public static Response imageView(InputStream inputStream, String tipo, String name) throws IOException {
+        Object retorno;
+        if("png".equals(tipo)) { retorno = toImage(inputStream); } 
+        else {
+            ByteArrayOutputStream out = toByteArrayOutputStream(inputStream);
+            retorno = out.toByteArray();
+        }
+        return responseView(retorno, name, "image/" + tipo);
+    }
     
     public static Response pdf(InputStream inputStream, String name) throws IOException {
         ByteArrayOutputStream out = toByteArrayOutputStream(inputStream);
@@ -26,7 +36,7 @@ public class DownloadHandler {
     
     public static Response pdfView(InputStream inputStream, String name) throws IOException {
         ByteArrayOutputStream out = toByteArrayOutputStream(inputStream);
-        return responseView(out.toByteArray(), name);
+        return responseView(out.toByteArray(), name, "application/pdf");
     } 
     
     private static Response response(Object out, String name) {
@@ -36,9 +46,10 @@ public class DownloadHandler {
             .build();        
     } 
     
-    private static Response responseView(Object out, String name) {
+    private static Response responseView(Object out, String name, String type) {
         return Response
             .ok(out)
+            .type(type)
             .header("content-disposition","filename = " + name)
             .build();        
     }
