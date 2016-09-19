@@ -116,8 +116,8 @@ public class ContaCorrenteController {
     @Path("/banco/{banco}/agencia/{agencia}/{agenciaDv}/contacorrente/{contacorrente}/{contacorrenteDv}")
     @Produces(MediaType.APPLICATION_JSON)
     public ContaCorrente findByContaCorrente(@PathParam("banco") Integer banco, @PathParam("agencia") Integer agencia,
-            @PathParam("agenciaDv") Integer agenciaDv, @PathParam("contacorrente") Integer contaCorrente, 
-            @PathParam("contacorrenteDv") Integer contaCorrenteDv) {
+            @PathParam("agenciaDv") String agenciaDv, @PathParam("contacorrente") Integer contaCorrente, 
+            @PathParam("contacorrenteDv") String contaCorrenteDv) {
         try {
             init();  
             return contaCorrenteService.findByContaCorrente(banco, agencia, agenciaDv, contaCorrente, contaCorrenteDv);

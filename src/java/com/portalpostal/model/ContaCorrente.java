@@ -8,9 +8,9 @@ public class ContaCorrente {
     private String nome;
     private Banco banco;
     private Integer agencia;
-    private Integer agenciaDv;
+    private String agenciaDv;
     private Integer contaCorrente;
-    private Integer contaCorrenteDv;
+    private String contaCorrenteDv;
     private Boolean poupanca;
     private Double limite;
     private List<CartaoCredito> cartaoCreditos;
@@ -49,11 +49,11 @@ public class ContaCorrente {
         this.agencia = agencia;
     }
 
-    public Integer getAgenciaDv() {
+    public String getAgenciaDv() {
         return agenciaDv;
     }
 
-    public void setAgenciaDv(Integer agenciaDv) {
+    public void setAgenciaDv(String agenciaDv) {
         this.agenciaDv = agenciaDv;
     }
 
@@ -65,11 +65,11 @@ public class ContaCorrente {
         this.contaCorrente = contaCorrente;
     }
 
-    public Integer getContaCorrenteDv() {
+    public String getContaCorrenteDv() {
         return contaCorrenteDv;
     }
 
-    public void setContaCorrenteDv(Integer contaCorrenteDv) {
+    public void setContaCorrenteDv(String contaCorrenteDv) {
         this.contaCorrenteDv = contaCorrenteDv;
     }
     
