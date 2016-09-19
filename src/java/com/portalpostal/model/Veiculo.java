@@ -1,12 +1,10 @@
 package com.portalpostal.model;
 
-import com.portalpostal.model.serializer.JsonDateSerializer;
 import com.portalpostal.model.dd.TipoCombustivelVeiculo;
 import com.portalpostal.model.dd.TipoSituacaoVeiculo;
 import com.portalpostal.model.dd.TipoStatusVeiculo;
 import com.portalpostal.model.dd.TipoVeiculo;
 import java.util.Date;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class Veiculo {
     

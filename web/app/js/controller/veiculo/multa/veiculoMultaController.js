@@ -105,7 +105,7 @@ app.controller('VeiculoMultaController', ['$scope', '$filter', 'VeiculoMultaServ
         };
         
         var modalVisualizar = function(veiculoMulta) {
-            var modalInstance = ModalService.modalDefault('partials/veiculo/modalVisualizarVeiculoMulta.html', 'ModalVisualizarVeiculoMultaController', 'md',
+            var modalInstance = ModalService.modalDefault('partials/veiculo/multa/modalVisualizarVeiculoMulta.html', 'ModalVisualizarVeiculoMultaController', 'md',
                 {
                     veiculoMulta: function() {
                         return veiculoMulta;
@@ -115,7 +115,7 @@ app.controller('VeiculoMultaController', ['$scope', '$filter', 'VeiculoMultaServ
         };
         
         var modalSalvar = function(veiculoMulta) {
-            var modalInstance = ModalService.modalDefault('partials/veiculo/modalEditarVeiculoMulta.html', 'ModalEditarVeiculoMultaController', 'lg',
+            var modalInstance = ModalService.modalDefault('partials/veiculo/multa/modalEditarVeiculoMulta.html', 'ModalEditarVeiculoMultaController', 'lg',
                 {
                     veiculoMulta: function() {
                         return veiculoMulta;

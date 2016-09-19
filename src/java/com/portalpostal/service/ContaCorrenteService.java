@@ -51,8 +51,8 @@ public class ContaCorrenteService {
         return contaCorrenteDAO.findByBanco(idContaCorrente);
     }
     
-    public ContaCorrente findByContaCorrente(Integer idBanco, Integer agencia, Integer agenciaDv, 
-            Integer contaCorrente, Integer contaCorrenteDv) throws Exception {
+    public ContaCorrente findByContaCorrente(Integer idBanco, Integer agencia, String agenciaDv, 
+            Integer contaCorrente, String contaCorrenteDv) throws Exception {
         init();
         return contaCorrenteDAO.findByContaCorrente(idBanco, agencia, agenciaDv, contaCorrente, contaCorrenteDv);
     }   

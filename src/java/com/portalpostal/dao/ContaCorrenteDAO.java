@@ -86,8 +86,8 @@ public class ContaCorrenteDAO extends GenericDAO {
         return contaCorrente;
     }
 
-    public ContaCorrente findByContaCorrente(Integer idBanco, Integer agencia, Integer agenciaDv, 
-            Integer contaCorrente, Integer contaCorrenteDv) throws Exception {     
+    public ContaCorrente findByContaCorrente(Integer idBanco, Integer agencia, String agenciaDv, 
+            Integer contaCorrente, String contaCorrenteDv) throws Exception {     
         String sql = "SELECT * FROM conta_corrente, banco "
                    + "WHERE conta_corrente.idBanco = banco.idBanco AND banco.idBanco = :idBanco "
                    + "AND conta_corrente.agencia = :agencia AND conta_corrente.agencia_dv = :agenciaDv "
