@@ -5,7 +5,6 @@ import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.LancamentoProgramado;
 import com.portalpostal.model.PlanoConta;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +16,8 @@ public class PlanoContaService {
     private PlanoContaDAO planoContaDAO;
     private LancamentoService lancamentoService;
     private LancamentoProgramadoService lancamentoProgramadoService;
+    private LancamentoProgramadoParcelaService lancamentoProgramadoParcelaService;
+    private LancamentoProgramadoRateioService lancamentoProgramadoRateioService;
 
     public PlanoContaService(String nomeBD) {
         this.nomeBD = nomeBD;
@@ -26,6 +27,8 @@ public class PlanoContaService {
         planoContaDAO = new PlanoContaDAO(nomeBD);
         lancamentoService = new LancamentoService(nomeBD);
         lancamentoProgramadoService = new LancamentoProgramadoService(nomeBD);
+        lancamentoProgramadoParcelaService = new LancamentoProgramadoParcelaService(nomeBD);
+        lancamentoProgramadoRateioService = new LancamentoProgramadoRateioService(nomeBD);
     }
     
     public List<PlanoConta> findAll() throws Exception {
@@ -104,6 +107,16 @@ public class PlanoContaService {
         init();
         if(!podeExcluir(idPlanoConta)) throw new Exception("Este plano de conta não pode ser excluído!"); 
         return planoContaDAO.remove(idPlanoConta);
+    }   
+    
+    public void setDefault() throws Exception {
+        init();
+        lancamentoService.deleteAllPlanoConta();
+        lancamentoProgramadoService.deleteAllPlanoConta();
+        lancamentoProgramadoParcelaService.deleteAllPlanoConta();
+        lancamentoProgramadoRateioService.deleteAllPlanoConta();
+        planoContaDAO.removeAll();
+        planoContaDAO.insertFromDefault();
     }     
     
     private boolean podeExcluir(Integer idPlanoConta) throws Exception {

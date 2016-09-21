@@ -46,6 +46,11 @@ public class LancamentoProgramadoRateioService {
     public LancamentoProgramadoRateio delete(Integer idLancamentoProgramadoRateio) throws Exception {
         init();
         return lancamentoProgramadoRateioDAO.remove(idLancamentoProgramadoRateio);
-    }    
+    }     
+    
+    public void deleteAllPlanoConta() throws Exception { 
+        init();
+        lancamentoProgramadoRateioDAO.removeAllPlanoConta();
+    }  
     
 }

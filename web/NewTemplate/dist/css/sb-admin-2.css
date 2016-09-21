@@ -3183,14 +3183,15 @@ table.table-condensed tbody tr td.cel-menu {
     margin: 10px 0 10px 0; 
     border-right: 1px solid #CCC; 
     color: #666;
-    width: 18%;
+    width: 12.5%;
     float: left;
     position: relative;
+    font-size: 12px;
 }
 
 .content-programacao-title {
-    width: 10%;
-    border-right: none; 
+    width: 12.5%;
+    border-right: none;
 }
 
 .content-programacao-title .title {

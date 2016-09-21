@@ -92,37 +92,48 @@
                         <div class="panel-heading">Programação</div>
                         <div class="panel-body">
                             <div class="row">
-                                    <div class="content-programacao content-programacao-title">
-                                        <div class="title text-center"></div>
-                                        <div class="text-right text-primary value">Receita</div>
-                                        <div class="text-right text-danger value">Despesa</div>
-                                    </div>
-                                    <div class="content-programacao">
-                                        <div class="title text-center"><strong >Vencidos</strong></div>
-                                        <div class="text-right text-primary value">{{lancamentosVencido.receita | currency : "R$ "}}</div>
-                                        <div class="text-right text-danger value">{{lancamentosVencido.despesa | currency : "R$ "}}</div>
-                                    </div>
-                                    <div class="content-programacao">
-                                        <div class="title text-center"><strong >Hoje</strong></div>
-                                        <div class="text-right text-primary value">{{lancamentosHoje.receita | currency : "R$ "}}</div>
-                                        <div class="text-right text-danger value">{{lancamentosHoje.despesa | currency : "R$ "}}</div>
-                                    </div>
-                                    <div class="content-programacao">
-                                        <div class="title text-center"><strong >30 Dias</strong></div>
-                                        <div class="text-right text-primary value">{{lancamentosUmMes.receita | currency : "R$ "}}</div>
-                                        <div class="text-right text-danger value">{{lancamentosUmMes.despesa | currency : "R$ "}}</div>
-                                    </div>
-                                    <div class="content-programacao">
-                                        <div class="title text-center"><strong >60 Dias</strong></div>
-                                        <div class="text-right text-primary value">{{lancamentosDoisMeses.receita | currency : "R$ "}}</div>
-                                        <div class="text-right text-danger value">{{lancamentosDoisMeses.despesa | currency : "R$ "}}</div>
-                                    </div>
-                                    <div class="content-programacao">
-                                        <div class="title text-center"><strong >90 Dias</strong></div>
-                                        <div class="text-right text-primary value">{{lancamentosTresMeses.receita | currency : "R$ "}}</div>
-                                        <div class="text-right text-danger value">{{lancamentosTresMeses.despesa | currency : "R$ "}}</div>
-                                    </div>
+                                <div class="content-programacao content-programacao-title">
+                                    <div class="title text-center"></div>
+                                    <div class="text-right text-primary value">Receita</div>
+                                    <div class="text-right text-danger value">Despesa</div>
+                                </div>
+                                <div class="content-programacao">
+                                    <div class="title text-center"><strong >Vencidos</strong></div>
+                                    <div class="text-right text-primary value">{{lancamentosVencido.receita | currency : "R$ "}}</div>
+                                    <div class="text-right text-danger value">{{lancamentosVencido.despesa | currency : "R$ "}}</div>
+                                </div>
+                                <div class="content-programacao">
+                                    <div class="title text-center"><strong >Hoje</strong></div>
+                                    <div class="text-right text-primary value">{{lancamentosHoje.receita | currency : "R$ "}}</div>
+                                    <div class="text-right text-danger value">{{lancamentosHoje.despesa | currency : "R$ "}}</div>
+                                </div>
+                                <div class="content-programacao">
+                                    <div class="title text-center"><strong >7 Dias</strong></div>
+                                    <div class="text-right text-primary value">{{lancamentosSeteDias.receita | currency : "R$ "}}</div>
+                                    <div class="text-right text-danger value">{{lancamentosSeteDias.despesa | currency : "R$ "}}</div>
+                                </div>
+                                <div class="content-programacao">
+                                    <div class="title text-center"><strong >15 Dias</strong></div>
+                                    <div class="text-right text-primary value">{{lancamentosQuinzeDias.receita | currency : "R$ "}}</div>
+                                    <div class="text-right text-danger value">{{lancamentosQuinzeDias.despesa | currency : "R$ "}}</div>
+                                </div>
+                                <div class="content-programacao">
+                                    <div class="title text-center"><strong >30 Dias *</strong></div>
+                                    <div class="text-right text-primary value">{{lancamentosUmMes.receita | currency : "R$ "}}</div>
+                                    <div class="text-right text-danger value">{{lancamentosUmMes.despesa | currency : "R$ "}}</div>
+                                </div>
+                                <div class="content-programacao">
+                                    <div class="title text-center"><strong >60 Dias</strong></div>
+                                    <div class="text-right text-primary value">{{lancamentosDoisMeses.receita | currency : "R$ "}}</div>
+                                    <div class="text-right text-danger value">{{lancamentosDoisMeses.despesa | currency : "R$ "}}</div>
+                                </div>
+                                <div class="content-programacao">
+                                    <div class="title text-center"><strong >90 Dias</strong></div>
+                                    <div class="text-right text-primary value">{{lancamentosTresMeses.receita | currency : "R$ "}}</div>
+                                    <div class="text-right text-danger value">{{lancamentosTresMeses.despesa | currency : "R$ "}}</div>
+                                </div>
                             </div>
+                            <div style="padding-left: 20px; border-top: 1px solid #CCC"><h5>* Inclusos 7 e 15 dias</h5></div>
                         </div>
                     </div>
                 </div>                

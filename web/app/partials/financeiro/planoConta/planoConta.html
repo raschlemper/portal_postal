@@ -6,12 +6,14 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" >
                             <div class="row">
-                                <div class="col-md-9">Lista com todos os Planos de Contas</div>
-                                <div class="col-md-3 pull-right">
-                                    <div class="form-inline pull-right">  
-                                        <button class="btn btn-sm btn-default" ng-click="report(planoContasLista)" style="margin-right: 10px;">
-                                            <i class="fa fa-lg fa-print fa-spc"></i> IMPRIMIR 
-                                        </button>                                          
+                                <div class="col-md-8">Lista com todos os Planos de Contas</div>
+                                <div class="col-md-4 pull-right">
+                                    <button class="btn btn-sm btn-default" ng-click="setDefault()" style="margin-right: 10px;">
+                                        <i class="fa fa-lg fa-file fa-spc"></i> CARREGAR PADRÃO 
+                                    </button>   
+                                    <button class="btn btn-sm btn-default" ng-click="report(planoContasLista)" style="margin-right: 10px;">
+                                        <i class="fa fa-lg fa-print fa-spc"></i> IMPRIMIR 
+                                    </button>                                          
                                     </div>
                                 </div>
                             </div>                              

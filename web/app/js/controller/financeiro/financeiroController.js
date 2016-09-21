@@ -434,6 +434,10 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                .then(function(data) {
                     var dataAtual = moment().format('YYYY-MM-DD');
                     var dataDiaSeguinte = moment().add(1, "d");
+                    var dataSeteDiasInicio = angular.copy(dataDiaSeguinte).format('YYYY-MM-DD');
+                    var dataSeteDiasFim = angular.copy(dataDiaSeguinte).add(7, "day").format('YYYY-MM-DD');
+                    var dataQuinzeDiasInicio = angular.copy(dataDiaSeguinte).format('YYYY-MM-DD');
+                    var dataQuinzeDiasFim = angular.copy(dataDiaSeguinte).add(15, "day").format('YYYY-MM-DD');
                     var dataUmMesInicio = angular.copy(dataDiaSeguinte).format('YYYY-MM-DD');
                     var dataUmMesFim = angular.copy(dataDiaSeguinte).add(1, "M").subtract(1, 'day').format('YYYY-MM-DD');
                     var dataDoisMesesInicio = angular.copy(dataDiaSeguinte).add(1, "M").format('YYYY-MM-DD');
@@ -442,12 +446,16 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                     var dataTresdataDoisMesesFim = angular.copy(dataDiaSeguinte).add(3, "M").subtract(1, 'day').format('YYYY-MM-DD');
                     $scope.lancamentosVencido = getValoresReceitaDespesaDefault();
                     $scope.lancamentosHoje = getValoresReceitaDespesaDefault();
+                    $scope.lancamentosSeteDias = getValoresReceitaDespesaDefault();
+                    $scope.lancamentosQuinzeDias = getValoresReceitaDespesaDefault();
                     $scope.lancamentosUmMes = getValoresReceitaDespesaDefault();
                     $scope.lancamentosDoisMeses = getValoresReceitaDespesaDefault();
                     $scope.lancamentosTresMeses = getValoresReceitaDespesaDefault();
                     _.map(data, function(programado) {
                         getValoresReceitaDespesa($scope.lancamentosVencido, LancamentoProgramadoService.lancamentoProgramadoVencido(angular.copy(programado), dataAtual));
                         getValoresReceitaDespesa($scope.lancamentosHoje, LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataAtual, dataAtual));
+                        getValoresReceitaDespesa($scope.lancamentosSeteDias, LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataSeteDiasInicio, dataSeteDiasFim));
+                        getValoresReceitaDespesa($scope.lancamentosQuinzeDias, LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataQuinzeDiasInicio, dataQuinzeDiasFim));
                         getValoresReceitaDespesa($scope.lancamentosUmMes, LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataUmMesInicio, dataUmMesFim));
                         getValoresReceitaDespesa($scope.lancamentosDoisMeses, LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataDoisMesesInicio, dataDoisMesesFim));
                         getValoresReceitaDespesa($scope.lancamentosTresMeses, LancamentoProgramadoService.lancamentoProgramado(angular.copy(programado), dataTresdataDoisMesesInicio, dataTresdataDoisMesesFim));

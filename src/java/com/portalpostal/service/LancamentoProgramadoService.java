@@ -149,6 +149,11 @@ public class LancamentoProgramadoService {
         removerLancamentoParcela(lancamentoProgramado, null);
         removerLancamentoRateio(lancamentoProgramado, null);
         return lancamentoProgramadoDAO.remove(idLancamentoProgramado);
+    }   
+    
+    public void deleteAllPlanoConta() throws Exception { 
+        init();
+        lancamentoProgramadoDAO.removeAllPlanoConta();
     } 
     
     public boolean podeExcluir(Integer idLancamentoProgramado) throws Exception {

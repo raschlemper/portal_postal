@@ -113,5 +113,16 @@ public class PlanoContaDAO extends GenericDAO {
         remove(sql, params, planoContaHandler);
         return planoConta;
     }
+
+    public void removeAll() throws Exception { 
+        String sql = "TRUNCATE TABLE plano_conta ";
+        execute(sql, null);
+    }
+
+    public void insertFromDefault() throws Exception {
+        String sql = "INSERT INTO plano_conta (idPlanoConta, tipo, codigo, nome, grupo) " +
+                     "SELECT idPlanoConta, tipo, codigo, nome, grupo FROM plano_conta_padrao "; 
+        execute(sql, null);
+    }
     
 }

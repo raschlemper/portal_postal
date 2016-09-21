@@ -133,6 +133,11 @@ app.factory('PlanoContaService', function($http, PromiseService) {
             return PromiseService.execute(
                     $http.delete(_contextPath + "/api/financeiro/planoconta/" + idPlanoConta));
         },
+
+        setDefault: function() {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/planoconta/default"));
+        },
         
         identing: function(estruturas) {
             identing(estruturas);

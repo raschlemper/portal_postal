@@ -156,6 +156,19 @@ app.controller('PlanoContaController',
                     });
             });
         };
+        
+        $scope.setDefault = function() {
+            modalDefault().then(function() {
+                PlanoContaService.setDefault()
+                    .then(function(data) { 
+                        modalMessage("Plano de Conta atualizado com sucesso!");
+                        todos();                        
+                    })
+                    .catch(function(e) {
+                        modalMessage(e);
+                    });
+            });
+        };
 
         // ***** REPORT ***** //
         
@@ -193,7 +206,13 @@ app.controller('PlanoContaController',
         };
         
         var modalExcluir = function() {
-            var modalInstance = ModalService.modalExcluir('Excluir PlanoConta?', 'Deseja realmente excluir este planoConta?');
+            var modalInstance = ModalService.modalExcluir('Excluir Plano de Conta?', 'Deseja realmente excluir este plano de conta?');
+            return modalInstance.result;
+        };
+        
+        var modalDefault = function() {
+            var modalInstance = ModalService.modalExcluir('Carregar Plano de Conta Padrão?', 
+            'Deseja realmente carregar o plano de conta padrão?<br/>Todos os planos de contas dos lançamentos serão excluídos!');
             return modalInstance.result;
         };
         
