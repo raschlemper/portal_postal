@@ -404,4 +404,9 @@ public class LancamentoDAO extends GenericDAO {
         remove(sql, params, lancamentoHandler);
         return lancamento;
     }
+
+    public void removeAllPlanoConta() throws Exception { 
+        String sql = "UPDATE lancamento SET idPlanoConta = null ";
+        remove(sql, null, lancamentoHandler);
+    }
 }

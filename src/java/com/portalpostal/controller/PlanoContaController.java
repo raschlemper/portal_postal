@@ -188,6 +188,18 @@ public class PlanoContaController {
         }
     } 
     
+    @GET
+    @Path("/default")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void setDefault() {
+        try {
+            init();
+            planoContaService.setDefault();
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    } 
+    
     private void validation(PlanoConta planoConta) throws Exception {  
         Validation validacao = new PlanoContaValidation();
         if(!validacao.validar(planoConta)) {

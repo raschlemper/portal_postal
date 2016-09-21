@@ -18,15 +18,16 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                            <label class="small">Banco</label>
+                            <banco banco-model="contaCorrente.banco" bancos="bancos"></banco>
+<!--                            <label class="small">Banco</label>
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-info"></i></span>
                                 <select class="form-control" name="banco" 
                                         ng-options="(banco.numero + ' - ' + banco.nome) for banco in bancos track by banco.idBanco" ng-model="contaCorrente.banco"></select>
-<!--                                <span class="input-group-btn">
+                                <span class="input-group-btn">
                                     <button class="btn btn-lg btn-primary" type="button" ng-click="openBanco()"><i class="fa fa-plus-circle"></i></button>
-                                </span>-->
-                            </div>
+                                </span>
+                            </div>-->
                         </div> 
                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                             <label class="small">Agência</label>

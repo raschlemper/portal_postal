@@ -239,4 +239,9 @@ public class LancamentoProgramadoDAO extends GenericDAO {
         remove(sql, params, lancamentoProgramadoHandler);
         return lancamentoProgramado;
     }
+
+    public void removeAllPlanoConta() throws Exception { 
+        String sql = "UPDATE lancamento_programado SET idPlanoConta = null ";
+        remove(sql, null, lancamentoProgramadoHandler);
+    }
 }

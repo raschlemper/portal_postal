@@ -101,7 +101,7 @@ public class GenericDAO {
         }
         return id;
     }
-
+    
     public void update(String sql, Map<String, Object> params, ResultSetHandler handler) throws Exception { 
         Connection connection = Sql2oConexao.getConnection(nameDB);
         try {              
@@ -123,6 +123,21 @@ public class GenericDAO {
             Query query = connection.createQuery(sql, true);
             if(params != null) { addParameter(query, params); }
             query.executeUpdate().getKey(Integer.class); 
+            connection.commit(true);
+        } catch (Exception e) {
+            ContrErroLog.inserir("HOITO - " + clazz.getSimpleName(), "SQLException", sql, e.toString());
+            connection.rollback();
+        } finally {
+            connection.close();
+        }
+    }
+
+    public void execute(String sql, Map<String, Object> params) throws Exception { 
+        Connection connection = Sql2oConexao.getConnection(nameDB);
+        try {              
+            Query query = connection.createQuery(sql, true);
+            if(params != null) { addParameter(query, params); }
+            query.executeUpdate(); 
             connection.commit(true);
         } catch (Exception e) {
             ContrErroLog.inserir("HOITO - " + clazz.getSimpleName(), "SQLException", sql, e.toString());

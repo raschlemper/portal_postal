@@ -212,7 +212,12 @@ public class LancamentoService {
         removerLancamentoAnexo(lancamento);
         removerLancamentoRateio(lancamento, null);
         return lancamentoDAO.remove(idLancamento);     
-    }     
+    }   
+    
+    public void deleteAllPlanoConta() throws Exception { 
+        init();
+        lancamentoDAO.removeAllPlanoConta();
+    } 
     
     // ***** RATEIO ***** //
     

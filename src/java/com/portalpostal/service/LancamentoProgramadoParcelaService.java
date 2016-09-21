@@ -53,4 +53,9 @@ public class LancamentoProgramadoParcelaService {
         return lancamentoProgramadoParcelaDAO.remove(idLancamentoProgramadoParcela);
     }    
     
+    public void deleteAllPlanoConta() throws Exception { 
+        init();
+        lancamentoProgramadoParcelaDAO.removeAllPlanoConta();
+    } 
+    
 }
