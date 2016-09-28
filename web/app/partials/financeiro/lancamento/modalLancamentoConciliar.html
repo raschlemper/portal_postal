@@ -68,6 +68,9 @@
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" ng-show="saldo"> 
                             
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 spc-default-top">
+                                <strong>Saldo Conta</strong><i class="pull-right">{{saldo.conta | currency : 'R$ '}}</i>
+                            </div>                            
+                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 spc-default-top">
                                 <strong>Saldo Atual</strong><i class="pull-right">{{saldo.atual | currency : 'R$ '}}</i>
                             </div>                            
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 spc-default-top">

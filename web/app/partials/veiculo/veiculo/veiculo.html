@@ -16,44 +16,7 @@
                         </div>
                         <div class="panel-body">
                             <div class="dataTable_wrapper no-padding">
-                                <table datatable="ng" dt-instance="instance" class="table table-striped table-bordered table-hover table-condensed" dt-options="dtOptions">
-                                    <thead>
-                                        <tr>
-                                            <th>Marca / Modelo</th>
-                                            <th>Placa</th>
-                                            <th>Combustível</th>
-                                            <th>Situação</th>
-                                            <th>Cadastro</th>
-                                            <th class="no-sort text-center" width="100">Alterar</th>
-                                            <th class="no-sort text-center" width="100">Excluir</th>
-                                            <th class="no-sort text-center" width="100">Detalhes</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="veiculo in veiculosLista track by veiculo.idVeiculo">
-                                            <td>{{veiculo.marca}} / {{veiculo.modelo}}</td>
-                                            <td class="text-nowrap">{{veiculo.placa | placa}}</td>
-                                            <td>{{veiculo.combustivel.descricao}}</td>
-                                            <td>{{veiculo.situacao.descricao}}</td>
-                                            <td>{{veiculo.dataCadastro | date : 'dd/MM/yyyy'}}</td>
-                                            <td align="center">
-                                                <button class="btn btn-sm btn-warning" ng-click="editar(veiculo.idVeiculo)">
-                                                    <i class="fa fa-lg fa-pencil"></i>
-                                                </button>
-                                            </td>
-                                            <td align="center">
-                                                <a class="btn btn-sm btn-danger" ng-click="excluir(veiculo.idVeiculo)">
-                                                    <i class="fa fa-lg fa-trash"></i>
-                                                </a>
-                                            </td>
-                                            <td align="center">
-                                                <a class="btn btn-sm btn-primary" ng-click="visualizar(veiculo.idVeiculo)">
-                                                    <i class="fa fa-lg fa-info"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <app-table lista="veiculosLista" colunas="colunas" linha="linha"></app-table>
                             </div>
                         </div>
                     </div>

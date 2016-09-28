@@ -6,9 +6,11 @@ app.controller('ModalVisualizarVeiculoManutencaoController', ['$scope', '$modalI
         var init = function () { 
             $scope.veiculoManutencao = veiculoManutencao;
         };
+                
+        // ***** CONTROLLER ***** // 
         
         $scope.editar = function() {
-            $modalInstance.close(veiculoManutencao.idVeiculoManutencao);
+            $modalInstance.close(veiculoManutencao);
         };
         
         $scope.cancel = function () {

@@ -86,9 +86,10 @@ app.controller('ModalLancamentoConciliarController',
         
         var calcularSaldo = function(saldoAtual, saldoReconciliacao) {
             return {
+                conta: $scope.conta.valorSaldoAbertura,
                 atual: saldoAtual,
                 reconciliacao: saldoReconciliacao,
-                diferenca: saldoReconciliacao - saldoAtual
+                diferenca: saldoReconciliacao - (saldoAtual + $scope.conta.valorSaldoAbertura)
             }
         };
         

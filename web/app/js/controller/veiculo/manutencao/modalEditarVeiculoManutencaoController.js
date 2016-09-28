@@ -1,25 +1,20 @@
 'use strict';
 
-app.controller('ModalEditarVeiculoManutencaoController', ['$scope', '$modalInstance', '$filter', 'veiculoManutencao', 'VeiculoService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, $filter, veiculoManutencao, VeiculoService, DatePickerService, ListaService, LISTAS) {
+app.controller('ModalEditarVeiculoManutencaoController', ['$scope', '$modalInstance', 'veiculoManutencao', 'VeiculoService', 'DatePickerService', 
+    'ListaService', 'ValorService', 'LISTAS',
+    function ($scope, $modalInstance, veiculoManutencao, VeiculoService, DatePickerService, ListaService, ValorService, LISTAS) {
 
         var init = function () {
             $scope.tipos = LISTAS.manutencao;    
             $scope.datepickerManutencao = angular.copy(DatePickerService.default);    
             $scope.datepickerAgendamento = angular.copy(DatePickerService.default);   
-            $scope.veiculoManutencao = {
-                idVeiculoManutencao: (veiculoManutencao && veiculoManutencao.idVeiculoManutencao) || null,
-                veiculo: (veiculoManutencao && veiculoManutencao.veiculo) || { idVeiculo: null },
-                tipo: (veiculoManutencao && veiculoManutencao.tipo) || $scope.tipos[0],    
-                quilometragem: (veiculoManutencao && veiculoManutencao.quilometragem) || null,        
-                valor: (veiculoManutencao && veiculoManutencao.valor) || null,    
-                dataManutencao: (veiculoManutencao && veiculoManutencao.dataManutencao) || null,
-                dataAgendamento: (veiculoManutencao && veiculoManutencao.dataAgendamento) || null,
-                descricao: (veiculoManutencao && veiculoManutencao.descricao) || null
-            }; 
+            $scope.veiculoManutencao = veiculoManutencao || {};
+            $scope.veiculoManutencao.tipo = (veiculoManutencao && veiculoManutencao.tipo) || $scope.tipos[0];
             getTitle();
             veiculos();
         };
+
+        // ***** CONTROLLER ***** //
         
         var getTitle = function() {
             if(veiculoManutencao && veiculoManutencao.idVeiculoManutencao) { $scope.title = "Editar Manutenção Veículo"; }
@@ -29,19 +24,16 @@ app.controller('ModalEditarVeiculoManutencaoController', ['$scope', '$modalInsta
         var veiculos = function () {
             VeiculoService.getAll()
                 .then(function (data) {
-                    $scope.veiculos = ajustarVeiculos(data);
-                    $scope.veiculoManutencao.veiculo = ListaService.getVeiculoValue($scope.veiculos, $scope.veiculoManutencao.veiculo.idVeiculo);
+                    $scope.veiculoLista = ajustarVeiculos(data);
+                    if($scope.veiculoManutencao.veiculo) {
+                        $scope.veiculoManutencao.veiculo = ListaService.getVeiculoValue($scope.veiculoLista, $scope.veiculoManutencao.veiculo.idVeiculo);
+                    } else {
+                        if($scope.veiculoLista && $scope.veiculoLista.length) { $scope.veiculoManutencao.veiculo = $scope.veiculoLista[0]; }
+                    }
                 })
                 .catch(function (e) {
                     console.log(e);
                 });
-        };
-        
-        var ajustarVeiculos = function(veiculos) {
-            return _.map(veiculos, function(veiculo) {
-                veiculo.descricao = veiculo.marca + ' / ' + veiculo.modelo + ' (' + $filter('placa')(veiculo.placa) + ')';
-                return veiculo;
-            });
         };
         
         $scope.ok = function(form) {
@@ -52,7 +44,18 @@ app.controller('ModalEditarVeiculoManutencaoController', ['$scope', '$modalInsta
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
-
+                
+        // ***** AJUSTAR ***** // 
+        
+        var ajustarVeiculos = function(veiculos) {
+            return _.map(veiculos, function(veiculo) {
+                veiculo.descricao = ValorService.getValueDescricaoVeiculo(veiculo);
+                return veiculo;
+            });
+        };
+                
+        // ***** VALIDAR ***** // 
+            
         var validarForm = function (form) {  
             if (form.dataManutencao.$modelValue && !moment(form.dataManutencao.$modelValue).isValid()) {
                 alert('A data da manutenção não é válida!');

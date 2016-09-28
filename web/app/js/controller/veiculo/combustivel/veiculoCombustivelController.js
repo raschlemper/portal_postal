@@ -1,7 +1,8 @@
 'use strict';
 
-app.controller('VeiculoCombustivelController', ['$scope', '$filter', 'VeiculoCombustivelService', 'ModalService', 'VeiculoHandler', 'VeiculoCombustivelHandler',
-    function ($scope, $filter, VeiculoCombustivelService, ModalService, VeiculoHandler, VeiculoCombustivelHandler) {
+app.controller('VeiculoCombustivelController', ['$scope', '$filter', 'VeiculoCombustivelService', 'ValorService', 'ModalService', 'VeiculoHandler', 
+    'VeiculoCombustivelHandler',
+    function ($scope, $filter, VeiculoCombustivelService, ValorService, ModalService, VeiculoHandler, VeiculoCombustivelHandler) {
 
         var init = function () {
             $scope.veiculosCombustivel = [];
@@ -14,12 +15,12 @@ app.controller('VeiculoCombustivelController', ['$scope', '$filter', 'VeiculoCom
         
         var initTable = function() {            
             $scope.colunas = [
-                {label: 'Placa', column: 'placa', filter: {name:'placa', args: null}},
-                {label: 'Data', column: 'data', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
+                {label: 'Placa', column: 'placa', dataClass:'text-center text-nowrap', filter: {name:'placa', args: null}},
+                {label: 'Data', column: 'data', dataClass:'text-center', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
                 {label: 'Km', column: 'quilometragem', filter: {name:'number', args: null}},             
                 {label: 'Quantidade', column: 'quantidade', filter: {name:'number', args: null}},            
-                {label: 'Valor Unitário', column: 'valorUnitario', filter: {name:'currency', args: ''}},            
-                {label: 'Valor Total', column: 'valorTotal', filter: {name:'currency', args: ''}}
+                {label: 'Valor Unitário', column: 'valorUnitario', dataClass:'text-right', filter: {name:'currency', args: ''}},            
+                {label: 'Valor Total', column: 'valorTotal', dataClass:'text-right', filter: {name:'currency', args: ''}}
             ]            
             $scope.linha = {
                 events: { 
@@ -57,7 +58,7 @@ app.controller('VeiculoCombustivelController', ['$scope', '$filter', 'VeiculoCom
         };
     
         var getMsgToClient = function(veiculo) {
-            return veiculo.modelo + " (" + $filter('placa')(veiculo.placa) + ")";        
+            return ValorService.getValueMsgVeiculo(veiculo);
         };
 
         // ***** VISUALIZAR ***** //
@@ -86,10 +87,11 @@ app.controller('VeiculoCombustivelController', ['$scope', '$filter', 'VeiculoCom
         };
 
         var salvar = function() {
-            modalSalvar().then(function(result) {
-                result = ajustarDados(result);
-                save(result);
-            });
+            modalSalvar()
+                .then(function(result) {
+                    result = ajustarDados(result);
+                    save(result);
+                });
         };
 
         var save = function(combustivel) {
@@ -107,8 +109,8 @@ app.controller('VeiculoCombustivelController', ['$scope', '$filter', 'VeiculoCom
 
         $scope.editar = function(combustivel) {
             VeiculoCombustivelService.get(combustivel.idVeiculoCombustivel)
-                .then(function(data) {
-                     editar(combustivel);
+                .then(function(result) {
+                     editar(result);
                 })
                 .catch(function(e) {
                     modalMessage(e.error);
@@ -164,7 +166,7 @@ app.controller('VeiculoCombustivelController', ['$scope', '$filter', 'VeiculoCom
             var combustivel = VeiculoCombustivelHandler.handle(data);
             combustivel.veiculo = VeiculoHandler.handle(data.veiculo);  
             return combustivel;
-        }
+        };
 
         // ***** MODAL ***** //
         

@@ -1,13 +1,41 @@
 'use strict';
 
-app.controller('VeiculoMultaController', ['$scope', '$filter', 'VeiculoMultaService', 'ModalService', 'DataTableService',
-    function ($scope, $filter, VeiculoMultaService, ModalService, DataTableService) {
+app.controller('VeiculoMultaController', ['$scope', 'VeiculoMultaService', 'ModalService', 'ValorService', 'VeiculoHandler', 'VeiculoMultaHandler',
+    function ($scope, VeiculoMultaService, ModalService, ValorService, VeiculoHandler, VeiculoMultaHandler) {
 
         var init = function () {
             $scope.veiculosMulta = [];
             $scope.veiculosMultaLista = [];
-            $scope.dtOptions = DataTableService.default();
-        };             
+            initTable();   
+            todos();
+        };    
+
+        // ***** TABLE ***** //
+        
+        var initTable = function() {            
+            $scope.colunas = [
+                {label: 'Placa', column: 'placa', dataClass:'text-center text-nowrap', filter: {name:'placa', args: null}},         
+                {label: 'Número', column: 'numero', filter: {name:'number', args: null}},       
+                {label: 'Condutor', column: 'condutor'},  
+                {label: 'Data', column: 'data', dataClass:'text-center', filter: {name: 'date', args: 'dd/MM/yyyy'}},            
+                {label: 'Valor', column: 'valor', dataClass:'text-right', filter: {name:'currency', args: ''}}
+            ]            
+            $scope.linha = {
+                events: { 
+                    edit: function(veiculoMulta) {
+                        $scope.editar(veiculoMulta);
+                    },
+                    remove: function(veiculoMulta) {
+                        $scope.excluir(veiculoMulta);
+                    },
+                    view: function(veiculoMulta) {
+                        $scope.visualizar(veiculoMulta);
+                    },
+                }   
+            }          
+        };        
+
+        // ***** CONTROLLER ***** //                    
 
         var todos = function() {
             VeiculoMultaService.getAll()
@@ -20,85 +48,125 @@ app.controller('VeiculoMultaController', ['$scope', '$filter', 'VeiculoMultaServ
                 });
         };
         
-        var criarVeiculosMultaLista = function(manutencoes) {
-            return _.map(manutencoes, function(multa) {
+        var criarVeiculosMultaLista = function(multas) {
+            return _.map(multas, function(multa) {
                 var obj = _.pick(multa, 'idVeiculoMulta', 'numero', 'condutor', 'data', 'valor');
                 return _.extend(obj, _.pick(multa.veiculo, 'marca', 'modelo', 'placa'));
             })
-        }
+        };
+    
+        var getMsgToClient = function(veiculo) {
+            return ValorService.getValueMsgVeiculo(veiculo);      
+        };
 
-        $scope.visualizar = function(idVeiculoMulta) {
-            VeiculoMultaService.get(idVeiculoMulta)
-                .then(function(veiculoMulta) {
-                     modalVisualizar(veiculoMulta).then(function(result) {
-                         $scope.editar(result);
-                     })          
+        // ***** VISUALIZAR ***** //
+        
+        $scope.visualizar = function(multa) {
+            VeiculoMultaService.get(multa.idVeiculoMulta)
+                .then(function(result) {
+                    visualizar(result);
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         };
 
-        $scope.salvar = function() {
-            modalSalvar().then(function(result) {
-                result = ajustarDados(result);
-                VeiculoMultaService.save(result)
-                    .then(function(data) {  
-                        modalMessage("Multa do Veículo " + getMsgToClient(data.veiculo) +  " Inserido com sucesso!");
-                        todos();
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            });
+        var visualizar = function(multa) {
+            modalVisualizar(multa)
+                .then(function(result) {
+                    $scope.editar(result);
+                });
         };
 
-        $scope.editar = function(idVeiculoMulta) {
-            VeiculoMultaService.get(idVeiculoMulta)
-                .then(function(veiculoMulta) {
-                     modalSalvar(veiculoMulta).then(function(result) {
-                        result = ajustarDados(result);
-                        VeiculoMultaService.update(idVeiculoMulta, result)
-                            .then(function (data) {  
-                                modalMessage("Multa do Veículo " + getMsgToClient(data.veiculo) + " Alterado com sucesso!");
-                                todos();
-                            })
-                            .catch(function(e) {
-                                modalMessage(e);
-                            });
-                    });
+        // ***** SALVAR ***** //        
+
+        $scope.salvar = function() {
+            salvar();
+        };
+
+        var salvar = function() {
+            modalSalvar()
+                .then(function(result) {
+                    result = ajustarDados(result);
+                    save(result);
+                });
+        };
+
+        var save = function(multa) {
+            VeiculoMultaService.save(multa)
+                .then(function(data) {  
+                    modalMessage("Multa do Veículo " + getMsgToClient(data.veiculo) +  " Inserido com sucesso!");
+                    todos();
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        // ***** EDITAR ***** //
+
+        $scope.editar = function(multa) {
+            VeiculoMultaService.get(multa.idVeiculoMulta)
+                .then(function(result) {
+                     editar(result);
                 })
                 .catch(function(e) {
                     modalMessage(e.error);
                 });
-           
         };
 
-        $scope.excluir = function(idVeiculoMulta) {
-            modalExcluir().then(function() {
-                VeiculoMultaService.delete(idVeiculoMulta)
-                    .then(function(data) { 
-                        modalMessage("Multa do Veículo " + getMsgToClient(data.veiculo) + " Removido com sucesso!");
-                        todos();                        
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            });
+        var editar = function(multa) {
+            modalSalvar(multa)
+                .then(function(result) {
+                    result = ajustarDados(result);
+                    update(result);
+                }); 
+        };
+        
+        var update = function(multa) {
+            VeiculoMultaService.update(multa.idVeiculoMulta, multa)
+                .then(function (data) {  
+                    modalMessage("Multa do Veículo " + getMsgToClient(data.veiculo) + " Alterado com sucesso!");
+                    todos();
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });             
+        };
+
+        // ***** EXCLUIR ***** //
+
+        $scope.excluir = function(multa) {
+            excluir(multa);
         }; 
         
+        var excluir = function(multa) {
+            modalExcluir()
+                .then(function() {
+                    remove(multa);
+                });
+        };
+        
+        var remove = function(multa) {
+            VeiculoMultaService.delete(multa.idVeiculoMulta)
+                .then(function(data) { 
+                    modalMessage("Multa do Veículo " + getMsgToClient(data.veiculo) + " Removido com sucesso!");
+                    todos();                        
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        // ***** AJUSTAR ***** //
+                        
         var ajustarDados = function(data) {  
-            data.veiculo = { 
-                idVeiculo: data.veiculo.idVeiculo,
-                modelo: data.veiculo.modelo,
-                placa: data.veiculo.placa
-            };
-            return data;
-        }
-    
-        var getMsgToClient = function(veiculo) {
-            return veiculo.modelo + " (" + $filter('placa')(veiculo.placa) + ")";        
-        }
+            var multa = VeiculoMultaHandler.handle(data);
+            multa.veiculo = VeiculoHandler.handle(data.veiculo);  
+            return multa;
+        };
+
+        // ***** MODAL ***** //
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);
@@ -128,8 +196,7 @@ app.controller('VeiculoMultaController', ['$scope', '$filter', 'VeiculoMultaServ
             var modalInstance = ModalService.modalExcluir('Excluir Multa?', 'Deseja realmente excluir esta multa?');
             return modalInstance.result;
         };
-
-        todos();
+        
         init();
 
     }]);

@@ -23,6 +23,9 @@ app.factory('VeiculoHandler', function() {
         veiculoHandle.chassis = getChassis(veiculo);
         veiculoHandle.renavam = getRenavam(veiculo);
         veiculoHandle.quilometragem = getQuilometragem(veiculo);
+        veiculoHandle.combustivel = getCombustivel(veiculo);
+        veiculoHandle.status = getStatus(veiculo);
+        veiculoHandle.situacao = getSituacao(veiculo);
         veiculoHandle.dataCadastro = getDataCadastro(veiculo);
         return veiculoHandle;
     };
@@ -84,6 +87,21 @@ app.factory('VeiculoHandler', function() {
     
     var getQuilometragem = function(veiculo) {
         return veiculo.quilometragem || null; 
+    };
+    
+    var getCombustivel = function(veiculo) {
+        if(!veiculo.combustivel) return veiculo.combustivel;
+        return veiculo.combustivel.id; 
+    };
+    
+    var getStatus = function(veiculo) {
+        if(!veiculo.status) return veiculo.status;
+        return veiculo.status.id; 
+    };
+    
+    var getSituacao = function(veiculo) {
+        if(!veiculo.situacao) return veiculo.situacao;
+        return veiculo.situacao.id; 
     };
     
     var getDataCadastro = function(veiculo) {

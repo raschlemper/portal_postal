@@ -7,8 +7,10 @@ app.controller('ModalVisualizarVeiculoSinistroController', ['$scope', '$modalIns
             $scope.veiculoSinistro = veiculoSinistro;
         };
         
+        // ***** CONTROLLER ***** //
+        
         $scope.editar = function() {
-            $modalInstance.close(veiculoSinistro.idVeiculoSinistro);
+            $modalInstance.close(veiculoSinistro);
         };
         
         $scope.cancel = function () {

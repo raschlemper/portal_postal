@@ -13,7 +13,7 @@ app.factory('FinanceiroValidation', function(ModalService, LISTAS, MESSAGES) {
     }
     
     var planoContaResultado = function(planoContas, planoContaSelected) {
-        if(!planoContaSelected) return true;
+        if(!planoContaSelected || !planoContaSelected.idPlanoConta) return true;
         if(planoContaSelected.ehGrupo) {
             modalMessage(MESSAGES.planoConta.info.NAO_PERMITE_GRUPO);
             return false;
@@ -29,7 +29,7 @@ app.factory('FinanceiroValidation', function(ModalService, LISTAS, MESSAGES) {
     };
 
     var centroCustoResultado = function(centroCustos, centroCustoSelected) {
-        if(!centroCustoSelected) return true;
+        if(!centroCustoSelected || !centroCustoSelected.idCentroCusto) return true;
         if(centroCustoSelected.ehGrupo) {
             modalMessage(MESSAGES.centroCusto.info.NAO_PERMITE_GRUPO);
             return false;

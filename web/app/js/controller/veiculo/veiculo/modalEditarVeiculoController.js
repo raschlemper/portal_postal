@@ -7,34 +7,20 @@ app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'vei
             $scope.tipos = LISTAS.tipoVeiculo;
             $scope.combustiveis = LISTAS.combustivel;
             $scope.status = LISTAS.statusVeiculo;
-            $scope.situacoes = LISTAS.situacaoVeiculo;
-            
-            $scope.veiculo = {
-                idVeiculo: (veiculo && veiculo.idVeiculo) || null,
-                tipo: (veiculo && veiculo.tipo) || $scope.tipos[1],
-                idMarca: (veiculo && veiculo.idMarca) || null,
-                marca: (veiculo && veiculo.marca) || null,
-                idModelo: (veiculo && veiculo.idModelo) || null,
-                modelo: (veiculo && veiculo.modelo) || null,
-                idVersao: (veiculo && veiculo.idVersao) || null,
-                versao: (veiculo && veiculo.versao) || null,
-                placa: (veiculo && veiculo.placa.toUpperCase()) || null,
-                anoModelo: (veiculo && veiculo.anoModelo) || null,
-                chassis: (veiculo && veiculo.chassis) || null,
-                renavam: (veiculo && veiculo.renavam) || null,
-                quilometragem: (veiculo && veiculo.quilometragem) || null,
-                combustivel: (veiculo && veiculo.combustivel) || $scope.combustiveis[0],         
-                status: (veiculo && veiculo.status) || $scope.status[0],          
-                situacao: (veiculo && veiculo.situacao) || $scope.situacoes[0],
-                dataCadastro: (veiculo && veiculo.dataCadastro) || new Date()
-            }; 
-
+            $scope.situacoes = LISTAS.situacaoVeiculo;            
+            $scope.veiculo = angular.copy(veiculo) || {};
+            $scope.veiculo.tipo = (veiculo && veiculo.tipo) || $scope.tipos[1];
+            $scope.veiculo.combustivel = (veiculo && veiculo.combustivel) || $scope.combustiveis[0];   
+            $scope.veiculo.status = (veiculo && veiculo.status) || $scope.status[0]; 
+            $scope.veiculo.situacao = (veiculo && veiculo.situacao) || $scope.situacoes[0];
+            $scope.veiculo.dataCadastro = (veiculo && veiculo.dataCadastro) || new Date();
             $scope.minVal = 1970;
             $scope.maxVal = (new Date).getFullYear() + 1;
-
             $scope.changeTipo($scope.veiculo.tipo);
             getTitle();
         };
+
+        // ***** CONTROLLER ***** //
         
         var getTitle = function() {
             if(veiculo && veiculo.idVeiculo) { $scope.title = "Editar Veículo"; }
@@ -115,6 +101,8 @@ app.controller('ModalEditarVeiculoController', ['$scope', '$modalInstance', 'vei
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
+                
+        // ***** VALIDAR ***** // 
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);

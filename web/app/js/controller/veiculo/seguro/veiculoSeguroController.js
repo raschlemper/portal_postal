@@ -1,13 +1,40 @@
 'use strict';
 
-app.controller('VeiculoSeguroController', ['$scope', '$filter', 'VeiculoSeguroService', 'ModalService', 'DataTableService',
-    function ($scope, $filter, VeiculoSeguroService, ModalService, DataTableService) {
+app.controller('VeiculoSeguroController', ['$scope', '$filter', 'VeiculoSeguroService', 'ModalService', 'ValorService', 'VeiculoHandler', 'VeiculoSeguroHandler',
+    function ($scope, $filter, VeiculoSeguroService, ModalService, ValorService, VeiculoHandler, VeiculoSeguroHandler) {
 
         var init = function () {
             $scope.veiculosSeguro = [];
             $scope.veiculosSeguroLista = [];
-            $scope.dtOptions = DataTableService.default();
-        };             
+            initTable();   
+            todos();
+        };              
+
+        // ***** TABLE ***** //
+        
+        var initTable = function() {            
+            $scope.colunas = [
+                {label: 'Placa', column: 'placa', dataClass:'text-center text-nowrap', filter: {name:'placa', args: null}},
+                {label: 'Apólice', column: 'numeroApolice', filter: {name:'number', args: null}},             
+                {label: 'Corretora', column: 'corretora'},            
+                {label: 'Data Vigência', dataClass:'text-center', column: 'dataVigencia'}
+            ]            
+            $scope.linha = {
+                events: { 
+                    edit: function(veiculoSeguro) {
+                        $scope.editar(veiculoSeguro);
+                    },
+                    remove: function(veiculoSeguro) {
+                        $scope.excluir(veiculoSeguro);
+                    },
+                    view: function(veiculoSeguro) {
+                        $scope.visualizar(veiculoSeguro);
+                    },
+                }   
+            }          
+        };        
+
+        // ***** CONTROLLER ***** //         
 
         var todos = function() {
             VeiculoSeguroService.getAll()
@@ -22,84 +49,124 @@ app.controller('VeiculoSeguroController', ['$scope', '$filter', 'VeiculoSeguroSe
         
         var criarVeiculosSeguroLista = function(manutencoes) {
             return _.map(manutencoes, function(seguro) {
-                var obj = _.pick(seguro, 'idVeiculoSeguro', 'numeroApolice', 'corretora', 'dataInicioVigencia', 'dataFimVigencia');
+                seguro.dataVigencia = $filter('date')(seguro.dataInicioVigencia, 'dd/MM/yyyy') + ' - ' + $filter('date')(seguro.dataFimVigencia, 'dd/MM/yyyy'); 
+                var obj = _.pick(seguro, 'idVeiculoSeguro', 'numeroApolice', 'corretora', 'dataVigencia');
                 return _.extend(obj, _.pick(seguro.veiculo, 'marca', 'modelo', 'placa'));
             })
-        }
+        };
+    
+        var getMsgToClient = function(veiculo) {
+            return ValorService.getValueMsgVeiculo(veiculo);      
+        };
 
-        $scope.visualizar = function(idVeiculoSeguro) {
-            VeiculoSeguroService.get(idVeiculoSeguro)
-                .then(function(veiculoSeguro) {
-                     modalVisualizar(veiculoSeguro).then(function(result) {
-                         $scope.editar(result);
-                     })          
+        // ***** VISUALIZAR ***** //
+        
+        $scope.visualizar = function(seguro) {
+            VeiculoSeguroService.get(seguro.idVeiculoSeguro)
+                .then(function(result) {
+                    visualizar(result);
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         };
 
-        $scope.salvar = function() {
-            modalSalvar().then(function(result) {
-                result = ajustarDados(result);
-                VeiculoSeguroService.save(result)
-                    .then(function(data) {  
-                        modalMessage("Seguro do Veículo " + getMsgToClient(data.veiculo) +  " Inserido com sucesso!");
-                        todos();
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            });
+        var visualizar = function(seguro) {
+            modalVisualizar(seguro)
+                .then(function(result) {
+                    $scope.editar(result);
+                });
         };
 
-        $scope.editar = function(idVeiculoSeguro) {
-            VeiculoSeguroService.get(idVeiculoSeguro)
-                .then(function(veiculoSeguro) {
-                     modalSalvar(veiculoSeguro).then(function(result) {
-                        result = ajustarDados(result);
-                        VeiculoSeguroService.update(idVeiculoSeguro, result)
-                            .then(function (data) {  
-                                modalMessage("Seguro do Veículo " + getMsgToClient(data.veiculo) + " Alterado com sucesso!");
-                                todos();
-                            })
-                            .catch(function(e) {
-                                modalMessage(e);
-                            });
-                    });
+        // ***** SALVAR ***** //
+
+        $scope.salvar = function() {
+            salvar();
+        };
+
+        var salvar = function() {
+            modalSalvar()
+                .then(function(result) {
+                    result = ajustarDados(result);
+                    save(result);
+                });
+        };
+
+        var save = function(seguro) {
+            VeiculoSeguroService.save(seguro)
+                .then(function(data) {  
+                    modalMessage("Seguro do Veículo " + getMsgToClient(data.veiculo) +  " Inserido com sucesso!");
+                    todos();
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        // ***** EDITAR ***** //
+        
+        $scope.editar = function(seguro) {
+            VeiculoSeguroService.get(seguro.idVeiculoSeguro)
+                .then(function(result) {
+                     editar(result);
                 })
                 .catch(function(e) {
                     modalMessage(e.error);
                 });
-           
         };
 
-        $scope.excluir = function(idVeiculoSeguro) {
-            modalExcluir().then(function() {
-                VeiculoSeguroService.delete(idVeiculoSeguro)
-                    .then(function(data) { 
-                        modalMessage("Seguro do Veículo " + getMsgToClient(data.veiculo) + " Removido com sucesso!");
-                        todos();                        
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            });
+        var editar = function(seguro) {
+            modalSalvar(seguro)
+                .then(function(result) {
+                    result = ajustarDados(result);
+                    update(result);
+                }); 
+        };
+        
+        var update = function(seguro) {
+            VeiculoSeguroService.update(seguro.idVeiculoSeguro, seguro)
+                .then(function (data) {  
+                    modalMessage("Seguro do Veículo " + getMsgToClient(data.veiculo) + " Alterado com sucesso!");
+                    todos();
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });             
+        };
+
+        // ***** EXCLUIR ***** //
+
+        $scope.excluir = function(seguro) {
+            excluir(seguro);
         }; 
         
-        var ajustarDados = function(data) {         
-            data.indenizacao = data.indenizacao.id; 
-            data.veiculo = { 
-                idVeiculo: data.veiculo.idVeiculo,
-                modelo: data.veiculo.modelo,
-                placa: data.veiculo.placa
-            };
-            return data;
-        }
-    
-        var getMsgToClient = function(veiculo) {
-            return veiculo.modelo + " (" + $filter('placa')(veiculo.placa) + ")";        
-        }
+        var excluir = function(seguro) {
+            modalExcluir()
+                .then(function() {
+                    remove(seguro);
+                });
+        };
+        
+        var remove = function(seguro) {
+            VeiculoSeguroService.delete(seguro.idVeiculoSeguro)
+                .then(function(data) { 
+                    modalMessage("Seguro do Veículo " + getMsgToClient(data.veiculo) + " Removido com sucesso!");
+                    todos();                        
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        // ***** AJUSTAR ***** //
+        
+        var ajustarDados = function(data) {     
+            var seguro = VeiculoSeguroHandler.handle(data);
+            seguro.veiculo = VeiculoHandler.handle(data.veiculo);  
+            return seguro;            
+        };
+
+        // ***** MODAL ***** //
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);
@@ -129,8 +196,7 @@ app.controller('VeiculoSeguroController', ['$scope', '$filter', 'VeiculoSeguroSe
             var modalInstance = ModalService.modalExcluir('Excluir Seguro?', 'Deseja realmente excluir este seguro?');
             return modalInstance.result;
         };
-
-        todos();
+        
         init();
 
     }]);
