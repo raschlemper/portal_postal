@@ -115,8 +115,8 @@ public class PlanoContaDAO extends GenericDAO {
     }
 
     public void removeAll() throws Exception { 
-        String sql = "TRUNCATE TABLE plano_conta ";
-        execute(sql, null);
+        execute("DELETE FROM plano_conta", null);
+        execute("ALTER TABLE plano_conta AUTO_INCREMENT = 1", null);
     }
 
     public void insertFromDefault() throws Exception {

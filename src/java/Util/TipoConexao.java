@@ -52,7 +52,7 @@ public enum TipoConexao {
     
     PRODUCTION() {
         protected String url(String nome) {
-            return String.format(URL, "localhost", 3306, nome);
+            return String.format(URL, "scc4.com.br", 3306, nome);
         }
         protected String username() {
             return "smart_bd";

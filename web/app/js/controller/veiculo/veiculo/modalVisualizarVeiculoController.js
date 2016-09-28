@@ -7,6 +7,8 @@ app.controller('ModalVisualizarVeiculoController', ['$scope', '$modalInstance', 
             $scope.veiculo = veiculo;
             pesquisarVeiculoFipe();
         };
+        
+        // ***** CONTROLLER ***** //
 
         var pesquisarVeiculoFipe = function () {
             FipeService.veiculo($scope.veiculo.tipo.id, $scope.veiculo.idMarca, $scope.veiculo.idModelo, $scope.veiculo.idVersao)
@@ -19,7 +21,7 @@ app.controller('ModalVisualizarVeiculoController', ['$scope', '$modalInstance', 
         };
         
         $scope.editar = function() {
-            $modalInstance.close(veiculo.idVeiculo);
+            $modalInstance.close(veiculo);
         };
         
         $scope.cancel = function () {

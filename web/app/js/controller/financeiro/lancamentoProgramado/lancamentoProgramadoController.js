@@ -10,7 +10,8 @@ app.controller('LancamentoProgramadoController',
 
         var init = function () {
             $scope.lancamentoProgramados = [];
-            $scope.lancamentoProgramadosLista = [];
+            $scope.lancamentoProgramadosLista = []; 
+            $scope.lancamentoProgramadosListaTable = [];
             $scope.tipos = LISTAS.lancamento;
             $scope.modelos = LISTAS.modeloLancamento;
             $scope.situacoes = LISTAS.situacaoLancamentoProgramado;
@@ -58,6 +59,11 @@ app.controller('LancamentoProgramadoController',
                     }
                 }
             };
+            $scope.events = { 
+                table: function(lancamentos) {
+                    $scope.lancamentoProgramadosListaTable = angular.copy(lancamentos);
+                }
+            }
         };
         
         $scope.filter = function(lista, search) {

@@ -1,13 +1,41 @@
 'use strict';
 
-app.controller('VeiculoSinistroController', ['$scope', '$filter', 'VeiculoSinistroService', 'ModalService', 'ValorService', 'DataTableService',
-    function ($scope, $filter, VeiculoSinistroService, ModalService, ValorService, DataTableService) {
+app.controller('VeiculoSinistroController', ['$scope', 'VeiculoSinistroService', 'ModalService', 'ValorService', 'VeiculoHandler', 'VeiculoSinistroHandler',
+    function ($scope, VeiculoSinistroService, ModalService, ValorService, VeiculoHandler, VeiculoSinistroHandler) {
 
         var init = function () {
             $scope.veiculosSinistro = [];
             $scope.veiculosSinistroLista = [];
-            $scope.dtOptions = DataTableService.default();
-        };             
+            initTable();   
+            todos();
+        };                  
+
+        // ***** TABLE ***** //
+        
+        var initTable = function() {            
+            $scope.colunas = [
+                {label: 'Placa', column: 'placa', dataClass:'text-center text-nowrap', filter: {name:'placa', args: null}},
+                {label: 'Número BO', column: 'boletimOcorrencia', filter: {name:'number', args: null}},    
+                {label: 'Tipo', column: 'tipo'},             
+                {label: 'Data', column: 'data', dataClass:'text-center', filter: {name:'date', args: 'dd/MM/yyyy'}},            
+                {label: 'Responsável', column: 'responsavel'}
+            ]            
+            $scope.linha = {
+                events: { 
+                    edit: function(veiculoSinistro) {
+                        $scope.editar(veiculoSinistro);
+                    },
+                    remove: function(veiculoSinistro) {
+                        $scope.excluir(veiculoSinistro);
+                    },
+                    view: function(veiculoSinistro) {
+                        $scope.visualizar(veiculoSinistro);
+                    },
+                }   
+            }          
+        };        
+
+        // ***** CONTROLLER ***** //      
 
         var todos = function() {
             VeiculoSinistroService.getAll()
@@ -22,85 +50,125 @@ app.controller('VeiculoSinistroController', ['$scope', '$filter', 'VeiculoSinist
         
         var criarVeiculosSinistroLista = function(manutencoes) {
             return _.map(manutencoes, function(sinistro) {
+                sinistro.tipo = sinistro.tipo.descricao;
+                sinistro.responsavel = sinistro.responsavel.descricao;
                 var obj = _.pick(sinistro, 'idVeiculoSinistro', 'boletimOcorrencia', 'tipo', 'data', 'responsavel');
                 return _.extend(obj, _.pick(sinistro.veiculo, 'marca', 'modelo', 'placa'));
             })
-        }
+        };
+    
+        var getMsgToClient = function(veiculo) {
+            return ValorService.getValueMsgVeiculo(veiculo);        
+        };
 
-        $scope.visualizar = function(idVeiculoSinistro) {
-            VeiculoSinistroService.get(idVeiculoSinistro)
-                .then(function(veiculoSinistro) {
-                     modalVisualizar(veiculoSinistro).then(function(result) {
-                         $scope.editar(result);
-                     })          
+        // ***** VISUALIZAR ***** //
+        
+        $scope.visualizar = function(sinistro) {
+            VeiculoSinistroService.get(sinistro.idVeiculoSinistro)
+                .then(function(result) {
+                    visualizar(result);
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         };
 
-        $scope.salvar = function() {
-            modalSalvar().then(function(result) {
-                result = ajustarDados(result);
-                VeiculoSinistroService.save(result)
-                    .then(function(data) {  
-                        modalMessage("Sinistro do Veículo " + getMsgToClient(data.veiculo) +  " Inserido com sucesso!");
-                        todos();
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            });
+        var visualizar = function(sinistro) {
+            modalVisualizar(sinistro)
+                .then(function(result) {
+                    $scope.editar(result);
+                });
         };
 
-        $scope.editar = function(idVeiculoSinistro) {
-            VeiculoSinistroService.get(idVeiculoSinistro)
-                .then(function(veiculoSinistro) {
-                     modalSalvar(veiculoSinistro).then(function(result) {
-                        result = ajustarDados(result);
-                        VeiculoSinistroService.update(idVeiculoSinistro, result)
-                            .then(function (data) {  
-                                modalMessage("Sinistro do Veículo " + getMsgToClient(data.veiculo) + " Alterado com sucesso!");
-                                todos();
-                            })
-                            .catch(function(e) {
-                                modalMessage(e);
-                            });
-                    });
+        // ***** SALVAR ***** //
+
+        $scope.salvar = function() {
+            salvar();
+        };
+
+        var salvar = function() {
+            modalSalvar()
+                .then(function(result) {
+                    result = ajustarDados(result);
+                    save(result);
+                });
+        };
+
+        var save = function(sinistro) {
+            VeiculoSinistroService.save(sinistro)
+                .then(function(data) {  
+                    modalMessage("Sinistro do Veículo " + getMsgToClient(data.veiculo) +  " Inserido com sucesso!");
+                    todos();
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        // ***** EDITAR ***** //
+        
+        $scope.editar = function(sinistro) {
+            VeiculoSinistroService.get(sinistro.idVeiculoSinistro)
+                .then(function(result) {
+                     editar(result);
                 })
                 .catch(function(e) {
                     modalMessage(e.error);
                 });
-           
         };
 
-        $scope.excluir = function(idVeiculoSinistro) {
-            modalExcluir().then(function() {
-                VeiculoSinistroService.delete(idVeiculoSinistro)
-                    .then(function(data) { 
-                        modalMessage("Sinistro do Veículo " + getMsgToClient(data.veiculo) + " Removido com sucesso!");
-                        todos();                        
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            });
+        var editar = function(sinistro) {
+            modalSalvar(sinistro)
+                .then(function(result) {
+                    result = ajustarDados(result);
+                    update(result);
+                }); 
+        };
+        
+        var update = function(sinistro) {
+            VeiculoSinistroService.update(sinistro.idVeiculoSinistro, sinistro)
+                .then(function (data) {  
+                    modalMessage("Sinistro do Veículo " + getMsgToClient(data.veiculo) + " Alterado com sucesso!");
+                    todos();
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });             
+        };
+
+        // ***** EXCLUIR ***** //
+
+        $scope.excluir = function(sinistro) {
+            excluir(sinistro);
         }; 
         
-        var ajustarDados = function(data) {  
-            data.tipo = data.tipo.id; 
-            data.responsavel = data.responsavel.id; 
-            data.veiculo = { 
-                idVeiculo: data.veiculo.idVeiculo,
-                modelo: data.veiculo.modelo,
-                placa: data.veiculo.placa
-            };
-            return data;
-        }
-    
-        var getMsgToClient = function(veiculo) {
-            return ValorService.getValueMsgVeiculo(veiculo);        
-        }
+        var excluir = function(sinistro) {
+            modalExcluir()
+                .then(function() {
+                    remove(sinistro);
+                });
+        };
+        
+        var remove = function(sinistro) {
+            VeiculoSinistroService.delete(sinistro.idVeiculoSinistro)
+                .then(function(data) { 
+                    modalMessage("Sinistro do Veículo " + getMsgToClient(data.veiculo) + " Removido com sucesso!");
+                    todos();                        
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        // ***** AJUSTAR ***** //
+        
+        var ajustarDados = function(data) {      
+            var sinistro = VeiculoSinistroHandler.handle(data);
+            sinistro.veiculo = VeiculoHandler.handle(data.veiculo);  
+            return sinistro;   
+        };
+
+        // ***** MODAL ***** //
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);
@@ -131,7 +199,6 @@ app.controller('VeiculoSinistroController', ['$scope', '$filter', 'VeiculoSinist
             return modalInstance.result;
         };
 
-        todos();
         init();
 
     }]);

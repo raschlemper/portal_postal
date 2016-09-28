@@ -80,5 +80,10 @@ public class LancamentoRateioDAO extends GenericDAO {
         remove(sql, params, lancamentoRateioHandler);
         return lancamentoRateio;
     }
+
+    public void removeAllPlanoConta() throws Exception { 
+        String sql = "UPDATE lancamento_rateio SET idPlanoConta = null ";
+        remove(sql, null, lancamentoRateioHandler);
+    }
     
 }

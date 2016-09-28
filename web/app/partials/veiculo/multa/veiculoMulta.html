@@ -16,44 +16,7 @@
                         </div>
                         <div class="panel-body">
                             <div class="dataTable_wrapper no-padding">
-                                <table datatable="ng" dt-instance="instance" class="table table-striped table-bordered table-hover table-condensed" dt-options="dtOptions">
-                                    <thead>
-                                        <tr>
-                                            <th>Placa</th>
-                                            <th>Número</th>
-                                            <th>Condutor</th>
-                                            <th>Data</th>
-                                            <th>Valor</th>
-                                            <th class="no-sort text-center" width="100">Alterar</th>
-                                            <th class="no-sort text-center" width="100">Excluir</th>
-                                            <th class="no-sort text-center" width="100">Detalhes</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="multa in veiculosMultaLista track by multa.idVeiculoMulta">
-                                            <td class="text-nowrap">{{multa.placa | placa}}</td>
-                                            <td>{{multa.numero | number}}</td>
-                                            <td>{{multa.condutor}}</td>
-                                            <td>{{multa.data | date : 'dd/MM/yyyy'}}</td>
-                                            <td>{{multa.valor | currency}}</td>
-                                            <td align="center">
-                                                <button class="btn btn-sm btn-warning" ng-click="editar(multa.idVeiculoMulta)">
-                                                    <i class="fa fa-lg fa-pencil"></i>
-                                                </button>
-                                            </td>
-                                            <td align="center">
-                                                <a class="btn btn-sm btn-danger" ng-click="excluir(multa.idVeiculoMulta)">
-                                                    <i class="fa fa-lg fa-trash"></i>
-                                                </a>
-                                            </td>
-                                            <td align="center">
-                                                <a class="btn btn-sm btn-primary" ng-click="visualizar(multa.idVeiculoMulta)">
-                                                    <i class="fa fa-lg fa-info"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <app-table lista="veiculosMultaLista" colunas="colunas" linha="linha"></app-table>
                             </div>
                         </div>
                     </div>

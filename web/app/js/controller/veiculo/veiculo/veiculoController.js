@@ -1,13 +1,41 @@
 'use strict';
 
-app.controller('VeiculoController', ['$scope', '$q', '$filter', 'VeiculoService', 'ModalService', 'DataTableService',
-    function ($scope, $q, $filter, VeiculoService, ModalService, DataTableService) {
+app.controller('VeiculoController', ['$scope', '$q', 'VeiculoService', 'ModalService', 'ValorService', 'VeiculoHandler',
+    function ($scope, $q, VeiculoService, ModalService, ValorService, VeiculoHandler) {
 
         var init = function () {
             $scope.veiculos = [];
             $scope.veiculosLista = [];
-            $scope.dtOptions = DataTableService.default();
-        };             
+            initTable();   
+            todos();
+        };                  
+
+        // ***** TABLE ***** //
+        
+        var initTable = function() {            
+            $scope.colunas = [
+                {label: 'Marca / Modelo', column: 'marcaModelo'},    
+                {label: 'Placa', column: 'placa', dataClass:'text-center text-nowrap', filter: {name:'placa', args: null}},
+                {label: 'Combustível', column: 'combustivel'},             
+                {label: 'Situação', column: 'situacao', dataClass:'text-center'},             
+                {label: 'Cadastro', column: 'dataCadastro', dataClass:'text-center', filter: {name:'date', args: 'dd/MM/yyyy'}}
+            ]            
+            $scope.linha = {
+                events: { 
+                    edit: function(veiculoSinistro) {
+                        $scope.editar(veiculoSinistro);
+                    },
+                    remove: function(veiculoSinistro) {
+                        $scope.excluir(veiculoSinistro);
+                    },
+                    view: function(veiculoSinistro) {
+                        $scope.visualizar(veiculoSinistro);
+                    },
+                }   
+            }          
+        };        
+
+        // ***** CONTROLLER ***** //                 
 
         var todos = function() {
             VeiculoService.getAll()
@@ -22,109 +50,141 @@ app.controller('VeiculoController', ['$scope', '$q', '$filter', 'VeiculoService'
         
         var criarVeiculosLista = function(veiculos) {
             return _.map(veiculos, function(veiculo) {
-                return _.pick(veiculo, 'idVeiculo', 'marca', 'modelo', 'placa', 'combustivel', 'situacao', 'dataCadastro');
+                veiculo.marcaModelo = veiculo.marca + ' / ' + veiculo.modelo;
+                veiculo.combustivel = veiculo.combustivel.descricao;
+                veiculo.situacao = veiculo.situacao.descricao;
+                return _.pick(veiculo, 'idVeiculo', 'marcaModelo', 'placa', 'combustivel', 'situacao', 'dataCadastro');
             })
-        }
+        };
+    
+        var getMsgToClient = function(veiculo) {
+            return ValorService.getValueMsgVeiculo(veiculo);              
+        };
 
-        $scope.visualizar = function(idVeiculo) {
-            VeiculoService.get(idVeiculo)
-                .then(function(veiculo) {
-                     modalVisualizar(veiculo).then(function(result) {
-                         $scope.editar(result);
-                     })          
+        // ***** VISUALIZAR ***** //
+        
+        $scope.visualizar = function(veiculo) {
+            VeiculoService.get(veiculo.idVeiculo)
+                .then(function(result) {
+                    visualizar(result);
                 })
                 .catch(function(e) {
                     modalMessage(e);
                 });
         };
 
-        $scope.salvar = function() {
-            modalSalvar().then(function(result) {
-                result = ajustarDados(result);
-                VeiculoService.save(result)
-                    .then(function(data) {  
-                        modalMessage("Veículo " + getMsgToClient(data) +  " Inserido com sucesso!");
-                        todos();
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            });
+        var visualizar = function(veiculo) {
+            modalVisualizar(veiculo)
+                .then(function(result) {
+                    $scope.editar(result);
+                });
         };
 
-        $scope.editar = function(idVeiculo) {
-            VeiculoService.get(idVeiculo)
-                .then(function(veiculo) {
-                     modalSalvar(veiculo).then(function(result) {
-                        result = ajustarDados(result);
-                        VeiculoService.update(idVeiculo, result)
-                            .then(function (data) {  
-                                modalMessage("Veículo " + getMsgToClient(data) + " Alterado com sucesso!");
-                                todos();
-                            })
-                            .catch(function(e) {
-                                modalMessage(e);
-                            });
-                    });
+        // ***** SALVAR ***** //
+
+        $scope.salvar = function() {
+            salvar();
+        };
+
+        var salvar = function() {
+            modalSalvar()
+                .then(function(result) {
+                    result = ajustarDados(result);
+                    save(result);
+                });
+        };
+
+        var save = function(veiculo) {
+            VeiculoService.save(veiculo)
+                .then(function(data) {  
+                    modalMessage("Veículo " + getMsgToClient(data) +  " Inserido com sucesso!");
+                    todos();
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        // ***** EDITAR ***** //
+        
+        $scope.editar = function(veiculo) {
+            VeiculoService.get(veiculo.idVeiculo)
+                .then(function(result) {
+                     editar(result);
                 })
                 .catch(function(e) {
                     modalMessage(e.error);
                 });
-           
         };
 
-        $scope.excluir = function(idVeiculo) {
-            $q.all([VeiculoService.getCombustivel(idVeiculo),
-                    VeiculoService.getManutencao(idVeiculo),
-                    VeiculoService.getMulta(idVeiculo),
-                    VeiculoService.getSeguro(idVeiculo),
-                    VeiculoService.getSinistro(idVeiculo)])
+        var editar = function(veiculo) {
+            modalSalvar(veiculo)
+                .then(function(result) {
+                    result = ajustarDados(result);
+                    update(result);
+                }); 
+        };
+        
+        var update = function(veiculo) {
+            VeiculoService.update(veiculo.idVeiculo, veiculo)
+                .then(function (data) {  
+                    modalMessage("Veículo " + getMsgToClient(data) + " Alterado com sucesso!");
+                    todos();
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });             
+        };
+
+        // ***** EXCLUIR ***** //
+
+        $scope.excluir = function(veiculo) {
+            $q.all([VeiculoService.getCombustivel(veiculo.idVeiculo),
+                    VeiculoService.getManutencao(veiculo.idVeiculo),
+                    VeiculoService.getMulta(veiculo.idVeiculo),
+                    VeiculoService.getSeguro(veiculo.idVeiculo),
+                    VeiculoService.getSinistro(veiculo.idVeiculo)])
                 .then(function(values) {  
                     var podeExcluir = true;
                     angular.forEach(values, function(value, key) {
                         if(value.length > 0) podeExcluir = false;
                     });
                     return podeExcluir;
-                }).then(function(pode) {
-                    if(!pode) {
+                }).then(function(podeExcluir) {
+                    if(!podeExcluir) {
                         modalMessage("Este veículo não pode ser excluído!");
                         return;
                     }
-                    excluir(idVeiculo);
+                    excluir(veiculo);
                 });
-            
         }; 
         
-        var excluir = function(idVeiculo) {
-            modalExcluir().then(function() {
-                VeiculoService.delete(idVeiculo)
-                    .then(function(data) { 
-                        modalMessage("Veículo " + getMsgToClient(data) + " Removido com sucesso!");
-                        todos();                        
-                    })
-                    .catch(function(e) {
-                        modalMessage(e);
-                    });
-            });            
-        }
+        var excluir = function(veiculo) {
+            modalExcluir()
+                .then(function() {
+                    remove(veiculo);
+                });
+        };
         
-        var ajustarDados = function(data) {            
-            data.tipo = data.tipo.id;
-            data.idMarca = data.marca.id;
-            data.marca = data.marca.name;
-            data.idModelo = data.modelo.id;
-            data.modelo = data.modelo.name;
-            data.idVersao = data.versao.id;
-            data.versao = data.versao.name;
-            data.combustivel = data.combustivel.id;
-            data.status = data.status.id;
-            data.situacao = data.situacao.id;
-            return data;
-        }
-    
-        var getMsgToClient = function(veiculo) {
-            return veiculo.modelo + " (" + $filter('placa')(veiculo.placa) + ")";        
-        }
+        var remove = function(veiculo) {
+            VeiculoService.delete(veiculo.idVeiculo)
+                .then(function(data) { 
+                    modalMessage("Veículo " + getMsgToClient(data) + " Removido com sucesso!");
+                    todos();                        
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        // ***** AJUSTAR ***** //        
+        
+        var ajustarDados = function(data) {       
+            var veiculo = VeiculoHandler.handle(data); 
+            return veiculo;
+        };
+
+        // ***** MODAL ***** //
         
         var modalMessage = function(message) {
             ModalService.modalMessage(message);
@@ -155,7 +215,6 @@ app.controller('VeiculoController', ['$scope', '$q', '$filter', 'VeiculoService'
             return modalInstance.result;
         };
 
-        todos();
         init();
 
     }]);

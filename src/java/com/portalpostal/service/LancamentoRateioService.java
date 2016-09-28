@@ -46,6 +46,11 @@ public class LancamentoRateioService {
     public LancamentoRateio delete(Integer idLancamentoRateio) throws Exception {
         init();
         return lancamentoRateioDAO.remove(idLancamentoRateio);
-    }    
+    }       
+    
+    public void deleteAllPlanoConta() throws Exception { 
+        init();
+        lancamentoRateioDAO.removeAllPlanoConta();
+    }  
     
 }

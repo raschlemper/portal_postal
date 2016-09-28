@@ -16,44 +16,7 @@
                         </div>
                         <div class="panel-body">
                             <div class="dataTable_wrapper no-padding">
-                                <table datatable="ng" dt-instance="instance" class="table table-striped table-bordered table-hover table-condensed" dt-options="dtOptions">
-                                    <thead>
-                                        <tr>
-                                            <th>Placa</th>
-                                            <th>Número BO</th>
-                                            <th>Tipo</th>
-                                            <th>Data</th>
-                                            <th>Valor</th>
-                                            <th class="no-sort text-center" width="100">Alterar</th>
-                                            <th class="no-sort text-center" width="100">Excluir</th>
-                                            <th class="no-sort text-center" width="100">Detalhes</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="sinistro in veiculosSinistroLista track by sinistro.idVeiculoSinistro">
-                                            <td class="text-nowrap">{{sinistro.placa | placa}}</td>
-                                            <td>{{sinistro.boletimOcorrencia | number}}</td>
-                                            <td>{{sinistro.tipo.descricao}}</td>
-                                            <td>{{sinistro.data | date : 'dd/MM/yyyy'}}</td>
-                                            <td>{{sinistro.responsavel.descricao}}</td>
-                                            <td align="center">
-                                                <button class="btn btn-sm btn-warning" ng-click="editar(sinistro.idVeiculoSinistro)">
-                                                    <i class="fa fa-lg fa-pencil"></i>
-                                                </button>
-                                            </td>
-                                            <td align="center">
-                                                <a class="btn btn-sm btn-danger" ng-click="excluir(sinistro.idVeiculoSinistro)">
-                                                    <i class="fa fa-lg fa-trash"></i>
-                                                </a>
-                                            </td>
-                                            <td align="center">
-                                                <a class="btn btn-sm btn-primary" ng-click="visualizar(sinistro.idVeiculoSinistro)">
-                                                    <i class="fa fa-lg fa-info"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <app-table lista="veiculosSinistroLista" colunas="colunas" linha="linha"></app-table>
                             </div>
                         </div>
                     </div>

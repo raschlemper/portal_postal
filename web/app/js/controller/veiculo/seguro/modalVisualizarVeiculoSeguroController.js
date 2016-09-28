@@ -7,8 +7,10 @@ app.controller('ModalVisualizarVeiculoSeguroController', ['$scope', '$modalInsta
             $scope.veiculoSeguro = veiculoSeguro;
         };
         
+        // ***** CONTROLLER ***** //
+        
         $scope.editar = function() {
-            $modalInstance.close(veiculoSeguro.idVeiculoSeguro);
+            $modalInstance.close(veiculoSeguro);
         };
         
         $scope.cancel = function () {

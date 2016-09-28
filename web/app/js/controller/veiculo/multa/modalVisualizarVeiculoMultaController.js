@@ -7,8 +7,10 @@ app.controller('ModalVisualizarVeiculoMultaController', ['$scope', '$modalInstan
             $scope.veiculoMulta = veiculoMulta;
         };
         
+        // ***** CONTROLLER ***** //
+        
         $scope.editar = function() {
-            $modalInstance.close(veiculoMulta.idVeiculoMulta);
+            $modalInstance.close(veiculoMulta);
         };
         
         $scope.cancel = function () {

@@ -15,6 +15,7 @@ public class PlanoContaService {
     
     private PlanoContaDAO planoContaDAO;
     private LancamentoService lancamentoService;
+    private LancamentoRateioService lancamentoRateioService;
     private LancamentoProgramadoService lancamentoProgramadoService;
     private LancamentoProgramadoParcelaService lancamentoProgramadoParcelaService;
     private LancamentoProgramadoRateioService lancamentoProgramadoRateioService;
@@ -26,6 +27,7 @@ public class PlanoContaService {
     public void init() {
         planoContaDAO = new PlanoContaDAO(nomeBD);
         lancamentoService = new LancamentoService(nomeBD);
+        lancamentoRateioService = new LancamentoRateioService(nomeBD);
         lancamentoProgramadoService = new LancamentoProgramadoService(nomeBD);
         lancamentoProgramadoParcelaService = new LancamentoProgramadoParcelaService(nomeBD);
         lancamentoProgramadoRateioService = new LancamentoProgramadoRateioService(nomeBD);
@@ -112,6 +114,7 @@ public class PlanoContaService {
     public void setDefault() throws Exception {
         init();
         lancamentoService.deleteAllPlanoConta();
+        lancamentoRateioService.deleteAllPlanoConta();
         lancamentoProgramadoService.deleteAllPlanoConta();
         lancamentoProgramadoParcelaService.deleteAllPlanoConta();
         lancamentoProgramadoRateioService.deleteAllPlanoConta();

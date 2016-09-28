@@ -10,7 +10,8 @@ app.controller('LancamentoController',
 
         var init = function () {
             $scope.lancamentos = [];
-            $scope.lancamentosLista = [];     
+            $scope.lancamentosLista = [];    
+            $scope.lancamentosListaTable = [];
             $scope.tipos = LISTAS.lancamento;
             $scope.modelos = LISTAS.modeloLancamento;
             $scope.situacoes = LISTAS.situacaoLancamento;
@@ -82,6 +83,7 @@ app.controller('LancamentoController',
             };
             $scope.events = { 
                 table: function(lancamentos) {
+                    $scope.lancamentosListaTable = angular.copy(lancamentos);
                     calculateSaldo(lancamentos);
                 }
             }
@@ -226,7 +228,7 @@ app.controller('LancamentoController',
         };
 
         var calculateSaldo = function(lancamentos) {
-            var saldo = 0;
+            var saldo = ($scope.conta && $scope.conta.valorSaldoAbertura) || 0;
             $scope.saldoTotal = 0;
             $scope.saldoTotal += ($scope.conta && $scope.conta.valorSaldoAbertura) || 0;
             return _.map(lancamentos, function(lancamento) {

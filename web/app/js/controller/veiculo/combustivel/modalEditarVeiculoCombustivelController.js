@@ -1,7 +1,9 @@
 'use strict';
 
-app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInstance', '$filter', 'veiculoCombustivel', 'VeiculoService', 'VeiculoCombustivelService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, $filter, veiculoCombustivel, VeiculoService, VeiculoCombustivelService, DatePickerService, ListaService, LISTAS) {
+app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInstance', 'veiculoCombustivel', 'VeiculoService', 'VeiculoCombustivelService', 
+    'DatePickerService', 'ListaService', 'ValorService', 'LISTAS',
+    function ($scope, $modalInstance, veiculoCombustivel, VeiculoService, VeiculoCombustivelService, DatePickerService, ListaService, 
+    ValorService, LISTAS) {
 
         var init = function () {
             $scope.tipos = LISTAS.combustivel; 
@@ -84,7 +86,7 @@ app.controller('ModalEditarVeiculoCombustivelController', ['$scope', '$modalInst
         
         var ajustarVeiculos = function(veiculos) {
             return _.map(veiculos, function(veiculo) {
-                veiculo.descricao = veiculo.marca + ' / ' + veiculo.modelo + ' (' + $filter('placa')(veiculo.placa) + ')';
+                veiculo.descricao = ValorService.getValueDescricaoVeiculo(veiculo);
                 return veiculo;
             });
         }

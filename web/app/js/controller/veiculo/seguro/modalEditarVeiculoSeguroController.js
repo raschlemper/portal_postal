@@ -1,26 +1,22 @@
 'use strict';
 
-app.controller('ModalEditarVeiculoSeguroController', ['$scope', '$modalInstance', '$filter', 'veiculoSeguro', 'VeiculoService', 'CepService', 'DatePickerService', 'ListaService', 'LISTAS',
-    function ($scope, $modalInstance, $filter, veiculoSeguro, VeiculoService, CepService, DatePickerService, ListaService, LISTAS) {
+app.controller('ModalEditarVeiculoSeguroController', ['$scope', '$modalInstance', 'veiculoSeguro', 'VeiculoService', 'ValorService', 'DatePickerService', 
+    'ListaService', 'LISTAS',
+    function ($scope, $modalInstance, veiculoSeguro, VeiculoService, ValorService, DatePickerService, ListaService, LISTAS) {
 
         var init = function () {  
             $scope.seguros = LISTAS.seguro;
             $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
             $scope.datepickerDataFim = angular.copy(DatePickerService.default);      
-            $scope.veiculoSeguro = {
-                idVeiculoSeguro: (veiculoSeguro && veiculoSeguro.idVeiculoSeguro) || null,
-                veiculo: (veiculoSeguro && veiculoSeguro.veiculo) || { idVeiculo: null }, 
-                numeroApolice: (veiculoSeguro && veiculoSeguro.numeroApolice) || null,     
-                corretora: (veiculoSeguro && veiculoSeguro.corretora) || null,        
-                assegurado: (veiculoSeguro && veiculoSeguro.assegurado) || null,     
-                valorFranquia: (veiculoSeguro && veiculoSeguro.valorFranquia) || null,    
-                indenizacao: (veiculoSeguro && veiculoSeguro.indenizacao) || $scope.seguros[0],   
-                dataInicioVigencia: (veiculoSeguro && veiculoSeguro.dataInicioVigencia) || new Date(),
-                dataFimVigencia: (veiculoSeguro && veiculoSeguro.dataFimVigencia) || new Date()
-            }; 
+            $scope.veiculoSeguro = veiculoSeguro || {};
+            $scope.veiculoSeguro.indenizacao = (veiculoSeguro && veiculoSeguro.indenizacao) || $scope.seguros[0]; 
+            $scope.veiculoSeguro.dataInicioVigencia = (veiculoSeguro && veiculoSeguro.dataInicioVigencia) || new Date();
+            $scope.veiculoSeguro.dataFimVigencia = (veiculoSeguro && veiculoSeguro.dataFimVigencia) || new Date(); 
             getTitle();
             veiculos();
         };
+
+        // ***** CONTROLLER ***** //
         
         var getTitle = function() {
             if(veiculoSeguro && veiculoSeguro.idVeiculoSeguro) { $scope.title = "Editar Seguro Veículo"; }
@@ -30,20 +26,17 @@ app.controller('ModalEditarVeiculoSeguroController', ['$scope', '$modalInstance'
         var veiculos = function () {
             VeiculoService.getAll()
                 .then(function (data) {
-                    $scope.veiculos = ajustarVeiculos(data);
-                    $scope.veiculoSeguro.veiculo = ListaService.getVeiculoValue($scope.veiculos, $scope.veiculoSeguro.veiculo.idVeiculo);
+                    $scope.veiculoLista = ajustarVeiculos(data);
+                    if($scope.veiculoSeguro.veiculo) {
+                        $scope.veiculoSeguro.veiculo = ListaService.getVeiculoValue($scope.veiculoLista, $scope.veiculoSeguro.veiculo.idVeiculo);
+                    } else {
+                        if($scope.veiculoLista && $scope.veiculoLista.length) { $scope.veiculoSeguro.veiculo = $scope.veiculoLista[0]; }
+                    }
                 })
                 .catch(function (e) {
                     console.log(e);
                 });
         };
-        
-        var ajustarVeiculos = function(veiculos) {
-            return _.map(veiculos, function(veiculo) {
-                veiculo.descricao = veiculo.marca + ' / ' + veiculo.modelo + ' (' + $filter('placa')(veiculo.placa) + ')';
-                return veiculo;
-            });
-        }
         
         $scope.ok = function(form) {
             if (!validarForm(form)) return;
@@ -53,6 +46,17 @@ app.controller('ModalEditarVeiculoSeguroController', ['$scope', '$modalInstance'
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
+                
+        // ***** AJUSTAR ***** // 
+        
+        var ajustarVeiculos = function(veiculos) {
+            return _.map(veiculos, function(veiculo) {
+                veiculo.descricao = ValorService.getValueDescricaoVeiculo(veiculo);
+                return veiculo;
+            });
+        };
+                
+        // ***** VALIDAR ***** // 
 
         var validarForm = function (form) {   
             if (form.numeroApolice.$error.required) {
