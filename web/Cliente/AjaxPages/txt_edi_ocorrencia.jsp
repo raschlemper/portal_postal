@@ -25,6 +25,7 @@
     String tipoPesquisa = request.getParameter("tipoPesquisa");
     
     int idCliente = Integer.parseInt(request.getParameter("idCliente"));
+    int idDepto = Integer.parseInt(request.getParameter("departamento"));
     String data = Util.FormatarData.DateToBD(request.getParameter("data"));
     String data2 = Util.FormatarData.DateToBD(request.getParameter("data2"));
 
@@ -36,16 +37,22 @@
 
     //Consulta movimentacao tracking
     Connection conn = Conexao.conectar(nomeBD);
+    String whereDepto = "";
+    if(idDepto > 0){
+        whereDepto = " AND idDepartamento = " + idDepto;
+    }
     String sql = "SELECT m.numObjeto, m.notaFiscal, t.last_status_date, t.last_status_code, t.last_status_type"
         + " FROM movimentacao AS m"
         + " LEFT JOIN movimentacao_tracking AS t ON t.numObjeto = m.numObjeto"
         + " WHERE idCliente = ? AND dataPostagem >= DATE_SUB(DATE(NOW()), INTERVAL 90 DAY) "
-        + " AND (last_edi_date <> last_status_date OR last_edi_date IS NULL)";
+        + " AND (last_edi_date <> last_status_date OR last_edi_date IS NULL)"
+        + whereDepto;
     if (tipoPesquisa.equals("1")) {
         sql = "SELECT m.numObjeto, m.notaFiscal, t.last_status_date, t.last_status_code, t.last_status_type"
             + " FROM movimentacao AS m"
             + " LEFT JOIN movimentacao_tracking AS t ON t.numObjeto = m.numObjeto"
-            + " WHERE idCliente = ? AND dataPostagem BETWEEN '" + data + "' AND '" + data2 + "' ";
+            + " WHERE idCliente = ? AND dataPostagem BETWEEN '" + data + "' AND '" + data2 + "' "
+            + whereDepto;
     }
 
     try {
@@ -80,6 +87,10 @@
                 int code = result.getInt("t.last_status_code");
                 String type = result.getString("t.last_status_type");
                 String nf = result.getString("m.notaFiscal");
+                if(nf != null && nf.length() > 8){
+                    nf = nf.substring(nf.length()-8, nf.length());
+                }
+                String sro = result.getString("m.numObjeto");
                 int edi_code = 0;
                 if (mapOcor.containsKey(code + ";" + type)) {
                     edi_code = mapOcor.get(code + ";" + type);
@@ -93,7 +104,7 @@
                 out.print(Util.FormataString.preencheStringCom(edi_code + "", "0", 2, -1)); //Código Ocorrencia EDI
                 out.print(Util.FormataString.preencheStringCom(sdf3.format(date), "0", 12, -1)); //Data Ocorrencia
                 out.print(Util.FormataString.preencheStringCom("00", "0", 2, -1)); //
-                out.println(Util.FormataString.preencheStringCom(mapOcorEdi.get(edi_code), " ", 76, 1)); // FILLER
+                out.println(Util.FormataString.preencheStringCom(sro, " ", 76, 1)); // FILLER
             }
         } else if (modelo.equals("EDI_5.0")) {
             //HEADER 1

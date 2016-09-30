@@ -21,6 +21,7 @@ public class ContaDAO extends GenericDAO {
                    + "LEFT OUTER JOIN conta_corrente ON(conta.idContaCorrente = conta_corrente.idContaCorrente) "
                    + "LEFT OUTER JOIN banco ON(conta_corrente.idBanco = banco.idBanco) "
                    + "LEFT OUTER JOIN cartao_credito ON(conta.idCartaoCredito = cartao_credito.idCartaoCredito) "
+                   + "WHERE conta.codigoIntegracao IS NULL "
                    + "ORDER BY conta.idConta";        
         return findAll(sql, null, contaHandler);
     }
@@ -72,7 +73,8 @@ public class ContaDAO extends GenericDAO {
                    + "FROM conta "
                    + "LEFT OUTER JOIN conta_corrente ON(conta.idContaCorrente = conta_corrente.idContaCorrente) "
                    + "LEFT OUTER JOIN banco ON(conta_corrente.idBanco = banco.idBanco) "
-                   + "LEFT OUTER JOIN cartao_credito ON(conta.idCartaoCredito = cartao_credito.idCartaoCredito)";     
+                   + "LEFT OUTER JOIN cartao_credito ON(conta.idCartaoCredito = cartao_credito.idCartaoCredito) "
+                   + "WHERE conta.codigoIntegracao IS NULL ";     
         return findAll(sql, null, contaHandler);
     }
 

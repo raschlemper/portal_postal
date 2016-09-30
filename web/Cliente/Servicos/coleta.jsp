@@ -98,11 +98,11 @@
 
             function preencherCampos() {
                 var form = document.form1;
-                if (form.contato.value == "") {
+                if (form.contato.value === "") {
                     alert('Preencha o seu Nome!');
                     return false;
                 }
-                if (form.dataColeta.value == "") {
+                if (form.dataColeta.value === "") {
                     alert('Preencha a Data da Coleta!');
                     return false;
                 }
@@ -110,6 +110,7 @@
                     return false;
                 }
                 if (!valida_hora(form.horaColeta)) {
+                    
                     return false;
                 }
                 if (!verificaHorarioColeta()) {
@@ -317,9 +318,9 @@
                                     if (tipoEscolhaColeta == 2) {%>
                                 <dd>
                                     <label>Hora da Coleta</label>
-                                    <select>
-                                        <option value="<%= hrf1.format(hrFimColeta)%>">Mais cedo possivel</option>
-                                        <option value="<%= hrf1.format(hrIniColeta)%> ">Mais tarde possível</option>                                    
+                                    <select name="horaColeta" id="horaColeta">
+                                        <option value="<%= hrf1.format(hrIniColeta)%>">Mais cedo possivel</option>
+                                        <option value="<%= hrf1.format(hrFimColeta)%> ">Mais tarde possível</option>                                    
                                     </select>
                                 </dd>
                                 <%}
@@ -327,6 +328,14 @@
                                 <dd>                                    
                                     <input type="hidden" name="horaColeta" id="horaColeta" style="width:100px;" value="<%= hrf1.format(hrFimColeta)%>" maxlength="5"/>
                                 </dd>
+                                <%} if (tipoEscolhaColeta == 4) {%>
+                                <dd>
+                                    <label>Hora da Coleta</label>
+                                    <select name="horaColeta" id="horaColeta">
+                                        <option value="<%= hrf1.format(hrIniColeta)%>">Periodo da manhã</option>
+                                        <option value="<%= hrf1.format(hrFimColeta)%> ">Periodo da tarde</option>                                    
+                                    </select>
+                                </dd> 
                                 <%}%>
                             </li>
                             <li>

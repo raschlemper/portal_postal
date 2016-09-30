@@ -89,6 +89,8 @@ public class ServEditarUsuario extends HttpServlet {
 
                 if (senha == null || senha.equals("")) {
                     senha = Controle.contrUsuario.consultaSenhaById(idUs, nomeBD);
+                } else {
+                    senha = Util.FormataString.encodeSenha(senha);
                 }
                 
                 int usaConsolidador = 0;
@@ -110,32 +112,6 @@ public class ServEditarUsuario extends HttpServlet {
                             acessosPortalPostal += ";" + acesso;
                         }
                     }
-                    
-                    /*
-                    String pp_etiqueta[] = request.getParameterValues("geretq_e");
-                    if(pp_etiqueta != null){
-                        for (String acesso : pp_etiqueta) {
-                            acessosPortalPostal += ";" + acesso;
-                        }
-                    }
-                    String pp_coleta[] = request.getParameterValues("coleta_e");
-                    if(pp_coleta != null){
-                        for (String acesso : pp_coleta) {
-                            acessosPortalPostal += ";" + acesso;
-                        }
-                    }
-                    String pp_importacao[] = request.getParameterValues("importacao_e");
-                    if(pp_importacao != null){
-                        for (String acesso : pp_importacao) {
-                            acessosPortalPostal += ";" + acesso;
-                        }
-                    }
-                    String pp_cadastro[] = request.getParameterValues("cadastro_e");
-                    if(pp_cadastro != null){
-                        for (String acesso : pp_cadastro) {
-                            acessosPortalPostal += ";" + acesso;
-                        }
-                    }*/
                 }
                 
                 if(usaConsolidador == 1){              
@@ -144,50 +120,7 @@ public class ServEditarUsuario extends HttpServlet {
                         for (String acesso : con_conf) {
                             acessosConsolidador += ";" + acesso;
                         }
-                    }                 
-                    /*
-                    String con_conf[] = request.getParameterValues("con_conf_e");
-                    if(con_conf != null){
-                        for (String acesso : con_conf) {
-                            acessosConsolidador += ";" + acesso;
-                        }
                     }
-                    String con_ferramenta[] = request.getParameterValues("con_ferramenta_e");
-                    if(con_ferramenta != null){
-                        for (String acesso : con_ferramenta) {
-                            acessosConsolidador += ";" + acesso;
-                        }
-                    }
-                    String con_exportacao[] = request.getParameterValues("con_exportacao_e");
-                    if(con_exportacao != null){
-                        for (String acesso : con_exportacao) {
-                            acessosConsolidador += ";" + acesso;
-                        }
-                    }
-                    String con_exped[] = request.getParameterValues("con_exped_e");
-                    if(con_exped != null){
-                        for (String acesso : con_exped) {
-                            acessosConsolidador += ";" + acesso;
-                        }
-                    }
-                    String con_pesq[] = request.getParameterValues("con_pesq_e");
-                    if(con_pesq != null){
-                        for (String acesso : con_pesq) {
-                            acessosConsolidador += ";" + acesso;
-                        }
-                    }
-                    String con_relat[] = request.getParameterValues("con_relat_e");
-                    if(con_relat != null){
-                        for (String acesso : con_relat) {
-                            acessosConsolidador += ";" + acesso;
-                        }
-                    }
-                    String con_util[] = request.getParameterValues("con_util_e");
-                    if(con_util != null){
-                        for (String acesso : con_util) {
-                            acessosConsolidador += ";" + acesso;
-                        }
-                    }*/
                 }
                 
                 if(!acessosPortalPostal.equals("")){
@@ -196,7 +129,6 @@ public class ServEditarUsuario extends HttpServlet {
                 if(!acessosConsolidador.equals("")){
                     acessosConsolidador = acessosConsolidador.substring(1);
                 }
-                senha = Util.FormataString.encodeSenha(senha);
                 Controle.contrUsuario.alterar(nome, nivel, login, senha, idEmpresa, idUs, email, usaPortalPostal, acessosPortalPostal, usaConsolidador, acessosConsolidador);
 
                 sessao.setAttribute("msg", "Usuário Alterado com sucesso!");

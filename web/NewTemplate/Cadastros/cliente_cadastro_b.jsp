@@ -40,6 +40,7 @@
         String bairro = cliInc.getBairro();
         String cidade = cliInc.getCidade();
         String uf = cliInc.getUf();
+        String obs = cliInc.getObs();
         String cep = cliInc.getCep() + "";
 
         //dados para gerar o mapa
@@ -432,11 +433,17 @@
                                                         </select>
                                                     </div>
                                                 </div>
-
                                                 <div class="col-sm-6 col-md-4 col-lg-3">
                                                     <label class="small">&nbsp;</label>
                                                     <div>                                                        
                                                         <button style="width: 230px;" type="button" class="btn btn-info form-control" onclick="showAddress(document.getElementById('address').value);"><i class="fa fa-search fa-spc"></i>Mostrar Endereço no Mapa</button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12">
+                                                    <label class="small">Observações</label>
+                                                    <div class="input-group">                                                        
+                                                        <span class="input-group-addon" ><i class="fa fa-home fa-fw"></i></span>                                                                                                             
+                                                        <textarea class="form-control" name="obs" id="obs" ><%= obs %></textarea>
                                                     </div>
                                                 </div>
                                             </div>

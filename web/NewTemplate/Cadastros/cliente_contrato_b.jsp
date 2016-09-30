@@ -41,11 +41,16 @@
             codAdm = "";
         }
         String dtVig = "---";
+        int statusCartao = cliInc.getStatusCartaoPostagem();
         if (cliInc.getDtVigenciaFimContrato() != null) {
             dtVig = sdf.format(cliInc.getDtVigenciaFimContrato());
+            SimpleDateFormat sdfa = new SimpleDateFormat("yyyy-MM-dd");       
+            Date dateWithoutTime = sdfa.parse(sdfa.format(new Date()));
+            if(cliInc.getDtVigenciaFimContrato().before(dateWithoutTime)){
+                statusCartao = 0; 
+            }
         }
         String ufContrato = cliInc.getUfContrato();
-        int statusCartao = cliInc.getStatusCartaoPostagem();
 
         int codDir = cliInc.getCodDiretoria();
         String nomeSara = cliInc.getNome();

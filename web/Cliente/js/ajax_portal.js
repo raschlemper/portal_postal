@@ -14,7 +14,7 @@ var http = getHTTPObject(); // We create the XMLHTTPRequest Object
 /****************************************************************/
 
 function waitMsg() {
-bootbox.dialog({
+    bootbox.dialog({
         title: '<h4> Aguarde... Processando Requisi&ccedil;&atilde;o<h4>',
         message: "<div class='progress'> <div class='progress-bar progress-bar-striped active' role='progressbar' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100' style='width:100%;'></div></div>",
         modal: true,
@@ -26,8 +26,8 @@ bootbox.dialog({
         zIndex: 2500
     });
 }
-function fechaMsg(){
-    bootbox.hideAll();      
+function fechaMsg() {
+    bootbox.hideAll();
     telaMsg();
 }
 
@@ -53,7 +53,29 @@ function handleHttpResponseBootStrap() {
             }
 
         } else {
-            alert("Erro: "+http.status + " <br> Informa&ccedil;&atilde;o n&atilde;o dispon&iacute;vel em nosso banco de dados.");
+            alert("Erro: " + http.status + " <br> Informa&ccedil;&atilde;o n&atilde;o dispon&iacute;vel em nosso banco de dados.");
+        }
+    }
+}
+function handleHttpResponsePreVenda() {
+    if (http.readyState == 4) {
+        if (http.status == 200) {
+            //alert("handleHTTPResponse");
+            var resultado = http.responseText;
+            if (resultado.toString() == "sessaoexpirada") {
+                window.location = "../../index.jsp?msgLog=3";
+            } else {
+                document.getElementById("divInteracao").innerHTML = resultado;
+                document.getElementById("divProtecao").className = "mostrar";
+                document.getElementById("divInteracao").className = "mostrar";
+            }
+
+        } else {
+            alert("Erro: Objeto sem pr&eacute;-postagem cadastrada!\n\
+                    <br><br>Para ter acesso a esta funcionalidade, voc&ecirc; deve fazer a pr&eacute;-postagem\n\
+                         <i>(Gerar Etiqueta)</i> do objeto pelo Portal Postal!\n\
+                    <br><br>Caso tenha relizado a pr&eacute;-postagem\n\
+                         <i>(Gerar Etiqueta)</i> entre em contato com a sua Ag&ecirc;ncia!");
         }
     }
 }
@@ -72,7 +94,7 @@ function handleHttpResponse() {
             }
 
         } else {
-           alert("Erro: "+http.status + " <br><br>Informa&ccedil;&atilde;o n&atilde;o dispon&iacute;vel em nosso banco de dados.<br><br> Verifique com a sua Ag&ecirc;ncia!");
+            alert("Erro: " + http.status + " <br><br>Informa&ccedil;&atilde;o n&atilde;o dispon&iacute;vel em nosso banco de dados.<br><br> Verifique com a sua Ag&ecirc;ncia!");
         }
     }
 }
@@ -86,7 +108,7 @@ function verReversa(idRev) {
 // funcao que retorna o forrm parra editarr o cooletador solicitado
 function verVenda(idVenda) {
     http.open("GET", "../../Cliente/AjaxPages/visualizar_venda.jsp?idVenda=" + idVenda, true);
-    http.onreadystatechange = handleHttpResponse;
+    http.onreadystatechange = handleHttpResponsePreVenda;
     http.send(null);
 }
 
@@ -148,8 +170,8 @@ function pesquisarDestinatario(nomeBD, multi) {
 }
 
 function copiaDadosDest(id, nome, empresa, cpf, cidade, uf, bairro, endereco, numero, complemento, cep, celular, email) {
-    
-    
+
+
     document.getElementById('idDestinatario').value = id;
     document.getElementById('nome').value = nome;
     document.getElementById('nomeOrig').value = nome;
@@ -165,7 +187,7 @@ function copiaDadosDest(id, nome, empresa, cpf, cidade, uf, bairro, endereco, nu
     document.getElementById('cep').value = cep;
     document.getElementById('celular').value = celular;
     document.getElementById('email_destinatario').value = email;
-    
+
 
     document.getElementById('obs').focus();
     chamaDivProtecao();
@@ -188,17 +210,17 @@ function copiaDadosDestMulti(cks) {
             var cidade = document.getElementById("cidade_multi_" + id).value;
             var uf = document.getElementById("uf_multi_" + id).value;
             var cpf = document.getElementById("cpf_multi_" + id).value;
-            var cep = document.getElementById("cep_multi_" + id).value;            
+            var cep = document.getElementById("cep_multi_" + id).value;
             var s = document.getElementById("servico_1");
             var servico = s.options[s.selectedIndex].text;
             var ar = document.getElementById("ar").value;
             var selAR = '';
-            if(ar === '1'){
+            if (ar === '1') {
                 selAR = 'selected';
             }
             var mp = document.getElementById("mp").value;
             var selMP = '';
-            if(mp === '1'){
+            if (mp === '1') {
                 selMP = 'selected';
             }
             var vd = document.getElementById("vd").value;
@@ -224,14 +246,14 @@ function copiaDadosDestMulti(cks) {
             linha.insertCell(4).appendChild(document.createTextNode(cidade + " / " + uf));
             linha.insertCell(5).appendChild(document.createTextNode(cep));
             linha.insertCell(6).innerHTML = "<input type='text' id='multi_nf_" + id + "' name='multi_nf_" + id + "' size='4' value='' />";
-            linha.insertCell(7).innerHTML = "<select name='multi_ar_"+id+"' id='multi_ar_"+id+"'>"+
-                                                "<option value='0'>Nao</option>"+
-                                                "<option "+selAR+" value='1'>Sim</option>"+
-                                            "</select>";
-            linha.insertCell(8).innerHTML = "<select name='multi_mp_"+id+"' id='multi_mp_"+id+"'>"+
-                                                "<option value='0'>Nao</option>"+
-                                                "<option "+selMP+" value='1'>Sim</option>"+
-                                            "</select>";
+            linha.insertCell(7).innerHTML = "<select name='multi_ar_" + id + "' id='multi_ar_" + id + "'>" +
+                    "<option value='0'>Nao</option>" +
+                    "<option " + selAR + " value='1'>Sim</option>" +
+                    "</select>";
+            linha.insertCell(8).innerHTML = "<select name='multi_mp_" + id + "' id='multi_mp_" + id + "'>" +
+                    "<option value='0'>Nao</option>" +
+                    "<option " + selMP + " value='1'>Sim</option>" +
+                    "</select>";
             linha.insertCell(9).innerHTML = "<input type='text' id='multi_vd_" + id + "' name='multi_vd_" + id + "' value='" + vd + "' size='5' onkeypress='mascara(this, maskReal)' />";
             var cell8 = linha.insertCell(10);
             cell8.innerHTML = "<img src='../../imagensNew/cross-button.png' style='cursor:pointer;' onclick='delRow(this);' />";
@@ -370,7 +392,7 @@ function pesquisaSintetica(idCliente, nomeBD) {
     var vd = document.getElementById("vd").checked;
     var atrasado = document.getElementById("atrasado").checked;
     var tpFat = document.getElementById("tipoFat").value;
-    http.open("GET", "../AjaxPages/consulta_sintetico.jsp?idCliente=" + idCliente + "&nomeBD=" + nomeBD + "&dataIni=" + dataInicio + "&dataFim=" + dataFinal + "&situacao=" + situacao + "&servico=" + servico + "&departamento=" + departamento + "&objeto=" + objeto + "&notaFiscal=" + notafiscal + "&destinatario=" + destinatario + "&cep=" + cep + "&ar=" + ar + "&vd=" + vd + "&uf=" + uf +"&tipoFat=" + tpFat+"&atrasado=" + atrasado, true);
+    http.open("GET", "../AjaxPages/consulta_sintetico.jsp?idCliente=" + idCliente + "&nomeBD=" + nomeBD + "&dataIni=" + dataInicio + "&dataFim=" + dataFinal + "&situacao=" + situacao + "&servico=" + servico + "&departamento=" + departamento + "&objeto=" + objeto + "&notaFiscal=" + notafiscal + "&destinatario=" + destinatario + "&cep=" + cep + "&ar=" + ar + "&vd=" + vd + "&uf=" + uf + "&tipoFat=" + tpFat + "&atrasado=" + atrasado, true);
     http.onreadystatechange = handleHttpResponsePesquisaCustomizadaObjetos;
     http.send(null);
 }
@@ -386,9 +408,9 @@ function pesquisaAr(idCliente, nomeBD) {
     http.send(null);
 }
 function pesqSro(param) {
-		$('#objetos').val(param);
-		$('#frmSRO').submit();
-	}
+    $('#objetos').val(param);
+    $('#frmSRO').submit();
+}
 
 function pesquisaAnalitica(idCliente, nomeBD) {
     abrirTelaEspera();
@@ -404,11 +426,11 @@ function pesquisaAnalitica(idCliente, nomeBD) {
     var uf = document.getElementById("uf").value;
     var ar = document.getElementById("ar").checked;
     var vd = document.getElementById("vd").checked;
-    var lp = document.getElementById("lp").value;    
+    var lp = document.getElementById("lp").value;
     var tpFat = document.getElementById("tipoFat").value;
     var atrasado = document.getElementById("atrasado").checked;
-    http.open("GET", "../AjaxPages/consulta_analitico.jsp?idCliente=" + idCliente + "&nomeBD=" + nomeBD + "&dataIni=" + dataInicio + "&dataFim=" + dataFinal + "&situacao=" + situacao + "&servico=" + servico + "&departamento=" + departamento + "&objeto=" + objeto + "&notaFiscal=" 
-            + notafiscal + "&destinatario=" + destinatario + "&cep=" + cep + "&ar=" + ar + "&vd=" + vd + "&uf=" + uf+ "&lp="+lp+ "&tipoFat=" + tpFat+"&atrasado=" + atrasado, true );
+    http.open("GET", "../AjaxPages/consulta_analitico.jsp?idCliente=" + idCliente + "&nomeBD=" + nomeBD + "&dataIni=" + dataInicio + "&dataFim=" + dataFinal + "&situacao=" + situacao + "&servico=" + servico + "&departamento=" + departamento + "&objeto=" + objeto + "&notaFiscal="
+            + notafiscal + "&destinatario=" + destinatario + "&cep=" + cep + "&ar=" + ar + "&vd=" + vd + "&uf=" + uf + "&lp=" + lp + "&tipoFat=" + tpFat + "&atrasado=" + atrasado, true);
     http.onreadystatechange = handleHttpResponsePesquisaCustomizadaObjetos;
     http.send(null);
 }
@@ -424,11 +446,11 @@ function handleHttpResponsePesquisaRelatorios() {
                 fecharTelaEspera();
                 document.getElementById("tableObjeto").innerHTML = resultado;
             }
-        } else {            
+        } else {
             fecharTelaEspera();
             alert(http.status + " - Not able to retrieve name");
         }
-    }    
+    }
 }
 
 function pesquisaObjetosRelatorios(idCliente, nomeBD) {
@@ -495,9 +517,9 @@ function pesquisaPrecoPrazo() {
         fecharTelaEspera();
         alert("Preencha todos os pesos e medidas das caixas.");
     } else {
-        http.open("GET", "../AjaxPages/consulta_preco_prazo.jsp?dataPostagem="+data+"&nCdEmpresa=" + codEmpresa + "&sDsSenha=" + senha + "&nCdServico=" + servico
+        http.open("GET", "../AjaxPages/consulta_preco_prazo.jsp?dataPostagem=" + data + "&nCdEmpresa=" + codEmpresa + "&sDsSenha=" + senha + "&nCdServico=" + servico
                 + "&sCepOrigem=" + cepOrigem + "&sCepDestino=" + cepDestino + "&nVlPeso=" + peso + "&nCdFormato=" + formato + "&nVlComprimento=" + comp
-                + "&nVlAltura=" + alt + "&nVlLargura=" + larg + "&nVlDiametro=" + diam + "&sCdMaoPropria=" + mp + "&nVlValorDeclarado=" + vd 
+                + "&nVlAltura=" + alt + "&nVlLargura=" + larg + "&nVlDiametro=" + diam + "&sCdMaoPropria=" + mp + "&nVlValorDeclarado=" + vd
                 + "&sCdAvisoRecebimento=" + ar + "&agrupado=" + agrupado + "&quantidade=" + qtd + params, true);
         http.onreadystatechange = handleHttpResponsePesquisaRelatorios;
         http.send(null);
@@ -544,31 +566,31 @@ function darBaixaAr(numObjeto) {
 
 // funcao que retorna as interacoes da ocorrencia solicitada
 /*function darBaixaAr2() {
-    var dataInicio = document.getElementById("dataIni").value;
-    var dataFinal = document.getElementById("dataFim").value;
-    var nome = retirarAcentos(document.getElementById("nomeRecebedor").value);
-    var data = document.getElementById("dataRecebimento").value;
-    var result = 0;
-    if (nome == "") {
-        alert("Preencha o nome de quem recebeu o AR!");
-        result = 1;
-    }
-    if (valida_data(document.getElementById("dataRecebimento")) == false) {
-        result = 1;
-    }
-    if (result == 0) {
-        var numObjeto = document.getElementById("numObjetoAr").value;
-        document.getElementById("img" + numObjeto).src = "../../imagensNew/tick_circle.png";
-        document.getElementById("nome" + numObjeto).innerHTML = nome;
-        document.getElementById("data" + numObjeto).innerHTML = data;
-        document.getElementById(numObjeto).value = "0";
-        document.getElementById("img" + numObjeto).setAttribute('onclick', "javascript:if(confirm('Voce tem certeza que deseja marcar este objeto como nao entregue?')){chamaJanelaBaixaAr('" + numObjeto + "');}else{return false;}");
-        chamaDivProtecao();
-        http.open("GET", "../AjaxPages/alterar_ar.jsp?numObjeto=" + numObjeto + "&baixa=1&nome=" + nome + "&data=" + data + "&inicio=" + dataInicio + "&final=" + dataFinal, true);
-        http.onreadystatechange = handleHttpResponseAr;
-        http.send(null);
-    }
-}*/
+ var dataInicio = document.getElementById("dataIni").value;
+ var dataFinal = document.getElementById("dataFim").value;
+ var nome = retirarAcentos(document.getElementById("nomeRecebedor").value);
+ var data = document.getElementById("dataRecebimento").value;
+ var result = 0;
+ if (nome == "") {
+ alert("Preencha o nome de quem recebeu o AR!");
+ result = 1;
+ }
+ if (valida_data(document.getElementById("dataRecebimento")) == false) {
+ result = 1;
+ }
+ if (result == 0) {
+ var numObjeto = document.getElementById("numObjetoAr").value;
+ document.getElementById("img" + numObjeto).src = "../../imagensNew/tick_circle.png";
+ document.getElementById("nome" + numObjeto).innerHTML = nome;
+ document.getElementById("data" + numObjeto).innerHTML = data;
+ document.getElementById(numObjeto).value = "0";
+ document.getElementById("img" + numObjeto).setAttribute('onclick', "javascript:if(confirm('Voce tem certeza que deseja marcar este objeto como nao entregue?')){chamaJanelaBaixaAr('" + numObjeto + "');}else{return false;}");
+ chamaDivProtecao();
+ http.open("GET", "../AjaxPages/alterar_ar.jsp?numObjeto=" + numObjeto + "&baixa=1&nome=" + nome + "&data=" + data + "&inicio=" + dataInicio + "&final=" + dataFinal, true);
+ http.onreadystatechange = handleHttpResponseAr;
+ http.send(null);
+ }
+ }*/
 
 
 
@@ -591,9 +613,9 @@ function handleHttpResponseAbrangenciaServ() {
                 } else if (resultado.trim() === 'SEDEXHJ') {
                     alert('Nao existe o SEDEX HOJE para este CEP!');
                 } else if (resultado.trim() === 'PAX') {
-                    alert('Nao existe o PAX para este CEP!');                
-                } else if(resultado.trim() === 'MSGRIO'){
-                    alert('Os envios para este CEP estao suspensos ate 20/08/2016!<br/>Motivo: Jogos Olimpicos do Rio 2016!');                
+                    alert('Nao existe o PAX para este CEP!');
+                } else if (resultado.trim() === 'MSGRIO') {
+                    alert('Os envios para este CEP estao suspensos ate 20/08/2016!<br/>Motivo: Jogos Olimpicos do Rio 2016!');
                 }
             }
         } else {
@@ -614,37 +636,37 @@ function verPesquisarAbrangenciaServ(cep, servico) {
     }
 }
 
-    function handleHttpResponseCepsSuspensos() {
-        if (http.readyState === 4) {
-            if (http.status === 200) {
-                //alert("handleHTTPResponse");
-                var resultado = http.responseText;
-                if (resultado.toString().trim() === "sessaoexpirada") {
-                    window.location = "../../index.jsp?msgLog=3";
-                } else {
-                    if (resultado.trim() === 'aceita') {
-                        chamaDivProtecao2();
-                    } else if(resultado.trim() === 'MSGRIO'){
-                        alert('Os envios para este CEP estao suspensos ate 20/08/2016!<br/>Motivo: Jogos Olimpicos do Rio 2016!');                
-                    }
-                }
+function handleHttpResponseCepsSuspensos() {
+    if (http.readyState === 4) {
+        if (http.status === 200) {
+            //alert("handleHTTPResponse");
+            var resultado = http.responseText;
+            if (resultado.toString().trim() === "sessaoexpirada") {
+                window.location = "../../index.jsp?msgLog=3";
             } else {
-                alert(http.status + " - Not able to retrieve name");
+                if (resultado.trim() === 'aceita') {
+                    chamaDivProtecao2();
+                } else if (resultado.trim() === 'MSGRIO') {
+                    alert('Os envios para este CEP estao suspensos ate 20/08/2016!<br/>Motivo: Jogos Olimpicos do Rio 2016!');
+                }
             }
+        } else {
+            alert(http.status + " - Not able to retrieve name");
         }
     }
+}
 
-    // funcao que retorna o forrm parra editarr o cooletador solicitado
-    function verPesquisarCepsSuspensos(cep, servico) {
-        if (cep.length === 9) {
-            http.open("GET", "../AjaxPages/consulta_ceps_suspensos.jsp?cep=" + cep + "&servico=" + servico, true);
-            http.onreadystatechange = handleHttpResponseCepsSuspensos;
-            http.send(null);
-        } else if (cep !== '') {
-            alert('Preencha o CEP por completo!');
-            document.getElementById('cep').focus();
-        }
+// funcao que retorna o forrm parra editarr o cooletador solicitado
+function verPesquisarCepsSuspensos(cep, servico) {
+    if (cep.length === 9) {
+        http.open("GET", "../AjaxPages/consulta_ceps_suspensos.jsp?cep=" + cep + "&servico=" + servico, true);
+        http.onreadystatechange = handleHttpResponseCepsSuspensos;
+        http.send(null);
+    } else if (cep !== '') {
+        alert('Preencha o CEP por completo!');
+        document.getElementById('cep').focus();
     }
+}
 
 /***************************************************************************/
 

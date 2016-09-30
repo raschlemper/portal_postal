@@ -3,18 +3,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <%
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                    String nomeBD = (String) session.getAttribute("nomeBD");
-                    if (nomeBD == null) {
-                        response.sendRedirect("../Portal/portal.jsp?msg=Sua sessao expirou! Para voltar ao Portal faça seu login novamente!");
-                    } else {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            String nomeBD = (String) session.getAttribute("nomeBD");
+            if (nomeBD == null) {
+                response.sendRedirect("../Portal/portal.jsp?msg=Sua sessao expirou! Para voltar ao Portal faça seu login novamente!");
+            } else {
 
-                        //String nomeEmpresa = Controle.contrEmpresa.nomeEmpresaByNomeBD(nomeBD);
-                        String numCliente = String.valueOf(session.getAttribute("idCliente"));
-                        String dataAtual = sdf.format(new Date());
-                        String dataOntem = Util.SomaData.SomarDiasDatas(new Date(), -1);
-                        String dataInicioCalendario = Util.SomaData.SomarDiasDatas(new Date(), -180); // diminui 6 meses
-        %>
+                //String nomeEmpresa = Controle.contrEmpresa.nomeEmpresaByNomeBD(nomeBD);
+                String numCliente = String.valueOf(session.getAttribute("idCliente"));
+                String dataAtual = sdf.format(new Date());
+                String dataOntem = Util.SomaData.SomarDiasDatas(new Date(), -1);
+                String dataInicioCalendario = Util.SomaData.SomarDiasDatas(new Date(), -180); // diminui 6 meses
+%>
         <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
         <title>Portal Postal | Relatórios</title>
         <meta name="keywords" content="" />
@@ -35,24 +35,64 @@
 
         <script type="text/javascript" charset="utf-8">
 
-            $(function() {
+            $(function () {
                 $("#dataIni").datepicker({
-                    minDate:'<%= dataInicioCalendario%>',
-                    maxDate:'<%= dataAtual%>',
+                    minDate: '<%= dataInicioCalendario%>',
+                    maxDate: '<%= dataAtual%>',
                     showOn: "button",
                     buttonImage: "../../imagensNew/calendario.png",
                     buttonImageOnly: true,
                     showAnim: "slideDown"
                 });
                 $("#dataFim").datepicker({
-                    minDate:'<%= dataInicioCalendario%>',
-                    maxDate:'<%= dataAtual%>',
+                    minDate: '<%= dataInicioCalendario%>',
+                    maxDate: '<%= dataAtual%>',
                     showOn: "button",
                     buttonImage: "../../imagensNew/calendario.png",
                     buttonImageOnly: true,
                     showAnim: "slideDown"
                 });
             });
+
+            function PrintElem(elem, type) {
+                if(type === 'EXCEL'){
+                    Popup_excel($(elem).html());
+                }else{
+                    Popup($(elem).html());
+                }                
+            }
+
+            function Popup(data) {
+                var mywindow = window.open('', 'Impressão de Relatório', 'fullscreen=yes');
+                mywindow.document.write('<html><head><title>Impressao de Relatorio</title>');
+                //mywindow.document.write('<link rel="stylesheet" href="../../css/estilo.css" type="text/css" />');
+                mywindow.document.write('</head><body >');
+                mywindow.document.write(data);
+                mywindow.document.write('</body></html>');
+
+                mywindow.document.close(); // necessary for IE >= 10
+                mywindow.focus(); // necessary for IE >= 10
+
+                mywindow.print();
+                mywindow.close();
+
+                return true;
+            }
+
+            function Popup_excel(data) {
+                $.ajax({
+                    method: "POST",
+                    url: "../AjaxPages/xls_relatorio.jsp",
+                    data: {
+                        data: data
+                    },
+                    contentType: 'application/xls',
+                    dataType: 'binary'
+                });
+                //console.log('../AjaxPages/xls_relatorio.jsp?data=' + data);
+                //window.open('../AjaxPages/xls_relatorio.jsp?data=' + data, 'excel', 'height=400,width=600');                
+                return true;
+            }
         </script>
     </head>
     <body>
@@ -72,9 +112,9 @@
                         <li>
                             <dd>
                                 <label>PERIODO DA PESQUISA</label>
-                                <input type="text" style="width:75px;" name="dataIni" id="dataIni" value="<%= dataOntem%>" maxlength="10" onkeypress="mascara(this,maskData);" />
+                                <input type="text" style="width:75px;" name="dataIni" id="dataIni" value="<%= dataOntem%>" maxlength="10" onkeypress="mascara(this, maskData);" />
                                 até
-                                <input type="text" style="width:75px;" name="dataFim" id="dataFim" value="<%= dataAtual%>" maxlength="10" onkeypress="mascara(this,maskData);" />
+                                <input type="text" style="width:75px;" name="dataFim" id="dataFim" value="<%= dataAtual%>" maxlength="10" onkeypress="mascara(this, maskData);" />
                             </dd>
                             <dd>
                                 <label>Agrupar Por</label>
@@ -107,6 +147,10 @@
                     </ul>
                     <img width="100%" src="../../imagensNew/linha.jpg"/>
 
+                    <div class="buttons">
+                        <button type="button" class="regular" onclick="PrintElem('#tableObjeto', 'PRINT')" ><img src="../../imagensNew/printer.png"/> IMPRIMIR RELATÓRIO</button>
+                        <%--<button type="button" class="regular" onclick="PrintElem('#tableObjeto', 'EXCEL')" ><img src="../../imagensNew/excel.png"/> EXPORTAR RELATÓRIO</button>--%>
+                    </div>
                     <div style="width: 100%;clear: both;">
                         <div id="titulo2" >Resultado da Pesquisa</div>
                         <div id="tableObjeto"></div>

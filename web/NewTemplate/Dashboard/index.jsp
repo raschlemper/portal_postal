@@ -137,7 +137,7 @@
                                     <a class="text-danger" href="../Telegrama/telegrama_naoenviados_b.jsp"><strong>ATENÇÃO!</strong> Existem <%= listaTele%> Telegramas para enviar.</a>
                                 </div>
                                 <%}%>
-                                <%if (listaContr.size() > 0) {%>
+                                <%if (listaContr!=null && listaContr.size() > 0) {%>
                                 <div class="alert alert-danger no-margin">
                                     <a href="#" class="close" data-dismiss="alert">&times;</a>
                                     <strong>ATENÇÃO!</strong> Existem clientes com o contrato a vencer em menos de 90 Dias:<br/>

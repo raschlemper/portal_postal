@@ -202,7 +202,7 @@
                                                         <tr style="cursor:default;">
                                                             <td align="center"><input type="checkbox" name="ids" value="<%= des.getId()%>" /></td>
                                                             <td align="center">
-                                                             <a href='#' onclick="pesqSro('<%= numObj %>');"><%= numObj%></a>   
+                                                             <a href="javascript:pesqSro('<%= numObj %>');"><%= numObj%></a>   
                                                             </td>
                                                             <td><%= des.getNomeServico()%></td>
                                                             <td><%= nomeCli%></td>
@@ -231,7 +231,7 @@
                 </div>
             </div>
         </div>
-        <form name="frmSRO" id="frmSRO" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
+        <form name="frmSRO" id="frmSRO" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank" >
             <input type="hidden" name="objetos" id="objetos" value="" />
         </form>  
 

@@ -1,0 +1,1 @@
+<iframe width="100%" height="100%" scrolling="no" src="pre_postagem_caixa_postal.jsp?idObjeto=<%=request.getParameter("idObjeto")%>"><iframe>

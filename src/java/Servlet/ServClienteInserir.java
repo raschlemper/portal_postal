@@ -7,7 +7,6 @@ package Servlet;
 
 import Controle.contrCliente;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,10 +36,9 @@ public class ServClienteInserir extends HttpServlet {
         if (expira == null) {
             response.sendRedirect("index.jsp?msgLog=3");
         } else {
+
             String nomeBD = (String) sessao.getAttribute("empresa");
-            
-            
-            
+
             double latitude = Double.parseDouble(request.getParameter("lat"));
             double longitude = Double.parseDouble(request.getParameter("lng"));
             int idGrupoFat = Integer.parseInt(request.getParameter("grupo_fat"));
@@ -56,21 +54,17 @@ public class ServClienteInserir extends HttpServlet {
             String bairro = request.getParameter("bairro");
             String cidade = request.getParameter("cidade");
             String uf = request.getParameter("uf");
-            
-            
-            int idCliente = contrCliente.inserirCliente(nome, fantasia, endereco, numero, complemento, bairro, cidade, uf, cep, telefone, email, cnpj, latitude, longitude, idGrupoFat, nomeBD);
-            
-            
-            
-            //int idCliente = Integer.parseInt(request.getParameter("idCliente"));
-            
-            //contrCliente.alterarLatitudeLongitude(latitude, longitude, idCliente, nomeBD);
+            String obs = request.getParameter("obs");
 
-            
+            int idCliente = contrCliente.inserirCliente(nome, fantasia, endereco, numero, complemento, bairro, cidade, uf, cep, telefone, email, cnpj, latitude, longitude, idGrupoFat, obs, nomeBD);
+
+            //int idCliente = Integer.parseInt(request.getParameter("idCliente"));            
+            //contrCliente.alterarLatitudeLongitude(latitude, longitude, idCliente, nomeBD);           
             
             sessao.setAttribute("msg", "Cliente inserido com sucesso!");                
             response.sendRedirect("NewTemplate/Cadastros/cliente_cadastro_b.jsp?idCliente="+idCliente);
             //response.sendRedirect(request.getHeader("referer"));
+
         }
     }
 

@@ -434,7 +434,7 @@ public class contrColeta {
     
     public static ArrayList<Coleta> consultaColetasPeloStatus(int status, int idColetador, String data, String ordem, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "SELECT idColeta, status, idCliente, idTipo, dataHoraColeta, dataHoraAguardando, dataHoraBaixa, dataHoraSolicitacao, obs,"
+        String sql = "SELECT idColeta, status, idCliente, idTipo, dataHoraColeta, dataHoraAguardando, dataHoraBaixa, dataHoraSolicitacao, c.obs,"
                 + " cliente.nome, cliente.nomeFantasia, coleta_tipos.tipo, coleta_coletador.nome, statusEntrega, tipoSolicitacao, cs.nome"
                 + " FROM coleta AS c"
                 + " LEFT JOIN cliente ON cliente.codigo = idCliente"
@@ -471,7 +471,7 @@ public class contrColeta {
                 Timestamp dataHoraColeta = result.getTimestamp("dataHoraColeta");
                 Timestamp dataHoraBaixa = result.getTimestamp("dataHoraBaixa");
                 Timestamp dataHoraAguardando = result.getTimestamp("dataHoraAguardando");
-                String obs = result.getString("obs");
+                String obs = result.getString("c.obs");
                 String nomeCliente = result.getString("cliente.nome");
                 String nomeFantasia = result.getString("cliente.nomeFantasia");
                 String tipoColeta = result.getString("coleta_tipos.tipo");
@@ -521,7 +521,7 @@ public class contrColeta {
 
     public static ArrayList<Coleta> consultaColetasPelaWeb(String ordem, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "SELECT idColeta, idCliente, idTipo, dataHoraColeta, dataHoraBaixa, dataHoraSolicitacao, dataHoraAguardando, obs, cs.nome,"
+        String sql = "SELECT idColeta, idCliente, idTipo, dataHoraColeta, dataHoraBaixa, dataHoraSolicitacao, dataHoraAguardando, c.obs, cs.nome,"
                 + " cliente.nome, cliente.nomeFantasia, coleta_tipos.tipo, coleta_coletador.nome, statusEntrega, tipoSolicitacao, c.idColetador"
                 + " FROM coleta AS c"
                 + " LEFT JOIN cliente ON cliente.codigo = idCliente"
@@ -542,7 +542,7 @@ public class contrColeta {
                 Timestamp dataHoraColeta = result.getTimestamp("dataHoraColeta");
                 Timestamp dataHoraBaixa = result.getTimestamp("dataHoraBaixa");
                 Timestamp dataHoraAguardando = result.getTimestamp("dataHoraAguardando");
-                String obs = result.getString("obs");
+                String obs = result.getString("c.obs");
                 String nomeCliente = result.getString("cliente.nome");
                 String nomeFantasia = result.getString("cliente.nomeFantasia");
                 String tipoColeta = result.getString("coleta_tipos.tipo");

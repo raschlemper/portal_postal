@@ -335,6 +335,7 @@
                                                 <option value='4'>Vendas - Serviço comparativo mês a mês</option>
                                                 <option value='5'>Vendas - Faturado AGF por período (sintético)</option>
                                                 <option value='6'>Vendas - Contrato ECT por período (sintético)</option>
+                                                <option value='8'>Vendas - Contrato/Cartão de postagem ECT por período (sintético)</option>
                                                 <option value='7'>Objetos - Atrasados</option>
                                             </select>
                                         </div>  

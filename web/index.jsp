@@ -202,8 +202,15 @@
             ga('send', 'pageview');
 
             function GerarCookie() {
+                document.getElementById('inputCodigo').value = document.getElementById('inputCodigo').value.replace(/\D/g,"");
+                
                 var loginPortalPostal = document.getElementById('inputEmail').value;
                 var agenciaPortalPostal = document.getElementById('inputCodigo').value;
+                if(agenciaPortalPostal === ''){
+                    alert('Preencha o Código da Agência!');
+                    document.getElementById('inputCodigo').focus();
+                    return false;                    
+                }
                 if (document.getElementById("checkLembrar").checked) {
                     $.cookie("LoginPortalPostal", loginPortalPostal, {expires: 30});
                     $.cookie("AgenciaPortalPostal", agenciaPortalPostal, {expires: 30});
@@ -211,6 +218,7 @@
                     $.removeCookie("LoginPortalPostal");
                     $.removeCookie("AgenciaPortalPostal");
                 }
+                return true;
             }
 
             // Função para ler o cookie.
@@ -259,12 +267,12 @@
                         <input type="text" name="loginHoito" id="inputEmail" class="form-control" placeholder="Login" required />
                         <input type="password" name="senhaHoito" id="inputPassword" class="form-control" placeholder="Senha" required />
                         <input type="checkbox" id="checkLembrar" value="remember-me" /> Lembrar login.
-                        <button onclick="GerarCookie();" class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Entrar</button>
+                        <button onclick="return GerarCookie();" class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Entrar</button>
                         <i style="color:red;font-size: 11px;">*Em caso de dúvidas, entre em contato com sua agência.</i>
                     </form><!-- /form -->
                 </div><!-- /card-container -->
                 <div class="text-center">
-                    Para acessar como agência entre em<br/><a href="http://agf.portalpostal.com.br">agf.portalpostal.com.br</a><br/>
+                    Para acessar como agência entre em<br/><a href="http://agf.portalpostal.com.br">agf.portalpostal.com.br</a><br/><br/>
                     <a href="http://www.beyondsecurity.com/vulnerability-scanner-verification/portalpostal.com.br" >
                         <img src="http://seal.beyondsecurity.com/verification-images/portalpostal.com.br/vulnerability-scanner-10.gif" alt="Vulnerability Scanner" border="0" />
                     </a>

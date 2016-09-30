@@ -8,7 +8,11 @@ import Controle.ContrErroLog;
 import Entidade.PreVenda;
 import Util.Conexao;
 import Util.FormataString;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 /**
@@ -17,14 +21,15 @@ import java.util.ArrayList;
  */
 public class ContrPreVenda {
 
-    public static boolean inserir(int idCliente, String numObjeto, int idDestinatario, int idRemetente, int codECT, String contrato, String departamento, String aosCuidados, String obs, String conteudo, int peso, int altura, int largura, int comprimento, float vd, int ar, int mp, String siglaAmarracao, String nomeServico, String notaFiscal, float valor_cobrar, String tipo, int idDepartamento, String cartaoPostagem, int idUser, int registro, String nomePreVenda, String email_destinatario, String tipo_etiqueta, String siglaPais, String destino_postagem, String nomeBD, int posta_restante, int registro_modico, String setor) {
+    public static int inserir(int idCliente, String numObjeto, int idDestinatario, int idRemetente, int codECT, String contrato, String departamento, String aosCuidados, String obs, String conteudo, int peso, int altura, int largura, int comprimento, float vd, int ar, int mp, String siglaAmarracao, String nomeServico, String notaFiscal, float valor_cobrar, String tipo, int idDepartamento, String cartaoPostagem, int idUser, int registro, String nomePreVenda, String email_destinatario, String tipo_etiqueta, String siglaPais, String destino_postagem, String nomeBD, int posta_restante, int registro_modico, String setor) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "INSERT INTO pre_venda (id, numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, userPreVenda, registro, nomePreVenda, email_destinatario, tipo_etiqueta, sigla_pais, destino_postagem, posta_restante, registro_modico, setor) values(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW(),?,?,?,?,?,?,?,?,?,?,?)";
         if (numObjeto.equals("avista")) {
             sql = "INSERT INTO pre_venda (numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, userPreVenda, registro, nomePreVenda, email_destinatario, tipo_etiqueta, sigla_pais, destino_postagem, posta_restante, registro_modico, setor) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW(),?,?,?,?,?,?,?,?,?,?,?)";
         }
+        Integer idPreVenda = null;
         try {
-            PreparedStatement valores = conn.prepareStatement(sql);
+            PreparedStatement valores = conn.prepareStatement(sql,PreparedStatement.RETURN_GENERATED_KEYS);
             valores.setString(1, numObjeto);
             valores.setInt(2, idCliente);
             valores.setInt(3, idDestinatario);
@@ -60,14 +65,18 @@ public class ContrPreVenda {
             valores.setInt(33, registro_modico);
             valores.setString(34, setor);
             valores.executeUpdate();
+            ResultSet result = valores.getGeneratedKeys();
+            if(result.next()){
+                idPreVenda = result.getInt(1);
+            }
             valores.close();
-            return true;
         } catch (SQLException e) {
             System.out.println("ERRO " + e);
             ContrErroLog.inserir("HOITO - contrContato", "SQLException", sql, e.toString());
-            return false;
+
         } finally {
             Conexao.desconectar(conn);
+            return idPreVenda;
         }
     }
 

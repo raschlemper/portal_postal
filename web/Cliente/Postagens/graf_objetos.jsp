@@ -389,9 +389,9 @@
                         </div>
                     </form>
                     <img width="100%" src="../../imagensNew/linha.jpg"/>
-                </div>
+                    
+                    <%--
                 <div style="width: 100%;clear: both;">
-                    <div id="titulo2">Resultado da Pesquisa</div>
                     <div id="tableObjeto">
                         <div class="" id="" style="float: right; margin: 12px;">   
 
@@ -419,11 +419,8 @@
                                         (9,'BDR'),(12,'BDR'),(28,'BDR'),(37,'BDR'),(43,'BDR'),(50,'BDR'),(51,'BDR'),(52,'BDR'),(69,'BDR')) ">EXTRAVIADO</option>
                                 <option value=" AND (last_status_code, last_status_type) IN 
                                         ((26,'BDE'),(24,'BDE'),(26,'BDI'),(24,'BDI'),(26,'BDR'),(24,'BDR'),(0,'LDI'),(1,'LDI'),(2,'LDI'),(3,'LDI'),(4,'LDI'),(14,'LDI')) ">AGUARDA RETIRADA</option>
-
-
-
                             </select>
-                            
+
                             <label>Filtrar por prazos</label>
                             <select>
                                 <option>Todos os objetos</option>
@@ -441,6 +438,7 @@
                                       document.formEXP.submit();"><img class="link_img" src="../../imagensNew/csv.png"> EXPORTAR .CSV</a>
   
                           </div> -->
+                    <div id="titulo2">Resultado da Pesquisa</div>
                         <table id="barraAtendimento" border="0">
                             <tbody><tr>
                                     <td align="left" style="font-weight:bold;font-size:12px;">
@@ -473,9 +471,6 @@
                                         <th width="100" class="head"><h3>SITUAÇÃO</h3></th>
                                         <th width="100" class="head"><h3>DEPARTAMENTO</h3></th>
                                         <th width="50" class="head"><h3>PROTOCOLO</h3></th>
-
-
-
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -483,7 +478,6 @@
                                         <td class="">
                                             <img class="link_img" src="../../imagensNew/mail_send.png"/></td>
                                         <td class="">
-
                                             <form name="frmDU599883489BR" id="frmDU599883489BR" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
                                                 <input type="hidden" name="objetos" id="objetos" value="DU599883489BR">
                                             </form>                    
@@ -528,22 +522,23 @@
                             </div>
                             <div id="tablenav2" class="tablenav" style="display: block;">
                                 <div>
-                                    <img src="../../javascript/plugins/TableSorter/images/left_end.png" width="20" height="20" alt="First Page" onclick="sorter2.move(-1, true)">
-                                        <img src="../../javascript/plugins/TableSorter/images/left.png" width="20" height="20" alt="First Page" onclick="sorter2.move(-1)">
-                                            <img src="../../javascript/plugins/TableSorter/images/right.png" width="20" height="20" alt="First Page" onclick="sorter2.move(1)">
-                                                <img src="../../javascript/plugins/TableSorter/images/right_end.png" width="20" height="20" alt="Last Page" onclick="sorter2.move(1, true)">
-                                                    <select style="margin-left:5px;" id="pagedropdown2" onchange="sorter2.goto(this.value)"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>
-                                                    <a style="margin-left:10px;" href="javascript:sorter2.showall()">Ver Tudo</a>
-                                                    </div>
-                                                    </div>
-                                                    <div id="tablelocation">
-                                                        <div class="page">Página <span id="currentpage2">1</span> de <span id="totalpages2">3</span></div>
-                                                    </div>
-                                                    </div>
-                                                    </div>
-                                                    </div>                       
-                                                    </div>
-                                                    </div>
-                                                    </body>
-                                                    </html>
-                                                    <%}%>
+                                    <img src="../../javascript/plugins/TableSorter/images/left_end.png" width="20" height="20" alt="First Page" onclick="sorter2.move(-1, true)"/>
+                                    <img src="../../javascript/plugins/TableSorter/images/left.png" width="20" height="20" alt="First Page" onclick="sorter2.move(-1)"/>
+                                    <img src="../../javascript/plugins/TableSorter/images/right.png" width="20" height="20" alt="First Page" onclick="sorter2.move(1)"/>
+                                    <img src="../../javascript/plugins/TableSorter/images/right_end.png" width="20" height="20" alt="Last Page" onclick="sorter2.move(1, true)"/>
+                                    <select style="margin-left:5px;" id="pagedropdown2" onchange="sorter2.goto(this.value)"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>
+                                    <a style="margin-left:10px;" href="javascript:sorter2.showall()">Ver Tudo</a>
+                                </div>
+                            </div>
+                            <div id="tablelocation">
+                                <div class="page">Página <span id="currentpage2">1</span> de <span id="totalpages2">3</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>     --%>
+                </div>                 
+            </div>
+        </div>
+    </body>
+</html>
+<%}%>

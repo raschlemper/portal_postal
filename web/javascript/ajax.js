@@ -175,9 +175,17 @@ function verEditarContato(idContato) {
 
 // funcao que retorna o form para editar o usuario solicitado
 function verEditarLoginPortal(id, local) {
+
     http.open("GET", "../../Cliente/Cadastros/usuario_editar.jsp?id=" + id + "&local=" + local, true);
     http.onreadystatechange = handleHttpResponse;
     http.send(null);
+}
+
+function reenviarObjetos(idObjeto){
+    http.open("GET", "../../Cliente/Servicos/pre_postagem_caixa_postal_frame.jsp?idObjeto="+idObjeto, true);
+    http.onreadystatechange = handleHttpResponse;
+    http.send(null);
+    
 }
 
 // funcao que retorna o form para editar o usuario solicitado

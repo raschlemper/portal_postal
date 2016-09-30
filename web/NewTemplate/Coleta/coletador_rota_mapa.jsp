@@ -1,9 +1,9 @@
+<%@page import="Entidade.Usuario"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="Entidade.empresas"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import = "java.text.DateFormat,java.util.ArrayList,java.sql.Timestamp, java.util.Date, java.text.SimpleDateFormat"%>
-
 <%
     response.setHeader("Cache-Control", "no-cache"); //HTTP 1.1
     response.setHeader("Pragma", "no-cache"); //HTTP 1.0
@@ -15,6 +15,7 @@
     } else {
 
         //pega os parametros passados para a pagina
+        String nomeBD = (String) session.getAttribute("nomeBD");
         String dataAtual = request.getParameter("dataPesquisa");
         String vIdColet = request.getParameter("idColetador");
 

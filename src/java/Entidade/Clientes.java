@@ -60,6 +60,7 @@ public class Clientes {
     private int separar_destinatarios;
     private int ar_digital;    
     private float fat_mes;
+    private String obs;
 
     public Clientes(int codigo, String nome, float fat_mes) {
         this.codigo = codigo;
@@ -77,9 +78,6 @@ public class Clientes {
         this.numero = numero;
         this.complemento = complemento;
     }
-    
-    
-    
 
     public Clientes(int codigo, String nome, String endereco, String telefone, String bairro, String cidade, String uf, int cep, String email, String cnpj, String nomeFantasia, String complemento, String senha, String numero, String url_logo, int temContrato, String numContrato, int anoContrato, String ufContrato, String nomeContrato, int usaEtiquetador, double latitude, double longitude, String cartaoPostagem, int envio_email, String login_correio, String senha_correio, String codAdministrativo, Date dtVigenciaFimContrato, int codDiretoria, int statusCartaoPostagem, String nomeClienteSara, int nome_etq, int erro_atualizacao, Timestamp dataHoraAtualizacao, String login_reversa, String senha_reversa, String cartao_reversa, String login_sigep, String senha_sigep, int idGrupoFaturamento, int ativo, int separar_destinatarios, float fat_mes) {
         this.codigo = codigo;
@@ -173,6 +171,7 @@ public class Clientes {
         this.ativo = result.getInt("ativo");
         this.separar_destinatarios = result.getInt("separar_destinatarios");              
         this.ar_digital = result.getInt("ar_digital");              
+        this.obs = result.getString("obscli");
 
     }
     
@@ -185,6 +184,14 @@ public class Clientes {
         this.nome = nome;
         this.email = email;
         this.codigo = codigo;
+    }
+
+    public String getObs() {
+        return obs;
+    }
+
+    public void setObs(String obs) {
+        this.obs = obs;
     }
 
     public int getAr_digital() {

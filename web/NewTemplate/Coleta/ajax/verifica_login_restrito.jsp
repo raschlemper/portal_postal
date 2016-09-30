@@ -10,7 +10,7 @@
         String mensagem = request.getParameter("mensagem");
         String idUsuario = request.getParameter("idUsuario");
 %>
-<form name='formLoginRestrito' action='<%= servlet%>' method='post'>
+<form name='formLoginRestrito' id='formLoginRestrito' action='<%= servlet%>' method='post'>
     <ul class="list-unstyled">
         <li class="list-group-item list-group-heading">
             <b>Login de Administrador</b>                

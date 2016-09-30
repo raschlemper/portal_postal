@@ -77,6 +77,8 @@
                         <%}%>
                     <li><a href="../../Cliente/Servicos/vpne.jsp">Controle de VPNe</a></li>
                     <li><a href="../../Cliente/Servicos/ar_digital_arquivo.jsp">Arquivos de AR Digital</a></li>
+                    <li><a href="../../Cliente/Servicos/objetos_caixa_postal.jsp">Objetos caixa postal</a></li>
+                    
                 </ul>
             </li>
             <li><a href="#">Etiquetas</a>

@@ -349,11 +349,11 @@ public class ContrPreVendaImporta {
                     String obs = aux[15].trim();
                     String cont = aux[16].trim();
 
-                    if (obs.length() > 50) {
-                        obs = obs.substring(0, 49);
+                    if (obs.length() > 100) {
+                        obs = obs.substring(0, 99);
                     }
-                    if (cont.length() > 50) {
-                        cont = cont.substring(0, 49);
+                    if (cont.length() > 200) {
+                        cont = cont.substring(0, 199);
                     }
 
                     ai.setObs(obs);
@@ -560,11 +560,11 @@ public class ContrPreVendaImporta {
                     String obs = aux[13].trim();
                     String cont = aux[13].trim();
 
-                    if (obs.length() > 50) {
-                        obs = obs.substring(0, 49);
+                    if (obs.length() > 100) {
+                        obs = obs.substring(0, 99);
                     }
-                    if (cont.length() > 50) {
-                        cont = cont.substring(0, 49);
+                    if (cont.length() > 200) {
+                        cont = cont.substring(0, 199);
                     }
                     ai.setObs(obs);
                     ai.setConteudo(cont);
@@ -669,11 +669,11 @@ public class ContrPreVendaImporta {
                     String obs = aux[12].trim();
                     String cont = aux[12].trim();
 
-                    if (obs.length() > 50) {
-                        obs = obs.substring(0, 49);
+                    if (obs.length() > 100) {
+                        obs = obs.substring(0, 99);
                     }
-                    if (cont.length() > 50) {
-                        cont = cont.substring(0, 49);
+                    if (cont.length() > 200) {
+                        cont = cont.substring(0, 199);
                     }
                     ai.setObs(obs);
                     ai.setConteudo(cont);
@@ -2558,8 +2558,8 @@ public class ContrPreVendaImporta {
         xPath = doc.createXPath(basePath + "nfe:infAdic/nfe:infCpl");
         xPath.setNamespaceURIs(uris);
         String obs = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
-        if (obs.length() > 50) {
-            obs = obs.substring(0, 49);
+        if (obs.length() > 100) {
+            obs = obs.substring(0, 99);
         }
 
         int qtt = 1;
@@ -2647,8 +2647,8 @@ public class ContrPreVendaImporta {
                 float vd = 0;
                 if (temvd == 1) {
                     vd = Float.parseFloat(vNF.replace(",", ".").trim());
-                    if (vd < 12) {
-                        vd = 12;
+                    if (vd < 17) {
+                        vd = 17;
                     }
                 }
 
@@ -2689,8 +2689,8 @@ public class ContrPreVendaImporta {
                 /**
                  * ************************************************************************
                  */
-                if (obs.length() > 50) {
-                    obs = obs.substring(0, 49);
+                if (obs.length() > 100) {
+                    obs = obs.substring(0, 99);
                 }
                 sql += "\n('" + numObjeto + "', " + idCliente + ", " + idDestinatario + ", " + idRemetente + ", '" + codECT + "', '" + contrato + "', '" + departamento + "', '" + aosCuidados + "', '" + obs + "', '" + conteudo + "', " + peso + ", " + altura + ", " + largura + ", " + comprimento + ", " + vd + ", " + ar + ", " + mp + ", '" + siglaAmarracao + "', '" + servico + "', '" + nNF + "', " + vlrCobrar + ", '" + tipo + "', " + idDepartamento + ", NOW(), '" + cartaoPostagem + "', " + registro + ", 'IMPORTACAO_NFE', " + temrm + "),";
                 TEM_PEDIDO = true;
