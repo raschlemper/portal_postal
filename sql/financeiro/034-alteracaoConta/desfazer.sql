@@ -1,0 +1,1 @@
+ALTER TABLE `conta` DROP visivel;

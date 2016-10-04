@@ -15,7 +15,9 @@ public class Conta {
     private TipoStatusConta status;
     private Date dataAbertura;
     private Double valorSaldoAbertura;   
-    private Double saldo; 
+    private Double saldo;   
+    private Integer codigoIntegracao; 
+    private Boolean visivel; 
     private List<Lancamento> lancamentos;
     private List<LancamentoProgramado> lancamentosProgramados;
 
@@ -89,6 +91,22 @@ public class Conta {
 
     public void setSaldo(Double saldo) {
         this.saldo = saldo;
+    }
+
+    public Integer getCodigoIntegracao() {
+        return codigoIntegracao;
+    }
+
+    public void setCodigoIntegracao(Integer codigoIntegracao) {
+        this.codigoIntegracao = codigoIntegracao;
+    }
+
+    public Boolean getVisivel() {
+        return visivel;
+    }
+
+    public void setVisivel(Boolean visivel) {
+        this.visivel = visivel;
     }
 
     public List<Lancamento> getLancamentos() {

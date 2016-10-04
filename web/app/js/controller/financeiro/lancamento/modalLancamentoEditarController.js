@@ -34,7 +34,7 @@ app.controller('ModalLancamentoEditarController',
         };
         
         var contas = function() {
-            ContaService.getAll()
+            ContaService.getAllVisivel()
                 .then(function (data) {
                     $scope.contas = data;
                     $scope.lancamento.conta = $scope.conta || $scope.lancamento.conta || $scope.contas[0];                    

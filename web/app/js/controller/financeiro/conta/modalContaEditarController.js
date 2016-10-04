@@ -11,6 +11,8 @@ app.controller('ModalContaEditarController',
             $scope.conta = conta || {};
             $scope.conta.tipo = (conta && conta.tipo) || $scope.tipos[0];
             $scope.conta.status = (conta && conta.status) || $scope.status[0];
+            $scope.conta.visivel = (conta && conta.visivel);
+            if(!$scope.conta.visivel) { $scope.conta.visivel = false; }
             getTitle();
             contaCorrente();
             cartaoCredito();

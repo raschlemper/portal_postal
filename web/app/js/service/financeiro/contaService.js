@@ -9,6 +9,11 @@ app.factory('ContaService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/conta/"));
         },
 
+        getAllVisivel: function() {
+            return PromiseService.execute(
+                    $http.get(_contextPath + "/api/financeiro/conta/visivel"));
+        },
+
         get: function(idConta) {
             return PromiseService.execute(
                     $http.get(_contextPath + "/api/financeiro/conta/" + idConta));

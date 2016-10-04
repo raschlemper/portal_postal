@@ -26,7 +26,7 @@ app.controller('ModalLancamentoProgramadoTransferirController',
         };
         
         var contas = function() {
-            ContaService.getAll()
+            ContaService.getAllVisivel()
                 .then(function (data) {
                     $scope.contas = data;
                     $scope.lancamentoProgramadoTransferencia.contaOrigem = 

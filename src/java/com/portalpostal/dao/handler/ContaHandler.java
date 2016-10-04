@@ -27,6 +27,8 @@ public class ContaHandler extends GenericHandler implements ResultSetHandler<Con
         conta.setStatus(TipoStatusConta.values()[getInt(result, "status")]);
         conta.setDataAbertura(getDate(result, "dataAbertura"));
         conta.setValorSaldoAbertura(getDouble(result, "valorSaldoAbertura"));
+        conta.setCodigoIntegracao(getInt(result, "codigoIntegracao"));
+        conta.setVisivel(getBoolean(result, "visivel"));
         conta.setSaldo(getSaldo(result));
         conta.setContaCorrente(getContaCorrente(result));
         conta.setCartaoCredito(getCartaoCredito(result));

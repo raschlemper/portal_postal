@@ -93,7 +93,7 @@ app.controller('FluxoCaixaController',
         }
         
         var contas = function() {
-            ContaService.getAll()
+            ContaService.getAllVisivel()
                 .then(function (data) {
                     $scope.contas = data;
                     planoContas();

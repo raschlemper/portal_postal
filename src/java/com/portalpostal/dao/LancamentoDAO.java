@@ -4,7 +4,6 @@ import com.portalpostal.dao.handler.LancamentoHandler;
 import com.portalpostal.dao.handler.SaldoHandler;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.Saldo;
-import com.portalpostal.model.dd.TipoLancamento;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +30,7 @@ public class LancamentoDAO extends GenericDAO {
                                                                + "lancamento.idLancamento = lancamento_transferencia.idLancamentoDestino) "
                    + "LEFT OUTER JOIN lancamento_programado ON(lancamento.idLancamentoProgramado = lancamento_programado.idLancamentoProgramado) "
                    + "WHERE lancamento.idConta = conta.idConta "
+                   + "AND conta.visivel = 1 "
                    + "AND DATE(lancamento.dataLancamento) "
                    + "BETWEEN IFNULL(:dataInicio, DATE(lancamento.dataLancamento)) AND IFNULL(:dataFim, DATE(lancamento.dataLancamento)) "
                    + "ORDER BY lancamento.dataLancamento"; 

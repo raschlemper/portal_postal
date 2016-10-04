@@ -58,6 +58,18 @@ public class ContaController {
     }  
     
     @GET
+    @Path("/visivel")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Conta> findAllVisivel() {
+        try {
+            init();    
+            return contaService.findAllVisivel();
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }  
+    
+    @GET
     @Path("/saldo")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Conta> findSaldo() {

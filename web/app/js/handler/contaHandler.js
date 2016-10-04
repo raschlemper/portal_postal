@@ -19,6 +19,8 @@ app.factory('ContaHandler', function() {
         contaHandle.dataAbertura = getDataAbertura(conta);
         contaHandle.valorSaldoAbertura = getValorSaldoAbertura(conta);
         contaHandle.saldo = getSaldo(conta);
+        contaHandle.codigoIntegracao = getCodigoIntegracao(conta);
+        contaHandle.visivel = getVisivel(conta);
         return contaHandle;
     };
     
@@ -60,6 +62,14 @@ app.factory('ContaHandler', function() {
     
     var getSaldo = function(conta) {
         return conta.saldo || null; 
+    };
+    
+    var getCodigoIntegracao = function(conta) {
+        return conta.codigoIntegracao || 1; 
+    };
+    
+    var getVisivel = function(conta) {
+        return conta.visivel; 
     };
 
     return {

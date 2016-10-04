@@ -24,7 +24,7 @@ app.controller('ModalLancamentoTransferirController',
         };
         
         var contas = function() {
-            ContaService.getAll()
+            ContaService.getAllVisivel()
                 .then(function (data) {
                     $scope.contas = data;
                     $scope.lancamentoTransferencia.contaOrigem = ($scope.lancamentoTransferencia.lancamentoOrigem && $scope.lancamentoTransferencia.lancamentoOrigem.conta) || conta || $scope.contas[0];
