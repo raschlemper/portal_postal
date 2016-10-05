@@ -25,16 +25,6 @@ public class ContaDAO extends GenericDAO {
         return findAll(sql, null, contaHandler);
     }
 
-    public List<Conta> findAllVisivel() throws Exception {
-        String sql = "SELECT * FROM conta "
-                   + "LEFT OUTER JOIN conta_corrente ON(conta.idContaCorrente = conta_corrente.idContaCorrente) "
-                   + "LEFT OUTER JOIN banco ON(conta_corrente.idBanco = banco.idBanco) "
-                   + "LEFT OUTER JOIN cartao_credito ON(conta.idCartaoCredito = cartao_credito.idCartaoCredito) "
-                   + "WHERE conta.visivel = 1 "
-                   + "ORDER BY conta.idConta";        
-        return findAll(sql, null, contaHandler);
-    }
-
     public Conta find(Integer idConta) throws Exception {
         String sql = "SELECT * FROM conta "
                    + "LEFT OUTER JOIN conta_corrente ON(conta.idContaCorrente = conta_corrente.idContaCorrente) "
@@ -99,10 +89,8 @@ public class ContaDAO extends GenericDAO {
     }
 
     public Conta save(Conta conta) throws Exception {  
-        String sql = "INSERT INTO conta (idContaCorrente, idCartaoCredito, nome, tipo, status, dataAbertura, valorSaldoAbertura, "
-                   + "codigoIntegracao, visivel) "
-                   + "VALUES(:idContaCorrente, :idCartaoCredito, :nome, :tipo, :status, :dataAbertura, :valorSaldoAbertura, "
-                   + ":codigoIntegracao, :visivel)";        
+        String sql = "INSERT INTO conta (idContaCorrente, idCartaoCredito, nome, tipo, status, dataAbertura, valorSaldoAbertura, codigoIntegracao) "
+                   + "VALUES(:idContaCorrente, :idCartaoCredito, :nome, :tipo, :status, :dataAbertura, :valorSaldoAbertura, :codigoIntegracao)";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idContaCorrente", (conta.getContaCorrente() == null ? null :conta.getContaCorrente().getIdContaCorrente()));
         params.put("idCartaoCredito", (conta.getCartaoCredito()== null ? null :conta.getCartaoCredito().getIdCartaoCredito()));
@@ -112,7 +100,6 @@ public class ContaDAO extends GenericDAO {
         params.put("dataAbertura", conta.getDataAbertura());
         params.put("valorSaldoAbertura", conta.getValorSaldoAbertura());
         params.put("codigoIntegracao", conta.getCodigoIntegracao());
-        params.put("visivel", conta.getVisivel());
         Integer idConta = save(sql, params, contaHandler);
         return find(idConta);
     }
@@ -120,7 +107,7 @@ public class ContaDAO extends GenericDAO {
     public Conta update(Conta conta) throws Exception {
         String sql = "UPDATE conta "
                    + "SET idContaCorrente = :idContaCorrente, idCartaoCredito = :idCartaoCredito, nome = :nome, tipo = :tipo, status = :status, "
-                   + "dataAbertura = :dataAbertura, valorSaldoAbertura = :valorSaldoAbertura, codigoIntegracao = :codigoIntegracao, visivel = :visivel "
+                   + "dataAbertura = :dataAbertura, valorSaldoAbertura = :valorSaldoAbertura, codigoIntegracao = :codigoIntegracao "
                    + "WHERE idConta = :idConta ";        
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("idConta", conta.getIdConta());
@@ -132,7 +119,6 @@ public class ContaDAO extends GenericDAO {
         params.put("dataAbertura", conta.getDataAbertura());
         params.put("valorSaldoAbertura", conta.getValorSaldoAbertura());
         params.put("codigoIntegracao", conta.getCodigoIntegracao());
-        params.put("visivel", conta.getVisivel());
         update(sql, params, contaHandler);
         return conta;  
     }

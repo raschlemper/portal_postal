@@ -112,7 +112,7 @@ app.controller('LancamentoProgramadoController',
         }
         
         var contas = function() {
-            ContaService.getAllVisivel()
+            ContaService.getAll()
                 .then(function (data) {
                     $scope.contas = data;
                     if($state.params.id) { $scope.editar($scope.conta, $state.params.id); }

@@ -10,7 +10,7 @@ app.directive('favorecido', function(FavorecidoService, ColaboradorService, Forn
             var init = function() {
                 $scope.filter = { name: 'favorecido', args: null };
                 $scope.events = { 'selectItem': selectFavorecido };
-                $scope.favorecidos = $scope.favorecidos || [];
+                $scope.favorecidos = [];
                 favorecidos();
             }       
         
@@ -18,9 +18,9 @@ app.directive('favorecido', function(FavorecidoService, ColaboradorService, Forn
                 FavorecidoService.getAll()
                     .then(function (data) {
                         angular.forEach(data, function(favorecido) {
-                            favorecido.descricao = favorecido.nome;
-                            $scope.favorecidos.push(favorecido);                            
+                            $scope.favorecidos.push(createItem(favorecido));                            
                         });
+                        $scope.favorecidoModel = createItem($scope.favorecidoModel);
                     })
                     .catch(function (e) {
                         console.log(e);
@@ -28,7 +28,13 @@ app.directive('favorecido', function(FavorecidoService, ColaboradorService, Forn
             };
         
             var selectFavorecido = function(favorecido) {
-                $scope.favorecidoModel = favorecido;
+                $scope.favorecidoModel = createItem(favorecido);
+            };
+            
+            var createItem = function(favorecido) {
+                if(!favorecido) return;
+                favorecido.descricao = favorecido.nome;
+                return favorecido;
             };
 
             // ***** COLABORADOR ***** //   

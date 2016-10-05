@@ -14,6 +14,7 @@ app.directive('appTypeahead', function($filter) {
             
             var init = function () { 
                 $scope.dropdownVisible = false;
+                $scope.items = $scope.items || [];
                 setPlaceholder();
                 setName();
                 setKeepGroup();

@@ -30,7 +30,6 @@ public class LancamentoDAO extends GenericDAO {
                                                                + "lancamento.idLancamento = lancamento_transferencia.idLancamentoDestino) "
                    + "LEFT OUTER JOIN lancamento_programado ON(lancamento.idLancamentoProgramado = lancamento_programado.idLancamentoProgramado) "
                    + "WHERE lancamento.idConta = conta.idConta "
-                   + "AND conta.visivel = 1 "
                    + "AND DATE(lancamento.dataLancamento) "
                    + "BETWEEN IFNULL(:dataInicio, DATE(lancamento.dataLancamento)) AND IFNULL(:dataFim, DATE(lancamento.dataLancamento)) "
                    + "ORDER BY lancamento.dataLancamento"; 

@@ -72,16 +72,7 @@
                                     <button class="btn btn-lg btn-primary" type="button" ng-click="openCartaoCredito()"><i class="fa fa-plus-circle"></i></button>
                                 </span>
                             </div>
-                        </div>                        
-                        <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2" ng-if="conta.codigoIntegracao">
-                            <label class="small">Visível</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                <select class="form-control" name="visivel" ng-model="conta.visivel"
-                                        ng-options="item.value as item.label for item in [{ label: 'Não', value: false }, { label: 'Sim', value: true }]">
-                                </select>
-                            </div>
-                        </div>     
+                        </div>    
                     </div>
                 </li>
             </ul>     

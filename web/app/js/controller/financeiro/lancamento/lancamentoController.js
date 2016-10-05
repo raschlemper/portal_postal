@@ -52,7 +52,7 @@ app.controller('LancamentoController',
                 },
                 events: { 
                     edit: function(lancamento) {
-                        if(isAutomatico(lancamento, MESSAGES.lancamento.info.ALTERAR_AUTOMATICO)) return;
+                        if(isAutomatico(lancamento.tipo.modelo, MESSAGES.lancamento.info.ALTERAR_AUTOMATICO)) return;
                         if(validaConciliado(lancamento.idLancamento)) {
                             modalConfirmarConciliado().then(function() {
                                 $scope.editar($scope.conta, lancamento, false);
@@ -62,7 +62,7 @@ app.controller('LancamentoController',
                         }
                     },
                     remove: function(lancamento) {
-                        if(isAutomatico(lancamento, MESSAGES.lancamento.info.EXCLUIR_AUTOMATICO)) return;
+                        if(isAutomatico(lancamento.tipo.modelo, MESSAGES.lancamento.info.EXCLUIR_AUTOMATICO)) return;
                         if(validaConciliado(lancamento.idLancamento)) {
                             modalConfirmarConciliado().then(function() {
                                 $scope.excluir($scope.conta, lancamento);
@@ -129,7 +129,7 @@ app.controller('LancamentoController',
         };
 
         var contas = function() {
-            ContaService.getAllVisivel()
+            ContaService.getAll()
                 .then(function (data) {
                     $scope.contas = data;
                     $scope.conta = $scope.contas[0];
@@ -266,8 +266,8 @@ app.controller('LancamentoController',
             return lancamentosSelecionados;
         };
         
-        var isAutomatico = function(lancamento, msg) {
-            if(lancamento.modelo != $scope.modelos[7].id) return false;
+        var isAutomatico = function(modelo, msg) {
+            if(modelo.id != $scope.modelos[6].id) return false;
             modalMessage(msg);
             return true;
         };

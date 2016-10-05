@@ -45,12 +45,12 @@ app.constant('MESSAGES', {
         info: {
             ALERT: "Alerta Lançamento",
             ALERT_EXCLUIR: "Excluir Lançamento?",
-            ALTERAR_AUTOMATICO: "Este lançamento é automático e não pode ser alterado.!",
+            ALTERAR_AUTOMATICO: "Este lançamento é automático e não pode ser alterado!",
             CONFIRMAR_EXCLUIR: "Deseja realmente excluir este lançamento?",
             CONFIRMAR_EXCLUIR_TODOS: "Deseja realmente excluir estes lançamentos?",
             CONFIRMAR_EXCLUIR_PROGRAMADOS_TODOS: "Deseja realmente excluir estes lançamentos? <br/> Alguns lançamentos parcelados não poderão ser excluídos. É necessário excluir todos os lançamentos posteriores!",
             EXCLUIR_POSTERIOR: "Este lançamento não pode ser excluído. É necessário excluir todos os lançamentos posteriores!",
-            EXCLUIR_AUTOMATICO: "Este lançamento é automático e não pode ser excluído.!",
+            EXCLUIR_AUTOMATICO: "Este lançamento é automático e não pode ser excluído!",
             SEM_LANCAMENTO_SELECIONADO: "Nenhum lançamento foi selecionado!",
             FAVORECIDO_NAO_CADASTRADO: "Este favorecido não esta cadastrado!"
         },

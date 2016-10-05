@@ -30,11 +30,6 @@ public class ContaService {
         return contaDAO.findAll();
     }  
     
-    public List<Conta> findAllVisivel() throws Exception {
-        init();
-        return contaDAO.findAllVisivel();
-    }  
-    
     public Conta find(Integer idConta) throws Exception {
         init();
         return contaDAO.find(idConta);
@@ -82,7 +77,6 @@ public class ContaService {
     public Conta save(Conta conta) throws Exception {
         init();
         conta.setCodigoIntegracao(0);
-        conta.setVisivel(true);
         return contaDAO.save(conta);
     } 
     
@@ -112,8 +106,7 @@ public class ContaService {
         if(conta.getCodigoIntegracao() == null || conta.getCodigoIntegracao() == 0) return conta;
         Conta contaOld = contaDAO.find(conta.getIdConta());
         contaOld.setDataAbertura(conta.getDataAbertura());
-        contaOld.setSaldo(conta.getSaldo());
-        contaOld.setVisivel(conta.getVisivel());
+        contaOld.setValorSaldoAbertura(conta.getValorSaldoAbertura());
         return contaOld;
     }
     
