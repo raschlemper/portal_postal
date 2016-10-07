@@ -1,4 +1,6 @@
 
+
+<%@page import="Emporium.Controle.StarsRatingLogisticaReversa"%>
 <%@page import="Util.FormataString"%>
 <%@page import="Emporium.Controle.ContrLogisticaReversa"%>
 <%@page import="Entidade.LogisticaReversa"%>
@@ -12,6 +14,8 @@
 <%@page import="Controle.contrDestinatario"%>
 <%@page import="Entidade.Destinatario"%>
 <%@page import="Entidade.SenhaCliente"%>
+<%@page import="Entidade.LegendaLogisticaReversa"%>
+<%@page import="java.util.List"%>
 <%@page import = "java.util.ArrayList,java.sql.Timestamp, java.util.Date, java.text.SimpleDateFormat"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -68,6 +72,9 @@
         //ArrayList<LogisticaReversa> lista = ContrLogisticaReversa.consultaReversasByCliente(cli.getCodigo(), nomeBD);
         ArrayList<LogisticaReversa> lista = ContrLogisticaReversa.pesqReversas(cli.getCodigo(), nomeBD, Util.FormatarData.DateToBD(dataOntem), Util.FormatarData.DateToBD(vDataAtual), idDeptos, filtro);
 
+        ContrLogisticaReversa contrLogistica = new ContrLogisticaReversa();
+        List<LegendaLogisticaReversa> stars = contrLogistica.pesquisaLegenda(nomeBD);
+
 %>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -96,7 +103,7 @@
         <link rel="stylesheet" href="../../javascript/plugins/TableSorter/styleSorterV3.css" />
         <script type="text/javascript" src="../../javascript/plugins/TableSorter/scriptSorterV3.js"></script>
         <!-- TableSorter -->
-
+        <script type="text/javascript" src="../../javascript/jx.js"></script>
         <script type="text/javascript">
             $(function () {
                 $("#dataIni").datepicker({
@@ -159,6 +166,42 @@
                     return false;
                 }
             }
+
+            function changeRating(idLogistica, idStar) {
+                var nextId = nextStarId(idStar);
+                $('#imgRating' + idLogistica).attr("src", nextStar(nextId));
+                $('#tdRating' + idLogistica).attr("onclick","changeRating("+idLogistica+","+nextId+")");
+                atualizaIdStar(idLogistica,nextId)
+            }
+            
+            function nextStarId(idStar){
+                var next = idStar + 1;
+                if (next > 5) {
+                    next = 1;
+                }
+                return next;
+            }
+
+            function nextStar(idStar) {
+                var starWhite = "<%=StarsRatingLogisticaReversa.STARWHITE.getPath()%>";
+                var startBlue = "<%=StarsRatingLogisticaReversa.STARBLUE.getPath()%>";
+                var startGray = "<%=StarsRatingLogisticaReversa.STARGRAY.getPath()%>";
+                var starRed = "<%=StarsRatingLogisticaReversa.STARRED.getPath()%>";
+                var starYellow = "<%=StarsRatingLogisticaReversa.STARYELLOW.getPath()%>";
+                var stars = new Array(starWhite, startBlue, startGray, starRed, starYellow);
+                return stars[idStar-1];
+            }
+            
+            function atualizaIdStar(idLogistica,nextStar){
+                JxPost('',JxResult, '../../ServAtualizaRatingLogisticaReversa',getParameter(idLogistica,nextStar),false);
+            }
+
+            function getParameter(idLogistica, idStar) {
+                return "idLogistica=" + idLogistica +
+                        "&rating=" + idStar;
+
+            }
+
         </script>
 
         <title>Portal Postal | Autorizações Geradas</title>
@@ -167,6 +210,9 @@
             .barraArqTable{float: right; margin-top: 2px;}
             .barraArqTable a{background: #1571d7; font-weight: normal; border: 1px solid #297edc; border-bottom: none; font-size: 12px; color: whitesmoke; padding: 3px 5px 6px 5px; margin-left: 5px;}
             .barraArqTable a:hover{background: #2d89ef; border: 1px solid white; border-bottom: none; color: white;}
+            .imgRating{height: 24px;width: 24px; cursor:pointer; }
+            .imgRatingLegend{padding-right: 10px;height: 24px;width: 24px; vertical-align: middle;}
+           
         </style>
     </head>
     <body onload="javascript:document.getElementById('nome').focus();">
@@ -182,7 +228,7 @@
 
                     <div id="titulo1">Autorizações Geradas</div>
 
-                    <ul class="ul_formulario">
+                    <ul class="ul_formulario" style="width:80%">
                         <li class="titulo"><dd><span>MONTE A SUA PESQUISA - <%=filtro%></span></dd></li>
                         <li>
                             <dd>
@@ -232,7 +278,7 @@
                                     <%--<button type="button" class="negative" onclick="teste();"><img src="../../imagensNew/broom.png"/> LIMPAR CAMPOS</button>--%>
                                 </div>
                             </dd>
-                            <dd class="buttons" style="width: 250px; float: right;">
+                            <dd class="buttons" style="width: 250px; ">
                                 <form name="formAtualiza" action="../../ServReversaAtualizar" method="post">                        
                                     <input type="hidden" name="nomeBD" value="<%= nomeBD%>" />
                                     <input type="hidden" name="usuario" value="<%= cli.getLogin_reversa()%>" />
@@ -242,8 +288,27 @@
                                     <button type="submit" onclick="abrirTelaEspera();" class="regular"><img src="../../imagensNew/refresh.png"/><span style="color: red">ATUALIZAR STATUS DA LISTA</span></button>
                                 </form>
                             </dd>
+                               
                         </li>
                     </ul>
+                    <div style="width:17%;float:right;border-left: 1px solid silver;">
+                        <ul class="ul_formulario" style="width: 100%; height: 100px; border-left: 1px solid silver;">
+                        <li class="titulo"><dd><span>LEGENDAS</span></dd></li>
+                        <li>
+                            <dd>
+                                 <% 
+                                    for(LegendaLogisticaReversa star : stars ){
+                                 %>
+                                 <img class="imgRatingLegend"  src="<%=StarsRatingLogisticaReversa.STARGRAY.getByCode(star.getId()).getPath()%>"/><b><%=star.getNome()%></b></br>
+                                <%}%>
+                                
+                            </dd>
+                        </li>
+                     </ul>
+                        
+                       
+                       
+                    </div>
 
                     <br/><br/>
 
@@ -251,72 +316,74 @@
                         Lista de Autorizações Geradas
                     </div>
                     <div style='max-width:100%;overflow:auto;'>
-                    <table cellpadding="0" cellspacing="0" border="0" id="table2" class="tinytable">
-                        <thead>
-                            <tr>
-                                <th><h3>Nº</h3></th>
-                                <th><h3>Depto</h3></th>
-                                <th><h3>Cartão</h3></th>
-                                <th><h3>Qtd.</h3></th>
-                                <th><h3>Nº do Objeto</h3></th>
-                                <th width="50"><h3>AR</h3></th>
-                                <th width="50"><h3>VD</h3></th>
-                                <th><h3>Nome</h3></th>
-                                <th><h3>Cidade / UF</h3></th>
-                                <th><h3>CEP</h3></th>
-                                <th><h3>Data Geração</h3></th>
-                                <th><h3>Data Validade</h3></th>
-                                <th><h3>Status</h3></th>
-                                <th class="nosort" width="60"><h3>Ver</h3></th>
-                                <th class="nosort" width="60"><h3>X</h3></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <%
-                                for (LogisticaReversa l : lista) {
-                                    String ar = "NÃO";
-                                    if (l.getAr() == 1) {
-                                        ar = "SIM";
-                                    }
-                                    String obj = "- - -";
-                                    if (!l.getNumObjeto().equals("")) {
-                                        obj = l.getNumObjeto();
-                                        if(obj.replaceAll("<br/>", "").trim().equals("")){
-                                            obj = obj.replaceAll("<br/>", "<br/> - - -");
+                        <table cellpadding="0" cellspacing="0" border="0" id="table2" class="tinytable">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th><h3>Nº</h3></th>
+                                    <th><h3>Depto</h3></th>
+                                    <th><h3>Cartão</h3></th>
+                                    <th><h3>Qtd.</h3></th>
+                                    <th><h3>Nº do Objeto</h3></th>
+                                    <th width="50"><h3>AR</h3></th>
+                                    <th width="50"><h3>VD</h3></th>
+                                    <th><h3>Nome</h3></th>
+                                    <th><h3>Cidade / UF</h3></th>
+                                    <th><h3>CEP</h3></th>
+                                    <th><h3>Data Geração</h3></th>
+                                    <th><h3>Data Validade</h3></th>
+                                    <th><h3>Status</h3></th>
+                                    <th class="nosort" width="60"><h3>Ver</h3></th>
+                                    <th class="nosort" width="60"><h3>X</h3></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%
+                                    for (LogisticaReversa l : lista) {
+                                        String ar = "NÃO";
+                                        if (l.getAr() == 1) {
+                                            ar = "SIM";
                                         }
-                                    }
-                                    String status = "CANCELADO";
-                                    if (l.getCancelado() == 0) {
-                                        status = l.getDescricaoStatus();
-                                    }
-                            %>
-                            <tr style="cursor:default;">
-                                <td><%= l.getCod_ap()%></td>
-                                <td><%= l.getNomeDepto()%></td>
-                                <td><%= l.getCartao()%></td>
-                                <td align="center"><%= l.getQtdObjeto()%></td>
-                                <td>
-                                    <%--<form name="frm<%= numeroRegistro%>" id="frm<%= numeroRegistro%>" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/multResultado.cfm" target="_blank">
-                                    <form name="frm<%= numeroRegistro%>" id="frm<%= numeroRegistro%>" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/newprint.cfm" target="_blank">--%>
-                                    <form name="frm<%= obj%>" id="frm<%= obj%>" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
-                                        <input type="hidden" name="objetos" id="objetos" value="<%= obj%>" />
-                                    </form>                    
-                                    <a href='#' onclick="document.getElementById('frm<%= obj%>').submit();"><%= obj%></a>
-                                </td>  
-                                <td align="center"><%= ar%></td>
-                                <td>R$ <%= l.getVd()%></td>
-                                <td><%= l.getNome_rem()%></td>
-                                <td><%= l.getCidade_rem() + "/" + l.getUf_rem()%></td>
-                                <td><%= l.getCep_rem()%></td>
-                                <td><%= l.getDataSolicitacao()%></td>
-                                <td><%= l.getValidade()%></td>
-                                <td><%= status%></td>
-                                <td align="center"><a onclick="verReversa(<%= l.getId()%>);" style="cursor:pointer;" ><img src="../../imagensNew/lupa.png" /></a></td>
-                                <td align="center"><%if (l.getCancelado() == 0 && l.getNumObjeto().equals("")) {%><a onclick="excluirRev(<%= l.getId()%>, <%= l.getCod_ap()%>);" style="cursor:pointer;" ><img src="../../imagensNew/cancel.png" /></a><%}%></td>
-                            </tr>
-                            <%}%>
-                        </tbody>
-                    </table>
+                                        String obj = "- - -";
+                                        if (!l.getNumObjeto().equals("")) {
+                                            obj = l.getNumObjeto();
+                                            if(obj.replaceAll("<br/>", "").trim().equals("")){
+                                                obj = obj.replaceAll("<br/>", "<br/> - - -");
+                                            }
+                                        }
+                                        String status = "CANCELADO";
+                                        if (l.getCancelado() == 0) {
+                                            status = l.getDescricaoStatus();
+                                        }
+                                %>
+                                <tr style="cursor:default;">
+                                    <td  id="tdRating<%=l.getId()%>" onclick="changeRating(<%=l.getId()%>,<%=l.getRating()%>)"><img class="imgRating" id="imgRating<%=l.getId()%>" src="<%=StarsRatingLogisticaReversa.STARGRAY.getByCode(l.getRating()).getPath()%>"/></td>
+                                    <td><%= l.getCod_ap()%></td>
+                                    <td><%= l.getNomeDepto()%></td>
+                                    <td><%= l.getCartao()%></td>
+                                    <td align="center"><%= l.getQtdObjeto()%></td>
+                                    <td>
+                                        <%--<form name="frm<%= numeroRegistro%>" id="frm<%= numeroRegistro%>" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/multResultado.cfm" target="_blank">
+                                        <form name="frm<%= numeroRegistro%>" id="frm<%= numeroRegistro%>" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/newprint.cfm" target="_blank">--%>
+                                        <form name="frm<%= obj%>" id="frm<%= obj%>" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
+                                            <input type="hidden" name="objetos" id="objetos" value="<%= obj%>" />
+                                        </form>                    
+                                        <a href='#' onclick="document.getElementById('frm<%= obj%>').submit();"><%= obj%></a>
+                                    </td>  
+                                    <td align="center"><%= ar%></td>
+                                    <td>R$ <%= l.getVd()%></td>
+                                    <td><%= l.getNome_rem()%></td>
+                                    <td><%= l.getCidade_rem() + "/" + l.getUf_rem()%></td>
+                                    <td><%= l.getCep_rem()%></td>
+                                    <td><%= l.getDataSolicitacao()%></td>
+                                    <td><%= l.getValidade()%></td>
+                                    <td><%= status%></td>
+                                    <td align="center"><a onclick="verReversa(<%= l.getId()%>);" style="cursor:pointer;" ><img src="../../imagensNew/lupa.png" /></a></td>
+                                    <td align="center"><%if (l.getCancelado() == 0 && l.getNumObjeto().equals("")) {%><a onclick="excluirRev(<%= l.getId()%>, <%= l.getCod_ap()%>);" style="cursor:pointer;" ><img src="../../imagensNew/cancel.png" /></a><%}%></td>
+                                </tr>
+                                <%}%>
+                            </tbody>
+                        </table>
                     </div>
                     <script type="text/javascript">
                         var sorter2 = new TINY.table.sorter('sorter2', 'table2', {

@@ -5,6 +5,7 @@ package caixapostal.filter;
 
 public class FilterObjetos {
 
+    private Integer idCliente;
     private String nomeDB;
     private String dataIni;
     private String dataFim;
@@ -68,6 +69,14 @@ public class FilterObjetos {
 
     public void setSituacao(String situacao) {
         this.situacao = situacao;
+    }
+
+    public Integer getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(Integer idCliente) {
+        this.idCliente = idCliente;
     }
 
 

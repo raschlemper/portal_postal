@@ -17,11 +17,11 @@ public class Conexao {
     private static final int contConn = 0;
     private static final String PROP_PATH = "/opt/tomcat/webapps/application_config/database.properties";
     //private static final String PROP_PATH = "C:\\Users\\Ricardinho\\Desktop\\database.properties";
-    //private static String HOST = "mysql-01.scc4.com.br";
+    //private static String HOST = "5.189.190.196";
     private static String HOST = "localhost";
     private static String PORT = "3306";
-    private static String USER = "root";
-    private static String PASS = "123456";
+    private static String USER = "smart_bd";
+    private static String PASS = "33m.SMRT";
 
     public static Connection conectar(String nome) {
         try {
@@ -149,8 +149,8 @@ public class Conexao {
                 //HOST = props.getProperty("DatabaseHost", "mysql-01.scc4.com.br");
                 HOST = props.getProperty("DatabaseHost", "localhost");
                 PORT = props.getProperty("DatabasePort", "3306");
-                USER = props.getProperty("DatabaseUser", "root");
-                PASS = props.getProperty("DatabasePass", "123456");
+                USER = props.getProperty("DatabaseUser", "smart_bd");
+                PASS = props.getProperty("DatabasePass", "33m.SMRT");
         
             }
         }

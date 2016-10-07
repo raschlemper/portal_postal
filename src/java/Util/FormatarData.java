@@ -456,7 +456,7 @@ public class FormatarData {
     }
 
     public static String dateTimeFormat(Date data){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         return dateFormat.format(data);
     }
 }

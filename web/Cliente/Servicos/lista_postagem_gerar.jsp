@@ -182,7 +182,7 @@
                                     </th>
                                     <th><h3>Nº PP</h3></th>
                                     <th><h3>Nº do Objeto</h3></th>
-                                    <th><h3>Nº OS</h3></th>
+                                    <th><h3>Nº Lista</h3></th>
                                     <th><h3>Serviço</h3></th>
                                     <th><h3>Destinatário</h3></th>
                                     <th><h3>Endereço</h3></th>

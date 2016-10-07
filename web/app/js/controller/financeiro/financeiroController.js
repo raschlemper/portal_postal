@@ -247,7 +247,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
             var dataFim = data.endOf("month").format('YYYY-MM-DD');
 //            var mesAtual = ListaService.getValue(LISTAS.meses, moment().format('MM')-1);
             $q.all([PlanoContaService.getStructureByTipo($scope.tipos[1].id), 
-                    LancamentoService.getSaldoPlanoConta(dataInicio, dataFim)])
+                    LancamentoService.getSaldoTipoPlanoConta(dataInicio, dataFim, $scope.tipos[1].id)])
                .then(function(values) {  
                     var estruturas = values[0];
                     var saldos = formatPlanoConta(values[1]);

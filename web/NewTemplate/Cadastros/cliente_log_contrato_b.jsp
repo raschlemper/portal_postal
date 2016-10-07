@@ -3,6 +3,7 @@
     Created on : Apr 16, 2015, 10:14:31 AM
     Author     : Fernando
 --%>
+<%@page import="Util.FormataString"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="Controle.ContrClienteContrato"%>
 <%@page import="Controle.contrCliente"%>
@@ -89,18 +90,16 @@
                                     <i class="fa fa-info-circle fa-lg fa-spc"></i>&nbsp;&nbsp;&nbsp;<b>Última Verificação:</b> <%= sdf2.format(log.getDataHora())%>
                                 </div>
                                 <%}%>                                
-                                <form action="../../ServAtualizaContrato" name="formAtualiza" method="post">
-                                    <ul class="list-unstyled" >
+                                <ul class="list-unstyled" >
                                         <li class="list-group-item list-group-heading">
                                             <label>VERIFICAR DADOS DOS CONTRATOS ECT</label>
                                         </li>
                                         <li class="list-group-item">
-                                            <button type="button" onclick="verificaComErro();" class="btn btn-primary"><i class="fa fa-refresh fa-lg fa-spc"></i> VERIFICAR CONTRATOS ECT</button>
+                                            <%--<button type="button" onclick="verificaComErro();" class="btn btn-primary"><i class="fa fa-refresh fa-lg fa-spc"></i> VERIFICAR CONTRATOS ECT</button>--%>
+                                            <button type="button" onclick="verificarContratos();" class="btn btn-primary"><i class="fa fa-refresh fa-lg fa-spc"></i> VERIFICAR CONTRATOS ECT</button>
                                             <input type="hidden" name="comErro" id="comErro" value="0"/>                                                 
                                         </li>
-                                    </ul>
-                                </form>
-
+                                    </ul>                             
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Log da Última Verificação dos Contratos ECT</div>
                                     <div class="panel-body">
@@ -108,7 +107,7 @@
                                             <table class="table table-striped table-bordered table-hover table-condensed" id="dataTables-example">
                                                 <thead>
                                                     <tr>
-                                                        <th width="70">Nº</th>
+                                                        <th width="60">Nº</th>
                                                         <th>Nome Fantasia</th>
                                                         <th width="270">Serviços ECT</th>
                                                         <th width="125">Vigência</th>
@@ -117,7 +116,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-
+                                                    <%--
                                                     <% if (log != null) {
                                                             String[] mgFalha = log.getMsgFalha().split(";");
                                                             String[] cf = log.getCodFalha().split(";");
@@ -217,7 +216,9 @@
                                                             }
                                                     %>
                                                     <tr>
-                                                        <td align="right"><%= c[0]%></td>
+                                                        <td align="right"><%= c[0]%>
+                                                            <input type="hidden" name="idsCli" id="idsCli" value="<%= c[0]%>" />
+                                                        </td>
                                                         <td><%= c[1]%></td>
                                                         <td><%= s%></td>
                                                         <td><%= status%></td>
@@ -225,6 +226,46 @@
                                                         <td align="center"><a href="cliente_contrato_b.jsp?idCliente=<%= c[0]%>" class="btn btn-sm btn-warning" ><i class="fa fa-lg fa-pencil-square-o"></i></a></td>
                                                     </tr>
                                                     <%}}}%>
+                                                    --%>
+                                                    <%
+                                                    ArrayList<Clientes> listaCliente = Controle.contrCliente.getNomeCodigoMetodo(nomeBD, false);            
+                                                    for (Clientes clie : listaCliente) {
+                                                        int temContrato = clie.getTemContrato();
+                                                        String numContrato = clie.getNumContrato();
+                                                        String cartaoPostagem = clie.getCartaoPostagem();
+                                                        if (temContrato == 1
+                                                            && clie.getLogin_sigep() != null 
+                                                            && !clie.getLogin_sigep().trim().equals("")
+                                                            && clie.getSenha_sigep() != null 
+                                                            && !clie.getSenha_sigep().trim().equals("")) {
+
+                                                            numContrato = Long.parseLong(numContrato) + "";
+                                                            cartaoPostagem = Long.parseLong(cartaoPostagem) + "";
+                                                    %>
+                                                    <tr>
+                                                        <td align="right">
+                                                            <%= clie.getCodigo() %>
+                                                            <input type="hidden" name="idsCli" id="idsCli" value="<%= clie.getCodigo() %>" />
+                                                            <input type="hidden" name="contrato<%= clie.getCodigo() %>" id="contrato<%= clie.getCodigo() %>" value="<%= numContrato %>" />
+                                                            <input type="hidden" name="cartao<%= clie.getCodigo() %>" id="cartao<%= clie.getCodigo() %>" value="<%= cartaoPostagem %>" />
+                                                            <input type="hidden" name="login<%= clie.getCodigo() %>" id="login<%= clie.getCodigo() %>" value="<%= clie.getLogin_sigep() %>" />
+                                                            <input type="hidden" name="senha<%= clie.getCodigo() %>" id="senha<%= clie.getCodigo() %>" value="<%= clie.getSenha_sigep() %>" />
+                                                        </td>
+                                                        <td>
+                                                            <%= clie.getNome() %>
+                                                        </td>
+                                                        <td>
+                                                            <div id="servicos<%= clie.getCodigo() %>">---</div>
+                                                        </td>
+                                                        <td>
+                                                            <div id="vigencia<%= clie.getCodigo() %>">---</div>
+                                                        </td>
+                                                        <td>
+                                                            <div id="mensagem<%= clie.getCodigo() %>">---</div>
+                                                        </td>
+                                                        <td align="center"><a href="cliente_contrato_b.jsp?idCliente=<%= clie.getCodigo() %>" class="btn btn-sm btn-warning" target="_blank" ><i class="fa fa-lg fa-pencil-square-o"></i></a></td>
+                                                    </tr>
+                                                    <%}}%>
                                                 </tbody>
                                             </table>
 
@@ -241,7 +282,7 @@
         <script>
 
             function AllTables() {
-                StartDataTable('dataTables-example');
+                //StartDataTable('dataTables-example');
                 LoadSelect2Script(MakeSelectDataTable('dataTables-example'));
                 fechaMsg();
             }
@@ -250,6 +291,59 @@
                 LoadDataTablesScripts(AllTables);
             });
 
+            function verificarContratos() {
+                
+                 $.ajax({
+                            method: "POST",
+                            url: "ajax/atualizaLogContratoSigepWEB.jsp",
+                            data: {idUser: '<%=usrSessao.getIdUsuario() %>', nomeUser: '<%=usrSessao.getNome()%>'},
+                            dataType: 'html'
+                        });
+                
+                
+                $("input[name='idsCli']").each(function() {  // first pass, create name mapping
+                    var idCli =  $(this).attr('value');             
+                    //if(idCli === '2300' || idCli === '2304' || idCli === '2285'){
+                        //console.log('entro ' + idCli);
+                        var contrato = document.getElementById('contrato'+idCli).value;
+                        var cartao = document.getElementById('cartao'+idCli).value;
+                        var loginSigep = document.getElementById('login'+idCli).value;
+                        var senhaSigep = document.getElementById('senha'+idCli).value;
+                        $.ajax({
+                            method: "POST",
+                            url: "ajax/pesquisaClienteContratoSigepWEB.jsp",
+                            data: {numContrato: contrato, cartaoPostagem: cartao, loginSigep: loginSigep, senhaSigep: senhaSigep},
+                            dataType: 'html'
+                        }).done(function(retorno) {
+                            var aux = retorno.split(';');
+                            if (aux[0] !== 'erro') {
+                                if (aux[0] === '1') {                                    
+                                    var msg_dialog = "SigepWEB OK!";
+                                    var validade = "Válido até " + aux[7];
+                                    var servicos = aux[9].split('@').join('<br/>') ;
+                                    
+                                    //console.log(idCli +" - ok: " + validade);
+                                    document.getElementById('servicos'+idCli).innerHTML = servicos;
+                                    document.getElementById('vigencia'+idCli).innerHTML = validade;
+                                    document.getElementById('mensagem'+idCli).innerHTML = msg_dialog;
+                                } else {
+                                    //console.log(idCli +" - erro: " + aux[1]);
+                                    document.getElementById('servicos'+idCli).innerHTML = '';
+                                    document.getElementById('vigencia'+idCli).innerHTML = 'Falha no SigepWEB';
+                                    document.getElementById('mensagem'+idCli).innerHTML = aux[1];
+                                }
+                            } else {
+                                //console.log(idCli +" - erro: " + aux[1]);
+                                document.getElementById('servicos'+idCli).innerHTML = '';
+                                document.getElementById('vigencia'+idCli).innerHTML = 'Falha no SigepWEB';
+                                document.getElementById('mensagem'+idCli).innerHTML = aux[1];
+                            }
+                        });
+                    
+                    //}
+                });
+            }
+            
             function verificaComErro() {
                 bootbox.confirm({
                     title: 'Verificação de Contratos',

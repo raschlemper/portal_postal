@@ -329,6 +329,10 @@
         <servlet-class>Emporium.Servlet.ServPreVenda</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>ServLegendaLogisticaReversa</servlet-name>
+        <servlet-class>Emporium.Servlet.ServLegendaLogisticaReversa</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>ServClienteContrato</servlet-name>
         <servlet-class>Servlet.ServClienteContrato</servlet-class>
     </servlet>
@@ -714,17 +718,21 @@
         <servlet-name>printPDFLabelToken</servlet-name>
         <servlet-class>iReports.printPDFLabelToken</servlet-class>
     </servlet>
-     <servlet>
+    <servlet>
         <servlet-name>ServCaixaPostal</servlet-name>
         <servlet-class>caixapostal.Servlet.ServCaixaPostal</servlet-class>
     </servlet>
-     <servlet>
+    <servlet>
         <servlet-name>ServPreVendaCaixaPostal</servlet-name>
         <servlet-class>caixapostal.Servlet.ServPreVendaCaixaPostal</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ServAlteracaoEndereco</servlet-name>
         <servlet-class>caixapostal.Servlet.ServAlteracaoEndereco</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServAtualizaRatingLogisticaReversa</servlet-name>
+        <servlet-class>Emporium.Servlet.ServAtualizaRatingLogisticaReversa</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ServLogin</servlet-name>
@@ -1215,6 +1223,10 @@
         <url-pattern>/ServImportaImpressaoPLP</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>ServLegendaLogisticaReversa</servlet-name>
+        <url-pattern>/ServLegendaLogisticaReversa</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ServEtiquetasPLP</servlet-name>
         <url-pattern>/ServEtiquetasPLP</url-pattern>
     </servlet-mapping>
@@ -1422,6 +1434,10 @@
     <servlet-mapping>
         <servlet-name>printPDFLabelToken</servlet-name>
         <url-pattern>/printPDFLabelToken</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServAtualizaRatingLogisticaReversa</servlet-name>
+        <url-pattern>/ServAtualizaRatingLogisticaReversa</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -30,12 +30,16 @@ public class CaixaPostalDao implements AutoCloseable {
        
         try {
             PreparedStatement prepare = conn.prepareStatement(montaSqlFilter(filter));
-            prepare.setDate(1, new java.sql.Date(toDate(filter.getDataIni())));
-            prepare.setDate(2, new java.sql.Date(toDate(filter.getDataFim())));
+            prepare.setInt(1, filter.getIdCliente());
+            if (!filter.getSituacao().equals(SituacaoObjetoInterno.PENDENTE.toString())) {
+                prepare.setDate(2, new java.sql.Date(toDate(filter.getDataIni())));
+                prepare.setDate(3, new java.sql.Date(toDate(filter.getDataFim())));
+            }
             ResultSet result = prepare.executeQuery();
 
             while (result.next()) {
                 ObjetoInterno objetoInterno = criaObjetoInterno(result);
+                carregaNumeroDoNovoObjeto(objetoInterno, result);
                 objetosInternos.add(objetoInterno);
             }
 
@@ -49,6 +53,28 @@ public class CaixaPostalDao implements AutoCloseable {
 
     }
 
+    private String montaSqlFilter(FilterObjetos filter) {
+        String sql = " SELECT objeto.*,pre.numObjeto FROM caixa_postal_objetos objeto LEFT JOIN pre_venda pre on pre.id=objeto.idPrePostagem  WHERE objeto.idCliente = ?  ";
+
+        if(!filter.getSituacao().equals(SituacaoObjetoInterno.PENDENTE.toString())){
+            sql += "AND CAST(objeto.dataLancamento AS DATE) BETWEEN ? AND ?";
+        }
+
+        if (!filter.getSituacao().isEmpty() && !filter.getSituacao().equals(SituacaoObjetoInterno.TODOS.toString())) {
+            sql += " AND objeto.situacao = '" + SituacaoObjetoInterno.valueOf(filter.getSituacao()).toString() + "' ";
+        }
+
+        if (filter.getDestinatario() != null && !filter.getDestinatario().trim().isEmpty()) {
+            sql += " AND objeto.destinatarioNome LIKE '%" + filter.getDestinatario() + "%'";
+        }
+        if (filter.getNumeroObjeto() != null && !filter.getNumeroObjeto().trim().isEmpty()) {
+            sql += " AND objeto.numeroObjeto = '" + filter.getNumeroObjeto() + "'";
+        }
+
+        return sql;
+
+    }
+
     private ObjetoInterno criaObjetoInterno(ResultSet result) throws SQLException {
         ObjetoInterno objetoInterno = new ObjetoInterno();
         objetoInterno.setId(result.getInt("id"));
@@ -56,20 +82,28 @@ public class CaixaPostalDao implements AutoCloseable {
         objetoInterno.setNumeroLote(result.getInt("numeroLote"));
         objetoInterno.setDataLancamento(result.getTimestamp("dataLancamento"));
         objetoInterno.setIdPrePostagem(result.getInt("idPrePostagem"));
+        objetoInterno.setMotivo(result.getString("motivo"));
         objetoInterno.setSituacao(getSituacao(result));
+        objetoInterno.setOrigem(result.getString("origem"));
+        objetoInterno.setNumeroPedido(result.getString("numeroPedido"));
         objetoInterno.setRemetente(criaRemetente(result));
         objetoInterno.setDestinatario(criaDestinatario(result));
         return objetoInterno;
     }
 
+    private void carregaNumeroDoNovoObjeto(ObjetoInterno objetoInterno,ResultSet result) throws SQLException{
+        objetoInterno.setNumeroNovoObjeto(result.getString("numObjeto"));
+    }
+
     public void Reenviar(FilterObjetos filter) throws SQLException {
         ObjetoInterno objetoInterno = findById(filter);
         if(isStatusPendente(objetoInterno)){
-            String sql = "UPDATE caixa_postal_objetos set situacao = ?,sincronizado=? WHERE id = ? ";
+            String sql = "UPDATE caixa_postal_objetos set situacao = ?,origem=?,sincronizado=? WHERE id = ? ";
             PreparedStatement prepare = conn.prepareStatement(sql);
             prepare.setString(1, SituacaoObjetoInterno.REENVIAR.toString());
-            prepare.setBoolean(2, false);
-            prepare.setInt(3, filter.getIdObjeto());
+            prepare.setString(2, SituacaoObjetoInterno.REENVIAR.toString());
+            prepare.setBoolean(3, false);
+            prepare.setInt(4, filter.getIdObjeto());
             prepare.executeUpdate();
             registraLogAlteracao(findById(filter));
         }
@@ -78,11 +112,12 @@ public class CaixaPostalDao implements AutoCloseable {
     public void Devolver(FilterObjetos filter) throws SQLException {
         ObjetoInterno objetoInterno = findById(filter);
         if(isStatusPendente(objetoInterno)){
-            String sql = "UPDATE caixa_postal_objetos set situacao = ?,sincronizado=? WHERE id = ? ";
+            String sql = "UPDATE caixa_postal_objetos set situacao = ?,origem=?,sincronizado=? WHERE id = ? ";
             PreparedStatement prepare = conn.prepareStatement(sql);
             prepare.setString(1, SituacaoObjetoInterno.DEVOLVER.toString());
-            prepare.setBoolean(2, false);
-            prepare.setInt(3, filter.getIdObjeto());
+            prepare.setString(2, SituacaoObjetoInterno.DEVOLVER.toString());
+            prepare.setBoolean(3, false);
+            prepare.setInt(4, filter.getIdObjeto());
             prepare.executeUpdate();
             registraLogAlteracao(findById(filter));
 
@@ -113,24 +148,6 @@ public class CaixaPostalDao implements AutoCloseable {
 
     private static String getSituacao(ResultSet result) throws SQLException {
         return SituacaoObjetoInterno.valueOf(result.getString("situacao")).getValue();
-    }
-
-    private String montaSqlFilter(FilterObjetos filter) {
-        String sql = " SELECT * FROM caixa_postal_objetos WHERE CAST(dataLancamento AS DATE) BETWEEN ? AND ? ";
-
-        if (!filter.getSituacao().isEmpty() && !filter.getSituacao().equals("TODOS")) {
-            sql += " AND situacao = '" + SituacaoObjetoInterno.valueOf(filter.getSituacao()).toString() + "' ";
-        }
-
-        if (filter.getDestinatario() != null && !filter.getDestinatario().trim().isEmpty()) {
-            sql += " AND destinatarioNome LIKE '%" + filter.getDestinatario() + "%'";
-        }
-        if (filter.getNumeroObjeto() != null && !filter.getNumeroObjeto().trim().isEmpty()) {
-            sql += " AND numeroObjeto = '" + filter.getNumeroObjeto() + "'";
-        }
-
-        return sql;
-
     }
 
     private boolean isStatusPendente(ObjetoInterno objetoInterno){
@@ -202,7 +219,8 @@ public class CaixaPostalDao implements AutoCloseable {
         prepare.setString(7, novoEndereco.getUf());
         prepare.setString(8,SituacaoObjetoInterno.ATUALIZAR_ENDERECO.toString());
         prepare.setBoolean(9,false);
-        prepare.setInt(10, objetoInterno.getId());
+        prepare.setString(10, SituacaoObjetoInterno.ATUALIZAR_ENDERECO.toString());
+        prepare.setInt(11, objetoInterno.getId());
         
         prepare.execute();
 
@@ -219,7 +237,8 @@ public class CaixaPostalDao implements AutoCloseable {
         buffer.append("destinatarioCidade=?,");
         buffer.append("destinatarioUf=?,");
         buffer.append("situacao=?,");
-        buffer.append("sincronizado=?");
+        buffer.append("sincronizado=?,");
+        buffer.append("origem=? ");
         buffer.append(" WHERE id=?");
         return buffer.toString();
     }
@@ -237,5 +256,7 @@ public class CaixaPostalDao implements AutoCloseable {
     private String sqlAtualizaPrePostagem(){
         return "UPDATE caixa_postal_objetos set idPrePostagem=?,situacao=?,sincronizado=? WHERE id=?";
     }
+
+    
 
 }

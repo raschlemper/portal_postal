@@ -79,6 +79,64 @@ public class ContrPreVenda {
             return idPreVenda;
         }
     }
+    public static int inserir_marcar_impresso(int idCliente, String numObjeto, int idDestinatario, int idRemetente, int codECT, String contrato, String departamento, String aosCuidados, String obs, String conteudo, int peso, int altura, int largura, int comprimento, float vd, int ar, int mp, String siglaAmarracao, String nomeServico, String notaFiscal, float valor_cobrar, String tipo, int idDepartamento, String cartaoPostagem, int idUser, int registro, String nomePreVenda, String email_destinatario, String tipo_etiqueta, String siglaPais, String destino_postagem, String nomeBD, int posta_restante, int registro_modico, String setor) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "INSERT INTO pre_venda (id, numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, userPreVenda, registro, nomePreVenda, email_destinatario, tipo_etiqueta, sigla_pais, destino_postagem, posta_restante, registro_modico, setor, impresso, userImpressao, dataImpressao) values(0,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW(),?,?,?,?,?,?,?,?,?,?,?,1,0,NOW())";
+        if (numObjeto.equals("avista")) {
+            sql = "INSERT INTO pre_venda (numObjeto, idCliente, idDestinatario, idRemetente, codECT, contrato, departamento, aos_cuidados, observacoes, conteudo, peso, altura, largura, comprimento, valor_declarado, aviso_recebimento, mao_propria, siglaAmarracao, nomeServico, notaFiscal, valor_cobrar, tipoEncomenda, idDepartamento, dataPreVenda, cartaoPostagem, userPreVenda, registro, nomePreVenda, email_destinatario, tipo_etiqueta, sigla_pais, destino_postagem, posta_restante, registro_modico, setor, impresso, userImpressao, dataImpressao) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW(),?,?,?,?,?,?,?,?,?,?,?,1,0,NOW())";
+        }
+        Integer idPreVenda = null;
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql,PreparedStatement.RETURN_GENERATED_KEYS);
+            valores.setString(1, numObjeto);
+            valores.setInt(2, idCliente);
+            valores.setInt(3, idDestinatario);
+            valores.setInt(4, idRemetente);
+            valores.setInt(5, codECT);
+            valores.setString(6, contrato);
+            valores.setString(7, departamento);
+            valores.setString(8, FormataString.removeSpecialChars(aosCuidados));
+            valores.setString(9, FormataString.removeSpecialChars(obs));
+            valores.setString(10, FormataString.removeSpecialChars(conteudo));
+            valores.setInt(11, peso);
+            valores.setInt(12, altura);
+            valores.setInt(13, largura);
+            valores.setInt(14, comprimento);
+            valores.setFloat(15, vd);
+            valores.setInt(16, ar);
+            valores.setInt(17, mp);
+            valores.setString(18, siglaAmarracao);
+            valores.setString(19, nomeServico);
+            valores.setString(20, notaFiscal);
+            valores.setFloat(21, valor_cobrar);
+            valores.setString(22, tipo);
+            valores.setInt(23, idDepartamento);
+            valores.setString(24, cartaoPostagem);
+            valores.setInt(25, idUser);
+            valores.setInt(26, registro);
+            valores.setString(27, nomePreVenda);
+            valores.setString(28, email_destinatario);
+            valores.setString(29, tipo_etiqueta);
+            valores.setString(30, siglaPais);
+            valores.setString(31, destino_postagem);
+            valores.setInt(32, posta_restante);
+            valores.setInt(33, registro_modico);
+            valores.setString(34, setor);
+            valores.executeUpdate();
+            ResultSet result = valores.getGeneratedKeys();
+            if(result.next()){
+                idPreVenda = result.getInt(1);
+            }
+            valores.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ContrErroLog.inserir("HOITO - contrContato", "SQLException", sql, e.toString());
+
+        } finally {
+            Conexao.desconectar(conn);
+            return idPreVenda;
+        }
+    }
 
     public static boolean alterar(int idCliente, String numObjeto, int idDestinatario, int idRemetente, int codECT, String contrato, String departamento, String aosCuidados, String obs, String conteudo, int peso, int altura, int largura, int comprimento, float vd, int ar, int mp, String siglaAmarracao, String nomeServico, String notaFiscal, float valor_cobrar, String tipo, int idDepartamento, String cartaoPostagem, int idUser, int id, int registro, String nomePreVenda, String tipo_etiqueta, String email, int rm, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);

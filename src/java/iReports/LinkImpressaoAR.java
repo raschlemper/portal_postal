@@ -5,7 +5,6 @@
  */
 package iReports;
 
-import Controle.contrCliente;
 import Entidade.Clientes;
 import Entidade.DadosEtiqueta;
 import Util.Conexao;
@@ -114,7 +113,7 @@ public class LinkImpressaoAR extends HttpServlet {
                     contrato = cli.getNumContrato();
                 }
 
-                String url_base = "http://localhost:8080/PortalPostal";
+                String url_base = "http://www.portalpostal.com.br";
                 String url = cli.getUrl_logo();
                 if (cli.getUrl_logo() == null || cli.getUrl_logo().trim().equals("") || cli.getUrl_logo().equals("null")) {
                     url = "";

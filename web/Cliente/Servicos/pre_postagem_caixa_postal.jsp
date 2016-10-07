@@ -104,6 +104,11 @@ ObjetoInterno objetoInterno = caixaPostalDao.findById(filter);
         <!-- TableSorter -->
 
         <script type="text/javascript">
+        var fechar = '<%=request.getParameter("enviado")%>';
+        if(fechar=='true'){
+            window.parent.chamaDivProtecao(true);
+        }
+            
             jQuery(document).ready(function ($) {
                 $(window).load(function () {
                     $('nome').val(' ');
@@ -1731,9 +1736,6 @@ ObjetoInterno objetoInterno = caixaPostalDao.findById(filter);
         return (($(this).val() == '<%=objetoInterno.getDestinatario().getUf()%>') || ($(this).text() == '<%=objetoInterno.getDestinatario().getUf()%>'));
     }).prop('selected', true);
     $('#uf').val('<%=objetoInterno.getDestinatario().getUf()%>');
-    var fechar = '<%=request.getParameter("enviado")%>';
-    if(fechar=='true'){
-        window.parent.chamaDivProtecao(true);
-    }
+    
 </script>
 <%}%>

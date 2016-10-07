@@ -47,6 +47,10 @@
                     <input name="cep_d" id="cep_d" size="6" maxlength="9" onkeypress="mascara(this, maskCep)"/>
                 </dd>
                 <dd>
+                    <label>CIDADE</label>
+                    <input name="cidade_d" id="cidade_d" size="25"/>
+                </dd>
+                <dd>
                     <label>TAGS</label>
                     <input name="tags_d" id="tags_d" size="39" />
                 </dd>

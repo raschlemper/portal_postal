@@ -58,8 +58,7 @@ public enum TipoConexao {
     PRODUCTION() {
         protected String url(String nome) {
             //return String.format(URL, "mysql-01.scc4.com.br", 3306, nome);
-            //return String.format(URL, "localhost", 3306, nome);
-            return String.format(URL, "scc4.com.br", 3306, nome);
+            return String.format(URL, "5.189.190.196", 3306, nome);
         }
 
         protected String username() {

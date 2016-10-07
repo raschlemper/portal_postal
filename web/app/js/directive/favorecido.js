@@ -10,7 +10,7 @@ app.directive('favorecido', function(FavorecidoService, ColaboradorService, Forn
             var init = function() {
                 $scope.filter = { name: 'favorecido', args: null };
                 $scope.events = { 'selectItem': selectFavorecido };
-                $scope.favorecidos = [];
+                $scope.favorecidos = $scope.favorecidos || [];
                 favorecidos();
             }       
         

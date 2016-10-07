@@ -19,6 +19,8 @@ public class ObjetoInterno {
     private boolean sincronizado;
     private String situacao;
     private Integer idPrePostagem;
+    private String origem;
+    private String numeroNovoObjeto;
 
     public DadosAdicionais getRemetente() {
         return remetente;
@@ -138,6 +140,22 @@ public class ObjetoInterno {
 
     public void setIdPrePostagem(Integer idPrePostagem) {
         this.idPrePostagem = idPrePostagem;
+    }
+
+    public String getOrigem() {
+        return origem;
+    }
+
+    public void setOrigem(String origem) {
+        this.origem = origem;
+    }
+
+    public String getNumeroNovoObjeto() {
+        return numeroNovoObjeto;
+    }
+
+    public void setNumeroNovoObjeto(String numeroNovoObjeto) {
+        this.numeroNovoObjeto = numeroNovoObjeto;
     }
 
 

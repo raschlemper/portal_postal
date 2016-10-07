@@ -14,6 +14,8 @@
     String nome = (String) request.getParameter("nome");
     String objeto = (String) request.getParameter("objeto");
     String situacao = (String) request.getParameter("situacao");
+    Integer idCliente = Integer.parseInt(String.valueOf(session.getAttribute("idCliente")));
+
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     Date dataAtual = new Date();
@@ -32,6 +34,7 @@
     filter.setDestinatario(nome);
     filter.setNumeroObjeto(objeto);
     filter.setSituacao(situacao);
+    filter.setIdCliente(idCliente);
 
     CaixaPostalDao caixaPostalDao = new CaixaPostalDao(filter.getNomeDB());
     List<ObjetoInterno> objetosInternos = caixaPostalDao.procuraObjetos(filter);
@@ -41,23 +44,20 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
-        <title>Portal Postal | Solicitar Coleta</title>
+        <title>Portal Postal | Objetos Caixa Postal</title>
         <meta name="keywords" content="" />
         <meta name="description" content="" />
 
+     
         <link href="../../css/estilo.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="../js/ajax_portal.js"></script>
         <script type="text/javascript" src="../../javascript/mascara.js"></script>
-        <script type="text/javascript" src="../../javascript/ajax.js"></script>
-        <script type="text/javascript" src="../../javascript/jsContato.js"></script>
 
         <link type="text/css" href="../../javascript/jquery/css/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
         <script type="text/javascript" src="../../javascript/jquery/js/jquery-1.6.2.min.js"></script>
         <script type="text/javascript" src="../../javascript/jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
         <script type="text/javascript" src="../../javascript/jquery/js/jquery.ui.datepicker-pt-BR.js"></script>
-        <script type="text/javascript" src="../../javascript/plugins/timepicker/jquery.clockpick.1.2.7.js"></script>
-        <link href="../../javascript/plugins/timepicker/jquery.clockpick.1.2.7.css" rel="stylesheet" type="text/css" />
-
+        
         <!-- FUSION CHARTS -->
         <script type="text/javascript" src="../../javascript/plugins/HighCharts/js/highcharts.js"></script>
         <script type="text/javascript" src="../../javascript/plugins/HighCharts/js/themes/grid.js"></script>
@@ -71,7 +71,14 @@
         <link rel="stylesheet" href="../../javascript/plugins/dropdown/css/style.css" type="text/css" media="screen, projection"/>
         <!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="../../javascript/plugins/dropdown/css/ie.css" media="screen" /><![endif]-->
         <script type="text/javascript" src="../../javascript/plugins/dropdown/js/jquery.dropdownPlain.js"></script>
-    </head>
+        <script type="text/javascript" src="../../javascript/ajax.js"></script>
+ </head>
+ <style type="text/css">
+     input[type="text"]{
+        height: 22px !important;
+     }
+     
+ </style>
     <body>
 
         <div id="divInteracao" style="margin:0 auto; width: 90%;height: 650px" class="esconder" align="center"></div>
@@ -84,7 +91,7 @@
         <div id="divPrincipal" align="center">
             <div id="container">
                 <div id="conteudo">
-                    <form name="form"  method="post">
+                 <form name="form"  method="post"> 
                         <ul class="ul_formulario">
                             <li class="titulo">
                             <dd>PESQUISAR OBJETOS</dd>
@@ -106,7 +113,7 @@
                             </dd>
                             <dd>
                                 <label>Situação:</label>
-                                <select name="situacao">
+                                <select id="filtroSituacao" name="situacao" >
                                     <option  value="TODOS">TODOS</option>
                                     <option <%=situacao.toUpperCase().equals("PENDENTE") ? "selected" : ""%>  value="PENDENTE">PENDENTE</option>
                                     <option <%=situacao.toUpperCase().equals("DEVOLVER") ? "selected" : ""%>  value="DEVOLVER">DEVOLVER</option>
@@ -115,15 +122,15 @@
                                 </select>
                             </dd>
                             <dd>
-                                <br>
-                                <button  type="button" class="regular" onclick="submit();
-                                            "><img src="../../imagensNew/lupa.png">PESQUISA</button>
+                                <div class="buttons">
+                                     <button  type="button" class="regular" onclick="submit();"><img src="../../imagensNew/lupa.png">PESQUISA</button>
+                                </div>
                             </dd>
 
                             </li>
 
                         </ul>
-                    </form>
+                    </form> 
                     <form id="formReenviarDevolver" name="formReenviarDevolver" method="post" action="../../ServCaixaPostal" >
                         <input id="idObjeto" name="idObjeto" type="hidden" />
                         <input id="situacao" name="situacao" type="hidden" />
@@ -132,19 +139,20 @@
                     <table cellpadding="0" cellspacing="0" border="0" id="table2" class="tinytable">
                         <thead>
                             <tr>
-                                <th width="150"><h3>Data lançamento</h3></th>
-                        <th width="150"><h3>Número objeto</h3></th>
-                        <th><h3>Remetente</h3></th>
-                        <th><h3>Destinatário</h3></th>
-                        <th width="100"><h3>Situação</h3></th>
-                        <th width="48"><h3>Reenviar</h3></th>
-                        <th width="48"><h3>Devolver</h3></th>
+                                <th width="80"><h3>Data</h3></th>
+                        <th width="100"><h3>OBJETO</h3></th>
+                        <th width="100"><h3>NOVO OBJETO</h3></th>
+                        <th><h3>NF/PEDIDO</h3></th>
+                        <th><h3>DESTINATÁRIO</h3></th>
+                        <th><h3>MOTIVO</h3></th>
+                        <th width="80"><h3>SITUAÇÃO</h3></th>
+                        <th width="48"><h3>REENVIAR</h3></th>
+                        <th width="48"><h3>DEVOLVER</h3></th>
                         </tr>
                         </thead>
                         <tbody>
                             <%
                                 for (ObjetoInterno objetoInterno : objetosInternos) {
-                                    boolean editavel = objetoInterno.getSituacao().equals(SituacaoObjetoInterno.PENDENTE.toString()) ? true : false;
                                     String situacaoHtml = "";
                                     if (objetoInterno.getSituacao().equals(SituacaoObjetoInterno.PENDENTE.toString())) {
                                         situacaoHtml = "<font color=\"red\">" + objetoInterno.getSituacao() + "</font>";
@@ -153,7 +161,13 @@
                                             || objetoInterno.getSituacao().equals(SituacaoObjetoInterno.REENVIAR.toString())) {
                                         situacaoHtml = "<font color=\"green\">" + objetoInterno.getSituacao() + "</font>";
                                     } else if (objetoInterno.getSituacao().equals(SituacaoObjetoInterno.FINALIZADO.toString())) {
-                                        situacaoHtml = "<font color=\"blue\">" + objetoInterno.getSituacao() + "</font>";
+                                        if(SituacaoObjetoInterno.REENVIAR.toString().equals(objetoInterno.getOrigem())){
+                                            situacaoHtml = "<font color=\"blue\">REENVIO FINALIZADO</font>";
+                                        }else if(SituacaoObjetoInterno.DEVOLVER.toString().equals(objetoInterno.getOrigem())){
+                                            situacaoHtml = "<font color=\"blue\">DEVOLUÇÃO FINALIZADA</font>";
+                                        }else{
+                                            situacaoHtml = "<font color=\"blue\">FINALIZADA</font>";
+                                        }
                                     }
                             %>
                             <tr>
@@ -164,8 +178,15 @@
                                     </form>                    
                                     <a href='#' onclick="document.getElementById('frm<%= objetoInterno.getNumeroObjeto()%>').submit();"><%= objetoInterno.getNumeroObjeto()%></a>
                                 </td>
-                                <td><%=objetoInterno.getRemetente().getNome()%></td>
+                                <td>
+                                    <form name="frm<%=objetoInterno.getNumeroNovoObjeto()==null?"":objetoInterno.getNumeroNovoObjeto()%>" id="frm<%=objetoInterno.getNumeroNovoObjeto()==null?"":objetoInterno.getNumeroNovoObjeto()%>" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
+                                        <input type="hidden" name="objetos" id="objetos" value="<%=objetoInterno.getNumeroNovoObjeto()==null?"":objetoInterno.getNumeroNovoObjeto()%>" />
+                                    </form>                    
+                                    <a href='#' onclick="document.getElementById('frm<%= objetoInterno.getNumeroNovoObjeto()==null?"":objetoInterno.getNumeroNovoObjeto()%>').submit();"><%=objetoInterno.getNumeroNovoObjeto()==null?"":objetoInterno.getNumeroNovoObjeto()%></a>
+                                </td>
+                                <td><%=objetoInterno.getNumeroPedido()%></td>
                                 <td><%=objetoInterno.getDestinatario().getNome()%></td>
+                                <td><%=objetoInterno.getMotivo()%></td>
                                 <td><%=situacaoHtml%>
 
                                 </td>
@@ -254,7 +275,9 @@
             showAnim: "slideDown"
         });
     });
-
+    
+    
+    
 
 
 </script>

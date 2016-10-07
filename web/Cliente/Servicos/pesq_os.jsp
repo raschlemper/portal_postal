@@ -180,7 +180,7 @@
                         <table cellpadding="0" cellspacing="0" border="0" id="table2" class="tinytable">
                             <thead>
                                 <tr>
-                                    <th><h3>Nº</h3></th>
+                                    <th><h3>Nº Lista</h3></th>
                                     <th><h3>Data</h3></th>
                                     <th><h3>QTD. de Objetos</h3></th>
                                     <th><h3>Responsável</h3></th>

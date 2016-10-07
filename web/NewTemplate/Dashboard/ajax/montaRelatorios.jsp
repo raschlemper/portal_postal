@@ -143,7 +143,7 @@
                             + " WHERE dataPostagem >= '" + dataIni + "' "
                             + " AND dataPostagem <= '" + dataFim + "' "
                             + " AND contratoEct <> '' AND contratoEct <> 0 "
-                            + " GROUP BY m.cartaoPostagem"
+                            + " GROUP BY m.codCliente, m.cartaoPostagem"
                             + " UNION"
                             + " SELECT '999999999 ' AS COD, 'TOTAL GERAL', ' ',"
                             + " REPLACE(REPLACE(REPLACE(FORMAT(SUM(valorServico), 2),'.',';'),',','.'),';',',')"

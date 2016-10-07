@@ -64,7 +64,23 @@ app.directive('appParcelar', function(DatePickerService, FrequenciaLancamentoSer
 //                    dataCompetencia = FrequenciaLancamentoService.addData(frequencia, dataCompetencia);
                     dataVencimento = FrequenciaLancamentoService.addData(frequencia.id, dataVencimento);
                 }
+                ajustesCentavosParcelas(lancamentoParcelar.valor, lancamentoParcelar.parcelas);
             };
+            
+            var ajustesCentavosParcelas = function(valorLancamento, parcelas) {
+                if(!parcelas || !parcelas.length) return;
+                var valorTotal = 0;
+                parcelas.map(function(parcela) {
+                    valorTotal += toFixe(parcela.valor, 2);
+                });
+                if(valorTotal !== valorLancamento) { 
+                    parcelas[0].valor += valorLancamento - valorTotal;
+                }
+            };
+        
+            var toFixe = function(value, fixe) {
+                return parseFloat(value.toFixed(fixe));
+            } 
             
             $scope.disabledNumeroParcela = function(parcelas) {
                 if(!parcelas) return false;

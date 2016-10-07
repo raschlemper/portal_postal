@@ -59,7 +59,9 @@ app.directive('appTypeahead', function($filter) {
                 var parents = [];
                 var results = lista.filter(function(item) {
                     if(item.keep) return true;
-                    var parse = (item[$scope.field].toLowerCase().indexOf(search.toLowerCase()) > -1);
+                    var itemLabel = removeAccents(angular.copy(item[$scope.field]));
+                    var searchLabel = removeAccents(angular.copy(search));
+                    var parse = (itemLabel.toLowerCase().indexOf(searchLabel.toLowerCase()) > -1);
                     if(parse) { parents.push(item.parent); }
                     return parse;
                 });
@@ -80,6 +82,25 @@ app.directive('appTypeahead', function($filter) {
                 if($scope.filter){ value = $filter($scope.filter.name)(item, $scope.filter.args); }
                 return value;
             };
+            
+            var removeAccents = function(source) {
+                var accent = [
+                    /[\300-\306]/g, /[\340-\346]/g, // A, a
+                    /[\310-\313]/g, /[\350-\353]/g, // E, e
+                    /[\314-\317]/g, /[\354-\357]/g, // I, i
+                    /[\322-\330]/g, /[\362-\370]/g, // O, o
+                    /[\331-\334]/g, /[\371-\374]/g, // U, u
+                    /[\321]/g, /[\361]/g, // N, n
+                    /[\307]/g, /[\347]/g, // C, c
+                ],
+                noaccent = ['A','a','E','e','I','i','O','o','U','u','N','n','C','c'];
+
+                for (var i = 0; i < accent.length; i++){
+                    source = source.replace(accent[i], noaccent[i]);
+                }
+
+                return source;
+            }
             
             init();
         }

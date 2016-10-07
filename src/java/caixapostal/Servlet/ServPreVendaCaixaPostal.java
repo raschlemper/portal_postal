@@ -266,7 +266,7 @@ public class ServPreVendaCaixaPostal extends HttpServlet {
                 //codECT = ContrServicoCombo.consultaCodCombo(codECT, ar, mp, vd);
                 
                 //INSERE PRE VENDA 
-                Integer idPrePostagem =  ContrPreVenda.inserir(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD, posta_restante, registro_modico, setor);
+                Integer idPrePostagem =  ContrPreVenda.inserir_marcar_impresso(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD, posta_restante, registro_modico, setor);
                 
                 ObjetoInterno objetoInterno = new ObjetoInterno();
                 objetoInterno.setId(Integer.parseInt(idObjetoCaixaPostal));
