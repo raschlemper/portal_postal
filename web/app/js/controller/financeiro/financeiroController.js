@@ -51,6 +51,13 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
             return parseFloat(value.toFixed(fixe));
         } 
         
+        var formatterTooltip = function(x, y, series) {
+            var label = '';
+            if(x) { label += '<b>' + x + '</b><br/>'; }
+            label += series.name + ': <b>' + $filter('currency')(y.toFixed(2), 'R$ ') + '</b>';
+            return label;
+        }
+        
         // Contas /////
         
         var initContas = function() {
@@ -99,7 +106,12 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
             $scope.configChartReceitaDespesa.push({ 
                 title: " ",
                 options: { 
-                    chart: { "type": "column" }
+                    chart: { "type": "column" },
+                    tooltip: {
+                        formatter: function() {
+                            return formatterTooltip(this.x, this.y, this.series);
+                        }
+                    }
                 },
                 xAxis: {
                     categories: getDescricaoMeses(meses),
@@ -225,6 +237,11 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                             showInLegend: true
                         }
                     },
+                    tooltip: {
+                        formatter: function() {
+                            return formatterTooltip(this.x, this.y, this.series);
+                        }
+                    }
                 },
                 series: [{                        
                     name: 'Saldo',
@@ -327,6 +344,11 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                             }
                         }
                     },
+                    tooltip: {
+                        formatter: function() {
+                            return formatterTooltip(this.x, this.y, this.series);
+                        }
+                    }
                 },
                 xAxis: {
                     categories: categorias,

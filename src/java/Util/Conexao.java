@@ -20,8 +20,8 @@ public class Conexao {
     //private static String HOST = "5.189.190.196";
     private static String HOST = "localhost";
     private static String PORT = "3306";
-    private static String USER = "smart_bd";
-    private static String PASS = "33m.SMRT";
+    private static String USER = "root";
+    private static String PASS = "123456";
 
     public static Connection conectar(String nome) {
         try {
