@@ -7,10 +7,22 @@ app.directive('centroCusto', function(CentroCustoService, ListaService, Financei
         link: function($scope, element, attr, controller) {  
             
             var init = function() {
+                $scope.showTypeFilter = false;  
+                $scope.validarSelected = true;  
                 $scope.filter = { name: 'centroCusto', args: null };
                 $scope.events = { 'selectItem': selectCentroCusto };
+                setTypeFilter();
+                setValidarSelected();
                 centroCustos(); 
-            }        
+            };
+                        
+            var setTypeFilter = function() {
+                if(attr.showTypeFilter) { $scope.showTypeFilter = (attr.showTypeFilter === "true"); }
+            };       
+                        
+            var setValidarSelected = function() {
+                if(attr.validarSelected) { $scope.validarSelected = (attr.validarSelected === "true"); }
+            };    
         
             var centroCustos = function() {
                 CentroCustoService.getStructure()
@@ -29,7 +41,7 @@ app.directive('centroCusto', function(CentroCustoService, ListaService, Financei
                 if($scope.centroCustoModel) {
                     $scope.centroCustoModel = ListaService.getCentroCustoValue(angular.copy($scope.centroCustos), $scope.centroCustoModel.idCentroCusto);
                 }                 
-            }
+            };
         
             var selectCentroCusto = function(centroCusto) {
                 if(!validarCentroCusto(centroCusto)) return;
@@ -37,6 +49,7 @@ app.directive('centroCusto', function(CentroCustoService, ListaService, Financei
             };
         
             var validarCentroCusto = function(centroCusto) {
+                if(!$scope.validarSelected) return true;
                 return FinanceiroValidation.centroCustoResultado($scope.centroCustos, centroCusto);
             };
             

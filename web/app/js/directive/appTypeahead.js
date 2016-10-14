@@ -13,11 +13,13 @@ app.directive('appTypeahead', function($filter) {
         link: function($scope, element, attr, controller) {                
             
             var init = function () { 
+                $scope.showTypeFilter = false;  
                 $scope.dropdownVisible = false;
                 $scope.items = $scope.items || [];
                 setPlaceholder();
                 setName();
                 setKeepGroup();
+                setTypeFilter();
             };
                         
             var setPlaceholder = function() {
@@ -31,7 +33,11 @@ app.directive('appTypeahead', function($filter) {
             var setKeepGroup = function() {
                 if(attr.keepGroup) { $scope.keepGroup = (attr.keepGroup === "true"); }
                 else { $scope.keepGroup = false; }
-            };
+            };     
+                        
+            var setTypeFilter = function() {
+                if(attr.showTypeFilter) { $scope.showTypeFilter = (attr.showTypeFilter === "true"); }
+            };  
             
             $scope.setVisible = function(visible) {
                 $scope.dropdownVisible = visible; 

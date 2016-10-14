@@ -3226,6 +3226,11 @@ table.table-condensed tbody tr td.cel-menu {
     border-top: 1px solid #CCC; 
     font-size: 16pt;
 }
+.title-line {
+    margin-bottom: 20px; 
+    border-bottom: 1px solid #CCC; 
+    font-size: 16pt;
+}
 .text-primary {
     color: #337ab7 !important;
 }

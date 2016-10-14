@@ -92,10 +92,16 @@ app.controller('LancamentoController',
         };
 
         $scope.filter = function(lista, search) { 
+            var tipoSelected = (search.tipo ? JSON.parse(search.tipo) : search.tipo);
+            var planoContaSelected = (search.planoConta ? PlanoContaService.getChildrenListPlanoConta(null, search.planoConta) : search.planoConta);
+            var centroCustoSelected = (search.centroCusto ? CentroCustoService.getChildrenListCentroCusto(null, search.centroCusto) : search.centroCusto);
             lista = _.filter(lista, function(item) {
-                return filterByData(item, search);
+                return filterByData(item, search) && 
+                       filterTipo(item, tipoSelected) && 
+                       filterByPlanoConta(item, planoContaSelected) &&
+                       filterByCentroCusto(item, centroCustoSelected);
             });    
-            lista = filterTipo(lista, search);
+//            lista = filterTipo(lista, search);
             return lista;
         };
 
@@ -108,13 +114,27 @@ app.controller('LancamentoController',
                     || (data.isSame(search.dataInicio) || data.isSame(search.dataFim)));
         };  
 
-        var filterTipo = function(lista, search) {          
-            if(!search.tipo) return lista;
-            var tipo = JSON.parse(search.tipo); 
-            lista = _.filter(lista, function(item) {
-                return item.tipo.id === tipo.id;
-            });
-            return lista;
+        var filterTipo = function(item, tipoSelected) {          
+            if(!tipoSelected) return true;
+            return item.tipo.id === tipoSelected.id;
+        };  
+
+        var filterByPlanoConta = function(item, planoContaSelected) {          
+            if(!planoContaSelected) return true;
+            var selected = false;
+            planoContaSelected.map(function(conta) {                
+                if(item.planoConta && item.planoConta === conta.descricao) { selected = true; }
+            })
+            return selected;
+        };
+
+        var filterByCentroCusto = function(item, centroCustoSelected) {          
+            if(!centroCustoSelected) return true;
+            var selected = false;
+            centroCustoSelected.map(function(custo) {                
+                if(item.centroCusto && item.centroCusto === custo.descricao) { selected = true; }
+            })
+            return selected;
         };
         
         $scope.filterByDays = function(days) {

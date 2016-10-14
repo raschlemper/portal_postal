@@ -13,7 +13,8 @@
             typeahead-on-select="selectPlanoConta($item)" 
             typeahead="planoConta.descricao for planoConta in planoContas | filter:{descricao:$viewValue} | limitTo:10">
 </div>-->
-<label class="small">Plano de Conta</label>
+<label class="small" ng-if="!showTypeFilter">Plano de Conta</label>
+<label ng-if="showTypeFilter">Plano de Conta:</label>
 <app-typeahead item-model="planoContaModel" 
                items="planoContas" 
                filter="filter"
@@ -21,5 +22,6 @@
                field="descricao"
                placeholder="Plano de conta" 
                name="planoConta"
-               keep-group="true">                      
+               keep-group="true"
+               show-type-filter="{{showTypeFilter}}">                      
 </app-typeahead>

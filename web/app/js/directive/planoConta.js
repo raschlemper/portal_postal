@@ -7,14 +7,26 @@ app.directive('planoConta', function(PlanoContaService, ListaService, Financeiro
         link: function($scope, element, attr, controller) {  
             
             var init = function() {
+                $scope.showTypeFilter = false;  
+                $scope.validarSelected = true;  
                 $scope.filter = { name: 'planoConta', args: null };
                 $scope.events = { 'selectItem': selectPlanoConta };
+                setTypeFilter();
+                setValidarSelected();
                 if($scope.tipo) {
                     planoContasByTipo($scope.tipo);
                 } else {
                     planoContas();                    
                 }
-            }        
+            }; 
+                        
+            var setTypeFilter = function() {
+                if(attr.showTypeFilter) { $scope.showTypeFilter = (attr.showTypeFilter === "true"); }
+            };       
+                        
+            var setValidarSelected = function() {
+                if(attr.validarSelected) { $scope.validarSelected = (attr.validarSelected === "true"); }
+            }; 
         
             var planoContas = function() {
                 PlanoContaService.getStructure()
@@ -43,14 +55,15 @@ app.directive('planoConta', function(PlanoContaService, ListaService, Financeiro
                 if($scope.planoContaModel) {
                     $scope.planoContaModel = ListaService.getPlanoContaValue(angular.copy($scope.planoContas), $scope.planoContaModel.idPlanoConta);
                 }                 
-            }
+            };
         
             var selectPlanoConta = function(planoConta) {
                 if(!validarPlanoConta(planoConta)) return;
                 $scope.planoContaModel = planoConta;
-            }
+            };
         
             var validarPlanoConta = function(planoConta) {
+                if(!$scope.validarSelected) return true;
                 return FinanceiroValidation.planoContaResultado($scope.planoContas, planoConta);
             };
             

@@ -51,7 +51,19 @@ app.factory('CentroCustoService', function($http, PromiseService) {
             else { code = estrutura; }
         });
         return code;
-    }
+    };
+            
+    var getChildrenListCentroCusto = function(list, planoConta) {
+        var listSelected = list || [];
+        if(!planoConta.contas) { listSelected.push(planoConta); }
+        else { 
+            planoConta.contas.map(function(conta) {
+                if(conta.ehGrupo) { getListPlanoConta(listSelected, conta); }
+                else { listSelected.push(conta); }
+             });
+         }     
+        return listSelected;
+    };
         
     return {
 
@@ -110,7 +122,9 @@ app.factory('CentroCustoService', function($http, PromiseService) {
             getEstrutura(estruturas);
         }, 
         
-        report: report
+        report: report,
+        
+        getChildrenListCentroCusto: getChildrenListCentroCusto
 
     }
 

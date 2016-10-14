@@ -54,19 +54,19 @@
                                         <div class="form-inline pull-left">
                                             
                                             <div class="form-group">
-                                                
+
                                                 <label>Conta:</label>
                                                 <select class="form-control spc-right" ng-model="lancSearch.conta">    
                                                     <option value=""> Todos </option> 
                                                     <option value="{{conta}}" ng-repeat="conta in contas track by conta.idConta"> {{conta.nome}} </option>    
                                                 </select>
-                                                
+
                                                 <label>Tipo:</label>
                                                 <select class="form-control spc-right" ng-model="lancSearch.tipo">
                                                     <option value=""> Todos </option> 
-                                                    <option value="{{tipo.codigo}}" ng-repeat="tipo in tiposLancamento track by $index"> {{tipo.descricao}} </option>        
+                                                    <option value="{{tipo}}" ng-repeat="tipo in tiposLancamento track by $index"> {{tipo.descricao}} </option>        
                                                 </select>
-                                                
+
                                                 <label>Data:</label>
                                                 <div class="input-group spc-right">
                                                     <input type="text" autocomplete="off" class="form-control" ng-model="lancSearch.dataInicio" style="width: 120px;"
@@ -82,8 +82,11 @@
                                                     <span class="input-group-addon" ng-click="datepickerDataFim.open($event)"><i class="fa fa-calendar"></i></span>
                                                 </div>
                                                 
-                                            </div>                                            
-                                            
+                                                <plano-conta class="spc-right" plano-conta-model="lancSearch.planoConta" show-type-filter="true" validar-selected="false"></plano-conta>
+                                                <centro-custo class="spc-right" centro-custo-model="lancSearch.centroCusto" show-type-filter="true" validar-selected="false"></centro-custo>
+                                               
+                                            </div>
+                                                                                        
                                         </div>
                                     </filter-content>                                    
                                     

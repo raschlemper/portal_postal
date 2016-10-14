@@ -1,6 +1,6 @@
 
 <div class="input-group">
-    <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+    <span class="input-group-addon" ng-if="!showTypeFilter"><i class="fa fa-info"></i></span>
     <input type="text" autocomplete="off" class="form-control"
            placeholder="{{placeholder}}" name="{{name}}"
            ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 100, 'blur': 0 } }"
