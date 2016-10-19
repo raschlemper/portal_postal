@@ -41,8 +41,8 @@
         <script type="text/javascript" src="../../javascript/jx.js"></script>
         <style type="text/css">
             .imgStars{ width: 32px;height: 32px; vertical-align: middle;}
-            .blockStars{margin-bottom: 20px;}
-            .inputStars{width:300px;}
+            //.blockStars{margin-bottom: 20px;}
+           //.inputStars{width:300px;}
              input[type="text"]{
                   height: 22px !important;
             }
@@ -59,7 +59,7 @@
 
         <div id="divPrincipal" align="center">
             <div id="container">
-                <div id="conteudo">
+                <div id="">
                          <ul class="ul_formulario">
                             <li class="titulo">
                              <dd>Legenda Logistica Reversa</dd>
@@ -67,23 +67,23 @@
                          </ul>
                     <p class="blockStars">
                         1.<img  class="imgStars" src="../../imagensNew/starwhite.png">
-                        <input id="starWhite" class="inputStars" value="<%=legendas.get(0).getNome()%>"  type="text" />
+                        <input id="starWhite" class="inputStars" value="<%=legendas.get(0).getNome()==null?"":legendas.get(0).getNome()%>"  type="text" />
                     </p>
                     <p class="blockStars">
                         2.<img  class="imgStars" src="../../imagensNew/starblue.png">
-                        <input id="starBlue" class="inputStars" value="<%=legendas.get(1).getNome()%>"  type="text" />
+                        <input id="starBlue" class="inputStars" value="<%=legendas.get(1).getNome()==null?"":legendas.get(1).getNome()%>"  type="text" />
                     </p>
                     <p class="blockStars">
                         3.<img class="imgStars" src="../../imagensNew/stargrey.png">
-                         <input id="starGrey" class="inputStars" value="<%=legendas.get(2).getNome()%>" type="text" />
+                         <input id="starGrey" class="inputStars" value="<%=legendas.get(2).getNome()==null?"":legendas.get(2).getNome()%>" type="text" />
                     </p>
                     <p class="blockStars">
                         4.<img class="imgStars" src="../../imagensNew/starred.png">
-                         <input id="starRed" class="inputStars" value="<%=legendas.get(3).getNome()%>" type="text" />
+                         <input id="starRed" class="inputStars" value="<%=legendas.get(3).getNome()==null?"":legendas.get(3).getNome()%>" type="text" />
                     </p>
                     <p class="blockStars">
                         5.<img class="imgStars" src="../../imagensNew/staryellow.png">
-                         <input id="starYellow" class="inputStars" value="<%=legendas.get(4).getNome()%>" type="text" />
+                         <input id="starYellow" class="inputStars" value="<%=legendas.get(4).getNome()==null?"":legendas.get(4).getNome()%>" type="text" />
                     </p>
                     
                     <div class="buttons">

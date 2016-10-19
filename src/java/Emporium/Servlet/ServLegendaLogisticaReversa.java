@@ -9,6 +9,7 @@ import Emporium.Controle.ContrLogisticaReversa;
 import Entidade.LegendaLogisticaReversa;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,36 +32,34 @@ public class ServLegendaLogisticaReversa extends HttpServlet {
         
         LegendaLogisticaReversa starWhite = new LegendaLogisticaReversa();
         starWhite.setId(1);
-        starWhite.setNome(request.getParameter("starWhite"));
+        starWhite.setNome(getParameter(request,"starWhite"));
         LegendaLogisticaReversa starBlue = new LegendaLogisticaReversa();
         starBlue.setId(2);
-        starBlue.setNome(request.getParameter("starBlue"));
+        starBlue.setNome(getParameter(request,"starBlue"));
         LegendaLogisticaReversa starGrey = new LegendaLogisticaReversa();
         starGrey.setId(3);
-        starGrey.setNome(request.getParameter("starGrey"));
+        starGrey.setNome(getParameter(request,"starGrey"));
         LegendaLogisticaReversa starRed = new LegendaLogisticaReversa();
         starRed.setId(4);
-        starRed.setNome(request.getParameter("starRed"));
+        starRed.setNome(getParameter(request,"starRed"));
         LegendaLogisticaReversa starYellow = new LegendaLogisticaReversa();
         starYellow.setId(5);
-        starYellow.setNome(request.getParameter("starYellow"));
+        starYellow.setNome(getParameter(request,"starYellow"));
 
         List<LegendaLogisticaReversa> legendas = new ArrayList<LegendaLogisticaReversa>(Arrays.asList(starWhite,starBlue,starGrey,starRed,starYellow));
 
 
         ContrLogisticaReversa dao = new ContrLogisticaReversa();
         PrintWriter out = response.getWriter();
+     
         try{
-            dao.atualizaLegenda(nomeBD, legendas);
-            
+            dao.atualizaLegenda(nomeBD, legendas);            
             out.println("%js alert('Alteração realizada com sucesso!'); js%");
             
         }catch(Exception ex){
             ex.printStackTrace();
             out.println("%js alert('Falha ao salvar os dados!'); js%");
         }
-        
-
 
         
     }
@@ -104,4 +103,8 @@ public class ServLegendaLogisticaReversa extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+
+    private String getParameter(HttpServletRequest request,String name) throws UnsupportedEncodingException{
+        return new String(request.getParameter(name).getBytes(),"UTF-8");
+    }
 }

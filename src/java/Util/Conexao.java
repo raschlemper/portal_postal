@@ -18,6 +18,10 @@ public class Conexao {
     private static final String PROP_PATH = "/opt/tomcat/webapps/application_config/database.properties";
     //private static final String PROP_PATH = "C:\\Users\\Ricardinho\\Desktop\\database.properties";
     //private static String HOST = "5.189.190.196";
+   // private static String HOST = "192.168.0.100";
+    //private static String PORT = "3306";
+    //private static String USER = "smart_bd";
+    //private static String PASS = "33m.SMRT";
     private static String HOST = "localhost";
     private static String PORT = "3306";
     private static String USER = "root";
@@ -125,19 +129,18 @@ public class Conexao {
             return null;
         }
     }
-    
-    public static void loadConnectionProperties(){
+
+    public static void loadConnectionProperties() {
         Properties props = new Properties();
         InputStream is = null;
 
         // First try loading from the current directory
         try {
             File f = new File(PROP_PATH);
-            is = new FileInputStream( f );
-        }
-        catch ( Exception e ) { 
+            is = new FileInputStream(f);
+        } catch (Exception e) {
             System.out.println(e);
-            is = null; 
+            is = null;
         }
 
         try {
@@ -151,10 +154,9 @@ public class Conexao {
                 PORT = props.getProperty("DatabasePort", "3306");
                 USER = props.getProperty("DatabaseUser", "smart_bd");
                 PASS = props.getProperty("DatabasePass", "33m.SMRT");
-        
+
             }
-        }
-        catch ( Exception e ) {
+        } catch (Exception e) {
             System.out.println(e);
         }
     }

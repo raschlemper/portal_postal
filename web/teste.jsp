@@ -1,9 +1,3 @@
-<%-- 
-    Document   : teste
-    Created on : 03/10/2016, 11:32:12
-    Author     : Ricardinho
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,9 +6,72 @@
         <title>JSP Page</title>
     </head>
     <body>
-        1<img src="http://www.portalpostal.com.br/imagensNew/chancelas/CHANCELA_PAC.png" /><br/>
-        2<img src="http://www.portalpostal.com.br:8080/imagensNew/chancelas/CHANCELA_PAC.png" /><br/>
-        3<img src="http://localhost:8080/imagensNew/chancelas/CHANCELA_PAC.png" /><br/>
-        4<img src="http://209.126.111.14:8080/imagensNew/chancelas/CHANCELA_PAC.png" />
+        <div class='my-legend round'>
+            <div class='legend-title'>LEGENDA</div>
+            <div class='legend-scale'>
+                <ul class='legend-labels'>
+                    <li><img class="imgStars" src="imagensNew/starwhite.png"/><span>One</span></li>
+                    <li><img class="imgStars" src="imagensNew/starblue.png"/><span>One</span></li>
+                    <li><img class="imgStars" src="imagensNew/stargrey.png"/><span>One</span></li>
+                    <li><img class="imgStars" src="imagensNew/starred.png"/><span>One</span></li>
+                    <li><img class="imgStars" src="imagensNew/staryellow.png"/><span>One</span></li>
+                </ul>
+            </div>
+            <div class='legend-source'> <a href="#" onclick="chamaDivProtecao();">ALTERAR</a></div>
+        </div>
+
+        <style type='text/css'>
+            .my-legend .legend-title {
+                text-align: center;
+                margin-bottom: 5px;
+                font-weight: bold;
+                font-size: 90%;
+            }
+            .my-legend .legend-scale ul {
+                margin: 0;
+                margin-bottom: 5px;
+                padding: 0;
+                float: left;
+                list-style: none;
+            }
+            .my-legend .legend-scale ul li {
+                font-size: 80%;
+                list-style: none;
+                margin-left: 0;
+                line-height: 18px;
+                margin-bottom: 2px;
+            }
+            .my-legend ul.legend-labels li span {
+               // display: block;
+              // float: left;
+               // height: 16px;
+               // width: 30px;
+               // margin-right: 5px;
+                margin-left: 15px;
+              //  border: 1px solid #999;
+            }
+            .my-legend .legend-source {
+                text-align: center;
+                font-size: 70%;
+                color: #999;
+                clear: both;
+            }
+            .my-legend a {
+                color: #777;    
+            }
+            .round{
+                border-radius: 15px;
+                border: 2px solid #2255a5;
+                padding: 15px; 
+                width: 200px;
+                height: 170px;
+                background-color: #F9F9F9;
+            }
+            .imgStars{ 
+                width: 24px;
+                height: 24px;
+                vertical-align: middle;
+            }
+        </style>
     </body>
 </html>

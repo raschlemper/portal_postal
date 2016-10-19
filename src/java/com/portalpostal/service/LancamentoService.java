@@ -121,6 +121,11 @@ public class LancamentoService {
         return lancamentoDAO.findSaldo(dataInicio, dataFim);
     } 
     
+    public List<Saldo> findSaldoByConta(Integer idConta, Date dataInicio, Date dataFim) throws Exception {
+        init();
+        return lancamentoDAO.findSaldoByConta(idConta, dataInicio, dataFim);
+    } 
+    
     public List<Saldo> findSaldoPlanoConta(Date dataInicio, Date dataFim) throws Exception {
         init();
         return lancamentoDAO.findSaldoPlanoConta(dataInicio, dataFim);

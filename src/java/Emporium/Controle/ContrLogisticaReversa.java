@@ -270,7 +270,7 @@ public class ContrLogisticaReversa {
     }
 
     private void atualizaNomeDaLegenda(LegendaLogisticaReversa legenda,Connection conn) throws SQLException {
-        String sql = "UPDATE legenda_log_reversa SET nome=? WHERE id=?";
+        String sql = "UPDATE legenda_log_reversa SET nome=? WHERE idstar=?";
         PreparedStatement prepare = conn.prepareStatement(sql);
         prepare.setString(1, legenda.getNome());
         prepare.setInt(2, legenda.getId());
@@ -280,7 +280,7 @@ public class ContrLogisticaReversa {
 
     public List<LegendaLogisticaReversa> pesquisaLegenda(String nomeDB) throws SQLException{
         Connection conn =   Conexao.conectar(nomeDB);
-        String sql ="SELECT * FROM legenda_log_reversa ORDER BY id ASC ";
+        String sql = "SELECT * FROM legenda_log_reversa ORDER BY idstar ASC ";
         PreparedStatement prepare = conn.prepareStatement(sql);
         ResultSet result = prepare.executeQuery();
         List<LegendaLogisticaReversa> lista = carregaLegendas(result);
@@ -292,7 +292,7 @@ public class ContrLogisticaReversa {
         List<LegendaLogisticaReversa> legendas = new ArrayList<LegendaLogisticaReversa>();
         while (result.next()) {
             LegendaLogisticaReversa legenda = new LegendaLogisticaReversa();
-            legenda.setId(result.getInt("id"));
+            legenda.setId(result.getInt("idstar"));
             legenda.setNome(result.getString("nome"));
             legendas.add(legenda);
         }

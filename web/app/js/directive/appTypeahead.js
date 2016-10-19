@@ -84,7 +84,7 @@ app.directive('appTypeahead', function($filter) {
             }
             
             $scope.getItem = function(item) {
-                var value = item[$scope.field];
+                var value = angular.copy(item[$scope.field]);
                 if($scope.filter){ value = $filter($scope.filter.name)(item, $scope.filter.args); }
                 return value;
             };

@@ -48,7 +48,8 @@
                     <td class="col-md-2 text-center" ng-if="!parcela.lancamento">
                         <app-datepicker class="input-group-modal" placeholder="Data do vencimento" name="dataVencimento" datepicker-model="parcela.dataVencimento"></app-datepicker>
                     </td>
-                    <td>
+                    <td class="text-right" ng-if="parcela.lancamento">{{parcela.valor | currency : 'R$ '}}</td>
+                    <td ng-if="!parcela.lancamento">
                         <input type="text" autocomplete="off" name="valor" class="form-control text-right" ui-number-mask="2" ng-model="parcela.valor" ng-required="true"/>
                     </td>
                     <td class="text-center" ng-if="!onlyView">

@@ -334,11 +334,11 @@ UNIDADE DE ENTREGA]]></text>
 			</staticText>
 			<image onErrorType="Blank">
 				<reportElement x="10" y="6" width="230" height="18" uuid="c7a146ed-0234-4757-aef2-4ae5229151ea"/>
-				<imageExpression><![CDATA["http://localhost:8080/PortalPostal/imagensNew/etq_ar.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["http://www.portalpostal.com.br/imagensNew/etq_ar.jpg"]]></imageExpression>
 			</image>
 			<image onErrorType="Blank">
 				<reportElement x="208" y="122" width="131" height="77" uuid="ed1a3b8f-1628-447c-ad66-89eec0137075"/>
-				<imageExpression><![CDATA["http://localhost:8080/PortalPostal/imagensNew/etq_ar2.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["http://www.portalpostal.com.br/imagensNew/etq_ar2.jpg"]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement x="245" y="4" width="38" height="20" uuid="eb8e4010-1b21-4d3c-ada7-bcf12df7f278">

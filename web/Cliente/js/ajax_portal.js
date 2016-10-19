@@ -133,6 +133,13 @@ function verPesquisarDestinatario(multi) {
     http.send(null);
 }
 
+// funcao que retorna o forrm parra editarr o cooletador solicitado
+function verPesquisarChaveNFE() {
+    http.open("GET", "../../Cliente/AjaxPages/consulta_chave_nfe.jsp", true);
+    http.onreadystatechange = handleHttpResponse;
+    http.send(null);
+}
+
 function handleHttpResponseConsultaDest() {
     if (http.readyState == 4) {
         if (http.status == 200) {

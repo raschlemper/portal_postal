@@ -34,9 +34,13 @@
     }else if (activeTabMenu.equals("6")) {
         mnServ = "btn-primary";
        nomeBarra = "<i class='fa fa-envelope fa-fw'></i> + Serviços";
-    }   if (temContratoTabMenu == 0) {
+    }   
+    
+    /*
+    if (temContratoTabMenu == 0) {
         mnEtq = "btn-disabled";
     }
+    */
 %>
 <div class="row">
     <div class="col-md-12">
@@ -51,9 +55,9 @@
             <a href="cliente_departamentos_b.jsp?idCliente=<%= idCliTabMenu%>" class="col-xs-3 col-sm-3 col-md-2 col-lg-2 text-center <%= mnDepto%> "><i class="fa fa-lg fa-sitemap"></i> <span>Departamentos</span></a>
             <a href="cliente_usuarios_b.jsp?idCliente=<%= idCliTabMenu%>" class="col-xs-3 col-sm-3 col-md-2 col-lg-2 text-center <%= mnUser%> "><i class="fa fa-lg fa-users"></i> <span>Usuários</span></a>
             <a href="cliente_contrato_b.jsp?idCliente=<%= idCliTabMenu%>" class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-center <%= mnContr%> "><i class="fa fa-lg fa-clipboard"></i> <span>Contrato ECT</span></a>
-             <a <%if (temContratoTabMenu == 1) {%>href="cliente_etiquetas_b.jsp?idCliente=<%= idCliTabMenu%>"<%} else {%> onclick="bootbox.alert('<b>Este cliente não possui Contrato ECT!</b><br/><br/>Para solicitar etiquetas cadastre um contrato para este cliente!');"  <%}%> class="col-xs-4 col-sm-4 col-md-1 col-lg-1 text-center <%= mnEtq%> "><i class="fa fa-lg fa-barcode"></i> <span>Etiquetas</span></a>
-             <a href="cliente_outros_serv_b.jsp?idCliente=<%= idCliTabMenu%>" class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-center <%= mnServ%> "><i class="fa fa-lg fa-envelope"></i> <span>+ Serviços</span></a>
-           
+            <%--<a <%if (temContratoTabMenu == 1) {%>href="cliente_etiquetas_b.jsp?idCliente=<%= idCliTabMenu%>"<%} else {%> onclick="bootbox.alert('<b>Este cliente não possui Contrato ECT!</b><br/><br/>Para solicitar etiquetas cadastre um contrato para este cliente!');"  <%}%> class="col-xs-4 col-sm-4 col-md-1 col-lg-1 text-center <%= mnEtq%> "><i class="fa fa-lg fa-barcode"></i> <span>Etiquetas</span></a>--%>
+            <a href="cliente_etiquetas_b.jsp?idCliente=<%= idCliTabMenu%>" class="col-xs-4 col-sm-4 col-md-1 col-lg-1 text-center <%= mnEtq%> "><i class="fa fa-lg fa-barcode"></i> <span>Etiquetas</span></a>
+            <a href="cliente_outros_serv_b.jsp?idCliente=<%= idCliTabMenu%>" class="col-xs-4 col-sm-4 col-md-2 col-lg-2 text-center <%= mnServ%> "><i class="fa fa-lg fa-envelope"></i> <span>+ Serviços</span></a>           
         </div>
     </div>
 </div>

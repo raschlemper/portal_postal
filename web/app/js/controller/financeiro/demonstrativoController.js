@@ -134,6 +134,7 @@ app.controller('DemonstrativoController', ['$scope', '$q', '$filter', 'PlanoCont
         }
         
         var getEstruturaDefault = function(estrutura, tipo) {
+            estrutura.idPlanoConta = 0;
             estrutura.codigo = 'X';
             estrutura.nome = "Não Identificado";
             estrutura.descricao = null;

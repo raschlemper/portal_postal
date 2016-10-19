@@ -203,12 +203,16 @@ public class ServEtiquetas extends HttpServlet {
                             d.setContrato_ect("");
                         }
 
-                        if (r.getString("imgChancela").contains("CHANCELA_")) {
-                            Image IMG_CHANCELA = new ImageIcon(getClass().getResource("Images/CHANCELA_" + r.getString("nomeServico") + ".png")).getImage();
-                            d.setChancela_img(IMG_CHANCELA);
-                        } else {
-                            Image IMG_CHANCELA = new ImageIcon(getClass().getResource("Images/" + r.getString("nomeServico") + ".png")).getImage();
-                            d.setChancela_img(IMG_CHANCELA);
+                        try {
+                            if (r.getString("imgChancela").contains("CHANCELA_")) {
+                                Image IMG_CHANCELA = new ImageIcon(getClass().getResource("Images/CHANCELA_" + r.getString("nomeServico") + ".png")).getImage();
+                                d.setChancela_img(IMG_CHANCELA);
+                            } else {
+                                Image IMG_CHANCELA = new ImageIcon(getClass().getResource("Images/" + r.getString("nomeServico") + ".png")).getImage();
+                                d.setChancela_img(IMG_CHANCELA);
+                            }
+                        } catch (Exception e) {
+                            d.setChancela_img(null);
                         }
 
                         d.setUrl_chancela(r.getString("imgChancela"));

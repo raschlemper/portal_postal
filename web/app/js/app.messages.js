@@ -61,7 +61,10 @@ app.constant('MESSAGES', {
             DATA_COMPETENCIA_VALIDA: "A competência do lançamento não é válida!",
             VALOR_REQUERIDA: "Preencha o valor do lançamento!",
             VALOR_VALIDA: "O valor do lançamento não é válido",
-            HISTORICO_REQUERIDA: "Preencha o histórico do lançamento!"
+            FAVORECIDO_REQUERIDA: "Preencha o favorecido do lançamento!",
+            HISTORICO_REQUERIDA: "Preencha o histórico do lançamento!",
+            PLANO_CONTA_REQUERIDA: "Preencha o plano de conta do lançamento!",
+            CENTRO_CUSTO_REQUERIDA: "Preencha o centro de custo do lançamento!"
         },
         programar: {
             title: {
@@ -92,7 +95,10 @@ app.constant('MESSAGES', {
                 DATA_COMPETENCIA_VALIDA: "A competência do lançamento programado não é válida!",
                 VALOR_REQUERIDA: "Preencha o valor do lançamento programado!",
                 VALOR_VALIDA: "O valor do lançamento programado não é válido",
-                HISTORICO_REQUERIDA: "Preencha o histórico do lançamento programado!"
+                FAVORECIDO_REQUERIDA: "Preencha o favorecido do lançamento programado!",
+                HISTORICO_REQUERIDA: "Preencha o histórico do lançamento programado!",
+                PLANO_CONTA_REQUERIDA: "Preencha o plano de conta do lançamento programado!",
+                CENTRO_CUSTO_REQUERIDA: "Preencha o centro de custo do lançamento programado!"
             }            
         },
         transferir: {

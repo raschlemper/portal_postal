@@ -76,7 +76,7 @@ public class ContaService {
     
     public Conta save(Conta conta) throws Exception {
         init();
-        conta.setCodigoIntegracao(0);
+        conta.setCodigoIntegracao(null);
         return contaDAO.save(conta);
     } 
     

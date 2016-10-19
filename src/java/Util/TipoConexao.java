@@ -45,13 +45,13 @@ public enum TipoConexao {
     
     HOMOLOGATION() {
         protected String url(String nome) {
-            return String.format(URL, "189.4.65.227", 3306, nome);
+            return String.format(URL, "localhost", 3306, nome);
         }
         protected String username() {
-            return "dev";
+            return "smart_bd";
         }
         protected String password() {
-            return "1234@";
+            return "33m.SMRT";
         }
     },
     

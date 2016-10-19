@@ -32,8 +32,8 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                 if(tipo === 'receitadespesa') { 
                     $scope.sizeChart = 400;
                     $scope.showChartReceitaDespesa = true;
-                    var dataInicio = moment().subtract(5, 'months').startOf("month");
-                    var dataFim = moment().add(6, 'months').endOf("month");
+                    var dataInicio = moment().subtract(11, 'months').startOf("month");
+                    var dataFim = moment().endOf("month");
                     chartSaldoByTipo(getMonths(dataInicio, dataFim), dataInicio.format('YYYY-MM-DD'), dataFim.format('YYYY-MM-DD'));     
                 }
                 if(tipo === 'despesa') { 
@@ -306,6 +306,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
         }
         
         var getEstruturaDefault = function(estrutura, tipo) {
+            estrutura.idPlanoConta = 0;
             estrutura.codigo = 'X';
             estrutura.nome = "Não Identificado";
             estrutura.descricao = estrutura.codigo + " - " + estrutura.nome;

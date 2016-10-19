@@ -64,7 +64,7 @@ app.factory('ContaHandler', function() {
     };
     
     var getCodigoIntegracao = function(conta) {
-        return conta.codigoIntegracao || 1; 
+        return conta.codigoIntegracao; 
     };
 
     return {

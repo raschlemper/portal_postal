@@ -127,8 +127,7 @@
                     <%if (acessosMn.contains(7)) {%><li><a href="../../Cliente/Cadastros/lr_lista.jsp">Endereços L. Reversa</a></li><%}%>
                     <%if (acessosMn.contains(7)) {%><li><a href="../../Cliente/Cadastros/codigos_edi.jsp">Cod. EDI</a></li><%}%>
                     <%if (acessosMn.contains(7)) {%><li><a href="../../Cliente/Cadastros/sro_edi.jsp">SRO x EDI</a></li><%}%>
-                    <%if (acessosMn.contains(7)) {%><li><a href="../../Cliente/Cadastros/legenda_logistica_reversa.jsp">Cadastro De Legenda</a></li><%}%>
-                </ul>
+               </ul>
             </li>            
             <%}%>
 

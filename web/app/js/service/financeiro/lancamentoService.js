@@ -47,6 +47,14 @@ app.factory('LancamentoService', function($http, PromiseService) {
                     $http.get(_contextPath + "/api/financeiro/lancamento/saldo?dataInicio=" + dataInicio + "&dataFim=" + dataFim));
         },
 
+        getSaldoByConta: function(idConta, dataInicio, dataFim) {
+            var url = _contextPath + "/api/financeiro/lancamento/conta/" + idConta + "/saldo?";
+            if(dataInicio) url += "dataInicio=" + dataInicio;
+            if(dataInicio && dataFim) url += "&";
+            if(dataFim) url += "dataFim=" + dataFim;
+            return PromiseService.execute($http.get(url));
+        },
+
         getSaldoPlanoConta: function(dataInicio, dataFim) {
             return PromiseService.execute(
                     $http.get(_contextPath + "/api/financeiro/lancamento/planoconta/saldo?dataInicio=" + dataInicio + "&dataFim=" + dataFim));
