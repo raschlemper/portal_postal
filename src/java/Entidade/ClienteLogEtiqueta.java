@@ -4,6 +4,8 @@
  */
 package Entidade;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 
 /**
@@ -25,7 +27,9 @@ public class ClienteLogEtiqueta {
     private String cartaoPostagem;
     private String codAdiministrativo; 
     private String tipoGeracao; 
-    private String tipoUso; 
+    private String tipoUso;
+    private int avista;
+    private int qtdUtilizada;
 
     public ClienteLogEtiqueta(int idLog, int idCliente, int idUsuario, String nomeUsuario, String faixaIni, String faixaFim, Timestamp dataHora, int qtd, String servico, String nomeServico) {
         this.idLog = idLog;
@@ -39,6 +43,7 @@ public class ClienteLogEtiqueta {
         this.servico = servico;
         this.nomeServico = nomeServico;
     }
+
     public ClienteLogEtiqueta(int idLog, int idCliente, int idUsuario, String nomeUsuario, String faixaIni, String faixaFim, Timestamp dataHora, int qtd, String servico, String nomeServico, String tipoGeracao, String tipoUso) {
         this.idLog = idLog;
         this.idCliente = idCliente;
@@ -52,6 +57,39 @@ public class ClienteLogEtiqueta {
         this.nomeServico = nomeServico;
         this.tipoGeracao = tipoGeracao;
         this.tipoUso = tipoUso;
+    }
+
+    public ClienteLogEtiqueta(ResultSet result, int qtdUtilizada) throws SQLException {
+        this.idLog = result.getInt("id");
+        this.idCliente = result.getInt("idCliente");
+        this.idUsuario = result.getInt("idUsuario");
+        this.nomeUsuario = result.getString("nomeUsuario");
+        this.faixaIni = result.getString("faixaIni");
+        this.faixaFim = result.getString("faixaFim");
+        this.dataHora = result.getTimestamp("dataHora");
+        this.qtd = result.getInt("qtd");
+        this.servico = result.getString("servico");
+        this.nomeServico = "";
+        this.tipoGeracao = result.getString("tipoGeracao");
+        this.tipoUso = result.getString("tipoUso");
+        this.avista = result.getInt("avista");
+        this.qtdUtilizada = qtdUtilizada;
+    }
+
+    public int getAvista() {
+        return avista;
+    }
+
+    public void setAvista(int avista) {
+        this.avista = avista;
+    }
+
+    public int getQtdUtilizada() {
+        return qtdUtilizada;
+    }
+
+    public void setQtdUtilizada(int qtdUtilizada) {
+        this.qtdUtilizada = qtdUtilizada;
     }
 
     public String getTipoGeracao() {

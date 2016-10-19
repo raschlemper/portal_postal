@@ -121,6 +121,11 @@ public class LancamentoService {
         return lancamentoDAO.findSaldo(dataInicio, dataFim);
     } 
     
+    public List<Saldo> findSaldoByConta(Integer idConta, Date dataInicio, Date dataFim) throws Exception {
+        init();
+        return lancamentoDAO.findSaldoByConta(idConta, dataInicio, dataFim);
+    } 
+    
     public List<Saldo> findSaldoPlanoConta(Date dataInicio, Date dataFim) throws Exception {
         init();
         return lancamentoDAO.findSaldoPlanoConta(dataInicio, dataFim);
@@ -186,6 +191,7 @@ public class LancamentoService {
     
     public Lancamento update(Lancamento lancamento) throws Exception {
         init();
+        if(isAutomatico(lancamento.getIdLancamento())) throw new Exception("Este lançamento não pode ser alterado!"); 
         Lancamento lancamentoResult = lancamentoDAO.update(ajustaLancamentoRateio(lancamento));
         removerLancamentoConciliado(lancamentoResult);
         lancamentoResult.setRateios(saveOrUpdateRateio(lancamento));
@@ -204,6 +210,7 @@ public class LancamentoService {
     
     public Lancamento delete(Integer idLancamento) throws Exception {
         init();
+        if(isAutomatico(idLancamento)) throw new Exception("Este lançamento não pode ser excluído!"); 
         Lancamento lancamento = find(idLancamento);
         removerLancamentoTransferencia(lancamento);
         removerLancamentoProgramado(lancamento);
@@ -218,6 +225,13 @@ public class LancamentoService {
         init();
         lancamentoDAO.removeAllPlanoConta();
     } 
+    
+    public boolean isAutomatico(Integer idLancamento) throws Exception {
+        init();
+        Lancamento lancamento = lancamentoDAO.find(idLancamento);
+        if(lancamento.getModelo() == TipoModeloLancamento.AUTOMATICO) return true;
+        return false;                
+    }  
     
     // ***** RATEIO ***** //
     

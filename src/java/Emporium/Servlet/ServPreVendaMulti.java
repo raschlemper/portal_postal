@@ -188,7 +188,7 @@ public class ServPreVendaMulti extends HttpServlet {
                 int qtdEtq = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ(servico, 0, idCliente, nomeBD);
                 if (codECT != 0 && qtdEtq == 0) {
                     if(ContrClienteEtiquetas.solicitarEtiquetasSigepWEB(codECT, cli, nomeBD)) {
-                        String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, nomeBD);
+                        String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, 0, nomeBD);
                         if (etq != null) {
                             String aux[] = etq.split(";");
                             numObjeto = aux[0];
@@ -196,7 +196,7 @@ public class ServPreVendaMulti extends HttpServlet {
                         }
                     }
                 } else if (codECT != 0 && qtdEtq != 0) {
-                    String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, nomeBD);
+                    String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, 0, nomeBD);
                     if (etq != null) {
                         String aux[] = etq.split(";");
                         numObjeto = aux[0];
@@ -205,6 +205,12 @@ public class ServPreVendaMulti extends HttpServlet {
                 } else if (codECT == 0) {
                     ServicoECT se = ContrServicoECT.consultaAvistaByGrupo(servico);
                     codECT = se.getCodECT();
+                    String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, 1, nomeBD);
+                    if (etq != null) {
+                        String aux[] = etq.split(";");
+                        numObjeto = aux[0];
+                        tipoEtiqueta = aux[1];
+                    }
                     contrato = "";
                 }
 

@@ -13,7 +13,7 @@
                             <label class="small">Nome</label>
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                <input type="text" autocomplete="off" name="nome" class="form-control" ng-model="conta.nome" 
+                                <input type="text" autocomplete="off" name="nome" class="form-control" ng-model="conta.nome" ng-disabled="conta.codigoIntegracao"
                                        ng-required="true" placeholder="Nome da conta"/>                                    
                             </div>
                         </div>
@@ -21,7 +21,7 @@
                             <label class="small">Tipo</label>
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                <select class="form-control" name="tipo" ng-change="changeTipo(conta.tipo)"
+                                <select class="form-control" name="tipo" ng-change="changeTipo(conta.tipo)" ng-disabled="conta.codigoIntegracao"
                                         ng-options="tipo.descricao for tipo in tipos track by tipo.id" ng-model="conta.tipo"></select>
                             </div>
                         </div>
@@ -29,7 +29,7 @@
                             <label class="small">Situação</label>
                             <div class="input-group">
                                 <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                <select class="form-control" name="status"
+                                <select class="form-control" name="status" ng-disabled="conta.codigoIntegracao"
                                         ng-options="stat.descricao for stat in status track by stat.id" ng-model="conta.status"></select>
                             </div>
                         </div>
@@ -72,7 +72,7 @@
                                     <button class="btn btn-lg btn-primary" type="button" ng-click="openCartaoCredito()"><i class="fa fa-plus-circle"></i></button>
                                 </span>
                             </div>
-                        </div>
+                        </div>    
                     </div>
                 </li>
             </ul>     

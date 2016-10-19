@@ -229,7 +229,7 @@ public class ServPreVenda extends HttpServlet {
                 int qtdEtq = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ(servico, 0, idCliente, nomeBD);
                 if (codECT != 0 && qtdEtq == 0 && !servico.equals("SIMPLES")) {
                     if(ContrClienteEtiquetas.solicitarEtiquetasSigepWEB(codECT, cli, nomeBD)) {
-                        String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, nomeBD);
+                        String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, 0, nomeBD);
                         if (etq != null) {
                             String aux[] = etq.split(";");
                             numObjeto = aux[0];
@@ -237,7 +237,7 @@ public class ServPreVenda extends HttpServlet {
                         }
                     }
                 } else if (codECT != 0 && qtdEtq != 0 && !servico.equals("SIMPLES")) {
-                    String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, nomeBD);
+                    String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, 0, nomeBD);
                     if (etq != null) {
                         String aux[] = etq.split(";");
                         numObjeto = aux[0];
@@ -252,6 +252,13 @@ public class ServPreVenda extends HttpServlet {
                     /*if (codECT == 10014 && servico.equals("CARTA")) {
                         registro = Integer.parseInt(request.getParameter("tipoCarta"));
                     }*/
+                    String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, 1, nomeBD);
+                    System.out.println(etq);
+                    if (etq != null) {
+                        String aux[] = etq.split(";");
+                        numObjeto = aux[0];
+                        tipoEtiqueta = aux[1];
+                    }
                     contrato = "";
                 }
 

@@ -1,9 +1,9 @@
 'use strict';
 
 app.controller('ModalLancamentoEditarController', 
-    ['$scope', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'LancamentoAnexoService', 'FavorecidoService', 
+    ['$scope', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoConciliadoService', 'ConfiguracaoService', 
         'ModalService', 'DatePickerService', 'ListaService', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
-    function ($scope, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, LancamentoAnexoService, FavorecidoService,
+    function ($scope, ContaService, PlanoContaService, CentroCustoService, LancamentoConciliadoService, ConfiguracaoService,
         ModalService, DatePickerService, ListaService, FinanceiroValidation, LISTAS, MESSAGES) {
 
         var init = function () {  
@@ -72,26 +72,11 @@ app.controller('ModalLancamentoEditarController',
                     if($scope.lancamento.centroCusto && $scope.lancamento.centroCusto.idCentroCusto) {
                         $scope.lancamento.centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, $scope.lancamento.centroCusto.idCentroCusto);
                     } 
-//                    favorecidos();
                 })
                 .catch(function (e) {
                     console.log(e);
                 });
         };
-        
-//        var favorecidos = function() {
-//            FavorecidoService.getAll()
-//                .then(function (data) {
-//                    $scope.favorecidos = data;
-//                })
-//                .catch(function (e) {
-//                    console.log(e);
-//                });
-//        };
-        
-//        $scope.selectFavorecido = function(favorecido) {
-//            $scope.lancamento.favorecido = favorecido;
-//        }
         
         var criarPlanoContasLista = function(data) {
             return _.filter(data, function(planoConta) { 
@@ -111,10 +96,10 @@ app.controller('ModalLancamentoEditarController',
         };
         
         $scope.ok = function(form, lancamento) {
-            if(!validaConta(lancamento.conta)) return;
-            if(!validarRateio(lancamento)) return;  
-            if (!validarForm(form, lancamento)) return;
-            var lancamento = ajustarDados(lancamento);
+            return validarLancamento(form, lancamento);
+        };
+        
+        var ok = function(lancamento) {
             var data = moment(lancamento.dataLancamento).format('YYYY-MM-DD HH:mm:ss');
             LancamentoConciliadoService.getByData(data)
                 .then(function(data) {  
@@ -138,6 +123,21 @@ app.controller('ModalLancamentoEditarController',
         };
                 
         // ***** VALIDAR ***** //  
+        
+        var validarLancamento = function(form, lancamento) {
+            if(!validaConta(lancamento.conta)) return;
+            if(!validarRateio(lancamento)) return;  
+            if (!validarForm(form, lancamento)) return;
+            ConfiguracaoService.get()
+                .then(function(data) {
+                    lancamento = ajustarDados(lancamento);
+                    if(!validarLancamentoByConfiguracao(data, lancamento)) return;
+                    ok(lancamento);
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
         
         var validaConta = function(conta) {
             return FinanceiroValidation.contaEncerrada(conta);
@@ -165,6 +165,41 @@ app.controller('ModalLancamentoEditarController',
             return true;
         }; 
 
+        var validarLancamentoByConfiguracao = function (configuracao, lancamento) {
+            if (configuracao.favorecido && !lancamento.favorecido) {
+                alert(MESSAGES.lancamento.validacao.FAVORECIDO_REQUERIDA);
+                return false;
+            } 
+            if (configuracao.historico && !lancamento.historico) {
+                alert(MESSAGES.lancamento.validacao.HISTORICO_REQUERIDA);
+                return false;
+            }
+            if(!lancamento.rateios || !lancamento.rateios.length) {
+                if (configuracao.planoConta && !lancamento.planoConta) {
+                    alert(MESSAGES.lancamento.validacao.PLANO_CONTA_REQUERIDA);
+                    return false;
+                }
+                if (configuracao.centroCusto && !lancamento.centroCusto) {
+                    alert(MESSAGES.lancamento.validacao.CENTRO_CUSTO_REQUERIDA);
+                    return false;
+                }
+            } else {
+                var retorno = true;
+                _.map(lancamento.rateios, function(rateio) { 
+                    if (retorno && configuracao.planoConta && (!rateio.planoConta || !rateio.planoConta.idPlanoConta)) {
+                        alert(MESSAGES.lancamento.programar.validacao.PLANO_CONTA_REQUERIDA);
+                        retorno = false;
+                    }
+                    if (retorno && configuracao.centroCusto && (!rateio.centroCusto || !rateio.centroCusto.idCentroCusto)) {
+                        alert(MESSAGES.lancamento.programar.validacao.CENTRO_CUSTO_REQUERIDA);
+                        retorno = false;
+                    }   
+                });
+                if(!retorno) return false;
+            }
+            return true;
+        }; 
+
         var validarForm = function (form, lancamento) {
             if(!lancamento.rateios || !lancamento.rateios.length) {
                 if(!$scope.validarPlanoConta(lancamento.planoConta)) {
@@ -174,9 +209,6 @@ app.controller('ModalLancamentoEditarController',
                     return false;
                 }
             } 
-            if (!$scope.validarFavorecido(form.favorecido.$modelValue)) {
-                return false;
-            }  
             if (form.dataCompetencia.$error.required) {
                 alert(MESSAGES.lancamento.validacao.DATA_COMPETENCIA_REQUERIDA);
                 return false;
@@ -197,10 +229,6 @@ app.controller('ModalLancamentoEditarController',
                 alert(MESSAGES.lancamento.validacao.VALOR_REQUERIDA);
                 return false;
             }
-//            if (form.historico.$error.required) {
-//                alert(MESSAGES.lancamento.validacao.HISTORICO_REQUERIDA);
-//                return false;
-//            }
             return true;
         }; 
                 

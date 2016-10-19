@@ -1,3 +1,4 @@
+<%@page import="java.util.Map"%>
 <%@page import="Entidade.empresas"%>
 <%@page import="Entidade.ServicoECT"%>
 <%@page import="Controle.ContrServicoECT"%>
@@ -25,6 +26,12 @@
     } else {
         int idCli = Integer.parseInt(String.valueOf(session.getAttribute("idCliente")));
         Clientes cli = contrCliente.consultaClienteById(idCli, nomeBD);
+        boolean isContratoSuspenso = !ContrClienteContrato.consultaStatusContrato(idCli, nomeBD);
+        int avista = 1;
+        if(cli.getTemContrato() == 1 && !isContratoSuspenso){
+            avista = 0;
+        }        
+        
         ArrayList<Integer> acs = (ArrayList<Integer>) session.getAttribute("servicos");
         ArrayList<Integer> dps = (ArrayList<Integer>) session.getAttribute("departamentos");
         int nivel = (Integer) session.getAttribute("nivelUsuarioEmp");
@@ -74,10 +81,12 @@
         <script type="text/javascript" src="../../javascript/ajax.js"></script>
         <script type="text/javascript" src="../js/ajax_portal.js"></script>
         <script type="text/javascript" src="../../javascript/mascara.js"></script>
+        <script type="text/javascript" src="../../javascript/jx.js"></script>
 
         <link href="../../css/estilo.css" rel="stylesheet" type="text/css" />
         <link href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" />
         <script src="http://code.jquery.com/jquery-1.10.2.js" type="text/javascript"></script>
+        
         <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js" type="text/javascript"></script>
 
         <!-- Menu -->
@@ -93,6 +102,41 @@
         <script type="text/javascript" src="../../javascript/plugins/TableSorter/scriptSorterV3.js"></script>
         <!-- TableSorter -->
 
+        <script type="text/javascript">
+            function pesquisarNFE(){
+                abrirTelaEspera();
+                JxPost('', JxResult, '../../ServDadosNFE', getParameter(), false);
+            }
+
+            function getParameter(){
+                var captcha = document.getElementById('captcha');
+                var keyNF = document.getElementById('keyNF');
+                var parametro = "captcha="+captcha.value+"&keyNF="+keyNF.value;
+                return parametro;
+            }
+
+            function carregaResultado(json){                
+                fecharTelaEspera();
+                chamaDivProtecao();
+                
+                var dadosDaNota = JSON.parse(json);
+                $('#nome').val(dadosDaNota.destinatario.nome);
+                $('#notaFiscal').val(dadosDaNota.numero);
+                $('#cpf_cnpj').val(dadosDaNota.destinatario.cnpj);
+                $('#endereco').val(dadosDaNota.destinatario.logradouro);
+                $('#numero').val('-');
+                $('#bairro').val(dadosDaNota.destinatario.bairro);
+                $('#cep').val(dadosDaNota.destinatario.cep);
+                $('#cidade').val(dadosDaNota.destinatario.municipio);
+                $('#celular').val(dadosDaNota.destinatario.telefone);
+                $('#uf').val(dadosDaNota.destinatario.uf);
+                $('#uf2').val(dadosDaNota.destinatario.uf);                
+                $('#vd').val(dadosDaNota.valorTotal.replace(',','.'));
+                
+                //$('#obs').val(dadosDaNota.informacoesComplementares);
+                //$('#nfPais').val(dadosDaNota.destinatario.pais);
+            }
+        </script>
         <script type="text/javascript">
             jQuery(document).ready(function ($) {
                 $(window).load(function () {
@@ -184,7 +228,7 @@
                     },
                     error: function () {
                         $('#coSdx').html('</br>erro na consulta');
-                        $('#coS10').html('</br>erro na consultaa');
+                        $('#coS10').html('</br>erro na consulta');
                         $('#coS12').html('</br>erro na consulta');
                         $('#coShj').html('</br>erro na consulta');
                         $('#coEsx').html('</br>erro na consulta');
@@ -879,7 +923,7 @@
         <title>Portal Postal | Pré Postagem</title>
 
     </head>
-    <body onload="fecharTelaEspera();<%if (!ContrClienteContrato.consultaStatusContrato(idCli, nomeBD)) {%> alert('O Contrato ou Cartão de Postagem estão Suspensos/Vencidos<br/><br/>Por Favor, entre em contato com a sua agência.<br/><br/>As Etiquetas serão geradas sem contrato até a regularização da situação.');<%}%>">
+    <body onload="fecharTelaEspera();<%if (isContratoSuspenso) {%> alert('O Contrato ou Cartão de Postagem estão Suspensos/Vencidos<br/><br/>Por Favor, entre em contato com a sua agência.<br/><br/>As Etiquetas serão geradas sem contrato até a regularização da situação.');<%}%>">
         <div id="divInteracao" class="esconder" style="top:10%; left:10%; right:10%; bottom:10%;" align="center"><input id="textointeracao" /></div>
         <div id="divInteracao2" class="esconder" style="top:10%; left:12%; right:12%; bottom:10%;" align="center">            
             <div style="width: 100%; margin-top: 15px;">
@@ -980,9 +1024,110 @@
                                     <dd><b class='serv'>PAC</b><br/>&nbsp;--<img src="../../imagensNew/pac.png" border="0" />--</dd>                                    --%>
                                 <%
                                     String tabSize = "70px";
+                                    Map<String, Integer> mapCodECT = ContrClienteContrato.consultaMapServicosContratoClienteByGrupo(idCli, nomeBD);
+                                    Map<String, Integer> mapQtdEtq = ContrClienteEtiquetas.mapQtdRestantePorGrupoServ(0, idCli, avista, nomeBD);                                    
+                                    //CONSULTA SE TEM CONTRATO MDPB
+                                    int codMDPB = ContrClienteContrato.consultaContratoClienteGruposServicos(idCli, "'MDPB_L' , 'MDPB_E', 'MDPB_N'", nomeBD);
                                     //CONSULTA SE TEM CONTRATO PAC
-                                    int codPac = ContrClienteContrato.consultaContratoClienteGrupoServ(idCli, "PAC", nomeBD);
-                                    int qtdPac = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ("PAC", 0, idCli, nomeBD);
+                                    int codPac = 0;
+                                    if(mapCodECT.containsKey("PAC")){
+                                       codPac =  mapCodECT.get("PAC");
+                                    }
+                                    int qtdPac = 0;
+                                    if(mapQtdEtq.containsKey("PAC")){
+                                        qtdPac = mapQtdEtq.get("PAC");
+                                    }
+                                    //CONSULTA SE TEM CONTRATO PAX
+                                    int codPax = 0;
+                                    if(mapCodECT.containsKey("PAX")){
+                                       codPax =  mapCodECT.get("PAX");
+                                    }
+                                    int qtdPax = 0;
+                                    if(mapQtdEtq.containsKey("PAX")){
+                                        qtdPax = mapQtdEtq.get("PAX");
+                                    }
+                                    //CONSULTA SE TEM CONTRATO SEDEX
+                                    int codSedex = 0;
+                                    if(mapCodECT.containsKey("SEDEX")){
+                                       codSedex =  mapCodECT.get("SEDEX");
+                                    }
+                                    int qtdSedex = 0;
+                                    if(mapQtdEtq.containsKey("SEDEX")){
+                                        qtdSedex = mapQtdEtq.get("SEDEX");
+                                    }
+                                    //CONSULTA SE TEM CONTRATO SEDEX 10
+                                    int codSedex10 = 0;
+                                    if(mapCodECT.containsKey("SEDEX10")){
+                                       codSedex10 =  mapCodECT.get("SEDEX10");
+                                    }
+                                    int qtdSedex10 = 0;
+                                    if(mapQtdEtq.containsKey("SEDEX10")){
+                                        qtdSedex10 = mapQtdEtq.get("SEDEX10");
+                                    }
+                                    //CONSULTA SE TEM CONTRATO SEDEX 12
+                                    int codSedex12 = 0;
+                                    if(mapCodECT.containsKey("SEDEX12")){
+                                       codSedex12 =  mapCodECT.get("SEDEX12");
+                                    }
+                                    int qtdSedex12 = 0;
+                                    if(mapQtdEtq.containsKey("SEDEX12")){
+                                        qtdSedex12 = mapQtdEtq.get("SEDEX12");
+                                    }
+                                    //CONSULTA SE TEM CONTRATO SEDEX HJ
+                                    int codSedexHJ = 0;
+                                    if(mapCodECT.containsKey("SEDEXHJ")){
+                                       codSedexHJ =  mapCodECT.get("SEDEXHJ");
+                                    }
+                                    int qtdSedexHJ = 0;
+                                    if(mapQtdEtq.containsKey("SEDEXHJ")){
+                                        qtdSedexHJ = mapQtdEtq.get("SEDEXHJ");
+                                    }
+                                    //CONSULTA SE TEM CONTRATO ESEDEX
+                                    int codEsedex = 0;
+                                    if(mapCodECT.containsKey("ESEDEX")){
+                                       codEsedex =  mapCodECT.get("ESEDEX");
+                                    }
+                                    int qtdEsedex = 0;
+                                    if(mapQtdEtq.containsKey("ESEDEX")){
+                                        qtdEsedex = mapQtdEtq.get("ESEDEX");
+                                    }
+                                    //CONSULTA SE TEM CONTRATO CARTA
+                                    int codCarta = 0;
+                                    if(mapCodECT.containsKey("CARTA")){
+                                       codCarta =  mapCodECT.get("CARTA");
+                                    }
+                                    int qtdCarta = 0;
+                                    if(mapQtdEtq.containsKey("CARTA")){
+                                        qtdCarta = mapQtdEtq.get("CARTA");
+                                    }
+                                    //CONSULTA SE TEM CONTRATO IMPRESSO
+                                    int codImp = 0;
+                                    if(mapCodECT.containsKey("IMPRESSO")){
+                                       codImp =  mapCodECT.get("IMPRESSO");
+                                    }
+                                    int qtdImp = 0;
+                                    if(mapQtdEtq.containsKey("IMPRESSO")){
+                                        qtdImp = mapQtdEtq.get("IMPRESSO");
+                                    }
+                                    //CONSULTA SE TEM CONTRATO SEDEX A COBRAR
+                                    int codSedexc = 0;
+                                    if(mapCodECT.containsKey("SEDEXC")){
+                                       codSedexc =  mapCodECT.get("SEDEXC");
+                                    }
+                                    int qtdSedexc = 0;
+                                    if(mapQtdEtq.containsKey("SEDEXC")){
+                                        qtdSedexc = mapQtdEtq.get("SEDEXC");
+                                    }
+                                    //CONSULTA SE TEM CONTRATO PAC A COBRAR
+                                    int codPacCob = 0;
+                                    if(mapCodECT.containsKey("PAC_COB")){
+                                       codPacCob =  mapCodECT.get("PAC_COB");
+                                    }
+                                    int qtdPacCob = 0;
+                                    if(mapQtdEtq.containsKey("PAC_COB")){
+                                        qtdPacCob = mapQtdEtq.get("PAC_COB");
+                                    }
+                                                                        
                                     if (!acs.contains(1)) {
                                         out.println("<dl style='width:" + tabSize + "; border-left: 1px solid #CCC;' id='PAC' onclick=\"alert('Este usuário não tem permisão para utilizar este serviço!');\">");
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>&nbsp;");//<img src="../../imagensNew/pac.png" border="0" />
@@ -1007,15 +1152,16 @@
                                     } else {
                                         out.println("<dl style='width:" + tabSize + "; border-left: 1px solid #CCC;' id='PAC' onclick=\"alteraServ('PAC',0);\" >");
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>&nbsp;");
-                                        out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
+                                        if (qtdPac > 0) {
+                                            out.println("<dd><p>QTD.: <b>" + qtdPac + "</b></p></dd>");
+                                        }else{
+                                            out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
+                                        }
                                         out.println("<input type='hidden' name='cod_pac' value='' />");
                                         out.println("<dd> <span id='coPac'></span></dd>");
                                         out.println("</dl>");
                                     }
 
-                                    //CONSULTA SE TEM CONTRATO PAX
-                                    int codPax = ContrClienteContrato.consultaContratoClienteGrupoServ(idCli, "PAX", nomeBD);
-                                    int qtdPax = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ("PAX", 0, idCli, nomeBD);
                                     if (!acs.contains(1)) {
                                         out.println("<dl style='width:" + tabSize + "; color:gray;' id='PAX' onclick=\"alert('Este usuário não tem permisão para utilizar este serviço!');\">");
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>GR. FORMATOS</dd>");
@@ -1044,9 +1190,6 @@
                                         out.println("</dl>");
                                     }
 
-                                    //CONSULTA SE TEM CONTRATO SEDEX
-                                    int codSedex = ContrClienteContrato.consultaContratoClienteGrupoServ(idCli, "SEDEX", nomeBD);
-                                    int qtdSedex = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ("SEDEX", 0, idCli, nomeBD);
                                     if (!acs.contains(2)) {
                                         out.println("<dl style='width:" + tabSize + "; color:gray;' id='SEDEX' onclick=\"alert('Este usuário não tem permisão para utilizar este serviço!');\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX</b><br/>&nbsp;");//<img src="../../imagensNew/sedex.png" border="0" />
@@ -1071,15 +1214,16 @@
                                     } else {
                                         out.println("<dl style='width:" + tabSize + ";' id='SEDEX' onclick=\"alteraServ('SEDEX',0);\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX</b><br/>&nbsp;");//<img src="../../imagensNew/sedex.png" border="0" />
-                                        out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
+                                        if (qtdSedex > 0) {
+                                            out.println("<dd><p>QTD.: <b>" + qtdSedex + "</b></p></dd>");
+                                        }else{
+                                            out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
+                                        }
                                         out.println("<input type='hidden' name='cod_sedex' value='' />");
                                         out.println("<dd> <span id='coSdx'></span></dd>");
                                         out.println("</dl>");
                                     }
 
-                                    //CONSULTA SE TEM CONTRATO SEDEX 10
-                                    int codSedex10 = ContrClienteContrato.consultaContratoClienteGrupoServ(idCli, "SEDEX10", nomeBD);
-                                    int qtdSedex10 = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ("SEDEX10", 0, idCli, nomeBD);
                                     if (!acs.contains(4)) {
                                         out.println("<dl style='width:" + tabSize + "; color:gray;' id='SEDEX10' onclick=\"alert('Este usuário não tem permisão para utilizar este serviço!');\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX 10</b><br/>&nbsp;</dd>");//<img src="../../imagensNew/sedex10.png" border="0" />
@@ -1104,15 +1248,16 @@
                                     } else {
                                         out.println("<dl style='width:" + tabSize + ";' id='SEDEX10' onclick=\"alteraServ('SEDEX10',0);\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX 10</b><br/>&nbsp;</dd>");
-                                        out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
+                                        if (qtdSedex10 > 0) {
+                                            out.println("<dd><p>QTD.: <b>" + qtdSedex10 + "</b></p></dd>");
+                                        }else{
+                                            out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
+                                        }
                                         out.println("<input type='hidden' name='cod_sedex10' value='' />");
                                         out.println("<dd> <span id='coS10'></span> </dd>");
                                         out.println("</dl>");
                                     }
 
-                                    //CONSULTA SE TEM CONTRATO SEDEX 12
-                                    int codSedex12 = ContrClienteContrato.consultaContratoClienteGrupoServ(idCli, "SEDEX12", nomeBD);
-                                    int qtdSedex12 = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ("SEDEX12", 0, idCli, nomeBD);
                                     if (!acs.contains(7)) {
                                         out.println("<dl style='width:" + tabSize + "; color:gray;' id='SEDEX12' onclick=\"alert('Este usuário não tem permisão para utilizar este serviço!');\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX 12</b><br/>&nbsp;</dd>");//<img src="../../imagensNew/sedex12.png" border="0" />
@@ -1137,15 +1282,16 @@
                                     } else {
                                         out.println("<dl style='width:" + tabSize + ";' id='SEDEX12' onclick=\"alteraServ('SEDEX12',0);\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX 12</b><br/>&nbsp;</dd>");
-                                        out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
+                                        if (qtdSedex12 > 0) {
+                                            out.println("<dd><p>QTD.: <b>" + qtdSedex12 + "</b></p></dd>");
+                                        }else{
+                                            out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
+                                        }
                                         out.println("<input type='hidden' name='cod_sedex12' value='' />");
                                         out.println("<dd> <span id='coS12'></span> </dd>");
                                         out.println("</dl>");
                                     }
 
-                                    //CONSULTA SE TEM CONTRATO SEDEX HJ
-                                    int codSedexHJ = ContrClienteContrato.consultaContratoClienteGrupoServ(idCli, "SEDEXHJ", nomeBD);
-                                    int qtdSedexHJ = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ("SEDEXHJ", 0, idCli, nomeBD);
                                     if (!acs.contains(8)) {
                                         out.println("<dl style='width:" + tabSize + "; color:gray;' id='SEDEXHJ' onclick=\"alert('Este usuário não tem permisão para utilizar este serviço!');\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX HJ</b><br/>&nbsp;</dd>");//<img src="../../imagensNew/sedex12.png" border="0" />
@@ -1170,15 +1316,16 @@
                                     } else {
                                         out.println("<dl style='width:" + tabSize + ";' id='SEDEXHJ' onclick=\"alteraServ('SEDEXHJ',0);\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX HJ</b><br/>&nbsp;</dd>");
-                                        out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
+                                        if (qtdSedexHJ > 0) {
+                                            out.println("<dd><p>QTD.: <b>" + qtdSedexHJ + "</b></p></dd>");
+                                        }else{
+                                            out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
+                                        }
                                         out.println("<input type='hidden' name='cod_sedexHJ' value='' />");
                                         out.println("<dd> <span id='coShj'></span> </dd>");
                                         out.println("</dl>");
                                     }
 
-                                    //CONSULTA SE TEM CONTRATO ESEDEX
-                                    int codEsedex = ContrClienteContrato.consultaContratoClienteGrupoServ(idCli, "ESEDEX", nomeBD);
-                                    int qtdEsedex = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ("ESEDEX", 0, idCli, nomeBD);
                                     if (acs.contains(5) && codEsedex != 0 && qtdEsedex > 0) {
                                         out.println("<dl style='width:" + tabSize + ";' id='ESEDEX' onclick=\"alteraServ('ESEDEX',1);\">");
                                         out.println("<dd><b class='servSmall'>eSEDEX</b><br/>&nbsp;</dd>");
@@ -1191,7 +1338,7 @@
                                         out.println("<dd><b class='servSmall'>eSEDEX</b><br/>&nbsp;</dd>");
                                         //out.println("<dd><img src='../../imagensNew/esedex.png' border='0' /></dd>");
                                         out.println("<dd><p><b>S/ ETIQUETA</b></p></dd>");
-                                        out.println("<input type='hidden' name='cod_esedex' value='" + codEsedex + "' /></dl>");
+                                        out.println("<input type='hidden' name='cod_esedex' value='" + codEsedex + "' />");
                                         out.println("<dd> <span id='coEsx'></span> </dd>");
                                         out.println("</dl>");
                                     } else {
@@ -1203,9 +1350,6 @@
                                         out.println("</dl>");
                                     }
 
-                                    //CONSULTA SE TEM CONTRATO CARTA
-                                    int codCarta = ContrClienteContrato.consultaContratoClienteGrupoServ(idCli, "CARTA", nomeBD);
-                                    int qtdCarta = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ("CARTA", 0, idCli, nomeBD);
                                     if (!acs.contains(6)) {
                                         out.println("<dl style='width:" + tabSize + "; color:gray;' id='CARTA' onclick=\"alert('Este usuário não tem permisão para utilizar este serviço!');\" >");
                                         out.println("<dd><b class='servSmall'>CARTAS</b><br/>&nbsp;</dd>");//<img src="../../imagensNew/carta.png" border="0" />
@@ -1227,14 +1371,15 @@
                                     } else {
                                         out.println("<dl style='width:" + tabSize + ";' id='CARTA' onclick=\"alteraServ('CARTA',0);\" >");
                                         out.println("<dd><b class='servSmall'>CARTAS</b><br/>&nbsp;</dd>");
-                                        out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
+                                        if (qtdCarta > 0) {
+                                            out.println("<dd><p>QTD.: <b>" + qtdCarta + "</b></p></dd>");
+                                        }else{
+                                            out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
+                                        }
                                         out.println("<input type='hidden' name='cod_carta' value='' />");
                                         out.println("</dl>");
                                     }
 
-                                    //CONSULTA SE TEM CONTRATO CARTA
-                                    int codImp = ContrClienteContrato.consultaContratoClienteGrupoServ(idCli, "IMPRESSO", nomeBD);
-                                    int qtdImp = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ("IMPRESSO", 0, idCli, nomeBD);
                                     if (!acs.contains(6)) {
                                         out.println("<dl style='width:" + tabSize + "; color:gray;' id='IMPRESSO' onclick=\"alert('Este usuário não tem permisão para utilizar este serviço!');\" >");
                                         out.println("<dd><b class='servSmall'>IMPRESSO</b><br/>&nbsp;</dd>");//<img src="../../imagensNew/carta.png" border="0" />
@@ -1256,14 +1401,15 @@
                                     } else {
                                         out.println("<dl style='width:" + tabSize + ";' id='IMPRESSO' onclick=\"alteraServ('IMPRESSO',0);\" >");
                                         out.println("<dd><b class='servSmall'>IMPRESSO</b><br/>&nbsp;</dd>");
-                                        out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
+                                        if (qtdImp > 0) {
+                                            out.println("<dd><p>QTD.: <b>" + qtdImp + "</b></p></dd>");
+                                        }else{
+                                            out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
+                                        }
                                         out.println("<input type='hidden' name='cod_carta' value='' />");
                                         out.println("</dl>");
                                     }
 
-                                    //CONSULTA SE TEM CONTRATO SEDEX A COBRAR
-                                    int codSedexc = ContrClienteContrato.consultaContratoClienteGrupoServ(idCli, "SEDEXC", nomeBD);
-                                    int qtdSedexc = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ("SEDEXC", 0, idCli, nomeBD);
                                     if (!acs.contains(3)) {
                                         out.println("<dl style='width:" + tabSize + "; color:gray;' id='SEDEXC' onclick=\"alert('Este usuário não tem permisão para utilizar este serviço!');\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX</b><br/>A COBRAR");//<img src="../../imagensNew/sedex_cobrar.png" border="0" />
@@ -1285,14 +1431,15 @@
                                     } else {
                                         out.println("<dl style='width:" + tabSize + ";' id='SEDEXC' onclick=\"alteraServ('SEDEXC',0);\" >");
                                         out.println("<dd><b class='servSmall'>SEDEX</b><br/>A COBRAR");//<img src="../../imagensNew/sedex_cobrar.png" border="0" />
-                                        out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
+                                        if (qtdSedexc > 0) {
+                                            out.println("<dd><p>QTD.: <b>" + qtdSedexc + "</b></p></dd>");
+                                        }else{
+                                            out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
+                                        }
                                         out.println("<input type='hidden' name='cod_sedexc' value='' />");
                                         out.println("</dl>");
                                     }
 
-                                    //CONSULTA SE TEM CONTRATO PAC A COBRAR
-                                    int codPacCob = ContrClienteContrato.consultaContratoClienteGrupoServ(idCli, "PAC_COB", nomeBD);
-                                    int qtdPacCob = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ("PAC_COB", 0, idCli, nomeBD);
                                     if (!acs.contains(3)) {
                                         out.println("<dl style='width:" + tabSize + "; color:gray;' id='PAC_COB' onclick=\"alert('Este usuário não tem permisão para utilizar este serviço!');\" >");
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>A COBRAR");//<img src="../../imagensNew/sedex_cobrar.png" border="0" />
@@ -1314,27 +1461,34 @@
                                     } else {
                                         out.println("<dl style='width:" + tabSize + ";' id='PAC_COB' onclick=\"alteraServ('PAC_COB',0);\" >");
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>A COBRAR");//<img src="../../imagensNew/sedex_cobrar.png" border="0" />
-                                        out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
+                                        if (qtdPacCob > 0) {
+                                            out.println("<dd><p>QTD.: <b>" + qtdPacCob + "</b></p></dd>");
+                                        }else{
+                                            out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
+                                        }
                                         out.println("<input type='hidden' name='cod_pacc' value='' />");
                                         out.println("</dl>");
                                     }
-
-                                    //CONSULTA SE TEM CONTRATO MDPB
-                                    int codMDPB = ContrClienteContrato.consultaContratoClienteGruposServicos(idCli, "'MDPB_L' , 'MDPB_E', 'MDPB_N'", nomeBD);
-                                    //  if (acs.contains(3) && codMDPB != 0) {
-                                    if (codMDPB != 0) {
-                                        out.println("<dl style='width:" + tabSize + ";' id='MDPB' onclick=\"alteraServ('MDPB',1);\" >");
-                                        out.println("<dd><b class='servSmall'>MDPB</b>");
-                                        out.println("<dd><p><b>REGISTRADA</b></p></dd>");
-                                        out.println("<input type='hidden' name='cod_mdpb' value='MDPB' />");
-                                        out.println("</dl>");
-                                    } else {
+                                    
+                                    if (!acs.contains(6)) {
                                         out.println("<dl style='width:" + tabSize + "; color:gray;' id='MDPB' onclick=\"alert('Este serviço não esta habilitado!');\" >");
                                         out.println("<dd><b class='servSmall'>MDPB</b>");
                                         out.println("<dd><p><b style='color:gray;'>BLOQUEADO</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_mdpb' value='MDPB' />");
                                         out.println("</dl>");
-                                    }
+                                    } else {
+                                        out.println("<dl style='width:" + tabSize + ";' id='MDPB' onclick=\"alteraServ('MDPB',1);\" >");
+                                        out.println("<dd><b class='servSmall'>MDPB</b>");
+                                        out.println("<dd><p><b>REGISTRADA</b></p></dd>");
+                                        out.println("<input type='hidden' name='cod_mdpb' value='MDPB' />");
+                                        out.println("</dl>");
+                                    } /*else {
+                                        out.println("<dl style='width:" + tabSize + "; color:gray;' id='MDPB' onclick=\"alert('Este serviço não esta habilitado!');\" >");
+                                        out.println("<dd><b class='servSmall'>MDPB</b>");
+                                        out.println("<dd><p><b style='color:gray;'>BLOQUEADO</b></p></dd>");
+                                        out.println("<input type='hidden' name='cod_mdpb' value='MDPB' />");
+                                        out.println("</dl>");
+                                    }*/
 
                                     ArrayList<Integer> listaOutrosServ = ContrClienteContrato.consultaOutrosServicosCliente(idCli, nomeBD);
                                     if (listaOutrosServ.size() > 0) {
@@ -1453,7 +1607,11 @@
                                 </li>
                                 <li id="singleDest1">
                                     <dd>
-                                        <label>Nome / Razão Social<b class="obg">*</b><a onClick="verPesquisarDestinatario('single');"><img src="../../imagensNew/lupa.png" /> PESQUISAR</a></label>
+                                        <label>
+                                            Nome / Razão Social<b class="obg">*</b>
+                                            <a onClick="verPesquisarDestinatario('single');" style="margin: 0 5px 0 0;"><img src="../../imagensNew/lupa.png" /> PESQUISAR</a>
+                                            <a onClick="verPesquisarChaveNFE();" style="margin: 0 10px 0 0;"><img src="../../imagensNew/lupa.png" /> CHAVE NF-E</a>
+                                        </label>
                                         <input style="display:none;" type="text" name="somefakename" />
                                         <input type="text" name="nome" id="nome" size="50" maxlength="70" value="" autocomplete="off" style="margin-bottom: 5px;" />
                                         <br/><input type="checkbox" name="salvarDestinatario" id="salvarDestinatario" value="1" checked /><i> Salvar os dados do destinatário.</i>

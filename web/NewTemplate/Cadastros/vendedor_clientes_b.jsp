@@ -62,36 +62,32 @@
                                                         <%
                                                             ArrayList<Clientes> listaCliente = Controle.contrCliente.getNomeCodigoMetodo(nomeBD, false);
                                                             for (Clientes c : listaCliente) {
-                                                                out.println("<option value='" + c.getCodigo() + "'>[" + c.getCodigo() + "] " + c.getNome() + "</option>");
+                                                                out.println("<option value='" + c.getCodigo() + "'>[" + c.getCodigo() + "] " + c.getNome().replace("'", "") + "</option>");
                                                                 jsonCliente += ",{ \"id\":\"" + c.getCodigo()
-                                                                        + "\" , \"nome\":\"" + c.getNome().replace("\"", "").replace("'", "")
-                                                                        + "\" , \"logradouro\":\"" + c.getEndereco().replace("\"", "").replace("'", "")
+                                                                        + "\" , \"nome\":\"" + c.getNome().replace("\"", "").replace(",", "").replace("'", "")
+                                                                        + "\" , \"logradouro\":\"" + c.getEndereco().replace("\"", "").replace("'", "").replace("/'", "-")
                                                                         + "\" , \"numero\":\"" + c.getNumero()
-                                                                        + "\" , \"complemento\":\"" + c.getComplemento().replace("\"", "").replace("'", "")
+                                                                        + "\" , \"complemento\":\"" + c.getComplemento().replace("\"", "").replace("'", "").replace("/'", "-")
                                                                         + "\" , \"bairro\":\"" + c.getBairro().replace("\"", "").replace("'", "")
                                                                         + "\" , \"cidade\":\"" + c.getCidade().replace("\"", "").replace("'", "")
                                                                         + "\" , \"uf\":\"" + c.getUf()
                                                                         + "\" , \"cep\":\"" + c.getCep()
-                                                                        + "\" , \"telefone\":\"" + c.getTelefone().replace("\"", "")
+                                                                        + "\" , \"telefone\":\"" + c.getTelefone().replace("\"", "").replace("'", "")
                                                                         + "\" , \"email\":\"" + c.getEmail().replace("\"", "") + "\" }";
                                                             }
                                                             jsonCliente = "{ \"clientes\" : [" + jsonCliente.substring(1) + "]}";
+
                                                         %>
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-2">
-                                                    <button type="button" disabled class="btn btn-sm btn-success hidden" id="add" onclick="addRow();"><i class="fa fa-plus fa-spc"></i> ADICIONAR NA ROTA</button>
-                                                    <%--<input style="width:450px;" type="text" id="nomeCliente" name="nomeCliente" onclick="javascript:this.value = '';" />--%>
+                                                    <button type="button" disabled class="btn btn-sm btn-success hidden" id="add" onclick="addRow();"><i class="fa fa-plus fa-spc"></i> ADICIONAR NA LISTA</button>
                                                     <input type="hidden" id="nomeCliAux" name="nomeCliAux" />
                                                     <input type="hidden" id="idCliAux" name="idCliAux" />
                                                 </div>
                                             </div>
                                         </li>
                                         <li class="list-group-item" style="display: none;" id="liDadosCli">
-                                            <%--<label>Endereço:</label><div style="font-size: 11px;" id="cli_endereco"><b style="color:red;">Escolha um Cliente!</b></div>
-                                            <label>Bairro:</label><div style="font-size: 11px;" id="cli_bairro"></div>
-                                            <label>Cidade/UF:</label><div style="font-size: 11px;" id="cli_cidade"></div>
-                                            <label>CEP:</label><div style="font-size: 11px;" id="cli_cep"></div>--%>
                                         </li>
                                         <li class="list-group-item no-padding">
                                             <table class="table table-striped table-bordered table-hover table-condensed" id="dataTables-example">
@@ -103,8 +99,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="table">
-                                                    <%
-                                                        for (int i = 0; i < listaClientes.size(); i++) {
+                                                    <%                                                        for (int i = 0; i < listaClientes.size(); i++) {
                                                             Clientes cf = (Clientes) listaClientes.get(i);
                                                             String nomeCliente = cf.getNome();
                                                             int idCliente = cf.getCodigo();
@@ -141,7 +136,7 @@
                                             <input type="hidden" name="nomeBD" id="nomeBD" value="<%= nomeBD%>" />
                                             <button type="submit" id="save" class="btn btn-success" <%if (listaClientes.size() <= 0) {%> disabled <%}%> onclick="javascript:document.form1.target = '';
                                                     document.form1.action = '../../ServInserirClientesVendedor';
-                                                    return validateRow();" ><i class="fa fa-lg fa-spc fa-save"></i> SALVAR ROTA</button>
+                                                    return validateRow();" ><i class="fa fa-lg fa-spc fa-save"></i> SALVAR LISTA</button>
                                         </li>
                                     </ul>
                                 </form>
@@ -166,6 +161,7 @@
                 $(".numeric").numeric({decimal: ".", negative: false, scale: 2});
                 LoadSelect2Script(selectCliente);
                 LoadDataTablesScripts(AllTables);
+
             });
 
             var jsonCli = '<%= jsonCliente%>';
@@ -174,6 +170,18 @@
                     desabilitaBotao();
                     $('#liDadosCli').hide();
                 } else {
+
+                    jsonCli = jsonCli.replace(/\\n/g, "\\n")
+                            .replace(/\\'/g, "\\'")
+                            .replace(/\\"/g, '\\"')
+                            .replace(/\\&/g, "\\&")
+                            .replace(/\\r/g, "\\r")
+                            .replace(/\\t/g, "\\t")
+                            .replace(/\\b/g, "\\b")
+                            .replace(/\\f/g, "\\f");
+// remove non-printable and other non-valid JSON chars
+                    jsonCli = jsonCli.replace(/[\u0000-\u0019]+/g, "");
+                    console.log(jsonCli.toString());
                     var data = JSON.parse(jsonCli);
                     var cliArray = data.clientes;
                     for (var i = 0; i < cliArray.length; i++) {

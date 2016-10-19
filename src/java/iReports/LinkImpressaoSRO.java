@@ -5,8 +5,6 @@
  */
 package iReports;
 
-import Controle.contrCliente;
-import static Emporium.Controle.ContrPreVenda.consultaIdBySRO;
 import Entidade.Clientes;
 import Entidade.DadosEtiqueta;
 import Util.Conexao;
@@ -27,7 +25,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -123,7 +120,7 @@ public class LinkImpressaoSRO extends HttpServlet {
                     contrato = cli.getNumContrato();
                 }
 
-                String url_base = "http://localhost:8080/PortalPostal";
+                String url_base = "http://www.portalpostal.com.br";
                 String url = cli.getUrl_logo();
                 if (cli.getUrl_logo() == null || cli.getUrl_logo().trim().equals("") || cli.getUrl_logo().equals("null")) {
                     url = "";

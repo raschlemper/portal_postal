@@ -45,10 +45,12 @@ app.constant('MESSAGES', {
         info: {
             ALERT: "Alerta Lançamento",
             ALERT_EXCLUIR: "Excluir Lançamento?",
+            ALTERAR_AUTOMATICO: "Este lançamento é automático e não pode ser alterado!",
             CONFIRMAR_EXCLUIR: "Deseja realmente excluir este lançamento?",
             CONFIRMAR_EXCLUIR_TODOS: "Deseja realmente excluir estes lançamentos?",
             CONFIRMAR_EXCLUIR_PROGRAMADOS_TODOS: "Deseja realmente excluir estes lançamentos? <br/> Alguns lançamentos parcelados não poderão ser excluídos. É necessário excluir todos os lançamentos posteriores!",
             EXCLUIR_POSTERIOR: "Este lançamento não pode ser excluído. É necessário excluir todos os lançamentos posteriores!",
+            EXCLUIR_AUTOMATICO: "Este lançamento é automático e não pode ser excluído!",
             SEM_LANCAMENTO_SELECIONADO: "Nenhum lançamento foi selecionado!",
             FAVORECIDO_NAO_CADASTRADO: "Este favorecido não esta cadastrado!"
         },
@@ -59,7 +61,10 @@ app.constant('MESSAGES', {
             DATA_COMPETENCIA_VALIDA: "A competência do lançamento não é válida!",
             VALOR_REQUERIDA: "Preencha o valor do lançamento!",
             VALOR_VALIDA: "O valor do lançamento não é válido",
-            HISTORICO_REQUERIDA: "Preencha o histórico do lançamento!"
+            FAVORECIDO_REQUERIDA: "Preencha o favorecido do lançamento!",
+            HISTORICO_REQUERIDA: "Preencha o histórico do lançamento!",
+            PLANO_CONTA_REQUERIDA: "Preencha o plano de conta do lançamento!",
+            CENTRO_CUSTO_REQUERIDA: "Preencha o centro de custo do lançamento!"
         },
         programar: {
             title: {
@@ -90,7 +95,10 @@ app.constant('MESSAGES', {
                 DATA_COMPETENCIA_VALIDA: "A competência do lançamento programado não é válida!",
                 VALOR_REQUERIDA: "Preencha o valor do lançamento programado!",
                 VALOR_VALIDA: "O valor do lançamento programado não é válido",
-                HISTORICO_REQUERIDA: "Preencha o histórico do lançamento programado!"
+                FAVORECIDO_REQUERIDA: "Preencha o favorecido do lançamento programado!",
+                HISTORICO_REQUERIDA: "Preencha o histórico do lançamento programado!",
+                PLANO_CONTA_REQUERIDA: "Preencha o plano de conta do lançamento programado!",
+                CENTRO_CUSTO_REQUERIDA: "Preencha o centro de custo do lançamento programado!"
             }            
         },
         transferir: {

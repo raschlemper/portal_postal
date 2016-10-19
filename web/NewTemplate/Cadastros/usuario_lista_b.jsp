@@ -3,13 +3,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <%
-    if (session.getAttribute("usuario") == null) {
+    Usuario usrSessao = (Usuario) session.getAttribute("agf_usuario");
+    if (usrSessao == null) {
         response.sendRedirect("../index.jsp?msgLog=3");
     } else {
 
-        int idNivelDoUsuario = (Integer) session.getAttribute("nivel");
-        if (idNivelDoUsuario != 1) {
-            response.sendRedirect("../jsp/imp_movimento.jsp?msg=Acesso Negado!");
+        if (usrSessao.getIdNivel() != 1) { 
+            response.sendRedirect("../Dashboard/index.jsp?msg=Somente nivel administrador tem acesso aos usuarios da AGF!");
+        } else if (usrSessao.getListaAcessosPortalPostal().contains("404")) { 
+            response.sendRedirect("../Dashboard/index.jsp?msg=Acesso Negado!");
         }
 
         String nomeBD = (String) session.getAttribute("empresa");

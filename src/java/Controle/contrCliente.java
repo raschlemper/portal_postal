@@ -7,7 +7,12 @@ package Controle;
 import Entidade.Clientes;
 import Entidade.HistoricoImport;
 import Util.Conexao;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -82,12 +87,28 @@ public class contrCliente {
         }
     }
     
-    public static int inserirCliente(String nome, String nomeFantasia, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String cep, String telefone, String email, String cnpj, double latitude, double longitude, int grupo_fat, String nomeBD) {
+    public static int inserirCliente(String nome, String nomeFantasia, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String cep, String telefone, String email, String cnpj, double latitude, double longitude, int grupo_fat, String obs, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "INSERT INTO cliente (nome,endereco,telefone,bairro,cidade,uf,cep,email,cnpj,nomeFantasia,complemento,numero,latitude,longitude, idGrupoFaturamento) \n"
-                + " VALUES ('" + nome + "','" + endereco + "','" + telefone + "','" + bairro + "','" + cidade + "','" + uf + "','" + cep + "','" + email + "','" + cnpj + "','" + nomeFantasia + "','" + complemento + "','" + numero + "','" + latitude + "','" + longitude + "', " + grupo_fat + ");";
+        String sql = "INSERT INTO cliente (nome,endereco,telefone,bairro,cidade,uf,cep,email,cnpj,nomeFantasia,complemento,numero,latitude,longitude,idGrupoFaturamento,obscli) \n"
+                + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
         try {
             PreparedStatement valores = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            valores.setString(1, nome);
+            valores.setString(2, endereco);
+            valores.setString(3, telefone);
+            valores.setString(4, bairro);
+            valores.setString(5, cidade);
+            valores.setString(6, uf);
+            valores.setString(7, cep);
+            valores.setString(8, email);
+            valores.setString(9, cnpj);
+            valores.setString(10, nomeFantasia);
+            valores.setString(11, complemento);
+            valores.setString(12, numero);
+            valores.setString(13, latitude + "");
+            valores.setString(14, longitude + "");
+            valores.setInt(15, grupo_fat);
+            valores.setString(16, obs);
             valores.executeUpdate();
             int autoIncrementKey = 0;
             ResultSet rs = valores.getGeneratedKeys();
@@ -105,13 +126,30 @@ public class contrCliente {
         }
     }
     
-    public static int alterarCliente(String nome, String nomeFantasia, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String cep, String telefone, String email, String cnpj, double latitude, double longitude, int grupo_fat, int idCliente, String nomeBD) {
+    public static int alterarCliente(String nome, String nomeFantasia, String endereco, String numero, String complemento, String bairro, String cidade, String uf, String cep, String telefone, String email, String cnpj, double latitude, double longitude, int grupo_fat, int idCliente, String obs, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "UPDATE cliente SET nome='" + nome + "',endereco='" + endereco + "',telefone='" + telefone + "',bairro='" + bairro + "',cidade='" + cidade + "',"
-                + "uf='" + uf + "',cep='" + cep + "',email='" + email + "',cnpj='" + cnpj + "',nomeFantasia='" + nomeFantasia + "',complemento='" + complemento + "',"
-                + "numero='" + numero + "',latitude='" + latitude + "',longitude='" + longitude + "', idGrupoFaturamento=" + grupo_fat + " WHERE codigo = " + idCliente + " ;";
+        String sql = "UPDATE cliente SET nome=?,endereco=?,telefone=?,bairro=?,cidade=?,"
+                + "uf=?,cep=?,email=?,cnpj=?,nomeFantasia=?,complemento=?,"
+                + "numero=?,latitude=?,longitude=?,idGrupoFaturamento=?,obscli=? WHERE codigo = ? ;";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
+            valores.setString(1, nome);
+            valores.setString(2, endereco);
+            valores.setString(3, telefone);
+            valores.setString(4, bairro);
+            valores.setString(5, cidade);
+            valores.setString(6, uf);
+            valores.setString(7, cep);
+            valores.setString(8, email);
+            valores.setString(9, cnpj);
+            valores.setString(10, nomeFantasia);
+            valores.setString(11, complemento);
+            valores.setString(12, numero);
+            valores.setString(13, latitude + "");
+            valores.setString(14, longitude + "");
+            valores.setInt(15, grupo_fat);
+            valores.setString(16, obs);
+            valores.setInt(17, idCliente);
             valores.executeUpdate();
             valores.close();
             return 1;
@@ -437,7 +475,7 @@ public class contrCliente {
             if (result.next()) {
                 return new Clientes(result);
             } else {
-                return null;
+               return null;
             }
         } catch (Exception e) {
             ContrErroLog.inserir("Portal Postal - contrCliente", "SQLException", sql, e.toString());

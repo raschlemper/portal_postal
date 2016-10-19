@@ -66,19 +66,21 @@
                                     <filter-content>
                                         <div class="form-inline pull-left">
                                             
+                                            
                                             <div class="form-group">
-                                                
+
                                                 <label>Conta:</label>
                                                 <select class="form-control spc-right" ng-model="conta" ng-change="changeConta(conta)"
-                                                    ng-options="conta.nome for conta in contas track by conta.idConta">    
+                                                    ng-options="conta.nome for conta in contas track by conta.idConta">     
+                                                    <option value=""> Todos </option> 
                                                 </select>
-                                                
+
                                                 <label>Tipo:</label>
                                                 <select class="form-control spc-right" ng-model="lancSearch.tipo">
                                                     <option value=""> Todos </option> 
                                                     <option value="{{tipo}}" ng-repeat="tipo in tipos track by $index"> {{tipo.descricao}} </option>        
                                                 </select>
-                                                
+
                                                 <label>Data:</label>
                                                 <div class="input-group spc-right">
                                                     <input type="text" autocomplete="off" class="form-control" ng-model="lancSearch.dataInicio" style="width: 120px;"
@@ -93,18 +95,26 @@
                                                            placeholder="Data final" ng-model-options='{ debounce: 1000 }'/>
                                                     <span class="input-group-addon" ng-click="datepickerDataFim.open($event)"><i class="fa fa-calendar"></i></span>
                                                 </div>  
-                                                
+
                                                 <button class="btn btn-sm btn-default" ng-click="filterByDays(-1)">Ontem</button> 
                                                 <button class="btn btn-sm btn-default" ng-click="filterByDays(0)">Hoje</button> 
+
+                                                <br>
                                                 
-                                            </div>                                             
+                                                <plano-conta class="spc-right" plano-conta-model="lancSearch.planoConta" show-type-filter="true" validar-selected="false"></plano-conta>
+                                                <centro-custo class="spc-right" centro-custo-model="lancSearch.centroCusto" show-type-filter="true" validar-selected="false"></centro-custo>
+                                               
+                                            </div>
                                             
                                         </div>
                                     </filter-content>   
                                     
                                     <title-content>
                                         <div class="margin-top">
-                                            <div class="title-table">
+                                            <div class="title-table" ng-if="!conta">
+                                                <strong><i>Todas as Contas</i></strong>
+                                            </div>
+                                            <div class="title-table" ng-if="conta">
                                                 <strong><i>{{conta.nome}} 
                                                         <span style="font-size: 11pt;" ng-show="conta.contaCorrente && conta.contaCorrente.banco && conta.contaCorrente.agencia && conta.contaCorrente.contaCorrente"> 
                                                        - (Banco: {{conta.contaCorrente.banco.nome}} / Agência: {{conta.contaCorrente.agencia}}-{{conta.contaCorrente.agenciaDv}} / Conta: {{conta.contaCorrente.contaCorrente}}-{{conta.contaCorrente.contaCorrenteDv}})

@@ -77,7 +77,9 @@
                                                 <span class="item-list col-ident-{{estrutura.nivel}}">{{estrutura.descricao}}</span>
                                             </div>
                                             <div class="col-md-8">
-                                                <div class="col-md-1" ng-repeat="saldo in estrutura.saldos track by $index">{{saldo | currency : ''}}</div>
+                                                <div class="col-md-1" style="padding: 0" ng-repeat="saldo in estrutura.saldos track by $index">
+                                                    <div class="text-right">{{saldo | currency : ''}}</div>
+                                                </div>
                                             </div>
                                             <div class="col-md-1">
                                                 <div class="text-right">{{estrutura.total | currency : ''}}</div>

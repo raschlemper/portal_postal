@@ -82,7 +82,7 @@
                     var indexB = form.arquivo.value.length;
                     var ext = form.arquivo.value.substring(indexA, indexB).toUpperCase();
                     var tipo = document.getElementById('tipo').value;
-                    if((tipo === 'CSV' || tipo === 'INTERLOGIC' || tipo === 'TRAY' || tipo === 'LINX') && ext !== ".CSV") {
+                    if((tipo === 'CSV' || tipo === 'INTERLOGIC' || tipo === 'RTSYS_SGI' || tipo === 'TRAY' || tipo === 'LINX' || tipo === 'ECOMPLETO') && ext !== ".CSV") {
                         fecharTelaEspera();
                         alert("O arquivo a ser importado deve ser '.CSV' !");
                         return false;
@@ -126,7 +126,7 @@
             
             function mudaFileOpts(tipo){
                 document.getElementById('dd_endereconf').className = 'esconder'; 
-                if(tipo === 'CSV' || tipo === 'INTERLOGIC' || tipo === 'WEBVENDAS'){
+                if(tipo === 'CSV' || tipo === 'INTERLOGIC' || tipo === 'WEBVENDAS' || tipo === 'ECOMPLETO' || tipo === 'RTSYS_SGI'){
                     document.getElementById('arquivo').accept = '.csv';
                     document.getElementById('arquivo').multiple = false;               
                     document.getElementById('dd_vd').className = 'esconder'; 
@@ -221,6 +221,8 @@
                                         <option value="EDI">ARQUIVO EDI</option>
                                         <option value="LINX">ARQUIVO LINX</option>
                                         <option value="WEBVENDAS">ARQUIVO WEBVENDAS</option>
+                                        <option value="ECOMPLETO">ARQUIVO E-COMPLETO</option>
+                                        <option value="RTSYS_SGI">ARQUIVO RTSys SGI</option>
                                         <option value="EV">ARQUIVO ESTANTE VIRTUAL</option>
                                         <!-- <option value="PS">ARQUIVO PS SERVICE EXCELL</option> -->
                                         <option value="PSN">ARQUIVO PS SERVICE</option>

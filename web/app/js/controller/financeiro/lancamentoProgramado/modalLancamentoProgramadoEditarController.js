@@ -1,9 +1,9 @@
 'use strict';
 
 app.controller('ModalLancamentoProgramadoEditarController', 
-    ['$scope', '$filter', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'FavorecidoService', 
+    ['$scope', '$filter', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'TipoDocumentoService', 'TipoFormaPagamentoService', 'ConfiguracaoService', 
      'ModalService', 'DatePickerService', 'LancamentoHandler', 'ListaService', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
-    function ($scope, $filter, ContaService, PlanoContaService, CentroCustoService, TipoDocumentoService, TipoFormaPagamentoService, FavorecidoService, 
+    function ($scope, $filter, ContaService, PlanoContaService, CentroCustoService, TipoDocumentoService, TipoFormaPagamentoService, ConfiguracaoService, 
         ModalService, DatePickerService, LancamentoHandler, ListaService, FinanceiroValidation, LISTAS, MESSAGES) {
 
         var init = function () {  
@@ -123,26 +123,11 @@ app.controller('ModalLancamentoProgramadoEditarController',
                 .then(function (data) {
                     $scope.formaPagamentos = data;
                     $scope.lancamentoProgramado.formaPagamento = $scope.lancamentoProgramado.formaPagamento || $scope.formaPagamentos[1];
-//                    favorecidos();
                 })
                 .catch(function (e) {
                     console.log(e);
                 });
         };
-        
-//        var favorecidos = function() {
-//            FavorecidoService.getAll()
-//                .then(function (data) {
-//                    $scope.favorecidos = data;
-//                })
-//                .catch(function (e) {
-//                    console.log(e);
-//                });
-//        };
-        
-//        $scope.selectFavorecido = function(favorecido) {
-//            $scope.lancamentoProgramado.favorecido = favorecido;
-//        }
         
         $scope.setDataCompetencia = function(lancamentoProgramado) {
             if(lancamentoProgramado.dataCompetencia) return;
@@ -166,11 +151,10 @@ app.controller('ModalLancamentoProgramadoEditarController',
         };
         
         $scope.ok = function(form, lancamentoProgramado) {
-            if(!$scope.validaConta(lancamentoProgramado.conta)) return;
-            if(!validarParcela(lancamentoProgramado.valor, lancamentoProgramado)) return;  
-            if(!$scope.validarRateio(lancamentoProgramado.valor, lancamentoProgramado)) return;  
-            if(!$scope.validarForm(form, lancamentoProgramado)) return;
-//            delete lancamentoProgramado.parcelas;
+            return validarLancamentoProgramado(form, lancamentoProgramado);
+        };
+        
+        var ok = function( lancamentoProgramado) {
             delete lancamentoProgramado.lancamentos;
             lancamentoProgramado.gerarLancamento = false;     
             $scope.close(lancamentoProgramado);
@@ -195,7 +179,22 @@ app.controller('ModalLancamentoProgramadoEditarController',
             return lancamento;
         };
         
-        // ***** VALIDAR ***** //
+        // ***** VALIDAR ***** // 
+        
+        var validarLancamentoProgramado = function(form, lancamentoProgramado) {
+            if(!$scope.validaConta(lancamentoProgramado.conta)) return;
+            if(!validarParcela(lancamentoProgramado.valor, lancamentoProgramado)) return;  
+            if(!$scope.validarRateio(lancamentoProgramado.valor, lancamentoProgramado)) return;  
+            if(!$scope.validarForm(form, lancamentoProgramado)) return;
+            ConfiguracaoService.get()
+                .then(function(data) {
+                    if(!validarLancamentoProgramadoByConfiguracao(data, lancamentoProgramado)) return;
+                    ok(lancamentoProgramado);
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
         
         $scope.validaConta = function(conta) {
             return FinanceiroValidation.contaEncerrada(conta);
@@ -233,6 +232,41 @@ app.controller('ModalLancamentoProgramadoEditarController',
             });  
             return true;
         };   
+
+        var validarLancamentoProgramadoByConfiguracao = function (configuracao, lancamentoProgramado) {
+            if (configuracao.favorecido && !lancamentoProgramado.favorecido) {
+                alert(MESSAGES.lancamento.programar.validacao.FAVORECIDO_REQUERIDA);
+                return false;
+            } 
+            if (configuracao.historico && !lancamentoProgramado.historico) {
+                alert(MESSAGES.lancamento.programar.validacao.HISTORICO_REQUERIDA);
+                return false;
+            }
+            if(!lancamentoProgramado.rateios || !lancamentoProgramado.rateios.length) {
+                if (configuracao.planoConta && !lancamentoProgramado.planoConta) {
+                    alert(MESSAGES.lancamento.programar.validacao.PLANO_CONTA_REQUERIDA);
+                    return false;
+                }
+                if (configuracao.centroCusto && !lancamentoProgramado.centroCusto) {
+                    alert(MESSAGES.lancamento.programar.validacao.CENTRO_CUSTO_REQUERIDA);
+                    return false;
+                }
+            } else {
+                var retorno = true;
+                _.map(lancamentoProgramado.rateios, function(rateio) { 
+                    if (retorno && configuracao.planoConta && (!rateio.planoConta || !rateio.planoConta.idPlanoConta)) {
+                        alert(MESSAGES.lancamento.programar.validacao.PLANO_CONTA_REQUERIDA);
+                        retorno = false;
+                    }
+                    if (retorno && configuracao.centroCusto && (!rateio.centroCusto || !rateio.centroCusto.idCentroCusto)) {
+                        alert(MESSAGES.lancamento.programar.validacao.CENTRO_CUSTO_REQUERIDA);
+                        retorno = false;
+                    }    
+                });     
+                if(!retorno) return false;          
+            }
+            return true;
+        }; 
         
         $scope.validarForm = function (form, lancamentoProgramado) {  
             if(!lancamentoProgramado.rateios || !lancamentoProgramado.rateios.length) {

@@ -297,7 +297,7 @@ UNIDADE DE ENTREGA]]></text>
 			</staticText>
 			<image scaleImage="RetainShape" onErrorType="Blank">
 				<reportElement x="27" y="2" width="235" height="21" uuid="c7a146ed-0234-4757-aef2-4ae5229151ea"/>
-				<imageExpression><![CDATA["http://localhost:8080/PortalPostal/imagensNew/TOPO_AR_DIGITAL.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["http://www.portalpostal.com.br/imagensNew/TOPO_AR_DIGITAL.jpg"]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement x="393" y="2" width="38" height="20" uuid="eb8e4010-1b21-4d3c-ada7-bcf12df7f278">
@@ -576,7 +576,7 @@ objeto.]]></text>
 			</staticText>
 			<image scaleImage="RetainShape" hAlign="Center" vAlign="Middle" onErrorType="Blank">
 				<reportElement x="262" y="24" width="82" height="66" uuid="ce1b6daf-e9f7-4bf6-94c2-3edca8f52bd3"/>
-				<imageExpression><![CDATA["http://localhost:8080/PortalPostal/imagensNew/chancelas/CHANCELA_AR_DIGITAL.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["http://www.portalpostal.com.br/imagensNew/chancelas/CHANCELA_AR_DIGITAL.jpg"]]></imageExpression>
 			</image>
 			<textField isStretchWithOverflow="true">
 				<reportElement x="268" y="60" width="69" height="14" uuid="4633ce34-bb02-45b8-bed1-315bf5bf0840"/>

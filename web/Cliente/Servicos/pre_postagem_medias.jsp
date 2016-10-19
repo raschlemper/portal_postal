@@ -67,6 +67,7 @@
         <meta http-equiv="pragma" content="no-cache" />
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 
+     
         <script type="text/javascript" src="../../javascript/ajax.js"></script>
         <script type="text/javascript" src="../js/ajax_portal.js"></script>
         <script type="text/javascript" src="../../javascript/mascara.js"></script>
@@ -88,7 +89,6 @@
         <link rel="stylesheet" href="../../javascript/plugins/TableSorter/styleSorterV3.css" />
         <script type="text/javascript" src="../../javascript/plugins/TableSorter/scriptSorterV3.js"></script>
         <!-- TableSorter -->
-
         <script type="text/javascript">
 
             function preencherCampos() {
@@ -179,6 +179,8 @@
                 }
             }
 
+
+
         </script>
 
         <title>Portal Postal | Pré Postagem</title>
@@ -225,7 +227,7 @@
                                                 for (int i = 0; i < listaDep.size(); i++) {
                                                     ClientesDeptos cd = listaDep.get(i);
                                                     String cartao = "0";
-                                                    if (cd.getCartaoPostagem() != null) {
+                                                    if (cd.getCartaoPostagem() != null && !cd.getCartaoPostagem().equals("") && !cd.getCartaoPostagem().equals("null")) {
                                                         cartao = cd.getCartaoPostagem();
                                                     }
                                                     if (dps.contains(cd.getIdDepartamento())) {
@@ -254,15 +256,15 @@
                                                 if (listaServ != null) {
                                                     for (int i = 0; i < listaServ.size(); i++) {
                                                         ServicoECT sv = listaServ.get(i);
-                                                        if (sv.getGrupoServico().equals("SEDEX") 
-                                                                || sv.getGrupoServico().equals("PAC") 
+                                                        if (sv.getGrupoServico().equals("SEDEX")
+                                                                || sv.getGrupoServico().equals("PAC")
                                                                 || sv.getGrupoServico().equals("CARTA")
                                                                 || sv.getGrupoServico().equals("SIMPLES")
                                                                 || sv.getGrupoServico().equals("IMPRESSO")
-                                                                || sv.getGrupoServico().equals("SEDEX10") 
-                                                                || sv.getGrupoServico().equals("SEDEX12") 
+                                                                || sv.getGrupoServico().equals("SEDEX10")
+                                                                || sv.getGrupoServico().equals("SEDEX12")
                                                                 || sv.getGrupoServico().equals("SEDEXHJ")
-                                                                || sv.getGrupoServico().equals("ESEDEX") 
+                                                                || sv.getGrupoServico().equals("ESEDEX")
                                                                 || sv.getGrupoServico().equals("PAX")) {
 
                                                             if (!sv.getGrupoServico().equals("SEDEXC")) {
@@ -363,6 +365,48 @@
                 </div>
             </div>
         </div>
+        <script type="text/javascript">
+
+          /*  var sorter2 = new TINY.table.sorter('sorter2', 'table2', {
+                headclass: 'head',
+                ascclass: 'asc',
+                descclass: 'desc',
+                evenclass: 'evenrow',
+                oddclass: 'oddrow',
+                evenselclass: 'evenselected',
+                oddselclass: 'oddselected',
+                paginate: false,
+                hoverid: 'selectedrowDefault',
+                sortcolumn: 1,
+                sortdir: 1,
+                init: true
+            });*/
+            
+            var sorterDes = new TINY.table.sorter('sorterDes', 'tableDes', {
+                headclass: 'head',
+                ascclass: 'asc',
+                descclass: 'desc',
+                evenclass: 'evenrow',
+                oddclass: 'oddrow',
+                evenselclass: 'evenselected',
+                oddselclass: 'oddselected',
+                paginate: true,
+                size: 20,
+                colddid: 'columnsDes',
+                currentid: 'currentpageDes',
+                totalid: 'totalpagesDes',
+                startingrecid: 'startrecordDes',
+                endingrecid: 'endrecordDes',
+                totalrecid: 'totalrecordsDes',
+                hoverid: 'selectedrowDefault',
+                pageddid: 'pagedropdownDes',
+                navid: 'tablenavDes',
+                sortcolumn: 2,
+                sortdir: 1,
+                init: false
+            });
+
+        </script> 
     </body>
 </html>
 <%}%>

@@ -89,6 +89,22 @@ public class LancamentoController {
     }  
     
     @GET
+    @Path("/conta/{idConta}/saldo")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Saldo> findSaldoByConta(@PathParam("idConta") Integer idConta, @QueryParam("dataInicio") String dataInicio, 
+            @QueryParam("dataFim") String dataFim) {
+        try {
+            init(); 
+            Date inicio = formatDate(dataInicio);
+            Date fim = formatDate(dataFim);
+            if(idConta == 0) idConta = null;
+            return lancamentoService.findSaldoByConta(idConta, inicio, fim);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    }  
+    
+    @GET
     @Path("/planoconta/saldo")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Saldo> findSaldoPlanoConta(@QueryParam("dataInicio") String dataInicio, 

@@ -32,8 +32,9 @@ app.factory('SaldoService', function($filter) {
 
     var getSaldo = function(data, mes, saldos, id) {
         angular.forEach(saldos, function(saldo) {
-            if(data[id] === saldo[id] && mes.id === saldo.mes - 1) {
-                data.saldos[mes.order] = toFixe(saldo.valor, 2);
+            var saldoId = saldo[id] || 0;
+            if(data[id] === saldoId && mes.id === saldo.mes - 1) {
+                data.saldos[mes.order] += toFixe(saldo.valor, 2);
             }
         });
     };    
@@ -58,7 +59,7 @@ app.factory('SaldoService', function($filter) {
 
     var getSaldoGrupo = function(estruturas, estruturaGrupo) {
         var estruturaSaldo = _.find(estruturas, function(estrutura) { 
-            return estrutura.idPlanoConta === estruturaGrupo.idGrupo;
+            return (estrutura.idPlanoConta) === estruturaGrupo.idGrupo;
         });             
         if(estruturaSaldo) { sumSaldo(estruturaSaldo, estruturaGrupo.saldos); }
     }; 

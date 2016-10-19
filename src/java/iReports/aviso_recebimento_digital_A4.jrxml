@@ -154,7 +154,7 @@
 		<band height="267" splitType="Stretch">
 			<image onErrorType="Blank">
 				<reportElement x="26" y="3" width="234" height="21" uuid="c7a146ed-0234-4757-aef2-4ae5229151ea"/>
-				<imageExpression><![CDATA["http://localhost:8080/PortalPostal/imagensNew/TOPO_AR_DIGITAL.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["http://www.portalpostal.com.br/imagensNew/TOPO_AR_DIGITAL.jpg"]]></imageExpression>
 			</image>
 			<rectangle>
 				<reportElement mode="Transparent" x="0" y="3" width="553" height="251" uuid="44436e6d-70fb-4ad7-a15c-27b0b6407385"/>
@@ -364,7 +364,7 @@ Centralizador Regional]]></text>
 			</textField>
 			<image onErrorType="Blank">
 				<reportElement x="348" y="5" width="68" height="70" uuid="4cbdcaac-3387-4b98-a403-261854dd0b72"/>
-				<imageExpression><![CDATA["http://localhost:8080/PortalPostal/imagensNew/chancelas/CHANCELA_AR_DIGITAL.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["http://www.portalpostal.com.br/imagensNew/chancelas/CHANCELA_AR_DIGITAL.jpg"]]></imageExpression>
 			</image>
 			<line>
 				<reportElement x="26" y="149" width="187" height="1" uuid="b10cae02-dcb7-4fdb-94b2-c7eb357bd837"/>

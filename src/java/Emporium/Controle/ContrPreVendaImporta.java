@@ -117,7 +117,7 @@ public class ContrPreVendaImporta {
                             servico = resultado;
                         }
                     }
-                } else if (ai.getServico().startsWith("PAC")) {
+                } else if (ai.getServico().startsWith("PAC") || ai.getServico().equals("41068")) {
                     servico = "PAC";
                 } else if (ai.getServico().startsWith("CARTA")) {
                     servico = "CARTA";
@@ -163,7 +163,7 @@ public class ContrPreVendaImporta {
                         AVISO += "<br/>Linha n." + linha + " - CEP " + ai.getCep() + " nao aceita Sedex Hoje! O servico foi alterado para Sedex!";
                         servico = "SEDEX";
                     }
-                } else if (ai.getServico().startsWith("SEDEX")) {
+                } else if (ai.getServico().startsWith("SEDEX") || ai.getServico().equals("40096")) {
                     servico = "SEDEX";
                 } else if (ai.getServico().startsWith("IMPRESSO")) {
                     servico = "IMPRESSO";
@@ -349,11 +349,11 @@ public class ContrPreVendaImporta {
                     String obs = aux[15].trim();
                     String cont = aux[16].trim();
 
-                    if (obs.length() > 50) {
-                        obs = obs.substring(0, 49);
+                    if (obs.length() > 100) {
+                        obs = obs.substring(0, 99);
                     }
-                    if (cont.length() > 50) {
-                        cont = cont.substring(0, 49);
+                    if (cont.length() > 200) {
+                        cont = cont.substring(0, 199);
                     }
 
                     ai.setObs(obs);
@@ -421,6 +421,238 @@ public class ContrPreVendaImporta {
                     } else {
                         ai.setPr("0");
                     }
+
+                    listaAi.add(ai);
+
+                }
+            }
+            le.close();
+
+            if (listaAi.size() > 0) {
+                //valida os dados do arquivo para efetuar a importacao
+                listaAi = validaDadosArquivo(listaAi, idCliente, servicoEscolhido, nomeBD);
+                if (!FALHA.equals("")) {
+                    //retorna mensagem de FALHA
+                    return FALHA;
+                } else {
+                    //MONTA SQL
+                    String sql = montaSqlPedido(listaAi, nomeBD);
+                    boolean flag = inserir(sql, nomeBD);
+                    if (flag) {
+                        return "Pedidos Importados Com Sucesso!<br/>" + AVISO;
+                    } else {
+                        return "Falha ao importar Pedidos!";
+                    }
+                }
+            } else {
+                return "Nenhum pedido no arquivo para importar!";
+            }
+
+        } catch (IOException e) {
+            return "Não foi possivel ler o arquivo: " + e;
+        } catch (Exception e) {
+            return "Falha na importacao dos pedidos: " + e;
+        }
+
+    }
+
+    //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
+    public static String importaPedidoEcompleto(FileItem item, int idCliente, int idDepartamento, String departamento, String contrato, String cartaoPostagem, String servicoEscolhido, int rm, String nomeBD) {
+
+        try {
+            //CONTADOR DE LINHA
+            int qtdLinha = 1;
+            ArrayList<ArquivoImportacao> listaAi = new ArrayList<ArquivoImportacao>();
+            BufferedReader le = new BufferedReader(new InputStreamReader(item.getInputStream(), "ISO-8859-1"));
+            // LE UMA LINHA DO ARQUIVO PARA PULAR O CABEÇALHO
+            le.readLine();
+            while (le.ready()) {
+                //LE UMA LINHA DO ARQUIVO E DIVIDE A LINHA POR PONTO E VIRGULA
+                String[] aux = le.readLine().replace(";", " ; ").split(";");
+                //ADICIONA CONTADOR DE LINHA
+                qtdLinha++;
+                //VERIFICA QUANTIDADE MAXIMA DE LINHAS PERMITIDAS
+                if (qtdLinha > MAX_ALLOWED) {
+                    return "Quantidade maxima de importacao de " + MAX_ALLOWED + " objetos por importacao!";
+                } else if (aux != null && aux.length >= 15) {
+                    ArquivoImportacao ai = new ArquivoImportacao();
+                    ai.setIdCliente(idCliente);
+                    ai.setIdDepartamento(idDepartamento);
+                    ai.setDepartamento(departamento);
+                    ai.setContrato(contrato);
+                    ai.setCartaoPostagem(cartaoPostagem);
+                    ai.setMetodoInsercao("IMPORTACAO_ECOMP");
+                    ai.setCodECT(0);
+
+                    ai.setNrLinha(qtdLinha + "");
+                    ai.setNrObjeto("avista");
+                    ai.setNome(aux[1].trim());
+                    ai.setEmpresa("");
+                    ai.setCpf("");
+                    ai.setCep(aux[8].trim());
+                    ai.setEndereco(aux[2].trim());
+                    ai.setNumero(aux[3].trim());
+                    ai.setComplemento(aux[4].trim());
+                    ai.setBairro(aux[5].trim());
+                    ai.setCidade(aux[6].trim());
+                    ai.setUf(aux[7].trim());
+                    ai.setEmail(aux[9].trim());
+                    ai.setCelular(aux[10].trim().replace(" ", ""));
+
+                    ai.setAosCuidados("");
+                    ai.setNotaFiscal(aux[0].trim());
+                    ai.setServico(aux[11].trim().toUpperCase());
+
+                    // limita o tamanho da observação e do conteudo
+                    String obs = aux[14].trim();
+                    String cont = "";
+
+                    if (obs.length() > 100) {
+                        obs = obs.substring(0, 99);
+                    }
+
+                    ai.setObs(obs);
+                    ai.setConteudo(cont);
+
+                    if (aux[0] != null) {
+                        ai.setChave(aux[0].trim());
+                    } else {
+                        ai.setChave("");
+                    }
+
+                    ai.setPeso("0");
+                    ai.setAltura("0");
+                    ai.setLargura("0");
+                    ai.setComprimento("0");
+                    ai.setAr("0");
+                    ai.setMp("0");
+
+                    try {
+                        ai.setVd(aux[13].trim().replace("R$ ", "").replace(",", "."));
+                    } catch (Exception e) {
+                        ai.setVd("0");
+                    }
+
+                    ai.setRm("0");
+                    ai.setPr("0");
+
+                    listaAi.add(ai);
+
+                }
+            }
+            le.close();
+
+            if (listaAi.size() > 0) {
+                //valida os dados do arquivo para efetuar a importacao
+                listaAi = validaDadosArquivo(listaAi, idCliente, servicoEscolhido, nomeBD);
+                if (!FALHA.equals("")) {
+                    //retorna mensagem de FALHA
+                    return FALHA;
+                } else {
+                    //MONTA SQL
+                    String sql = montaSqlPedido(listaAi, nomeBD);
+                    boolean flag = inserir(sql, nomeBD);
+                    if (flag) {
+                        return "Pedidos Importados Com Sucesso!<br/>" + AVISO;
+                    } else {
+                        return "Falha ao importar Pedidos!";
+                    }
+                }
+            } else {
+                return "Nenhum pedido no arquivo para importar!";
+            }
+
+        } catch (IOException e) {
+            return "Não foi possivel ler o arquivo: " + e;
+        } catch (Exception e) {
+            return "Falha na importacao dos pedidos: " + e;
+        }
+
+    }
+
+    //Importa arquivos tipo .TXT separados com campos com tamanhos determinados
+    public static String importaPedidoRTSysSGI(FileItem item, int idCliente, int idDepartamento, String departamento, String contrato, String cartaoPostagem, String servicoEscolhido, int rm, String nomeBD) {
+
+        try {
+            //CONTADOR DE LINHA
+            int qtdLinha = 1;
+            ArrayList<ArquivoImportacao> listaAi = new ArrayList<ArquivoImportacao>();
+            BufferedReader le = new BufferedReader(new InputStreamReader(item.getInputStream(), "ISO-8859-1"));
+            // LE UMA LINHA DO ARQUIVO PARA PULAR O CABEÇALHO
+            //le.readLine();
+            while (le.ready()) {
+                //LE UMA LINHA DO ARQUIVO E DIVIDE A LINHA POR PONTO E VIRGULA
+                String[] aux = le.readLine().replace(";", " ; ").split(";");
+                //ADICIONA CONTADOR DE LINHA
+                qtdLinha++;
+                //VERIFICA QUANTIDADE MAXIMA DE LINHAS PERMITIDAS
+                if (qtdLinha > MAX_ALLOWED) {
+                    return "Quantidade maxima de importacao de " + MAX_ALLOWED + " objetos por importacao!";
+                } else if (aux != null && aux.length >= 21) {
+                    ArquivoImportacao ai = new ArquivoImportacao();
+                    ai.setIdCliente(idCliente);
+                    ai.setIdDepartamento(idDepartamento);
+                    ai.setDepartamento(departamento);
+                    ai.setContrato(contrato);
+                    ai.setCartaoPostagem(cartaoPostagem);
+                    ai.setMetodoInsercao("IMPORTACAO_CSV");
+                    ai.setCodECT(0);
+
+                    ai.setNrLinha(qtdLinha + "");
+                    ai.setNrObjeto("avista");
+                    ai.setNome(aux[4].trim());
+                    ai.setEmpresa("");
+                    ai.setCpf(aux[3].trim());
+                    ai.setCep(aux[9].trim());
+                    ai.setEndereco(aux[5].trim());
+                    ai.setNumero(aux[6].trim());
+                    ai.setComplemento(aux[7].trim());
+                    ai.setBairro(aux[8].trim());
+                    ai.setCidade(aux[10].trim());
+                    ai.setUf(aux[11].trim());
+                    ai.setEmail(aux[12].trim());
+                    ai.setCelular(aux[13].trim().replace(" ", ""));
+
+                    ai.setAosCuidados("");
+                    ai.setNotaFiscal(aux[19].trim());
+                    ai.setServico(aux[20].trim().toUpperCase());
+
+                    // limita o tamanho da observação e do conteudo
+                    String obs = aux[0].trim() + " - " + aux[1].trim();
+                    String cont = aux[1].trim();
+
+                    if (obs.length() > 100) {
+                        obs = obs.substring(0, 99);
+                    }
+                    if (cont.length() > 200) {
+                        cont = cont.substring(0, 199);
+                    }
+
+                    ai.setObs(obs);
+                    ai.setConteudo(cont);
+
+                    if (aux[0] != null) {
+                        ai.setChave(aux[0].trim());
+                    } else {
+                        ai.setChave("");
+                    }
+
+                    ai.setPeso("0");
+                    ai.setAltura("0");
+                    ai.setLargura("0");
+                    ai.setComprimento("0");
+                    ai.setAr("0");
+                    ai.setMp("0");
+
+                    try {
+                        ai.setVd("0");
+                        //ai.setVd(aux[16].trim().replace("R$ ", "").replace(",", "."));
+                    } catch (Exception e) {
+                        ai.setVd("0");
+                    }
+
+                    ai.setRm("0");
+                    ai.setPr("0");
 
                     listaAi.add(ai);
 
@@ -560,11 +792,11 @@ public class ContrPreVendaImporta {
                     String obs = aux[13].trim();
                     String cont = aux[13].trim();
 
-                    if (obs.length() > 50) {
-                        obs = obs.substring(0, 49);
+                    if (obs.length() > 100) {
+                        obs = obs.substring(0, 99);
                     }
-                    if (cont.length() > 50) {
-                        cont = cont.substring(0, 49);
+                    if (cont.length() > 200) {
+                        cont = cont.substring(0, 199);
                     }
                     ai.setObs(obs);
                     ai.setConteudo(cont);
@@ -669,11 +901,11 @@ public class ContrPreVendaImporta {
                     String obs = aux[12].trim();
                     String cont = aux[12].trim();
 
-                    if (obs.length() > 50) {
-                        obs = obs.substring(0, 49);
+                    if (obs.length() > 100) {
+                        obs = obs.substring(0, 99);
                     }
-                    if (cont.length() > 50) {
-                        cont = cont.substring(0, 49);
+                    if (cont.length() > 200) {
+                        cont = cont.substring(0, 199);
                     }
                     ai.setObs(obs);
                     ai.setConteudo(cont);
@@ -2558,8 +2790,8 @@ public class ContrPreVendaImporta {
         xPath = doc.createXPath(basePath + "nfe:infAdic/nfe:infCpl");
         xPath.setNamespaceURIs(uris);
         String obs = elementToText((Element) xPath.selectSingleNode(doc.getRootElement()));
-        if (obs.length() > 50) {
-            obs = obs.substring(0, 49);
+        if (obs.length() > 100) {
+            obs = obs.substring(0, 99);
         }
 
         int qtt = 1;
@@ -2647,8 +2879,8 @@ public class ContrPreVendaImporta {
                 float vd = 0;
                 if (temvd == 1) {
                     vd = Float.parseFloat(vNF.replace(",", ".").trim());
-                    if (vd < 12) {
-                        vd = 12;
+                    if (vd < 17) {
+                        vd = 17;
                     }
                 }
 
@@ -2689,8 +2921,8 @@ public class ContrPreVendaImporta {
                 /**
                  * ************************************************************************
                  */
-                if (obs.length() > 50) {
-                    obs = obs.substring(0, 49);
+                if (obs.length() > 100) {
+                    obs = obs.substring(0, 99);
                 }
                 sql += "\n('" + numObjeto + "', " + idCliente + ", " + idDestinatario + ", " + idRemetente + ", '" + codECT + "', '" + contrato + "', '" + departamento + "', '" + aosCuidados + "', '" + obs + "', '" + conteudo + "', " + peso + ", " + altura + ", " + largura + ", " + comprimento + ", " + vd + ", " + ar + ", " + mp + ", '" + siglaAmarracao + "', '" + servico + "', '" + nNF + "', " + vlrCobrar + ", '" + tipo + "', " + idDepartamento + ", NOW(), '" + cartaoPostagem + "', " + registro + ", 'IMPORTACAO_NFE', " + temrm + "),";
                 TEM_PEDIDO = true;

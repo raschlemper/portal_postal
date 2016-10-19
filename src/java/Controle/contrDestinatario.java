@@ -167,14 +167,13 @@ public class contrDestinatario {
                 + " AND idDestinatario LIKE '%" + codigo + "%'"
                 + " AND nome LIKE '%" + nome + "%'"
                 + " AND empresa LIKE '%" + emp + "%'"
-                + " AND cpf_cnpj LIKE '%" + cpf_cnpj + "%'"
-                + " AND (bairro LIKE '%" + bairro + "%'"
-                + " OR cidade LIKE '%" + cidade + "%'"
-                + " OR endereco LIKE '%" + end + "%')"
+                + " AND cpf_cnpj LIKE '%" + cpf_cnpj + "%'"              
+                + " AND cidade LIKE '%" + cidade + "%'"
+                + " AND endereco LIKE '%" + end + "%'"
                 + " AND cep LIKE '%" + cep + "%'"
                 + whereTag
-                + " ORDER BY nome";
-        
+                + " ORDER BY nome;";
+        //System.out.println(sql);
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();

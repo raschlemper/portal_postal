@@ -29,15 +29,6 @@
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
                                 <favorecido favorecido-model="lancamento.favorecido" favorecidos="favorecidos"></favorecido>
-<!--                                <label class="small">Favorecido</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
-                                    <input class="form-control" type="text" name="favorecido" ng-model="lancamento.favorecido.nome" placeholder="Favorecido do lançamento"
-                                            autocomplete="off" 
-                                            typeahead-template-url="favorecidoTemplate.html"
-                                            typeahead-on-select="selectFavorecido($item)" 
-                                            typeahead="favorecido.nome for favorecido in favorecidos | filter:{nome:$viewValue} | limitTo:10">
-                                </div>-->
                             </div>
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
                                 <label class="small">Histórico</label>
@@ -63,23 +54,9 @@
                         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">     
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12" ng-hide="showRatear">
                                 <plano-conta plano-conta-model="lancamento.planoConta" tipo="lancamento.tipo"></plano-conta>
-<!--                                <label class="small">Plano de Conta</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                    <select class="form-control" name="planoConta" ng-change="validarPlanoConta(lancamento.planoConta)"
-                                            ng-options="planoConta.descricao for planoConta in planoContas track by planoConta.idPlanoConta" ng-model="lancamento.planoConta"></select>
-                                </div>-->
                             </div> 
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12" ng-hide="showRatear">
                                 <centro-custo centro-custo-model="lancamento.centroCusto"></centro-custo>
-<!--                                <label class="small">Centro de Custo</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon" ><i class="fa fa-info"></i></span>
-                                    <select class="form-control" name="centroCusto" ng-change="validarCentroCusto(lancamento.centroCusto)"
-                                        ng-options="centroCusto.descricao for centroCusto in centroCustos track by centroCusto.idCentroCusto" ng-model="lancamento.centroCusto">
-                                        <option value=""></option>
-                                    </select>
-                                </div>-->
                             </div> 
                             <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
                                 <label class="small">Número</label>

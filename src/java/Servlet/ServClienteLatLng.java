@@ -104,9 +104,10 @@ public class ServClienteLatLng extends HttpServlet {
             String bairro = request.getParameter("bairro");
             String cidade = request.getParameter("cidade");
             String uf = request.getParameter("uf");
+            String obs = request.getParameter("obs");
             
             
-            contrCliente.alterarCliente(nome, fantasia, endereco, numero, complemento, bairro, cidade, uf, cep, telefone, email, cnpj, latitude, longitude, idGrupoFat, idCliente, nomeBD);
+            contrCliente.alterarCliente(nome, fantasia, endereco, numero, complemento, bairro, cidade, uf, cep, telefone, email, cnpj, latitude, longitude, idGrupoFat, idCliente, obs, nomeBD);
             
 
             //response.sendRedirect("Agencia/Configuracao/cliente_lista.jsp?msg=Latitude e Longitude alterados com sucesso!");

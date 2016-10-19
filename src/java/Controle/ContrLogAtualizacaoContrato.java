@@ -43,6 +43,22 @@ public class ContrLogAtualizacaoContrato {
             Conexao.desconectar(conn);
         }
     }
+    public static void atualizarData(int idUsuario, String nomeUsuario, String nomeBD){
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "insert into log_atualizacao_contratos (dataHora, idUsuario, nomeUsuario) values(NOW(),?,?)";
+        try{
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.setInt(1,idUsuario);
+            valores.setString(2,nomeUsuario);
+            valores.executeUpdate();
+            valores.close();
+        }catch(SQLException e){
+            System.out.println(e);
+            ContrErroLog.inserir("contrLogColeta.atualizarData", "SQLException", sql, e.toString());
+        }finally{
+            Conexao.desconectar(conn);
+        }
+    }
     
     public static LogAtualizacaoContratos consultaUltimoLog(String nomeBD){
        Connection conn = Conexao.conectar(nomeBD);

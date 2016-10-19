@@ -83,7 +83,7 @@ app.factory('FinanceiroValidation', function(ModalService, LISTAS, MESSAGES) {
     var saldoParcela = function(parcelas) {            
         var saldo = 0;
         _.map(parcelas, function(parcela) {
-            saldo += parcela.valor;
+            saldo += parseFloat(parcela.valor.toFixed(2));
         });
         return saldo;
     };
@@ -91,7 +91,7 @@ app.factory('FinanceiroValidation', function(ModalService, LISTAS, MESSAGES) {
     var saldoRateio = function(rateios) {            
         var saldo = 0;
         _.map(rateios, function(rateio) {
-            saldo += rateio.valor;
+            saldo += parseFloat(rateio.valor.toFixed(2));
         });
         return saldo;
     };

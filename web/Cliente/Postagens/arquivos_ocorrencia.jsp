@@ -1,3 +1,5 @@
+<%@page import="Entidade.ClientesDeptos"%>
+<%@page import="Controle.ContrClienteDeptos"%>
 <%@page import="Emporium.Controle.ContrPreVenda"%>
 <%@page import="Entidade.PreVenda"%>
 <%@page import="Entidade.Endereco"%>
@@ -29,6 +31,7 @@
         if (request.getParameter("tipo") != null) {
             tipo = request.getParameter("tipo");
         }
+        ArrayList<Integer> dps = (ArrayList<Integer>) session.getAttribute("departamentos");
 
         String dataBD = Util.FormatarData.DateToBD(vDataAtual);
         String dataBD2 = Util.FormatarData.DateToBD(vData2);
@@ -109,7 +112,29 @@
                                     <input type="text" name="data" id="data" style="width:60px;" value="<%= vDataAtual%>" maxlength="10" onKeyPress="mascara(this, maskData)" />
                                     até
                                     <input type="text" name="data2" id="data2" style="width:60px;" value="<%= vData2%>" maxlength="10" onKeyPress="mascara(this, maskData)" />
-                                </dd>
+                                </dd>                                
+                                <dd>
+                                    <label>Departamento / Centro de Custo</label>
+                                    <select name="departamento" style="width: 230px;">
+                                        <%
+                                            ArrayList<ClientesDeptos> listaDep = ContrClienteDeptos.consultaDeptos(idCliente, nomeBD);
+                                            if (listaDep != null && listaDep.size() > 0) {
+                                                if (dps.size() != 1) {
+                                                    if (listaDep.size() > 1 || dps.size() == 0) {
+                                        %>
+                                        <option value="0">TODOS OS DEPARTAMENTOS</option>                                    
+                                        <%                                                }
+                                            }
+                                            for (int i = 0; i < listaDep.size(); i++) {
+                                                ClientesDeptos cd = listaDep.get(i);
+                                                if (dps.contains(cd.getIdDepartamento())) {
+                                        %>
+                                        <option value="<%=cd.getIdDepartamento()%>"><%= cd.getNomeDepartamento()%></option>
+                                        <%}}} else {%>
+                                        <option value="0">NENHUM DEPARTAMENTO</option>
+                                        <%}%>
+                                    </select>
+                                </dd>     
                                 <dd>
                                     <label>Modelo do Arquivo</label>
                                     <select name="modelo">

@@ -1,8 +1,10 @@
 'use strict';
 
 app.controller('ModalContaEditarController', 
-    ['$scope', '$modalInstance', 'conta', 'ContaCorrenteService', 'CartaoCreditoService', 'DatePickerService', 'ModalService', 'ListaService', 'LISTAS', 'MESSAGES',
-    function ($scope, $modalInstance, conta, ContaCorrenteService, CartaoCreditoService,  DatePickerService, ModalService, ListaService, LISTAS, MESSAGES) {
+    ['$scope', '$modalInstance', 'conta', 'ContaCorrenteService', 'CartaoCreditoService', 'ContaCorrenteHandler', 'ContaHandler', 'DatePickerService', 
+     'ModalService', 'ListaService', 'LISTAS', 'MESSAGES',
+    function ($scope, $modalInstance, conta, ContaCorrenteService, CartaoCreditoService, ContaCorrenteHandler, ContaHandler, DatePickerService, 
+    ModalService, ListaService, LISTAS, MESSAGES) {
 
         var init = function () {  
             $scope.tipos = LISTAS.tipoConta;
@@ -87,6 +89,7 @@ app.controller('ModalContaEditarController',
         
         $scope.openContaCorrente = function() {            
             modalSalvarContaCorrente().then(function(result) {
+                result = ajustarDadosContaCorrente(result);
                 ContaCorrenteService.save(result)
                     .then(function(data) {  
                         modalMessage("Conta Corrente " + data.nome +  " Inserida com sucesso!");
@@ -100,6 +103,7 @@ app.controller('ModalContaEditarController',
         
         $scope.openCartaoCredito = function() {   
             modalSalvarCartaoCredito().then(function(result) {
+                result = ajustarDadosCartaoCredito(result);
                 CartaoCreditoService.save(result)
                     .then(function(data) {  
                         modalMessage("Cartão de Crédito " + data.nome +  " Inserido com sucesso!");
@@ -118,6 +122,23 @@ app.controller('ModalContaEditarController',
         
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
+        };
+
+        // ***** AJUSTAR ***** //
+        
+        var ajustarDadosContaCorrente = function(data) {  
+            return ContaCorrenteHandler.handle(data);
+        };
+        
+        var ajustarDadosCartaoCredito = function(data) {  
+            if(data.contas) {
+                var contas = [];
+                data.contas.map(function(conta) {
+                    contas.push(ContaHandler.handle(conta));
+                });
+                data.contas = contas;
+            }    
+            return data;
         };
         
         // ***** VALIDAR ***** // 

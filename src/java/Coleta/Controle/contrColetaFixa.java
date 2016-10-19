@@ -222,6 +222,20 @@ public class contrColetaFixa {
             Conexao.desconectar(conn);
         }
     }
+    public static void setTipoEscolhaColetaDoCliente(int idEmpresa, String tipo) {
+        Connection conn = Conexao.conectarGeral();
+        String sql = "UPDATE empresas set tipoEscolhaColeta = "+tipo+" WHERE idEmpresa= " + idEmpresa;
+        try {
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.executeUpdate();
+           
+        } catch (SQLException e) {
+            ContrErroLog.inserir("setTipoEscolhaColetaDoCliente", "SQLException", sql, e.toString());
+            
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
 
     public static ArrayList consultaColetasFixasPeloColetador(int idColetador, String nomeBD) throws SQLException {
         Connection conn = Conexao.conectar(nomeBD);

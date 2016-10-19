@@ -47,7 +47,8 @@ app.factory('PlanoContaService', function($http, PromiseService) {
                 codigo: estrutura.estrutura,
                 keep: (estrutura.contas ? true : false),
                 descricao: estrutura.descricao,
-                parent: estrutura.parent
+                parent: estrutura.parent,
+                contas: estrutura.contas
             });
             if(estrutura.contas) { flatten(estrutura.contas, estruturasLista); }
         });
@@ -70,7 +71,19 @@ app.factory('PlanoContaService', function($http, PromiseService) {
             else { code = estrutura; }
         });
         return code;
-    }
+    };
+            
+    var getChildrenListPlanoConta = function(list, planoConta) {
+        var listSelected = list || [];
+        if(!planoConta.contas) { listSelected.push(planoConta); }
+        else { 
+            planoConta.contas.map(function(conta) {
+                if(conta.ehGrupo) { getListPlanoConta(listSelected, conta); }
+                else { listSelected.push(conta); }
+             });
+         }     
+        return listSelected;
+    };
         
     return {
 
@@ -153,7 +166,9 @@ app.factory('PlanoContaService', function($http, PromiseService) {
             getEstrutura(estruturas);
         }, 
         
-        report: report
+        report: report,
+        
+        getChildrenListPlanoConta: getChildrenListPlanoConta
 
     }
 

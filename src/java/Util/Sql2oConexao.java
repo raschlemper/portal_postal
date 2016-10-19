@@ -10,7 +10,8 @@ public class Sql2oConexao {
     
     public static Connection getConnection(String nameDB) { 
         try {     
-            Class.forName(DRIVER); 
+            Class.forName(DRIVER);
+            //System.out.println("sql2o - " + CONEXAO.url("pp_" + nameDB) + " " + CONEXAO.username() + " " + CONEXAO.password());
             Sql2o sql2o = new Sql2o(CONEXAO.url("pp_" + nameDB), CONEXAO.username(), CONEXAO.password());
             return sql2o.beginTransaction();
         } catch(Exception ex) {

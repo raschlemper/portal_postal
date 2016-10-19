@@ -232,6 +232,37 @@ public class ContrClienteContrato {
         }
     }
 
+    public static Map<String, Integer> consultaMapServicosContratoClienteByGrupo(int idCliente, String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "SELECT * FROM cliente_contrato WHERE idCliente = " + idCliente + ";";
+        String sql2 = "SELECT codigo FROM cliente WHERE codigo = " + idCliente + " AND (statusCartaoPostagem = 0 OR  dtVigenciaFimContrato < DATE(NOW()) OR temContrato = 0)";
+        try {
+            Map<String, Integer> mapServicosContrato = new HashMap<>();
+            PreparedStatement valores = conn.prepareStatement(sql2);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            if (result.next()) {
+                return mapServicosContrato;
+            }
+
+            valores = conn.prepareStatement(sql);
+            result = (ResultSet) valores.executeQuery();
+            while (result.next()) {
+                int codECT = result.getInt("codECT");
+                String serv = result.getString("grupoServico");
+                mapServicosContrato.put(serv, codECT);
+            }
+
+            valores.close();
+            return mapServicosContrato;
+        } catch (SQLException e) {
+            System.out.println(e);
+            //ContrErroLog.inserir("HOITO - contrNivel", "SQLException", sql, e.toString());
+            return null;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+
     public static int consultaContratoClienteGruposServicos(int idCliente, String grupoServ, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "SELECT codECT FROM cliente_contrato LEFT JOIN cliente ON codigo = idCliente WHERE idCliente = " + idCliente + " AND grupoServico IN ( " + grupoServ + " ) "

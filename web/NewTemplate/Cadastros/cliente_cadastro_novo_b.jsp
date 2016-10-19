@@ -317,6 +317,13 @@
                                                         <button style="width: 230px;" type="button" class="btn btn-info form-control" onclick="showAddress('');"><i class="fa fa-search fa-spc"></i>Mostrar Endereço no Mapa</button>
                                                     </div>
                                                 </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12">
+                                                    <label class="small">Observações</label>
+                                                    <div class="input-group">                                                        
+                                                        <span class="input-group-addon" ><i class="fa fa-home fa-fw"></i></span>                                                                                                             
+                                                        <textarea class="form-control" name="obs" id="obs" ></textarea>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </li> 
                                     </ul>

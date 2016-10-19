@@ -12,7 +12,8 @@
             typeahead-on-select="selectCentroCusto($item)" 
             typeahead="centroCusto.descricao for centroCusto in centroCustos | filter:{descricao:$viewValue} | limitTo:10">
 </div>-->
-<label class="small">Centro de Custo</label>
+<label class="small" ng-if="!showTypeFilter">Centro de Custo</label>
+<label ng-if="showTypeFilter">Centro de Custo:</label>
 <app-typeahead item-model="centroCustoModel" 
                items="centroCustos" 
                filter="filter"
@@ -20,5 +21,6 @@
                field="descricao"
                placeholder="Centro de Custo" 
                name="centroCusto"
-               keep-group="true">                      
+               keep-group="true"
+               show-type-filter="{{showTypeFilter}}">                      
 </app-typeahead>

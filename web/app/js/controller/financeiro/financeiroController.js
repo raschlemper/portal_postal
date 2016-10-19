@@ -32,8 +32,8 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                 if(tipo === 'receitadespesa') { 
                     $scope.sizeChart = 400;
                     $scope.showChartReceitaDespesa = true;
-                    var dataInicio = moment().subtract(5, 'months').startOf("month");
-                    var dataFim = moment().add(6, 'months').endOf("month");
+                    var dataInicio = moment().subtract(11, 'months').startOf("month");
+                    var dataFim = moment().endOf("month");
                     chartSaldoByTipo(getMonths(dataInicio, dataFim), dataInicio.format('YYYY-MM-DD'), dataFim.format('YYYY-MM-DD'));     
                 }
                 if(tipo === 'despesa') { 
@@ -50,6 +50,13 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
         var toFixe = function(value, fixe) {
             return parseFloat(value.toFixed(fixe));
         } 
+        
+        var formatterTooltip = function(x, y, series) {
+            var label = '';
+            if(x) { label += '<b>' + x + '</b><br/>'; }
+            label += series.name + ': <b>' + $filter('currency')(y.toFixed(2), 'R$ ') + '</b>';
+            return label;
+        }
         
         // Contas /////
         
@@ -99,7 +106,12 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
             $scope.configChartReceitaDespesa.push({ 
                 title: " ",
                 options: { 
-                    chart: { "type": "column" }
+                    chart: { "type": "column" },
+                    tooltip: {
+                        formatter: function() {
+                            return formatterTooltip(this.x, this.y, this.series);
+                        }
+                    }
                 },
                 xAxis: {
                     categories: getDescricaoMeses(meses),
@@ -225,6 +237,11 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                             showInLegend: true
                         }
                     },
+                    tooltip: {
+                        formatter: function() {
+                            return formatterTooltip(this.x, this.y, this.series);
+                        }
+                    }
                 },
                 series: [{                        
                     name: 'Saldo',
@@ -247,7 +264,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
             var dataFim = data.endOf("month").format('YYYY-MM-DD');
 //            var mesAtual = ListaService.getValue(LISTAS.meses, moment().format('MM')-1);
             $q.all([PlanoContaService.getStructureByTipo($scope.tipos[1].id), 
-                    LancamentoService.getSaldoPlanoConta(dataInicio, dataFim)])
+                    LancamentoService.getSaldoTipoPlanoConta(dataInicio, dataFim, $scope.tipos[1].id)])
                .then(function(values) {  
                     var estruturas = values[0];
                     var saldos = formatPlanoConta(values[1]);
@@ -289,6 +306,7 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
         }
         
         var getEstruturaDefault = function(estrutura, tipo) {
+            estrutura.idPlanoConta = 0;
             estrutura.codigo = 'X';
             estrutura.nome = "Não Identificado";
             estrutura.descricao = estrutura.codigo + " - " + estrutura.nome;
@@ -327,6 +345,11 @@ app.controller('FinanceiroController', ['$scope', '$q', '$filter', '$state', 'Co
                             }
                         }
                     },
+                    tooltip: {
+                        formatter: function() {
+                            return formatterTooltip(this.x, this.y, this.series);
+                        }
+                    }
                 },
                 xAxis: {
                     categories: categorias,

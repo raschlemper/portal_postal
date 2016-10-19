@@ -50,7 +50,8 @@ app.constant('LISTAS', {
                          {'id': 2, 'codigo': 'programado', 'descricao': 'Programado'},
                          {'id': 3, 'codigo': 'transferenciaprogramado', 'descricao': 'Transferência Programada'},
                          {'id': 4, 'codigo': 'parcelado', 'descricao': 'Parcelado'},
-                         {'id': 5, 'codigo': 'reconciliado', 'descricao': 'Reconciliado'}],
+                         {'id': 5, 'codigo': 'reconciliado', 'descricao': 'Reconciliado'},
+                         {'id': 6, 'codigo': 'automatico', 'descricao': 'Automático'}],
      
     "planoConta": [{'id': 0, 'codigo': 'receita', 'descricao': 'Receita'},
                     {'id': 1, 'codigo': 'despesa', 'descricao': 'Despesa'}],

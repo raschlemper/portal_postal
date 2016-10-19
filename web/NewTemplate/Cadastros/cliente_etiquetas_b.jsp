@@ -1,4 +1,3 @@
-
 <%@page import="Controle.ContrClienteDeptos"%>
 <%@page import="Entidade.ClientesDeptos"%>
 <%@page import="Controle.ContrClienteEtiquetas"%>
@@ -27,9 +26,9 @@
         String cnpjInc = cliInc.getCnpj();
         String cnpjNum = cnpjInc.replace(".", "").replaceAll("-", "").replaceAll("/", "");
 
-        if (cliInc.getTemContrato() == 0) {
+        /*if (cliInc.getTemContrato() == 0) {
             response.sendRedirect("cliente_usuarios.jsp?idCliente=" + idClienteInc + "&msg=Este Cliente nao Possui Contrato ECT");
-        } else {
+        } else {*/
 %>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -59,6 +58,17 @@
                         <div class="row">
                             <div class="col-xs-12">
 
+                                <%if (!ContrClienteContrato.consultaStatusContrato(idClienteInc, nomeBD)) {%>
+                                <div class="alert alert-danger no-margin">
+                                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                                    <strong>ATENÇÃO CONTRATO SUSPENSO!</strong>
+                                    <br/><br/>
+                                    Este cliente está com o Contrato ECT suspenso ou com a validade vencida!<br/>
+                                    Só será possível inserir etiquetas ao regularizar a situação!
+                                </div>
+                                <br/>
+                                <br/>
+                                <%}else{%>
                                 <form name="form1" action="../../ServInserirFaixaEtiqueta" method="post">
                                     <ul class="list-unstyled">
                                         <li class="list-group-item list-group-heading">
@@ -72,17 +82,29 @@
                                                         <span class="input-group-addon" ><i class="fa fa-envelope"></i></span>                                                
                                                         <select style="max-width: 250px;" class="form-control" name="servico" onchange="verificaTipoReg(this);">
                                                             <option value="0">ESCOLHA UM SERVIÇO</option>
-                                                            <%
+                                                            <%   
                                                                 ArrayList<Integer> listaContrato = ContrClienteContrato.consultaContratoClienteGroupByServico(idClienteInc, nomeBD);
                                                                 ArrayList<Integer> listaOutros = ContrClienteContrato.consultaOutrosServicosCliente(idClienteInc, nomeBD);
-                                                                ArrayList<ServicoECT> listaServ = ContrServicoECT.consultaServicosSigepWEB();
-                                                                for (int i = 0; i < listaServ.size(); i++) {
-                                                                    ServicoECT sv = listaServ.get(i);
-                                                                    if (listaContrato.contains(sv.getCodECT()) || listaOutros.contains(sv.getCodECT())) {
-                                                                        out.print("<option value='0;" + sv.getGrupoServico() + "'>" + sv.getNomeSimples() + "</option>");
+                                                                ArrayList<ServicoECT> listaServ = ContrServicoECT.consultaServicosSigepWEB();                                                             
+                                                                if (cliInc.getTemContrato() == 0) {
+                                                                    out.print("<option value='0;CARTA'>CARTA</option>");
+                                                                    out.print("<option value='0;PAC'>PAC</option>");
+                                                                    out.print("<option value='0;SEDEX'>SEDEX</option>");
+                                                                    out.print("<option value='0;SEDEX10'>SEDEX 10</option>");
+                                                                    out.print("<option value='0;SEDEX12'>SEDEX 12</option>");
+                                                                    out.print("<option value='0;PPI'>PROTOCOLO POSTAL</option>");
+                                                                    out.print("<option value='0;IMPRESSO'>IMPRESSO</option>");
+                                                                    out.print("<option value='0;MDPB_L'>MDPB LOCAL</option>");
+                                                                    out.print("<option value='0;MDPB_E'>MDPB ESTADUAL</option>");
+                                                                    out.print("<option value='0;MDPB_N'>MDPB NACIONAL</option>");
+                                                                }else{
+                                                                    for (int i = 0; i < listaServ.size(); i++) {
+                                                                        ServicoECT sv = listaServ.get(i);
+                                                                        if (listaContrato.contains(sv.getCodECT()) || listaOutros.contains(sv.getCodECT())) {
+                                                                            out.print("<option value='0;" + sv.getGrupoServico() + "'>" + sv.getNomeSimples() + "</option>");
+                                                                        }
                                                                     }
                                                                 }
-                                                                //out.print("<option value='0;PPI'>PROTOCOLO POSTAL</option>");
                                                             %>
                                                         </select>
                                                     </div>   
@@ -127,11 +149,14 @@
                                             </div>-->
                                         </li>
                                         <li class="list-group-item">
+                                            <input type="hidden" name="temContrato" value="<%= cliInc.getTemContrato() %>" />
                                             <input type="hidden" name="idCliente" value="<%= idClienteInc%>" />
                                             <button type="button" class="btn btn-success" onclick="return preencherCampos();"><i class="fa fa-lg fa-save fa-spc"></i> INSERIR ETIQUETAS MANUAL</button>
                                         </li>
                                     </ul>
                                 </form>
+                                            
+                                <%if (cliInc.getTemContrato() == 1) {%>
                                 <form name="form2" action="../../ServInserirFaixaEtiquetaWS" method="post">
                                     <ul class="list-unstyled">
                                         <li class="list-group-item list-group-heading">
@@ -199,7 +224,7 @@
                                         </li>
                                     </ul>
                                 </form>
-
+                                <%}}%>
 
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
@@ -230,7 +255,7 @@
                                                         ArrayList<ClienteLogEtiqueta> listaLog = Controle.ContrClienteEtiquetas.consultaLogFaixas(idClienteInc, 60, nomeBD);
                                                         for (int i = 0; i < listaLog.size(); i++) {
                                                             ClienteLogEtiqueta log = listaLog.get(i);
-                                                            int qtdUt = ContrClienteEtiquetas.contaQtdUtilizadaPorIdLog(log.getIdLog(), 1, nomeBD);
+                                                            int qtdUt = log.getQtdUtilizada();//ContrClienteEtiquetas.contaQtdUtilizadaPorIdLog(log.getIdLog(), 1, nomeBD);
                                                             String nomeServ = log.getServico() + "";
 
                                                             double dias = Util.FormatarData.diferencaEmDias(log.getDataHora(), new Date());
@@ -427,5 +452,4 @@
         </script>
     </body>
 </html>
-<%}
-    }%>
+<%}%>

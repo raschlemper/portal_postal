@@ -30,6 +30,8 @@
             antecedencia = String.valueOf(hc.getMinAntecedencia());
         }
 
+        int tipoEscolhaColeta = Coleta.Controle.contrColetaFixa.consultaTipoEscolhaColetaDoCliente(idEmpresa);
+
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -61,7 +63,7 @@
                                 <form name="form1" action="../../ServHoraColeta" method="post">
                                     <div class="panel panel-default">   
                                         <div class="panel-heading">
-                                            <label>HORARIO DE INICIO E TÉRMINO DAS COLETAS EM SUA AGÊNCIA <small>(PARA SOLICITAÇÕE DE COLETA VIA WEB)</small>:</label>
+                                            <label>HORÁRIO DE INICIO E TÉRMINO DAS COLETAS EM SUA AGÊNCIA <small>(PARA SOLICITAÇÕES DE COLETAS VIA WEB)</small>:</label>
                                         </div>
                                         <div class="panel-body panel-form form-horizontal">  
                                             <div class="col-sm-4 col-md-2 col-lg-2">
@@ -82,7 +84,7 @@
                                     </div>
                                     <div class="panel panel-default">   
                                         <div class="panel-heading">
-                                            <label>HORÁRIO LIMITE QUE O CLIENTE PODE SOLICITAR COLETAS VIA WEB:</label>
+                                            <label>HORÁRIO LIMITE QUE O CLIENTE PODE SOLICITAR AS COLETAS VIA WEB:</label>
                                         </div>
                                         <div class="panel-body panel-form form-horizontal">  
                                             <div class="col-sm-4 col-md-2 col-lg-2">
@@ -115,12 +117,12 @@
                                         <div class="panel-body panel-form form-horizontal">  
                                             <div class="col-sm-6">
                                                 <label class="control-label small" for="escolha">Opção do cliente:</label>
-                                               <div class="input-group">
-                                                    <select id="optHorario" class="form-control" name="tipoEscolhaCli" >
-                                                        <option value="1">ESCOLHE HORA DA COLETA</option>
-                                                        <option value="3">NÃO ESCOLHE HORA DA COLETA</option>
-                                                        <option value="2">MAIS CEDO x MAIS TARDE POSSIVEL</option>
-                                                        <option value="4">PERIODO DA MANHÃ x PERIODO DA TARDE</option>
+                                                <div class="input-group">
+                                                    <select id="optHorario" class="form-control" name="tipoEscolhaCli" onchange="tocarOpcao(this);" >
+                                                        <option value="1" <%if (tipoEscolhaColeta == 1) {%>selected<%}%>>ESCOLHE HORA DA COLETA</option>
+                                                        <option value="3" <%if (tipoEscolhaColeta == 3) {%>selected<%}%>>NÃO ESCOLHE HORA DA COLETA</option>
+                                                        <option value="2" <%if (tipoEscolhaColeta == 2) {%>selected<%}%>>MAIS CEDO x MAIS TARDE POSSIVEL</option>
+                                                        <option value="4" <%if (tipoEscolhaColeta == 4) {%>selected<%}%>>PERIODO DA MANHÃ x PERIODO DA TARDE</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -159,16 +161,28 @@
                 if (!valida_hora(form.timefield3)) {
                     return false;
                 }
-                if (form.antecedencia.value == "") {
+                if (form.antecedencia.value === "") {
                     alert('Preencha o tempo de antecedência!');
                     return false;
                 }
                 form.submit();
             }
+
+            function  tocarOpcao(v) {
+                $.ajax({
+                    url: 'ajax/tocarTipoImpressao.jsp',
+                    type: 'POST',
+                    data: {PrintType: v.value},
+                   // contentType: 'application/text; charset=utf-8',
+                    /*success: function (response) {
+                        alert(response);
+                    },*/
+                    error: function () {
+                        alert("Ocoreu um erro inesperado !");
+                    }
+                });
+            }
         </script>
-
-
-
     </body>
 </html>
 <%}%>

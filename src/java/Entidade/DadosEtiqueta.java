@@ -5,6 +5,8 @@
  */
 package Entidade;
 
+import java.awt.Image;
+
 /**
  *
  * @author Ricardinho
@@ -66,8 +68,17 @@ public class DadosEtiqueta {
     private String remetente_cidade;
     private String remetente_uf;
     private String remetente_pais;
+    private Image chancela_img;
 
     public DadosEtiqueta() {
+    }
+
+    public Image getChancela_img() {
+        return chancela_img;
+    }
+
+    public void setChancela_img(Image chancela_img) {
+        this.chancela_img = chancela_img;
     }
 
     public int getId_pp() {

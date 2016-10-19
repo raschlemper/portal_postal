@@ -135,12 +135,29 @@
                             + " ON idCliente = codigo "
                             + " WHERE prazo_cumprido > prazo_estimado; ";
                     break;
+                     case "8":
+                    sql = "SELECT codCliente AS COD, nome AS NOME_CLIENTE, m.cartaoPostagem AS CARTAO, "
+                            + " REPLACE(REPLACE(REPLACE(FORMAT(SUM(valorServico), 2),'.',';'),',','.'),';',',') AS $TOTAL "
+                            + " FROM movimentacao m"
+                            + " LEFT JOIN cliente ON codCliente = codigo"
+                            + " WHERE dataPostagem >= '" + dataIni + "' "
+                            + " AND dataPostagem <= '" + dataFim + "' "
+                            + " AND contratoEct <> '' AND contratoEct <> 0 "
+                            + " GROUP BY m.codCliente, m.cartaoPostagem"
+                            + " UNION"
+                            + " SELECT '999999999 ' AS COD, 'TOTAL GERAL', ' ',"
+                            + " REPLACE(REPLACE(REPLACE(FORMAT(SUM(valorServico), 2),'.',';'),',','.'),';',',')"
+                            + " FROM movimentacao"
+                            + " WHERE dataPostagem >= '" + dataIni + "' "
+                            + " AND dataPostagem <= '" + dataFim + "' "
+                            + " AND contratoEct <> '' AND contratoEct <> 0 ORDER BY COD; ";
+                    break;
 
                 default:
                     sql = "";
 
             }
-           //System.out.println(sql);
+            System.out.println(sql);
             String jsn = Controle.contrRelatorios.montaJson(sql, sdf, nomeBd);
 
 

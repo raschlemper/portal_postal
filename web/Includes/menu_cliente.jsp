@@ -77,6 +77,8 @@
                         <%}%>
                     <li><a href="../../Cliente/Servicos/vpne.jsp">Controle de VPNe</a></li>
                     <li><a href="../../Cliente/Servicos/ar_digital_arquivo.jsp">Arquivos de AR Digital</a></li>
+                    <li><a href="../../Cliente/Servicos/objetos_caixa_postal.jsp">Objetos caixa postal</a></li>
+                    
                 </ul>
             </li>
             <li><a href="#">Etiquetas</a>
@@ -125,7 +127,7 @@
                     <%if (acessosMn.contains(7)) {%><li><a href="../../Cliente/Cadastros/lr_lista.jsp">Endereços L. Reversa</a></li><%}%>
                     <%if (acessosMn.contains(7)) {%><li><a href="../../Cliente/Cadastros/codigos_edi.jsp">Cod. EDI</a></li><%}%>
                     <%if (acessosMn.contains(7)) {%><li><a href="../../Cliente/Cadastros/sro_edi.jsp">SRO x EDI</a></li><%}%>
-                </ul>
+               </ul>
             </li>            
             <%}%>
 

@@ -15,6 +15,8 @@ import br.com.correios.bsb.sigep.master.bean.cliente.AutenticacaoException;
 import br.com.correios.bsb.sigep.master.bean.cliente.SigepClienteException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -69,8 +71,9 @@ public class ContrClienteEtiquetas {
                             String finicial = prefixo + inicial + dgInicial + "BR";
                             String ffim = prefixo + fim + dgFim + "BR";
 
+                            int avista = 0;
                             //INSERE LOG DE ETIQUETAS
-                            int idImportacao = Controle.ContrClienteEtiquetas.insereLog(finicial, ffim, c.getCodigo(), 0, "Solicitação Automática", qtd, grupoServ, "SigepWEB", "PARA PORTAL POSTAL", nomeBD);
+                            int idImportacao = Controle.ContrClienteEtiquetas.insereLog(finicial, ffim, c.getCodigo(), 0, "Solicitação Automática", qtd, grupoServ, "SigepWEB", "PARA PORTAL POSTAL", avista, nomeBD);
 
                             //INSERE FAIXAS NO BANCO
                             int nIni = Integer.parseInt(inicial);
@@ -143,9 +146,9 @@ public class ContrClienteEtiquetas {
         }
     }
 
-    public static int insereLog(String faixaIni, String faixaFim, int idCliente, int idUsuario, String nomeUsuario, int qtd, String codECT, String tipoGeracao, String tipoUso, String nomeBD) {
+    public static int insereLog(String faixaIni, String faixaFim, int idCliente, int idUsuario, String nomeUsuario, int qtd, String codECT, String tipoGeracao, String tipoUso, int avista, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "INSERT INTO log_etiquetas_cli (idCliente, idUsuario, nomeUsuario, dataHora, faixaIni, faixaFim, qtd, servico, tipoGeracao, tipoUso) VALUES(?,?,?,NOW(),?,?,?,?,?,?)";
+        String sql = "INSERT INTO log_etiquetas_cli (idCliente, idUsuario, nomeUsuario, dataHora, faixaIni, faixaFim, qtd, servico, tipoGeracao, tipoUso, avista) VALUES(?,?,?,NOW(),?,?,?,?,?,?,?)";
         try {
             PreparedStatement valores = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             valores.setInt(1, idCliente);
@@ -157,6 +160,7 @@ public class ContrClienteEtiquetas {
             valores.setString(7, codECT);
             valores.setString(8, tipoGeracao);
             valores.setString(9, tipoUso);
+            valores.setInt(10, avista);
             valores.executeUpdate();
             int autoIncrementKey = 0;
             ResultSet rs = valores.getGeneratedKeys();
@@ -264,6 +268,30 @@ public class ContrClienteEtiquetas {
         }
     }
 
+    public static Map<String, Integer> mapQtdRestantePorGrupoServ(int utilizada, int idCliente, int avista, String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "SELECT grupoServico, COUNT(idImportacao) AS qtd"
+                + " FROM cliente_etiquetas"
+                + " WHERE idCliente = " + idCliente + " AND utilizada = " + utilizada + " AND avista = " + avista
+                + " GROUP BY grupoServico;";
+        try {
+            Map<String, Integer> mapServicosEtiquetas = new HashMap<>();
+            PreparedStatement valores = conn.prepareStatement(sql);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            while (result.next()) {
+                int qtd = result.getInt("qtd");
+                String servico = result.getString("grupoServico");
+                mapServicosEtiquetas.put(servico, qtd);
+            }
+            return mapServicosEtiquetas;
+        } catch (SQLException e) {
+            System.out.println(e);
+            return null;
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+
     public static String pegaEtiquetaNaoUtilizadaPorGrupoServ(int idCliente, String servico, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "SELECT seqLogica, utilizada FROM cliente_etiquetas WHERE utilizada = 0 AND idCliente = " + idCliente + " AND grupoServico = '" + servico + "' ORDER BY idImportacao, seqLogica LIMIT 1 FOR UPDATE"; //WHERE RETIRADO = AND cartaoPostagem = '"+cartaoPostagem+"'
@@ -287,10 +315,13 @@ public class ContrClienteEtiquetas {
         }
     }
 
-    public static String pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(int idCli, String servico, String nomeBD) {
+    public static String pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(int idCli, String servico, int avista, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "SELECT seqLogica, utilizada, idImportacao FROM cliente_etiquetas WHERE utilizada = 0 AND idCliente = " + idCli + " AND grupoServico = '" + servico + "' ORDER BY idImportacao, seqLogica LIMIT 1 FOR UPDATE"; //WHERE RETIRADO = AND cartaoPostagem = '"+cartaoPostagem+"'
-
+        String sql = "SELECT seqLogica, utilizada, idImportacao"
+                + " FROM cliente_etiquetas"
+                + " WHERE utilizada = 0 AND idCliente = " + idCli + " AND grupoServico = '" + servico + "' AND avista = " + avista + ""
+                + " ORDER BY idImportacao, seqLogica LIMIT 1 FOR UPDATE";
+        //System.out.println(sql);
         try {
             String lista = null;
             PreparedStatement valores3 = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -326,24 +357,17 @@ public class ContrClienteEtiquetas {
 
     public static ArrayList<ClienteLogEtiqueta> consultaLogFaixas(int idCli, int limit, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "SELECT * FROM log_etiquetas_cli WHERE idCliente = " + idCli + " ORDER BY dataHora DESC LIMIT " + limit;
+        String sql = "SELECT *, (SELECT COUNT(*) FROM cliente_etiquetas WHERE idImportacao = id AND utilizada = 1) AS qtdUtilizada "
+                + " FROM log_etiquetas_cli"
+                + " WHERE idCliente = " + idCli + ""
+                + " ORDER BY dataHora DESC LIMIT " + limit;
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();
             ArrayList<ClienteLogEtiqueta> lista = new ArrayList<ClienteLogEtiqueta>();
             while (result.next()) {
-                int idLog = result.getInt("id");
-                int idCliente = result.getInt("idCliente");
-                int idUsuario = result.getInt("idUsuario");
-                String nomeUsuario = result.getString("nomeUsuario");
-                String faixaIni = result.getString("faixaIni");
-                String faixaFim = result.getString("faixaFim");
-                String nomeServico = "";
-                String servico = result.getString("servico");
-                int qtd = result.getInt("qtd");
-                Timestamp dataHora = result.getTimestamp("dataHora");
-
-                ClienteLogEtiqueta log = new ClienteLogEtiqueta(idLog, idCliente, idUsuario, nomeUsuario, faixaIni, faixaFim, dataHora, qtd, servico, nomeServico);
+                int qtdUtilizada = result.getInt("qtdUtilizada");
+                ClienteLogEtiqueta log = new ClienteLogEtiqueta(result, qtdUtilizada);
                 lista.add(log);
             }
             return lista;
@@ -357,7 +381,10 @@ public class ContrClienteEtiquetas {
 
     public static ArrayList<ClienteLogEtiqueta> consultaLogFaixas(String dataIni, String dataFim, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "SELECT log_etiquetas_cli.*, nome FROM log_etiquetas_cli LEFT JOIN cliente ON codigo = idCliente WHERE DATE(dataHora) BETWEEN '" + dataIni + "' AND '" + dataFim + "' ORDER BY dataHora DESC";
+        String sql = "SELECT log_etiquetas_cli.*, nome FROM log_etiquetas_cli"
+                + " LEFT JOIN cliente ON codigo = idCliente"
+                + " WHERE DATE(dataHora) BETWEEN '" + dataIni + "' AND '" + dataFim + "'"
+                + " ORDER BY dataHora DESC";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             ResultSet result = (ResultSet) valores.executeQuery();

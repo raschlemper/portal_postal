@@ -1,4 +1,4 @@
-app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES) {
+app.directive('appRatear', function(FinanceiroValidation, ListaService,  ModalService, MESSAGES) {
     
     return {
         restrict: 'E',
@@ -64,7 +64,7 @@ app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES
             var saldoRateio = function(lancamentoRatear) {            
                 var saldo = 0;
                 _.map(lancamentoRatear.rateios, function(rateio) {
-                    saldo += rateio.valor;
+                    saldo += toFixe(rateio.valor, 2);
                 });
                 return saldo;
             };
@@ -102,7 +102,11 @@ app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES
                     rateio.percentual = calculatePercentual(saldo, rateio);
                     rateio.valor =  rateio.percentual * valorParcelado;
                 });
-            };      
+            };     
+        
+            var toFixe = function(value, fixe) {
+                return parseFloat(value.toFixed(fixe));
+            }  
             
             $scope.$watchCollection("lancamentoRatear.quantidadeParcela", function(newValue, oldValue) {
                 if(!newValue) return;
@@ -136,6 +140,12 @@ app.directive('appRatear', function(FinanceiroValidation, ListaService, MESSAGES
             $scope.validarCentroCusto = function(centroCusto) {
                 return FinanceiroValidation.centroCustoResultado($scope.centroCustos, centroCusto);
             };   
+        
+            // ***** MODAL ***** //
+
+            var modalMessage = function(message) {
+                ModalService.modalMessage(message);
+            }; 
             
         }
     }

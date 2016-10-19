@@ -128,6 +128,7 @@
                     </a> 
                     <ul class="nav-pills nav-stacked" style="list-style-type:none;">
                         <li style="display:none;"><a href="${pageContext.request.contextPath}/app/financeiro/banco">Banco</a></li>
+                        <li><a href="${pageContext.request.contextPath}/app/financeiro/configuracao">Configuração</a></li>
                         <li><a href="${pageContext.request.contextPath}/app/financeiro/colaborador">Colaborador</a></li>
                         <li><a href="${pageContext.request.contextPath}/app/financeiro/fornecedor">Fornecedor</a></li>
                         <li><a href="${pageContext.request.contextPath}/app/financeiro/planoconta">Plano Conta</a></li>

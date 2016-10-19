@@ -67,11 +67,17 @@ app.controller('LancamentoProgramadoController',
         };
         
         $scope.filter = function(lista, search) {
+            var tipoSelected = (search.tipo ? JSON.parse(search.tipo) : search.tipo);
+            var contaSelected = (search.conta ? JSON.parse(search.conta) : search.conta);
+            var planoContaSelected = (search.planoConta ? PlanoContaService.getChildrenListPlanoConta(null, search.planoConta) : search.planoConta);
+            var centroCustoSelected = (search.centroCusto ? CentroCustoService.getChildrenListCentroCusto(null, search.centroCusto) : search.centroCusto);
             lista = _.filter(lista, function(item) {
-                return filterByData(item, search);
+                return filterByData(item, search) && 
+                       filterTipo(item, tipoSelected) && 
+                       filterConta(item, contaSelected) &&
+                       filterByPlanoConta(item, planoContaSelected) &&
+                       filterByCentroCusto(item, centroCustoSelected);
             });  
-            lista = filterTipo(lista, search);
-            lista = filterConta(lista, search);
             return lista;
         }
         
@@ -82,22 +88,33 @@ app.controller('LancamentoProgramadoController',
                     || (data.isSame(search.dataInicio) || data.isSame(search.dataFim)));
         }; 
         
-        var filterTipo = function(lista, search) {          
-            if(!search.tipo) return lista;
-            lista = _.filter(lista, function(item) {
-                return item.tipoLancamento === search.tipo;
-            });
-            return lista;
-        }
+        var filterTipo = function(item, tipoSelected) {          
+            if(!tipoSelected) return true;
+            return item.tipoLancamento === tipoSelected.codigo;
+        };
         
-        var filterConta = function(lista, search) {          
-            if(!search.conta) return lista;
-            var conta = JSON.parse(search.conta); 
-            lista = _.filter(lista, function(item) {
-                return item.conta.idConta === conta.idConta;
-            });
-            return lista;
-        }
+        var filterConta = function(item, contaSelected) {          
+            if(!contaSelected) return true;
+            return item.conta.idConta === contaSelected.idConta;
+        }; 
+
+        var filterByPlanoConta = function(item, planoContaSelected) {          
+            if(!planoContaSelected) return true;
+            var selected = false;
+            planoContaSelected.map(function(conta) {                
+                if(item.planoConta && item.planoConta === conta.descricao) { selected = true; }
+            })
+            return selected;
+        };
+
+        var filterByCentroCusto = function(item, centroCustoSelected) {          
+            if(!centroCustoSelected) return true;
+            var selected = false;
+            centroCustoSelected.map(function(custo) {                
+                if(item.centroCusto && item.centroCusto === custo.descricao) { selected = true; }
+            })
+            return selected;
+        };
         
         // ***** CONTROLLER ***** //
         

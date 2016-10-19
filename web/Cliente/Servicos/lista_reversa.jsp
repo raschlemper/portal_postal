@@ -1,4 +1,6 @@
 
+
+<%@page import="Emporium.Controle.StarsRatingLogisticaReversa"%>
 <%@page import="Util.FormataString"%>
 <%@page import="Emporium.Controle.ContrLogisticaReversa"%>
 <%@page import="Entidade.LogisticaReversa"%>
@@ -12,6 +14,8 @@
 <%@page import="Controle.contrDestinatario"%>
 <%@page import="Entidade.Destinatario"%>
 <%@page import="Entidade.SenhaCliente"%>
+<%@page import="Entidade.LegendaLogisticaReversa"%>
+<%@page import="java.util.List"%>
 <%@page import = "java.util.ArrayList,java.sql.Timestamp, java.util.Date, java.text.SimpleDateFormat"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -67,7 +71,8 @@
         }
         //ArrayList<LogisticaReversa> lista = ContrLogisticaReversa.consultaReversasByCliente(cli.getCodigo(), nomeBD);
         ArrayList<LogisticaReversa> lista = ContrLogisticaReversa.pesqReversas(cli.getCodigo(), nomeBD, Util.FormatarData.DateToBD(dataOntem), Util.FormatarData.DateToBD(vDataAtual), idDeptos, filtro);
-
+        ContrLogisticaReversa contrLogistica = new ContrLogisticaReversa();
+        List<LegendaLogisticaReversa> stars = contrLogistica.pesquisaLegenda(nomeBD);
 %>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -96,7 +101,7 @@
         <link rel="stylesheet" href="../../javascript/plugins/TableSorter/styleSorterV3.css" />
         <script type="text/javascript" src="../../javascript/plugins/TableSorter/scriptSorterV3.js"></script>
         <!-- TableSorter -->
-
+        <script type="text/javascript" src="../../javascript/jx.js"></script>
         <script type="text/javascript">
             $(function () {
                 $("#dataIni").datepicker({
@@ -139,7 +144,7 @@
             }
             function chamaDivProtecao() {
                 var classe = document.getElementById("divProtecao").className;
-                if (classe == "esconder") {
+                if (classe === "esconder") {
                     document.getElementById("divProtecao").className = "mostrar";
                     document.getElementById("divInteracao").className = "mostrar";
                 } else {
@@ -159,6 +164,61 @@
                     return false;
                 }
             }
+
+            function changeRating(idLogistica, idStar) {
+                var nextId = nextStarId(idStar);
+                $('#imgRating' + idLogistica).attr("src", nextStar(nextId));
+                $('#tdRating' + idLogistica).attr("onclick", "changeRating(" + idLogistica + "," + nextId + ")");
+                atualizaIdStar(idLogistica, nextId)
+            }
+
+            function nextStarId(idStar) {
+                var next = idStar + 1;
+                if (next > 5) {
+                    next = 1;
+                }
+                return next;
+            }
+
+            function nextStar(idStar) {
+                var starWhite = "<%=StarsRatingLogisticaReversa.STARWHITE.getPath()%>";
+                var startBlue = "<%=StarsRatingLogisticaReversa.STARBLUE.getPath()%>";
+                var startGray = "<%=StarsRatingLogisticaReversa.STARGRAY.getPath()%>";
+                var starRed = "<%=StarsRatingLogisticaReversa.STARRED.getPath()%>";
+                var starYellow = "<%=StarsRatingLogisticaReversa.STARYELLOW.getPath()%>";
+                var stars = new Array(starWhite, startBlue, startGray, starRed, starYellow);
+                return stars[idStar - 1];
+            }
+
+            function atualizaIdStar(idLogistica, nextStar) {
+                JxPost('', JxResult, '../../ServAtualizaRatingLogisticaReversa', getParameter(idLogistica, nextStar), false);
+            }
+
+            function getParameter(idLogistica, idStar) {
+                return "idLogistica=" + idLogistica +
+                        "&rating=" + idStar;
+
+            }
+
+            function cadastroStars() {
+                JxPost('', JxResult, '../../ServLegendaLogisticaReversa', getParameter2(), false);
+                location.reload();
+            }
+
+            function getParameter2() {
+                var starWhite = document.getElementById('starWhite').value;
+                var starBlue = document.getElementById('starBlue').value;
+                var startGrey = document.getElementById('starGrey').value;
+                var startRed = document.getElementById('starRed').value;
+                var starYellow = document.getElementById('starYellow').value;
+                return "starWhite=" + starWhite +
+                        "&starBlue=" + starBlue +
+                        "&starGrey=" + startGrey +
+                        "&starRed=" + startRed +
+                        "&starYellow=" + starYellow;
+            }
+
+
         </script>
 
         <title>Portal Postal | Autorizações Geradas</title>
@@ -167,10 +227,97 @@
             .barraArqTable{float: right; margin-top: 2px;}
             .barraArqTable a{background: #1571d7; font-weight: normal; border: 1px solid #297edc; border-bottom: none; font-size: 12px; color: whitesmoke; padding: 3px 5px 6px 5px; margin-left: 5px;}
             .barraArqTable a:hover{background: #2d89ef; border: 1px solid white; border-bottom: none; color: white;}
+            .imgRating{height: 20px;width: 20px; cursor:pointer; }
+            .imgRatingLegend{padding-right: 10px;height: 24px;width: 24px; vertical-align: middle;}
+            .my-legend .legend-title {
+                text-align: center;
+                margin-bottom: 5px;
+                font-weight: bold;
+                font-size: 110%;
+            }
+            .my-legend .legend-scale ul {
+                margin: 0;
+                margin-bottom: 5px;
+                padding: 0;
+                float: left;
+                list-style: none;
+            }
+            .my-legend .legend-scale ul li {
+               // font-size: 80%;
+                list-style: none;
+                margin-left: 0;
+                line-height: 18px;
+                margin-bottom: 2px;
+            }
+            .my-legend ul.legend-labels li span {
+                margin-left: 15px;}
+            .my-legend ul.legend-labels li {
+                padding: 0px; 
+                min-height: 0px; 
+            }
+            .my-legend .legend-source {
+                text-align: center;
+                font-size: 90%;
+               color: #999;
+                clear: both;
+            }
+            .my-legend a {
+              // color: #777;    
+            }
+            .round{
+                border-radius: 15px;
+                border: 2px solid #2255a5;
+                padding: 15px; 
+                width: 200px;
+                height: 160px;
+                background-color: #F9F9F9;
+            }
+            .imgStars{ 
+                width: 24px;
+                height: 24px;
+                vertical-align: middle;
+            }
+            // .blockStars{text-align: left;}
+
         </style>
     </head>
-    <body onload="javascript:document.getElementById('nome').focus();">
-        <div id="divInteracao" class="esconder" style="top:10%; left:25%; right:25%; bottom:10%;" align="center"><input id="textointeracao" /></div>
+    <body>        
+        <div id="divInteracao" class="esconder" style="top:10%; left:25%; right:25%; bottom:10%;" align="center">
+            <div style="width: 100%; margin: 15px;">
+                <div style="width: 95%; text-align: left;">
+                    <div style='float:right;'><a onclick='chamaDivProtecao();' href='#' class='botaoClose'>Fechar</a></div>
+                    <div id='titulo1'>Alterar Legendas</div>
+                </div>
+                <img style="margin-bottom: 25px;" width="100%" src="../../imagensNew/linha.jpg"/>
+                <div id="">                
+                    <p class="blockStars">
+                        <img  class="imgStars" src="../../imagensNew/starwhite.png"/>
+                            <input id="starWhite" class="inputStars" value="<%=stars.get(0).getNome() == null ? "" : stars.get(0).getNome()%>"  type="text" />
+                    </p>
+                    <p class="blockStars">
+                        <img  class="imgStars" src="../../imagensNew/starblue.png"/>
+                            <input id="starBlue" class="inputStars" value="<%=stars.get(1).getNome() == null ? "" : stars.get(1).getNome()%>"  type="text" />
+                    </p>
+                    <p class="blockStars">
+                        <img class="imgStars" src="../../imagensNew/stargrey.png"/>
+                            <input id="starGrey" class="inputStars" value="<%=stars.get(2).getNome() == null ? "" : stars.get(2).getNome()%>" type="text" />
+                    </p>
+                    <p class="blockStars">
+                        <img class="imgStars" src="../../imagensNew/starred.png"/>
+                            <input id="starRed" class="inputStars" value="<%=stars.get(3).getNome() == null ? "" : stars.get(3).getNome()%>" type="text" />
+                    </p>
+                    <p class="blockStars">
+                        <img class="imgStars" src="../../imagensNew/staryellow.png"/>
+                            <input id="starYellow" class="inputStars" value="<%=stars.get(4).getNome() == null ? "" : stars.get(4).getNome()%>" type="text" />
+                    </p>                   
+                </div>
+                <div class="buttons"> 
+                    <button type='button' class='positive' onclick='cadastroStars();'><img src="../../imagensNew/tick_circle.png" /> SALVAR DADOS</button>
+                    <button type='button' class='negative' onClick='chamaDivProtecao();'><img src="../../imagensNew/cross_circle.png" /> CANCELAR</button>
+                </div>
+            </div>
+        </div>
+
         <div id="divProtecao" class="esconder"></div>
 
         <%@ include file="../../Includes/menu_cliente.jsp" %>
@@ -182,7 +329,7 @@
 
                     <div id="titulo1">Autorizações Geradas</div>
 
-                    <ul class="ul_formulario">
+                    <ul class="ul_formulario" style="width: 780px; height: 170px; margin-right: 0; border-right: 1px solid silver;">
                         <li class="titulo"><dd><span>MONTE A SUA PESQUISA - <%=filtro%></span></dd></li>
                         <li>
                             <dd>
@@ -225,98 +372,117 @@
                             </dd>
                         </li>
                         <li>
-                            <dd style="width: 650px;">
+                            <dd style="width: 350px;">
                                 <div class="buttons">
                                     <button type="button" class="regular" onclick="validaDataSint();
                                             "><img src="../../imagensNew/lupa.png"/> PESQUISAR</button>
                                     <%--<button type="button" class="negative" onclick="teste();"><img src="../../imagensNew/broom.png"/> LIMPAR CAMPOS</button>--%>
                                 </div>
                             </dd>
-                            <dd class="buttons" style="width: 250px; float: right;">
+                            <dd class="buttons" style="width: 250px; ">
                                 <form name="formAtualiza" action="../../ServReversaAtualizar" method="post">                        
                                     <input type="hidden" name="nomeBD" value="<%= nomeBD%>" />
                                     <input type="hidden" name="usuario" value="<%= cli.getLogin_reversa()%>" />
                                     <input type="hidden" name="senha" value="<%= cli.getSenha_reversa()%>" />
                                     <input type="hidden" name="codAdm" value="<%= cli.getCodAdministrativo()%>" />
                                     <input type="hidden" name="idCli" value="<%= cli.getCodigo()%>" />
-                                    <button type="submit" onclick="abrirTelaEspera();" class="regular"><img src="../../imagensNew/refresh.png"/><span style="color: red">ATUALIZAR STATUS DA LISTA</span></button>
+                                    <button type="submit" onclick="abrirTelaEspera();" class="regular"><img src="../../imagensNew/refresh.png"/><span style="color: red">VERIFICAR OBJETOS POSTADOS</span></button>
                                 </form>
                             </dd>
+
+                        </li>
+                    </ul>
+                    <ul class="ul_formulario" style= "width: 250px; height: 170px; margin-left: 0; padding: 0px 10px 35px 90px;">
+                        <li>
+                            <div class='my-legend round'>
+                                <div class='legend-title'>LEGENDA</div>
+                                <div class='legend-scale'>
+                                    <ul class='legend-labels'>
+                                        <li><img class="imgStars" src="../../imagensNew/starwhite.png"/><span><%= stars.get(0).getNome() == null ? "" : stars.get(0).getNome()%></span></li>
+                                        <li><img class="imgStars" src="../../imagensNew/starblue.png"/><span><%=stars.get(1).getNome() == null ? "" : stars.get(1).getNome()%></span></li>
+                                        <li><img class="imgStars" src="../../imagensNew/stargrey.png"/><span><%=stars.get(2).getNome() == null ? "" : stars.get(2).getNome()%></span></li>
+                                        <li><img class="imgStars" src="../../imagensNew/starred.png"/><span><%=stars.get(3).getNome() == null ? "" : stars.get(3).getNome()%></span></li>
+                                        <li><img class="imgStars" src="../../imagensNew/staryellow.png"/><span><%=stars.get(4).getNome() == null ? "" : stars.get(4).getNome()%></span></li>
+                                    </ul>
+                                </div>
+                                <div class='legend-source'> <a href="#" onclick="chamaDivProtecao();">ALTERAR</a></div>
+                            </div>
                         </li>
                     </ul>
 
                     <br/><br/>
-
                     <div id="titulo2">                        
                         Lista de Autorizações Geradas
                     </div>
                     <div style='max-width:100%;overflow:auto;'>
-                    <table cellpadding="0" cellspacing="0" border="0" id="table2" class="tinytable">
-                        <thead>
-                            <tr>
-                                <th><h3>Nº</h3></th>
-                                <th><h3>Depto</h3></th>
-                                <th><h3>Cartão</h3></th>
-                                <th><h3>Qtd.</h3></th>
-                                <th><h3>Nº do Objeto</h3></th>
-                                <th width="50"><h3>AR</h3></th>
-                                <th width="50"><h3>VD</h3></th>
-                                <th><h3>Nome</h3></th>
-                                <th><h3>Cidade / UF</h3></th>
-                                <th><h3>CEP</h3></th>
-                                <th><h3>Data Geração</h3></th>
-                                <th><h3>Data Validade</h3></th>
-                                <th><h3>Status</h3></th>
-                                <th class="nosort" width="60"><h3>Ver</h3></th>
-                                <th class="nosort" width="60"><h3>X</h3></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <%
-                                for (LogisticaReversa l : lista) {
-                                    String ar = "NÃO";
-                                    if (l.getAr() == 1) {
-                                        ar = "SIM";
-                                    }
-                                    String obj = "- - -";
-                                    if (!l.getNumObjeto().equals("")) {
-                                        obj = l.getNumObjeto();
-                                        if(obj.replaceAll("<br/>", "").trim().equals("")){
-                                            obj = obj.replaceAll("<br/>", "<br/> - - -");
+                        <table cellpadding="0" cellspacing="0" border="0" id="table2" class="tinytable">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th><h3>Nº</h3></th>
+                                    <th><h3>Depto</h3></th>
+                                    <th><h3>Cartão</h3></th>
+                                    <th><h3>Qtd.</h3></th>
+                                    <th><h3>Nº do Objeto</h3></th>
+                                    <th width="50"><h3>AR</h3></th>
+                                    <th width="50"><h3>VD</h3></th>
+                                    <th><h3>Nome</h3></th>
+                                    <th><h3>Cidade / UF</h3></th>
+                                    <th><h3>CEP</h3></th>
+                                    <th><h3>Data Geração</h3></th>
+                                    <th><h3>Data Validade</h3></th>
+                                    <th><h3>Status</h3></th>
+                                    <th class="nosort" width="60"><h3>Ver</h3></th>
+                                    <th class="nosort" width="60"><h3>X</h3></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%
+                                    for (LogisticaReversa l : lista) {
+                                        String ar = "NÃO";
+                                        if (l.getAr() == 1) {
+                                            ar = "SIM";
                                         }
-                                    }
-                                    String status = "CANCELADO";
-                                    if (l.getCancelado() == 0) {
-                                        status = l.getDescricaoStatus();
-                                    }
-                            %>
-                            <tr style="cursor:default;">
-                                <td><%= l.getCod_ap()%></td>
-                                <td><%= l.getNomeDepto()%></td>
-                                <td><%= l.getCartao()%></td>
-                                <td align="center"><%= l.getQtdObjeto()%></td>
-                                <td>
-                                    <%--<form name="frm<%= numeroRegistro%>" id="frm<%= numeroRegistro%>" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/multResultado.cfm" target="_blank">
-                                    <form name="frm<%= numeroRegistro%>" id="frm<%= numeroRegistro%>" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/newprint.cfm" target="_blank">--%>
-                                    <form name="frm<%= obj%>" id="frm<%= obj%>" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
-                                        <input type="hidden" name="objetos" id="objetos" value="<%= obj%>" />
-                                    </form>                    
-                                    <a href='#' onclick="document.getElementById('frm<%= obj%>').submit();"><%= obj%></a>
-                                </td>  
-                                <td align="center"><%= ar%></td>
-                                <td>R$ <%= l.getVd()%></td>
-                                <td><%= l.getNome_rem()%></td>
-                                <td><%= l.getCidade_rem() + "/" + l.getUf_rem()%></td>
-                                <td><%= l.getCep_rem()%></td>
-                                <td><%= l.getDataSolicitacao()%></td>
-                                <td><%= l.getValidade()%></td>
-                                <td><%= status%></td>
-                                <td align="center"><a onclick="verReversa(<%= l.getId()%>);" style="cursor:pointer;" ><img src="../../imagensNew/lupa.png" /></a></td>
-                                <td align="center"><%if (l.getCancelado() == 0 && l.getNumObjeto().equals("")) {%><a onclick="excluirRev(<%= l.getId()%>, <%= l.getCod_ap()%>);" style="cursor:pointer;" ><img src="../../imagensNew/cancel.png" /></a><%}%></td>
-                            </tr>
-                            <%}%>
-                        </tbody>
-                    </table>
+                                        String obj = "- - -";
+                                        if (!l.getNumObjeto().equals("")) {
+                                            obj = l.getNumObjeto();
+                                            if (obj.replaceAll("<br/>", "").trim().equals("")) {
+                                                obj = obj.replaceAll("<br/>", "<br/> - - -");
+                                            }
+                                        }
+                                        String status = "CANCELADO";
+                                        if (l.getCancelado() == 0) {
+                                            status = l.getDescricaoStatus();
+                                        }
+                                %>
+                                <tr style="cursor:default;">
+                                    <td  id="tdRating<%=l.getId()%>" onclick="changeRating(<%=l.getId()%>,<%=l.getRating()%>)"><img class="imgRating" id="imgRating<%=l.getId()%>" src="<%=StarsRatingLogisticaReversa.STARGRAY.getByCode(l.getRating()).getPath()%>"/></td>
+                                    <td><%= l.getCod_ap()%></td>
+                                    <td><%= l.getNomeDepto()%></td>
+                                    <td><%= l.getCartao()%></td>
+                                    <td align="center"><%= l.getQtdObjeto()%></td>
+                                    <td>
+                                        <%--<form name="frm<%= numeroRegistro%>" id="frm<%= numeroRegistro%>" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/multResultado.cfm" target="_blank">
+                                        <form name="frm<%= numeroRegistro%>" id="frm<%= numeroRegistro%>" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/newprint.cfm" target="_blank">--%>
+                                        <form name="frm<%= obj%>" id="frm<%= obj%>" method="post" action="http://www2.correios.com.br/sistemas/rastreamento/Resultado.cfm" target="_blank">
+                                            <input type="hidden" name="objetos" id="objetos" value="<%= obj%>" />
+                                        </form>                    
+                                        <a href='#' onclick="document.getElementById('frm<%= obj%>').submit();"><%= obj%></a>
+                                    </td>  
+                                    <td align="center"><%= ar%></td>
+                                    <td>R$ <%= l.getVd()%></td>
+                                    <td><%= l.getNome_rem()%></td>
+                                    <td><%= l.getCidade_rem() + "/" + l.getUf_rem()%></td>
+                                    <td><%= l.getCep_rem()%></td>
+                                    <td><%= l.getDataSolicitacao()%></td>
+                                    <td><%= l.getValidade()%></td>
+                                    <td><%= status%></td>
+                                    <td align="center"><a onclick="verReversa(<%= l.getId()%>);" style="cursor:pointer;" ><img src="../../imagensNew/lupa.png" /></a></td>
+                                    <td align="center"><%if (l.getCancelado() == 0 && l.getNumObjeto().equals("")) {%><a onclick="excluirRev(<%= l.getId()%>, <%= l.getCod_ap()%>);" style="cursor:pointer;" ><img src="../../imagensNew/cancel.png" /></a><%}%></td>
+                                </tr>
+                                <%}%>
+                            </tbody>
+                        </table>
                     </div>
                     <script type="text/javascript">
                         var sorter2 = new TINY.table.sorter('sorter2', 'table2', {
@@ -342,7 +508,6 @@
                         <input type="hidden" name="codAP" id="codAP" value="" />
                         <input type="hidden" name="idRev" id="idRev" value="" />
                     </form>
-
                 </div>
             </div>
         </div>

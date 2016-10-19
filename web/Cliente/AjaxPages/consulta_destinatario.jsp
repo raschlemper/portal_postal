@@ -22,6 +22,7 @@
         String emp = request.getParameter("empresa");
         String end = request.getParameter("endereco");
         String cep1 = request.getParameter("cep");
+        String cidade = request.getParameter("cidade");
         
         MaskFormatter mask; 
         if (cep1 != null) {
@@ -39,10 +40,9 @@
         String tags = request.getParameter("tags");
         String multi = request.getParameter("multi");
 
-        ArrayList<Destinatario> lista = contrDestinatario.pesquisa(idCliente, cod, nom, "", end, end, cep1, emp, end, nomeBD, tags);                                    
+        ArrayList<Destinatario> lista = contrDestinatario.pesquisa(idCliente, cod, nom, "", "", cidade, cep1, emp, end, nomeBD, tags);                                    
         if (lista.size() >= 1) {
 %>
-
 <table id="barraAtendimento" border="0" style="width: 100%;">
     <tr>
         <td align="left" style="font-weight:bold;font-size:12px;">
@@ -81,7 +81,7 @@
                     int id = dest.getIdDestinatario();
                     String nome = FormataString.removeAccentsToUpper(dest.getNome());
                     String empresa = FormataString.removeAccentsToUpper(dest.getEmpresa());
-                    String cidade = FormataString.removeAccentsToUpper(dest.getCidade());
+                    String cid = FormataString.removeAccentsToUpper(dest.getCidade());
                     String uf = dest.getUf();
                     String endereco = FormataString.removeAccentsToUpper(dest.getEndereco());
                     String numero = dest.getNumero();
@@ -118,7 +118,7 @@
                     <input type="hidden" name="endereco_multi_<%= id%>" id="endereco_multi_<%= id%>" value="<%= endereco%>" />
                     <input type="hidden" name="numero_multi_<%= id%>" id="numero_multi_<%= id%>" value="<%= numero%>" />
                     <input type="hidden" name="compl_multi_<%= id%>" id="compl_multi_<%= id%>" value="<%= complemento%>" />
-                    <input type="hidden" name="cidade_multi_<%= id%>" id="cidade_multi_<%= id%>" value="<%= cidade%>" />
+                    <input type="hidden" name="cidade_multi_<%= id%>" id="cidade_multi_<%= id%>" value="<%= cid%>" />
                     <input type="hidden" name="bairro_multi_<%= id%>" id="bairro_multi_<%= id%>" value="<%= bairro%>" />
                     <input type="hidden" name="uf_multi_<%= id%>" id="uf_multi_<%= id%>" value="<%= uf%>" />
                     <input type="hidden" name="cpf_multi_<%= id%>" id="cpf_multi_<%= id%>" value="<%= cpf%>" />
@@ -133,7 +133,7 @@
                 <td><%= dest.getIdDestinatario()%></td>
                 <td><%= nome%></td>
                 <td><%= empresa%></td>
-                <td><%= cidade + "/" + uf%></td>
+                <td><%= cid + "/" + uf%></td>
                 <td><%= endereco + ", " + numero%></td>
                 <td><%= cep%></td>
                 <td><%= tag%></td>

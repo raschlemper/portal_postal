@@ -197,7 +197,7 @@ WHERE qtdTotal > 0;]]>
 			</rectangle>
 			<image hAlign="Left" onErrorType="Blank">
 				<reportElement x="5" y="4" width="133" height="30" uuid="c4613b94-1c34-4ea3-b49b-2099ed27135f"/>
-				<imageExpression><![CDATA["http://localhost:8080/PortalPostal/imagensNew/correios_logo.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["http://www.portalpostal.com.br/imagensNew/correios_logo.jpg"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="143" y="0" width="246" height="22" uuid="e8816082-2f42-4ba8-b895-58470c4e7c71"/>

@@ -9,7 +9,7 @@ app.directive('banco', function(BancoService, ColaboradorService, FornecedorServ
             
             var init = function() {
                 $scope.events = { 'selectItem': selectBanco };
-                $scope.bancos = $scope.bancos || [];
+                $scope.bancos = [];
                 bancos();
             }       
         
@@ -17,9 +17,9 @@ app.directive('banco', function(BancoService, ColaboradorService, FornecedorServ
                 BancoService.getAll()
                     .then(function (data) {
                         angular.forEach(data, function(banco) {
-                            banco.descricao = banco.nome;
-                            $scope.bancos.push(banco);                            
+                            $scope.bancos.push(createItem(banco));                            
                         });
+                        $scope.bancoModel = createItem($scope.bancoModel);
                     })
                     .catch(function (e) {
                         console.log(e);
@@ -27,7 +27,13 @@ app.directive('banco', function(BancoService, ColaboradorService, FornecedorServ
             };
         
             var selectBanco = function(banco) {
-                $scope.bancoModel = banco;
+                $scope.bancoModel = createItem(banco);
+            };
+            
+            var createItem = function(banco) {
+                if(!banco) return;
+                banco.descricao = banco.numero + ' - ' + banco.nome;
+                return banco;
             };
             
             init();

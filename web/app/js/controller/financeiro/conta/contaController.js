@@ -49,7 +49,7 @@ app.controller('ContaController',
         
         var criarContasLista = function(contas) {
             return _.map(contas, function(conta) {
-                return _.pick(conta, 'idConta', 'nome', 'tipo', 'status');
+                return _.pick(conta, 'idConta', 'nome', 'tipo', 'status', 'codigoIntegracao');
             })
         };
 
@@ -132,6 +132,10 @@ app.controller('ContaController',
         // ***** EXCLUIR ***** //
 
         $scope.excluir = function(conta) {
+            if(conta.codigoIntegracao) {
+                modalMessage("Esta conta não pode ser excluída!");
+                return;
+            }
             $q.all([ContaService.getLancamento(conta.idConta, null, null),
                     ContaService.getLancamentoProgramado(conta.idConta, null, null)])
                 .then(function(values) {   

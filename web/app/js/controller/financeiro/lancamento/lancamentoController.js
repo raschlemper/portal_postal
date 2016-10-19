@@ -32,7 +32,8 @@ app.controller('LancamentoController',
                 {label: '', column: 'tipo', headerClass: 'no-sort', dataClass:'text-center col-tipo', filter: {name: 'tipoLancamento', args: ''}},               
                 {label: '', column: 'anexo', headerClass: 'no-sort', dataClass:'text-center col-anexo', filter: {name: 'anexo', args: '', callback: 'linha.events.anexar(item)'}},           
                 {label: '', column: 'situacao.descricao', headerClass: 'no-sort', dataClass:'text-center col-compensado', filter: {name: 'situacaoLancamento', args: '', callback: 'linha.events.compensar(item)'}}, 
-                {label: '', column: 'numeroLoteConciliado', headerClass: 'no-sort', dataClass:'text-center col-reconciliado', filter: {name: 'conciliadoLancamento', args: ''}},         
+                {label: '', column: 'numeroLoteConciliado', headerClass: 'no-sort', dataClass:'text-center col-reconciliado', filter: {name: 'conciliadoLancamento', args: ''}},              
+                {label: 'Conta', column: 'conta.nome', showColumn: true, selected: false},                      
                 {label: 'Data', column: 'dataLancamento', dataClass: 'text-center cel-data', filter: {name: 'date', args: 'dd/MM/yy'}},                
                 {label: 'Número', column: 'numero'},               
                 {label: 'Plano Conta', column: 'planoConta'},   
@@ -52,6 +53,7 @@ app.controller('LancamentoController',
                 },
                 events: { 
                     edit: function(lancamento) {
+                        if(isAutomatico(lancamento.tipo.modelo, MESSAGES.lancamento.info.ALTERAR_AUTOMATICO)) return;
                         if(validaConciliado(lancamento.idLancamento)) {
                             modalConfirmarConciliado().then(function() {
                                 $scope.editar($scope.conta, lancamento, false);
@@ -61,6 +63,7 @@ app.controller('LancamentoController',
                         }
                     },
                     remove: function(lancamento) {
+                        if(isAutomatico(lancamento.tipo.modelo, MESSAGES.lancamento.info.EXCLUIR_AUTOMATICO)) return;
                         if(validaConciliado(lancamento.idLancamento)) {
                             modalConfirmarConciliado().then(function() {
                                 $scope.excluir($scope.conta, lancamento);
@@ -90,10 +93,16 @@ app.controller('LancamentoController',
         };
 
         $scope.filter = function(lista, search) { 
+            var tipoSelected = (search.tipo ? JSON.parse(search.tipo) : search.tipo);
+            var planoContaSelected = (search.planoConta ? PlanoContaService.getChildrenListPlanoConta(null, search.planoConta) : search.planoConta);
+            var centroCustoSelected = (search.centroCusto ? CentroCustoService.getChildrenListCentroCusto(null, search.centroCusto) : search.centroCusto);
             lista = _.filter(lista, function(item) {
-                return filterByData(item, search);
+                return filterByData(item, search) && 
+                       filterTipo(item, tipoSelected) && 
+                       filterByPlanoConta(item, planoContaSelected) &&
+                       filterByCentroCusto(item, centroCustoSelected);
             });    
-            lista = filterTipo(lista, search);
+//            lista = filterTipo(lista, search);
             return lista;
         };
 
@@ -106,13 +115,27 @@ app.controller('LancamentoController',
                     || (data.isSame(search.dataInicio) || data.isSame(search.dataFim)));
         };  
 
-        var filterTipo = function(lista, search) {          
-            if(!search.tipo) return lista;
-            var tipo = JSON.parse(search.tipo); 
-            lista = _.filter(lista, function(item) {
-                return item.tipo.id === tipo.id;
-            });
-            return lista;
+        var filterTipo = function(item, tipoSelected) {          
+            if(!tipoSelected) return true;
+            return item.tipo.id === tipoSelected.id;
+        };  
+
+        var filterByPlanoConta = function(item, planoContaSelected) {          
+            if(!planoContaSelected) return true;
+            var selected = false;
+            planoContaSelected.map(function(conta) {                
+                if(item.planoConta && item.planoConta === conta.descricao) { selected = true; }
+            })
+            return selected;
+        };
+
+        var filterByCentroCusto = function(item, centroCustoSelected) {          
+            if(!centroCustoSelected) return true;
+            var selected = false;
+            centroCustoSelected.map(function(custo) {                
+                if(item.centroCusto && item.centroCusto === custo.descricao) { selected = true; }
+            })
+            return selected;
         };
         
         $scope.filterByDays = function(days) {
@@ -140,7 +163,8 @@ app.controller('LancamentoController',
 
         $scope.changeConta = function(conta) {
             $scope.conta = conta;
-            todos(conta);
+            if(conta) { todosByConta(conta); }
+            else { todos(); }
         }
 
         var planoContas = function() {
@@ -162,17 +186,17 @@ app.controller('LancamentoController',
                     $scope.centroCustos = data;
                     CentroCustoService.estrutura($scope.centroCustos);
                     $scope.centroCustos = CentroCustoService.flatten($scope.centroCustos);                 
-                    todos($scope.conta);
+                    todosByConta($scope.conta);
                 })
                 .catch(function (e) {
                     console.log(e);
                 });
         };
 
-        var todos = function(conta) {
-            ContaService.getLancamento(conta.idConta, null, null)
+        var todos = function() {
+            LancamentoService.getAll(null, null)
                 .then(function (data) {
-                    $scope.lancamentos = angular.copy(data.lancamentos);
+                    $scope.lancamentos = angular.copy(data);
                     $scope.lancamentosLista = criarLancamentosLista(data);
                     if(!$scope.lancamentosLista.length) { calculateSaldo($scope.lancamentosLista); }
                 })
@@ -181,8 +205,20 @@ app.controller('LancamentoController',
                 });
         };
 
-        var criarLancamentosLista = function(data) {
-            return _.map(data.lancamentos, function(lancamento) { 
+        var todosByConta = function(conta) {
+            ContaService.getLancamento(conta.idConta, null, null)
+                .then(function (data) {
+                    $scope.lancamentos = angular.copy(data.lancamentos);
+                    $scope.lancamentosLista = criarLancamentosLista(data.lancamentos);
+                    if(!$scope.lancamentosLista.length) { calculateSaldo($scope.lancamentosLista); }
+                })
+                .catch(function(e) {
+                    console.log(e);
+                });
+        };
+
+        var criarLancamentosLista = function(lancamentos) {
+            return _.map(lancamentos, function(lancamento) { 
 
                 if(lancamento.tipo.id === $scope.tipos[1].id) { 
                     lancamento.pagamento = lancamento.valor * -1;
@@ -223,14 +259,32 @@ app.controller('LancamentoController',
                 
                 if(lancamento.favorecido) { lancamento.favorecido = lancamento.favorecido.nome; }
 
-                return _.pick(lancamento, 'idLancamento', 'tipo', 'anexo', 'dataLancamento', 'numero', 'planoConta', 'centroCusto', 'usuario', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico', 'situacao', 'numeroLoteConciliado');
+                return _.pick(lancamento, 'idLancamento', 'tipo', 'anexo', 'conta', 'dataLancamento', 'numero', 'planoConta', 'centroCusto', 'usuario', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico', 'situacao', 'numeroLoteConciliado');
             })
         };
 
         var calculateSaldo = function(lancamentos) {
-            var saldo = ($scope.conta && $scope.conta.valorSaldoAbertura) || 0;
+            if(!$scope.lancSearch.dataInicio) {
+                calculateSaldoInicial(0, lancamentos);
+            } else {
+                var conta = 0;
+                if($scope.conta && $scope.conta.idConta) { conta = $scope.conta.idConta; }
+                LancamentoService.getSaldoByConta(conta, null, 
+                        moment($scope.lancSearch.dataInicio).subtract(1, 'days').format('YYYY-MM-DD'))
+                    .then(function (data) {
+                        if(!data || !data.length) { calculateSaldoInicial(0, lancamentos); }
+                        else { calculateSaldoInicial(data[0].valor, lancamentos); }
+                    })
+                    .catch(function(e) {
+                        console.log(e);
+                    });
+            }
+        };
+
+        var calculateSaldoInicial = function(saldoInicial, lancamentos) {
+            var saldo = calculateSaldoInicialContas(saldoInicial);
             $scope.saldoTotal = 0;
-            $scope.saldoTotal += ($scope.conta && $scope.conta.valorSaldoAbertura) || 0;
+            $scope.saldoTotal += saldo;
             return _.map(lancamentos, function(lancamento) {
                 if(lancamento.pagamento) { 
                     saldo += lancamento.pagamento;
@@ -242,6 +296,18 @@ app.controller('LancamentoController',
                 }
                 lancamento.saldo = saldo;
             });
+        };
+        
+        var calculateSaldoInicialContas = function(saldoInicial) {
+            if($scope.conta) return $scope.conta.valorSaldoAbertura + saldoInicial;
+            if($scope.contas && $scope.contas.length) {
+                var saldo = saldoInicial;
+                $scope.contas.map(function(conta) {
+                    saldo += conta.valorSaldoAbertura;
+                });
+                return saldo;
+            }
+            return saldoInicial;
         };
 
         var getLancamentoSelecionados = function(conta, lancamentos, callback) {            
@@ -262,6 +328,12 @@ app.controller('LancamentoController',
                 }                 
             });
             return lancamentosSelecionados;
+        };
+        
+        var isAutomatico = function(modelo, msg) {
+            if(modelo.id != $scope.modelos[6].id) return false;
+            modalMessage(msg);
+            return true;
         };
 
         // ***** VISUALIZAR ***** //
@@ -301,7 +373,7 @@ app.controller('LancamentoController',
             LancamentoService.save(lancamento)
                 .then(function(data) {  
                     //modalMessage(MESSAGES.lancamento.sucesso.INSERIDO_SUCESSO);
-                    todos(conta);
+                    todosByConta(conta);
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -331,7 +403,7 @@ app.controller('LancamentoController',
             modalSalvar(conta, lancamento, lancamento.tipo, goToAnexo)
                 .then(function(result) {
                     if(!result) { 
-                        todos(conta); 
+                        todosByConta(conta); 
                         return;
                     }
                     result = ajustarDados(result);
@@ -343,7 +415,7 @@ app.controller('LancamentoController',
             LancamentoService.update(lancamento.idLancamento, lancamento)
                 .then(function (data) {  
                     modalMessage(MESSAGES.lancamento.sucesso.ALTERADO_SUCESSO);
-                    todos(conta);
+                    todosByConta(conta);
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -386,7 +458,7 @@ app.controller('LancamentoController',
             LancamentoService.delete(lancamento.idLancamento)
                 .then(function(data) { 
                     modalMessage(MESSAGES.lancamento.sucesso.REMOVIDO_SUCESSO);
-                    todos(conta);                        
+                    todosByConta(conta);                        
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -422,7 +494,7 @@ app.controller('LancamentoController',
             LancamentoService.deleteAll(lancamentoList)
                 .then(function(data) { 
                     modalMessage(MESSAGES.lancamento.sucesso.REMOVIDO_SUCESSO_TODOS);
-                    todos(conta);                        
+                    todosByConta(conta);                        
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -461,7 +533,7 @@ app.controller('LancamentoController',
             LancamentoTransferenciaService.save(lancamentoTransferencia)
                 .then(function(data) {  
                     //modalMessage(MESSAGES.lancamento.transferir.sucesso.INSERIDO_SUCESSO);
-                    todos(conta);
+                    todosByConta(conta);
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -472,7 +544,7 @@ app.controller('LancamentoController',
             LancamentoTransferenciaService.update(lancamentoTransferencia.idLancamentoTransferencia, lancamentoTransferencia)
                 .then(function(data) {  
                     modalMessage(MESSAGES.lancamento.transferir.sucesso.ALTERADO_SUCESSO);
-                    todos(conta);
+                    todosByConta(conta);
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -492,7 +564,7 @@ app.controller('LancamentoController',
             LancamentoConciliadoService.create(lancamentoConciliado)
                 .then(function(data) {  
                     //modalMessage(MESSAGES.lancamento.conciliar.sucesso.INSERIDO_SUCESSO);
-                    todos(conta);
+                    todosByConta(conta);
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -518,7 +590,7 @@ app.controller('LancamentoController',
         var compensarTodos = function(conta, lancamentos) {
             LancamentoService.updateSituacao(lancamentos)
                 .then(function (data) { 
-                    todos(conta);
+                    todosByConta(conta);
                 })
                 .catch(function(e) {
                     modalMessage(e);

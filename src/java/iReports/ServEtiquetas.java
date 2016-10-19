@@ -9,6 +9,7 @@ import Emporium.Controle.ContrPreVenda;
 import Entidade.Clientes;
 import Entidade.DadosEtiqueta;
 import Util.Conexao;
+import java.awt.Image;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.ImageIcon;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
@@ -112,7 +114,7 @@ public class ServEtiquetas extends HttpServlet {
                     contrato = cli.getNumContrato();
                 }
 
-                String url_base = "http://localhost:8080/PortalPostal";
+                String url_base = "http://www.portalpostal.com.br";
                 String url = cli.getUrl_logo();
                 if (cli.getUrl_logo() == null || cli.getUrl_logo().trim().equals("") || cli.getUrl_logo().equals("null")) {
                     url = "";
@@ -200,7 +202,19 @@ public class ServEtiquetas extends HttpServlet {
                         }else{
                             d.setContrato_ect("");
                         }
-                        
+
+                        try {
+                            if (r.getString("imgChancela").contains("CHANCELA_")) {
+                                Image IMG_CHANCELA = new ImageIcon(getClass().getResource("Images/CHANCELA_" + r.getString("nomeServico") + ".png")).getImage();
+                                d.setChancela_img(IMG_CHANCELA);
+                            } else {
+                                Image IMG_CHANCELA = new ImageIcon(getClass().getResource("Images/" + r.getString("nomeServico") + ".png")).getImage();
+                                d.setChancela_img(IMG_CHANCELA);
+                            }
+                        } catch (Exception e) {
+                            d.setChancela_img(null);
+                        }
+
                         d.setUrl_chancela(r.getString("imgChancela"));
                         d.setUrl_logo(url);
                         d.setSigla_triagem(r.getString("siglaAmarracao"));

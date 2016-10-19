@@ -331,6 +331,14 @@
                                                                             <label>CEP:</label>
                                                                             <%= pv.getCepDes()%>
                                                                         </li>
+                                                                        <li>
+                                                                            <label>E-mail:</label>
+                                                                            <%= pv.getEmail_destinatario() %>
+                                                                        </li>
+                                                                        <li>
+                                                                            <label>Telefone:</label>
+                                                                            <%= pv.getCelularDes() %>
+                                                                        </li>
                                                                     </ul>
                                                                 </div>
                                                             </div>

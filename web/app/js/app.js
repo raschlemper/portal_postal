@@ -105,7 +105,13 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
                 templateUrl: 'partials/financeiro/financeiro.html',
                 controller: 'FinanceiroController',
                 resolve: {}
-            })          
+            })             
+            .state('app.financeiro.configuracao', {
+                url: '/configuracao',
+                templateUrl: 'partials/financeiro/configuracao.html',
+                controller: 'ConfiguracaoController',
+                resolve: {}
+            })           
             .state('app.financeiro.chart', {
                 url: '/chart/:tipo',
                 templateUrl: 'partials/financeiro/chart.html',
