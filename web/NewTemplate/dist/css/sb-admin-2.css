@@ -1497,6 +1497,10 @@ label.small{
     margin-right: 10px;
 }
 
+.btn .fa-spc-sm, .btn .glyphicon-spc{
+    margin-right: 3px;
+}
+
 .toggle-switch {
   position: relative;
   width: 60px;

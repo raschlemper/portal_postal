@@ -91,30 +91,6 @@
         <!-- TableSorter -->
         <script type="text/javascript">
 
-            function preencherCampos() {
-                var form = document.form1;
-                if (form.departamento.value === '-1') {
-                    alert('Escolha o Departamento/Centro de Custo para a Postagem!\n\nCaso não exista o departameto desejado,\npeça para a agência incluir no cadastro!');
-                    return false;
-                }
-                abrirTelaEspera();
-                form.submit();
-            }
-
-            function verificacaoAbr() {
-                //VERIFICA ABRANGENCIA DE SERVIÇOS
-                var form = document.form1;
-                if (form.servico.value === 'ESEDEX') {
-                    verPesquisarAbrangenciaServ(form.cep.value, 'ESEDEX');
-                } else if (form.servico.value === 'SEDEX10') {
-                    verPesquisarAbrangenciaServ(form.cep.value, 'SEDEX10');
-                } else if (form.servico.value === 'SEDEX12') {
-                    verPesquisarAbrangenciaServ(form.cep.value, 'SEDEX12');
-                } else if (form.servico.value === 'PAX') {
-                    verPesquisarAbrangenciaServ(form.cep.value, 'PAX');
-                }
-            }
-
             function chamaDivProtecao() {
                 var classe = document.getElementById("divProtecao").className;
                 if (classe === 'esconder') {
@@ -247,7 +223,7 @@
                                 <li>
                                     <dd>
                                         <label>Serviço<b class="obg">*</b></label>
-                                        <select style="width: 220px;" name="servico_1" id="servico_1">
+                                        <select style="width: 220px;" name="servico_1" id="servico_1" class="servico_1">
                                             <%
                                                 ArrayList<Integer> listaContratoServ = ContrClienteContrato.consultaContratoCliente(idCli, nomeBD);
                                                 ArrayList<Integer> listaOutrosServ = ContrClienteContrato.consultaOutrosServicosCliente(idCli, nomeBD);
@@ -345,14 +321,22 @@
                                         </tbody>
                                     </table>
                                 </li>
+                                        <li>
+                                <dd style="width: 100%;text-align: center;">
+                                    <div class="buttons">
+                                        <button type="button" onclick="consultaCeps();" class="regular"><img src="../../imagensNew/refresh.png" /> VALIDAR CEPs</button>
+                                        <button type="button" class="regular"  onclick="window.open('http://www.buscacep.correios.com.br', 'CORREIOS');" ><img src="../../imagensNew/lupa.png" /> CONSULTE AQUI O CEP CORRETO</button>
+                                    </div>
+                                </dd>
+                            </li>
                                 <li>
-                                    <dd style="width: 100%;">
+                                    <dd style="width: 100%;text-align: center;">
                                         <div class="buttons">
                                             <input type="hidden" name="nomeBD" id="nomeBD" value="<%= nomeBD%>" />
                                             <input type="hidden" name="idCliente" value="<%= idCli%>" />
                                             <input type="hidden" name="idUser" value="<%= idUser%>" />
                                             <input type="hidden" name="nomeUser" value="<%= nomeUser%>" />
-                                            <button type="button" class="positive" onclick="return preencherCampos();"><img src="../../imagensNew/tick_circle.png" /> EFETUAR PRÉ-POSTAGEM</button>
+                                            <button type="button" class="positive" onclick="return verificaCepsServicos();"><img src="../../imagensNew/tick_circle.png" /> EFETUAR PRÉ-POSTAGEM</button>
                                         </div>
                                     </dd>
                                 </li>
@@ -366,21 +350,101 @@
             </div>
         </div>
         <script type="text/javascript">
+function preencherCampos() {
+                
+            }
+          function verificaCepsServicos() {
+                abrirTelaEspera();
+                var form = document.form1;
+                var flagCep = true;
+                var flagServ = true;
 
-          /*  var sorter2 = new TINY.table.sorter('sorter2', 'table2', {
-                headclass: 'head',
-                ascclass: 'asc',
-                descclass: 'desc',
-                evenclass: 'evenrow',
-                oddclass: 'oddrow',
-                evenselclass: 'evenselected',
-                oddselclass: 'oddselected',
-                paginate: false,
-                hoverid: 'selectedrowDefault',
-                sortcolumn: 1,
-                sortdir: 1,
-                init: true
-            });*/
+                $(".multi_id").each(function () {
+                    var id = $(this).attr('value');                    
+                    if ($("#multi_cep_label_"+id).css("background-color") !== "rgb(153, 255, 102)") {
+                        flagCep = false;
+                    }
+                    if ($("#multi_serv_label_"+id).css("background-color") !== "rgb(153, 255, 102)") {
+                        flagServ = false;
+                    }
+                });
+
+                if(!flagCep){
+                    fecharTelaEspera();
+                    alert("Existem CEPs inválidos!\nCorrija/Valide todos os CEPs (em vermelho).\nClique em 'Validar Postagens' para validar!");
+                    return false;
+                }else if(!flagServ){
+                    fecharTelaEspera();
+                    alert("Existem Serviços Inválidos!\nCorrija/Valide todos os Serviços (em vermelho).\nClique em 'Validar Postagens' para validar!");
+                    return false;
+                } else if (form.departamento.value === '-1') {
+                    fecharTelaEspera();
+                    alert('Escolha o Departamento/Centro de Custo para a Postagem!\n\nCaso não exista o departameto desejado,\npeça para a agência incluir no cadastro!');
+                    return false;
+                } else {
+                    form.submit();
+                }
+            }
+
+            function consultaCeps() {
+                $(".multi_id").each(function () {
+                    var id = $(this).attr('value');
+                    console.log($("#multi_cep_label_" + id).css("background-color"));
+                    
+                    if ($("#multi_cep_label_"+id).css("background-color") !== "rgb(153, 255, 102)") {
+                        $.ajax({
+                            method: "POST",
+                            url: "../../AjaxPages/ajax_cep_json.jsp",
+                            data: {cep: $("#multi_cep_" + id).val()},
+                            dataType: 'json'
+                        }).done(function (retorno) {
+                            if (retorno.logradouro.toUpperCase() === 'CEP INEXISTENTE') {
+                                console.log(id + " - " + retorno.cep + " <<< " + retorno.logradouro.toUpperCase());
+                                $("#multi_cep_label_"+id).css("background-color", "#ff5050");
+                            } else {
+                                console.log(id + " - " + retorno.cep + " >>> " + retorno.logradouro.toUpperCase());
+                                $("#multi_cep_label_"+id).css("background-color", "#99ff66");
+                            }
+                        });
+                    }
+                    
+                    if ($("#multi_serv_label_"+id).css("background-color") !== "rgb(153, 255, 102)") {
+                        var s = $("#multi_serv_" + id).val().split(';');  
+                        $.ajax({
+                            method: "POST",
+                            url: "../../AjaxPages/ajax_abrangencia_json.jsp",
+                            data: {
+                                cep: $("#multi_cep_" + id).val(),
+                                servico: s[1],
+                                troca_servico: 'SIM'
+                            },
+                            dataType: 'json'
+                        }).done(function (retorno) {
+                            if (retorno.resultado !== 'TROCA' && retorno.resultado !== 'OK') {
+                                console.log(id + " - " + retorno.resultado);
+                                $("#multi_serv_label_"+id).css("background-color", "#ff5050");
+                                $("#multi_serv_label_"+id).html($("#multi_serv_label_"+id).html()+"<br/>"+retorno.resultado);
+                            } else if (retorno.resultado === 'TROCA') {
+                                console.log(id + " - " + retorno.resultado);
+                                var ns0 = retorno.servico_novo;
+                                var ns1 = retorno.servico_novo;
+                                $("#servico_1 > option").each(function(){         
+                                    if($(this).val().split(';')[1] === retorno.servico_novo){                                        
+                                        ns1 = $(this).val();
+                                        ns0 = $("#servico_1 option[value='"+$(this).val()+"']").text();
+                                    }
+                                });
+                                $("#multi_serv_label_"+id).css("background-color", "#99ff66");
+                                $("#multi_serv_label_"+id).html(ns0+"<br/><span style='background-color:yellow;'>CEP não aceita "+retorno.servico_antigo+"</span>");
+                                $("#multi_serv_"+id).val(ns1);
+                            } else {
+                                console.log(id + " - " + retorno.resultado);
+                                $("#multi_serv_label_"+id).css("background-color", "#99ff66");
+                            }
+                        });
+                    }
+                });
+            }
             
             var sorterDes = new TINY.table.sorter('sorterDes', 'tableDes', {
                 headclass: 'head',

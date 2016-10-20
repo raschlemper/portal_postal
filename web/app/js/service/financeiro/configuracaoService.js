@@ -6,12 +6,12 @@ app.factory('ConfiguracaoService', function($http, PromiseService) {
 
         get: function() {
             return PromiseService.execute(
-                    $http.get(_contextPath + "/api/configuracao/financeiro/"));
+                    $http.get(_contextPath + "/api/financeiro/configuracao/"));
         },
         
         save: function(data) {
             return PromiseService.execute(
-                    $http.put(_contextPath + "/api/configuracao/financeiro/", data));
+                    $http.put(_contextPath + "/api/financeiro/configuracao/", data));
         }
 
     }

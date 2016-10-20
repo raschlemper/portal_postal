@@ -41,8 +41,9 @@
         <script type="text/javascript" src="../../javascript/jx.js"></script>
         <style type="text/css">
             .imgStars{ width: 32px;height: 32px; vertical-align: middle;}
-            //.blockStars{margin-bottom: 20px;}
-           //.inputStars{width:300px;}
+            
+            /* .blockStars{margin-bottom: 20px;}
+            .inputStars{width:300px;}*/
              input[type="text"]{
                   height: 22px !important;
             }

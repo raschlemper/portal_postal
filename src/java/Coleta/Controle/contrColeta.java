@@ -24,9 +24,9 @@ import java.util.Map;
  */
 public class contrColeta {
 
-    public static int inserir(int idCliente, int idUsuario, int idColetador, int idContato, int idTipo, int status, Timestamp dataHoraColeta, String obs, int tipoSolicitacao, String nomeBD) {
+    public static int inserir(int idCliente, int idUsuario, int idColetador, int idContato, int idTipo, int status, Timestamp dataHoraAtual, Timestamp dataHoraColeta, String obs, int tipoSolicitacao, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "insert into coleta (idCliente, idUsuario, idColetador, idContato, idTipo, status, dataHoraSolicitacao, dataHoraColeta, obs, tipoSolicitacao) values(?,?,?,?,?,?,NOW(),?,?,?)";
+        String sql = "insert into coleta (idCliente, idUsuario, idColetador, idContato, idTipo, status, dataHoraSolicitacao, dataHoraColeta, obs, tipoSolicitacao) values(?,?,?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement valores = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             valores.setInt(1, idCliente);
@@ -35,9 +35,10 @@ public class contrColeta {
             valores.setInt(4, idContato);
             valores.setInt(5, idTipo);
             valores.setInt(6, status);
-            valores.setTimestamp(7, dataHoraColeta);
-            valores.setString(8, obs);
-            valores.setInt(9, tipoSolicitacao);
+            valores.setTimestamp(7, dataHoraAtual);
+            valores.setTimestamp(8, dataHoraColeta);
+            valores.setString(9, obs);
+            valores.setInt(10, tipoSolicitacao);
             valores.executeUpdate();
             int autoIncrementKey = 0;
             ResultSet rs = valores.getGeneratedKeys();
@@ -120,14 +121,15 @@ public class contrColeta {
         }
     }
 
-    public static int darBaixaColetas(String idColetas, int status, int statusEntrega, String nomeBD) {
+    public static int darBaixaColetas(String idColetas, int status, int statusEntrega, Timestamp dataHoraAtual, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "UPDATE coleta SET status=?, statusEntrega=?, dataHoraBaixa=NOW() where idColeta IN("+idColetas+")";
+        String sql = "UPDATE coleta SET status=?, statusEntrega=?, dataHoraBaixa=? WHERE idColeta IN(" + idColetas + ")";
 
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setInt(1, status);
             valores.setInt(2, statusEntrega);
+            valores.setTimestamp(3, dataHoraAtual);
             int i = valores.executeUpdate();
             return i;
         } catch (SQLException e) {

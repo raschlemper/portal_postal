@@ -16,9 +16,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%
 
-    response.setHeader("Cache-Control", "no-cache");
-    response.setHeader("Pragma", "no-cache");
-    response.setDateHeader("Expires", -1);
+    response.setHeader("Pragma", "No-cache");
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setDateHeader("Expires", 0);
 
     String nomeBD = (String) session.getAttribute("nomeBD");
     if (nomeBD == null) {
@@ -104,25 +104,30 @@
 
         <script type="text/javascript">
             function pesquisarNFE(){
-                abrirTelaEspera();
-                JxPost('', JxResult, '../../ServDadosNFE', getParameter(), false);
+                var key = document.getElementById('keyNF').value.replace(/\D/g,"");
+                if(key.length !== 44) {
+                    alert("A chave da nota deve conter 44 digitos!");
+                } else if(document.getElementById('captcha').value.length !== 6) {
+                    alert("Captcha inválido!");
+                } else {
+                    abrirTelaEspera();
+                    JxPost('', JxResult, '../../ServDadosNFE', getParameter(), false);
+                }
             }
 
             function getParameter(){
-                var captcha = document.getElementById('captcha');
-                var keyNF = document.getElementById('keyNF');
-                var parametro = "captcha="+captcha.value+"&keyNF="+keyNF.value;
+                var captcha = document.getElementById('captcha').value;
+                var keyNF = document.getElementById('keyNF').value.replace(/\D/g,"");
+                var parametro = "captcha="+captcha+"&keyNF="+keyNF;
                 return parametro;
             }
 
-            function carregaResultado(json){                
-                fecharTelaEspera();
-                chamaDivProtecao();
-                
+            function carregaResultado(json){       
                 var dadosDaNota = JSON.parse(json);
                 $('#nome').val(dadosDaNota.destinatario.nome);
                 $('#notaFiscal').val(dadosDaNota.numero);
                 $('#cpf_cnpj').val(dadosDaNota.destinatario.cnpj);
+                $('#email_destinatario').val(dadosDaNota.destinatario.email);
                 $('#endereco').val(dadosDaNota.destinatario.logradouro);
                 $('#numero').val('-');
                 $('#bairro').val(dadosDaNota.destinatario.bairro);
@@ -130,9 +135,13 @@
                 $('#cidade').val(dadosDaNota.destinatario.municipio);
                 $('#celular').val(dadosDaNota.destinatario.telefone);
                 $('#uf').val(dadosDaNota.destinatario.uf);
-                $('#uf2').val(dadosDaNota.destinatario.uf);                
-                $('#vd').val(dadosDaNota.valorTotal.replace(',','.'));
-                
+                $('#uf2').val(dadosDaNota.destinatario.uf);     
+                if(document.getElementById('vdNF').checked){
+                    $('#vd').val(dadosDaNota.valorTotal.replace(',','.'));                    
+                }                
+                      
+                fecharTelaEspera();       
+                chamaDivProtecao();
                 //$('#obs').val(dadosDaNota.informacoesComplementares);
                 //$('#nfPais').val(dadosDaNota.destinatario.pais);
             }
@@ -1162,7 +1171,7 @@
                                         out.println("</dl>");
                                     }
 
-                                    if (!acs.contains(1)) {
+                                    if (!acs.contains(9)) {
                                         out.println("<dl style='width:" + tabSize + "; color:gray;' id='PAX' onclick=\"alert('Este usuário não tem permisão para utilizar este serviço!');\">");
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>GR. FORMATOS</dd>");
                                         out.println("<dd><p><b style='color:gray;'>BLOQUEADO</b></p></dd>");
@@ -1380,7 +1389,7 @@
                                         out.println("</dl>");
                                     }
 
-                                    if (!acs.contains(6)) {
+                                    if (!acs.contains(11)) {
                                         out.println("<dl style='width:" + tabSize + "; color:gray;' id='IMPRESSO' onclick=\"alert('Este usuário não tem permisão para utilizar este serviço!');\" >");
                                         out.println("<dd><b class='servSmall'>IMPRESSO</b><br/>&nbsp;</dd>");//<img src="../../imagensNew/carta.png" border="0" />
                                         out.println("<dd><p><b style='color:gray;'>BLOQUEADO</b></p></dd>");
@@ -1440,7 +1449,7 @@
                                         out.println("</dl>");
                                     }
 
-                                    if (!acs.contains(3)) {
+                                    if (!acs.contains(10)) {
                                         out.println("<dl style='width:" + tabSize + "; color:gray;' id='PAC_COB' onclick=\"alert('Este usuário não tem permisão para utilizar este serviço!');\" >");
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>A COBRAR");//<img src="../../imagensNew/sedex_cobrar.png" border="0" />
                                         out.println("<dd><p><b style='color:gray;'>BLOQUEADO</b></p></dd>");
@@ -1470,7 +1479,7 @@
                                         out.println("</dl>");
                                     }
                                     
-                                    if (!acs.contains(6)) {
+                                    if (!acs.contains(12)) {
                                         out.println("<dl style='width:" + tabSize + "; color:gray;' id='MDPB' onclick=\"alert('Este serviço não esta habilitado!');\" >");
                                         out.println("<dd><b class='servSmall'>MDPB</b>");
                                         out.println("<dd><p><b style='color:gray;'>BLOQUEADO</b></p></dd>");

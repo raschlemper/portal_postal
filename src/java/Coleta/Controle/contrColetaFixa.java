@@ -12,7 +12,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,9 +24,9 @@ import java.util.Map;
  */
 public class contrColetaFixa {
 
-    public static void inserir(int idCliente, int idColetador, int idTipo, int fixo, String hora, String nomeBD) {
+    public static void inserir(int idCliente, int idColetador, int idTipo, int fixo, String hora, String dias, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "insert into coleta_rotas (idCliente, idColetador, idTipo, fixo, hora) values(?,?,?,?,?)";
+        String sql = "insert into coleta_rotas (idCliente, idColetador, idTipo, fixo, hora, dias) values(?,?,?,?,?,?)";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setInt(1, idCliente);
@@ -32,28 +34,30 @@ public class contrColetaFixa {
             valores.setInt(3, idTipo);
             valores.setInt(4, fixo);
             valores.setString(5, hora);
+            valores.setString(6, dias);
             valores.executeUpdate();
             valores.close();
         } catch (SQLException e) {
-            ContrErroLog.inserir("HOITO - contrColetaFixa", "SQLException", sql, e.toString());
+            ContrErroLog.inserir("contrColetaFixa.inserir", "SQLException", sql, e.toString());
         } finally {
             Conexao.desconectar(conn);
         }
     }
 
-    public static void alterar(int idCliente, int idColetador, int idTipo, int fixo, String hora, int idRota, String nomeBD) {
+    public static void alterar(int idCliente, int idColetador, int idTipo, int fixo, String hora, int idRota, String dias, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
-        String sql = "update coleta_rotas set idTipo=?, fixo=?, hora=? WHERE idColetaFixa = ?;";
+        String sql = "update coleta_rotas set idTipo=?, fixo=?, hora=?, dias=? WHERE idColetaFixa = ?;";
         try {
             PreparedStatement valores = conn.prepareStatement(sql);
             valores.setInt(1, idTipo);
             valores.setInt(2, fixo);
             valores.setString(3, hora);
-            valores.setInt(4, idRota);
+            valores.setString(4, dias);
+            valores.setInt(5, idRota);
             valores.executeUpdate();
             valores.close();
         } catch (SQLException e) {
-            ContrErroLog.inserir("HOITO - contrColetaFixa", "SQLException", sql, e.toString());
+            ContrErroLog.inserir("contrColetaFixa.alterar", "SQLException", sql, e.toString());
         } finally {
             Conexao.desconectar(conn);
         }
@@ -184,6 +188,35 @@ public class contrColetaFixa {
             Conexao.desconectar(conn);
         }
     }
+
+    public static String consultaHoraEventualDoCliente(Date dataComAntecedencia, int idCliente, String nomeBD) {
+        Connection conn = Conexao.conectar(nomeBD);
+        String sql = "SELECT hora FROM coleta_rotas WHERE idCliente=? ORDER BY fixo LIMIT 1;";
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("HHmm");
+            PreparedStatement valores = conn.prepareStatement(sql);
+            valores.setInt(1, idCliente);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            while (result.next()) {
+                String hr = result.getString("hora");
+                int hrint = Integer.parseInt(hr.replace(":", ""));
+                int hrant = Integer.parseInt(sdf.format(dataComAntecedencia));
+                //System.out.println(hr + " - " + hrint + " < " + hrant);
+                if (hrint > hrant) {
+                    return result.getString("hora");
+                }
+            }
+            result.close();
+            valores.close();
+            return "";
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrColetaFixa", "SQLException", sql, e.toString());
+            return "";
+        } finally {
+            Conexao.desconectar(conn);
+        }
+    }
+
     public static int consultaTipoColetaEventualDoCliente(int idCliente, String nomeBD) {
         Connection conn = Conexao.conectar(nomeBD);
         String sql = "SELECT idTipo FROM coleta_rotas WHERE idCliente=? ORDER BY fixo LIMIT 1;";
@@ -252,7 +285,8 @@ public class contrColetaFixa {
                 int idTipo = result.getInt("idTipo");
                 int fixo = result.getInt("fixo");
                 String hora = result.getString("hora");
-                ColetaFixa cf = new ColetaFixa(idColetaFixa, idCliente, idColetador, idTipo, fixo, hora);
+                String dias = result.getString("dias");
+                ColetaFixa cf = new ColetaFixa(idColetaFixa, idCliente, idColetador, idTipo, fixo, hora, dias);
                 listaStatus.add(cf);
             }
             valores.close();
@@ -279,7 +313,8 @@ public class contrColetaFixa {
                 int idTipo = result.getInt("idTipo");
                 int fixo = result.getInt("fixo");
                 String hora = result.getString("hora");
-                ColetaFixa cf = new ColetaFixa(idColetaFixa, idCliente, idColetador, idTipo, fixo, hora);
+                String dias = result.getString("dias");
+                ColetaFixa cf = new ColetaFixa(idColetaFixa, idCliente, idColetador, idTipo, fixo, hora, dias);
                 listaStatus.add(cf);
             }
             valores.close();

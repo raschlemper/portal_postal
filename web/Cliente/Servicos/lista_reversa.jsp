@@ -243,7 +243,7 @@
                 list-style: none;
             }
             .my-legend .legend-scale ul li {
-               // font-size: 80%;
+               /* font-size: 80%;*/
                 list-style: none;
                 margin-left: 0;
                 line-height: 18px;
@@ -262,7 +262,7 @@
                 clear: both;
             }
             .my-legend a {
-              // color: #777;    
+              /* color: #777;    */
             }
             .round{
                 border-radius: 15px;
@@ -277,7 +277,7 @@
                 height: 24px;
                 vertical-align: middle;
             }
-            // .blockStars{text-align: left;}
+            /* .blockStars{text-align: left;} */
 
         </style>
     </head>

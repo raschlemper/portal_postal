@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Coleta.Entidade;
 
 /**
@@ -17,6 +16,7 @@ public class ColetaFixa {
     private int idTipo;
     private int fixo;
     private String hora;
+    private String dias;
 
     public ColetaFixa(int idColetaFixa, int idCliente, int idColetador, int idTipo, int fixo, String hora) {
         this.idColetaFixa = idColetaFixa;
@@ -25,6 +25,25 @@ public class ColetaFixa {
         this.idTipo = idTipo;
         this.fixo = fixo;
         this.hora = hora;
+    }
+
+    public ColetaFixa(int idColetaFixa, int idCliente, int idColetador, int idTipo, int fixo, String hora, String dias) {
+        this.idColetaFixa = idColetaFixa;
+        this.idCliente = idCliente;
+        this.idColetador = idColetador;
+        this.idTipo = idTipo;
+        this.fixo = fixo;
+        this.hora = hora;
+        this.dias = dias;
+    }
+
+    
+    public String getDias() {
+        return dias;
+    }
+
+    public void setDias(String dias) {
+        this.dias = dias;
     }
 
     public int getFixo() {

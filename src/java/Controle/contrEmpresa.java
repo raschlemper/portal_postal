@@ -5,8 +5,8 @@
 package Controle;
 
 import Entidade.empresas;
-import java.sql.Connection;
 import Util.Conexao;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,6 +34,22 @@ public class contrEmpresa {
         } catch (SQLException e) {
             ContrErroLog.inserir("HOITO - contrEmpresa", "SQLException", sql, e.toString());
             return null;
+        } finally {
+            Conexao.desconectar(con);
+        }
+    }
+
+    public static boolean consultaoSemHrVerao(int idEmpresa) {
+        Connection con = Conexao.conectarGeral();
+        String sql = "SELECT sem_hr_verao FROM empresas WHERE idEmpresa = ? AND sem_hr_verao = 1";
+        try {
+            PreparedStatement valores = con.prepareStatement(sql);
+            valores.setInt(1, idEmpresa);
+            ResultSet result = (ResultSet) valores.executeQuery();
+            return result.next();
+        } catch (SQLException e) {
+            ContrErroLog.inserir("HOITO - contrEmpresa", "SQLException", sql, e.toString());
+            return false;
         } finally {
             Conexao.desconectar(con);
         }

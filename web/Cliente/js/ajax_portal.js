@@ -237,8 +237,8 @@ function copiaDadosDestMulti(cks) {
             var nrLinha = document.getElementById('tableMultiDest').rows.length;
             var linha = document.getElementById('tableMultiDest').insertRow(nrLinha);
             linha.insertCell(0).innerHTML = "<input type='text' id='multi_qtd_" + id + "' name='multi_qtd_" + id + "' value='1' size='1' onkeypress='mascara(this, maskNumero)' />";
-            linha.insertCell(1).innerHTML = servico +
-                    "<input type='hidden' id='multi_id' name='multi_id' value='" + id + "' />" +
+            linha.insertCell(1).innerHTML = "<span style='white-space: nowrap;' id='multi_serv_label_" + id + "' >"+servico + "</span>" +
+                    "<input type='hidden' id='multi_id' name='multi_id' class='multi_id' value='" + id + "' />" +
                     "<input type='hidden' id='multi_serv_" + id + "' name='multi_serv_" + id + "' value='" + s.value + "' />" +
                     "<input type='hidden' id='multi_nome_" + id + "' name='multi_nome_" + id + "' value='" + nome + "' />" +
                     "<input type='hidden' id='multi_empresa_" + id + "' name='multi_empresa_" + id + "' value='" + empr + "' />" +
@@ -253,7 +253,7 @@ function copiaDadosDestMulti(cks) {
             linha.insertCell(2).appendChild(document.createTextNode(nome));
             linha.insertCell(3).appendChild(document.createTextNode(end + ", " + num + " " + compl));
             linha.insertCell(4).appendChild(document.createTextNode(cidade + " / " + uf));
-            linha.insertCell(5).appendChild(document.createTextNode(cep));
+            linha.insertCell(5).innerHTML = "<span style='white-space: nowrap;' id='multi_cep_label_" + id + "' >"+cep+"</label>";
             linha.insertCell(6).innerHTML = "<input type='text' id='multi_nf_" + id + "' name='multi_nf_" + id + "' size='4' value='' />";
             linha.insertCell(7).innerHTML = "<select name='multi_ar_" + id + "' id='multi_ar_" + id + "'>" +
                     "<option value='0'>Nao</option>" +

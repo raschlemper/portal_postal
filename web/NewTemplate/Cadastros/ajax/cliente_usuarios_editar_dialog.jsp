@@ -169,13 +169,17 @@
                             </label>
                             <select class="form-control" name="servicos" id="servicos2" multiple='true' onclick="controleCombobox2(this)" size="10" >
                                 <option value="1" <%if (listSer.contains("1")) {%> selected <%}%> >PAC</option>
+                                <option value="9" <%if (listSer.contains("9")) {%> selected <%}%> >PAC GRD. FORMATOS</option>
                                 <option value="2" <%if (listSer.contains("2")) {%> selected <%}%> >SEDEX</option>
-                                <option value="3" <%if (listSer.contains("3")) {%> selected <%}%> >SEDEX A COBRAR</option>
                                 <option value="4" <%if (listSer.contains("4")) {%> selected <%}%> >SEDEX 10</option>
-                                <option value="5" <%if (listSer.contains("5")) {%> selected <%}%> >E-SEDEX</option>
-                                <option value="6" <%if (listSer.contains("6")) {%> selected <%}%> >CARTA REGISTRADA</option>
                                 <option value="7" <%if (listSer.contains("7")) {%> selected <%}%> >SEDEX 12</option>
                                 <option value="8" <%if (listSer.contains("8")) {%> selected <%}%> >SEDEX HOJE</option>
+                                <option value="5" <%if (listSer.contains("5")) {%> selected <%}%> >E-SEDEX</option>
+                                <option value="6" <%if (listSer.contains("6")) {%> selected <%}%> >CARTA REGISTRADA</option>
+                                <option value="11" <%if (listSer.contains("11")) {%> selected <%}%> >IMPRESSO REGISTRADO</option>
+                                <option value="3" <%if (listSer.contains("3")) {%> selected <%}%> >SEDEX A COBRAR</option>
+                                <option value="10" <%if (listSer.contains("10")) {%> selected <%}%> >PAC A COBRAR</option>
+                                <option value="12" <%if (listSer.contains("12")) {%> selected <%}%> >MDPB REGISTRADO</option>
                             </select>
                             <script language="">
                                 function controleCombobox2(combo) {

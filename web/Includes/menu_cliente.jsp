@@ -1,4 +1,6 @@
 
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="Entidade.Usuario"%>
 <%@page import="Entidade.Clientes"%>
 <%@page import="java.util.ArrayList"%>
@@ -85,7 +87,7 @@
                 <ul class="sub_menu">
                     <%if (acessosMn.contains(5)) {%>
                         <%if (nvMenu != 99) {%>
-                        <li><a href="../../Cliente/Servicos/pre_postagem.jsp">Gerar Etiqueta</a></li>
+                        <li><a href="../../Cliente/Servicos/pre_postagem.jsp?dt=<%= new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) %>">Gerar Etiqueta</a></li>
                         <li><a href="../../Cliente/Servicos/pre_postagem_medias.jsp">Gerar Etiquetas Mult.</a></li>
                         <li><a href="../../Cliente/Servicos/imp_postagem.jsp">Importar Postagens</a></li>
                         <%}%>

@@ -1,3 +1,4 @@
+<%@page import="Controle.ContrReclamacao"%>
 <%@page import="java.text.ParseException"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="Entidade.Movimentacao"%>
@@ -155,7 +156,7 @@
     </tr>
 </table>
 <div style='max-width:100%;overflow:auto;'>
-    <table cellpadding="0" cellspacing="0" border="0" id="table2" class="tinytable">
+    <table style="width: 1500px;" cellpadding="0" cellspacing="0" border="0" id="table2" class="tinytable">
         <thead>
             <tr>
                 <th width='10' class="nosort"><h3></h3></th>
@@ -169,8 +170,8 @@
         <%}%>
         <th><h3>DESTINATÁRIO</h3></th>
         <th width='80'><h3>CEP</h3></th>
-        <th width='100'><h3>SITUAÇÃO</h3></th>
-        <th><h3>NF</h3></th>
+        <th><h3>SITUAÇÃO</h3></th>
+        <th width='60'><h3>NF</h3></th>
         <th width='100'><h3>DEPARTAMENTO</h3></th>
         <%if (acessosUs.contains(8)) {%>
         <th width='50'><h3>PRAZO EST.</h3></th>
@@ -204,6 +205,13 @@
                     String pz_cumprido = "---";
                     String atrasado = "";
                     if (acessosUs.contains(8)) {
+                        if (mov.getPrazo_estimado() != null) {
+                            ContrReclamacao cr = new ContrReclamacao();
+                            Calendar novadataPrevisaoEntrega = cr.recalculaDataEstimada(cr.dateToCalendar(mov.getDataPostagem()), cr.dateToCalendar(mov.getPrazo_estimado()), "");
+                            if(novadataPrevisaoEntrega != null){
+                                mov.setPrazo_estimado(novadataPrevisaoEntrega.getTime());                    
+                            }
+                        }
                         if (mov.getPrazo_estimado() != null && mov.getPrazo_cumprido_date() != null) {
                             pz_estimado = sdf.format(mov.getPrazo_estimado());
                             pz_cumprido = sdf.format(mov.getPrazo_cumprido_date());
@@ -264,13 +272,13 @@
                 </td>
                 <%--<a href='http://websro.correios.com.br/sro_bin/txect01$.QueryList?P_LINGUA=001&P_TIPO=001&P_COD_UNI=<%= numeroRegistro%>' target=_blank><%= numeroRegistro%></a></td>--%>
                 <td align='left'><a href='visulizaTicket.jsp?idmov=<%=mov.getId()%>' target='_blank'><%= servico2%></a></td>
-                <td><%= peso%>g</td>
-                <td><%= qtd%></td>
+                <td align='right'><%= peso%>g</td>
+                <td align='right'><%= qtd%></td>
                 <td><%= vData%></td>
                 <%if (acessosUs.contains(3)) {%>
-                <td nowrap align='left'>R$ <%= vValor%></td>
+                <td nowrap align='right'>R$ <%= vValor%></td>
                 <% }%>
-                <td style="font-size: 10px;"><a onclick="verVenda(<%= mov.getIdPre_venda()%>);" style="cursor:pointer;" ><%= destinatario%></a></td>
+                <td align='left' style="font-size: 10px;"><a onclick="verVenda(<%= mov.getIdPre_venda()%>);" style="cursor:pointer;" ><%= destinatario%></a></td>
                 <td><%= cepDestino%></td>
                 <td><%= status%></td>
                 <td><%= notaFiscal%></td>
@@ -285,10 +293,10 @@
         <tfoot>
             <tr style="background: #f0f0f0; color:red; font-size: 12px;">
                 <td colspan="4"></td>
-                <td nowrap="true" align="center"><%= qtdTotal%></td>
+                <td nowrap="true" align="right"><%= qtdTotal%></td>
                 <td></td>
                 <%if (acessosUs.contains(3)) {%>
-                <td nowrap="true">R$ <%= Util.FormatarDecimal.formatarFloat(vlrTotal.floatValue())%></td>
+                <td nowrap="true" align='right'>R$ <%= Util.FormatarDecimal.formatarFloat(vlrTotal.floatValue())%></td>
                 <%}%>
                 <td colspan="7"></td>
             </tr>

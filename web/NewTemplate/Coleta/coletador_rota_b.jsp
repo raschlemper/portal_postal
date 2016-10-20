@@ -8,7 +8,7 @@
 <%@ page import = "java.util.ArrayList,java.sql.Timestamp, java.util.Date, java.text.SimpleDateFormat"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%
-      Usuario usrSessao = (Usuario) session.getAttribute("agf_usuario");
+    Usuario usrSessao = (Usuario) session.getAttribute("agf_usuario");
     if (usrSessao == null) {
         response.sendRedirect("../../index.jsp?msgLog=3");
     } else if (usrSessao.getListaAcessosPortalPostal().contains("203")) {
@@ -126,7 +126,13 @@
                                                         <th class="no-sort" width="150">Tipo da Coleta</th>
                                                         <th width="90">Horario</th>
                                                         <th class="no-sort" width="130">Coleta Fixa?</th>
-                                                        <th class="no-sort" width="60">Remover</th>
+                                                        <th class="no-sort" width="6" style="padding: 2px; text-align: center; vertical-align: middle;">S</th>
+                                                        <th class="no-sort" width="6" style="padding: 2px; text-align: center; vertical-align: middle;">T</th>
+                                                        <th class="no-sort" width="6" style="padding: 2px; text-align: center; vertical-align: middle;">Q</th>
+                                                        <th class="no-sort" width="6" style="padding: 2px; text-align: center; vertical-align: middle;">Q</th>
+                                                        <th class="no-sort" width="6" style="padding: 2px; text-align: center; vertical-align: middle;">S</th>
+                                                        <th class="no-sort" width="6" style="padding: 2px; text-align: center; vertical-align: middle;">S</th>
+                                                        <th class="no-sort" width="6">Remover</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="table">
@@ -138,6 +144,7 @@
                                                             int idTipoColeta = cf.getIdTipo();
                                                             int fixo = cf.getFixo();
                                                             String horaColeta = cf.getHora();
+                                                            String dias = cf.getDias();
                                                             String nomeCliente = Controle.contrCliente.consultaNomeById(idCliente, nomeBD);
                                                             if (nomeCliente.equals("")) {
                                                                 nomeCliente = "Cliente Cód. " + idCliente + " não encontrado!";
@@ -167,11 +174,11 @@
                                                                             if (cl.getIdTipo() == 1) {
                                                                                 fx = "fixo";
                                                                             }
-                                                                            rt += "| "+ cl.getNomeColetador() +" - "+ fx +" ";
+                                                                            rt += "| " + cl.getNomeColetador() + " - " + fx + " ";
 
                                                                         }
                                                                     }
-                                                                    if(rt.contains("|")){
+                                                                    if (rt.contains("|")) {
                                                                         rt = rt.substring(1);
                                                                     }
                                                             %>
@@ -192,11 +199,17 @@
                                                         </td>
                                                         <td align="center"><input class="form-control" type="text" id="hora<%=i%>" name="hora<%=i%>" value="<%= horaColeta%>" size="5" maxlength="5" onkeypress="mascara(this, maskHora)" onblur="valida_hora(this);" /></td>
                                                         <td align="center">
-                                                            <select class="form-control" id="fixo<%=i%>" name="fixo<%=i%>">
+                                                            <select class="form-control" id="fixo<%=i%>" name="fixo<%=i%>" onchange="ajustaCk(<%=i%>, this.value)">
                                                                 <option value="0" <%if (fixo == 0) {%> selected <%}%> >Eventual</option>
                                                                 <option value="1" <%if (fixo == 1) {%> selected <%}%> >Fixa</option>
                                                             </select>
                                                         </td>
+                                                                <td style="padding: 2px;"><input type="checkbox" name="seg<%=i%>" id="seg<%=i%>" value="2" onclick='handleClick(<%=idColetaFixa%>, <%=i%>);' <%if (fixo == 0) {%> checked disabled <%} else if(dias.contains("2")){%> checked <%}%>/></td>
+                                                                <td style="padding: 2px;"><input type="checkbox" name="ter<%=i%>" id="ter<%=i%>" value="3" onclick='handleClick(<%=idColetaFixa%>, <%=i%>);' <%if (fixo == 0) {%>checked disabled <%} else if(dias.contains("3")){%> checked <%}%>/></td>
+                                                                <td style="padding: 2px;"><input type="checkbox" name="qua<%=i%>" id="qua<%=i%>" value="4" onclick='handleClick(<%=idColetaFixa%>, <%=i%>);' <%if (fixo == 0) {%>checked disabled <%} else if(dias.contains("4")){%> checked <%}%>/></td>
+                                                                <td style="padding: 2px;"><input type="checkbox" name="qui<%=i%>" id="qui<%=i%>" value="5" onclick='handleClick(<%=idColetaFixa%>, <%=i%>);' <%if (fixo == 0) {%>checked disabled <%} else if(dias.contains("5")){%> checked <%}%>/></td>
+                                                                <td style="padding: 2px;"><input type="checkbox" name="sex<%=i%>" id="sex<%=i%>" value="6" onclick='handleClick(<%=idColetaFixa%>, <%=i%>);' <%if (fixo == 0) {%>checked disabled <%} else if(dias.contains("6")){%> checked <%}%>/></td>
+                                                                <td style="padding: 2px;"><input type="checkbox" name="sab<%=i%>" id="sab<%=i%>" value="7" onclick='handleClick(<%=idColetaFixa%>, <%=i%>);' <%if (fixo == 0) {%>checked disabled <%} else if(dias.contains("7")){%> checked <%}%>/></td>
                                                         <td align="center"><button type="button" class="btn btn-sm btn-danger" id="del" onclick="addDelList('<%= idColetaFixa%>', this);"><i class="fa fa-trash fa-lg"></i></button></td>
                                                     </tr>
                                                     <%}%>
@@ -355,26 +368,39 @@
                 var coluna3 = linha.insertCell(3);
                 coluna3.innerHTML = "<select class='form-control' id='select" + cont + "' name='select" + cont + "'> <%= optTipo%> </select>";
                 coluna3.align = "center";
-
-
-
                 var coluna4 = linha.insertCell(4);
                 coluna4.innerHTML = "<input class='form-control' type='text' id='hora" + cont + "' name='hora" + cont + "' value='' size='2' maxlength='5' onKeyPress='mascara(this,maskHora)' onblur='valida_hora(this);' />";
                 coluna4.align = "center";
-
                 var coluna5 = linha.insertCell(5);
-                coluna5.innerHTML = "<select class='form-control' id='fixo" + cont + "' name='fixo" + cont + "'>"
+                coluna5.innerHTML = "<select class='form-control' id='fixo" + cont + "' name='fixo" + cont + "' onchange='ajustaCk("+cont+", this.value)'>"
                         + "<option value='1' selected >Fixa</option>"
-                        + "<option value='0'>Eventual</option>"
+                        + "<option value='0'  >Eventual</option>"
                         + "</select>";
                 coluna5.align = "center"
 
                 var coluna6 = linha.insertCell(6);
-                coluna6.innerHTML = "<button class='btn btn-sm btn-danger' type='button' id='del' onclick='delRow(this);'><i class='fa fa-lg fa-trash'></i></button>";
-                coluna6.align = "center"
+                coluna6.innerHTML = "<td><input type='checkbox' value='2' name='seg"+cont+"' id='seg"+cont+"' checked/></td>";
+                coluna6.setAttribute('style','padding : 2px;');
+                var coluna7 = linha.insertCell(7);
+                coluna7.innerHTML = "<td><input type='checkbox' value='3' name='ter"+cont+"' id='ter"+cont+"' checked/></td>";
+                coluna7.setAttribute('style','padding : 2px;');
+                var coluna8 = linha.insertCell(8);
+                coluna8.innerHTML = "<td><input type='checkbox' value='4' name='qua"+cont+"' id='qua"+cont+"' checked/></td>";
+                coluna8.setAttribute('style','padding : 2px;');
+                var coluna9 = linha.insertCell(9);
+                coluna9.innerHTML = "<td><input type='checkbox' value='5' name='qui"+cont+"' id='qui"+cont+"' checked/></td>";
+                coluna9.setAttribute('style','padding : 2px;');
+                var coluna10 = linha.insertCell(10);
+                coluna10.innerHTML = "<td><input type='checkbox' value='6' name='sex"+cont+"' id='sex"+cont+"' checked/></td>";
+                coluna10.setAttribute('style','padding : 2px;');
+                var coluna11 = linha.insertCell(11);
+                coluna11.innerHTML = "<td><input type='checkbox' value='7' name='sab"+cont+"' id='sab"+cont+"' checked/></td>";
+                coluna11.setAttribute('style','padding : 2px;');
+                var coluna12 = linha.insertCell(12);
+                coluna12.innerHTML = "<button class='btn btn-sm btn-danger' type='button' id='del' onclick='delRow(this);'><i class='fa fa-lg fa-trash'></i></button>";
+                coluna12.align = "center"
 
                 document.getElementById('contador').value = newCont;
-
                 document.getElementById('idCliAux').value = 0;
                 document.getElementById('nomeCliAux').value = "";
 
@@ -411,6 +437,56 @@
                     return false
                 }
                 return true;
+            }
+
+            function ajustaCk(ck, fx) {
+                console.log(ck + ' -- ' + fx);
+                if (fx === '1') {
+                    console.log('hablitar');
+                    $('#seg' + ck).removeAttr("disabled");
+                    $('#ter' + ck).removeAttr("disabled");
+                    $('#qua' + ck).removeAttr("disabled");
+                    $('#qui' + ck).removeAttr("disabled");
+                    $('#sex' + ck).removeAttr("disabled");
+                    $('#sab' + ck).removeAttr("disabled");
+                } else {
+                    console.log('desablitar');
+                    $('#seg' + ck).prop('checked', true);
+                    $('#ter' + ck).prop('checked', true);
+                    $('#qua' + ck).prop('checked', true);
+                    $('#qui' + ck).prop('checked', true);
+                    $('#sex' + ck).prop('checked', true);
+                    $('#sab' + ck).prop('checked', true);
+                    $('#seg' + ck).attr("disabled", true);
+                    $('#ter' + ck).attr("disabled", true);
+                    $('#qua' + ck).attr("disabled", true);
+                    $('#qui' + ck).attr("disabled", true);
+                    $('#sex' + ck).attr("disabled", true);
+                    $('#sab' + ck).attr("disabled", true);
+                }
+            }
+            function handleClick(id, ck) {
+                var tx ='';
+                    if($('#seg' + ck).prop('checked')){
+                        tx += ';2';
+                    };
+                    if($('#ter' + ck).prop('checked')){
+                        tx += ';3';
+                    };
+                    if($('#qua' + ck).prop('checked')){
+                        tx += ';4';
+                    };
+                    if($('#qui' + ck).prop('checked')){
+                        tx += ';5';
+                    };
+                    if($('#sex' + ck).prop('checked')){
+                        tx += ';6';
+                    };
+                    if($('#sab' + ck).prop('checked')){
+                        tx += ';7';
+                    };
+                console.log('id > '+id+' -- '+tx.substr(1));
+                //fazer ajax
             }
 
             function addDelList(idColetaFixa, linha) {

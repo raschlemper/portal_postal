@@ -128,7 +128,7 @@
                     <input type="hidden" name="tags_multi_<%= id%>" id="tags_multi_<%= id%>" value="<%= tag%>" />
                 </td>
                 <%} else {%>
-                <td><img style="cursor: pointer;" class="link_img" src="../../imagensNew/user_plus.png" onclick="copiaDadosDest('<%= dest.getIdDestinatario()%>', '<%= nome%>', '<%= empresa%>', '<%= cpf%>', '<%= cidade%>', '<%= uf%>', '<%= bairro%>', '<%= endereco%>', '<%= numero%>', '<%= complemento%>', '<%= cep%>', '<%=celular %>', '<%= email%>');" /></td>
+                <td><img style="cursor: pointer;" class="link_img" src="../../imagensNew/user_plus.png" onclick="copiaDadosDest('<%= dest.getIdDestinatario()%>', '<%= nome%>', '<%= empresa%>', '<%= cpf%>', '<%= cid%>', '<%= uf%>', '<%= bairro%>', '<%= endereco%>', '<%= numero%>', '<%= complemento%>', '<%= cep%>', '<%=celular %>', '<%= email%>');" /></td>
                 <%}%>
                 <td><%= dest.getIdDestinatario()%></td>
                 <td><%= nome%></td>
@@ -170,7 +170,7 @@
     <img width="100%" src="../../imagensNew/linha.jpg"/>
     <%if (multi.equals("multi")) {%>
     <div style="margin: 30px 0 60px 0;" class="buttons">
-        <button type="button" class="positive" onclick="copiaDadosDestMulti(document.getElementsByName('cks_dest'));"><img src="../../imagensNew/tick_circle.png" /> ADICIONAR DESTINATÁRIOS</button>
+        <button type="button" class="positive" onclick="copiaDadosDestMulti(document.getElementsByName('cks_dest'));consultaCeps();"><img src="../../imagensNew/tick_circle.png" /> ADICIONAR DESTINATÁRIOS</button>
         <button type="button" class="negative" onclick="chamaDivProtecao();"><img src="../../imagensNew/cross_circle.png" /> CANCELAR</button>
     </div>
     <br/>

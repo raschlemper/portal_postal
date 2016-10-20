@@ -18,35 +18,33 @@
         <div id='titulo1'>Pesquisar Destinatário por Chave de NF-e</div>
     </div>
     <img width="100%" src="../../imagensNew/linha.jpg"/>
-    <form name='' action='' method='post'>
-        <ul style="width: 95%; text-align: left;" class="ul_formulario">
-            <li>
-                <dd>
-                    <label>Captcha:</label>
+    <form name='' action='' method='post'>       
+        <table style="margin:0 auto;">
+            <tr>
+                <td style="padding-right: 25px;">
                     <img src="<%=captcha%>"/>
-                </dd>
-            </li>
-            <li>                    
-                <dd>
-                    <label>Digite o Captcha:</label>
-                    <input size="15" id="captcha"/>
-                </dd>
-            </li>
-            <li>
-                <dd>
-                    <label>Chave da Nota Fiscal:</label>
-                    <input size="50" id="keyNF" value=""/>
-                </dd>
-            </li>
-            <li>
-                <dd>
-                    <div class="buttons" style="margin-top: -7px;">
+                </td>
+                <td style="padding-left: 25px; border-left: 1px solid silver;" align="left">                    
+                    <label style="font-size: 11px; font-weight: bold;">Digite o Captcha:</label><br/>
+                    <input type="text" size="15" id="captcha"/>            
+                    <br/><br/>
+                    <label style="font-size: 11px; font-weight: bold;">Chave da Nota Fiscal:</label><br/>
+                    <input type="text" size="50" id="keyNF" onkeypress="mascara(this, maskNumero);" onblur="mascara(this, maskNumero);" value=""/>
+                    <br/><br/>
+                    <label>&nbsp;</label>
+                    <input type="checkbox" id="vdNF" value="1" /> Declarar Valor da Nota Fiscal.
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <div class="buttons">
                         <button type="button" class="regular" onclick="pesquisarNFE();"><img src="../../imagensNew/lupa.png"/> PESQUISAR</button>
                         <button type="button" class="negative" onclick="chamaDivProtecao();"><img src="../../imagensNew/cross_circle.png" /> CANCELAR</button>
                     </div>
-                </dd>
-            </li>
-        </ul>
+                </td>
+            </tr>
+        </table>
     </form>  
 </div>
 <%}%>

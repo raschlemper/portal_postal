@@ -5,9 +5,12 @@
 package Emporium.Servlet;
 
 import Controle.ContrErroLog;
+import Controle.contrEmpresa;
+import Util.FormatarData;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -79,6 +82,7 @@ public class ServAgendaColeta extends HttpServlet {
         } else {
             try {
 
+                int idAgf = (Integer) sessao.getAttribute("idEmpresa");
                 String nomeBD = (String) sessao.getAttribute("nomeBD");
                 
                 int idColeta = 0, idTipo = 0, idUsuario = 0;
@@ -89,6 +93,12 @@ public class ServAgendaColeta extends HttpServlet {
                 String dataHoraColeta = request.getParameter("dataColeta") +" "+request.getParameter("horaColeta");
                 //formata a data para timestamp do tipo 'dd/MM/yyyy HH:mm'
                 Timestamp vDataHoraColeta = Util.FormatarData.formataDateTime(dataHoraColeta);
+                Timestamp vDataHoraAtual = new Timestamp(new Date().getTime());
+                if (contrEmpresa.consultaoSemHrVerao(idAgf)) {
+                    //vDataHoraColeta = FormatarData.somarHorasNaData(vDataHoraColeta, -1);
+                    vDataHoraAtual = FormatarData.somarHorasNaData(vDataHoraAtual, -1);
+                }
+
 
                 //pega os dados do contato
                 String contato = request.getParameter("contato");
@@ -104,11 +114,9 @@ public class ServAgendaColeta extends HttpServlet {
                     }
                 }
                 if(idColetador == 0){
-                                    idColeta = Coleta.Controle.contrColeta.inserir(idCliente, idUsuario, idColetador, idContato, idTipo, 1, vDataHoraColeta, obs, 3, nomeBD);
-
+                    idColeta = Coleta.Controle.contrColeta.inserir(idCliente, idUsuario, idColetador, idContato, idTipo, 1, vDataHoraAtual, vDataHoraColeta, obs, 3, nomeBD);
                 }else{
-                    idColeta = Coleta.Controle.contrColeta.inserir(idCliente, idUsuario, idColetador, idContato, idTipo, 2, vDataHoraColeta, obs, 3, nomeBD);
-                
+                    idColeta = Coleta.Controle.contrColeta.inserir(idCliente, idUsuario, idColetador, idContato, idTipo, 2, vDataHoraAtual, vDataHoraColeta, obs, 3, nomeBD);
                 }
                 Controle.ContrLogColeta.inserir(idColeta, idUsuario, "Solicitação WEB", "Coleta Solicitada pela WEB", nomeBD);
 

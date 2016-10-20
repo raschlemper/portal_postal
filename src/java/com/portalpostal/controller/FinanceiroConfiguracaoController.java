@@ -17,8 +17,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/configuracao")
-public class ConfiguracaoController {
+@Path("/financeiro/configuracao")
+public class FinanceiroConfiguracaoController {
     
     @Context
     private HttpServletRequest request;
@@ -35,7 +35,7 @@ public class ConfiguracaoController {
     }
     
     @GET
-    @Path("/financeiro/")
+    @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public ConfiguracaoFinanceiro findFinanceiro() {
         try {
@@ -47,7 +47,7 @@ public class ConfiguracaoController {
     } 
     
     @PUT
-    @Path("/financeiro/")
+    @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public ConfiguracaoFinanceiro saveFinanceiro(ConfiguracaoFinanceiro configuracao) {

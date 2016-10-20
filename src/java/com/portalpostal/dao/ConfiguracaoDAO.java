@@ -1,7 +1,6 @@
 package com.portalpostal.dao;
 
 import com.portalpostal.dao.handler.ConfiguracaoFinanceiroHandler;
-import com.portalpostal.model.Banco;
 import com.portalpostal.model.ConfiguracaoFinanceiro;
 import java.util.HashMap;
 import java.util.Map;

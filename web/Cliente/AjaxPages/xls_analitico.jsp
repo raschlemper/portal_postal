@@ -1,3 +1,4 @@
+<%@page import="Controle.ContrReclamacao"%>
 <%@page import="Entidade.empresas"%>
 <%@page import="Entidade.ClientesUsuario"%>
 <%@page import="java.math.BigDecimal"%>
@@ -51,6 +52,9 @@
             <th><h5>CONTRATO ECT</h5></th>
             <th><h5>DESTINO</h5></th>
             <th><h5>OBS</h5></th>
+            <%if(us.getAcessos().contains(8)){%>
+            <th><h5>PREV. ENTREGA</h5></th>
+            <%}%>
         </tr>
     </thead>
     <tbody>
@@ -83,8 +87,9 @@
                 String cepDestino = FormataString.formataCep(mov.getCep());
                 String departamento2 = mov.getDepartamento();
 
+                
                 /*
-                    String pz_estimado = "---";
+                    
                     String pz_cumprido = "---";
                     String atrasado = "";
                     
@@ -110,21 +115,12 @@
                         }
                     }
                  */
-                Date dataSit = mov.getDataEntrega();
+                Date dataSit = mov.getLast_status_date();
                 String dtSit = sdf.format(mov.getDataPostagem());
                 if (dataSit != null) {
                     dtSit = sdf.format(dataSit);
                 }
-                String status = mov.getStatus();
-                if (mov.getLast_status_date() != null) {
-                    status = mov.getLast_status_name();
-                    dataSit = mov.getLast_status_date();
-                    if (dataSit != null) {
-                        dtSit = sdf.format(mov.getLast_status_date());
-                        dtSit = sdf.format(dataSit);
-                    }
-                }
-
+                String status = mov.getLast_status_name();
 
         %>
         <tr align='center' style="font-size: 10px;">
@@ -151,6 +147,19 @@
             <td><%= mov.getContratoEct()%></td>
             <td><%= mov.getPaisDestino()%></td>
             <td><%= mov.getObs()%></td>
+            <%
+                if(us.getAcessos().contains(8)){
+                String pz_estimado = "---";
+                if (mov.getPrazo_estimado() != null) {
+                    ContrReclamacao cr = new ContrReclamacao();
+                    Calendar novadataPrevisaoEntrega = cr.recalculaDataEstimada(cr.dateToCalendar(mov.getDataPostagem()), cr.dateToCalendar(mov.getPrazo_estimado()), "");
+                    if(novadataPrevisaoEntrega != null){
+                        pz_estimado = sdf.format(novadataPrevisaoEntrega.getTime());                    
+                    }
+                }
+            %>
+            <td><%= pz_estimado %></td>
+            <%}%>
         </tr>
         <%}%>
     </tbody>

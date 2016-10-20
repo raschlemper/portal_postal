@@ -45,6 +45,12 @@ app.factory('ListaService', function() {
 //            if(!value) { value = list[0]; }
             return value;
         },
+
+        getLancamentoProgramadoValue: function(list, key) {
+            var value = _.find(list, function(item){ return item.idLancamentoProgramado == key; });
+//            if(!value) { value = list[0]; }
+            return value;
+        },
         
         getValueCombustivelFipe: function(list, key) {
             var value = _.find(list, function(item){ return item.descricao.toLowerCase() == key.toLowerCase(); });

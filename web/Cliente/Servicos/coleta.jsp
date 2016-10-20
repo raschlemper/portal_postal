@@ -1,3 +1,5 @@
+<%@page import="Util.FormatarData"%>
+<%@page import="Controle.contrEmpresa"%>
 <%@page import="Entidade.Contato"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <%@page import="java.util.ArrayList, java.util.Date, java.text.SimpleDateFormat, java.sql.*, java.util.Calendar, java.util.Locale" %>
@@ -18,11 +20,18 @@
 
         String numCliente = String.valueOf(session.getAttribute("idCliente"));
         int idCliente = Integer.parseInt(numCliente);
+        int idAgf = (Integer) session.getAttribute("idEmpresa");
+        
 
         String dia = sdf3.format(new Date());
         String mes = sdf4.format(new Date());
         String ano = sdf5.format(new Date());
         String hora = sdf6.format(new Date());
+        Date dataAtual = new Date();
+        if(contrEmpresa.consultaoSemHrVerao(idAgf)){
+            hora = sdf6.format(FormatarData.somarHorasNaData(new Date(), -1));   
+            dataAtual = FormatarData.somarHorasNaData(new Date(), -1);   
+        }        
         String minuto = sdf7.format(new Date());
 
         Coleta.Entidade.HoraColeta hc = Coleta.Controle.contrHoraColeta.consultaHoraColetaById(nomeBD);
@@ -34,9 +43,12 @@
             hrFimColeta = hc.getHoraFimColeta();
             antecedencia = hc.getMinAntecedencia();
         }
+        
+        Date dataAtualComAntecedencia = FormatarData.somarMinutosNaData(new Date(), antecedencia);   
 
         int coleEve = Coleta.Controle.contrColetaFixa.consultaColetadorEventualDoCliente(idCliente, nomeBD);
         int coleEvTipo = Coleta.Controle.contrColetaFixa.consultaTipoColetaEventualDoCliente(idCliente, nomeBD);
+        String hrEventual = Coleta.Controle.contrColetaFixa.consultaHoraEventualDoCliente(dataAtualComAntecedencia, idCliente, nomeBD);
         
         int tipoEscolhaColeta = Coleta.Controle.contrColetaFixa.consultaTipoEscolhaColetaDoCliente((Integer) session.getAttribute("idEmpresa"));
 %>
@@ -106,15 +118,16 @@
                     alert('Preencha a Data da Coleta!');
                     return false;
                 }
-                if (!valida_data(form.dataColeta)) {
-                    return false;
-                }
-                if (!valida_hora(form.horaColeta)) {
-                    
-                    return false;
-                }
-                if (!verificaHorarioColeta()) {
-                    return false;
+                if(typeof form.isEvent === "undefined"){
+                    if (!valida_data(form.dataColeta)) {
+                        return false;
+                    }
+                    if (!valida_hora(form.horaColeta)) {
+                        return false;
+                    }
+                    if (!verificaHorarioColeta()) {
+                        return false;
+                    }  
                 }
 
                 form.submit();
@@ -325,8 +338,13 @@
                                 </dd>
                                 <%}
                                     if (tipoEscolhaColeta == 3) {%>
-                                <dd>                                    
+                                <dd>                       
+                                    <%if(!hrEventual.equals("")){%>
+                                    <input type="hidden" name="horaColeta" id="horaColeta" style="width:100px;" value="<%= hrEventual %>" maxlength="5"/>
+                                    <input type="hidden" name="isEvent" id="isEvent" value="1"/>
+                                    <%}else{%>
                                     <input type="hidden" name="horaColeta" id="horaColeta" style="width:100px;" value="<%= hrf1.format(hrFimColeta)%>" maxlength="5"/>
+                                    <%}%>
                                 </dd>
                                 <%} if (tipoEscolhaColeta == 4) {%>
                                 <dd>

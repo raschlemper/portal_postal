@@ -61,10 +61,41 @@
             String destinatario = mov.getDestinatario();
             String cepDestino = FormataString.formataCep(mov.getCep());
             String departamento2 = mov.getDepartamento();
-            String status = mov.getStatus();            
-            if (mov.getLast_status_date() != null) {
-                status = mov.getLast_status_name();
-            }
+            
+
+                /*
+                    String pz_estimado = "---";
+                    String pz_cumprido = "---";
+                    String atrasado = "";
+                    
+                    if(acessosUs.contains(8)){
+                        if (mov.getPrazo_estimado() != null && mov.getPrazo_cumprido_date() != null) {
+                            pz_estimado = sdf.format(mov.getPrazo_estimado());
+                            pz_cumprido = sdf.format(mov.getPrazo_cumprido_date());
+                            if (mov.getPrazo_estimado().before(mov.getPrazo_cumprido_date())) {
+                                atrasado = "color:red;font-weight:bold;";
+                            }
+                        } else if (mov.getPrazo_estimado() != null) {
+                            pz_estimado = sdf.format(mov.getPrazo_estimado());
+                            Date date = new Date();
+                            try {
+                                DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                                date = (java.util.Date) formatter.parse(formatter.format(date));
+                            } catch (ParseException e) {
+                                //System.out.println(e.getMessage());
+                            }
+                            if (mov.getPrazo_estimado().before(date)) {
+                                atrasado = "color:red;font-weight:bold;";
+                            }
+                        }
+                    }
+                 
+                Date dataSit = mov.getLast_status_date();
+                String dtSit = sdf.format(mov.getDataPostagem());
+                if (dataSit != null) {
+                    dtSit = sdf.format(dataSit);
+                }*/
+                String status = mov.getLast_status_name();
     %>
     <tr align='center' style="font-size: 10px;">      
         <td><a target="_blank" href="http://websro.correios.com.br/sro_bin/txect01$.inexistente?p_itemcode=&p_lingua=001&p_teste=&p_tipo=003&z_action=&p_cod_lis=<%= numeroRegistro%>" ><%= numeroRegistro%></a></td>

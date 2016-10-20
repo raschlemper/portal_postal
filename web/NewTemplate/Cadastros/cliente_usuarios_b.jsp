@@ -163,13 +163,17 @@
                                                     </label>
                                                     <select class="form-control" name="servicos" id="servicos" multiple='true' onclick="controleCombobox2(this)" size="10" >
                                                         <option value="1" >PAC</option>
+                                                        <option value="9" >PAC GRD. FORMATOS</option>
                                                         <option value="2" >SEDEX</option>
-                                                        <option value="3" >SEDEX A COBRAR</option>
                                                         <option value="4" >SEDEX 10</option>
-                                                        <option value="5" >E-SEDEX</option>
-                                                        <option value="6" >CARTA REGISTRADA</option>
                                                         <option value="7" >SEDEX 12</option>
                                                         <option value="8" >SEDEX HOJE</option>
+                                                        <option value="5" >E-SEDEX</option>
+                                                        <option value="6" >CARTA REGISTRADA</option>
+                                                        <option value="11" >IMPRESSO REGISTRADO</option>
+                                                        <option value="3" >SEDEX A COBRAR</option>
+                                                        <option value="10" >PAC A COBRAR</option>
+                                                        <option value="12" >MDPB REGISTRADO</option>
                                                     </select>
                                                     <script language="">
                                                         function controleCombobox2(combo) {

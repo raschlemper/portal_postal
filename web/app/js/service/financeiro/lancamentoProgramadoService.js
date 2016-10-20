@@ -122,6 +122,11 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
                     $http.put(_contextPath + "/api/financeiro/lancamento/programado/" + idLancamentoProgramado, data));
         },
 
+        updateAll: function(data) {
+            return PromiseService.execute(
+                    $http.put(_contextPath + "/api/financeiro/lancamento/programado/", data));
+        },
+
         create: function(data) {
             return PromiseService.execute(
                     $http.post(_contextPath + "/api/financeiro/lancamento/programado/create", data));

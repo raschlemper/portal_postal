@@ -1,4 +1,5 @@
 
+<%@page import="java.util.Date"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -72,7 +73,8 @@
             <table style="height: 600px;" border="0" cellspacing="0"  >
                 <tr>
                     <td style="height: 250px;" colspan="2" align="center">
-                        <img src="imagensNew/PortalPostal_logo.png" height="200"/>
+                        <img src="imagensNew/PortalPostal_logo.png" height="200"/><br/>
+                        <%= new Date() %>
                     </td>
                 </tr>
                 <tr>
