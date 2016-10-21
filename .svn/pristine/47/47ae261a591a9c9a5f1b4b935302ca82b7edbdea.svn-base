@@ -1,0 +1,107 @@
+<div id="page-content-wrapper">
+    <div class="container-fluid">
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" >
+                            <div class="row">
+                                <div class="col-md-3">Demonstrativo Financeiro</div>
+                                <div class="col-md-9 pull-right">
+                                    <div class="form-inline pull-right">  
+                                        <button class="btn btn-sm btn-default" ng-click="report(planoContasLista)" style="margin-right: 10px;">
+                                            <i class="fa fa-lg fa-print fa-spc"></i> IMPRIMIR 
+                                        </button>                                          
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="panel-body" ng-if="!estruturasLista.length">
+                            <div class="panel-msg-info text-center">Não existem lançamentos para o período selecionado!</div>
+                        </div>
+                        <div class="panel-body panel-list" ng-if="estruturasLista.length">
+                            
+                            <div class="row">
+                                <div class="col-md-12 pull-right">
+                                    <div class="form-inline pull-left">     
+                                        <label style="margin-right: 10px;">
+                                            <input type="checkbox" ng-model="withValues">
+                                            Com Valores
+                                        </label>   
+                                        <label style="margin-right: 10px;">
+                                            <input type="checkbox" ng-model="byCompetencia" ng-change="pesquisar(byCompetencia, byCentroCusto, dataInicio, dataFim)">
+                                            Por Competência
+                                        </label> 
+                                        <label style="margin-right: 10px;">
+                                            <input type="checkbox" ng-model="byCentroCusto" ng-change="pesquisar(byCompetencia, byCentroCusto, dataInicio, dataFim)">
+                                            Por Centro de Custo
+                                        </label>
+                                    </div>
+                                    <div class="form-inline pull-right">    
+                                        <label>Mês:</label>
+                                        <select class="form-control" ng-model="mesSelected" ng-change="setData(mesSelected, anoSelected)" style="margin-right: 10px;"
+                                            ng-options="mes.descricao for mes in meses track by mes.id">    
+                                        </select>                                            
+                                        <label>Ano:</label>
+                                        <select class="form-control" ng-model="anoSelected" ng-change="setData(mesSelected, anoSelected)" style="margin-right: 10px;"
+                                            ng-options="ano.descricao for ano in anos track by ano.id">    
+                                        </select>
+                                        <button class="btn btn-sm btn-primary" ng-click="pesquisar(byCompetencia, byCentroCusto, dataInicio, dataFim)" style="margin-right: 30px;">
+                                            <i class="fa fa-lg fa-search fa-spc"></i> PESQUISAR 
+                                        </button>  
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="list-group margin-top">
+                                <div class="list-group-item list-group-header">
+                                    <div class="row">
+                                        <div class="col-md-3" ng-if="!byCentroCusto">Plano de Conta</div>
+                                        <div class="col-md-3" ng-if="byCentroCusto">Centro de Custo</div>
+                                        <div class="col-md-8">
+                                            <div class="col-md-1 text-center" ng-repeat="periodo in periodoSelected track by $index">
+                                                {{periodo.abreviacao}}<br/>{{periodo.ano}}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="text-center">TOTAL</div>
+                                        </div>
+                                    </div>                
+                                </div> 
+                                <div class="list-group-container">
+                                    <div class="list-group-item list-group-content" ng-repeat="estrutura in estruturasLista track by $index" ng-show="showRow(withValues, estrutura)"
+                                         ng-class="{'text-primary': estrutura.tipo.id === tipos[0].id,
+                                                    'text-danger': estrutura.tipo.id === tipos[1].id}">
+                                        <div class="row" ng-class="{'col-list-item-group': estrutura.ehGrupo}">
+                                            <div class="col-md-3">
+                                                <span class="item-list col-ident-{{estrutura.nivel}}">{{estrutura.descricao}}</span>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="col-md-1" ng-repeat="saldo in estrutura.saldos track by $index">{{saldo | currency : ''}}</div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="text-right">{{estrutura.total | currency : ''}}</div>
+                                            </div>
+                                        </div>                
+                                    </div>
+                                </div>
+                                <div class="list-group-item list-group-footer">
+                                    <div class="row">
+                                        <div class="col-md-3" style="font-size: 14px">Total</div>
+                                        <div class="col-md-8">
+                                            <div class="col-md-1" ng-repeat="total in totais.total track by $index">{{total | currency : ''}}</div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="text-right">{{totais.geral | currency : ''}}</div>
+                                        </div>
+                                    </div>                
+                                </div>                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>

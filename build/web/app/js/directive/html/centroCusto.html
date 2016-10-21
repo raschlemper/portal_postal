@@ -1,0 +1,26 @@
+<!--<script type="text/ng-template" id="centroCustoTemplate.html">
+  <a>
+      <span bind-html-unsafe="match.label" ng-class="{'bold': match.model.ehGrupo}"></span>
+  </a>
+</script>
+<label class="small">Plano de Conta</label>
+<div class="input-group">
+    <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+    <input class="form-control" type="text" name="centroCusto" ng-model="centroCustoModel.descricao" placeholder="Centro de Custo"
+            autocomplete="off" 
+            typeahead-template-url="centroCustoTemplate.html"            
+            typeahead-on-select="selectCentroCusto($item)" 
+            typeahead="centroCusto.descricao for centroCusto in centroCustos | filter:{descricao:$viewValue} | limitTo:10">
+</div>-->
+<label class="small" ng-if="!showTypeFilter">Centro de Custo</label>
+<label ng-if="showTypeFilter">Centro de Custo:</label>
+<app-typeahead item-model="centroCustoModel" 
+               items="centroCustos" 
+               filter="filter"
+               events="events"
+               field="descricao"
+               placeholder="Centro de Custo" 
+               name="centroCusto"
+               keep-group="true"
+               show-type-filter="{{showTypeFilter}}">                      
+</app-typeahead>

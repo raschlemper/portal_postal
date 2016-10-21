@@ -1,0 +1,1 @@
+truncate table tipo_forma_pagamento;

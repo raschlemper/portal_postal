@@ -1,0 +1,1 @@
+ALTER TABLE lancamento_anexo ADD `tipo` VARCHAR(100) NOT NULL;
