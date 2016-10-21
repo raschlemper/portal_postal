@@ -1,0 +1,93 @@
+<form name="veiculoCombustivelForm" novalidate>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
+        <h4 class="modal-title">{{title}}</h4>
+    </div>
+    <div class="modal-body">
+        <div class="bootbox-body">
+            <ul class="list-unstyled">
+                <li class="list-group-item">
+                    <div class="row form-horizontal">
+                        <input type="hidden" name="idVeiculoCombustivel" ng-model="veiculoCombustivel.idVeiculoCombustivel"/>                        
+                        <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8">
+                            <label class="small">Veículo</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-car"></i></span>
+                                <select class="form-control" name="veiculo" ng-change="getLastVeiculoCombustivel(veiculoCombustivel)" 
+                                        ng-options="veiculo.descricao for veiculo in veiculos track by veiculo.idVeiculo" ng-model="veiculoCombustivel.veiculo"></select>
+                            </div>
+                        </div>                        
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Tipo</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                <select class="form-control" name="tipo"
+                                        ng-options="tipo.descricao for tipo in tipos track by tipo.id" ng-model="veiculoCombustivel.tipo"></select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Quantidade</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                <input type="text" autocomplete="off" name="quantidade" class="form-control" ng-blur="setValorUnitario()" 
+                                       ui-number-mask="2" placeholder="Quantidade do abastecimento em litros" ng-model="veiculoCombustivel.quantidade" ng-required="true"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Valor Total</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
+                                <input type="text" autocomplete="off" name="valorTotal" class="form-control" ng-blur="setValorUnitario()"
+                                       ui-number-mask="2" placeholder="Valor total do abastecimento" ng-model="veiculoCombustivel.valorTotal" ng-required="true"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Valor Unitário</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-usd"></i></span>
+                                <input type="text" autocomplete="off" name="valorUnitario" class="form-control" ng-blur="setValorTotal()" 
+                                       ui-number-mask="2" placeholder="Valor unitário do abastecimento" ng-model="veiculoCombustivel.valorUnitario" ng-required="true" ng-readonly="true"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Data</label>
+                            <div class="input-group">
+                                <input type="text" autocomplete="off" name="data" class="form-control" ng-model="veiculoCombustivel.data" 
+                                       datepicker-popup="{{datepicker.format}}" is-open="datepicker.opened" ng-required="true"
+                                       current-text="{{datepicker.today}}" clear-text="{{datepicker.clear}}" close-text="{{datepicker.close}}"
+                                       placeholder="Data do abastecimento"/>
+                                <span class="input-group-addon" ng-click="datepicker.open($event)"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Quilometragem Anterior</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                <input type="text" autocomplete="off" name="quilometragemAnterior" class="form-control" ng-model="quilometragemAnterior" 
+                                       ui-number-mask="0" ng-readonly="true"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Quilometragem Atual</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                <input type="text" autocomplete="off" name="quilometragem" class="form-control" ng-model="veiculoCombustivel.quilometragem" 
+                                       ui-number-mask="0" placeholder="Quilometragem atual do veículo" ng-required="true"/>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>     
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">
+            <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR
+        </button>
+        <button type="button" class="btn btn-success" ng-click="ok(this.veiculoCombustivelForm)">
+            <i class="fa fa-lg fa-save fa-spc"></i> SALVAR
+        </button>
+    </div>
+</form>    
+
+  

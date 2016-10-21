@@ -1,0 +1,367 @@
+<form name="colaboradorForm" novalidate>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
+        <h4 class="modal-title">{{title}}</h4>
+    </div>
+    <div class="modal-body">
+        <div class="bootbox-body">
+            <ul class="list-unstyled">
+                <li class="list-group-item">
+                    <div class="row form-horizontal" style="padding: 10px;">
+                        
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="colaborador" class="active">
+                                <a href="#geral" aria-controls="geral" role="tab" data-toggle="tab">Geral</a>
+                            </li>
+                            <li role="colaborador">
+                                <a href="#endereco" aria-controls="endereco" role="tab" data-toggle="tab">Endereço</a>
+                            </li>
+                            <li role="colaborador">
+                                <a href="#profissional" aria-controls="profissional" role="tab" data-toggle="tab">Informações Profissionais</a>
+                            </li>
+                            <li role="colaborador">
+                                <a href="#bancaria" aria-controls="bancaria" role="tab" data-toggle="tab">Informações Bancárias</a>
+                            </li>
+                        </ul>                        
+                        
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="geral">
+                                <input type="hidden" name="idColaborador" ng-model="colaborador.idColaborador"/>
+                                <div class="col-xs-12 col-sm-6 col-md-9 col-lg-9">
+                                    <label class="small">Nome</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="nome" class="form-control" ng-model="colaborador.nome" 
+                                               ng-required="true" placeholder="Nome do colaborador"/>                                    
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label class="small">Situação</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                        <select class="form-control" name="status" ng-model="colaborador.status" ng-required="true"
+                                                ng-options="situacao.descricao for situacao in situacoes track by situacao.id"></select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label class="small">CPF</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="cpf" class="form-control" ng-model="colaborador.cpf" 
+                                               placeholder="Cpf do colaborador"/>          
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label class="small">RG</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="rg" class="form-control" ng-model="colaborador.rg" 
+                                               placeholder="Rg do colaborador"/>   
+                                    </div>
+                                </div>     
+                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label class="small">Sexo</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                        <select class="form-control" name="sexo" ng-model="colaborador.sexo"
+                                                ng-options="sexo.descricao for sexo in sexos track by sexo.id"></select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label class="small">Data Nascimento</label>
+                                    <app-datepicker class="input-group" placeholder="Data de nascimento do colaborador" name="dataNascimento" datepicker-model="colaborador.dataNascimento"></app-datepicker>                                        
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label class="small">Telefone</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="telefone" class="form-control" ng-model="colaborador.telefone"
+                                               ui-mask="(99) 99999-9999" ui-mask-placeholder-char="_" ui-mask-placeholder placeholder="Número telefone"/>                                               
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label class="small">Celular</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="celular" class="form-control" ng-model="colaborador.celular"
+                                               ui-mask="(99) 99999-9999" ui-mask-placeholder-char="_" ui-mask-placeholder placeholder="Número celular"/>                                               
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <label class="small">Email</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="email" class="form-control" ng-model="colaborador.email"
+                                               placeholder="Email do colaborador"/>                                               
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-9 col-lg-9">
+                                    <label class="small">Cônjuge</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="number" autocomplete="off" name="conjuge" class="form-control" ng-model="colaborador.conjuge" 
+                                               placeholder="Cônjuge do colaborador"/>   
+                                    </div>
+                                </div>  
+                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label class="small">Estado Civil</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                        <select class="form-control" name="estadoCivil" ng-model="colaborador.estadoCivil"
+                                                ng-options="estadoCivil.descricao for estadoCivil in estadosCivil track by estadoCivil.id"></select>
+                                    </div>
+                                </div>    
+                                <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5">
+                                    <label class="small">Naturalidade</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="naturalidade" class="form-control" ng-model="colaborador.naturalidade" 
+                                               placeholder="Naturalidade do colaborador"/>   
+                                    </div>
+                                </div>   
+                                <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5">
+                                    <label class="small">Nacionalidade</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="nacionalidade" class="form-control" ng-model="colaborador.nacionalidade" 
+                                               placeholder="Nacionalidade do colaborador"/>   
+                                    </div>
+                                </div>      
+                                <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2">
+                                    <label class="small">Dependentes</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="number" autocomplete="off" name="dependentes" class="form-control" ng-model="colaborador.dependentes" 
+                                               placeholder="Número"/>   
+                                    </div>
+                                </div>          
+                                <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
+                                    <label class="small">Nome Pai</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="nomePai" class="form-control" ng-model="colaborador.nomePai" 
+                                               placeholder="Nome do pai do colaborador"/>   
+                                    </div>
+                                </div>          
+                                <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12">
+                                    <label class="small">Nome Mãe</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="nomeMae" class="form-control" ng-model="colaborador.nomeMae" 
+                                               placeholder="Nome do mãe do colaborador"/>   
+                                    </div>
+                                </div>   
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <label class="small">Observação</label>
+                                    <textarea class="form-control" rows="3" name="observacao" placeholder="" ng-model="colaborador.observacao"></textarea>       
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="endereco">
+                                <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8">
+                                    <label class="small">Logradouro</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="logradouro" class="form-control" ng-model="colaborador.endereco.logradouro" 
+                                               placeholder="Logradouro do endereço"/>   
+                                    </div>
+                                </div>        
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">CEP</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input class="form-control" type="text" name="cep" ng-model="colaborador.endereco.cep" ui-br-cep-mask placeholder="Pesquisar por CEP" />                                
+                                        <span class="input-group-addon icon-search" title="Pesquisar CEP" ng-click="pesquisarCep(colaborador.endereco.cep)"><i class="fa fa-search"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-9 col-lg-9">
+                                    <label class="small">Complemento</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="complemento" class="form-control" ng-model="colaborador.endereco.complemento" 
+                                               placeholder="Complemento do endereço"/>   
+                                    </div>
+                                </div>  
+                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label class="small">Número</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="number" autocomplete="off" name="numero" class="form-control" ng-model="colaborador.endereco.numero" 
+                                               placeholder="Número"/>   
+                                    </div>
+                                </div>      
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">Bairo</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="bairro" class="form-control" ng-model="colaborador.endereco.bairro" 
+                                               placeholder="Bairro do endereço"/>   
+                                    </div>
+                                </div>       
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">Cidade</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="cidade" class="form-control" ng-model="colaborador.endereco.cidade" 
+                                               placeholder="Cidade do endereço"/>   
+                                    </div>
+                                </div>       
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">Estado</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="estado" class="form-control" ng-model="colaborador.endereco.estado" 
+                                               placeholder="Estado do endereço"/>   
+                                    </div>
+                                </div>          
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="profissional">
+                                <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8">
+                                    <label class="small">Cargo / Função</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="cargoFuncao" class="form-control" ng-model="colaborador.informacaoProfissional.cargoFuncao" 
+                                               placeholder="Cargo ou função do colaborador"/>   
+                                    </div>
+                                </div>             
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">Salário</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="salario" class="form-control" ng-model="colaborador.informacaoProfissional.salario" 
+                                               ui-number-mask="2" placeholder="Salário do colaborador"/>   
+                                    </div>
+                                </div>           
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">Admissão</label>
+                                    <app-datepicker class="input-group" placeholder="Data de admissão do colaborador" name="dataAdmissao" datepicker-model="colaborador.informacaoProfissional.dataAdmissao"></app-datepicker>
+                                </div>              
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">Demissão</label>
+                                    <app-datepicker class="input-group" placeholder="Data de demissão do colaborador" name="dataDemissao" datepicker-model="colaborador.informacaoProfissional.dataDemissao"></app-datepicker>
+                                </div>        
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">PIS / PASEP</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="pisPasep" class="form-control" ng-model="colaborador.informacaoProfissional.pisPasep" 
+                                               placeholder="Pis/Pasep do colaborador"/>   
+                                    </div>
+                                </div>           
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">Título Eleitoral</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="tituloEleitoral" class="form-control" ng-model="colaborador.informacaoProfissional.tituloEleitoral" 
+                                               placeholder="Título eleitoral do colaborador"/>   
+                                    </div>
+                                </div>           
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">Cert. Reservista</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="certificadoReservista" class="form-control" ng-model="colaborador.informacaoProfissional.certificadoReservista" 
+                                               placeholder="Certificado de reservista do colaborador"/>   
+                                    </div>
+                                </div>           
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">N. CTPS</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="ctps" class="form-control" ng-model="colaborador.informacaoProfissional.ctps" 
+                                               placeholder="Número carteira de trabalho"/>   
+                                    </div>
+                                </div>  
+                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label class="small">Horário Entrada</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="horarioEntrada" class="form-control" ng-model="colaborador.informacaoProfissional.horarioEntrada"
+                                               model-view-value="true" ui-mask="99:99" ui-mask-placeholder-char="_" ui-mask-placeholder placeholder="Horário de entrada"/>                                               
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label class="small">Horário Saída</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="horarioSaida" class="form-control" ng-model="colaborador.informacaoProfissional.horarioSaida"
+                                               model-view-value="true" ui-mask="99:99" ui-mask-placeholder-char="_" ui-mask-placeholder placeholder="Horário de saída"/>                                               
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label class="small">Intervalo Início</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="intervaloDe" class="form-control" ng-model="colaborador.informacaoProfissional.intervaloDe"
+                                               model-view-value="true" ui-mask="99:99" ui-mask-placeholder-char="_" ui-mask-placeholder placeholder="Início do intervalo"/>                                               
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                    <label class="small">Intervalo Fim</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-asterisk"></i></span>
+                                        <input type="text" autocomplete="off" name="intervaloAte" class="form-control" ng-model="colaborador.informacaoProfissional.intervaloAte"
+                                               model-view-value="true" ui-mask="99:99" ui-mask-placeholder-char="_" ui-mask-placeholder placeholder="Fim do intervalo"/>                                               
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <label class="small">Observação</label>
+                                    <textarea class="form-control" rows="3" name="profissionalObservacao" placeholder="" ng-model="colaborador.informacaoProfissional.observacao"></textarea>       
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="bancaria">
+                                <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8">
+                                    <label class="small">Banco</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                        <select class="form-control" name="banco" 
+                                                ng-options="(banco.numero + ' - ' + banco.nome) for banco in bancos track by banco.idBanco" ng-model="colaborador.informacaoBancaria.banco"></select>
+                                    </div>
+                                </div> 
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                                    <label class="small">Tipo Conta</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                        <select class="form-control" name="tipoConta"
+                                                ng-options="tipo.descricao for tipo in tipos track by tipo.id" ng-model="colaborador.informacaoBancaria.tipoConta"></select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <label class="small">Agência</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="number" autocomplete="off" name="agencia" class="form-control" ng-model="colaborador.informacaoBancaria.agencia" 
+                                               placeholder="Número agência"/>     
+                                        <span class="input-group-addon">-</span>
+                                        <input type="number" autocomplete="off" name="agenciaDv"  min="0" max="99" class="form-control" ng-model="colaborador.informacaoBancaria.agenciaDv" 
+                                              />                                               
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                    <label class="small">Conta Corrente</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                        <input type="number" autocomplete="off" name="contaCorrente" class="form-control" ng-model="colaborador.informacaoBancaria.contaCorrente" 
+                                               placeholder="Número conta corrente"/>     
+                                        <span class="input-group-addon">-</span>
+                                        <input type="number" autocomplete="off" name="contaCorrenteDv" min="0" max="99" class="form-control" ng-model="colaborador.informacaoBancaria.contaCorrenteDv" 
+                                               />                                       
+                                    </div>
+                                </div>          
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>     
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">
+            <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR
+        </button>
+        <button type="button" class="btn btn-success" ng-click="ok(this.colaboradorForm)">
+            <i class="fa fa-lg fa-save fa-spc"></i> SALVAR
+        </button>
+    </div>
+</form>    
+
+  

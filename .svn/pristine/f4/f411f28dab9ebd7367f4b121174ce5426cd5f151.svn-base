@@ -1,0 +1,38 @@
+<!--<script type="text/ng-template" id="favorecidoTemplate.html">
+  <a>
+      <i class="fa fa-spc" ng-class="{'fa-user': match.model.tipo.codigo === 'colaborador', 
+                                      'fa-truck': match.model.tipo.codigo === 'fornecedor',
+                                      'fa-bank': match.model.tipo.codigo === 'cliente'}"></i>
+      <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+  </a>
+</script>
+<label class="small" style="width: 100%">Favorecido
+    <div class="pull-right">
+        <span class="spc-right"><i class="fa fa-bank  fa-spc"></i> Cliente</span>
+        <span class="spc-right"><i class="fa fa-user  fa-spc"></i> Colaborador</span>
+        <span class="spc-right"><i class="fa fa-truck fa-spc"></i> Fornecedor</span>
+    </div>
+</label>
+<div class="input-group">
+    <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+    <input class="form-control" type="text" name="favorecido" ng-model="favorecidoModel.nome" placeholder="Favorecido do lançamento"
+            autocomplete="off" 
+            typeahead-template-url="favorecidoTemplate.html"
+            typeahead-on-select="selectFavorecido($item)" 
+            typeahead="favorecido.nome for favorecido in favorecidos | filter:{nome:$viewValue} | limitTo:10">
+</div>-->
+<label class="small" style="width: 100%">Favorecido
+    <div class="pull-right">
+        <span class="spc-right"><i class="fa fa-bank  fa-spc"></i> Cliente</span>
+        <a class="spc-right" ng-click="salvarColaborador()"><i class="fa fa-user  fa-spc"></i> Colaborador</a>
+        <a class="spc-right" ng-click="salvarFornecedor()"><i class="fa fa-truck fa-spc"></i> Fornecedor</a>
+    </div>
+</label>
+<app-typeahead item-model="favorecidoModel" 
+               items="favorecidos" 
+               filter="filter"
+               events="events"
+               field="nome"
+               placeholder="Favorecido" 
+               name="favorecido">                      
+</app-typeahead>

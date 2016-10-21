@@ -1,0 +1,439 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Entidade;
+
+/**
+ *
+ * @author Ricardinho
+ */
+public class DadosEtiqueta {
+    
+    private int id_pp;
+    private int id_cliente;
+    private int id_depto;         
+    
+    private int codido_ect;
+    private String grupo_servico;
+    private String sro;
+    private String cartao_postagem;
+    private String contrato_ect;
+    
+    private int ar;        
+    private int mp;    
+    private float vd;   
+    private float valor_cobrar;   
+    
+    private float peso;    
+    private float altura;    
+    private float largura;    
+    private float comprimento;  
+    
+    private String url_chancela;
+    private String url_logo;
+    private String sigla_triagem;    
+    private String nota_fiscal;
+    private String conteudo;
+    private String observacao;    
+    private String aos_cuidados;    
+    
+    private String destinatario_nome;
+    private String destinatario_documento;
+    private String destinatario_cep;
+    private String destinatario_logradouro;
+    private String destinatario_numero;
+    private String destinatario_complemento;
+    private String destinatario_bairro;
+    private String destinatario_cidade;
+    private String destinatario_uf;
+    private String destinatario_pais;
+    private String destinatario_email;
+    private String destinatario_celular;
+    
+    private String remetente_nome;
+    private String remetente_departamento;
+    private String remetente_documento;
+    private String remetente_cep;
+    private String remetente_logradouro;
+    private String remetente_numero;
+    private String remetente_complemento;
+    private String remetente_bairro;
+    private String remetente_cidade;
+    private String remetente_uf;
+    private String remetente_pais;
+
+    public DadosEtiqueta() {
+    }
+
+    public int getId_pp() {
+        return id_pp;
+    }
+
+    public void setId_pp(int id_pp) {
+        this.id_pp = id_pp;
+    }
+
+    public int getId_cliente() {
+        return id_cliente;
+    }
+
+    public void setId_cliente(int id_cliente) {
+        this.id_cliente = id_cliente;
+    }
+
+    public int getId_depto() {
+        return id_depto;
+    }
+
+    public void setId_depto(int id_depto) {
+        this.id_depto = id_depto;
+    }
+
+    public int getCodido_ect() {
+        return codido_ect;
+    }
+
+    public void setCodido_ect(int codido_ect) {
+        this.codido_ect = codido_ect;
+    }
+
+    public String getGrupo_servico() {
+        return grupo_servico;
+    }
+
+    public void setGrupo_servico(String grupo_servico) {
+        this.grupo_servico = grupo_servico;
+    }
+
+    public String getSro() {
+        return sro;
+    }
+
+    public void setSro(String sro) {
+        this.sro = sro;
+    }
+
+    public String getCartao_postagem() {
+        return cartao_postagem;
+    }
+
+    public void setCartao_postagem(String cartao_postagem) {
+        this.cartao_postagem = cartao_postagem;
+    }
+
+    public String getContrato_ect() {
+        return contrato_ect;
+    }
+
+    public void setContrato_ect(String contrato_ect) {
+        this.contrato_ect = contrato_ect;
+    }
+
+    public int getAr() {
+        return ar;
+    }
+
+    public void setAr(int ar) {
+        this.ar = ar;
+    }
+
+    public int getMp() {
+        return mp;
+    }
+
+    public void setMp(int mp) {
+        this.mp = mp;
+    }
+
+    public float getVd() {
+        return vd;
+    }
+
+    public void setVd(float vd) {
+        this.vd = vd;
+    }
+
+    public float getValor_cobrar() {
+        return valor_cobrar;
+    }
+
+    public void setValor_cobrar(float valor_cobrar) {
+        this.valor_cobrar = valor_cobrar;
+    }
+
+    public float getPeso() {
+        return peso;
+    }
+
+    public void setPeso(float peso) {
+        this.peso = peso;
+    }
+
+    public float getAltura() {
+        return altura;
+    }
+
+    public void setAltura(float altura) {
+        this.altura = altura;
+    }
+
+    public float getLargura() {
+        return largura;
+    }
+
+    public void setLargura(float largura) {
+        this.largura = largura;
+    }
+
+    public float getComprimento() {
+        return comprimento;
+    }
+
+    public void setComprimento(float comprimento) {
+        this.comprimento = comprimento;
+    }
+
+    public String getUrl_chancela() {
+        return url_chancela;
+    }
+
+    public void setUrl_chancela(String url_chancela) {
+        this.url_chancela = url_chancela;
+    }
+
+    public String getUrl_logo() {
+        return url_logo;
+    }
+
+    public void setUrl_logo(String url_logo) {
+        this.url_logo = url_logo;
+    }
+
+    public String getSigla_triagem() {
+        return sigla_triagem;
+    }
+
+    public void setSigla_triagem(String sigla_triagem) {
+        this.sigla_triagem = sigla_triagem;
+    }
+
+    public String getNota_fiscal() {
+        return nota_fiscal;
+    }
+
+    public void setNota_fiscal(String nota_fiscal) {
+        this.nota_fiscal = nota_fiscal;
+    }
+
+    public String getConteudo() {
+        return conteudo;
+    }
+
+    public void setConteudo(String conteudo) {
+        this.conteudo = conteudo;
+    }
+
+    public String getObservacao() {
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
+    }
+
+    public String getAos_cuidados() {
+        return aos_cuidados;
+    }
+
+    public void setAos_cuidados(String aos_cuidados) {
+        this.aos_cuidados = aos_cuidados;
+    }
+
+    public String getDestinatario_nome() {
+        return destinatario_nome;
+    }
+
+    public void setDestinatario_nome(String destinatario_nome) {
+        this.destinatario_nome = destinatario_nome;
+    }
+
+    public String getDestinatario_documento() {
+        return destinatario_documento;
+    }
+
+    public void setDestinatario_documento(String destinatario_documento) {
+        this.destinatario_documento = destinatario_documento;
+    }
+
+    public String getDestinatario_cep() {
+        return destinatario_cep;
+    }
+
+    public void setDestinatario_cep(String destinatario_cep) {
+        this.destinatario_cep = destinatario_cep;
+    }
+
+    public String getDestinatario_logradouro() {
+        return destinatario_logradouro;
+    }
+
+    public void setDestinatario_logradouro(String destinatario_logradouro) {
+        this.destinatario_logradouro = destinatario_logradouro;
+    }
+
+    public String getDestinatario_numero() {
+        return destinatario_numero;
+    }
+
+    public void setDestinatario_numero(String destinatario_numero) {
+        this.destinatario_numero = destinatario_numero;
+    }
+
+    public String getDestinatario_complemento() {
+        return destinatario_complemento;
+    }
+
+    public void setDestinatario_complemento(String destinatario_complemento) {
+        this.destinatario_complemento = destinatario_complemento;
+    }
+
+    public String getDestinatario_bairro() {
+        return destinatario_bairro;
+    }
+
+    public void setDestinatario_bairro(String destinatario_bairro) {
+        this.destinatario_bairro = destinatario_bairro;
+    }
+
+    public String getDestinatario_cidade() {
+        return destinatario_cidade;
+    }
+
+    public void setDestinatario_cidade(String destinatario_cidade) {
+        this.destinatario_cidade = destinatario_cidade;
+    }
+
+    public String getDestinatario_uf() {
+        return destinatario_uf;
+    }
+
+    public void setDestinatario_uf(String destinatario_uf) {
+        this.destinatario_uf = destinatario_uf;
+    }
+
+    public String getDestinatario_pais() {
+        return destinatario_pais;
+    }
+
+    public void setDestinatario_pais(String destinatario_pais) {
+        this.destinatario_pais = destinatario_pais;
+    }
+
+    public String getDestinatario_email() {
+        return destinatario_email;
+    }
+
+    public void setDestinatario_email(String destinatario_email) {
+        this.destinatario_email = destinatario_email;
+    }
+
+    public String getDestinatario_celular() {
+        return destinatario_celular;
+    }
+
+    public void setDestinatario_celular(String destinatario_celular) {
+        this.destinatario_celular = destinatario_celular;
+    }
+
+    public String getRemetente_nome() {
+        return remetente_nome;
+    }
+
+    public void setRemetente_nome(String remetente_nome) {
+        this.remetente_nome = remetente_nome;
+    }
+
+    public String getRemetente_departamento() {
+        return remetente_departamento;
+    }
+
+    public void setRemetente_departamento(String remetente_departamento) {
+        this.remetente_departamento = remetente_departamento;
+    }
+
+    public String getRemetente_documento() {
+        return remetente_documento;
+    }
+
+    public void setRemetente_documento(String remetente_documento) {
+        this.remetente_documento = remetente_documento;
+    }
+
+    public String getRemetente_cep() {
+        return remetente_cep;
+    }
+
+    public void setRemetente_cep(String remetente_cep) {
+        this.remetente_cep = remetente_cep;
+    }
+
+    public String getRemetente_logradouro() {
+        return remetente_logradouro;
+    }
+
+    public void setRemetente_logradouro(String remetente_logradouro) {
+        this.remetente_logradouro = remetente_logradouro;
+    }
+
+    public String getRemetente_numero() {
+        return remetente_numero;
+    }
+
+    public void setRemetente_numero(String remetente_numero) {
+        this.remetente_numero = remetente_numero;
+    }
+
+    public String getRemetente_complemento() {
+        return remetente_complemento;
+    }
+
+    public void setRemetente_complemento(String remetente_complemento) {
+        this.remetente_complemento = remetente_complemento;
+    }
+
+    public String getRemetente_bairro() {
+        return remetente_bairro;
+    }
+
+    public void setRemetente_bairro(String remetente_bairro) {
+        this.remetente_bairro = remetente_bairro;
+    }
+
+    public String getRemetente_cidade() {
+        return remetente_cidade;
+    }
+
+    public void setRemetente_cidade(String remetente_cidade) {
+        this.remetente_cidade = remetente_cidade;
+    }
+
+    public String getRemetente_uf() {
+        return remetente_uf;
+    }
+
+    public void setRemetente_uf(String remetente_uf) {
+        this.remetente_uf = remetente_uf;
+    }
+
+    public String getRemetente_pais() {
+        return remetente_pais;
+    }
+
+    public void setRemetente_pais(String remetente_pais) {
+        this.remetente_pais = remetente_pais;
+    }
+    
+        
+}

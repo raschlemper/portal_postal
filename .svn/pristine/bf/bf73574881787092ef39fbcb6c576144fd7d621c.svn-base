@@ -1,0 +1,15 @@
+<script type="text/ng-template" id="planoContaTemplate.html">
+  <a>
+      <span bind-html-unsafe="match.label" ng-class="{'bold': match.model.ehGrupo}"></span>
+  </a>
+</script>
+<label class="small">Plano de Conta</label>
+<div class="input-group">
+    <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+    <input class="form-control" type="text" name="planoConta" ng-model="planoContaModel.descricao" placeholder="Plano de conta"
+            autocomplete="off" 
+            typeahead-empty
+            typeahead-template-url="planoContaTemplate.html"            
+            typeahead-on-select="selectPlanoConta($item)" 
+            typeahead="planoConta.descricao for planoConta in planoContas | filter:{descricao:$viewValue} | limitTo:10">
+</div>

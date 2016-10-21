@@ -1,0 +1,28 @@
+package com.portalpostal.dao.handler;
+
+import com.portalpostal.model.ConfiguracaoFinanceiro;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import org.sql2o.ResultSetHandler;
+
+public class ConfiguracaoFinanceiroHandler extends GenericHandler implements ResultSetHandler<ConfiguracaoFinanceiro> {
+        
+    public ConfiguracaoFinanceiroHandler() {
+        super("configuracao_financeiro");
+    }
+    
+    public ConfiguracaoFinanceiroHandler(String table) {
+        super(table);
+    }
+
+    public ConfiguracaoFinanceiro handle(ResultSet result) throws SQLException {
+        ConfiguracaoFinanceiro configuracaoFinanceiro = new ConfiguracaoFinanceiro();
+        configuracaoFinanceiro.setIdConfiguracaoFinanceiro(getInt(result, "idConfiguracaoFinanceiro"));
+        configuracaoFinanceiro.setFavorecido(getBoolean(result, "favorecido"));
+        configuracaoFinanceiro.setHistorico(getBoolean(result, "historico"));
+        configuracaoFinanceiro.setPlanoConta(getBoolean(result, "planoConta"));
+        configuracaoFinanceiro.setCentroCusto(getBoolean(result, "centroCusto"));
+        return configuracaoFinanceiro;
+    }
+    
+}
