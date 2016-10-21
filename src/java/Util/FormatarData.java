@@ -459,4 +459,59 @@ public class FormatarData {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         return dateFormat.format(data);
     }
+
+    public static Date somarHorasNaData(Date data, int horas) {
+        if (data == null) {
+            return data;
+        }
+        try {
+            // Através do Calendar, trabalhamos a data informada e adicionamos 1 dia nela
+            Calendar c = Calendar.getInstance();
+            c.setTime(data);
+            c.add(Calendar.HOUR, horas);
+            // Obtemos a data alterada
+            return c.getTime();
+        } catch (Exception e) {
+            return data;
+        }
+    }
+
+    public static Date somarMinutosNaData(Date data, int minutos) {
+        if (data == null) {
+            return data;
+        }
+        try {
+            // Através do Calendar, trabalhamos a data informada e adicionamos 1 dia nela
+            Calendar c = Calendar.getInstance();
+            c.setTime(data);
+            c.add(Calendar.MINUTE, minutos);
+            // Obtemos a data alterada
+            return c.getTime();
+        } catch (Exception e) {
+            return data;
+        }
+    }
+
+    /*public static void main(String[] args) {
+        Timestamp vDataHoraAtual = new Timestamp(new Date().getTime());
+        System.out.println(vDataHoraAtual);
+        vDataHoraAtual = FormatarData.somarHorasNaData(vDataHoraAtual, -1);
+        System.out.println(vDataHoraAtual);
+    }*/
+
+    public static Timestamp somarHorasNaData(Timestamp data, int horas) {
+        if (data == null) {
+            return data;
+        }
+        try {
+            // Através do Calendar, trabalhamos a data informada e adicionamos 1 dia nela
+            Calendar c = Calendar.getInstance();
+            c.setTime(data);
+            c.add(Calendar.HOUR, horas);
+            // Obtemos a data alterada
+            return new Timestamp(c.getTimeInMillis());
+        } catch (Exception e) {
+            return data;
+        }
+    }
 }

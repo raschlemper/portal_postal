@@ -63,15 +63,23 @@ app.directive('appTypeahead', function($filter) {
             var filterByExclude = function(lista, search) {
                 if(!lista || !search) return lista;
                 var parents = [];
-                var results = lista.filter(function(item) {
-                    if(item.keep) return true;
-                    var itemLabel = removeAccents(angular.copy(item[$scope.field]));
-                    var searchLabel = removeAccents(angular.copy(search));
-                    var parse = (itemLabel.toLowerCase().indexOf(searchLabel.toLowerCase()) > -1);
-                    if(parse) { parents.push(item.parent); }
-                    return parse;
-                });
-                return ExcludeByEmpty(results, parents);
+                var selected = findByField(lista, search);
+                if(selected && selected.keep) {
+                    var listSelected = [];
+                    listSelected.push(selected);
+                    getChildrenList(lista, selected, listSelected);
+                    return listSelected;
+                } else {
+                    var results = lista.filter(function(item) {
+                        if(item.keep) return true;
+                        var itemLabel = removeAccents(angular.copy(item[$scope.field]));
+                        var searchLabel = removeAccents(angular.copy(search));
+                        var parse = (itemLabel.toLowerCase().indexOf(searchLabel.toLowerCase()) > -1);
+                        if(parse) { parents.push(item.parent); }
+                        return parse;
+                    });         
+                    return ExcludeByEmpty(results, parents);           
+                }
             };
             
             var ExcludeByEmpty = function(lista, parents) {
@@ -81,7 +89,25 @@ app.directive('appTypeahead', function($filter) {
                     if(_.contains(parents, item.id)) return true;
                     return false;
                 })
-            }
+            };
+            
+            var getChildrenList = function(list, item, listSelected) {
+                list.map(function(value) {
+                    if(item.id === value.parent) {
+                        if(listSelected.indexOf(item) === -1) { listSelected.push(item); }
+                        if(value.keep) { getChildrenList(list, value, listSelected); }
+                        else { 
+                            if(listSelected.indexOf(value) === -1) { listSelected.push(value); }
+                        }
+                    }
+                });
+            };
+            
+            var findByField = function(list, field) {
+                return _.find(list, function(item) {
+                    return item[$scope.field] === field;
+                });
+            };
             
             $scope.getItem = function(item) {
                 var value = angular.copy(item[$scope.field]);

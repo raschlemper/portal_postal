@@ -46,7 +46,7 @@
                                                                       'fa fa-university':               conta.tipo.codigo === 'contacorrente'}"></i></h5>
                                                 </div>
                                                 <div class="col-md-11">
-                                                    <h5><strong>{{conta.nome}}</strong> ({{conta.tipo.descricao}})
+                                                    <h5><strong>{{conta.nome}}</strong> ({{conta.tipo.descricao}}) <span class="text-danger" ng-if="conta.codigoIntegracao"> - Sistema</span>
                                                     </h5>
                                                 </div>
                                             </div>

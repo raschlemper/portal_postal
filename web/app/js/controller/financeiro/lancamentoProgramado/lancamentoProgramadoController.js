@@ -241,10 +241,11 @@ app.controller('LancamentoProgramadoController',
             return saldo;
         }
         
-        var getLancamentoProgramadosSelecionados = function(lancamentosProgramados) {            
+        var getLancamentoProgramadosSelecionados = function(lancamentosProgramados, callback) {            
             var lancamentosProgramadosSelecionados = [];
             _.map(lancamentosProgramados, function(lancamentoProgramado) {
                 if(!lancamentoProgramado.selected) return;
+                if(callback) { lancamentoProgramado = callback(lancamentoProgramado); }
                 lancamentosProgramadosSelecionados.push(angular.copy(lancamentoProgramado));
             });
             return lancamentosProgramadosSelecionados;
@@ -524,6 +525,27 @@ app.controller('LancamentoProgramadoController',
             }            
         };
 
+        // ***** MOVER ***** //
+
+        $scope.moverContaTodos = function(conta, lancamentos) {    
+            var lancamentoSelecionados = getLancamentoProgramadosSelecionados(angular.copy(lancamentos), ajustarDadosMoverConta)
+            if(!existeLancamentoSelecionado(lancamentoSelecionados)) return;
+            modalMoverConta(conta).then(function(data) {
+                lancamentoSelecionados = getLancamentoProgramadosSelecionados(angular.copy(lancamentos), ajustarDadosMoverConta)
+                moverContaTodos(conta, lancamentoSelecionados);
+            });
+        };
+
+        var moverContaTodos = function(conta, lancamentos) {
+            LancamentoProgramadoService.updateAll(lancamentos)
+                .then(function (data) { 
+                    todos(conta);
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
         // ***** REPORT ***** //
         
         $scope.report = function(lancamentos) {
@@ -544,9 +566,17 @@ app.controller('LancamentoProgramadoController',
         };
         
         // ***** AJUSTAR ***** //
+
+        var ajustarDadosMoverConta = function(lancamentoProgramado) {
+            var lancamentoProgramadoCompleto = ListaService.getLancamentoProgramadoValue($scope.lancamentoProgramados, lancamentoProgramado.idLancamentoProgramado);
+//            lancamentoProgramadoCompleto.conta = conta;
+            lancamentoProgramadoCompleto = ajustarDados(lancamentoProgramadoCompleto);
+            return lancamentoProgramadoCompleto;
+        };
         
         var ajustarDados = function(data) {   
-            var lancamentos = ajustarDadosLancamentos(data.lancamentos);
+            var lancamentos = [];
+            if(data.lancamentos && data.lancamentos.length) { lancamentos = ajustarDadosLancamentos(data.lancamentos); }
             var lancamentoProgramado = LancamentoProgramadoHandler.handle(data);
             lancamentoProgramado.lancamentos = lancamentos;
             lancamentoProgramado.parcelas = LancamentoProgramadoParcelaHandler.handleList(data.parcelas);
@@ -640,6 +670,16 @@ app.controller('LancamentoProgramadoController',
                     lancamentoProgramadoTransferencia: function() {
                         return lancamentoProgramadoTransferencia;
                     }
+                });
+            return modalInstance.result;
+        };
+
+        var modalMoverConta = function(conta) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/conta/modalMoverConta.html', 'ModalMoverContaController', 'lg', 
+                {
+                    conta: function() {
+                        return conta;
+                    }                
                 });
             return modalInstance.result;
         };

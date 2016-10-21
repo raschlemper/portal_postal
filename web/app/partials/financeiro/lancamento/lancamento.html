@@ -22,17 +22,20 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="pull-left">                                     
-                                        <button class="btn btn-sm btn-default spc-right" ng-click="excluirTodos(conta, events.list())">
-                                            <i class="fa fa-lg fa-times fa-spc"></i> EXCLUIR 
+                                        <button class="btn btn-sm btn-default" ng-click="excluirTodos(conta, events.list())">
+                                            <i class="fa fa-lg fa-times fa-spc-sm"></i> EXCLUIR 
                                         </button>                                            
-                                        <button class="btn btn-sm btn-default spc-right" ng-click="compensarTodos(conta, events.list())">
-                                            <i class="fa fa-lg fa-arrow-circle-o-down fa-spc"></i> COMPENSAR 
-                                        </button>                                
-                                        <button class="btn btn-sm btn-default spc-right" ng-click="conciliar(conta)">
-                                            <i class="fa fa-lg fa-retweet fa-spc"></i> RECONCILIAÇÃO 
+                                        <button class="btn btn-sm btn-default" ng-click="compensarTodos(conta, events.list())">
+                                            <i class="fa fa-lg fa-arrow-circle-o-down fa-spc-sm"></i> COMPENSAR 
+                                        </button>                                             
+                                        <button class="btn btn-sm btn-default" ng-click="moverContaTodos(conta, events.list())">
+                                            <i class="fa fa-lg fa-arrow-circle-right fa-spc-sm"></i> MOVER 
+                                        </button>                              
+                                        <button class="btn btn-sm btn-default" ng-click="conciliar(conta)">
+                                            <i class="fa fa-lg fa-retweet fa-spc-sm"></i> RECONCILIAÇÃO 
                                         </button>                                    
                                         <button class="btn btn-sm btn-default" ui-sref="app.financeiro.lancamentoprogramado">
-                                            <i class="fa fa-lg fa-clock-o fa-spc"></i> PROGRAMAÇÃO 
+                                            <i class="fa fa-lg fa-clock-o fa-spc-sm"></i> PROGRAMAÇÃO 
                                         </button>      
                                     </div>
                                     <div class="pull-right">  

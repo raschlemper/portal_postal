@@ -26,7 +26,15 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+<<<<<<< .mine
+<<<<<<< HEAD
+import javax.servlet.http.HttpSession;
+=======
 import javax.swing.ImageIcon;
+>>>>>>> .r1103
+=======
+import javax.swing.ImageIcon;
+>>>>>>> 372fcf9605e64b658a5fb821c1b42c3cceeac61e
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -38,23 +46,28 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
  *
  * @author Fernando
  */
-public class printPDFLabelToken extends HttpServlet {
+public class LinkImpressaoSRO extends HttpServlet {
 
-   
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String codAgencia = request.getParameter("codAgencia");
         int cod = Integer.parseInt(codAgencia);
-        String idC = request.getParameter("codCliente");
-        int idCli = Integer.parseInt(idC);
         String nomeBD = Controle.contrLogin.cnpjEmpresa(cod).trim();
 
-        String token = (String) request.getParameter("token");
-               
-        if(token.equals("F133273B9921711BE3r0lZxd8A@F266irj2Dun")){
-        
-        Clientes cli = Controle.contrCliente.consultaClienteById(idCli, nomeBD);
+        String login = request.getParameter("login");
+        String senha = request.getParameter("senha");
+
+        Clientes cli = Controle.contrLogin.loginWS(login, senha, nomeBD);
 
         if (cli == null) {
             response.setContentType("text/html");
@@ -64,9 +77,14 @@ public class printPDFLabelToken extends HttpServlet {
             out.println("</erro>");
 
         } else {
-            String ids = request.getParameter("ids");
+            String sro = request.getParameter("sro");
+            if (sro.contains(",")) {
+                sro = sro.replace(",", "','");
+            }
+            sro = "'" + sro + "'";
 
             int idCliente = cli.getCodigo();
+
             String formato = request.getParameter("formato");
             String url_jrxml = "etiqueta_A4_4_por_folha.jasper";
             if (formato.equals("A4") || formato.equals("PIMACO_6288_1")) {
@@ -112,7 +130,7 @@ public class printPDFLabelToken extends HttpServlet {
                     contrato = cli.getNumContrato();
                 }
 
-                String url_base = "http://localhost:8080/PortalPostal";
+                String url_base = "http://www.portalpostal.com.br";
                 String url = cli.getUrl_logo();
                 if (cli.getUrl_logo() == null || cli.getUrl_logo().trim().equals("") || cli.getUrl_logo().equals("null")) {
                     url = "";
@@ -167,7 +185,7 @@ public class printPDFLabelToken extends HttpServlet {
                         + " ON"
                         + " p.idDepartamento = dep.idDepartamento AND p.idCliente = dep.idCliente"
                         + " WHERE"
-                        + " p.idCliente = " + idCliente + " AND id IN (" + ids + ")"
+                        + " p.idCliente = " + idCliente + " AND numObjeto IN (" + sro + ")"
                         + " ORDER BY id;";
 
                 //System.out.println(sql_query);
@@ -295,7 +313,6 @@ public class printPDFLabelToken extends HttpServlet {
             }
         }
     }
-    }
 
     public static boolean urlExist(String vurl) {
         try {
@@ -306,6 +323,7 @@ public class printPDFLabelToken extends HttpServlet {
             return false;
         }
     }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

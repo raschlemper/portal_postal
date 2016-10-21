@@ -19,8 +19,10 @@ import javax.servlet.http.HttpSession;
  */
 public class ServInserirColetaFixa extends HttpServlet {
 
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -32,14 +34,14 @@ public class ServInserirColetaFixa extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             /* TODO output your page here
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ServInserirColetaFixa</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ServInserirColetaFixa at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+             out.println("<html>");
+             out.println("<head>");
+             out.println("<title>Servlet ServInserirColetaFixa</title>");  
+             out.println("</head>");
+             out.println("<body>");
+             out.println("<h1>Servlet ServInserirColetaFixa at " + request.getContextPath () + "</h1>");
+             out.println("</body>");
+             out.println("</html>");
              */
         } finally {
             out.close();
@@ -47,8 +49,9 @@ public class ServInserirColetaFixa extends HttpServlet {
     }
 
     // <editor-fold defaultstate="collapsed" desc="Métodos HttpServlet. Clique no sinal de + à esquerda para editar o código.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -60,8 +63,9 @@ public class ServInserirColetaFixa extends HttpServlet {
         processRequest(request, response);
     }
 
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -91,12 +95,30 @@ public class ServInserirColetaFixa extends HttpServlet {
                         int fixo = Integer.parseInt(request.getParameter("fixo" + i));
                         String hora = request.getParameter("hora" + i);
                         String vidRota = request.getParameter("idRota" + i);
+                        String dias = "";
+                        System.out.println(i);
+                        String seg = request.getParameter("seg" + i);
+                        dias += (seg != null) ? ";" + seg : "";
+                        String ter = request.getParameter("ter" + i);
+                        dias += (ter != null) ? ";" + ter : "";
+                        String qua = request.getParameter("qua" + i);
+                        dias += (qua != null) ? ";" + qua : "";
+                        String qui = request.getParameter("qui" + i);
+                        dias += (qui != null) ? ";" + qui : "";
+                        String sex = request.getParameter("sex" + i);
+                        dias += (sex != null) ? ";" + sex : "";
+                        String sab = request.getParameter("sab" + i);
+                        dias += (sab != null) ? ";" + sab : "";
+                        if (dias.length() > 1) {
+                            dias = dias.substring(1);
+                        }
+                        System.out.println("rota >"+vidRota+" dias >"+dias);
                         //SE nao existir nenhuma coleta fixa daquele cliente insere novo senao altera o existente
                         if (vidRota == null) {
-                            Coleta.Controle.contrColetaFixa.inserir(idCliente, idColetador, idTipo, fixo, hora, nomeBD);
+                            Coleta.Controle.contrColetaFixa.inserir(idCliente, idColetador, idTipo, fixo, hora, dias, nomeBD);
                         } else {
                             int idRota = Integer.parseInt(vidRota);
-                            Coleta.Controle.contrColetaFixa.alterar(idCliente, idColetador, idTipo, fixo, hora, idRota, nomeBD);
+                            Coleta.Controle.contrColetaFixa.alterar(idCliente, idColetador, idTipo, fixo, hora, idRota, dias, nomeBD);
                         }
                     }
                 }
@@ -125,8 +147,9 @@ public class ServInserirColetaFixa extends HttpServlet {
 
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

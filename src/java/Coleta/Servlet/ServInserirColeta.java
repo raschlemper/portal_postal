@@ -5,14 +5,11 @@
 package Coleta.Servlet;
 
 import Controle.ContrErroLog;
+import Controle.contrEmpresa;
+import Util.FormatarData;
 import java.io.*;
-import java.net.*;
-
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
@@ -74,6 +71,7 @@ public class ServInserirColeta extends HttpServlet {
             try {
 
                 String nomeBD = (String) sessao.getAttribute("empresa");
+                int idEmpresa = (Integer) sessao.getAttribute("idEmpresa");
 
                 //pega os dados da coleta
                 int idColetador = Integer.parseInt(request.getParameter("idColetador"));
@@ -85,7 +83,11 @@ public class ServInserirColeta extends HttpServlet {
                 String dataHoraColeta = request.getParameter("dataColeta") +" "+request.getParameter("horaColeta");
                 //formata a data para timestamp do tipo 'dd/MM/yyyy HH:mm'
                 Timestamp vDataHoraColeta = Util.FormatarData.formataDateTime(dataHoraColeta);
-
+                Timestamp vDataHoraAtual = new Timestamp(new Date().getTime());
+                if (contrEmpresa.consultaoSemHrVerao(idEmpresa)) {
+                    //vDataHoraColeta = FormatarData.somarHorasNaData(vDataHoraColeta, -1);
+                    vDataHoraAtual = FormatarData.somarHorasNaData(vDataHoraAtual, -1);
+                }
                 //status padrao para uma nova coleta = 2 (repassado)
                 int status = 2;
 
@@ -104,7 +106,7 @@ public class ServInserirColeta extends HttpServlet {
                 }
 
                 //insere uma nova coleta no bd
-                int idColeta = Coleta.Controle.contrColeta.inserir(idCliente, idUsuario, idColetador, idContato, idTipo, status, vDataHoraColeta, obs, 1, nomeBD);
+                int idColeta = Coleta.Controle.contrColeta.inserir(idCliente, idUsuario, idColetador, idContato, idTipo, status, vDataHoraAtual, vDataHoraColeta, obs, 1, nomeBD);
                 Controle.ContrLogColeta.inserir(idColeta, idUsuario, nomeUsuario, "Coleta Solicitada por Telefone", nomeBD);
 
                 sessao.setAttribute("msg", "Nova Coleta inserida com sucesso!");

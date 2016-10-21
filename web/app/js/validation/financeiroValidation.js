@@ -5,6 +5,7 @@ app.factory('FinanceiroValidation', function(ModalService, LISTAS, MESSAGES) {
     var statusConta = LISTAS.statusConta;
         
     var contaEncerrada = function(conta) {
+        if(!conta || !conta.status) return true;
         if(conta.status.id === statusConta[1].id) {
             modalMessage(MESSAGES.conta.info.CONTA_ENCERRADO);
             return false;

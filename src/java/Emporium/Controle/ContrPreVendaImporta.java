@@ -2655,9 +2655,48 @@ public class ContrPreVendaImporta {
                 //VERIFICAR SE CEP POSSUI ESEDEX CASO O SERVICO ESCOLHIDO SEJA ESEDEX.
                 //SE NAO POSSUIR O ESEDEX TROCAR PARA SEDEX.
                 cep = cep.replace("-", "").replace(".", "").trim();
-                if (servico.equals("ESEDEX")) {
-                    int cep2 = Integer.parseInt(cep);
-                    if (!ContrServicoAbrangencia.verificaByCepServico(cep2, servico, nomeBD)) {
+                int cep2 = Integer.parseInt(cep);
+                if (servico.startsWith("PAX")) {
+                    //VERIFICAR SE CEP POSSUI PAX
+                    if (ContrServicoAbrangencia.verificaByCepServico(cep2, "PAX", nomeBD)) {
+                        servico = "PAX";
+                    } else {
+                        servico = "PAC";
+                    }
+                } else if (servico.startsWith("ESEDEX") || servico.startsWith("E-SEDEX")) {
+                    //VERIFICAR SE CEP POSSUI ESEDEX
+                    if (ContrServicoAbrangencia.verificaByCepServico(cep2, "ESEDEX", nomeBD)) {
+                        servico = "ESEDEX";
+                    } else {
+                        servico = "SEDEX";
+                    }
+                } else if (servico.replace(" ", "").startsWith("SEDEX10")) {
+                    //VERIFICAR SE CEP POSSUI SEDEX10
+                    if (ContrServicoAbrangencia.verificaByCepServico(cep2, "SEDEX10", nomeBD)) {
+                        servico = "SEDEX10";
+                    } else if (ContrServicoAbrangencia.verificaByCepServico(cep2, "SEDEX12", nomeBD)) {
+                        servico = "SEDEX12";
+                    } else {
+                        servico = "SEDEX";
+                    }
+                } else if (servico.replace(" ", "").startsWith("SEDEX12")) {
+                    //VERIFICAR SE CEP POSSUI SEDEX12.
+                    if (ContrServicoAbrangencia.verificaByCepServico(cep2, "SEDEX12", nomeBD)) {
+                        servico = "SEDEX12";
+                    } else if (ContrServicoAbrangencia.verificaByCepServico(cep2, "SEDEX10", nomeBD)) {
+                        servico = "SEDEX10";
+                    } else {
+                        servico = "SEDEX";
+                    }
+                } else if (servico.replace(" ", "").startsWith("SEDEXHJ")) {
+                    //VERIFICAR SE CEP POSSUI SEDEXHJ.
+                    if (ContrServicoAbrangencia.verificaByCepServico(cep2, "SEDEXHJ", nomeBD)) {
+                        servico = "SEDEXHJ";
+                    } else if (ContrServicoAbrangencia.verificaByCepServico(cep2, "SEDEX10", nomeBD)) {
+                        servico = "SEDEX10";
+                    } else if (ContrServicoAbrangencia.verificaByCepServico(cep2, "SEDEX12", nomeBD)) {
+                        servico = "SEDEX12";
+                    } else {
                         servico = "SEDEX";
                     }
                 }
@@ -2670,7 +2709,6 @@ public class ContrPreVendaImporta {
 
                 int codECT = ContrClienteContrato.consultaContratoClienteGrupoServ(idCliente, servico, nomeBD);
                 int qtdEtq = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ(servico, 0, idCliente, nomeBD);
-
                 if (codECT != 0 && qtdEtq != 0 && !servico.equals("CARTA")) {
                     //numObjeto = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServ(idCliente, servico, nomeBD);
                     //ContrClienteEtiquetas.alteraUtilizadaEtiqueta(numObjeto, 1, nomeBD);

@@ -36,7 +36,7 @@ app.controller('LancamentoController',
                 {label: 'Conta', column: 'conta.nome', showColumn: true, selected: false},                      
                 {label: 'Data', column: 'dataLancamento', dataClass: 'text-center cel-data', filter: {name: 'date', args: 'dd/MM/yy'}},                
                 {label: 'Número', column: 'numero'},               
-                {label: 'Plano Conta', column: 'planoConta'},   
+                {label: 'Plano Conta', column: 'planoConta.descricao'},   
                 {label: 'Centro Custo', column: 'centroCusto', showColumn: true, selected: false},
                 {label: 'Usuário', column: 'usuario', showColumn: true, selected: false},
                 {label: 'Favorecido', column: 'favorecido'},                
@@ -124,7 +124,7 @@ app.controller('LancamentoController',
             if(!planoContaSelected) return true;
             var selected = false;
             planoContaSelected.map(function(conta) {                
-                if(item.planoConta && item.planoConta === conta.descricao) { selected = true; }
+                if(item.planoConta && item.planoConta.id && item.planoConta.id.indexOf(conta.id) > -1) { selected = true; }
             })
             return selected;
         };
@@ -133,7 +133,7 @@ app.controller('LancamentoController',
             if(!centroCustoSelected) return true;
             var selected = false;
             centroCustoSelected.map(function(custo) {                
-                if(item.centroCusto && item.centroCusto === custo.descricao) { selected = true; }
+                if(item.centroCusto && item.centroCusto.id && item.centroCusto.id.indexOf(custo.id) > -1) { selected = true; }
             })
             return selected;
         };
@@ -206,15 +206,18 @@ app.controller('LancamentoController',
         };
 
         var todosByConta = function(conta) {
-            ContaService.getLancamento(conta.idConta, null, null)
-                .then(function (data) {
-                    $scope.lancamentos = angular.copy(data.lancamentos);
-                    $scope.lancamentosLista = criarLancamentosLista(data.lancamentos);
-                    if(!$scope.lancamentosLista.length) { calculateSaldo($scope.lancamentosLista); }
-                })
-                .catch(function(e) {
-                    console.log(e);
-                });
+            if(!conta || !conta.idConta) { todos(conta); }
+            else {  
+                ContaService.getLancamento(conta.idConta, null, null)
+                    .then(function (data) {
+                        $scope.lancamentos = angular.copy(data.lancamentos);
+                        $scope.lancamentosLista = criarLancamentosLista(data.lancamentos);
+                        if(!$scope.lancamentosLista.length) { calculateSaldo($scope.lancamentosLista); }
+                    })
+                    .catch(function(e) {
+                        console.log(e);
+                    });
+            }
         };
 
         var criarLancamentosLista = function(lancamentos) {
@@ -233,16 +236,16 @@ app.controller('LancamentoController',
 
                 if(lancamento.planoConta && lancamento.planoConta.idPlanoConta) { 
                     var planoConta = ListaService.getPlanoContaValue($scope.planoContas, lancamento.planoConta.idPlanoConta); 
-                    lancamento.planoConta = planoConta.descricao;                    
+                    lancamento.planoConta = { descricao: planoConta.descricao, id: getIdsPlanoConta(planoConta) }                    
                 } else {
-                    lancamento.planoConta = null;
+                    lancamento.planoConta = { descricao: null };
                 }
 
                 if(lancamento.centroCusto && lancamento.centroCusto.idCentroCusto) { 
                     var centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, lancamento.centroCusto.idCentroCusto); 
-                    lancamento.centroCusto = centroCusto.descricao;                    
+                    lancamento.centroCusto = { descricao: centroCusto.descricao, id: getIdsCentroCusto(centroCusto) }              
                 } else {
-                    lancamento.centroCusto = null;
+                    lancamento.centroCusto = { descricao: null };
                 }
 
                 if(lancamento.modelo.id === $scope.modelos[1].id || lancamento.modelo.id === $scope.modelos[3].id) { 
@@ -253,14 +256,42 @@ app.controller('LancamentoController',
                 lancamento.anexo = { exists: lancamento.anexos, modelo: lancamento.modelo };
 
                 if(lancamento.rateios && lancamento.rateios.length) {
-                    lancamento.planoConta = "Diversos";
-                    lancamento.centroCusto = "Diversos";
+                    lancamento.planoConta = { descricao: "Diversos", id: getIdsPlanoContaByRateio(lancamento.rateios) };
+                    lancamento.centroCusto = { descricao: "Diversos", id: getIdsCentroCustoByRateio(lancamento.rateios) };
                 }
                 
                 if(lancamento.favorecido) { lancamento.favorecido = lancamento.favorecido.nome; }
 
                 return _.pick(lancamento, 'idLancamento', 'tipo', 'anexo', 'conta', 'dataLancamento', 'numero', 'planoConta', 'centroCusto', 'usuario', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico', 'situacao', 'numeroLoteConciliado');
             })
+        };
+        
+        var getIdsPlanoConta = function(value) {
+            var planoContas = [];
+            planoContas.push(value.idPlanoConta);
+            return planoContas;
+        };
+        
+        var getIdsPlanoContaByRateio = function(values) {
+            var planoContas = [];
+            values.map(function(value) {
+                planoContas.push(value.planoConta.idPlanoConta);
+            });
+            return planoContas;
+        };
+        
+        var getIdsCentroCusto = function(value) {
+            var centroCustos = [];
+            centroCustos.push(value.idCentroCusto);
+            return centroCustos;
+        };
+        
+        var getIdsCentroCustoByRateio = function(values) {
+            var centroCustos = [];
+            values.map(function(value) {
+                centroCustos.push(value.centroCusto.idCentroCusto);
+            });
+            return centroCustos;
         };
 
         var calculateSaldo = function(lancamentos) {
@@ -597,6 +628,27 @@ app.controller('LancamentoController',
                 });
         };
 
+        // ***** MOVER ***** //
+
+        $scope.moverContaTodos = function(conta, lancamentos) {    
+            var lancamentoSelecionados = getLancamentoSelecionados(conta, angular.copy(lancamentos), ajustarDadosMoverConta)
+            if(!existeLancamentoSelecionado(lancamentoSelecionados)) return;
+            modalMoverConta(conta).then(function(data) {
+                lancamentoSelecionados = getLancamentoSelecionados(data, angular.copy(lancamentos), ajustarDadosMoverConta)
+                moverContaTodos(conta, lancamentoSelecionados);
+            });
+        };
+
+        var moverContaTodos = function(conta, lancamentos) {
+            LancamentoService.updateAll(lancamentos)
+                .then(function (data) { 
+                    todosByConta(conta);
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
         // ***** REPORT ***** //
         
         $scope.report = function(lancamentos) {
@@ -652,6 +704,13 @@ app.controller('LancamentoController',
             } else {
                 lancamentoCompleto.situacao = $scope.situacoes[2];                 
             }
+            lancamentoCompleto = ajustarDados(lancamentoCompleto);
+            return lancamentoCompleto;
+        };
+
+        var ajustarDadosMoverConta = function(conta, lancamento) {
+            var lancamentoCompleto = ListaService.getLancamentoValue($scope.lancamentos, lancamento.idLancamento);
+            lancamentoCompleto.conta = conta;
             lancamentoCompleto = ajustarDados(lancamentoCompleto);
             return lancamentoCompleto;
         };
@@ -747,6 +806,16 @@ app.controller('LancamentoController',
                     conta: function() {
                         return conta;
                     },
+                });
+            return modalInstance.result;
+        };
+
+        var modalMoverConta = function(conta) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/conta/modalMoverConta.html', 'ModalMoverContaController', 'lg', 
+                {
+                    conta: function() {
+                        return conta;
+                    }                
                 });
             return modalInstance.result;
         };

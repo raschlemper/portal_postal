@@ -162,6 +162,23 @@ public class LancamentoProgramadoController {
         }
     } 
     
+    @PUT
+    @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void updateAll(List<LancamentoProgramado> lancamentosProgramados) {
+        try {
+            init();
+            for (LancamentoProgramado lancamentoProgramado : lancamentosProgramados) {   
+                validation(lancamentoProgramado);
+                lancamentoProgramado.setUsuario(usuario);
+                lancamentoProgramadoService.update(lancamentoProgramado);
+            }
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    } 
+    
     @POST
     @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)

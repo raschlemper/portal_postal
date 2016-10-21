@@ -78,7 +78,7 @@ app.factory('PlanoContaService', function($http, PromiseService) {
         if(!planoConta.contas) { listSelected.push(planoConta); }
         else { 
             planoConta.contas.map(function(conta) {
-                if(conta.ehGrupo) { getListPlanoConta(listSelected, conta); }
+                if(conta.grupos) { getChildrenListPlanoConta(listSelected, conta); }
                 else { listSelected.push(conta); }
              });
          }     
