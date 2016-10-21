@@ -88,6 +88,7 @@ public class LancamentoHandler extends GenericHandler implements ResultSetHandle
     
     private Favorecido getFavorecido(ResultSet result) throws SQLException {
         if(!existColumn(result, "favorecido.idFavorecido")) return null;
+        if(!existFKValue(result, "favorecido.idFavorecido")) return null;
         return new FavorecidoHandler().handle(result); 
     }       
         

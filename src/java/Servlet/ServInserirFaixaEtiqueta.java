@@ -106,6 +106,12 @@ public class ServInserirFaixaEtiqueta extends HttpServlet {
             int nFim = Integer.parseInt(numero2.substring(0, 8));
             int nDigitoFim = Integer.parseInt(numero2.substring(8, 9));
 
+            int temContrato = Integer.parseInt(request.getParameter("temContrato"));
+            int avista = 1;
+            if (temContrato == 1) {
+                avista = 0;
+            }
+
             int qtd = Integer.parseInt(request.getParameter("qtd"));
             String cartao = "";//request.getParameter("cartao");
 
@@ -118,15 +124,15 @@ public class ServInserirFaixaEtiqueta extends HttpServlet {
                     if (nFim == nVerificaFim - 1) {
                         if (!Controle.ContrClienteEtiquetas.verificaExistenciaFaixaEtiquetaBD(prefixo + "" + numero + "" + sufixo, prefixo2 + "" + numero2 + "" + sufixo2, nomeBD)) {
 
-                            int idImportacao = Controle.ContrClienteEtiquetas.insereLog(prefixo + "" + numero + "" + sufixo, prefixo2 + "" + numero2 + "" + sufixo2, idCliente, idUsuario, nomeUsuario, qtd, grupoServ, "MANUAL", "PARA PORTAL POSTAL", nomeBD);
+                            int idImportacao = Controle.ContrClienteEtiquetas.insereLog(prefixo + "" + numero + "" + sufixo, prefixo2 + "" + numero2 + "" + sufixo2, idCliente, idUsuario, nomeUsuario, qtd, grupoServ, "MANUAL", "PARA PORTAL POSTAL", avista, nomeBD);
 
-                            String sql = "INSERT INTO cliente_etiquetas (seqLogica, idImportacao, idCliente, codECT, grupoServico, cartaoPostagem) VALUES";
+                            String sql = "INSERT INTO cliente_etiquetas (seqLogica, idImportacao, idCliente, codECT, grupoServico, cartaoPostagem, avista) VALUES";
                             for (int num = nIni; num <= nFim; num++) {
                                 String etiqueta = prefixo + "" + CalculoEtiqueta.concertaTamanhoNum(num) + "" + CalculoEtiqueta.calculaDigito(num) + "" + sufixo;
                                 if (num == nFim) {
-                                    sql += " ('" + etiqueta + "', " + idImportacao + ", " + idCliente + ", " + servico + ", '" + grupoServ + "', '" + cartao + "');";
+                                    sql += " ('" + etiqueta + "', " + idImportacao + ", " + idCliente + ", " + servico + ", '" + grupoServ + "', '" + cartao + "', " + avista + ");";
                                 } else {
-                                    sql += " ('" + etiqueta + "', " + idImportacao + ", " + idCliente + ", " + servico + ", '" + grupoServ + "', '" + cartao + "'),";
+                                    sql += " ('" + etiqueta + "', " + idImportacao + ", " + idCliente + ", " + servico + ", '" + grupoServ + "', '" + cartao + "', " + avista + "),";
                                 }
                             }
                             Controle.ContrClienteEtiquetas.insereEtiquetas(sql, nomeBD);

@@ -4,11 +4,13 @@ package caixapostal.componentes;
 
 public enum SituacaoObjetoInterno {
 
+
     PENDENTE(1,"PENDENTE"),
     ATUALIZAR_ENDERECO(2,"ATUALIZAR ENDEREÇO"),
     DEVOLVER(3,"DEVOLVER"),
     REENVIAR(4,"REENVIAR"),
-    FINALIZADO(5,"FINALIZADO");
+    FINALIZADO(5,"FINALIZADO"),
+    TODOS(6,"TODOS");
 
     private String status;
     private int codigo;

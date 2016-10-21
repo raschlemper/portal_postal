@@ -55,7 +55,7 @@ public class ContaController {
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
-    }  
+    } 
     
     @GET
     @Path("/saldo")

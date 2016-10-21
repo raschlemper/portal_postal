@@ -235,7 +235,7 @@ public class ServPreVendaCaixaPostal extends HttpServlet {
                 int qtdEtq = ContrClienteEtiquetas.contaQtdUtilizadaPorGrupoServ(servico, 0, idCliente, nomeBD);
                 if (codECT != 0 && qtdEtq == 0 && !servico.equals("SIMPLES")) {
                     if(ContrClienteEtiquetas.solicitarEtiquetasSigepWEB(codECT, cli, nomeBD)) {
-                        String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, nomeBD);
+                        String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, 0, nomeBD);
                         if (etq != null) {
                             String aux[] = etq.split(";");
                             numObjeto = aux[0];
@@ -243,7 +243,7 @@ public class ServPreVendaCaixaPostal extends HttpServlet {
                         }
                     }
                 } else if (codECT != 0 && qtdEtq != 0 && !servico.equals("SIMPLES")) {
-                    String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, nomeBD);
+                    String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, 0, nomeBD);
                     if (etq != null) {
                         String aux[] = etq.split(";");
                         numObjeto = aux[0];
@@ -266,7 +266,7 @@ public class ServPreVendaCaixaPostal extends HttpServlet {
                 //codECT = ContrServicoCombo.consultaCodCombo(codECT, ar, mp, vd);
                 
                 //INSERE PRE VENDA 
-                Integer idPrePostagem =  ContrPreVenda.inserir(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD, posta_restante, registro_modico, setor);
+                Integer idPrePostagem =  ContrPreVenda.inserir_marcar_impresso(idCliente, numObjeto, idDestinatario, idRemetente, codECT, contrato, departamento, aosCuidados, obs, conteudo, peso, altura, largura, comprimento, vd, ar, mp, siglaAmarracao, servico, notaFiscal, vlrCobrar, tipo, idDepartamento, cartaoPostagem, idUser, registro, nomeUser, email_destinatario, tipoEtiqueta, siglaPais, tipoPost, nomeBD, posta_restante, registro_modico, setor);
                 
                 ObjetoInterno objetoInterno = new ObjetoInterno();
                 objetoInterno.setId(Integer.parseInt(idObjetoCaixaPostal));

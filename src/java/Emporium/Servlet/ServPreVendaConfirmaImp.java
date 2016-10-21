@@ -212,13 +212,13 @@ public class ServPreVendaConfirmaImp extends HttpServlet {
             }
             
             if(codECT != 0 && nObj == null){
-                String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, nomeBD);  
+                String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, 0, nomeBD);
                 if(etq != null){
                     String aux[] = etq.split(";");
                     numObjeto = aux[0];
                     tipoEtiqueta = aux[1];
                 } else if(ContrClienteEtiquetas.solicitarEtiquetasSigepWEB(codECT, cli, nomeBD)) {
-                    etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, nomeBD);
+                    etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, 0, nomeBD);
                     if (etq != null) {
                         String aux[] = etq.split(";");
                         numObjeto = aux[0];
@@ -238,6 +238,12 @@ public class ServPreVendaConfirmaImp extends HttpServlet {
                         registro = 0;
                     }
                 }*/
+                String etq = ContrClienteEtiquetas.pegaEtiquetaNaoUtilizadaPorGrupoServComTipoEtiqueta(idCliente, servico, 1, nomeBD);
+                if (etq != null) {
+                    String aux[] = etq.split(";");
+                    numObjeto = aux[0];
+                    tipoEtiqueta = aux[1];
+                }
                 contrato = "";
             }
             

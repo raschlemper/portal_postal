@@ -38,8 +38,8 @@ app.controller('LancamentoProgramadoController',
                 {label: 'Usuário', column: 'usuario', showColumn: true, selected: false},           
                 {label: 'Favorecido', column: 'favorecido'},  
                 {label: 'Valor', column: 'valor', headerClass: 'no-sort', filter: {name: 'currency', args: ''}},              
-                {label: 'Situação', column: 'situacao'},  
-                {label: 'Frequência', column: 'frequencia'}
+                {label: 'Situação', column: 'situacao.descricao'},  
+                {label: 'Frequência', column: 'frequencia.descricao'}
             ]            
             $scope.linha = {
                 conditionalClass: function(item) {
@@ -159,7 +159,7 @@ app.controller('LancamentoProgramadoController',
                     $scope.centroCustos = data;
                     CentroCustoService.estrutura($scope.centroCustos);
                     $scope.centroCustos = CentroCustoService.flatten($scope.centroCustos);                 
-                    todos();
+                    todosByConta($scope.conta);
                 })
                 .catch(function (e) {
                     console.log(e);
@@ -175,6 +175,20 @@ app.controller('LancamentoProgramadoController',
                 .catch(function(e) {
                     console.log(e);
                 });
+        };
+
+        var todosByConta = function(conta) {
+            if(!conta || !conta.idConta) { todos(conta); }
+            else {  
+                ContaService.getLancamento(conta.idConta, null, null)
+                    .then(function (data) {
+                        $scope.lancamentoProgramados = data;
+                        $scope.lancamentoProgramadosLista = criarLancamentoProgramadosLista($scope.lancamentoProgramados);
+                    })
+                    .catch(function(e) {
+                        console.log(e);
+                    });
+            }
         };
         
         var criarLancamentoProgramadosLista = function(lancamentosProgramados) {
@@ -223,8 +237,8 @@ app.controller('LancamentoProgramadoController',
                     lancamentoProgramado.planoConta = $scope.modelos[3].descricao;
                 }
                                 
-                lancamentoProgramado.situacao = lancamentoProgramado.situacao.descricao;
-                lancamentoProgramado.frequencia = lancamentoProgramado.frequencia.descricao + complementoDescricaoFrequencia;
+//                lancamentoProgramado.situacao = lancamentoProgramado.situacao.descricao;
+                lancamentoProgramado.frequencia.descricao += complementoDescricaoFrequencia;
 //                lancamentoProgramado.numeroParcela = lancamentoProgramado.numero;
 //                lancamentoProgramado.tipo.modelo = $scope.modelos;
                 
@@ -241,11 +255,11 @@ app.controller('LancamentoProgramadoController',
             return saldo;
         }
         
-        var getLancamentoProgramadosSelecionados = function(lancamentosProgramados, callback) {            
+        var getLancamentoProgramadosSelecionados = function(conta, lancamentosProgramados, callback) {            
             var lancamentosProgramadosSelecionados = [];
             _.map(lancamentosProgramados, function(lancamentoProgramado) {
                 if(!lancamentoProgramado.selected) return;
-                if(callback) { lancamentoProgramado = callback(lancamentoProgramado); }
+                if(callback) { lancamentoProgramado = callback(conta, lancamentoProgramado); }
                 lancamentosProgramadosSelecionados.push(angular.copy(lancamentoProgramado));
             });
             return lancamentosProgramadosSelecionados;
@@ -300,7 +314,7 @@ app.controller('LancamentoProgramadoController',
                 LancamentoProgramadoService.save(lancamentoProgramado)
                     .then(function(data) { 
                         //modalMessage(MESSAGES.lancamento.programar.sucesso.INSERIDO_SUCESSO);
-                        todos(conta);
+                        todosByConta(conta);
                     })
                     .catch(function(e) {
                         modalMessage(e);
@@ -338,7 +352,7 @@ app.controller('LancamentoProgramadoController',
             LancamentoProgramadoService.update(lancamentoProgramado.idLancamentoProgramado, lancamentoProgramado)
                 .then(function (data) {  
                     modalMessage(MESSAGES.lancamento.programar.sucesso.ALTERADO_SUCESSO);
-                    todos(conta);
+                    todosByConta(conta);
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -378,7 +392,7 @@ app.controller('LancamentoProgramadoController',
                     encerrarLancamentoProgramado(lancamentoProgramado, lancamentoProgramado.lancamentos[0]); 
                     if(showMsg) {
                         //modalMessage(MESSAGES.lancamento.sucesso.INSERIDO_SUCESSO);
-                        todos(conta);                        
+                        todosByConta(conta);                        
                     }
                 })
                 .catch(function(e) {
@@ -418,7 +432,7 @@ app.controller('LancamentoProgramadoController',
             LancamentoProgramadoService.delete(lancamentoProgramado.idLancamentoProgramado)
                 .then(function(data) { 
                     modalMessage(MESSAGES.lancamento.programar.sucesso.REMOVIDO_SUCESSO);
-                    todos(conta);                        
+                    todosByConta(conta);                        
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -428,7 +442,7 @@ app.controller('LancamentoProgramadoController',
         // ***** EXCLUIR TODOS ***** //
 
         $scope.excluirTodos = function(conta, lancamentos) {
-            var lancamentoSelecionados = getLancamentoProgramadosSelecionados(lancamentos);   
+            var lancamentoSelecionados = getLancamentoProgramadosSelecionados(conta, lancamentos);   
             if(!existeLancamentoSelecionado(lancamentoSelecionados)) return;
             var lancamentosValidos = getLancamentos(lancamentoSelecionados);
             var msg = MESSAGES.lancamento.programar.info.CONFIRMAR_EXCLUIR_TODOS;
@@ -452,7 +466,7 @@ app.controller('LancamentoProgramadoController',
             LancamentoProgramadoService.deleteAll(lancamentosProgramados)
                 .then(function(data) { 
                     modalMessage(MESSAGES.lancamento.programar.sucesso.REMOVIDO_SUCESSO_TODOS);
-                    todos(conta);                        
+                    todosByConta(conta);                        
                 })
                 .catch(function(e) {
                     modalMessage(e);
@@ -493,7 +507,7 @@ app.controller('LancamentoProgramadoController',
                 LancamentoProgramadoTransferenciaService.save(lancamentoProgramadoTransferencia)
                     .then(function(data) {  
                         //modalMessage(MESSAGES.lancamento.transferir.sucesso.INSERIDO_SUCESSO);
-                        todos();
+                        todosByConta(conta);
                     })
                     .catch(function(e) {
                         modalMessage(e);
@@ -508,7 +522,7 @@ app.controller('LancamentoProgramadoController',
                         .update(lancamentoProgramadoTransferencia.idLancamentoProgramadoTransferencia, lancamentoProgramadoTransferencia)
                     .then(function(data) {  
                         modalMessage(MESSAGES.lancamento.transferir.sucesso.ALTERADO_SUCESSO);
-                        todos();
+                        todosByConta(conta);
                     })
                     .catch(function(e) {
                         modalMessage(e);
@@ -528,10 +542,10 @@ app.controller('LancamentoProgramadoController',
         // ***** MOVER ***** //
 
         $scope.moverContaTodos = function(conta, lancamentos) {    
-            var lancamentoSelecionados = getLancamentoProgramadosSelecionados(angular.copy(lancamentos), ajustarDadosMoverConta)
+            var lancamentoSelecionados = getLancamentoProgramadosSelecionados(conta, angular.copy(lancamentos), null)
             if(!existeLancamentoSelecionado(lancamentoSelecionados)) return;
             modalMoverConta(conta).then(function(data) {
-                lancamentoSelecionados = getLancamentoProgramadosSelecionados(angular.copy(lancamentos), ajustarDadosMoverConta)
+                lancamentoSelecionados = getLancamentoProgramadosSelecionados(data, angular.copy(lancamentos), ajustarDadosMoverConta)
                 moverContaTodos(conta, lancamentoSelecionados);
             });
         };
@@ -567,9 +581,9 @@ app.controller('LancamentoProgramadoController',
         
         // ***** AJUSTAR ***** //
 
-        var ajustarDadosMoverConta = function(lancamentoProgramado) {
+        var ajustarDadosMoverConta = function(conta, lancamentoProgramado) {
             var lancamentoProgramadoCompleto = ListaService.getLancamentoProgramadoValue($scope.lancamentoProgramados, lancamentoProgramado.idLancamentoProgramado);
-//            lancamentoProgramadoCompleto.conta = conta;
+            lancamentoProgramadoCompleto.conta = conta;
             lancamentoProgramadoCompleto = ajustarDados(lancamentoProgramadoCompleto);
             return lancamentoProgramadoCompleto;
         };

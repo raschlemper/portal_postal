@@ -6,7 +6,7 @@
 
 package Emporium.Controle;
 
-import Controle.ContrErroLog;
+import Entidade.LegendaLogisticaReversa;
 import Entidade.LogisticaReversa;
 import Util.Conexao;
 import java.sql.Connection;
@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -257,6 +258,55 @@ public class ContrLogisticaReversa {
         } finally {
             Conexao.desconectar(conn);
         }
+    }
+
+    public void atualizaLegenda(String nomeDB,List<LegendaLogisticaReversa> legendas) throws SQLException{
+        Connection conn =   Conexao.conectar(nomeDB);
+        for (LegendaLogisticaReversa legenda : legendas) {
+            atualizaNomeDaLegenda(legenda,conn);
+        }
+        conn.close();
+
+    }
+
+    private void atualizaNomeDaLegenda(LegendaLogisticaReversa legenda,Connection conn) throws SQLException {
+        String sql = "UPDATE legenda_log_reversa SET nome=? WHERE idstar=?";
+        PreparedStatement prepare = conn.prepareStatement(sql);
+        prepare.setString(1, legenda.getNome());
+        prepare.setInt(2, legenda.getId());
+        prepare.execute();
+
+    }
+
+    public List<LegendaLogisticaReversa> pesquisaLegenda(String nomeDB) throws SQLException{
+        Connection conn =   Conexao.conectar(nomeDB);
+        String sql = "SELECT * FROM legenda_log_reversa ORDER BY idstar ASC ";
+        PreparedStatement prepare = conn.prepareStatement(sql);
+        ResultSet result = prepare.executeQuery();
+        List<LegendaLogisticaReversa> lista = carregaLegendas(result);
+        conn.close();
+        return lista ;
+    }
+
+    private List<LegendaLogisticaReversa> carregaLegendas(ResultSet result) throws SQLException {
+        List<LegendaLogisticaReversa> legendas = new ArrayList<LegendaLogisticaReversa>();
+        while (result.next()) {
+            LegendaLogisticaReversa legenda = new LegendaLogisticaReversa();
+            legenda.setId(result.getInt("idstar"));
+            legenda.setNome(result.getString("nome"));
+            legendas.add(legenda);
+        }
+        return legendas;
+    }
+
+    public void AtualizaRatingLogisticaReversa(String nomeDB,Integer idLogistica, Integer rating) throws SQLException{
+        Connection conn =   Conexao.conectar(nomeDB);
+        String sql = "UPDATE logistica_reversa SET rating=? WHERE id=?";
+        PreparedStatement prepare = conn.prepareStatement(sql);
+        prepare.setInt(1, rating);
+        prepare.setInt(2, idLogistica);
+        prepare.execute();
+        conn.close();
     }
     
 }

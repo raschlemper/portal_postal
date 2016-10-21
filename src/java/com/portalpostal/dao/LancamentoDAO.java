@@ -4,7 +4,6 @@ import com.portalpostal.dao.handler.LancamentoHandler;
 import com.portalpostal.dao.handler.SaldoHandler;
 import com.portalpostal.model.Lancamento;
 import com.portalpostal.model.Saldo;
-import com.portalpostal.model.dd.TipoLancamento;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -64,7 +63,7 @@ public class LancamentoDAO extends GenericDAO {
     }
 
     public List<Lancamento> findByConta(Integer idConta, Date dataInicio, Date dataFim) throws Exception {
-        String sql = "SELECT lancamento.*, plano_conta.*, centro_custo.*, lancamento_transferencia.*, lancamento_programado.*, favorecido.*, "
+        String sql = "SELECT lancamento.*, plano_conta.*, centro_custo.*, lancamento_transferencia.*, lancamento_programado.*, favorecido.*, conta.*, "
                    + "(SELECT count(1) FROM lancamento_anexo WHERE lancamento.idLancamento = lancamento_anexo.idLancamento) as anexos "
                    + "FROM conta, lancamento "
                    + "LEFT OUTER JOIN favorecido ON(lancamento.idFavorecido = favorecido.idFavorecido) "
@@ -150,6 +149,23 @@ public class LancamentoDAO extends GenericDAO {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("dataInicio", dataInicio);       
         params.put("dataFim", dataFim);   
+        return findAll(sql, params, saldoHandler);
+    }
+
+    public List<Saldo> findSaldoByConta(Integer idConta, Date dataInicio, Date dataFim) throws Exception {
+        String sql = "SELECT idConta as id, DATE(max(lancamento.dataLancamento)) as data, "
+                          + "SUM( IF(lancamento.tipo = 0, IFNULL(lancamento_rateio.valor, lancamento.valor), IFNULL(lancamento_rateio.valor, lancamento.valor) * -1) ) as valor "
+                   + "FROM lancamento "
+                   + "LEFT OUTER JOIN lancamento_rateio ON(lancamento.idLancamento = lancamento_rateio.idLancamento) "
+                   + "WHERE DATE(lancamento.dataLancamento) "
+                   + "BETWEEN IFNULL(:dataInicio, DATE(lancamento.dataLancamento)) AND IFNULL(:dataFim, DATE(lancamento.dataLancamento)) "
+                   + "AND lancamento.idConta = IFNULL(:idConta, lancamento.idConta) "
+                   + "GROUP BY idConta "
+                   + "ORDER BY data";            
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("dataInicio", dataInicio);       
+        params.put("dataFim", dataFim);        
+        params.put("idConta", idConta);   
         return findAll(sql, params, saldoHandler);
     }
 

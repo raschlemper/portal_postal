@@ -1,0 +1,183 @@
+package com.portal.componentes.nfe;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
+public class LeitorConteudo {
+
+    private DadosNFE dadosNFE;
+
+    public LeitorConteudo() {
+        dadosNFE = new DadosNFE();
+        dadosNFE.setDestinatario(new DadosDestinatario());
+    }
+
+    public DadosNFE ler(Document documento) {
+        carregaDadosDaNota(documento);
+        carregaDadosDestinatario(documento);
+        return dadosNFE;
+    }
+
+    private void carregaDadosDaNota(Document documento) {
+        for (Element label : documento.select("label")) {
+            if (getNumero(label)) {
+                continue;
+            }
+
+            if (getValorTotal(label)) {
+                continue;
+            }
+
+            if (getDescricao(label)) {
+                continue;
+            }
+        }
+    }
+
+    private void carregaDadosDestinatario(Document documento) {
+        for (Element elemento : documento.select("legend")) {
+            if (elemento.text().contains("Dados do Destinatário")) {
+                Element tableElements = elemento.nextElementSibling();
+                getNomeDestinatario(tableElements);
+                getCNPJ(tableElements);
+                getBairro(tableElements);
+                getLogradouro(tableElements);
+                getCEP(tableElements);
+                getMunicipio(tableElements);
+                getTelefone(tableElements);
+                getUF(tableElements);
+                getPais(tableElements);
+                getEmail(tableElements);
+
+            }
+
+        }
+    }
+
+    private void getNomeDestinatario(Element tableElements) {
+        DadosDestinatario destinatario = dadosNFE.getDestinatario();
+        for (Element tableElement : tableElements.select("td")) {
+            if (tableElement.text().contains("Nome / Razão Social") && destinatario.getNome() == null) {
+                destinatario.setNome(tableElement.select("span").text().trim());
+                break;
+            }
+        }
+    }
+
+    private void getCNPJ(Element tableElements) {
+        DadosDestinatario destinatario = dadosNFE.getDestinatario();
+        for (Element tableElement : tableElements.select("td")) {
+            if (tableElement.text().contains("CNPJ") && destinatario.getCnpj() == null) {
+                destinatario.setCnpj(tableElement.select("span").text().trim());
+                break;
+            }
+
+        }
+    }
+
+    private void getBairro(Element tableElements) {
+        DadosDestinatario destinatario = dadosNFE.getDestinatario();
+        for (Element tableElement : tableElements.select("td")) {
+            if (tableElement.text().contains("Bairro / Distrito") && destinatario.getBairro() == null) {
+                destinatario.setBairro(tableElement.select("span").text().trim());
+                break;
+            }
+        }
+    }
+
+    private void getCEP(Element tableElements) {
+        DadosDestinatario destinatario = dadosNFE.getDestinatario();
+        for (Element tableElement : tableElements.select("td")) {
+            if (tableElement.text().contains("CEP") && destinatario.getCep() == null) {
+                destinatario.setCep(tableElement.select("span").text().trim());
+                break;
+            }
+        }
+    }
+
+    private void getLogradouro(Element tableElements) {
+        DadosDestinatario destinatario = dadosNFE.getDestinatario();
+        for (Element tableElement : tableElements.select("td")) {
+            if (tableElement.text().contains("Endereço") && destinatario.getLogradouro() == null) {
+                destinatario.setLogradouro(tableElement.select("span").text().trim());
+                break;
+            }
+        }
+    }
+
+    private void getMunicipio(Element tableElements) {
+        DadosDestinatario destinatario = dadosNFE.getDestinatario();
+        for (Element tableElement : tableElements.select("td")) {
+            if (tableElement.text().contains("Município") && destinatario.getMunicipio() == null) {
+                destinatario.setMunicipio(tableElement.select("span").text().trim());
+                break;
+            }
+        }
+    }
+
+    private void getTelefone(Element tableElements) {
+        DadosDestinatario destinatario = dadosNFE.getDestinatario();
+        for (Element tableElement : tableElements.select("td")) {
+            if (tableElement.text().contains("Telefone") && destinatario.getTelefone() == null) {
+                destinatario.setTelefone(tableElement.select("span").text().trim());
+                break;
+            }
+        }
+    }
+
+    private void getUF(Element tableElements) {
+        DadosDestinatario destinatario = dadosNFE.getDestinatario();
+        for (Element tableElement : tableElements.select("td")) {
+            if (tableElement.text().contains("UF") && destinatario.getUf() == null) {
+                destinatario.setUf(tableElement.select("span").text().trim());
+                break;
+            }
+        }
+    }
+
+    private void getEmail(Element tableElements) {
+        DadosDestinatario destinatario = dadosNFE.getDestinatario();
+        for (Element tableElement : tableElements.select("td")) {
+            if (tableElement.text().contains("E-mail") && destinatario.getEmail() == null) {
+                destinatario.setEmail(tableElement.select("span").text().trim());
+                break;
+            }
+        }
+    }
+
+    private void getPais(Element tableElements) {
+        DadosDestinatario destinatario = dadosNFE.getDestinatario();
+        for (Element tableElement : tableElements.select("td")) {
+            if (tableElement.text().contains("País") && destinatario.getPais() == null) {
+                destinatario.setPais(tableElement.select("span").text());
+                break;
+            }
+        }
+    }
+
+    private boolean getDescricao(Element label) {
+        if (label.text().contains("Descrição") && dadosNFE.getInformacoesComplementares() == null) {
+            dadosNFE.setInformacoesComplementares(Jsoup.parse(label.nextElementSibling().text()).text());
+            return true;
+        }
+        return false;
+    }
+
+    private boolean getValorTotal(Element label) {
+        if (label.text().contains("Valor Total da Nota Fiscal") && dadosNFE.getValorTotal() == null) {
+            dadosNFE.setValorTotal(label.nextElementSibling().text());
+            return true;
+        }
+        return false;
+    }
+
+    private boolean getNumero(Element label) {
+        if (label.text().equals("Número") && dadosNFE.getNumero() == null) {
+            dadosNFE.setNumero(label.nextElementSibling().text());
+            return true;
+        }
+        return false;
+    }
+
+}

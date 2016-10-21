@@ -98,6 +98,7 @@ public class ServInserirFaixaEtiquetaWS extends HttpServlet {
 
             try {
 
+                int avista = 0;
                 String aux[] = request.getParameter("servico").split(";");
                 int servico = Integer.parseInt(aux[0]);
                 String grupoServ = aux[1];
@@ -137,7 +138,7 @@ public class ServInserirFaixaEtiquetaWS extends HttpServlet {
                                     String ffim = prefixo + fim + dgFim + "BR";
 
                                     //INSERE LOG DE ETIQUETAS
-                                    int idImportacao = Controle.ContrClienteEtiquetas.insereLog(finicial, ffim, idCliente, idUsuario, nomeUsuario, qtd, grupoServ, "SigepWEB", tipoUso, nomeBD);
+                                    int idImportacao = Controle.ContrClienteEtiquetas.insereLog(finicial, ffim, idCliente, idUsuario, nomeUsuario, qtd, grupoServ, "SigepWEB", tipoUso, avista, nomeBD);
 
                                     //INSERE FAIXAS NO BANCO
                                     int nIni = Integer.parseInt(inicial);

@@ -59,6 +59,7 @@ public class LogisticaReversa {
     private String nomeDepto;
     private String cartao;
     private String validade;
+    private Integer rating;
 
     public LogisticaReversa(ResultSet result) throws SQLException {
         this.id = result.getInt("id");
@@ -103,6 +104,7 @@ public class LogisticaReversa {
         this.nomeDepto = result.getString("nomeDepto");        
         this.cartao = result.getString("cartaoPost");
         this.validade = result.getString("validade");
+        this.rating = result.getInt("rating");
     }
 
     public String getValidade() {
@@ -444,5 +446,14 @@ public class LogisticaReversa {
     public void setCancelado(int cancelado) {
         this.cancelado = cancelado;
     }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
+    }
+
     
 }

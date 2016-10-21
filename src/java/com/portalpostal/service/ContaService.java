@@ -76,11 +76,13 @@ public class ContaService {
     
     public Conta save(Conta conta) throws Exception {
         init();
+        conta.setCodigoIntegracao(null);
         return contaDAO.save(conta);
     } 
     
     public Conta update(Conta conta) throws Exception {
         init();
+        conta = updateContaIntegracao(conta);
         return contaDAO.update(conta);
     } 
     
@@ -91,11 +93,21 @@ public class ContaService {
     }     
     
     private boolean podeExcluir(Integer idConta) throws Exception {
-        List<Lancamento> lancamentos = lancamentoService.findByConta(idConta, null, null);
+        Conta conta = contaDAO.find(idConta);
+        if(conta.getCodigoIntegracao() != null && conta.getCodigoIntegracao() != 0) return false;
+        List<Lancamento> lancamentos = lancamentoService.findByConta(conta.getIdConta(), null, null);
         if(!lancamentos.isEmpty()) return false;
-        List<LancamentoProgramado> lancamentoProgramados = lancamentoProgramadoService.findByConta(idConta, null, null);
+        List<LancamentoProgramado> lancamentoProgramados = lancamentoProgramadoService.findByConta(conta.getIdConta(), null, null);
         if(!lancamentoProgramados.isEmpty()) return false;
         return true;                
     }  
+    
+    private Conta updateContaIntegracao(Conta conta) throws Exception {
+        if(conta.getCodigoIntegracao() == null || conta.getCodigoIntegracao() == 0) return conta;
+        Conta contaOld = contaDAO.find(conta.getIdConta());
+        contaOld.setDataAbertura(conta.getDataAbertura());
+        contaOld.setValorSaldoAbertura(conta.getValorSaldoAbertura());
+        return contaOld;
+    }
     
 }
