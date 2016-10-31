@@ -1,0 +1,101 @@
+<div id="page-content-wrapper">
+    <div class="container-fluid">
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" >
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <h4>
+                                        <strong>{{title}}</strong>
+                                        <div class="pull-right pull-top">  
+                                            <button class="btn btn-sm btn-default" ng-click="report(lancamentoProgramadosListaTable)" style="margin-right: 10px;">
+                                                <i class="fa fa-lg fa-print fa-spc-sm"></i> IMPRIMIR 
+                                            </button>                                          
+                                        </div>
+                                    </h4>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="pull-left">                                     
+                                        <button class="btn btn-sm btn-default" ng-click="excluirTodos(conta, events.list())">
+                                            <i class="fa fa-lg fa-times fa-spc"></i> EXCLUIR 
+                                        </button>   
+                                    </div>
+                                    <div class="pull-right">  
+                                        <button class="btn btn-sm btn-primary spc-right" ng-click="salvar(conta, tipos[0])">
+                                            <i class="fa fa-lg fa-plus-circle fa-spc"></i> CONTAS A RECEBER
+                                        </button>     
+                                        <button class="btn btn-sm btn-danger spc-right" ng-click="salvar(conta, tipos[1])">
+                                            <i class="fa fa-lg fa-minus-circle fa-spc"></i> CONTAS A PAGAR
+                                        </button>   
+                                        <button class="btn btn-sm btn-success" ng-click="transferir()">
+                                            <i class="fa fa-lg fa-exchange fa-spc"></i> TRANSF. PROGRAMADA
+                                        </button>     
+                                    </div>
+                                </div>
+                            </div>                              
+                        </div>
+                        <div class="panel-body">
+                            <div class="dataTable_wrapper no-padding">
+                                 <app-table lista="lancamentoProgramadosLista" 
+                                            colunas="colunas" 
+                                            linha="linha" 
+                                            events="events" 
+                                            filter="filter" 
+                                            search="lancSearch" 
+                                            default-filter="true" 
+                                            order-by-column="data"
+                                            show-checkbox="true"
+                                            show-menu="true"
+                                            show-column-menu="true">
+                                    
+                                    <filter-content>
+                                        <div class="form-inline pull-left">
+                                            
+                                            <div class="form-group">
+
+                                                <label>Conta:</label>
+                                                <select class="form-control spc-right" ng-model="lancSearch.conta">    
+                                                    <option value=""> Todos </option> 
+                                                    <option value="{{conta}}" ng-repeat="conta in contas track by conta.idConta"> {{conta.nome}} </option>    
+                                                </select>
+
+                                                <label>Tipo:</label>
+                                                <select class="form-control spc-right" ng-model="lancSearch.tipo">
+                                                    <option value=""> Todos </option> 
+                                                    <option value="{{tipo}}" ng-repeat="tipo in tiposLancamento track by $index"> {{tipo.descricao}} </option>        
+                                                </select>
+
+                                                <label>Data:</label>
+                                                <div class="input-group spc-right">
+                                                    <input type="text" autocomplete="off" class="form-control" ng-model="lancSearch.dataInicio" style="width: 120px;"
+                                                        datepicker-popup="{{datepickerDataInicio.format}}" is-open="datepickerDataInicio.opened" ng-required="true"
+                                                        current-text="{{datepickerDataInicio.today}}" clear-text="{{datepickerDataInicio.clear}}" close-text="{{datepickerDataInicio.close}}"
+                                                        placeholder="Data início" ng-model-options='{ debounce: 1000 }'/>
+                                                    <span class="input-group-addon" ng-click="datepickerDataInicio.open($event)"><i class="fa fa-calendar"></i></span>
+                                                    <span class="input-group-addon">-</span>
+                                                    <input type="text" autocomplete="off" class="form-control" ng-model="lancSearch.dataFim" style="width: 120px;"
+                                                           datepicker-popup="{{datepickerDataFim.format}}" is-open="datepickerDataFim.opened" ng-required="true"
+                                                           current-text="{{datepickerDataFim.today}}" clear-text="{{datepickerDataFim.clear}}" close-text="{{datepickerDataFim.close}}"
+                                                           placeholder="Data final" ng-model-options='{ debounce: 1000 }'/>
+                                                    <span class="input-group-addon" ng-click="datepickerDataFim.open($event)"><i class="fa fa-calendar"></i></span>
+                                                </div>
+                                                
+                                                <plano-conta class="spc-right" plano-conta-model="lancSearch.planoConta" show-type-filter="true" validar-selected="false"></plano-conta>
+                                                <centro-custo class="spc-right" centro-custo-model="lancSearch.centroCusto" show-type-filter="true" validar-selected="false"></centro-custo>
+                                               
+                                            </div>
+                                                                                        
+                                        </div>
+                                    </filter-content>                                    
+                                    
+                                </app-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>

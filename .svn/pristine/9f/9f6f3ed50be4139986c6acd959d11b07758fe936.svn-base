@@ -1,0 +1,259 @@
+package Coleta.Relatorio;
+
+import Coleta.View.TotalClientesPorColetador;
+import Coleta.View.TotalMovimentoClientePorDiaDeColeta;
+import Coleta.View.TotalMovimentoPorColetador;
+import caixapostal.componentes.Conexao;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class RelatorioDeColeta implements AutoCloseable {
+
+    private final String nomeDataBase;
+    private static Connection CONNECTION;
+
+    public RelatorioDeColeta(String nomeDB) {
+        this.nomeDataBase = nomeDB;
+    }
+
+    public List<TotalClientesPorColetador> findClientesPorColetador(String idColetador, String dataInicial, String dataFinal) throws SQLException {
+        CONNECTION = Conexao.getConnection(nomeDataBase);
+        PreparedStatement prepare = CONNECTION.prepareStatement(getSqlfindTotalClientesPorColetador());
+        prepare.setString(1, dataInicial);
+        prepare.setString(2, dataFinal);
+        prepare.setString(3, dataInicial);
+        prepare.setString(4, dataFinal);
+        prepare.setInt(5, Integer.valueOf(idColetador));
+        return executeClietensPorColetador(prepare);
+
+    }
+
+    public List<TotalClientesPorColetador> findClientesPorColetadorDuplicado(String idColetador, String dataInicial, String dataFinal) throws SQLException {
+        CONNECTION = Conexao.getConnection(nomeDataBase);
+        PreparedStatement prepare = CONNECTION.prepareStatement(getSqlfindTotalClientesPorColetadorDuplicado());
+        prepare.setString(1, dataInicial);
+        prepare.setString(2, dataFinal);
+        prepare.setString(3, idColetador.trim());
+        prepare.setString(4, dataInicial);
+        prepare.setString(5, dataFinal);
+        return executeClietensPorColetador(prepare);
+    }
+
+    public List<TotalMovimentoClientePorDiaDeColeta> findTotalMovimentoClientePorDiaDeColeta(String idColetador, String idCliente, String dataInicial, String dataFinal) throws SQLException {
+        CONNECTION = Conexao.getConnection(nomeDataBase);
+        PreparedStatement prepare = CONNECTION.prepareStatement(getSqlfindTotalMovimentoClientePorDiaDeColeta());
+        prepare.setString(1, dataInicial);
+        prepare.setString(2, dataFinal);
+        prepare.setString(3, idColetador.trim());
+        prepare.setString(4, dataInicial);
+        prepare.setString(5, dataFinal);
+        prepare.setInt(6, Integer.parseInt(idCliente));
+        return executeTotalMovimentoClientePorDiaDeColeta(prepare);
+    }
+
+    public List<TotalMovimentoPorColetador> findTotalMovimentoPorColetador(String dataInicial, String dataFinal) throws SQLException {
+        CONNECTION = getConnection();
+        PreparedStatement prepare = CONNECTION.prepareStatement(getSqlfindTotalMovimentoPorColetador());
+        return executaPesquisaTotalMovimentoPorColetador(prepare, dataInicial, dataFinal);
+    }
+
+    public List<TotalMovimentoPorColetador> findTotalMovimentoPorColetadorDuplicados(String dataInicial, String dataFinal) throws SQLException {
+        CONNECTION = getConnection();
+        PreparedStatement prepare = CONNECTION.prepareStatement(getSqlfindTotalMovimentoPorColetadorDuplicados());
+        return executaPesquisaTotalMovimentoPorColetador(prepare, dataInicial, dataFinal);
+    }
+
+    public String formataValorMonetario(double valor) {
+        DecimalFormat fomater = new DecimalFormat("###,###.00");
+        return fomater.format(valor);
+    }
+
+    public String dateFomat(String data, String de, String para) throws ParseException {
+        Date dataFormatada = new SimpleDateFormat(de).parse(data);
+        return new SimpleDateFormat(para).format(dataFormatada);
+
+    }
+
+    @Override
+    public void close() throws Exception {
+        if (CONNECTION != null) {
+            CONNECTION.close();
+        }
+    }
+
+    private List<TotalMovimentoClientePorDiaDeColeta> executeTotalMovimentoClientePorDiaDeColeta(PreparedStatement prepare) throws SQLException {
+        ResultSet result = prepare.executeQuery();
+        List<TotalMovimentoClientePorDiaDeColeta> totalMovimentoClientePorDiaDeColeta = new ArrayList<TotalMovimentoClientePorDiaDeColeta>();
+        while (result.next()) {
+            totalMovimentoClientePorDiaDeColeta.add(criaTotalMovimentoClientePorDiaDeColeta(result));
+        }
+        return totalMovimentoClientePorDiaDeColeta;
+    }
+
+    private List<TotalClientesPorColetador> executeClietensPorColetador(PreparedStatement prepare) throws SQLException {
+        ResultSet result = prepare.executeQuery();
+        List<TotalClientesPorColetador> clientesPorColetador = new ArrayList<TotalClientesPorColetador>();
+        while (result.next()) {
+            clientesPorColetador.add(criaClientePorColetador(result));
+        }
+        return clientesPorColetador;
+    }
+
+    private List<TotalMovimentoPorColetador> executaPesquisaTotalMovimentoPorColetador(PreparedStatement prepare, String dataInicial, String dataFinal) throws SQLException {
+        prepare.setString(1, dataInicial);
+        prepare.setString(2, dataFinal);
+        prepare.setString(3, dataInicial);
+        prepare.setString(4, dataFinal);
+        ResultSet result = prepare.executeQuery();
+        List<TotalMovimentoPorColetador> totalMovimentoPorColetador = new ArrayList<TotalMovimentoPorColetador>();
+        while (result.next()) {
+            totalMovimentoPorColetador.add(criaTotalMovimentoPorColetador(result));
+        }
+        return totalMovimentoPorColetador;
+    }
+
+    private TotalMovimentoPorColetador criaTotalMovimentoPorColetador(ResultSet result) throws SQLException {
+        TotalMovimentoPorColetador total = new TotalMovimentoPorColetador();
+        total.setIdColetador(result.getString("CODIGO"));
+        total.setNomeColetador(result.getString("NOME"));
+        total.setTotal(result.getDouble("TOTAL"));
+        return total;
+    }
+
+     private TotalMovimentoClientePorDiaDeColeta criaTotalMovimentoClientePorDiaDeColeta(ResultSet result) throws SQLException {
+        TotalMovimentoClientePorDiaDeColeta total = new TotalMovimentoClientePorDiaDeColeta();
+        total.setIdCliente(result.getString("CODIGO"));
+        total.setNome(result.getString("NOME"));
+        total.setData(result.getString("DATACOLETA"));
+        total.setTotal(result.getDouble("TOTAL"));
+        return total;
+    }
+
+     private TotalClientesPorColetador criaClientePorColetador(ResultSet result) throws SQLException {
+        TotalClientesPorColetador clientePorColetador = new TotalClientesPorColetador();
+        clientePorColetador.setIdCliente(result.getString("CODIGO"));
+        clientePorColetador.setNomeCliente(result.getString("NOME"));
+        clientePorColetador.setTotal(result.getDouble("TOTAL"));
+        return clientePorColetador;
+    }
+
+    private String getSqlfindTotalClientesPorColetador() {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT COLETA.IDCLIENTE CODIGO, MOVIMENTO.NOME, SUM(MOVIMENTO.VALOR)  TOTAL FROM ");
+        sql.append("  (SELECT COLETA.IDCLIENTE, COLETA.IDCOLETADOR, COLETADOR.NOME,");
+        sql.append(" DATE(COLETA.DATAHORACOLETA) DATACOLETA, COUNT( DISTINCT COLETA.IDCOLETADOR) TOTAL ");
+        sql.append(" FROM coleta COLETA, coleta_coletador COLETADOR ");
+        sql.append(" WHERE COLETA.IDCOLETADOR = COLETADOR.IDCOLETADOR ");
+        sql.append(" AND DATE(DATAHORACOLETA) BETWEEN ? AND ? ");
+        sql.append(" AND COLETA.STATUS = 5 ");
+        sql.append(" GROUP BY IDCLIENTE, DATE(DATAHORACOLETA) ");
+        sql.append(" HAVING TOTAL = 1) COLETA, ");
+        sql.append(" (SELECT CODCLIENTE,CLIENTE.NOME, DATE(DATAPOSTAGEM) DATAPOSTAGEM, SUM(VALORSERVICO) VALOR ");
+        sql.append(" FROM movimentacao MOVIMENTACAO,cliente CLIENTE ");
+        sql.append(" WHERE MOVIMENTACAO.CODCLIENTE = CLIENTE.CODIGO AND DATE(DATAPOSTAGEM) BETWEEN ? AND ? ");
+        sql.append(" GROUP BY CODCLIENTE, DATE(DATAPOSTAGEM)) MOVIMENTO ");
+        sql.append(" WHERE MOVIMENTO.CODCLIENTE = COLETA.IDCLIENTE ");
+        sql.append(" AND MOVIMENTO.DATAPOSTAGEM = COLETA.DATACOLETA ");
+        sql.append(" AND COLETA.IDCOLETADOR = ? ");
+        sql.append(" GROUP BY COLETA.IDCLIENTE ORDER BY TOTAL DESC ");
+        return sql.toString();
+    }
+
+    private String getSqlfindTotalClientesPorColetadorDuplicado() {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT COLETA.IDCLIENTE CODIGO, MOVIMENTO.NOME, SUM(MOVIMENTO.VALOR)  TOTAL FROM ");
+        sql.append("  (SELECT COLETA.IDCLIENTE, GROUP_CONCAT(COLETA.IDCOLETADOR ORDER BY COLETA.IDCOLETADOR ASC ) IDCOLETADOR, COLETADOR.NOME,");
+        sql.append(" DATE(COLETA.DATAHORACOLETA) DATACOLETA, COUNT( DISTINCT COLETA.IDCOLETADOR) TOTAL ");
+        sql.append(" FROM coleta COLETA, coleta_coletador COLETADOR ");
+        sql.append(" WHERE COLETA.IDCOLETADOR = COLETADOR.IDCOLETADOR ");
+        sql.append(" AND DATE(DATAHORACOLETA) BETWEEN ? AND ? ");
+        sql.append(" AND COLETA.STATUS = 5 ");
+        sql.append(" GROUP BY IDCLIENTE, DATE(DATAHORACOLETA) ");
+        sql.append(" HAVING TOTAL > 1 AND IDCOLETADOR = ?) COLETA, ");
+        sql.append(" (SELECT CODCLIENTE,CLIENTE.NOME, DATE(DATAPOSTAGEM) DATAPOSTAGEM, SUM(VALORSERVICO) VALOR ");
+        sql.append(" FROM movimentacao MOVIMENTACAO,cliente CLIENTE ");
+        sql.append(" WHERE MOVIMENTACAO.CODCLIENTE = CLIENTE.CODIGO AND DATE(DATAPOSTAGEM) BETWEEN ? AND ? ");
+        sql.append(" GROUP BY CODCLIENTE, DATE(DATAPOSTAGEM)) MOVIMENTO ");
+        sql.append(" WHERE MOVIMENTO.CODCLIENTE = COLETA.IDCLIENTE ");
+        sql.append(" AND MOVIMENTO.DATAPOSTAGEM = COLETA.DATACOLETA ");
+        sql.append(" GROUP BY COLETA.IDCLIENTE ORDER BY TOTAL DESC ");
+        return sql.toString();
+    }
+
+    private String getSqlfindTotalMovimentoPorColetador() {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT COLETA.IDCOLETADOR CODIGO,COLETA.NOME NOME,SUM(MOVIMENTO.VALOR) TOTAL FROM ");
+        sql.append(" (SELECT COLETA.IDCLIENTE,COLETA.IDCOLETADOR,COLETADOR.NOME,DATE(COLETA.DATAHORACOLETA) DATACOLETA,COUNT(DISTINCT COLETA.IDCOLETADOR) TOTAL ");
+        sql.append(" FROM coleta COLETA,coleta_coletador COLETADOR ");
+        sql.append(" WHERE COLETA.IDCOLETADOR = COLETADOR.IDCOLETADOR AND DATE(DATAHORACOLETA) BETWEEN ? AND ? ");
+        sql.append(" AND COLETA.STATUS = 5 ");
+        sql.append(" GROUP BY IDCLIENTE,DATE(DATAHORACOLETA) HAVING TOTAL = 1) COLETA, ");
+        sql.append(" (SELECT CODCLIENTE,DATE(DATAPOSTAGEM) DATAPOSTAGEM,SUM(VALORSERVICO) VALOR ");
+        sql.append(" FROM movimentacao MOVIMENTACAO ");
+        sql.append(" WHERE DATE(DATAPOSTAGEM) BETWEEN ? AND ? ");
+        sql.append(" GROUP BY CODCLIENTE,DATE(DATAPOSTAGEM)) MOVIMENTO ");
+        sql.append(" WHERE MOVIMENTO.CODCLIENTE = COLETA.IDCLIENTE AND MOVIMENTO.DATAPOSTAGEM = COLETA.DATACOLETA ");
+        sql.append(" GROUP BY COLETA.IDCOLETADOR ");
+        return sql.toString();
+    }
+
+    private String getSqlfindTotalMovimentoPorColetadorDuplicados() {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT COLETA.IDCOLETADOR CODIGO,COLETA.NOME NOME,SUM(MOVIMENTO.VALOR) TOTAL FROM ");
+        sql.append(" (SELECT COLETA.IDCLIENTE, ");
+        sql.append(" GROUP_CONCAT( DISTINCT COLETA.IDCOLETADOR ORDER BY COLETA.IDCOLETADOR ASC) IDCOLETADOR, GROUP_CONCAT( DISTINCT COLETADOR.NOME ORDER BY COLETADOR.NOME ASC ) NOME, ");
+        sql.append(" DATE(COLETA.DATAHORACOLETA) DATACOLETA,COUNT(DISTINCT COLETA.IDCOLETADOR) TOTAL");
+        sql.append(" FROM coleta COLETA,coleta_coletador COLETADOR ");
+        sql.append(" WHERE COLETA.IDCOLETADOR = COLETADOR.IDCOLETADOR AND DATE(DATAHORACOLETA) BETWEEN ? AND ? ");
+        sql.append(" AND COLETA.STATUS = 5 ");
+        sql.append(" GROUP BY IDCLIENTE,DATE(DATAHORACOLETA) HAVING TOTAL > 1) COLETA, ");
+        sql.append(" (SELECT CODCLIENTE,DATE(DATAPOSTAGEM) DATAPOSTAGEM,SUM(VALORSERVICO) VALOR ");
+        sql.append(" FROM movimentacao MOVIMENTACAO ");
+        sql.append(" WHERE DATE(DATAPOSTAGEM) BETWEEN ? AND ? ");
+        sql.append(" GROUP BY CODCLIENTE,DATE(DATAPOSTAGEM)) MOVIMENTO ");
+        sql.append(" WHERE MOVIMENTO.CODCLIENTE = COLETA.IDCLIENTE AND MOVIMENTO.DATAPOSTAGEM = COLETA.DATACOLETA ");
+        sql.append(" GROUP BY COLETA.IDCOLETADOR ");
+        return sql.toString();
+    }
+
+     private String getSqlfindTotalMovimentoClientePorDiaDeColeta() {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" SELECT COLETA.IDCLIENTE CODIGO, MOVIMENTO.NOME, COLETA.DATACOLETA, SUM(MOVIMENTO.VALOR) TOTAL");
+        sql.append(" FROM (");
+        sql.append(" SELECT COLETA.IDCLIENTE,");
+        sql.append(" GROUP_CONCAT(COLETA.IDCOLETADOR ORDER BY COLETA.IDCOLETADOR ASC) IDCOLETADOR,");
+        sql.append(" COLETADOR.NOME,DATE(COLETA.DATAHORACOLETA) DATACOLETA,");
+        sql.append(" COUNT(DISTINCT COLETA.IDCOLETADOR) TOTAL");
+        sql.append(" FROM coleta COLETA,coleta_coletador COLETADOR");
+        sql.append(" WHERE COLETA.IDCOLETADOR = COLETADOR.IDCOLETADOR");
+        sql.append(" AND DATE(DATAHORACOLETA) BETWEEN ? AND ? AND COLETA.STATUS = 5");
+        sql.append(" GROUP BY IDCLIENTE,DATE(DATAHORACOLETA)");
+        sql.append(" HAVING TOTAL > 1 AND IDCOLETADOR = ?) COLETA,");
+        sql.append(" (SELECT CODCLIENTE, CLIENTE.NOME, DATE(DATAPOSTAGEM) DATAPOSTAGEM, SUM(VALORSERVICO) VALOR");
+        sql.append(" FROM movimentacao MOVIMENTACAO, cliente CLIENTE");
+        sql.append(" WHERE MOVIMENTACAO.CODCLIENTE = CLIENTE.CODIGO");
+        sql.append(" AND DATE(DATAPOSTAGEM) BETWEEN ? AND ? ");
+        sql.append(" GROUP BY CODCLIENTE,DATE(DATAPOSTAGEM)) MOVIMENTO");
+        sql.append(" WHERE MOVIMENTO.CODCLIENTE = COLETA.IDCLIENTE");
+        sql.append(" AND MOVIMENTO.DATAPOSTAGEM = COLETA.DATACOLETA AND COLETA.IDCLIENTE = ?");
+        sql.append(" GROUP BY COLETA.IDCLIENTE,COLETA.DATACOLETA");
+        sql.append(" ORDER BY COLETA.DATACOLETA DESC");
+        return sql.toString();
+    }
+
+    private Connection getConnection() {
+        if (CONNECTION == null) {
+            CONNECTION = Conexao.getConnection(nomeDataBase);
+        }
+        return CONNECTION;
+    }
+
+}

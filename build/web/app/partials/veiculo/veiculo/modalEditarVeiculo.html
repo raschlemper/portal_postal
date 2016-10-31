@@ -1,0 +1,123 @@
+<form name="veiculoForm" novalidate>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
+        <h4 class="modal-title">{{title}}</h4>
+    </div>
+    <div class="modal-body">
+        <div class="bootbox-body">
+            <ul class="list-unstyled">
+                <li class="list-group-item">
+                    <div class="row form-horizontal">
+                        <input type="hidden" name="idVeiculo" ng-model="veiculo.idVeiculo"/>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Tipo</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-car"></i></span>
+                                <select class="form-control" name="tipo" ng-change="changeTipo(veiculo.tipo)"
+                                        ng-options="tipo.descricao for tipo in tipos track by tipo.id" ng-model="veiculo.tipo"></select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Marca</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-car"></i></span>
+                                <select class="form-control" name="marca" ng-change="changeMarca(veiculo.tipo, veiculo.marca)"
+                                        ng-options="marca.name for marca in marcas track by marca.key" ng-model="veiculo.marca"></select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Modelo</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-car"></i></span>
+                                <select class="form-control" name="modelo" ng-change="changeModelo(veiculo.tipo, veiculo.marca, veiculo.modelo)"
+                                        ng-options="modelo.name for modelo in modelos track by modelo.key" ng-model="veiculo.modelo"></select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Versão</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-car"></i></span>
+                                <select class="form-control" name="versao" ng-change="changeVersao(veiculo.tipo, veiculo.marca, veiculo.modelo, veiculo.versao)"
+                                        ng-options="versao.name for versao in versoes track by versao.key" ng-model="veiculo.versao"></select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Ano Modelo</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                <input type="number" autocomplete="off" name="anoModelo" class="form-control" ng-model="veiculo.anoModelo" 
+                                       min="{{minVal}}" max="{{maxVal}}" placeholder="Ano do modelo do veículo"/>                                    
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Placa</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                <input type="text" autocomplete="off" name="placa" class="form-control" ng-model="veiculo.placa" ng-required="true"
+                                       ui-mask="AAA-9999" ui-mask-placeholder-char="_" ui-mask-placeholder placeholder="Placa do veículo"/>                                    
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Chassis</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                <input type="text" autocomplete="off" name="chassis" class="form-control" ng-model="veiculo.chassis"
+                                       ui-mask="*****************   " ui-mask-placeholder-char="_" ui-mask-placeholder placeholder="Chassis do veículo"/>                                    
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Renavam</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                <input type="text" autocomplete="off" name="renavam" class="form-control" ng-model="veiculo.renavam" ng-required="true"
+                                       ui-mask="9999999999-9" ui-mask-placeholder-char="_" ui-mask-placeholder placeholder="Renavam do veículo"/>                                    
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Quilometragem</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-asterisk"></i></span>
+                                <input type="text" autocomplete="off" name="quilometragem" class="form-control" ng-model="veiculo.quilometragem" ng-required="true"
+                                       ui-number-mask="0" placeholder="Quilometragem do veículo"/>                                    
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Tipo Combustível</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                <select class="form-control" name="combustivel"
+                                        ng-options="combustivel.descricao for combustivel in combustiveis track by combustivel.id" ng-model="veiculo.combustivel"></select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Estado Veículo</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                <select class="form-control" name="status"
+                                        ng-options="stat.descricao for stat in status track by stat.id" ng-model="veiculo.status"></select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <label class="small">Situação</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                <select class="form-control" name="situacao"
+                                        ng-options="situacao.descricao for situacao in situacoes track by situacao.id" ng-model="veiculo.situacao"></select>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>     
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">
+            <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR
+        </button>
+        <button type="button" class="btn btn-success" ng-click="ok(this.veiculoForm)">
+            <i class="fa fa-lg fa-save fa-spc"></i> SALVAR
+        </button>
+    </div>
+</form>    
+
+  

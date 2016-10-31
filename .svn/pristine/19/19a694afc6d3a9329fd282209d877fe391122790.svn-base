@@ -1,0 +1,87 @@
+package com.portalpostal.importacao.componentes;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ConversorDestinatarioModeloVip {
+
+    private static int[] POSICAO_NOME = {0, 50};
+    private static int[] POSICAO_ENDERECO = {50, 140};
+    private static int[] POSICAO_NUMERO = {140, 155};
+    private static int[] POSICAO_COMPLEMENTO = {155, 205};
+    private static int[] POSICAO_BAIRRO = {205, 255};
+    private static int[] POSICAO_CIDADE = {255, 345};
+    private static int[] POSICAO_ESTADO = {345, 347};
+    private static int[] POSICAO_CEP = {347, 387};
+    private static int[] POSICAO_TELEFONE = {387, 407};
+    private static int[] POSICAO_CODIGOFINANCEIRO = {407, 417};
+    private static int[] POSICAO_NUMEROOBJETO = {417, 430};
+    private static int[] POSICAO_PESO = {430, 436};
+    private static int[] POSICAO_ALTURA = {436, 441};
+    private static int[] POSICAO_LARGURA = {441, 446};
+    private static int[] POSICAO_COMPRIMENTO = {446, 451};
+    private static int[] POSICAO_CUBICO = {451, 457};
+    private static int[] POSICAO_NOTA = {457, 469};
+    private static int[] POSICAO_SERIENOTA = {469, 474};
+    private static int[] POSICAO_VALORDECLARADO = {474, 494};
+    private static int[] POSICAO_VALORCOBRAR = {494, 504};
+    private static int[] POSICAO_SERVICOSADICIONAIS = {504, 522};
+    private static int[] POSICAO_CONTRATO = {522, 533};
+    private static int[] POSICAO_ADMINISTRATIVO = {533, 544};
+    private static int[] POSICAO_CARTAO = {543, 555};
+    private static int[] POSICAO_OBSERVACAO = {655, 755};
+    private static int[] POSICAO_CONTEUDOOBJETO = {955, 1005};
+    private static int[] POSICAO_CODIGOVOLUME = {1005, 1009};
+    private static int[] POSICAO_QUANTIDADEVOLUME = {1009, 1013};
+    private static int[] POSICAO_CODIGOCLIENTEVISUAL = {1013, 1022};
+    private static int[] POSICAO_EMAIL = {555, 655};
+    private static int[] POSICAO_CELULAR = {1022, 1042};
+
+    private static int INDICE_INICIAL = 0;
+    private static int INDICE_FINAL = 1;
+
+    public List<DestinatarioModeloVip> converter(List<String> linhasDoArquivo) {
+        List<DestinatarioModeloVip> destinatarios = new ArrayList<DestinatarioModeloVip>();
+        for (String linha : linhasDoArquivo) {
+            destinatarios.add(criaDestinatario(linha));
+        }
+        return destinatarios;
+    }
+
+    private DestinatarioModeloVip criaDestinatario(String linha) {
+        DestinatarioModeloVip destinatario = new DestinatarioModeloVip();
+        destinatario.setNome(linha.substring(POSICAO_NOME[INDICE_INICIAL], POSICAO_NOME[INDICE_FINAL]).trim());
+        destinatario.setEndereco(linha.substring(POSICAO_ENDERECO[INDICE_INICIAL], POSICAO_ENDERECO[INDICE_FINAL]).trim());
+        destinatario.setNumero(linha.substring(POSICAO_NUMERO[INDICE_INICIAL], POSICAO_NUMERO[INDICE_FINAL]).trim());
+        destinatario.setComplemento(linha.substring(POSICAO_COMPLEMENTO[INDICE_INICIAL], POSICAO_COMPLEMENTO[INDICE_FINAL]).trim());
+        destinatario.setBairro(linha.substring(POSICAO_BAIRRO[INDICE_INICIAL], POSICAO_BAIRRO[INDICE_FINAL]).trim());
+        destinatario.setCidade(linha.substring(POSICAO_CIDADE[INDICE_INICIAL], POSICAO_CIDADE[INDICE_FINAL]).trim());
+        destinatario.setEstado(linha.substring(POSICAO_ESTADO[INDICE_INICIAL], POSICAO_ESTADO[INDICE_FINAL]).trim());
+        destinatario.setCep(linha.substring(POSICAO_CEP[INDICE_INICIAL], POSICAO_CEP[INDICE_FINAL]).trim());
+        destinatario.setTelefone(linha.substring(POSICAO_TELEFONE[INDICE_INICIAL], POSICAO_TELEFONE[INDICE_FINAL]).trim());
+        destinatario.setCodigoFinanceiro(linha.substring(POSICAO_CODIGOFINANCEIRO[INDICE_INICIAL], POSICAO_CODIGOFINANCEIRO[INDICE_FINAL]).trim());
+        destinatario.setNumeroObjeto(linha.substring(POSICAO_NUMEROOBJETO[INDICE_INICIAL], POSICAO_NUMEROOBJETO[INDICE_FINAL]).trim());
+        destinatario.setPeso(linha.substring(POSICAO_PESO[INDICE_INICIAL], POSICAO_PESO[INDICE_FINAL]).trim());
+        destinatario.setAltura(linha.substring(POSICAO_ALTURA[INDICE_INICIAL], POSICAO_ALTURA[INDICE_FINAL]).trim());
+        destinatario.setLargura(linha.substring(POSICAO_LARGURA[INDICE_INICIAL], POSICAO_LARGURA[INDICE_FINAL]).trim());
+        destinatario.setComprimento(linha.substring(POSICAO_COMPRIMENTO[INDICE_INICIAL], POSICAO_COMPRIMENTO[INDICE_FINAL]).trim());
+        destinatario.setCubico(linha.substring(POSICAO_CUBICO[INDICE_INICIAL], POSICAO_CUBICO[INDICE_FINAL]).trim());
+        destinatario.setNota(linha.substring(POSICAO_NOTA[INDICE_INICIAL], POSICAO_NOTA[INDICE_FINAL]).trim());
+        destinatario.setSerieNota(linha.substring(POSICAO_SERIENOTA[INDICE_INICIAL], POSICAO_SERIENOTA[INDICE_FINAL]).trim());
+        destinatario.setValorDeclarado(linha.substring(POSICAO_VALORDECLARADO[INDICE_INICIAL], POSICAO_VALORDECLARADO[INDICE_FINAL]).trim());
+        destinatario.setValorCobrar(linha.substring(POSICAO_VALORCOBRAR[INDICE_INICIAL], POSICAO_VALORCOBRAR[INDICE_FINAL]).trim());
+        destinatario.setServicosAdicionais(linha.substring(POSICAO_SERVICOSADICIONAIS[INDICE_INICIAL], POSICAO_SERVICOSADICIONAIS[INDICE_FINAL]).trim());
+        destinatario.setContrato(linha.substring(POSICAO_CONTRATO[INDICE_INICIAL], POSICAO_CONTRATO[INDICE_FINAL]).trim());
+        destinatario.setAdministrativo(linha.substring(POSICAO_ADMINISTRATIVO[INDICE_INICIAL], POSICAO_ADMINISTRATIVO[INDICE_FINAL]).trim());
+        destinatario.setCartao(linha.substring(POSICAO_CARTAO[INDICE_INICIAL], POSICAO_CARTAO[INDICE_FINAL]).trim());
+        destinatario.setEmail(linha.substring(POSICAO_EMAIL[INDICE_INICIAL], POSICAO_EMAIL[INDICE_FINAL]).trim());
+        destinatario.setConteudoDoObjeto(linha.substring(POSICAO_CONTEUDOOBJETO[INDICE_INICIAL], POSICAO_CONTEUDOOBJETO[INDICE_FINAL]).trim());
+        destinatario.setCodigoVolume(linha.substring(POSICAO_CODIGOVOLUME[INDICE_INICIAL], POSICAO_CODIGOVOLUME[INDICE_FINAL]).trim());
+        destinatario.setQuantidadeVolumes(linha.substring(POSICAO_QUANTIDADEVOLUME[INDICE_INICIAL], POSICAO_QUANTIDADEVOLUME[INDICE_FINAL]).trim());
+        destinatario.setCodigoClienteVisual(linha.substring(POSICAO_CODIGOCLIENTEVISUAL[INDICE_INICIAL], POSICAO_CODIGOCLIENTEVISUAL[INDICE_FINAL]).trim());
+        destinatario.setCelular(linha.substring(POSICAO_CELULAR[INDICE_INICIAL], POSICAO_CELULAR[INDICE_FINAL]).trim());
+        destinatario.setObservacao(linha.substring(POSICAO_OBSERVACAO[INDICE_INICIAL], POSICAO_OBSERVACAO[INDICE_FINAL]).trim());
+        return destinatario;
+    }
+
+}

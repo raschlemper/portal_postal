@@ -1,0 +1,104 @@
+<form name="veiculoForm" novalidate>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
+        <h4 class="modal-title">Visualizar Veículo</h4>
+    </div>
+    <div class="modal-body">
+        <div class="bootbox-body">
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Tipo:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.tipo.descricao}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Marca:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.marca}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Modelo:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.modelo}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Versão:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.versao}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Preço:</label>
+                </div>
+                <div class="col-md-8">{{veiculoFipe.preco}} ({{veiculoFipe.referencia}})</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Placa:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.placa | placa}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Ano Modelo:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.anoModelo}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Chassis:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.chassis | uppercase}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Renavam:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.renavam | renavam}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>KM:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.quilometragem | number}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Combustível:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.combustivel.descricao}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Status:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.status.descricao}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Situação:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.situacao.descricao}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-right">
+                    <label>Data Cadastro:</label>
+                </div>
+                <div class="col-md-8">{{veiculo.dataCadastro | date : 'dd/MM/yyyy'}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-warning" ng-click="editar()">
+            <i class="fa fa-lg fa-pencil fa-spc"></i> EDITAR
+        </button>
+        <button type="button" class="btn btn-default" ng-click="cancel()">
+            <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR
+        </button>
+    </div>
+</form>    
+
+  
