@@ -10,6 +10,12 @@ app.factory('ListaService', function() {
             return value;
         },
 
+        getTableValue: function(list, key) {
+            var value = _.find(list, function(item){ return item.column == key; });
+//            if(!value) { value = list[0]; }
+            return value;
+        },
+
         getVeiculoValue: function(list, key) {
             var value = _.find(list, function(item){ return item.idVeiculo == key; });
 //            if(!value) { value = list[0]; }

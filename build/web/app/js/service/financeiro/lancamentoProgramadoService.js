@@ -3,6 +3,7 @@
 app.factory('LancamentoProgramadoService', function($http, PromiseService, FrequenciaLancamentoService, LISTAS) {
     
     var situacoes = LISTAS.situacaoLancamentoProgramado;
+    var periodos = angular.copy(LISTAS.periodo);
     
     var report = function(lancamentos) {
         var dados = [];
@@ -14,7 +15,7 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
             report.conta = lancamento.conta.nome;
             report.numero = lancamento.numero;
             report.favorecido = lancamento.favorecido;
-            report.planoConta = lancamento.planoConta;
+            report.planoConta = lancamento.planoConta.descricao;
             report.historico = lancamento.historico;
             report.frequencia = lancamento.frequencia.descricao;
             report.valor = lancamento.valor;
@@ -74,7 +75,11 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
         lancamento.baixado = false;
         if(parcelaLancamento && parcelaLancamento.lancamento) { lancamento.baixado = true; }
         return lancamento;
-    }
+    };
+    
+    var getPeriodos = function() {
+        return periodos;
+    };
     
 //    var setNumeroParcelaLancamento = function(lancamento) {
 //        if(lancamento.parcelas && lancamento.parcelas.length) {
@@ -85,14 +90,18 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
     return {
 
         getAll: function(dataInicio, dataFim) {
-            var url = _contextPath + "/api/financeiro/lancamento/programado/";
-            if(dataInicio && dataFim) { url += "?dataInicio=" + dataInicio + "&dataFim=" + dataFim; }
+            var url = _contextPath + "/api/financeiro/lancamento/programado/?";
+            if(dataInicio) url += "dataInicio=" + dataInicio;
+            if(dataInicio && dataFim) url += "&";
+            if(dataFim) url += "dataFim=" + dataFim;
             return PromiseService.execute($http.get(url));
         },
 
         getAllAtivo: function(dataInicio, dataFim) {
-            var url = _contextPath + "/api/financeiro/lancamento/programado/ativo";
-            if(dataInicio && dataFim) { url += "?dataInicio=" + dataInicio + "&dataFim=" + dataFim; }
+            var url = _contextPath + "/api/financeiro/lancamento/programado/ativo?";
+            if(dataInicio) url += "dataInicio=" + dataInicio;
+            if(dataInicio && dataFim) url += "&";
+            if(dataFim) url += "dataFim=" + dataFim;
             return PromiseService.execute($http.get(url));
         },
 
@@ -124,6 +133,16 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
         update: function(idLancamentoProgramado, data) {
             return PromiseService.execute(
                     $http.put(_contextPath + "/api/financeiro/lancamento/programado/" + idLancamentoProgramado, data));
+        },
+
+        updateConta: function(data) {
+            return PromiseService.execute(
+                    $http.put(_contextPath + "/api/financeiro/lancamento/programado/conta", data));
+        },
+
+        updateSituacao: function(data) {
+            return PromiseService.execute(
+                    $http.put(_contextPath + "/api/financeiro/lancamento/programado/situacao", data));
         },
 
         updateAll: function(data) {
@@ -162,7 +181,9 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
             return lista;
         },
         
-        report: report
+        report: report,
+        
+        periodos: getPeriodos()
 
     }
 

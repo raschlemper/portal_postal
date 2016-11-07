@@ -95,8 +95,8 @@ app.controller('ModalLancamentoTransferirController',
                 });
         };
 
-        var validarLancamentoByConfiguracao = function (configuracao, lancamento) {
-            if (configuracao.historico && !lancamento.historico) {
+        var validarLancamentoByConfiguracao = function (configuracao, lancamentoProgramadoTransferencia) {
+            if (configuracao.historico && !lancamentoProgramadoTransferencia.historico) {
                 alert(MESSAGES.lancamento.validacao.HISTORICO_REQUERIDA);
                 return false;
             }

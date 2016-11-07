@@ -13,12 +13,12 @@ app.factory('FinanceiroValidation', function(StringService, ModalService, LISTAS
         return true;
     };
         
-    var periodoLancamentos = function(dataInicio, dataFim) {
+    var periodoLancamentos = function(dataInicio, dataFim, days) {
         if(!dataInicio || !dataFim) return true;
         var dataInicioFmt = moment(angular.copy(dataInicio));
         var dataFimFmt = moment(angular.copy(dataFim));
-        if(dataFimFmt.diff(dataInicioFmt, 'days') > 90) {
-            modalMessage(StringService.format(MESSAGES.lancamento.info.PERIODO_INVALIDO, '90'));
+        if(dataFimFmt.diff(dataInicioFmt, 'days') > days) {
+            modalMessage(StringService.format(MESSAGES.lancamento.info.PERIODO_INVALIDO, days));
             return false;
         };
         return true;

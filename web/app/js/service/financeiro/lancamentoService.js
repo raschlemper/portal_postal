@@ -1,6 +1,8 @@
 'use strict';
 
-app.factory('LancamentoService', function($http, PromiseService) {
+app.factory('LancamentoService', function($http, PromiseService, LISTAS) {
+    
+    var periodos = angular.copy(LISTAS.periodo);
     
     var report = function(lancamentos) {
         var dados = [];
@@ -35,13 +37,20 @@ app.factory('LancamentoService', function($http, PromiseService) {
             rateios.push(lancamentoRateio);
         });
         return rateios;
-    }
+    };
+    
+    var getPeriodos = function() {
+        periodos.splice(0, 1);
+        return periodos;
+    };
 
     return {
 
         getAll: function(dataInicio, dataFim) {
-            var url = _contextPath + "/api/financeiro/lancamento/";
-            if(dataInicio && dataFim) { url += "?dataInicio=" + dataInicio + "&dataFim=" + dataFim; }
+            var url = _contextPath + "/api/financeiro/lancamento/?";
+            if(dataInicio) url += "dataInicio=" + dataInicio;
+            if(dataInicio && dataFim) url += "&";
+            if(dataFim) url += "dataFim=" + dataFim;
             return PromiseService.execute($http.get(url));
         },
 
@@ -113,6 +122,11 @@ app.factory('LancamentoService', function($http, PromiseService) {
                     $http.put(_contextPath + "/api/financeiro/lancamento/" + idLancamento, data));
         },
 
+        updateConta: function(data) {
+            return PromiseService.execute(
+                    $http.put(_contextPath + "/api/financeiro/lancamento/conta", data));
+        },
+
         updateSituacao: function(data) {
             return PromiseService.execute(
                     $http.put(_contextPath + "/api/financeiro/lancamento/situacao", data));
@@ -145,7 +159,9 @@ app.factory('LancamentoService', function($http, PromiseService) {
             return rateios;
         },
         
-        report: report
+        report: report,
+        
+        periodos: getPeriodos()
 
     }
 

@@ -87,13 +87,14 @@ app.controller('ModalLancamentoConciliarController',
         var calcularSaldo = function(saldoAtual, saldoReconciliacao) {
             return {
                 conta: $scope.conta.valorSaldoAbertura,
-                atual: saldoAtual,
+                atual: $scope.conta.valorSaldoAbertura + saldoAtual,
                 reconciliacao: saldoReconciliacao,
                 diferenca: saldoReconciliacao - (saldoAtual + $scope.conta.valorSaldoAbertura)
             }
         };
         
         $scope.ok = function(form, lancamentoConciliado) {
+            if (!validarSaldoDiferencaConciliacao($scope.saldo)) return;            
             return validarLancamento(form, lancamentoConciliado);     
         };
         
@@ -116,13 +117,21 @@ app.controller('ModalLancamentoConciliarController',
         };
                 
         // ***** VALIDAR ***** //  
+               
+        var validarSaldoDiferencaConciliacao = function(saldo) {
+            if (saldo && saldo.diferenca === 0) {
+                alert(MESSAGES.lancamento.validacao.SALDO_DIFERENCA_ZERO);
+                return false;
+            }
+            return true;
+        };
         
         var validarLancamento = function(form, lancamentoConciliado) {
             if (!validarForm(form, lancamentoConciliado)) return;
             ConfiguracaoService.get()
                 .then(function(data) {
-                    lancamentoConciliado = ajustarDados($scope.saldo, lancamentoConciliado);
                     if(!validarLancamentoByConfiguracao(data, lancamentoConciliado)) return;
+                    lancamentoConciliado = ajustarDados($scope.saldo, lancamentoConciliado);
                     ok(lancamentoConciliado);
                 })
                 .catch(function(e) {

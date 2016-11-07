@@ -130,8 +130,8 @@ app.controller('ModalLancamentoEditarController',
             if (!validarForm(form, lancamento)) return;
             ConfiguracaoService.get()
                 .then(function(data) {
-                    lancamento = ajustarDados(lancamento);
                     if(!validarLancamentoByConfiguracao(data, lancamento)) return;
+                    lancamento = ajustarDados(lancamento);
                     ok(lancamento);
                 })
                 .catch(function(e) {

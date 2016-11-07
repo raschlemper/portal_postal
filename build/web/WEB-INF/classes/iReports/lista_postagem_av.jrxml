@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Protocolo de Postagem" pageWidth="595" pageHeight="842" columnWidth="575" leftMargin="10" rightMargin="10" topMargin="20" bottomMargin="20" uuid="5d989118-bbd3-486e-869f-c7efcb8efc71">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="table">
@@ -214,39 +214,49 @@ WHERE qtdTotal > 0;]]>
 				<text><![CDATA[A VISTA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="389" y="0" width="87" height="15" uuid="2eaf7f22-3cb0-4989-9760-7da4ef743cc8"/>
-				<textElement textAlignment="Right"/>
-				<text><![CDATA[DATA]]></text>
+				<reportElement x="391" y="0" width="92" height="13" uuid="2eaf7f22-3cb0-4989-9760-7da4ef743cc8"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[DATA GERAÇÃO:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="476" y="0" width="56" height="15" uuid="2eaf7f22-3cb0-4989-9760-7da4ef743cc8"/>
-				<textElement textAlignment="Right"/>
-				<text><![CDATA[LISTA]]></text>
+				<reportElement x="484" y="0" width="48" height="13" uuid="2eaf7f22-3cb0-4989-9760-7da4ef743cc8"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Nº LISTA:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="532" y="0" width="43" height="15" uuid="2eaf7f22-3cb0-4989-9760-7da4ef743cc8"/>
-				<textElement textAlignment="Right"/>
-				<text><![CDATA[FOLHA]]></text>
+				<reportElement x="532" y="0" width="40" height="13" uuid="2eaf7f22-3cb0-4989-9760-7da4ef743cc8"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[FOLHA:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="532" y="15" width="43" height="20" uuid="955aeefe-8da1-4888-8c5c-9a0ac651832e"/>
-				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+				<reportElement x="532" y="11" width="40" height="13" uuid="955aeefe-8da1-4888-8c5c-9a0ac651832e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="476" y="15" width="56" height="20" uuid="955aeefe-8da1-4888-8c5c-9a0ac651832e"/>
-				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+				<reportElement x="484" y="11" width="48" height="13" uuid="955aeefe-8da1-4888-8c5c-9a0ac651832e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{idOs}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy">
-				<reportElement x="389" y="15" width="87" height="20" uuid="15bea8c5-5a3b-4709-bcbd-7eef32bc93be"/>
-				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+			<textField pattern="dd/MM/yyyy HH:mm">
+				<reportElement x="484" y="26" width="88" height="13" uuid="15bea8c5-5a3b-4709-bcbd-7eef32bc93be"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="401" y="54" width="174" height="14" uuid="abcfeac0-285c-4de6-9550-c1e90a2d5e49"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA["CNPJ "+ $P{cnpjCliente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="391" y="26" width="92" height="13" uuid="2129c600-8f15-45fd-b538-3ab2c3dfb149"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[DATA IMPRESSÃO:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy HH:mm">
+				<reportElement x="391" y="11" width="92" height="13" uuid="ff57e16f-fbd2-4026-bc8d-d518f6aece6c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{dataOs}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

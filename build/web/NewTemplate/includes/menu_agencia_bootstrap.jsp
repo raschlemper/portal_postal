@@ -37,6 +37,7 @@
                 <li><a href="${pageContext.request.contextPath}/NewTemplate/Dashboard/index.jsp">Overview AGF</a></li>
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(201)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Coleta/acompanhamento_b.jsp">Overview Coletas</a></li><%}%>  
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(701)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Dashboard/relatorios.jsp">Relatórios</a></li><%}%> 
+                <li><a href="${pageContext.request.contextPath}/NewTemplate/Dashboard/vendasPorCliente.jsp">Raio-X por Cliente</a></li>
             </ul>
         </li>
         <%if (usrMenu.getListaAcessosPortalPostal().contains(106)) {%>

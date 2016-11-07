@@ -40,29 +40,29 @@
         <meta name="description" content=""/>
         <meta name="author" content=""/>
         <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-8">
-            
+
+
+            <%@ include file="../includes/Css_js.jsp" %>
+            <!--  <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.css"/>
       
-<%@ include file="../includes/Css_js.jsp" %>
-                                                    <!--  <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.css"/>
-                                              
-                                                    <!--  <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>-->
+            <!--  <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>-->
 
 
-                                                    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.js"></script>
-                                                    <script src="https://cdn.datatables.net/buttons/1.1.2/js/dataTables.buttons.min.js"></script>
-                                                    <script src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.flash.min.js"></script>
-                                                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-                                                    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-                                                    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-                                                    <script src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.html5.min.js"></script>
-                                                    <script src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.print.min.js"></script>
-                                                    <script src="../../javascript/jx.js" type="text/javascript"></script>
-                                                    <link href="../../NewTemplate/dist/css/jquery.dataTables.css" rel="stylesheet"/>
-            
-            
-            
+            <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.js"></script>
+            <script src="https://cdn.datatables.net/buttons/1.1.2/js/dataTables.buttons.min.js"></script>
+            <script src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.flash.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+            <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+            <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+            <script src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.html5.min.js"></script>
+            <script src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.print.min.js"></script>
+            <script src="../../javascript/jx.js" type="text/javascript"></script>
+             <!--JS para gerar excell -->
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.core.min.js"></script>
+            <script src="../../javascript/exportarPlanilha.js" type="text/javascript"></script>
+            <link href="../../NewTemplate/dist/css/jquery.dataTables.css" rel="stylesheet"/>
+
             <script>
-
                 function callTableJs(titulo) {
 
                     $('#excelDataTable').DataTable({
@@ -110,25 +110,25 @@
 
 
                 function ajaxtable() {
-                    
+
                     if ($('#tipoRel').val() === '0') {
                         alert('SELECIONE UM RELATÓRIO');
                         $('#tipoRel').focus();
                         return false;
                     }
-                    
-                    if($('#tipoRel').val() == '9'){
+
+                    if ($('#tipoRel').val() == '9') {
                         showTotaPorColetador();
                         return;
                     }
-                    
+
                     var titulo = $('#tipoRel option:selected').html();
                     var sqlT = $('#tipoRel').val();
                     var dataIni = $('#data').val();
                     var dataFim = $('#data2').val();
                     waitMsg();
-                    
-                    
+
+
 
                     $.ajax({
                         method: "GET",
@@ -141,7 +141,6 @@
 
                                 if (jQuery.isEmptyObject(ret)) {
                                     $("#tbWrapper").html(" <div class='dataTable_wrapper no-padding'> <table id='excelDataTable' class='display compact'>" +
-                                            
                                             "</br><div class='alert alert-danger text-center' >  <strong>OPS!</strong> NÃO HOUVERAM RESULTADOS PARA A PESQUISA</div>" +
                                             "</div>");
                                 } else {
@@ -232,7 +231,7 @@
 
                         <div class="row">
                             <div class="col-md-12">                       
-                                <h4 class="page-header"><b class="text-primary"><i class="fa fa-dashboard"></i> Dashborad</b> > <small>Relatףrios</small></h4>
+                                <h4 class="page-header"><b class="text-primary"><i class="fa fa-dashboard"></i> Dashboard</b> > <small>Relatףrios</small></h4>
                             </div>
                         </div>
                         <div class="row">
@@ -255,7 +254,7 @@
                                                 <option value='5'>Vendas - Faturado AGF por perםodo (sintיtico)</option>
                                                 <option value='6'>Vendas - Contrato ECT por perםodo (sintיtico)</option>
                                                 <option value='8'>Vendas - Contrato/Cartדo de postagem ECT por perםodo (sintיtico)</option>
-                                                <option value='9'>Vendas - Cliente/Coletadores por perםodo</option>
+                                                <option value='9'>Vendas - Faturamento Cliente/Coleta realizada por perםodo</option>
                                                 <option value='7'>Objetos - Atrasados</option>
                                             </select>
                                         </div>  
@@ -365,70 +364,73 @@
                         // $('#data2').removeAttr('disabled');
                     }
                 }
-                
-                function showTotaPorColetador(){
-                    var parameter = "dataInicial="+$('#data').val()+
-                                    "&dataFinal="+$('#data2').val();
-                                    
-                    JxPost('tbWrapper', JxResult, 'ajax/relatorioColetaDosColetadores.jsp',parameter, false);
-                    
+
+                function showTotaPorColetador() {
+                    var parameter = "dataInicial=" + $('#data').val() +
+                            "&dataFinal=" + $('#data2').val();
+
+                    JxPost('tbWrapper', JxResult, 'ajax/relatorioColetaDosColetadores.jsp', parameter, false);
+
                 }
-                
-                function showClientePorPeriodoDetalhado(idColetador,nomeColetador,dataInicial,dataFinal){
-                    var parameter = "idColetador="+idColetador+
-                                    "&nomeColetador="+nomeColetador+
-                                    "&dataInicial="+dataInicial+
-                                    "&dataFinal="+dataFinal;
-                    
+
+                function showClientePorPeriodoDetalhado(idColetador, nomeColetador, dataInicial, dataFinal) {
+                    var parameter = "idColetador=" + idColetador +
+                            "&nomeColetador=" + nomeColetador +
+                            "&dataInicial=" + dataInicial +
+                            "&dataFinal=" + dataFinal;
+
                     var dialog = bootbox.dialog({
                         title: 'Relatףrio de coleta',
-                        message: '<div id="reportColetaPorColetador" style=\"height:500px;overflow-y:auto;\"></div>',
+                        message: '<div id="reportColetaPorColetador" style=\"height:500px;overflow-y:auto;overflow-x:hidden;\"></div>',
                         size: 'large'
                     });
-                    
-                    dialog.init(function(){
-                        JxPost('reportColetaPorColetador', JxResult, 'ajax/relatorioColetaPorColetador.jsp',parameter, false);
-                   });
+
+                    dialog.init(function () {
+                        JxPost('reportColetaPorColetador', JxResult, 'ajax/relatorioColetaPorColetador.jsp', parameter, false);
+                    });
                 }
-                
-                function showClientePorPeriodoDetalhadoDuplicado(idColetador,nomeColetador,dataInicial,dataFinal){
-                     var parameter = "idColetador="+idColetador+
-                                    "&nomeColetador="+nomeColetador+
-                                    "&dataInicial="+dataInicial+
-                                    "&dataFinal="+dataFinal;
-                    
+
+                function showClientePorPeriodoDetalhadoDuplicado(idColetador, nomeColetador, dataInicial, dataFinal) {
+                    var parameter = "idColetador=" + idColetador +
+                            "&nomeColetador=" + nomeColetador +
+                            "&dataInicial=" + dataInicial +
+                            "&dataFinal=" + dataFinal;
+
                     var dialog = bootbox.dialog({
                         title: 'Relatףrio de coleta - Clientes com coletas duplicadas',
-                        message: '<div id="reportColetaPorColetador" style=\"height:500px;overflow-y:auto;\"></div>',
+                        message: '<div id="reportColetaPorColetador" style=\"height:500px;overflow-y:auto;overflow-x:hidden;\"></div>',
                         size: 'large'
                     });
-                    dialog.init(function(){
-                        JxPost('reportColetaPorColetador', JxResult, 'ajax/relatorioColetaPorColetadorDuplicado.jsp',parameter, false);
-                   });
-                    
+                    dialog.init(function () {
+                        JxPost('reportColetaPorColetador', JxResult, 'ajax/relatorioColetaPorColetadorDuplicado.jsp', parameter, false);
+                    });
+
                 }
-                
-                function showClienteMovimento(idColetador,idCliente,nomeColetador,dataInicial,dataFinal){
-                     var parameter = "idColetador="+idColetador+
-                                    "&idCliente="+idCliente+
-                                    "&nomeColetador="+nomeColetador+
-                                    "&dataInicial="+dataInicial+
-                                    "&dataFinal="+dataFinal;
-                    
+
+                function showClienteMovimento(idColetador, idCliente, nomeColetador, dataInicial, dataFinal) {
+                    var parameter = "idColetador=" + idColetador +
+                            "&idCliente=" + idCliente +
+                            "&nomeColetador=" + nomeColetador +
+                            "&dataInicial=" + dataInicial +
+                            "&dataFinal=" + dataFinal;
+
                     var dialog = bootbox.dialog({
                         title: 'Relatףrio de coleta - Movimentaחדo do cliente',
-                        message: '<div id="reportMovimentoCliente" style=\"height:300px;overflow-y:auto;\"></div>',
-                        className:'modalMovimento'
-                        
-                    });
-                    dialog.init(function(){
-                        JxPost('reportMovimentoCliente', JxResult, 'ajax/relatorioColetaMovimentoCliente.jsp',parameter, false);
-                   });
-                    
-                }
-                
-            </script>
+                        message: '<div id="reportMovimentoCliente" style=\"height:300px;overflow-y:auto;overflow-x:hidden;\"></div>',
+                        className: 'modalMovimento'
 
+                    });
+                    dialog.init(function () {
+                        JxPost('reportMovimentoCliente', JxResult, 'ajax/relatorioColetaMovimentoCliente.jsp', parameter, false);
+                    });
+
+                }
+
+
+
+            </script>
+                                                
+           
     </body>
 </html>
 <%}%>

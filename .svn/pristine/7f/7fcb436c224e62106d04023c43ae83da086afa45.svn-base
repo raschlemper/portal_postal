@@ -1,0 +1,942 @@
+'use strict';
+
+app.controller('LancamentoController', 
+    ['$scope', 'LancamentoService', 'LancamentoTransferenciaService', 'LancamentoConciliadoService', 'ContaService', 'PlanoContaService', 
+    'CentroCustoService', 'ConfiguracaoService', 'ReportService', 'ModalService', 'DatePickerService', 'ListaService', 'LancamentoHandler', 
+    'LancamentoRateioHandler', 'LancamentoTransferenciaHandler', 'LancamentoConciliadoHandler', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
+    function ($scope, LancamentoService, LancamentoTransferenciaService, LancamentoConciliadoService, ContaService, PlanoContaService, 
+        CentroCustoService, ConfiguracaoService, ReportService, ModalService, DatePickerService, ListaService, LancamentoHandler, 
+        LancamentoRateioHandler, LancamentoTransferenciaHandler, LancamentoConciliadoHandler, FinanceiroValidation, LISTAS, MESSAGES) {
+
+        var init = function () {
+            $scope.lancamentos = [];
+            $scope.lancamentosLista = [];    
+            $scope.lancamentosListaTable = [];
+            $scope.tipos = LISTAS.lancamento;
+            $scope.modelos = LISTAS.modeloLancamento;
+            $scope.situacoes = LISTAS.situacaoLancamento;
+            $scope.statusConta = LISTAS.statusConta;
+            $scope.periodos = LISTAS.periodo;
+//            $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
+//            $scope.datepickerDataFim = angular.copy(DatePickerService.default);  
+            $scope.outOfRangePeriodo = false;  
+            $scope.saldoTotal = 0;
+            $scope.lancSearch = {};
+            getTitle();
+            contas();
+            initTable();
+        };  
+
+        // ***** TABLE ***** //
+
+        var initTable = function() {            
+            $scope.colunas = [              
+                {label: '', column: 'tipo', headerClass: 'no-sort', dataClass:'text-center col-tipo', filter: {name: 'tipoLancamento', args: ''}},               
+                {label: '', column: 'anexo', headerClass: 'no-sort', dataClass:'text-center col-anexo', filter: {name: 'anexo', args: '', callback: 'linha.events.anexar(item)'}},           
+                {label: '', column: 'situacao.descricao', headerClass: 'no-sort', dataClass:'text-center col-compensado', filter: {name: 'situacaoLancamento', args: '', callback: 'linha.events.compensar(item)'}}, 
+                {label: '', column: 'numeroLoteConciliado', headerClass: 'no-sort', dataClass:'text-center col-reconciliado', filter: {name: 'conciliadoLancamento', args: ''}},              
+                {label: 'Conta', column: 'conta.nome'},                      
+                {label: 'Data', column: 'dataLancamento', dataClass: 'text-center cel-data', filter: {name: 'date', args: 'dd/MM/yy'}},                
+                {label: 'Número', column: 'numero'},               
+                {label: 'Plano Conta', column: 'planoConta.descricao'},   
+                {label: 'Centro Custo', column: 'centroCusto.descricao', showColumn: true, selected: false},
+                {label: 'Usuário', column: 'usuario', showColumn: true, selected: false},
+                {label: 'Favorecido', column: 'favorecido'},                
+                {label: 'Histórico', column: 'historico'},
+                {label: 'Crédito', column: 'deposito', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}},  
+                {label: 'Débito', column: 'pagamento', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}},  
+                {label: 'Saldo', column: 'saldo', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'saldoLancamento', args: ''}}
+            ]            
+            $scope.linha = {
+                conditionalClass: function(item) {
+                    if(item.tipo.id === $scope.tipos[0].id) return 'text-primary';
+                    else if(item.tipo.id === $scope.tipos[1].id) return 'text-danger';
+                    else if(item.tipo.id === $scope.tipos[$scope.tipos.length - 1].id) return 'text-warning';
+                },
+                events: { 
+                    edit: function(lancamento) {
+                        if(isAutomatico(lancamento.tipo.modelo, MESSAGES.lancamento.info.ALTERAR_AUTOMATICO)) return;
+                        if(validaConciliado(lancamento.idLancamento)) {
+                            modalConfirmarConciliado().then(function() {
+                                $scope.editar($scope.lancSearch.conta, lancamento, false);
+                            });
+                        } else {
+                            $scope.editar($scope.lancSearch.conta, lancamento, false);
+                        }
+                    },
+                    remove: function(lancamento) {
+                        if(isAutomatico(lancamento.tipo.modelo, MESSAGES.lancamento.info.EXCLUIR_AUTOMATICO)) return;
+                        if(validaConciliado(lancamento.idLancamento)) {
+                            modalConfirmarConciliado().then(function() {
+                                $scope.excluir($scope.lancSearch.conta, lancamento);
+                            });
+                        } else {
+                            $scope.excluir($scope.lancSearch.conta, lancamento);
+                        }
+
+                    },
+                    view: function(lancamento) {
+                        $scope.visualizar($scope.lancSearch.conta, lancamento);
+                    },
+                    compensar: function(lancamento) {
+                        $scope.compensar($scope.lancSearch.conta, lancamento, false);
+                    },
+                    anexar: function(lancamento) {
+                        $scope.editar($scope.lancSearch.conta, lancamento, true);
+                    }
+                }
+            };
+            $scope.events = { 
+                table: function(lancamentos) {
+                    calculateSaldo(lancamentos);
+                    $scope.lancamentosListaTable = angular.copy(lancamentos);
+                }
+            }
+        };
+
+        $scope.filter = function(lista, search) { 
+            var tipoSelected = (search.tipo ? JSON.parse(search.tipo) : search.tipo);
+            var planoContaSelected = (search.planoConta ? PlanoContaService.getChildrenListPlanoConta(null, search.planoConta) : search.planoConta);
+            var centroCustoSelected = (search.centroCusto ? CentroCustoService.getChildrenListCentroCusto(null, search.centroCusto) : search.centroCusto);
+            lista = _.filter(lista, function(item) {
+                return filterByData(item, search) && 
+                       filterTipo(item, tipoSelected) && 
+                       filterByPlanoConta(item, planoContaSelected) &&
+                       filterByCentroCusto(item, centroCustoSelected);
+            });    
+//            lista = filterTipo(lista, search);
+            return lista;
+        };
+
+        var filterByData = function(item, search) {
+            var dataInicio = moment(search.dataInicio);
+            var dataFim = moment(search.dataFim);
+            if((!search.dataInicio || !dataInicio.isValid()) || (!search.dataFim || !dataFim.isValid())) return true;
+            var data = moment(item.dataLancamento);
+            return (data.isBefore(search.dataFim) && data.isAfter(search.dataInicio) 
+                    || (data.isSame(search.dataInicio) || data.isSame(search.dataFim)));
+        };  
+
+        var filterTipo = function(item, tipoSelected) {          
+            if(!tipoSelected) return true;
+            return item.tipo.id === tipoSelected.id;
+        };  
+
+        var filterByPlanoConta = function(item, planoContaSelected) {          
+            if(!planoContaSelected) return true;
+            var selected = false;
+            planoContaSelected.map(function(conta) {                
+                if(item.planoConta && item.planoConta.id && item.planoConta.id.indexOf(conta.id) > -1) { selected = true; }
+            })
+            return selected;
+        };
+
+        var filterByCentroCusto = function(item, centroCustoSelected) {          
+            if(!centroCustoSelected) return true;
+            var selected = false;
+            centroCustoSelected.map(function(custo) {                
+                if(item.centroCusto && item.centroCusto.id && item.centroCusto.id.indexOf(custo.id) > -1) { selected = true; }
+            })
+            return selected;
+        };
+        
+        $scope.filterByDays = function(days) {
+            $scope.lancSearch.periodo = null;
+            $scope.lancSearch.dataInicio = moment().add(days, 'days').format('YYYY-MM-DD');
+            $scope.lancSearch.dataFim = moment().add(days, 'days').format('YYYY-MM-DD');
+        };
+
+        // ***** CONTROLLER ***** //
+
+        var getTitle = function() {
+            $scope.title = MESSAGES.lancamento.title.LISTA; 
+        };
+
+        var contas = function() {
+            ContaService.getAll()
+                .then(function (data) {
+                    $scope.contas = data;
+                    $scope.lancSearch.conta = $scope.contas[0];
+                    planoContas();
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+
+        $scope.changeConta = function(conta) {
+            if(!validaPeriodo($scope.lancSearch.dataInicio, $scope.lancSearch.dataFim)) return;
+            $scope.lancSearch.conta = conta;
+            if(conta) { todosByConta(conta); }
+            else { todos(); }
+        };
+
+        var planoContas = function() {
+            PlanoContaService.getStructure()
+                .then(function (data) {
+                    $scope.planoContas = data;
+                    PlanoContaService.estrutura($scope.planoContas);
+                    $scope.planoContas = PlanoContaService.flatten($scope.planoContas);                 
+                    centroCustos();
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+
+        var centroCustos = function() {
+            CentroCustoService.getStructure()
+                .then(function (data) {
+                    $scope.centroCustos = data;
+                    CentroCustoService.estrutura($scope.centroCustos);
+                    $scope.centroCustos = CentroCustoService.flatten($scope.centroCustos);  
+                    configuracao();
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+
+        var configuracao = function() {            
+            ConfiguracaoService.get()
+                .then(function(data) { 
+                    var periodo = data.periodoLancamento || $scope.periodos[1];
+                    $scope.changePeriodo($scope.lancSearch.conta, periodo);      
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        var todos = function() {
+            if(!$scope.lancSearch.dataInicio || !$scope.lancSearch.dataFim) return;
+            LancamentoService.getAll($scope.lancSearch.dataInicio.format('YYYY-MM-DD'), $scope.lancSearch.dataFim.format('YYYY-MM-DD'))
+                .then(function (data) {
+                    $scope.lancamentos = angular.copy(data);
+                    $scope.lancamentosLista = criarLancamentosLista(data);
+                    if(!$scope.lancamentosLista.length) { calculateSaldo($scope.lancamentosLista); }
+                })
+                .catch(function(e) {
+                    console.log(e);
+                });
+        };
+
+        var todosByConta = function(conta) {
+            if(!$scope.lancSearch.dataInicio || !$scope.lancSearch.dataFim) return;
+            if(!conta || !conta.idConta) { todos(); }
+            else {  
+                ContaService.getLancamento(conta.idConta, $scope.lancSearch.dataInicio.format('YYYY-MM-DD'), $scope.lancSearch.dataFim.format('YYYY-MM-DD'))
+                    .then(function (data) {
+                        $scope.lancamentos = angular.copy(data.lancamentos);
+                        $scope.lancamentosLista = criarLancamentosLista(data.lancamentos);
+                        if(!$scope.lancamentosLista.length) { calculateSaldo($scope.lancamentosLista); }
+                    })
+                    .catch(function(e) {
+                        console.log(e);
+                    });
+            }
+        };
+
+        $scope.changePeriodo = function(conta, periodo) {
+            if(!periodo) return;
+            var dataInicio = moment();
+            var dataFim = moment();
+            $scope.lancSearch.periodo = periodo;
+            switch(periodo.id) {
+                case 0:
+                    dataInicio = dataInicio.startOf('month');
+                    dataFim = dataFim.endOf('month');
+                    break; 
+                case 1:
+                    dataInicio = dataInicio.subtract(7, 'days');
+                    break; 
+                case 2:
+                    dataInicio = dataInicio.subtract(15, 'days');
+                    break; 
+                case 3:
+                    dataInicio = dataInicio.subtract(30, 'days');
+                    break; 
+                case 4:
+                    dataInicio = dataInicio.subtract(60, 'days');
+                    break; 
+                case 5:
+                    dataInicio = dataInicio.subtract(90, 'days');
+                    break; 
+            }           
+            setDataInicio(dataInicio);
+            setDataFim(dataFim);
+            todosByConta(conta);
+        };
+        
+        $scope.changeDataInicio = function(conta, dataInicio) {
+            changeData(conta, dataInicio, $scope.lancSearch.dataFim);
+        };
+        
+        $scope.changeDataFim = function(conta, dataFim) {
+            changeData(conta, $scope.lancSearch.dataInicio, dataFim);
+        };
+        
+        var changeData = function(conta, dataInicio, dataFim) {
+            $scope.lancSearch.periodo = null;
+            $scope.lancSearch.dataInicio = getDate(dataInicio);
+            $scope.lancSearch.dataFim = getDate(dataFim);
+            if($scope.lancSearch.dataInicio && $scope.lancSearch.dataFim) {
+                if(!validaPeriodo($scope.lancSearch.dataInicio, $scope.lancSearch.dataFim)) { 
+                    $scope.outOfRangePeriodo = true;
+                } else {
+                    $scope.outOfRangePeriodo = false;
+                    todosByConta(conta);                        
+                }
+            }
+        };
+        
+        var setDataInicio = function(dataInicio) {
+            $scope.lancSearch.dataInicio = getDate(dataInicio);
+//            angular.element("#dataInicio").val(dataInicio.format('DD/MM/YYYY'));
+        };
+        
+        var setDataFim = function(dataFim) {
+            $scope.lancSearch.dataFim = getDate(dataFim);
+//            angular.element("#dataFim").val(dataFim.format('DD/MM/YYYY'));
+                        
+        };
+        
+        var getDate = function(date) {
+            if(!angular.isDate(date)) {
+                return moment(date, "DD/MM/YYYY"); 
+            } 
+            return date;
+        };
+
+        var criarLancamentosLista = function(lancamentos) {
+            return _.map(lancamentos, function(lancamento) { 
+
+                if(lancamento.tipo.id === $scope.tipos[1].id) { 
+                    lancamento.pagamento = lancamento.valor * -1;
+                    lancamento.deposito = null;
+                } 
+                else if(lancamento.tipo.id === $scope.tipos[0].id) { 
+                    lancamento.deposito = lancamento.valor; 
+                    lancamento.pagamento = null;
+                }  
+
+                if(lancamento.numeroParcela) { lancamento.numero = lancamento.numero + '-' + lancamento.numeroParcela; }
+
+                if(lancamento.planoConta && lancamento.planoConta.idPlanoConta) { 
+                    var planoConta = ListaService.getPlanoContaValue($scope.planoContas, lancamento.planoConta.idPlanoConta); 
+                    lancamento.planoConta = { descricao: planoConta.descricao, id: getIdsPlanoConta(planoConta) }                    
+                } else {
+                    lancamento.planoConta = { descricao: null };
+                }
+
+                if(lancamento.centroCusto && lancamento.centroCusto.idCentroCusto) { 
+                    var centroCusto = ListaService.getCentroCustoValue($scope.centroCustos, lancamento.centroCusto.idCentroCusto); 
+                    lancamento.centroCusto = { descricao: centroCusto.descricao, id: getIdsCentroCusto(centroCusto) }              
+                } else {
+                    lancamento.centroCusto = { descricao: null };
+                }
+
+                if(lancamento.modelo.id === $scope.modelos[1].id || lancamento.modelo.id === $scope.modelos[3].id) { 
+                    lancamento.planoConta = { descricao: lancamento.modelo.descricao };
+                    lancamento.centroCusto = { descricao: lancamento.modelo.descricao };
+                }
+
+                lancamento.tipo.modelo = lancamento.modelo;
+                lancamento.anexo = { exists: lancamento.anexos, modelo: lancamento.modelo };
+
+                if(lancamento.rateios && lancamento.rateios.length) {
+                    lancamento.planoConta = { descricao: "Diversos", id: getIdsPlanoContaByRateio(lancamento.rateios) };
+                    lancamento.centroCusto = { descricao: "Diversos", id: getIdsCentroCustoByRateio(lancamento.rateios) };
+                }
+                
+                if(lancamento.favorecido) { lancamento.favorecido = lancamento.favorecido.nome; }
+
+                return _.pick(lancamento, 'idLancamento', 'tipo', 'anexo', 'conta', 'dataLancamento', 'numero', 'planoConta', 'centroCusto', 'usuario', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico', 'situacao', 'numeroLoteConciliado');
+            })
+        };
+        
+        var getIdsPlanoConta = function(value) {
+            var planoContas = [];
+            planoContas.push(value.idPlanoConta);
+            return planoContas;
+        };
+        
+        var getIdsPlanoContaByRateio = function(values) {
+            var planoContas = [];
+            values.map(function(value) {
+                planoContas.push(value.planoConta.idPlanoConta);
+            });
+            return planoContas;
+        };
+        
+        var getIdsCentroCusto = function(value) {
+            var centroCustos = [];
+            centroCustos.push(value.idCentroCusto);
+            return centroCustos;
+        };
+        
+        var getIdsCentroCustoByRateio = function(values) {
+            var centroCustos = [];
+            values.map(function(value) {
+                centroCustos.push(value.centroCusto.idCentroCusto);
+            });
+            return centroCustos;
+        };
+
+        var calculateSaldo = function(lancamentos) {
+            if(!$scope.lancSearch.dataInicio) {
+                calculateSaldoInicial(0, lancamentos);
+            } else {
+                var conta = 0;
+                if($scope.lancSearch.conta && $scope.lancSearch.conta.idConta) { conta = $scope.lancSearch.conta.idConta; }
+                LancamentoService.getSaldoByConta(conta, null, 
+                        moment($scope.lancSearch.dataInicio).subtract(1, 'days').format('YYYY-MM-DD'))
+                    .then(function (data) {
+                        if(!data || !data.length) { calculateSaldoInicial(0, lancamentos); }
+                        else { calculateSaldoInicial(data[0].valor, lancamentos); }
+                    })
+                    .catch(function(e) {
+                        console.log(e);
+                    });
+            }
+        };
+
+        var calculateSaldoInicial = function(saldoInicial, lancamentos) {
+            var saldo = calculateSaldoInicialContas(saldoInicial);
+            $scope.saldoTotal = 0;
+            $scope.saldoTotal += saldo;
+            _.map(lancamentos, function(lancamento) {
+                if(lancamento.pagamento) { 
+                    saldo += lancamento.pagamento;
+                    $scope.saldoTotal += lancamento.pagamento;
+                } 
+                else if(lancamento.deposito) {
+                    saldo += lancamento.deposito;
+                    $scope.saldoTotal += lancamento.deposito;
+                }
+                lancamento.saldo = saldo;
+            });
+        };
+        
+        var calculateSaldoInicialContas = function(saldoInicial) {
+            if($scope.lancSearch.conta) return $scope.lancSearch.conta.valorSaldoAbertura + saldoInicial;
+            if($scope.contas && $scope.contas.length) {
+                var saldo = saldoInicial;
+                $scope.contas.map(function(conta) {
+                    saldo += conta.valorSaldoAbertura;
+                });
+                return saldo;
+            }
+            return saldoInicial;
+        };
+
+        var getLancamentoSelecionados = function(conta, lancamentos, callback) {            
+            var lancamentosSelecionados = [];
+            _.map(lancamentos, function(lancamento) {
+                if(!lancamento.selected) return;
+                if(callback) { lancamento = callback(conta, lancamento); }
+                lancamentosSelecionados.push(angular.copy(lancamento));
+            });
+            return lancamentosSelecionados;
+        };
+
+        var getLancamentosProgramado = function(lancamentos) {               
+            var lancamentosSelecionados = [];
+            _.map(lancamentos, function(lancamento) {        
+                if(!existeLancamentoProgramadoParceladoPosterior(lancamento)) {                
+                    lancamentosSelecionados.push(lancamento);
+                }                 
+            });
+            return lancamentosSelecionados;
+        };
+        
+        var isAutomatico = function(modelo, msg) {
+            if(modelo.id != $scope.modelos[6].id) return false;
+            modalMessage(msg);
+            return true;
+        };
+
+        // ***** VISUALIZAR ***** //
+
+        $scope.visualizar = function(conta, lancamento) {
+            LancamentoService.get(lancamento.idLancamento)
+                .then(function(result) {
+                     visualizar(conta, result)         
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        var visualizar = function(conta, lancamento) {
+            modalVisualizar(lancamento)
+               .then(function(lancamentoEditar) {
+                   $scope.editar(conta, lancamentoEditar, false);
+               });
+        };
+
+        // ***** SALVAR ***** //
+
+        $scope.salvar = function(conta, tipo) {
+            if(!validaConta(conta)) return;
+            salvar(conta, tipo);
+        };
+
+        var salvar = function(conta, tipo) {
+            modalSalvar(conta, null, tipo, false).then(function(result) {
+                result = ajustarDados(result);
+                save(conta, result);
+            });
+        };
+
+        var save = function(conta, lancamento) {
+            LancamentoService.save(lancamento)
+                .then(function(data) {  
+                    //modalMessage(MESSAGES.lancamento.sucesso.INSERIDO_SUCESSO);
+                    todosByConta(conta);
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+
+        };
+
+        // ***** EDITAR ***** //
+
+        $scope.editar = function(conta, lancamento, goToAnexo) {
+            if(!validaConta(conta)) return;
+            LancamentoService.get(lancamento.idLancamento)
+                .then(function(result) {
+                    if(result.lancamentoTransferencia) {
+                        $scope.transferir(conta, result.lancamentoTransferencia);
+                    } else {   
+                        editar(conta, result, goToAnexo);
+                    }
+                })
+                .catch(function(e) {
+                    modalMessage(e.error);
+                });
+
+        };
+
+        var editar = function(conta, lancamento, goToAnexo) {                   
+            modalSalvar(conta, lancamento, lancamento.tipo, goToAnexo)
+                .then(function(result) {
+                    if(!result) { 
+                        todosByConta(conta); 
+                        return;
+                    }
+                    result = ajustarDados(result);
+                    update(conta, result);
+                });            
+        }
+
+        var update = function(conta, lancamento) {
+            LancamentoService.update(lancamento.idLancamento, lancamento)
+                .then(function (data) {  
+                    modalMessage(MESSAGES.lancamento.sucesso.ALTERADO_SUCESSO);
+                    todosByConta(conta);
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });            
+        }
+
+        // ***** EXCLUIR ***** //
+
+        $scope.excluir = function(conta, lancamento) {
+            if(!validaConta(conta)) return;
+            LancamentoService.get(lancamento.idLancamento)
+                .then(function(data) {
+//                    if(data.lancamentoProgramado) {
+//                        excluirLancamentoProgramado(conta, data);
+//                    } else {
+                        excluir(conta, data);
+//                    }  
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });            
+        }; 
+
+        var excluirLancamentoProgramado = function(conta, lancamento) {    
+            if(existeLancamentoProgramadoParceladoPosterior(lancamento)) {                
+                modalMessage(MESSAGES.lancamento.info.EXCLUIR_POSTERIOR);
+            } else {
+                excluir(conta, lancamento);
+            } 
+        };
+
+        var excluir = function(conta, lancamento) {
+            modalExcluir(MESSAGES.lancamento.info.CONFIRMAR_EXCLUIR)
+                .then(function() {
+                    remove(conta, lancamento);
+                });
+        };
+
+        var remove = function(conta, lancamento) {
+            LancamentoService.delete(lancamento.idLancamento)
+                .then(function(data) { 
+                    modalMessage(MESSAGES.lancamento.sucesso.REMOVIDO_SUCESSO);
+                    todosByConta(conta);                        
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });            
+        };
+
+        // ***** EXCLUIR TODOS ***** //
+
+        $scope.excluirTodos = function(conta, lancamentos) {
+            if(!validaConta(conta)) return;
+            var lancamentoSelecionados = getLancamentoSelecionados(conta, lancamentos, ajustarDadosExcluir);  
+            if(!existeLancamentoSelecionado(lancamentoSelecionados)) return;
+//            var lancamentosValidos = getLancamentosProgramado(lancamentoSelecionados);
+            var msg = MESSAGES.lancamento.info.CONFIRMAR_EXCLUIR_TODOS;
+//            if(lancamentosValidos.length !== lancamentoSelecionados.length) { 
+//                msg = MESSAGES.lancamento.info.CONFIRMAR_EXCLUIR_PROGRAMADOS_TODOS;
+//            }
+            excluirTodos(conta, lancamentoSelecionados, msg);
+        }; 
+
+        var excluirTodos = function(conta, lancamentos, message) {
+            modalExcluir(message)
+                .then(function() {
+                    removeAll(conta, lancamentos);
+                });
+        };
+
+        var removeAll = function(conta, lancamentos) {
+            var lancamentoList = [];
+            _.map(lancamentos, function(lancamento) {
+                lancamentoList.push(ajustarDados(lancamento));
+            });
+            LancamentoService.deleteAll(lancamentoList)
+                .then(function(data) { 
+                    modalMessage(MESSAGES.lancamento.sucesso.REMOVIDO_SUCESSO_TODOS);
+                    todosByConta(conta);                        
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });            
+        };
+
+        // ***** TRANSFERIR ***** //
+
+        $scope.transferir = function(conta, lancamentoTransferencia) {
+            if(!validaConta(conta)) return;
+            if(!lancamentoTransferencia) {
+                transferir(conta, lancamentoTransferencia);
+            } else {
+                LancamentoTransferenciaService.get(lancamentoTransferencia.idLancamentoTransferencia)
+                    .then(function(lancamentoTransferencia) {
+                        transferir(conta, lancamentoTransferencia);
+                    })
+                    .catch(function(e) {
+                        modalMessage(e.error);
+                    });
+            }            
+        };
+
+        var transferir = function(conta, lancamentoTransferencia) {
+            modalTransferir(conta, lancamentoTransferencia).then(function(result) {
+                result = ajustarDadosTransferencia(result);
+                if(lancamentoTransferencia) {  
+                    updateTransferencia(conta, result);
+                } else {
+                    saveTransferencia(conta, result);
+                }
+            });
+        };
+
+        var saveTransferencia = function(conta, lancamentoTransferencia) {
+            LancamentoTransferenciaService.save(lancamentoTransferencia)
+                .then(function(data) {  
+                    //modalMessage(MESSAGES.lancamento.transferir.sucesso.INSERIDO_SUCESSO);
+                    todosByConta(conta);
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });        
+        };
+
+        var updateTransferencia = function(conta, lancamentoTransferencia) {
+            LancamentoTransferenciaService.update(lancamentoTransferencia.idLancamentoTransferencia, lancamentoTransferencia)
+                .then(function(data) {  
+                    modalMessage(MESSAGES.lancamento.transferir.sucesso.ALTERADO_SUCESSO);
+                    todosByConta(conta);
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });        
+        };
+
+        // ***** RECONCILIAR ***** //
+
+        $scope.conciliar = function(conta) {
+            if(!validaContaSelected(conta)) return;
+            modalConciliar(conta).then(function(result) {
+                result = ajustarDadosConciliado(conta, result);
+                conciliar(conta, result);
+            });
+        };
+
+        var conciliar = function(conta, lancamentoConciliado) {
+            LancamentoConciliadoService.create(lancamentoConciliado)
+                .then(function(data) {  
+                    //modalMessage(MESSAGES.lancamento.conciliar.sucesso.INSERIDO_SUCESSO);
+                    todosByConta(conta);
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        // ***** COMPENSAR ***** //
+
+        $scope.compensarTodos = function(conta, lancamentos) {
+            var lancamentoSelecionados = getLancamentoSelecionados(conta, angular.copy(lancamentos), ajustarDadosCompensar)
+            if(!existeLancamentoSelecionado(lancamentoSelecionados)) return;
+            modalConfirmarCompensado().then(function() {
+                compensarTodos(conta, lancamentoSelecionados);
+            });
+        };
+
+        $scope.compensar = function(conta, lancamento) {
+            var lancamentosCompletos = [];
+            lancamentosCompletos.push(ajustarDadosCompensar(conta, lancamento));
+            compensarTodos(conta, lancamentosCompletos);
+        };
+
+        var compensarTodos = function(conta, lancamentos) {
+            LancamentoService.updateSituacao(lancamentos)
+                .then(function (data) { 
+                    todosByConta(conta);
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        // ***** MOVER ***** //
+
+        $scope.moverContaTodos = function(conta, lancamentos) {    
+            var lancamentoSelecionados = getLancamentoSelecionados(conta, angular.copy(lancamentos), ajustarDadosMoverConta)
+            if(!existeLancamentoSelecionado(lancamentoSelecionados)) return;
+            modalMoverConta(conta).then(function(data) {
+                lancamentoSelecionados = getLancamentoSelecionados(data, angular.copy(lancamentos), ajustarDadosMoverConta)
+                moverContaTodos(conta, lancamentoSelecionados);
+            });
+        };
+
+        var moverContaTodos = function(conta, lancamentos) {
+            LancamentoService.updateAll(lancamentos)
+                .then(function (data) { 
+                    todosByConta(conta);
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        // ***** REPORT ***** //
+        
+        $scope.report = function(lancamentos) {
+            calculateSaldo(lancamentos);
+            var params = LancamentoService.report(lancamentos);   
+            ReportService.pdf('lancamento', params);
+        };
+        
+        $scope.export = function(lancamentos) {
+            var params = LancamentoService.report(lancamentos);   
+            ReportService.excel('lancamento', params);
+        };
+
+        // ***** VALIDAR ***** //
+
+        var validaConta = function(conta) {
+            return FinanceiroValidation.contaEncerrada(conta);
+        };
+
+        var validaContaSelected = function(conta) {
+            if(conta) return true;
+            modalMessage(MESSAGES.lancamento.conciliar.info.SEM_CONTA_SELECIONADO);
+            return false;
+        };
+
+        var validaPeriodo = function(dataInicio, dataFim) {
+            if($scope.lancSearch.periodo) { return FinanceiroValidation.periodoLancamentos(dataInicio, dataFim, 90); }
+            else { return FinanceiroValidation.periodoLancamentos(dataInicio, dataFim, 120); }
+        };
+
+        var validaConciliado = function(idLancamento) {
+            var lancamento = ListaService.getLancamentoValue($scope.lancamentos, idLancamento);
+            if(lancamento.numeroLoteConciliado) { return true; }
+            return false
+        };
+
+        var existeLancamentoSelecionado = function(lancamentosSelecionados) {
+            if(lancamentosSelecionados && lancamentosSelecionados.length) return true;
+            modalMessage(MESSAGES.lancamento.programar.info.SEM_LANCAMENTO_SELECIONADO);
+            return false;
+        };
+
+        var existeLancamentoProgramadoParceladoPosterior = function(lancamento) {   
+            if(lancamento.modelo.id !== $scope.modelos[4].id) return false;         
+            if(lancamento.lancamentoProgramado 
+                    && lancamento.numeroParcela < lancamento.lancamentoProgramado.numeroParcela) {                
+                return true;
+            } 
+            return false;
+        };
+
+        // ***** AJUSTAR ***** //
+
+        var ajustarDadosExcluir = function(conta, lancamento) { 
+            var lancamentoCompleto = ListaService.getLancamentoValue($scope.lancamentos, lancamento.idLancamento);
+            lancamentoCompleto.conta = conta;
+            return lancamentoCompleto;
+        };
+
+        var ajustarDadosCompensar = function(conta, lancamento) {
+            var lancamentoCompleto = ListaService.getLancamentoValue($scope.lancamentos, lancamento.idLancamento);
+            lancamentoCompleto.conta = conta;
+            if(lancamentoCompleto.situacao.id === $scope.situacoes[2].id) { 
+                lancamentoCompleto.situacao = $scope.situacoes[0]; 
+            } else {
+                lancamentoCompleto.situacao = $scope.situacoes[2];                 
+            }
+            lancamentoCompleto = ajustarDados(lancamentoCompleto);
+            return lancamentoCompleto;
+        };
+
+        var ajustarDadosMoverConta = function(conta, lancamento) {
+            var lancamentoCompleto = ListaService.getLancamentoValue($scope.lancamentos, lancamento.idLancamento);
+            lancamentoCompleto.conta = conta;
+            lancamentoCompleto = ajustarDados(lancamentoCompleto);
+            return lancamentoCompleto;
+        };
+
+        var ajustarDados = function(data) {  
+            var lancamento = LancamentoHandler.handle(data);
+            lancamento.rateios = LancamentoRateioHandler.handleList(data.rateios);
+            return lancamento;
+        };
+
+        var ajustarDadosTransferencia = function(data) { 
+            var modelo = $scope.modelos[1];
+            var lancamentoTransferencia = LancamentoTransferenciaHandler.handle(data);
+            lancamentoTransferencia.lancamentoOrigem = getLancamento(data.contaOrigem, null, null, $scope.tipos[1], modelo, 
+                data.dataLancamentoOrigem, data.dataCompetenciaOrigem, data, data.lancamentoOrigem);
+            lancamentoTransferencia.lancamentoDestino = getLancamento(data.contaDestino, null, null,  $scope.tipos[0], modelo, 
+                data.dataLancamentoDestino, data.dataCompetenciaDestino, data, data.lancamentoDestino);
+            return lancamentoTransferencia;
+        };
+
+        var ajustarDadosConciliado = function(conta, data) {    
+            var lancamento = getLancamento(conta, data.planoConta, data.centroCusto, data.tipo, $scope.modelos[5], 
+                data.dataLancamento, data.dataCompetencia, data, null);
+            var lancamentoConciliado = LancamentoConciliadoHandler.handle(data);
+            lancamentoConciliado.lancamento = lancamento;
+            return lancamentoConciliado;
+        };
+
+        var getLancamento = function(conta, planoConta, centroCusto, tipo, modelo, dataLancamento, dataCompetencia, data, lancamentoOriginal) {
+            data.idLancamento = (lancamentoOriginal && lancamentoOriginal.idLancamento) || null;
+            data.conta = conta;
+            data.planoConta = planoConta;
+            data.centroCusto = centroCusto;
+            data.tipo = tipo;
+            data.modelo = modelo;
+            data.dataLancamento = dataLancamento;
+            data.dataCompetencia = dataCompetencia;
+            data.situacao = (data && data.situacao) || $scope.situacoes[0];
+            return LancamentoHandler.handle(data);
+        };
+
+        // ***** MODAL ***** //
+
+        var modalMessage = function(message) {
+            ModalService.modalMessage(message);
+        };
+
+        var modalVisualizar = function(lancamento) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamentoVisualizar.html', 'ModalLancamentoVisualizarController', 'lg',
+                {
+                    lancamento: function() {
+                        return lancamento;
+                    }
+                });
+            return modalInstance.result;
+        };
+
+        var modalSalvar = function(conta, lancamento, tipo, anexo) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamento.html', 'ModalLancamentoController', 'lg',
+                {
+                    lancamento: function() {
+                        return lancamento;
+                    },
+                    conta: function() {
+                        return conta;
+                    },
+                    tipo: function() {
+                        return tipo;
+                    },
+                    anexo: function() {
+                        return anexo;
+                    }
+                });
+            return modalInstance.result;
+        };
+
+        var modalTransferir = function(conta, lancamentoTransferencia) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamentoTransferir.html', 'ModalLancamentoTransferirController', 'lg',
+                {
+                    lancamentoTransferencia: function() {
+                        return lancamentoTransferencia;
+                    },                    
+                    conta: function() {
+                        return conta;
+                    }
+                });
+            return modalInstance.result;
+        };
+
+        var modalConciliar = function(conta) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamento/modalLancamentoConciliar.html', 'ModalLancamentoConciliarController', 'lg',
+                {
+                    conta: function() {
+                        return conta;
+                    },
+                });
+            return modalInstance.result;
+        };
+
+        var modalMoverConta = function(conta) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/conta/modalMoverConta.html', 'ModalMoverContaController', 'lg', 
+                {
+                    conta: function() {
+                        return conta;
+                    }                
+                });
+            return modalInstance.result;
+        };
+
+        var modalConfirmarConciliado = function() {
+            var modalInstance = ModalService.modalConfirmar(MESSAGES.lancamento.info.ALERT, MESSAGES.lancamento.conciliar.info.CONFIRMAR_ALTERAR);
+            return modalInstance.result;
+        };
+
+        var modalConfirmarCompensado = function() {
+            var modalInstance = ModalService.modalConfirmar(MESSAGES.lancamento.info.ALERT, MESSAGES.lancamento.compensar.info.CONFIRMAR_TODOS);
+            return modalInstance.result;
+        };
+
+        var modalExcluir = function(message) {
+            var modalInstance = ModalService.modalExcluir(MESSAGES.lancamento.info.ALERT_EXCLUIR, message);
+            return modalInstance.result;
+        };
+
+        init();
+
+    }]);

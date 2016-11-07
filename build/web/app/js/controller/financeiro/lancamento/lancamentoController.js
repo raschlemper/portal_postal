@@ -16,7 +16,7 @@ app.controller('LancamentoController',
             $scope.modelos = LISTAS.modeloLancamento;
             $scope.situacoes = LISTAS.situacaoLancamento;
             $scope.statusConta = LISTAS.statusConta;
-            $scope.periodos = LISTAS.periodo;
+            $scope.periodos = LancamentoService.periodos;
 //            $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
 //            $scope.datepickerDataFim = angular.copy(DatePickerService.default);  
             $scope.outOfRangePeriodo = false;  
@@ -45,7 +45,7 @@ app.controller('LancamentoController',
                 {label: 'Histórico', column: 'historico'},
                 {label: 'Crédito', column: 'deposito', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}},  
                 {label: 'Débito', column: 'pagamento', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}},  
-                {label: 'Saldo', column: 'saldo', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'saldoLancamento', args: ''}}
+                {label: 'Saldo', column: 'saldo', selected: true, headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'saldoLancamento', args: ''}}
             ]            
             $scope.linha = {
                 conditionalClass: function(item) {
@@ -90,6 +90,7 @@ app.controller('LancamentoController',
                 table: function(lancamentos) {
                     calculateSaldo(lancamentos);
                     $scope.lancamentosListaTable = angular.copy(lancamentos);
+                    calculateSaldo($scope.lancamentosListaTable);
                 }
             }
         };
@@ -99,8 +100,7 @@ app.controller('LancamentoController',
             var planoContaSelected = (search.planoConta ? PlanoContaService.getChildrenListPlanoConta(null, search.planoConta) : search.planoConta);
             var centroCustoSelected = (search.centroCusto ? CentroCustoService.getChildrenListCentroCusto(null, search.centroCusto) : search.centroCusto);
             lista = _.filter(lista, function(item) {
-                return filterByData(item, search) && 
-                       filterTipo(item, tipoSelected) && 
+                return filterTipo(item, tipoSelected) && 
                        filterByPlanoConta(item, planoContaSelected) &&
                        filterByCentroCusto(item, centroCustoSelected);
             });    
@@ -141,6 +141,7 @@ app.controller('LancamentoController',
         };
         
         $scope.filterByDays = function(days) {
+            $scope.lancSearch.periodo = null;
             $scope.lancSearch.dataInicio = moment().add(days, 'days').format('YYYY-MM-DD');
             $scope.lancSearch.dataFim = moment().add(days, 'days').format('YYYY-MM-DD');
         };
@@ -208,12 +209,13 @@ app.controller('LancamentoController',
         };
 
         var todos = function() {
-            if(!$scope.lancSearch.dataInicio || !$scope.lancSearch.dataFim) return;
-            LancamentoService.getAll($scope.lancSearch.dataInicio.format('YYYY-MM-DD'), $scope.lancSearch.dataFim.format('YYYY-MM-DD'))
+            LancamentoService.getAll($scope.lancSearch.dataInicio, $scope.lancSearch.dataFim)
                 .then(function (data) {
                     $scope.lancamentos = angular.copy(data);
                     $scope.lancamentosLista = criarLancamentosLista(data);
                     if(!$scope.lancamentosLista.length) { calculateSaldo($scope.lancamentosLista); }
+                    ListaService.getTableValue($scope.colunas, 'saldo').selected = false;
+                    ListaService.getTableValue($scope.colunas, 'conta.nome').selected = true;
                 })
                 .catch(function(e) {
                     console.log(e);
@@ -221,14 +223,17 @@ app.controller('LancamentoController',
         };
 
         var todosByConta = function(conta) {
-            if(!$scope.lancSearch.dataInicio || !$scope.lancSearch.dataFim) return;
-            if(!conta || !conta.idConta) { todos(conta); }
+            if($scope.lancSearch.dataInicio) { $scope.lancSearch.dataInicio = $scope.lancSearch.dataInicio.format('YYYY-MM-DD'); }
+            if($scope.lancSearch.dataFim) { $scope.lancSearch.dataFim = $scope.lancSearch.dataFim.format('YYYY-MM-DD'); }
+            if(!conta || !conta.idConta) { todos(); }
             else {  
-                ContaService.getLancamento(conta.idConta, $scope.lancSearch.dataInicio.format('YYYY-MM-DD'), $scope.lancSearch.dataFim.format('YYYY-MM-DD'))
+                ContaService.getLancamento(conta.idConta, $scope.lancSearch.dataInicio, $scope.lancSearch.dataFim)
                     .then(function (data) {
                         $scope.lancamentos = angular.copy(data.lancamentos);
                         $scope.lancamentosLista = criarLancamentosLista(data.lancamentos);
                         if(!$scope.lancamentosLista.length) { calculateSaldo($scope.lancamentosLista); }
+                        ListaService.getTableValue($scope.colunas, 'saldo').selected = true;
+                        ListaService.getTableValue($scope.colunas, 'conta.nome').selected = false;
                     })
                     .catch(function(e) {
                         console.log(e);
@@ -242,23 +247,23 @@ app.controller('LancamentoController',
             var dataFim = moment();
             $scope.lancSearch.periodo = periodo;
             switch(periodo.id) {
-                case 0:
+                case 1:
                     dataInicio = dataInicio.startOf('month');
                     dataFim = dataFim.endOf('month');
                     break; 
-                case 1:
+                case 2:
                     dataInicio = dataInicio.subtract(7, 'days');
                     break; 
-                case 2:
+                case 3:
                     dataInicio = dataInicio.subtract(15, 'days');
                     break; 
-                case 3:
+                case 4:
                     dataInicio = dataInicio.subtract(30, 'days');
                     break; 
-                case 4:
+                case 5:
                     dataInicio = dataInicio.subtract(60, 'days');
                     break; 
-                case 5:
+                case 6:
                     dataInicio = dataInicio.subtract(90, 'days');
                     break; 
             }           
@@ -290,14 +295,15 @@ app.controller('LancamentoController',
         };
         
         var setDataInicio = function(dataInicio) {
-            $scope.lancSearch.dataInicio = getDate(dataInicio);
+            if(dataInicio) { $scope.lancSearch.dataInicio = getDate(dataInicio); }
+            else { $scope.lancSearch.dataInicio = null; }
 //            angular.element("#dataInicio").val(dataInicio.format('DD/MM/YYYY'));
         };
         
         var setDataFim = function(dataFim) {
-            $scope.lancSearch.dataFim = getDate(dataFim);
-//            angular.element("#dataFim").val(dataFim.format('DD/MM/YYYY'));
-                        
+            if(dataFim) { $scope.lancSearch.dataFim = getDate(dataFim); }
+            else { $scope.lancSearch.dataFim = null; }
+//            angular.element("#dataFim").val(dataFim.format('DD/MM/YYYY'));                        
         };
         
         var getDate = function(date) {
@@ -319,7 +325,7 @@ app.controller('LancamentoController',
                     lancamento.pagamento = null;
                 }  
 
-                if(lancamento.numeroParcela) { lancamento.numero = lancamento.numero + '-' + lancamento.numeroParcela; }
+                if(lancamento.numeroParcela) { lancamento.numero = (lancamento.numero ? lancamento.numero : '') + '-' + lancamento.numeroParcela; }
 
                 if(lancamento.planoConta && lancamento.planoConta.idPlanoConta) { 
                     var planoConta = ListaService.getPlanoContaValue($scope.planoContas, lancamento.planoConta.idPlanoConta); 
@@ -404,7 +410,7 @@ app.controller('LancamentoController',
             var saldo = calculateSaldoInicialContas(saldoInicial);
             $scope.saldoTotal = 0;
             $scope.saldoTotal += saldo;
-            return _.map(lancamentos, function(lancamento) {
+            _.map(lancamentos, function(lancamento) {
                 if(lancamento.pagamento) { 
                     saldo += lancamento.pagamento;
                     $scope.saldoTotal += lancamento.pagamento;
@@ -763,7 +769,8 @@ app.controller('LancamentoController',
         };
 
         var validaPeriodo = function(dataInicio, dataFim) {
-            return FinanceiroValidation.periodoLancamentos(dataInicio, dataFim);
+            if($scope.lancSearch.periodo) { return FinanceiroValidation.periodoLancamentos(dataInicio, dataFim, 90); }
+            else { return FinanceiroValidation.periodoLancamentos(dataInicio, dataFim, 120); }
         };
 
         var validaConciliado = function(idLancamento) {

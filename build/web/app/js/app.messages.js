@@ -1,6 +1,8 @@
 'use strict';
 
 app.constant('MESSAGES', {
+    
+    VERSION: '07/11/2016 - 00:00',
 
     conta: { 
         info: {
@@ -66,7 +68,8 @@ app.constant('MESSAGES', {
             FAVORECIDO_REQUERIDA: "Preencha o favorecido do lançamento!",
             HISTORICO_REQUERIDA: "Preencha o histórico do lançamento!",
             PLANO_CONTA_REQUERIDA: "Preencha o plano de conta do lançamento!",
-            CENTRO_CUSTO_REQUERIDA: "Preencha o centro de custo do lançamento!"
+            CENTRO_CUSTO_REQUERIDA: "Preencha o centro de custo do lançamento!",
+            SALDO_DIFERENCA_ZERO: "Não é possível gerar a reconciliação. <br/> Pois o saldo de diferença é igual a zero!"
         },
         programar: {
             title: {

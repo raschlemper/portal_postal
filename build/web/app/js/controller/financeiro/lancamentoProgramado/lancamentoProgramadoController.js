@@ -15,7 +15,7 @@ app.controller('LancamentoProgramadoController',
             $scope.tipos = LISTAS.lancamento;
             $scope.modelos = LISTAS.modeloLancamento;
             $scope.situacoes = LISTAS.situacaoLancamentoProgramado;
-            $scope.periodos = LISTAS.periodo;
+            $scope.periodos = LancamentoProgramadoService.periodos;
             $scope.tiposLancamento = [];
 //            $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
 //            $scope.datepickerDataFim = angular.copy(DatePickerService.default);  
@@ -32,7 +32,7 @@ app.controller('LancamentoProgramadoController',
         var initTable = function() {            
             $scope.colunas = [              
                 {label: '', column: 'tipo', headerClass: 'no-sort', dataClass:'text-center col-tipo', filter: {name: 'tipoLancamento', args: ''}},       
-                {label: 'Conta', column: 'conta.nome'},                      
+                {label: 'Conta', column: 'conta.nome', showColumn: true, selected: false},                      
                 {label: 'Vencimento', column: 'dataVencimento', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
                 {label: 'Número', column: 'numero'},         
                 {label: 'Plano Conta', column: 'planoConta.descricao'},   
@@ -45,9 +45,12 @@ app.controller('LancamentoProgramadoController',
             ]            
             $scope.linha = {
                 conditionalClass: function(item) {
-                    if(item.tipo.id === $scope.tipos[0].id) return 'text-primary';
-                    else if(item.tipo.id === $scope.tipos[1].id) return 'text-danger';
-                    else if(item.tipo.id === $scope.tipos[$scope.tipos.length - 1].id) return 'text-warning';
+                    var css = null;
+                    if(item.tipo.id === $scope.tipos[0].id) { css = 'text-primary'; }
+                    else if(item.tipo.id === $scope.tipos[1].id) { css = 'text-danger'; }
+                    else if(item.tipo.id === $scope.tipos[$scope.tipos.length - 1].id) { css = 'text-warning'; }
+                    if(moment(item.dataVencimento).isBefore(getDataHoje())) { css += ' line-vencida'; }
+                    return css;
                 },
                 events: { 
                     edit: function(lancamentoProgramado) {
@@ -113,7 +116,11 @@ app.controller('LancamentoProgramadoController',
             $scope.tiposLancamento.push( { codigo: $scope.tipos[0].codigo, descricao: 'Contas a Receber' });
             $scope.tiposLancamento.push( { codigo: $scope.tipos[1].codigo, descricao: 'Contas a Pagar' });
             $scope.tiposLancamento.push( { codigo: $scope.modelos[3].codigo, descricao: 'Transf. Programada' });
-        }
+        };
+        
+        var getDataHoje = function() {
+            return moment().startOf('day');
+        };
         
         var contas = function() {
             ContaService.getAll()
@@ -172,11 +179,11 @@ app.controller('LancamentoProgramadoController',
         };
 
         var todos = function() {
-            if(!$scope.lancSearch.dataInicio || !$scope.lancSearch.dataFim) return;
-            LancamentoProgramadoService.getAll($scope.lancSearch.dataInicio.format('YYYY-MM-DD'), $scope.lancSearch.dataFim.format('YYYY-MM-DD'))
+            LancamentoProgramadoService.getAll($scope.lancSearch.dataInicio, $scope.lancSearch.dataFim)
                 .then(function (data) {
                     $scope.lancamentoProgramados = data;
                     $scope.lancamentoProgramadosLista = criarLancamentoProgramadosLista($scope.lancamentoProgramados);
+                    ListaService.getTableValue($scope.colunas, 'conta.nome').selected = true;
                 })
                 .catch(function(e) {
                     console.log(e);
@@ -184,13 +191,15 @@ app.controller('LancamentoProgramadoController',
         };
 
         var todosByConta = function(conta) {
-            if(!$scope.lancSearch.dataInicio || !$scope.lancSearch.dataFim) return;
-            if(!conta || !conta.idConta) { todos(conta); }
+            if($scope.lancSearch.dataInicio) { $scope.lancSearch.dataInicio = $scope.lancSearch.dataInicio.format('YYYY-MM-DD'); }
+            if($scope.lancSearch.dataFim) { $scope.lancSearch.dataFim = $scope.lancSearch.dataFim.format('YYYY-MM-DD'); }
+            if(!conta || !conta.idConta) { todos(); }
             else {  
-                ContaService.getLancamentoProgramado(conta.idConta, $scope.lancSearch.dataInicio.format('YYYY-MM-DD'), $scope.lancSearch.dataFim.format('YYYY-MM-DD'))
+                ContaService.getLancamentoProgramado(conta.idConta, $scope.lancSearch.dataInicio, $scope.lancSearch.dataFim)
                     .then(function (data) {
                         $scope.lancamentoProgramados = data.lancamentosProgramados;
                         $scope.lancamentoProgramadosLista = criarLancamentoProgramadosLista($scope.lancamentoProgramados);
+                    ListaService.getTableValue($scope.colunas, 'conta.nome').selected = false;
                     })
                     .catch(function(e) {
                         console.log(e);
@@ -205,22 +214,26 @@ app.controller('LancamentoProgramadoController',
             $scope.lancSearch.periodo = periodo;
             switch(periodo.id) {
                 case 0:
+                    dataInicio = null;
+                    dataFim = dataFim.subtract(1, 'days').endOf('day');
+                    break; 
+                case 1:
                     dataInicio = dataInicio.startOf('month');
                     dataFim = dataFim.endOf('month');
                     break; 
-                case 1:
+                case 2:
                     dataInicio = dataInicio.subtract(7, 'days');
                     break; 
-                case 2:
+                case 3:
                     dataInicio = dataInicio.subtract(15, 'days');
                     break; 
-                case 3:
+                case 4:
                     dataInicio = dataInicio.subtract(30, 'days');
                     break; 
-                case 4:
+                case 5:
                     dataInicio = dataInicio.subtract(60, 'days');
                     break; 
-                case 5:
+                case 6:
                     dataInicio = dataInicio.subtract(90, 'days');
                     break; 
             }  
@@ -252,14 +265,15 @@ app.controller('LancamentoProgramadoController',
         };
         
         var setDataInicio = function(dataInicio) {
-            $scope.lancSearch.dataInicio = getDate(dataInicio);
+            if(dataInicio) { $scope.lancSearch.dataInicio = getDate(dataInicio); }
+            else { $scope.lancSearch.dataInicio = null; }
 //            angular.element("#dataInicio").val(dataInicio.format('DD/MM/YYYY'));
         };
         
         var setDataFim = function(dataFim) {
-            $scope.lancSearch.dataFim = getDate(dataFim);
-//            angular.element("#dataFim").val(dataFim.format('DD/MM/YYYY'));
-                        
+            if(dataFim) { $scope.lancSearch.dataFim = getDate(dataFim); }
+            else { $scope.lancSearch.dataFim = null; }
+//            angular.element("#dataFim").val(dataFim.format('DD/MM/YYYY'));                        
         };
         
         var getDate = function(date) {
@@ -464,8 +478,7 @@ app.controller('LancamentoProgramadoController',
         };
         
         var create = function(conta, lancamentoProgramado, showMsg) { 
-            var isParcela = (lancamentoProgramado.parcelas && lancamentoProgramado.parcelas.length);
-            lancamentoProgramado = ajustarLancamentoProgramadoFrequencia(lancamentoProgramado, isParcela);
+            lancamentoProgramado = ajustarLancamentoProgramadoFrequencia(lancamentoProgramado);
             LancamentoProgramadoService.create(lancamentoProgramado)
                 .then(function(data) {  
                     encerrarLancamentoProgramado(lancamentoProgramado, lancamentoProgramado.lancamentos[0]); 
@@ -630,7 +643,7 @@ app.controller('LancamentoProgramadoController',
         };
 
         var moverContaTodos = function(conta, lancamentos) {
-            LancamentoProgramadoService.updateAll(lancamentos)
+            LancamentoProgramadoService.updateConta(lancamentos)
                 .then(function (data) { 
                     todos(conta);
                 })
@@ -649,7 +662,8 @@ app.controller('LancamentoProgramadoController',
         // ***** VALIDAR ***** //
 
         var validaPeriodo = function(dataInicio, dataFim) {
-            return FinanceiroValidation.periodoLancamentos(dataInicio, dataFim);
+            if($scope.lancSearch.periodo) { return FinanceiroValidation.periodoLancamentos(dataInicio, dataFim, 90); }
+            else { return FinanceiroValidation.periodoLancamentos(dataInicio, dataFim, 120); }
         };
         
         var existeLancamentoSelecionado = function(lancamentosSelecionados) {
@@ -721,13 +735,28 @@ app.controller('LancamentoProgramadoController',
             lancamentoProgramado.lancamentos.push(lancamentoHandle);
         };
         
-        var ajustarLancamentoProgramadoFrequencia = function(lancamentoProgramado, isParcelas) {             
-            if(!isParcelas) {
+        var ajustarLancamentoProgramadoFrequencia = function(lancamentoProgramado) {             
+            if((lancamentoProgramado.parcelas && lancamentoProgramado.parcelas.length)) {
+                var parcela = getFirstParcelaAberta(lancamentoProgramado);
+                lancamentoProgramado.dataCompetencia = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataCompetencia) || moment();
+                lancamentoProgramado.dataVencimento = parcela.dataVencimento || moment();
+            } else {
                 lancamentoProgramado.dataCompetencia = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataCompetencia) || moment();
                 lancamentoProgramado.dataVencimento = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataVencimento) || moment();
             }
             return lancamentoProgramado;
         };
+        
+        var getFirstParcelaAberta = function(lancamentoProgramado) {
+            var numeroParcela = 0
+            if(lancamentoProgramado.lancamentos && lancamentoProgramado.lancamentos.length){
+                numeroParcela = lancamentoProgramado.lancamentos[0].numeroParcela;
+            };
+            var parcelas = lancamentoProgramado.parcelas || [];
+            return _.find(parcelas, function(parcela) { 
+                return !parcela.lancamento && numeroParcela !== parcela.numero; 
+            });
+        }
         
         // ***** MODAL ***** //
         

@@ -186,7 +186,7 @@
                             url: "autocomplete_dest.jsp",
                             type: "POST",
                             dataType: "json",
-                            data: {nomePesquisa: request.term},
+                            data: {nomePesquisa: request.term,servico: '', tipoDestino: ''},
                             success: function(data) {
                                 response(data);
                             },
@@ -245,6 +245,44 @@
                 $("#uf").val('');
                 //$("#uf2").val('');
             }
+            
+            function handleHttpResponseCepRem() {
+    if (http.readyState == 4) {
+        if (http.status == 200) {
+            //alert("handleHTTPResponse");
+            var resultado = http.responseText;
+            if (resultado.toString() == "sessaoexpirada") {
+                window.location = "../../index.jsp?msgLog=3";
+            } else {
+                var aux = resultado.split(";");
+
+                document.getElementById('cidadeCli').value = aux[2];
+                document.getElementById('ufCli').value = aux[1];
+                document.getElementById('bairroCli').value = aux[3];
+                document.getElementById('enderecoCli').value = aux[4];
+                if (aux[4] == '') {
+                    document.getElementById('enderecoCli').focus();
+                } else {
+                    document.getElementById('numeroCli').focus();
+                }
+            }
+        } else {
+            alert(http.status + " - Not able to retrieve name");
+        }
+    }
+}
+
+// funcao que retorna o forrm parra editarr o cooletador solicitado
+    function verPesquisarCepRem(cep) {
+        if (cep.length == 9) {
+            http.open("GET", "../../AjaxPages/ajax_cep_csv.jsp?cep=" + cep, true);
+            http.onreadystatechange = handleHttpResponseCepRem;
+            http.send(null);
+        } else if (cep != '') {
+            alert('Preencha o CEP por completo!');
+            document.getElementById('cepCli').focus();
+        }
+    }
             
             
         </script>
@@ -310,7 +348,7 @@
                                 <li id="singleDest2">
                                     <dd>
                                         <label>CEP<b class="obg">*</b><a onclick="window.open('http://www.buscacep.correios.com.br', 'CORREIOS');" ><img src="../../imagensNew/question.png" /></a></label>
-                                        <input type="text" name="cepCli" id="cepCli" size="8" maxlength="9" value="<%= cli.getCep() %>" onkeypress="mascara(this, maskCep);" />
+                                        <input type="text" name="cepCli" id="cepCli" size="8" maxlength="9" value="<%= cli.getCep() %>" onblur="verPesquisarCepRem(this.value);" onkeypress="mascara(this, maskCep);" />
                                     </dd>
                                     <dd>
                                         <label>Endereço<b class="obg">*</b></label>

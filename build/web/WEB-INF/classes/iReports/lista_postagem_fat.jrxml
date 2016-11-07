@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="orderm_servico" pageWidth="595" pageHeight="842" columnWidth="575" leftMargin="10" rightMargin="10" topMargin="20" bottomMargin="20" uuid="5d989118-bbd3-486e-869f-c7efcb8efc71">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="table">
@@ -251,39 +251,51 @@ WHERE qtdTotal > 0;]]>
 				<text><![CDATA[A FATURAR]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="378" y="0" width="95" height="15" uuid="2eaf7f22-3cb0-4989-9760-7da4ef743cc8"/>
+				<reportElement x="379" y="0" width="97" height="13" uuid="2eaf7f22-3cb0-4989-9760-7da4ef743cc8"/>
 				<textElement textAlignment="Right"/>
-				<text><![CDATA[DATA]]></text>
+				<text><![CDATA[DATA GERAÇÃO:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="473" y="0" width="59" height="15" uuid="2eaf7f22-3cb0-4989-9760-7da4ef743cc8"/>
+				<reportElement x="478" y="0" width="54" height="13" uuid="2eaf7f22-3cb0-4989-9760-7da4ef743cc8"/>
 				<textElement textAlignment="Right"/>
-				<text><![CDATA[LISTA]]></text>
+				<text><![CDATA[Nº LISTA:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="532" y="0" width="43" height="15" uuid="2eaf7f22-3cb0-4989-9760-7da4ef743cc8"/>
+				<reportElement x="532" y="0" width="41" height="13" uuid="2eaf7f22-3cb0-4989-9760-7da4ef743cc8"/>
 				<textElement textAlignment="Right"/>
-				<text><![CDATA[FOLHA]]></text>
+				<text><![CDATA[FOLHA:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="532" y="15" width="43" height="20" uuid="955aeefe-8da1-4888-8c5c-9a0ac651832e"/>
-				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+				<reportElement x="532" y="11" width="41" height="13" uuid="955aeefe-8da1-4888-8c5c-9a0ac651832e"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="473" y="15" width="59" height="20" uuid="955aeefe-8da1-4888-8c5c-9a0ac651832e"/>
-				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+				<reportElement x="478" y="11" width="54" height="13" uuid="955aeefe-8da1-4888-8c5c-9a0ac651832e"/>
+				<textElement textAlignment="Right" verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA[$P{idOs}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy">
-				<reportElement x="378" y="15" width="95" height="20" uuid="15bea8c5-5a3b-4709-bcbd-7eef32bc93be"/>
-				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			<textField pattern="">
+				<reportElement x="379" y="11" width="97" height="13" uuid="15bea8c5-5a3b-4709-bcbd-7eef32bc93be"/>
+				<textElement textAlignment="Right" verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$P{dataOs}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="401" y="54" width="174" height="14" uuid="abcfeac0-285c-4de6-9550-c1e90a2d5e49"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA["CNPJ "+ $P{cnpjCliente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="379" y="26" width="97" height="13" uuid="fcddcf97-1b7a-469d-9b60-bbc4a306ee63"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[DATA IMPRESSÃO:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy HH:mm">
+				<reportElement x="478" y="26" width="95" height="13" uuid="5071cd0e-0643-4e8b-b6d7-287318950370"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -510,7 +522,7 @@ WHERE qtdTotal > 0;]]>
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="145" splitType="Stretch">
+		<band height="146" splitType="Stretch">
 			<rectangle>
 				<reportElement x="0" y="1" width="459" height="30" uuid="3f18da95-a37a-48c4-a5aa-13d0d3aa0776"/>
 			</rectangle>

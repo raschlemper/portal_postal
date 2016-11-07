@@ -86,7 +86,7 @@
                         fecharTelaEspera();
                         alert("O arquivo a ser importado deve ser '.CSV' !");
                         return false;
-                    } else if((tipo === 'XML' || tipo === 'NFE'|| tipo === 'PLP') && ext !== ".XML") {
+                    } else if((tipo === 'XML' || tipo === 'NFE'|| tipo === 'PLP' || tipo === 'LK') && ext !== ".XML") {
                         fecharTelaEspera();
                         alert("O arquivo a ser importado deve ser '.XML' !");
                         return false;
@@ -155,7 +155,7 @@
                     document.getElementById('dd_ar').className = 'mostrar'; 
                     document.getElementById('form1').action = '../../ServPreVendaImportar';  
                     $('#tipo_serv option[value="ARQUIVO"]').text("DEFINIDO NO ARQUIVO");
-                }else if (tipo === 'XML' || tipo === 'PLP'){
+                }else if (tipo === 'XML' || tipo === 'PLP' || tipo === 'LK'){
                     document.getElementById('arquivo').accept = '.xml';
                     document.getElementById('arquivo').multiple = false;               
                     document.getElementById('dd_vd').className = 'esconder'; 
@@ -231,8 +231,9 @@
                                         <option value="ECOMPLETO">ARQUIVO E-COMPLETO</option>
                                         <option value="RTSYS_SGI">ARQUIVO RTSys SGI</option>
                                         <option value="EV">ARQUIVO ESTANTE VIRTUAL</option>
-                                        <option value="VIPP">ARQUIVO VIP</option>
+                                        <option value="VIPP">ARQUIVO VIPP</option>
                                         <option value="PSN">ARQUIVO PS SERVICE</option>
+                                        <option value="LK">ARQUIVO LK TEL</option>
                                         
                                         <%if(idEmp == 236505){%><option value="LADOAVESSO">ARQUIVO LADOAVESSO</option><%}%>
                                         <%if(idEmp == 236505){%><option value="INTERLOGIC">ARQUIVO INTERLOGIC</option><%}%>

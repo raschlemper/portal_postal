@@ -3324,3 +3324,6 @@ table.table-condensed tbody tr td.cel-menu {
     font-size: 150pt;
     color: #333;
 }
+.line-vencida {
+    background-color: #F6D6D5 !important;
+}

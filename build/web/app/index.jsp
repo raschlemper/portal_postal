@@ -22,6 +22,7 @@
         <div id="wrapper">
             <%@ include file="/NewTemplate/includes/menu_agencia_bootstrap.jsp" %>
             <div ui-view></div>
+            <div class="pull-right" style="padding-right: 20px; font-size: 8pt;">Última Atualização: {{version}}</div>
         </div> 
 
         <script type="text/javascript" charset="UTF-8" src="${pageContext.request.contextPath}/plugins/angular/angular.min.js"></script>

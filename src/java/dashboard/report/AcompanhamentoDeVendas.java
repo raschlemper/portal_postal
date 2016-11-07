@@ -1,0 +1,256 @@
+package dashboard.report;
+
+import Util.FormatarData;
+import Util.FormatarDecimal;
+import caixapostal.componentes.Conexao;
+import dashboard.view.VendasPorCliente;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+public class AcompanhamentoDeVendas {
+
+    private final String nomeDataBase;
+    private static Connection CONNECTION;
+
+    public AcompanhamentoDeVendas(String nomeDataBase) {
+        this.nomeDataBase = nomeDataBase;
+    }
+
+    public List<VendasPorCliente> findVendasPorCliente(int idCliente) throws SQLException {
+        CONNECTION = Conexao.getConnection(nomeDataBase);
+        PreparedStatement prepare = CONNECTION.prepareStatement(sqlFindVendasPorCliente());
+        prepare.setInt(1, idCliente);
+        prepare.setDate(2, new java.sql.Date(getDateInicial().getTime()));
+        prepare.setDate(3, new java.sql.Date(getDateFinal().getTime()));
+        ResultSet result = prepare.executeQuery();
+        return carregaVendarDoCliente(result);
+    }
+
+    public List<VendasPorCliente> findVendasPorClienteFilterServicos(int idCliente,String idServicos) throws SQLException {
+        CONNECTION = Conexao.getConnection(nomeDataBase);
+        PreparedStatement prepare = CONNECTION.prepareStatement(sqlFindVendasPorClienteFilterServicos(idServicos));
+        prepare.setInt(1, idCliente);
+        prepare.setDate(2, new java.sql.Date(getDateInicial().getTime()));
+        prepare.setDate(3, new java.sql.Date(getDateFinal().getTime()));
+        ResultSet result = prepare.executeQuery();
+        return carregaVendarDoCliente(result);
+    }
+
+    public Map<Integer, String> getMonthName(List<VendasPorCliente> vendas) {
+        Map<Integer, String> meses = new HashMap<>();
+        for (int contador = 0; contador < 6; contador++) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.MONTH, contador * -1);
+            int mes = calendar.get(Calendar.MONTH) + 1;
+            meses.put(mes, FormatarData.nomeMes(mes));
+        }
+        return meses;
+    }
+
+    public List<Integer> getServicos(List<VendasPorCliente> vendas) {
+        Set<Integer> servicos = new HashSet<>();
+
+        for (VendasPorCliente venda : vendas) {
+            servicos.add(venda.getCodigoECT());
+        }
+        return new ArrayList<Integer>(servicos);
+    }
+
+    public Double[] somaTotaisDoMes(Integer mes, List<VendasPorCliente> vendas) {
+        double quantidadeTotal = 0;
+        double valorTotal = 0;
+        for (VendasPorCliente venda : vendas) {
+            if (Integer.valueOf(venda.getMes()).equals(mes)) {
+                quantidadeTotal = quantidadeTotal + venda.getQuantidade();
+                valorTotal = valorTotal + venda.getTotal();
+            }
+        }
+        return new Double[]{quantidadeTotal, valorTotal};
+    }
+
+    public Map<Integer, List<VendasPorCliente>> montaGridVendas(List<VendasPorCliente> vendas, Map<Integer, String> meses) {
+        Map<Integer, List<VendasPorCliente>> servicos = carregaServicosNoMapeamento(vendas, meses);
+        for (List<VendasPorCliente> valoresMeses : servicos.values()) {
+            for (VendasPorCliente valorMes : valoresMeses) {
+                for (VendasPorCliente venda : vendas) {
+                    if (valorMes.getCodigoECT().equals(venda.getCodigoECT()) && valorMes.getMes().equals(FormatarData.nomeMes(Integer.valueOf(venda.getMes())))) {
+                        valorMes.setQuantidade(venda.getQuantidade());
+                        valorMes.setTotal(venda.getTotal());
+
+                    }
+                }
+            }
+        }
+        return servicos;
+    }
+
+    public String getNomeServico(Integer codigoECT, List<VendasPorCliente> vendas) {
+        for (VendasPorCliente venda : vendas) {
+            if (venda.getCodigoECT().equals(codigoECT)) {
+                return quebraTamanhoServico(venda.getServico());
+            }
+        }
+        return null;
+    }
+
+    private String quebraTamanhoServico(String servico) {
+        if (servico.length() > 20) {
+            return servico.substring(0, 20) + "...";
+        }
+        return servico;
+    }
+
+    private Map<Integer, List<VendasPorCliente>> carregaServicosNoMapeamento(List<VendasPorCliente> vendas, Map<Integer, String> meses) {
+        Map<Integer, List<VendasPorCliente>> servicos = new HashMap<>();
+        for (VendasPorCliente venda : vendas) {
+            servicos.put(venda.getCodigoECT(), carregaMesesDoServico(venda.getCodigoECT(), meses));
+        }
+        return servicos;
+    }
+
+    private List<VendasPorCliente> carregaMesesDoServico(Integer codigoECT, Map<Integer, String> meses) {
+        List<VendasPorCliente> vendas = new ArrayList<>();
+        for (Entry entry : meses.entrySet()) {
+            VendasPorCliente vendasCliente = new VendasPorCliente();
+            vendasCliente.setCodigoECT(codigoECT);
+            vendasCliente.setMes(String.valueOf(entry.getValue()));
+            vendasCliente.setQuantidade(0);
+            vendasCliente.setTotal(0d);
+            vendas.add(vendasCliente);
+        }
+        return vendas;
+    }
+
+    private String sqlFindVendasPorCliente() {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" SELECT MONTH(dataPostagem) MES ,codigoEct CODIGOECT,descServico SERVICO,SUM(VALORSERVICO) TOTAL,SUM(quantidade) QUANTIDADE ");
+        sql.append(" FROM movimentacao WHERE CODCLIENTE=? AND DATAPOSTAGEM BETWEEN ? AND ?");
+        sql.append(" GROUP BY month(dataPostagem),codigoECT ORDER BY month(dataPostagem) ASC ");
+        return sql.toString();
+    }
+
+     private String sqlFindVendasPorClienteFilterServicos(String idServicos) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" SELECT MONTH(dataPostagem) MES ,codigoEct CODIGOECT,descServico SERVICO,SUM(VALORSERVICO) TOTAL,SUM(quantidade) QUANTIDADE ");
+        sql.append(" FROM movimentacao WHERE CODCLIENTE=? AND DATAPOSTAGEM BETWEEN ? AND ? AND codigoEct in ("+idServicos+")");
+        sql.append(" GROUP BY month(dataPostagem),codigoECT ORDER BY month(dataPostagem) ASC ");
+        return sql.toString();
+    }
+
+    private List<VendasPorCliente> carregaVendarDoCliente(ResultSet result) throws SQLException {
+        List<VendasPorCliente> vendasPorCliente = new ArrayList<VendasPorCliente>();
+        while (result.next()) {
+            VendasPorCliente vendas = new VendasPorCliente();
+            vendas.setMes(result.getString("MES"));
+            vendas.setServico(result.getString("SERVICO"));
+            vendas.setTotal(result.getDouble("TOTAL"));
+            vendas.setQuantidade(result.getInt("QUANTIDADE"));
+            vendas.setCodigoECT(result.getInt("CODIGOECT"));
+            vendasPorCliente.add(vendas);
+        }
+        return vendasPorCliente;
+    }
+
+    private Date getDateInicial() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -5);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        return calendar.getTime();
+    }
+
+    private Date getDateFinal() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return calendar.getTime();
+    }
+
+    public String getDataChartsQuantidadePorServico(List<VendasPorCliente> vendas, Map<Integer, String> meses) {
+        HashMap<Integer, String> servicos = getServicosUnicos(vendas);
+        List<List<String>> data = new ArrayList<>();
+
+        List<String> dadosY = new ArrayList<>();
+        dadosY.add("'Mes'");
+        for (String servicoNome : servicos.values()) {
+            dadosY.add("'" + quebraTamanhoServico(servicoNome) + "'");
+        }
+
+        data.add(dadosY);
+
+        for (Entry mes : meses.entrySet()) {
+            List<String> dadosX = new ArrayList<>();
+            dadosX.add("'" + String.valueOf(mes.getValue()) + "'");
+            for (Entry servico : servicos.entrySet()) {
+                dadosX.add(getQuantidadeTotal((Integer) mes.getKey(), (Integer) servico.getKey(), vendas));
+            }
+            data.add(dadosX);
+        }
+
+        return Arrays.toString(data.toArray());
+
+    }
+
+
+     public String getDataChartsValorPorServico(List<VendasPorCliente> vendas, Map<Integer, String> meses) {
+        HashMap<Integer, String> servicos = getServicosUnicos(vendas);
+        List<List<String>> data = new ArrayList<>();
+
+        List<String> dadosY = new ArrayList<>();
+        dadosY.add("'Mes'");
+        for (String servicoNome : servicos.values()) {
+            dadosY.add("'" + quebraTamanhoServico(servicoNome) + "'");
+        }
+
+        data.add(dadosY);
+
+        for (Entry mes : meses.entrySet()) {
+            List<String> dadosX = new ArrayList<>();
+            dadosX.add("'" + String.valueOf(mes.getValue()) + "'");
+            for (Entry servico : servicos.entrySet()) {
+                dadosX.add(getValorTotal((Integer) mes.getKey(), (Integer) servico.getKey(), vendas));
+            }
+            data.add(dadosX);
+        }
+
+        return Arrays.toString(data.toArray());
+
+    }
+
+    private HashMap<Integer, String> getServicosUnicos(List<VendasPorCliente> vendas) {
+        HashMap<Integer, String> servicos = new HashMap<>();
+        for (VendasPorCliente venda : vendas) {
+            servicos.put(venda.getCodigoECT(), venda.getServico());
+        }
+        return servicos;
+    }
+
+    private String getQuantidadeTotal(Integer mes, Integer servico, List<VendasPorCliente> vendas) {
+        for (VendasPorCliente venda : vendas) {
+            if (venda.getCodigoECT().equals(servico) && Integer.valueOf(venda.getMes()).equals(mes)) {
+                return String.valueOf("{v:"+venda.getQuantidade()+",f:'"+venda.getQuantidade()+"'}");
+            }
+        }
+        return "0";
+    }
+
+     private String getValorTotal(Integer mes, Integer servico, List<VendasPorCliente> vendas) {
+        for (VendasPorCliente venda : vendas) {
+            if (venda.getCodigoECT().equals(servico) && Integer.valueOf(venda.getMes()).equals(mes)) {
+                return String.valueOf("{v:"+venda.getTotal()+",f:'"+FormatarDecimal.formataValorMonetario(venda.getTotal())+"'}");
+            }
+        }
+        return "0";
+    }
+
+}

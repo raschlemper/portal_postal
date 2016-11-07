@@ -143,7 +143,7 @@
                 var curHour = '<%= hora%>';
                 var curMin = '<%= minuto%>';
                 // data e hora atual
-                var curDateTime = new Date(curYear, curMonth, curDay, curHour, curMin);
+                var curDateTime = new Date(curYear,  parseInt(curMonth)-1, curDay, curHour, curMin);
 
                 var hrLimite = '<%= hrFimAcesso%>';
                 var hrIniColeta = '<%= hrIniColeta%>';
@@ -159,7 +159,7 @@
                     minIni = minIni.replace('0', '');
                 }
                 // data hora inicio das coletas
-                var dateTimeIniCol = new Date(curYear, curMonth, curDay, hrsIni, minIni);
+                var dateTimeIniCol = new Date(curYear,  parseInt(curMonth)-1, curDay, hrsIni, minIni);
 
 
                 var hrsFim = hrFimColeta.substring(0, 2);
@@ -171,7 +171,7 @@
                     minFim = minFim.replace('0', '');
                 }
                 // data hora fim das coletas
-                var dateTimeFimCol = new Date(curYear, curMonth, curDay, hrsFim, minFim);
+                var dateTimeFimCol = new Date(curYear,  parseInt(curMonth)-1, curDay, hrsFim, minFim);
 
                 var hrsLim = hrLimite.substring(0, 2);
                 if (hrsLim < 10) {
@@ -183,7 +183,7 @@
                     minLim = minLim.replace('0', '');
                 }
                 //data hora limite
-                var dateTimeLimite = new Date(curYear, curMonth, curDay, hrsLim, minLim);
+                var dateTimeLimite = new Date(curYear,  parseInt(curMonth)-1, curDay, hrsLim, minLim);
 
                 // data hora antecencia minimima
 
@@ -201,7 +201,7 @@
                 if (mes < 10) {
                     mes = mes.replace('0', '');
                 }
-                //mes = parseInt(mes) - 1;
+                mes = parseInt(mes) - 1;
                 // var ano = parseInt(data.substring(6, 10));
                 var ano = data.substring(6, 10);
 
@@ -228,9 +228,7 @@
                 var dDateOnly = new Date(dateSolicitacao.getFullYear(),dateSolicitacao.getMonth(),dateSolicitacao.getDate());
 
                 console.log(todayDateOnly.getDate());
-                console.log(document.getElementById('isEvent') === null);
-                
-                
+                console.log(document.getElementById('isEvent') === null);  
                
 
                 if (curDateTime.getTime() > dateSolicitacao.getTime()) {

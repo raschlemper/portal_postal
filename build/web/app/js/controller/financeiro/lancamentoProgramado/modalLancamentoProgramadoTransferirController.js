@@ -2,9 +2,9 @@
 
 app.controller('ModalLancamentoProgramadoTransferirController', 
     ['$scope', '$modalInstance', 'lancamentoProgramadoTransferencia', 'LancamentoProgramadoTransferenciaService', 'ContaService', 'TipoDocumentoService', 
-     'TipoFormaPagamentoService', 'FrequenciaLancamentoService', 'LISTAS', 'MESSAGES',
+     'TipoFormaPagamentoService', 'FrequenciaLancamentoService', 'ConfiguracaoService', 'LISTAS', 'MESSAGES',
     function ($scope, $modalInstance, lancamentoProgramadoTransferencia, LancamentoProgramadoTransferenciaService, ContaService, TipoDocumentoService, 
-    TipoFormaPagamentoService, FrequenciaLancamentoService, LISTAS, MESSAGES) {
+    TipoFormaPagamentoService, FrequenciaLancamentoService, ConfiguracaoService, LISTAS, MESSAGES) {
 
         var init = function () { 
             $scope.frequencias = LISTAS.frequencia;
@@ -100,7 +100,10 @@ app.controller('ModalLancamentoProgramadoTransferirController',
         };
         
         $scope.ok = function(form, lancamentoProgramadoTransferencia) {
-            if (!$scope.validarForm(form)) return;
+            return validarLancamento(form, lancamentoProgramadoTransferencia);      
+        };
+        
+        var ok = function(lancamentoProgramadoTransferencia) {
             $modalInstance.close(lancamentoProgramadoTransferencia);            
         };
         
@@ -112,6 +115,26 @@ app.controller('ModalLancamentoProgramadoTransferirController',
 
 
         // ***** VALIDAR ***** //
+        
+        var validarLancamento = function(form, lancamentoProgramadoTransferencia) {
+            if (!validarForm(form, lancamentoProgramadoTransferencia)) return;
+            ConfiguracaoService.get()
+                .then(function(data) {
+                    if(!validarLancamentoByConfiguracao(data, lancamentoProgramadoTransferencia)) return;
+                    ok(lancamentoProgramadoTransferencia);
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+
+        var validarLancamentoByConfiguracao = function (configuracao, lancamentoProgramadoTransferencia) {
+            if (configuracao.historico && !lancamentoProgramadoTransferencia.historico) {
+                alert(MESSAGES.lancamento.validacao.HISTORICO_REQUERIDA);
+                return false;
+            }
+            return true;
+        }; 
 
         $scope.validarForm = function (form) {
             if(form.contaOrigem.$modelValue === form.contaDestino.$modelValue) {

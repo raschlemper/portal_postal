@@ -11,6 +11,7 @@ app.factory('DemonstrativoService', function() {
                 report.dataFim = moment(dataFim);
                 report.descricao = estrutura.descricao; 
                 report.periodo = moment(periodo.ano + '-' + (periodo.id + 1) + '-01');//.format('YYYY-MM-DD HH:mm:ss');
+                report.grupo = estrutura.ehGrupo;
                 report.saldo = estrutura.saldos[periodo.order];
                 dados.push(report);
             });

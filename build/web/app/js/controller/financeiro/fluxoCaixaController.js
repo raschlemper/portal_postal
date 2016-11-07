@@ -8,13 +8,11 @@ app.controller('FluxoCaixaController',
             $scope.lancamentos = [];
             $scope.lancamentosLista = [];     
             $scope.tipos = LISTAS.lancamento;
-            $scope.modelos = LISTAS.modeloLancamento;
-            $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
-            $scope.datepickerDataFim = angular.copy(DatePickerService.default);   
-            $scope.vencidos = false;
-            $scope.dataInicio = null;
-            $scope.dataFim = null;
+            $scope.modelos = LISTAS.modeloLancamento; 
+//            $scope.lancSearch.dataInicio = null;
+//            $scope.lancSearch.dataFim = null;
             $scope.lancSearch = {};
+            $scope.lancSearch.vencidos = false;
             getTitle();
             periodos(3);
             initTable();
@@ -50,27 +48,26 @@ app.controller('FluxoCaixaController',
         };
 
         $scope.filter = function(lista, search) { 
-            lista = filterConta(lista, search);
-            if(!_.isEmpty(search)) { initChartFluxoCaixa(lista); }
+            var contaSelected = (search.conta ? JSON.parse(search.conta) : search.conta);
+            lista = _.filter(lista, function(item) {
+                return filterConta(item, contaSelected);
+            });
+//            if(!_.isEmpty(search)) { initChartFluxoCaixa(lista); }
             return lista;
         };
 
         $scope.filterByData = function(dataInicio, dataFim) {
-            dataInicio = moment(dataInicio);
-            dataFim = moment(dataFim);
-            if(dataInicio && dataInicio.isValid() && dataFim && dataFim.isValid()) {
-                periodos(0);
-                todos(dataInicio, dataFim, $scope.vencidos)
+            $scope.lancSearch.dataInicio = getDate(dataInicio);
+            $scope.lancSearch.dataFim = getDate(dataFim);
+            if(dataInicio && $scope.lancSearch.dataInicio.isValid() && dataFim && $scope.lancSearch.dataFim.isValid()) {
+            $scope.lancSearch.periodo = $scope.periodos[0];
+                todos($scope.lancSearch.dataInicio.format('YYYY-MM-DD'), $scope.lancSearch.dataFim.format('YYYY-MM-DD'), $scope.lancSearch.vencidos)
             }
         }; 
         
-        var filterConta = function(lista, search) {          
-            if(!search.conta) return lista;
-            var conta = JSON.parse(search.conta); 
-            lista = _.filter(lista, function(item) {
-                return item.conta.idConta === conta.idConta;
-            });
-            return lista;
+        var filterConta = function(item, contaSelected) {          
+            if(!contaSelected) return true;
+            return item.conta.idConta === contaSelected.idConta;
         }
 
         // ***** CONTROLLER ***** //
@@ -88,7 +85,7 @@ app.controller('FluxoCaixaController',
                 if(numeroPeriodo > 1) { descricao = "Próximos " + numeroPeriodo + " meses"; }
                 $scope.periodos.push({'id': i, 'codigo': numeroPeriodo, 'descricao': descricao});
             }
-            $scope.periodo = $scope.periodos[index]
+            $scope.changePeriodo($scope.periodos[index], $scope.lancSearch.vencidos);
             contas();
         }
         
@@ -109,7 +106,7 @@ app.controller('FluxoCaixaController',
                     $scope.planoContas = data;
                     PlanoContaService.estrutura($scope.planoContas);
                     $scope.planoContas = PlanoContaService.flatten($scope.planoContas);                 
-                    todosByPeriodo($scope.periodo.codigo, $scope.vencidos);
+                    todosByPeriodo($scope.lancSearch.periodo.codigo, $scope.lancSearch.vencidos);
                 })
                 .catch(function (e) {
                     console.log(e);
@@ -124,13 +121,13 @@ app.controller('FluxoCaixaController',
         };
 
         var todos = function(dataInicio, dataFim, vencidos) {
-            LancamentoProgramadoService.getAllAtivo(null, null)
+            LancamentoProgramadoService.getAllAtivo(dataInicio, dataFim)
                 .then(function (data) {
                     $scope.lancamentos = getLancamentos(angular.copy(data), dataInicio, dataFim, vencidos);
                     $scope.lancamentos.sort(compareData);
                     $scope.lancamentosLista = criarLancamentosLista(angular.copy($scope.lancamentos));
-                    $scope.lancamentosLista = filterConta($scope.lancamentosLista, $scope.lancSearch);
-                    if(!_.isEmpty($scope.lancSearch)) { initChartFluxoCaixa($scope.lancamentosLista); }
+                    $scope.lancamentosLista = $scope.filter($scope.lancamentosLista, $scope.lancSearch);
+//                    if(!_.isEmpty($scope.lancSearch)) { initChartFluxoCaixa($scope.lancamentosLista); }
                 })
                 .catch(function(e) {
                     console.log(e);
@@ -207,13 +204,32 @@ app.controller('FluxoCaixaController',
         };
         
         $scope.changePeriodo = function(periodo, vencidos) {
-            angular.element("#dataInicio").val(null);
-            angular.element("#dataFim").val(null);
-            todosByPeriodo(periodo.codigo, vencidos);
+            if(!periodo) return;
+            $scope.lancSearch.periodo = periodo;
+            var dataInicio = moment();
+            var dataFim = moment().add(periodo.id + 1, 'months');
+            setDataInicio(dataInicio, vencidos);
+            setDataFim(dataFim, vencidos);
+            todos(dataInicio.format('YYYY-MM-DD'), dataFim.format('YYYY-MM-DD'), vencidos);
         }
         
         $scope.pesquisar = function(periodo, vencidos) {
             todosByPeriodo(periodo.codigo, vencidos);
+        };
+        
+        var setDataInicio = function(dataInicio) {
+            $scope.lancSearch.dataInicio = getDate(dataInicio);
+        };
+        
+        var setDataFim = function(dataFim) {
+            $scope.lancSearch.dataFim = getDate(dataFim);                       
+        };
+        
+        var getDate = function(date) {
+            if(!angular.isDate(date)) {
+                return moment(date, "DD/MM/YYYY"); 
+            } 
+            return date;
         };
 
         // ***** GRÁFICO ***** //

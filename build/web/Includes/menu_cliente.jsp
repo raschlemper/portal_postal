@@ -76,7 +76,7 @@
                     <li><a href="../../Cliente/Servicos/coleta.jsp">Solicitar Coleta</a></li>
                         <%}%>
                         <%if (acessosMn.contains(5)) {%>
-                    <li><a href="../../Cliente/Servicos/telegrama_postal.jsp">Solicitar Telegrama Postal</a></li>
+                    <li><a href="../../Cliente/Servicos/telegrama_postal.jsp?dt=<%= new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) %>">Solicitar Telegrama Postal</a></li>
                         <%}%>
                     <li><a href="../../Cliente/Servicos/vpne.jsp">Controle de VPNe</a></li>
                     <li><a href="../../Cliente/Servicos/ar_digital_arquivo.jsp">Arquivos de AR Digital</a></li>

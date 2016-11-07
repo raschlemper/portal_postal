@@ -1,10 +1,12 @@
 'use strict';
 
-app.controller('ConfiguracaoController', ['$scope', 'ConfiguracaoService', 'ConfiguracaoFinanceiroHandler', 'ModalService', 'ListaService', 'LISTAS',
-    function ($scope, ConfiguracaoService, ConfiguracaoFinanceiroHandler, ModalService, ListaService, LISTAS) {
+app.controller('ConfiguracaoController', ['$scope', 'ConfiguracaoService', 'LancamentoService', 'LancamentoProgramadoService', 'ConfiguracaoFinanceiroHandler', 
+    'ModalService', 'ListaService', 'LISTAS',
+    function ($scope, ConfiguracaoService, LancamentoService, LancamentoProgramadoService, ConfiguracaoFinanceiroHandler, ModalService, ListaService, LISTAS) {
             
         var init = function () {                        
-            $scope.periodos = LISTAS.periodo;
+            $scope.lancamentoPeriodos = LancamentoService.periodos;                
+            $scope.lancamentoProgramadoPeriodos = LancamentoProgramadoService.periodos;
             $scope.configuracao = {};
             visualizar();
         };
@@ -19,9 +21,9 @@ app.controller('ConfiguracaoController', ['$scope', 'ConfiguracaoService', 'Conf
                     $scope.configuracao.historico = data.historico || false; 
                     $scope.configuracao.planoConta = data.planoConta || false; 
                     $scope.configuracao.centroCusto = data.centroCusto || false; 
-                    $scope.configuracao.periodoLancamento = data.periodoLancamento || $scope.periodos[1]; 
+                    $scope.configuracao.periodoLancamento = data.periodoLancamento || $scope.lancamentoPeriodos[1]; 
                             //ListaService.getValue($scope.periodos, data.periodoLancamento) || $scope.periodos[1]; 
-                    $scope.configuracao.periodoLancamentoProgramado = data.periodoLancamentoProgramado || $scope.periodos[1]; 
+                    $scope.configuracao.periodoLancamentoProgramado = data.periodoLancamentoProgramado || $scope.lancamentoProgramadoPeriodos[1]; 
                             //ListaService.getValue($scope.periodos, data.periodoLancamentoProgramado) || $scope.periodos[1]; 
                 })
                 .catch(function(e) {

@@ -83,8 +83,8 @@ app.controller('ModalLancamentoProgramadoGerarController',
             if(!validarForm(form, lancamento)) return;     
             ConfiguracaoService.get()
                 .then(function(data) {
-                    lancamento = ajustarLancamento(lancamento);  
                     if(!validarLancamentoProgramadoByConfiguracao(data, lancamento)) return;
+                    lancamento = ajustarLancamento(lancamento);  
                     lancar(lancamentoProgramado, lancamento);
                 })
                 .catch(function(e) {

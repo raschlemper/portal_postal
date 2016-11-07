@@ -1,0 +1,202 @@
+'use strict';
+
+app.controller('ModalLancamentoConciliarController', 
+    ['$scope', '$modalInstance', 'conta', 'PlanoContaService', 'CentroCustoService', 'ContaService', 'ConfiguracaoService', 'DatePickerService', 'ListaService', 
+     'FinanceiroValidation', 'LISTAS', "MESSAGES",
+    function ($scope, $modalInstance, conta, PlanoContaService, CentroCustoService, ContaService, ConfiguracaoService, DatePickerService, ListaService, 
+        FinanceiroValidation, LISTAS, MESSAGES) {
+
+        var init = function () {  
+            $scope.conta = conta;
+            $scope.datepickerLancamento = angular.copy(DatePickerService.default); 
+            $scope.tipos = LISTAS.lancamento;
+            $scope.lancamentoConciliado = {}; 
+            getTitle();
+        };
+                
+        // ***** CONTROLLER ***** //   
+        
+        var getTitle = function() {
+            $scope.title = MESSAGES.lancamento.conciliar.title.INSERIR; 
+        };
+        
+        var planoContas = function(tipo) {
+            PlanoContaService.getStructureByTipo(tipo.id)
+                .then(function (data) {
+                    $scope.planoContas = data;
+                    PlanoContaService.estrutura($scope.planoContas);
+                    $scope.planoContas = PlanoContaService.flatten($scope.planoContas);
+//                    $scope.planoContas = criarPlanoContasLista($scope.planoContas);
+                    if($scope.lancamentoConciliado.planoConta) {
+                        $scope.lancamentoConciliado.planoConta = ListaService.getPlanoContaValue(
+                                $scope.planoContas, $scope.lancamentoConciliado.planoConta.idPlanoConta) || $scope.planoContas[0];
+                    } else {
+                         $scope.lancamentoConciliado.planoConta  = null;
+                    }
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+        
+        var centroCustos = function() {
+            CentroCustoService.getStructure()
+                .then(function (data) {
+                    $scope.centroCustos = data;
+                    CentroCustoService.estrutura($scope.centroCustos);
+                    $scope.centroCustos = CentroCustoService.flatten($scope.centroCustos);
+//                    $scope.centroCustos = criarCentroCustosLista($scope.centroCustos);
+                    if($scope.lancamentoConciliado.centroCusto && $scope.lancamentoConciliado.centroCusto.idCentroCusto) {
+                        $scope.lancamentoConciliado.centroCusto = ListaService.getCentroCustoValue(
+                                $scope.centroCustos, $scope.lancamentoConciliado.centroCusto.idCentroCusto) || $scope.centroCustos[0];
+                    } else {
+                         $scope.lancamentoConciliado.centroCusto  = null;
+                    }
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+        
+        $scope.calcularSaldo = function(conta, dataLancamento, saldoReconciliacao) {
+            dataLancamento = moment(dataLancamento).format('YYYY-MM-DD HH:mm:ss');
+            ContaService.getSaldoLancamento(conta.idConta, dataLancamento)
+                .then(function (data) {
+                    if(!data) return;
+                    $scope.saldo = calcularSaldo(data.saldo, saldoReconciliacao);
+                    setValoresLancamentoConciliado($scope.saldo, $scope.lancamentoConciliado);
+                    planoContas($scope.lancamentoConciliado.tipo);
+                    centroCustos();
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        };
+        
+        var setValoresLancamentoConciliado = function(saldo, lancamentoConciliado) {
+            if($scope.saldo.diferenca > 0) { $scope.lancamentoConciliado.tipo = $scope.tipos[0]; } 
+            else { $scope.lancamentoConciliado.tipo = $scope.tipos[1]; }
+            if(saldo.diferenca === 0) {
+                lancamentoConciliado.planoConta = null;
+                lancamentoConciliado.centroCusto = null;
+                lancamentoConciliado.tipo = $scope.tipos[0];
+                lancamentoConciliado.historico = "Lançamento sem valor";
+            }            
+        }
+        
+        var calcularSaldo = function(saldoAtual, saldoReconciliacao) {
+            return {
+                conta: $scope.conta.valorSaldoAbertura,
+                atual: $scope.conta.valorSaldoAbertura + saldoAtual,
+                reconciliacao: saldoReconciliacao,
+                diferenca: saldoReconciliacao - (saldoAtual + $scope.conta.valorSaldoAbertura)
+            }
+        };
+        
+        $scope.ok = function(form, lancamentoConciliado) {
+            if (!validarSaldoDiferencaConciliacao($scope.saldo)) return;            
+            return validarLancamento(form, lancamentoConciliado);     
+        };
+        
+        var ok = function(lancamentoConciliado) {
+            $modalInstance.close(lancamentoConciliado);            
+        };
+        
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+                
+        // ***** AJUSTAR ***** //  
+        
+        var ajustarDados = function(saldo, lancamentoConciliado) {
+            lancamentoConciliado.dataCompetencia = lancamentoConciliado.dataLancamento;
+            lancamentoConciliado.dataEmissao = lancamentoConciliado.dataLancamento;
+            if(saldo.diferenca < 0) { lancamentoConciliado.valor = saldo.diferenca * -1; }
+            else { lancamentoConciliado.valor = saldo.diferenca; }
+            return lancamentoConciliado;
+        };
+                
+        // ***** VALIDAR ***** //  
+               
+        var validarSaldoDiferencaConciliacao = function(saldo) {
+            if (saldo && saldo.diferenca === 0) {
+                alert(MESSAGES.lancamento.validacao.SALDO_DIFERENCA_ZERO);
+                return false;
+            }
+        };
+        
+        var validarLancamento = function(form, lancamentoConciliado) {
+            if (!validarForm(form, lancamentoConciliado)) return;
+            ConfiguracaoService.get()
+                .then(function(data) {
+                    if(!validarLancamentoByConfiguracao(data, lancamentoConciliado)) return;
+                    lancamentoConciliado = ajustarDados($scope.saldo, lancamentoConciliado);
+                    ok(lancamentoConciliado);
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });
+        };
+        
+        $scope.validarPlanoConta = function(planoConta) {
+            FinanceiroValidation.planoContaResultado($scope.planoContas, planoConta);
+        };
+        
+        $scope.validarCentroCusto = function(centroCusto) {
+            FinanceiroValidation.centroCustoResultado($scope.centroCustos, centroCusto);
+        };
+
+        var validarLancamentoByConfiguracao = function (configuracao, lancamento) {
+            if (configuracao.historico && !lancamento.historico) {
+                alert(MESSAGES.lancamento.validacao.HISTORICO_REQUERIDA);
+                return false;
+            }
+            if(!lancamento.rateios || !lancamento.rateios.length) {
+                if (configuracao.planoConta && !lancamento.planoConta) {
+                    alert(MESSAGES.lancamento.validacao.PLANO_CONTA_REQUERIDA);
+                    return false;
+                }
+                if (configuracao.centroCusto && !lancamento.centroCusto) {
+                    alert(MESSAGES.lancamento.validacao.CENTRO_CUSTO_REQUERIDA);
+                    return false;
+                }
+            } else {
+                var retorno = true;
+                _.map(lancamento.rateios, function(rateio) { 
+                    if (retorno && configuracao.planoConta && (!rateio.planoConta || !rateio.planoConta.idPlanoConta)) {
+                        alert(MESSAGES.lancamento.programar.validacao.PLANO_CONTA_REQUERIDA);
+                        retorno = false;
+                    }
+                    if (retorno && configuracao.centroCusto && (!rateio.centroCusto || !rateio.centroCusto.idCentroCusto)) {
+                        alert(MESSAGES.lancamento.programar.validacao.CENTRO_CUSTO_REQUERIDA);
+                        retorno = false;
+                    }   
+                });
+                if(!retorno) return false;
+            }
+            return true;
+        }; 
+
+        var validarForm = function (form) {
+            if($scope.lancamentoConciliado.planoConta && $scope.lancamentoConciliado.planoConta.ehGrupo) {
+                alert(MESSAGES.planoConta.info.NAO_PERMITE_GRUPO);
+                return false;
+            }
+            if($scope.lancamentoConciliado.centroCusto && $scope.lancamentoConciliado.centroCusto.ehGrupo) {
+                alert(MESSAGES.centroCusto.info.NAO_PERMITE_GRUPO);
+                return false;
+            }
+            if (form.dataLancamento.$error.required) {
+                alert(MESSAGES.lancamento.conciliar.validacao.DATA_LANCAMENTO_REQUERIDA);
+                return false;
+            }       
+            if (form.dataLancamento.$modelValue && !moment(form.dataLancamento.$modelValue).isValid()) {
+                alert(MESSAGES.lancamento.conciliar.validacao.DATA_LANCAMENTO_VALIDA);
+                return false;
+            }  
+            return true;
+        };
+
+        init();
+
+    }]);

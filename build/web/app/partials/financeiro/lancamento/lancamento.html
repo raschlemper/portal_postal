@@ -24,13 +24,13 @@
                                     <div class="pull-left">                                     
                                         <button class="btn btn-sm btn-default" ng-click="excluirTodos(lancSearch.conta, events.list())">
                                             <i class="fa fa-lg fa-times fa-spc-sm"></i> EXCLUIR 
-                                        </button>                                            
-                                        <button class="btn btn-sm btn-default" ng-click="compensarTodos(lancSearch.conta, events.list())">
-                                            <i class="fa fa-lg fa-arrow-circle-o-down fa-spc-sm"></i> COMPENSAR 
                                         </button>                                             
                                         <button class="btn btn-sm btn-default" ng-click="moverContaTodos(lancSearch.conta, events.list())">
                                             <i class="fa fa-lg fa-arrow-circle-right fa-spc-sm"></i> MOVER 
-                                        </button>                              
+                                        </button>                                           
+                                        <button class="btn btn-sm btn-default" ng-click="compensarTodos(lancSearch.conta, events.list())">
+                                            <i class="fa fa-lg fa-arrow-circle-o-down fa-spc-sm"></i> COMPENSAR 
+                                        </button>                               
                                         <button class="btn btn-sm btn-default" ng-click="conciliar(lancSearch.conta)">
                                             <i class="fa fa-lg fa-retweet fa-spc-sm"></i> RECONCILIAÇÃO 
                                         </button>                                    
@@ -79,41 +79,33 @@
                                                     <option value=""> Todos </option> 
                                                 </select>
 
-                                                <label>Período:</label>
-                                                <select class="form-control spc-right" ng-model="lancSearch.periodo" ng-change="changePeriodo(conta, lancSearch.periodo)"
-                                                        ng-options="periodo.descricao for periodo in periodos track by periodo.id">
-                                                    <option value=""> Nenhum </option>
-                                                </select>
-
-                                                <label>Data:</label>
-                                                <div class="input-group spc-right">                                                    
-                                                    <input type="text" autocomplete="off" class="form-control" style="width: 120px;" id="dataInicio" name="dataInicio" datepicker-custom ng-model="lancSearch.dataInicio" ng-change="changeDataInicio(conta, lancSearch.dataInicio)"/>
-                                                    <label for="dataInicio" class='input-group-addon'><i class='fa fa-calendar'></i></label>
-<!--                                                    <input type="text" autocomplete="off" class="form-control" ng-model="lancSearch.dataInicio" style="width: 120px;"
-                                                        datepicker-popup="{{datepickerDataInicio.format}}" is-open="datepickerDataInicio.opened" ng-required="true"
-                                                        current-text="{{datepickerDataInicio.today}}" clear-text="{{datepickerDataInicio.clear}}" close-text="{{datepickerDataInicio.close}}"
-                                                        placeholder="Data início" ng-model-options='{ debounce: 1000 }'/>
-                                                    <span class="input-group-addon" ng-click="datepickerDataInicio.open($event)"><i class="fa fa-calendar"></i></span>-->
-                                                    <span class="input-group-addon">-</span>                                                    
-                                                    <input type="text" autocomplete="off" class="form-control" style="width: 120px;" id="dataFim" name="dataFim" datepicker-custom ng-model="lancSearch.dataFim" ng-change="changeDataFim(conta, lancSearch.dataFim)"/>
-                                                    <label for="dataFim" class='input-group-addon'><i class='fa fa-calendar'></i></label>
-<!--                                                    <input type="text" autocomplete="off" class="form-control" ng-model="lancSearch.dataFim" style="width: 120px;"
-                                                           datepicker-popup="{{datepickerDataFim.format}}" is-open="datepickerDataFim.opened" ng-required="true"
-                                                           current-text="{{datepickerDataFim.today}}" clear-text="{{datepickerDataFim.clear}}" close-text="{{datepickerDataFim.close}}"
-                                                           placeholder="Data final" ng-model-options='{ debounce: 1000 }'/>
-                                                    <span class="input-group-addon" ng-click="datepickerDataFim.open($event)"><i class="fa fa-calendar"></i></span>-->
-                                                </div>  
-
-                                                <button class="btn btn-sm btn-default" ng-click="filterByDays(-1)" ng-if="false">Ontem</button> 
-                                                <button class="btn btn-sm btn-default" ng-click="filterByDays(0)" ng-if="false">Hoje</button> 
-
-                                                <br>
-
                                                 <label>Tipo:</label>
                                                 <select class="form-control spc-right" ng-model="lancSearch.tipo">
                                                     <option value=""> Todos </option> 
                                                     <option value="{{tipo}}" ng-repeat="tipo in tipos track by $index"> {{tipo.descricao}} </option>        
                                                 </select>
+
+                                                <br>
+
+                                                <label>Período:</label>
+                                                <select class="form-control spc-right" ng-model="lancSearch.periodo" ng-change="changePeriodo(lancSearch.conta, lancSearch.periodo)"
+                                                        ng-options="periodo.descricao for periodo in periodos track by periodo.id">
+                                                    <option value=""> Livre </option>
+                                                </select>
+
+                                                <label>Data:</label>
+                                                <div class="input-group spc-right">                                                    
+                                                    <input type="text" autocomplete="off" class="form-control" style="width: 120px;" id="dataInicio" name="dataInicio" datepicker-custom ng-model="lancSearch.dataInicio" ng-change="changeDataInicio(lancSearch.conta, lancSearch.dataInicio)"/>
+                                                    <label for="dataInicio" class='input-group-addon'><i class='fa fa-calendar'></i></label>
+                                                    <span class="input-group-addon">-</span>                                                    
+                                                    <input type="text" autocomplete="off" class="form-control" style="width: 120px;" id="dataFim" name="dataFim" datepicker-custom ng-model="lancSearch.dataFim" ng-change="changeDataFim(lancSearch.conta, lancSearch.dataFim)"/>
+                                                    <label for="dataFim" class='input-group-addon'><i class='fa fa-calendar'></i></label>
+                                                </div>  
+
+                                                <button class="btn btn-sm btn-default" ng-click="filterByDays(-1)">Ontem</button> 
+                                                <button class="btn btn-sm btn-default" ng-click="filterByDays(0)">Hoje</button> 
+
+                                                <br>
                                                 
                                                 <plano-conta class="spc-right" plano-conta-model="lancSearch.planoConta" show-type-filter="true" validar-selected="false"></plano-conta>
                                                 <centro-custo class="spc-right" centro-custo-model="lancSearch.centroCusto" show-type-filter="true" validar-selected="false"></centro-custo>
@@ -125,15 +117,17 @@
                                     
                                     <title-content>
                                         <div class="margin-top">
-                                            <div class="title-table" ng-if="!conta">
-                                                <strong><i>Todas as Contas</i></strong>
+                                            <div class="title-table" ng-if="!lancSearch.conta">
+                                                <i><strong>Todas as Contas</strong>
+                                                    <small style="font-size: 11pt;">(Para este filtro de "Todas as Contas", favor desconsiderar o saldo, filtro somente para pesquisa de lançamentos)</small>
+                                                </i>
                                             </div>
-                                            <div class="title-table" ng-if="conta">
-                                                <strong><i>{{conta.nome}} 
-                                                        <span style="font-size: 11pt;" ng-show="conta.contaCorrente && conta.contaCorrente.banco && conta.contaCorrente.agencia && conta.contaCorrente.contaCorrente"> 
-                                                       - (Banco: {{conta.contaCorrente.banco.nome}} / Agência: {{conta.contaCorrente.agencia}}-{{conta.contaCorrente.agenciaDv}} / Conta: {{conta.contaCorrente.contaCorrente}}-{{conta.contaCorrente.contaCorrenteDv}})
+                                            <div class="title-table" ng-if="lancSearch.conta">
+                                                <strong><i>{{lancSearch.conta.nome}} 
+                                                        <span style="font-size: 11pt;" ng-show="lancSearch.conta.contaCorrente && lancSearch.conta.contaCorrente.banco && lancSearch.conta.contaCorrente.agencia && lancSearch.conta.contaCorrente.contaCorrente"> 
+                                                       - (Banco: {{lancSearch.conta.contaCorrente.banco.nome}} / Agência: {{lancSearch.conta.contaCorrente.agencia}}-{{lancSearch.conta.contaCorrente.agenciaDv}} / Conta: {{lancSearch.conta.contaCorrente.contaCorrente}}-{{lancSearch.conta.contaCorrente.contaCorrenteDv}})
                                                    </span>
-                                                        <span ng-show="false">/ ({{conta.status.descricao}})</span>
+                                                        <span ng-show="false">/ ({{lancSearch.conta.status.descricao}})</span>
                                                 </i></strong>
                                             </div>
                                         </div>
