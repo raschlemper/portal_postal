@@ -479,9 +479,9 @@ app.controller('LancamentoProgramadoController',
         
         var create = function(conta, lancamentoProgramado, showMsg) { 
             lancamentoProgramado = ajustarLancamentoProgramadoFrequencia(lancamentoProgramado);
-            encerrarLancamentoProgramado(lancamentoProgramado, lancamentoProgramado.lancamentos[0]); 
             LancamentoProgramadoService.create(lancamentoProgramado)
                 .then(function(data) {  
+                    encerrarLancamentoProgramado(lancamentoProgramado, lancamentoProgramado.lancamentos[0]); 
                     if(showMsg) {
                         //modalMessage(MESSAGES.lancamento.sucesso.INSERIDO_SUCESSO);
                         todosByConta(conta);                        
@@ -623,7 +623,7 @@ app.controller('LancamentoProgramadoController',
         }
         
         var encerrarLancamentoProgramado = function(lancamentoProgramado, lancamento) {
-            if(lancamentoProgramado.frequencia === 0) { // Único
+            if(lancamentoProgramado.frequencia === 'unico') { 
                 lancamentoProgramado.situacao = $scope.situacoes[2].id;
             }
             if(lancamento.numeroParcela === lancamentoProgramado.quantidadeParcela) {

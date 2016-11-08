@@ -35,9 +35,9 @@ app.controller('ModalLancamentoProgramadoGerarController',
 //                });
 //        };
         
-        $scope.selectFavorecido = function(favorecido) {
-            $scope.lancamento.favorecido = favorecido;
-        }
+//        $scope.selectFavorecido = function(favorecido) {
+//            $scope.lancamento.favorecido = favorecido;
+//        }
         
         $scope.lancar = function(form, lancamentoProgramado, lancamento) {
             return validarLancamentoProgramado(form, lancamentoProgramado, lancamento);

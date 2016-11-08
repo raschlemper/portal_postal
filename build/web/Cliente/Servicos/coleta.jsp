@@ -48,7 +48,6 @@
         int coleEve = Coleta.Controle.contrColetaFixa.consultaColetadorEventualDoCliente(idCliente, nomeBD);
         int coleEvTipo = Coleta.Controle.contrColetaFixa.consultaTipoColetaEventualDoCliente(idCliente, nomeBD);
         String hrEventual = Coleta.Controle.contrColetaFixa.consultaHoraEventualDoCliente(dataAtualComAntecedencia, idCliente, nomeBD);
-
         int tipoEscolhaColeta = Coleta.Controle.contrColetaFixa.consultaTipoEscolhaColetaDoCliente((Integer) session.getAttribute("idEmpresa"));
 %>
 
@@ -117,19 +116,19 @@
                     alert('Preencha a Data da Coleta!');
                     return false;
                 }
-                 
+
                 if (!valida_data(form.dataColeta)) {
                     return false;
                 }
                 if (!valida_hora(form.horaColeta)) {
                     return false;
                 }
-                
+
                 if (!verificaHorarioColeta()) {
 
                     return false;
                 }
-                 
+
 
                 form.submit();
             }
@@ -143,7 +142,7 @@
                 var curHour = '<%= hora%>';
                 var curMin = '<%= minuto%>';
                 // data e hora atual
-                var curDateTime = new Date(curYear,  parseInt(curMonth)-1, curDay, curHour, curMin);
+                var curDateTime = new Date(curYear, parseInt(curMonth) - 1, curDay, curHour, curMin);
 
                 var hrLimite = '<%= hrFimAcesso%>';
                 var hrIniColeta = '<%= hrIniColeta%>';
@@ -159,7 +158,7 @@
                     minIni = minIni.replace('0', '');
                 }
                 // data hora inicio das coletas
-                var dateTimeIniCol = new Date(curYear,  parseInt(curMonth)-1, curDay, hrsIni, minIni);
+                var dateTimeIniCol = new Date(curYear, parseInt(curMonth) - 1, curDay, hrsIni, minIni);
 
 
                 var hrsFim = hrFimColeta.substring(0, 2);
@@ -171,7 +170,7 @@
                     minFim = minFim.replace('0', '');
                 }
                 // data hora fim das coletas
-                var dateTimeFimCol = new Date(curYear,  parseInt(curMonth)-1, curDay, hrsFim, minFim);
+                var dateTimeFimCol = new Date(curYear, parseInt(curMonth) - 1, curDay, hrsFim, minFim);
 
                 var hrsLim = hrLimite.substring(0, 2);
                 if (hrsLim < 10) {
@@ -183,7 +182,7 @@
                     minLim = minLim.replace('0', '');
                 }
                 //data hora limite
-                var dateTimeLimite = new Date(curYear,  parseInt(curMonth)-1, curDay, hrsLim, minLim);
+                var dateTimeLimite = new Date(curYear, parseInt(curMonth) - 1, curDay, hrsLim, minLim);
 
                 // data hora antecencia minimima
 
@@ -216,6 +215,7 @@
                 }
 
                 var dateSolicitacao = new Date(ano, mes, dia, hrs, min);
+
                 var dateAtualAnteced = addMinutes(curDateTime, ant);
                 console.log('atual ' + curDateTime);
                 console.log('atual - antecedencia ' + dateAtualAnteced);
@@ -223,18 +223,42 @@
                 console.log('fim coletas ' + dateTimeFimCol);
                 console.log('limite coletas ' + dateTimeLimite);
                 console.log('solictacao ' + dateSolicitacao);
-                
-                var todayDateOnly = new Date(curDateTime.getFullYear(),curDateTime.getMonth(),curDateTime.getDate()); //This will write a Date with time set to 00:00:00 so you kind of have date only
-                var dDateOnly = new Date(dateSolicitacao.getFullYear(),dateSolicitacao.getMonth(),dateSolicitacao.getDate());
 
-                console.log(todayDateOnly.getDate());
-                console.log(document.getElementById('isEvent') === null);  
-               
+                var todayDateOnly = new Date(curDateTime.getFullYear(), curDateTime.getMonth(), curDateTime.getDate()); //This will write a Date with time set to 00:00:00 so you kind of have date only
+                var dDateOnly = new Date(dateSolicitacao.getFullYear(), dateSolicitacao.getMonth(), dateSolicitacao.getDate());
+
+                /* console.log(todayDateOnly.getDate());
+                 console.log(document.getElementById('isEvent') === null);
+                 console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+                 
+                 console.log('DIA hoje ' + todayDateOnly.getTime());
+                 console.log('YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY');
+                 */
+                /* solicitada é eventual */
+                if (document.getElementById('isEvent')) {
+                    /* solicitada para o dia de hoje */
+                    if (dDateOnly.getTime() === todayDateOnly.getTime()) {
+                        /* solicitada para o dia de hoje e a hora da solicitação eventual é menor que hora atual*/
+                        if (dateSolicitacao.getTime() < curDateTime.getTime()) {
+                            alert("ATENÇÃO !!!! <br/><br/>O horario pré-cadastrado em nosso sistema para sua coléta é " + dateSolicitacao.getHours() + ":" + dateSolicitacao.getMinutes() + "<br/>\n\
+                                Com já passou deste horário por favor entre em contato com a sua Agência.");
+                            return false;
+                            /* dateSolicitacao = dateAtualAnteced;
+                             console.log('nova data solicitacao ' + dateSolicitacao);
+                             console.log('HH ' + dateSolicitacao);
+                             var hhmm = dateSolicitacao.getHours() + ':' + dateSolicitacao.getMinutes();
+                             $('#horaColeta').val(hhmm);
+                             console.log('HH:mm ' + hhmm);*/
+                        }
+
+                    }
+                }
 
                 if (curDateTime.getTime() > dateSolicitacao.getTime()) {
                     alert("Somente podem ser solicitadas coletas de hoje em diante!!!");
                     return false;
                 }
+
                 if (dDateOnly.getTime() === todayDateOnly.getTime() && dateSolicitacao.getTime() > dateTimeFimCol.getTime() && document.getElementById('isEvent') === null) {
                     alert("Coletas para o mesmo dia devem ser solicitadas até às " + hrFimColeta + "hrs!");
                     return false;
@@ -243,7 +267,7 @@
                     alert("A Coleta deve ser solicitada com " + ant + " minutos de antecedencia!");
                     return false;
                 }
-                if(document.getElementById('isEvent') === null){
+                if (document.getElementById('isEvent') === null) {
                     if (dateSolicitacao.getHours() < dateTimeIniCol.getHours() || dateSolicitacao.getHours() > dateTimeFimCol.getHours()) {
                         alert("A Coletas estão disponíveis somente entre " + hrIniColeta + "hrs e " + hrFimColeta + "hrs !");
                         return false;
@@ -275,14 +299,10 @@
         <div id="divPrincipal" align="center">
             <div id="container">
                 <div id="conteudo">
-
-
-
-
                     <form name="form1" action="../../ServAgendaColeta" method="post">
                         <ul class="ul_formulario">
                             <li class="titulo">
-                                <dd><span>Dados do Contato</span></dd>
+                                <dd><span>Dados do Contato </span></dd>
                             </li>
                             <li id="liContato">
                                 <dd>
@@ -295,7 +315,7 @@
                                                 for (int j = 0; j < listaContatos.size(); j++) {
                                                     Contato con = listaContatos.get(j);
                                             %>
-                                            <option value="<%= con.getIdContato() %>"><%= con.getContato()%></option>
+                                            <option value="<%= con.getIdContato()%>"><%= con.getContato()%></option>
                                             <%}%>
                                         </select>
                                     </div>

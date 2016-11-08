@@ -67,6 +67,11 @@ app.directive('planoConta', function(PlanoContaService, ListaService, Financeiro
                 return FinanceiroValidation.planoContaResultado($scope.planoContas, planoConta);
             };
             
+            $scope.$watch('tipo', function(newValue, oldValue) {
+                if(angular.equals(newValue, oldValue)) return;
+                init(); 
+            });
+            
             init();
         }
     }

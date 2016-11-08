@@ -142,8 +142,9 @@ app.controller('LancamentoController',
         
         $scope.filterByDays = function(days) {
             $scope.lancSearch.periodo = null;
-            $scope.lancSearch.dataInicio = moment().add(days, 'days').format('YYYY-MM-DD');
-            $scope.lancSearch.dataFim = moment().add(days, 'days').format('YYYY-MM-DD');
+            setDataInicio(moment().add(days, 'days'));
+            setDataFim(moment().add(days, 'days'));
+            todosByConta($scope.lancSearch.conta);
         };
 
         // ***** CONTROLLER ***** //
@@ -209,7 +210,7 @@ app.controller('LancamentoController',
         };
 
         var todos = function() {
-            LancamentoService.getAll($scope.lancSearch.dataInicio, $scope.lancSearch.dataFim)
+            LancamentoService.getAll($scope.lancSearch.dataInicio.format('YYYY-MM-DD'), $scope.lancSearch.dataFim.format('YYYY-MM-DD'))
                 .then(function (data) {
                     $scope.lancamentos = angular.copy(data);
                     $scope.lancamentosLista = criarLancamentosLista(data);
@@ -223,11 +224,11 @@ app.controller('LancamentoController',
         };
 
         var todosByConta = function(conta) {
-            if($scope.lancSearch.dataInicio) { $scope.lancSearch.dataInicio = $scope.lancSearch.dataInicio.format('YYYY-MM-DD'); }
-            if($scope.lancSearch.dataFim) { $scope.lancSearch.dataFim = $scope.lancSearch.dataFim.format('YYYY-MM-DD'); }
+            if($scope.lancSearch.dataInicio) { setDataInicio($scope.lancSearch.dataInicio); }
+            if($scope.lancSearch.dataFim) { setDataFim($scope.lancSearch.dataFim); }
             if(!conta || !conta.idConta) { todos(); }
             else {  
-                ContaService.getLancamento(conta.idConta, $scope.lancSearch.dataInicio, $scope.lancSearch.dataFim)
+                ContaService.getLancamento(conta.idConta, $scope.lancSearch.dataInicio.format('YYYY-MM-DD'), $scope.lancSearch.dataFim.format('YYYY-MM-DD'))
                     .then(function (data) {
                         $scope.lancamentos = angular.copy(data.lancamentos);
                         $scope.lancamentosLista = criarLancamentosLista(data.lancamentos);

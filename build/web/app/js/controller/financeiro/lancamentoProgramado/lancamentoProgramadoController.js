@@ -179,7 +179,7 @@ app.controller('LancamentoProgramadoController',
         };
 
         var todos = function() {
-            LancamentoProgramadoService.getAll($scope.lancSearch.dataInicio, $scope.lancSearch.dataFim)
+            LancamentoProgramadoService.getAll($scope.lancSearch.dataInicio.format('YYYY-MM-DD'), $scope.lancSearch.dataFim.format('YYYY-MM-DD'))
                 .then(function (data) {
                     $scope.lancamentoProgramados = data;
                     $scope.lancamentoProgramadosLista = criarLancamentoProgramadosLista($scope.lancamentoProgramados);
@@ -191,11 +191,11 @@ app.controller('LancamentoProgramadoController',
         };
 
         var todosByConta = function(conta) {
-            if($scope.lancSearch.dataInicio) { $scope.lancSearch.dataInicio = $scope.lancSearch.dataInicio.format('YYYY-MM-DD'); }
-            if($scope.lancSearch.dataFim) { $scope.lancSearch.dataFim = $scope.lancSearch.dataFim.format('YYYY-MM-DD'); }
+            if($scope.lancSearch.dataInicio) { setDataInicio($scope.lancSearch.dataInicio); }
+            if($scope.lancSearch.dataFim) { setDataFim($scope.lancSearch.dataFim); }
             if(!conta || !conta.idConta) { todos(); }
             else {  
-                ContaService.getLancamentoProgramado(conta.idConta, $scope.lancSearch.dataInicio, $scope.lancSearch.dataFim)
+                ContaService.getLancamentoProgramado(conta.idConta, $scope.lancSearch.dataInicio.format('YYYY-MM-DD'), $scope.lancSearch.dataFim.format('YYYY-MM-DD'))
                     .then(function (data) {
                         $scope.lancamentoProgramados = data.lancamentosProgramados;
                         $scope.lancamentoProgramadosLista = criarLancamentoProgramadosLista($scope.lancamentoProgramados);
@@ -479,9 +479,9 @@ app.controller('LancamentoProgramadoController',
         
         var create = function(conta, lancamentoProgramado, showMsg) { 
             lancamentoProgramado = ajustarLancamentoProgramadoFrequencia(lancamentoProgramado);
+            encerrarLancamentoProgramado(lancamentoProgramado, lancamentoProgramado.lancamentos[0]); 
             LancamentoProgramadoService.create(lancamentoProgramado)
                 .then(function(data) {  
-                    encerrarLancamentoProgramado(lancamentoProgramado, lancamentoProgramado.lancamentos[0]); 
                     if(showMsg) {
                         //modalMessage(MESSAGES.lancamento.sucesso.INSERIDO_SUCESSO);
                         todosByConta(conta);                        
@@ -623,11 +623,11 @@ app.controller('LancamentoProgramadoController',
         }
         
         var encerrarLancamentoProgramado = function(lancamentoProgramado, lancamento) {
-            if(lancamentoProgramado.frequencia.codigo === 'unico') { 
-                lancamentoProgramado.situacao = $scope.situacoes[2];
+            if(lancamentoProgramado.frequencia === 0) { // Único
+                lancamentoProgramado.situacao = $scope.situacoes[2].id;
             }
             if(lancamento.numeroParcela === lancamentoProgramado.quantidadeParcela) {
-                lancamentoProgramado.situacao = $scope.situacoes[2];                
+                lancamentoProgramado.situacao = $scope.situacoes[2].id;                
             }            
         };
 
@@ -737,9 +737,10 @@ app.controller('LancamentoProgramadoController',
         
         var ajustarLancamentoProgramadoFrequencia = function(lancamentoProgramado) {             
             if((lancamentoProgramado.parcelas && lancamentoProgramado.parcelas.length)) {
-                var parcela = getFirstParcelaAberta(lancamentoProgramado);
                 lancamentoProgramado.dataCompetencia = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataCompetencia) || moment();
-                lancamentoProgramado.dataVencimento = parcela.dataVencimento || moment();
+                lancamentoProgramado.dataVencimento = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataVencimento) || moment();
+                var parcela = getFirstParcelaAberta(lancamentoProgramado);
+                if(parcela) { lancamentoProgramado.dataVencimento = parcela.dataVencimento || moment(); } 
             } else {
                 lancamentoProgramado.dataCompetencia = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataCompetencia) || moment();
                 lancamentoProgramado.dataVencimento = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataVencimento) || moment();

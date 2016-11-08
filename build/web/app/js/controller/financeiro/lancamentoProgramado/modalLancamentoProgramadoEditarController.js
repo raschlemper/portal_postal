@@ -173,6 +173,7 @@ app.controller('ModalLancamentoProgramadoEditarController',
             lancamento.dataVencimento = (parcela && parcela.dataVencimento) || lancamentoProgramado.dataVencimento;
             lancamento.valor = (parcela && parcela.valor) || lancamentoProgramado.valor;
             lancamento.situacao = (lancamentoProgramado && lancamentoProgramado.situacao) || $scope.situacoes[0]; 
+            lancamento.favorecido = lancamentoProgramado.favorecido;
             lancamento.modelo = modelo;
 //            lancamento.parcelas = lancamentoProgramado.parcelas;
             lancamento.rateios = lancamentoProgramado.rateios;

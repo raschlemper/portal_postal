@@ -94,7 +94,7 @@ app.controller('ModalLancamentoConciliarController',
         };
         
         $scope.ok = function(form, lancamentoConciliado) {
-            if (!validarSaldoDiferencaConciliacao($scope.saldo)) return;            
+//            if (!validarSaldoDiferencaConciliacao($scope.saldo)) return;            
             return validarLancamento(form, lancamentoConciliado);     
         };
         
@@ -148,6 +148,7 @@ app.controller('ModalLancamentoConciliarController',
         };
 
         var validarLancamentoByConfiguracao = function (configuracao, lancamento) {
+            if($scope.saldo.diferenca === 0) return true;
             if (configuracao.historico && !lancamento.historico) {
                 alert(MESSAGES.lancamento.validacao.HISTORICO_REQUERIDA);
                 return false;
@@ -179,14 +180,6 @@ app.controller('ModalLancamentoConciliarController',
         }; 
 
         var validarForm = function (form) {
-            if($scope.lancamentoConciliado.planoConta && $scope.lancamentoConciliado.planoConta.ehGrupo) {
-                alert(MESSAGES.planoConta.info.NAO_PERMITE_GRUPO);
-                return false;
-            }
-            if($scope.lancamentoConciliado.centroCusto && $scope.lancamentoConciliado.centroCusto.ehGrupo) {
-                alert(MESSAGES.centroCusto.info.NAO_PERMITE_GRUPO);
-                return false;
-            }
             if (form.dataLancamento.$error.required) {
                 alert(MESSAGES.lancamento.conciliar.validacao.DATA_LANCAMENTO_REQUERIDA);
                 return false;

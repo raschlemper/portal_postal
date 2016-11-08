@@ -34,7 +34,7 @@
                                 </button>
                             </div>
                             
-                            <div ng-show="saldo && saldo.diferenca">
+                            <div ng-if="saldo && saldo.diferenca && lancamentoConciliado.tipo">
                                 <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 divider-horizontal-top">
                                     <plano-conta plano-conta-model="lancamentoConciliado.planoConta" tipo="lancamentoConciliado.tipo"></plano-conta>
 <!--                                    <label class="small">Plano de Conta</label>
