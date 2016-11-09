@@ -98,6 +98,18 @@
             
         </tr>
     </tbody>
+    <tfoot ng-if="footer">
+        <tr>
+            <td ng-show="showMenu"></td>
+            <td ng-show="showCheckbox"></td>
+            <td ng-repeat="foot in footer track by $index" class="text-right" ng-show="foot.column.selected">
+                <span compile="columnFilter(foot.value, foot)"></span>
+            </td>            
+            <td ng-if="linha.events.edit" ng-show="!showMenu"></td>
+            <td ng-if="linha.events.remove" ng-show="!showMenu"></td>
+            <td ng-if="linha.events.view" ng-show="!showMenu"></td>
+        </tr>
+    </tfoot>
 </table>
 <div class="box-content" style="padding:10px 10px 0 10px">
     <div class="clearfix">

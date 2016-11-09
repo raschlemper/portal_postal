@@ -3174,6 +3174,17 @@ table.table-condensed tbody tr td.cel-menu {
     width: 20px;
     color: #333;
 }
+table.table-condensed > tfoot {
+    background-color: #DDD;
+    color: #000;
+    font-weight: bold;
+}
+table.table-condensed tfoot tr td {
+    border-color: #B3B3B3 !important;
+    padding: 3px 10px;
+    font-size: 12px;
+    vertical-align: middle;
+}
 .btn-table {
     padding: 5px;
     width: 30px;

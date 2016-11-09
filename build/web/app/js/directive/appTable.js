@@ -90,6 +90,7 @@ app.directive('appTable', function($filter) {
                 getFinish();
                 scope.orderBy();
                 eventTable(scope.listaFiltrada);
+                setColumnsFooter(scope.colunas);
             };
             
             var eventTable = function(items) {                
@@ -115,8 +116,7 @@ app.directive('appTable', function($filter) {
             scope.column = function(item, coluna) {
                 var colunas = coluna.column.split('.');
                 var value = getColumn(item, angular.copy(colunas));
-                if(coluna.filter && coluna.filter.callback){ value = $filter(coluna.filter.name)(value, coluna.filter.callback); }
-                else if(coluna.filter){ value = $filter(coluna.filter.name)(value, coluna.filter.args); }
+                value = scope.columnFilter(value, coluna);
                 return value;
             }
             
@@ -126,6 +126,12 @@ app.directive('appTable', function($filter) {
                 if(!colunas.length) return value;
                 return getColumn(value, colunas);
             };
+            
+            scope.columnFilter = function(value, coluna) {
+                if(coluna.filter && coluna.filter.callback){ value = $filter(coluna.filter.name)(value, coluna.filter.callback); }
+                else if(coluna.filter){ value = $filter(coluna.filter.name)(value, coluna.filter.args); }
+                return value;
+            }
             
             scope.filterList = function(lista, search) {
                 if(scope.searchAll) { lista = $filter('filter')(lista, scope.searchAll); }
@@ -149,12 +155,44 @@ app.directive('appTable', function($filter) {
             
             scope.events.list = function() {
                 return scope.listaFiltrada;
-            }     
+            };   
             
             scope.showColumn = function(event, coluna) {
                 event.stopPropagation();
                 coluna.selected = !coluna.selected;
-            }
+            };
+            
+            var setColumnsFooter = function(colunas) {
+                scope.footer = {};
+                _.map(colunas, function(coluna) {
+//                    if(!coluna.selected) return;
+                    scope.footer[coluna.column] = { 
+                        show: (coluna.footer && coluna.footer.show) || false, 
+                        value: (coluna.footer && coluna.footer.value) || null,
+                        callback: (coluna.footer && coluna.footer.callback) || null,
+                        filter: (coluna.footer && coluna.footer.filter) || null,
+                        column: coluna
+                    };
+                });
+                setFooter(scope.listaFiltrada);
+            };
+            
+            var setFooter = function(listaFiltrada) {
+                _.map(listaFiltrada, function(item) {
+                    angular.forEach(item, function(value, key) {
+                        if(!scope.footer[key]) return;
+                        if(scope.footer[key].show) { 
+                            if(scope.footer[key].callback) {
+                                scope.footer[key].value = scope.footer[key].callback(scope.footer[key], value);
+                            } else {
+                                scope.footer[key].value += value;
+                            }
+                        } else {
+                            scope.footer[key].value = null;                        
+                        }
+                    });
+                });    
+            };
             
             scope.$watchCollection('selectAll', function(newValue, oldValue) {
                 _.map(scope.listaFiltrada, function(item) {

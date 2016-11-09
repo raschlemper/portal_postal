@@ -43,8 +43,8 @@ app.controller('LancamentoController',
                 {label: 'Usuário', column: 'usuario', showColumn: true, selected: false},
                 {label: 'Favorecido', column: 'favorecido'},                
                 {label: 'Histórico', column: 'historico'},
-                {label: 'Crédito', column: 'deposito', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}},  
-                {label: 'Débito', column: 'pagamento', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}},  
+                {label: 'Crédito', column: 'deposito', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}, footer: { show: true, callback: null, dataClass: 'text-right', filter: {name: 'currency', args: '' }} },  
+                {label: 'Débito', column: 'pagamento', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}, footer: { show: true, callback: null, dataClass: 'text-right', filter: {name: 'currency', args: '' }} },  
                 {label: 'Saldo', column: 'saldo', selected: true, headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'saldoLancamento', args: ''}}
             ]            
             $scope.linha = {

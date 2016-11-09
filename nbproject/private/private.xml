@@ -11,6 +11,11 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/home/rafael/NetBeansProjects/Portal_Postal_Web/web/app/js/directive/appTable.js</file>
+            <file>file:/home/rafael/NetBeansProjects/Portal_Postal_Web/web/app/js/controller/financeiro/lancamento/lancamentoController.js</file>
+            <file>file:/home/rafael/NetBeansProjects/Portal_Postal_Web/web/NewTemplate/dist/css/sb-admin-2.css</file>
+            <file>file:/home/rafael/NetBeansProjects/Portal_Postal_Web/web/app/js/directive/html/appTable.html</file>
+        </group>
     </open-files>
 </project-private>
