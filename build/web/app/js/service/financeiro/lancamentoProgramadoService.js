@@ -78,7 +78,18 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
     };
     
     var getPeriodos = function() {
-        return periodos;
+        var periodosCustom = [];
+        periodos.map(function(periodo) {
+            if(periodo.id === 0)  { periodosCustom.push(periodo); }
+            if(periodo.id === 1)  { periodosCustom.push(periodo); }
+            if(periodo.id === 9)  { periodosCustom.push(periodo); }
+            if(periodo.id === 10) { periodosCustom.push(periodo); }
+            if(periodo.id === 11) { periodosCustom.push(periodo); }
+            if(periodo.id === 12) { periodosCustom.push(periodo); }
+            if(periodo.id === 13) { periodosCustom.push(periodo); }
+            if(periodo.id === 14) { periodosCustom.push(periodo); }    
+        });
+        return periodosCustom;
     };
     
 //    var setNumeroParcelaLancamento = function(lancamento) {

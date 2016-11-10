@@ -256,8 +256,8 @@
                                     <td><input type="text" name="conteudo<%= pv.getId()%>" value="<%= pv.getConteudo()%>"  maxlength="200" /></td>
                                     <td><input type="text" name="celular<%= pv.getId()%>" value="<%= pv.getCelularDes()%>"  maxlength="15" /></td>
                                     <td><input type="text" name="email<%= pv.getId()%>" value="<%= pv.getEmail_destinatario()%>"  maxlength="100" /></td>                                    
-                                    <%if (pv.getPeso() > 0) {%>
-                                    <td><input type="text" size="4" name="peso<%= pv.getId()%>" value="<%= pv.getPeso()%>" /></td>
+                                    <%if (pv.getPeso() >= 0) {%>                                    
+                                    <td><input type="text" size="4" name="peso<%= pv.getId()%>" value="<%= pv.getPeso()%>" <%=pv.getPeso() == 0? "style=\"background-color: #ff5050;\"" :""%> /></td>
                                     <td><input type="text" size="3" name="altura<%= pv.getId()%>" value="<%= pv.getAltura()%>" /></td>
                                     <td><input type="text" size="3" name="largura<%= pv.getId()%>" value="<%= pv.getLargura()%>" /></td>
                                     <td><input type="text" size="3" name="comprimento<%= pv.getId()%>" value="<%= pv.getComprimento()%>" /></td>

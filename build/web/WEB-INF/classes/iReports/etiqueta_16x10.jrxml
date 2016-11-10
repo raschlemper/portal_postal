@@ -159,355 +159,303 @@
 	<field name="chancela_img" class="java.awt.Image">
 		<fieldDescription><![CDATA[chancela_img]]></fieldDescription>
 	</field>
+	<field name="logo_ect_img" class="java.awt.Image">
+		<fieldDescription><![CDATA[logo_ect_img]]></fieldDescription>
+	</field>
+	<field name="dataMatrixEct" class="java.lang.String">
+		<fieldDescription><![CDATA[dataMatrixEct]]></fieldDescription>
+	</field>
+	<field name="simbolo_img" class="java.awt.Image">
+		<fieldDescription><![CDATA[simbolo_img]]></fieldDescription>
+	</field>
+	<field name="destinatario_cep_dig" class="java.lang.String">
+		<fieldDescription><![CDATA[destinatario_cep]]></fieldDescription>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
 		<band height="400" splitType="Stretch">
-			<rectangle>
-				<reportElement uuid="2cd680f9-e5b0-4f7a-876a-da8953be620e" x="170" y="273" width="69" height="49"/>
-			</rectangle>
-			<line>
-				<reportElement uuid="a6541d87-a388-4419-9b4e-b53348d5d8a4" x="0" y="73" width="247" height="1"/>
-			</line>
-			<line>
-				<reportElement uuid="defb1bdc-3660-46b0-a274-ceba7db8b055" x="0" y="146" width="247" height="1"/>
-			</line>
-			<line>
-				<reportElement uuid="a0ec9e51-f2bc-45c9-b144-68e43eedf9f6" x="0" y="268" width="247" height="2"/>
-			</line>
-			<line>
-				<reportElement uuid="5d0dbbce-31d5-4911-884f-b5f7410f9735" x="0" y="325" width="247" height="2"/>
-			</line>
-			<textField>
-				<reportElement uuid="493b0442-d2dd-4179-8600-0c2f21317f72" mode="Opaque" x="2" y="12" width="107" height="60" forecolor="#FFFFFF" backcolor="#000000">
-					<printWhenExpression><![CDATA[$F{sro}.length() == 13]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="40" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{sigla_triagem}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="13eca123-68ea-4805-a26f-ac71f081a21f" x="3" y="327" width="91" height="11"/>
-				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="true" isUnderline="false"/>
-				</textElement>
-				<text><![CDATA[REMETENTE:]]></text>
-			</staticText>
-			<image hAlign="Center" vAlign="Middle" isUsingCache="false" onErrorType="Blank">
-				<reportElement uuid="3ac176c4-72f8-4b0a-b36e-349fb739a598" x="2" y="338" width="91" height="61"/>
-				<imageExpression><![CDATA[$F{url_logo}]]></imageExpression>
-			</image>
-			<textField>
-				<reportElement uuid="0c765bb1-743a-4c9a-ac29-5c0d1d8efd52" x="99" y="326" width="148" height="10"/>
-				<textElement verticalAlignment="Middle">
-					<font size="7" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{remetente_nome}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="26626fd0-f87d-440b-8f4b-b0f57a0b066b" x="99" y="344" width="148" height="10">
-					<printWhenExpression><![CDATA[!$F{contrato_ect}.equals("")]]></printWhenExpression>
-				</reportElement>
-				<textElement>
-					<font size="7"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{contrato_ect} +" / "+ $F{cartao_postagem}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement uuid="6fc09125-5552-42ec-9e65-b33b25015711" x="99" y="353" width="148" height="20"/>
-				<textElement>
-					<font size="7"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{remetente_logradouro}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="e8772111-278f-4b24-9c5c-5be5d4d3d3b0" x="99" y="371" width="148" height="10"/>
-				<textElement>
-					<font size="7"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{remetente_bairro}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="68536785-32b6-41d9-a843-c21d6a927e04" x="99" y="380" width="148" height="10"/>
-				<textElement>
-					<font size="7"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{remetente_cidade}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="c127d4a4-350c-470e-9b28-d4d24f50d6cd" x="99" y="389" width="148" height="10"/>
-				<textElement>
-					<font size="7"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{remetente_cep}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="e5d7481b-6daa-477e-ac2a-4477ff1813dd" x="2" y="147" width="91" height="13"/>
-				<textElement>
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[DESTINATÁRIO:]]></text>
-			</staticText>
-			<textField>
-				<reportElement uuid="8469f520-99dc-4015-ac35-b24da8f8518b" x="148" y="0" width="100" height="59">
-					<printWhenExpression><![CDATA[$F{sro}.length() != 13  || $F{grupo_servico}.equals("CARTA_MOD")  || $F{grupo_servico}.equals("IMPRESSO")  || $F{grupo_servico}.startsWith("MDPB")]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="18" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{grupo_servico}]]></textFieldExpression>
-			</textField>
-			<image scaleImage="RetainShape" hAlign="Center" vAlign="Middle" isUsingCache="true" onErrorType="Blank">
-				<reportElement uuid="8a2cee8e-6648-4ebb-8631-16095e945083" x="161" y="0" width="86" height="59">
-					<printWhenExpression><![CDATA[!$F{grupo_servico}.equals("CARTA_MOD")  && !$F{grupo_servico}.equals("IMPRESSO")  && !$F{grupo_servico}.startsWith("MDPB")]]></printWhenExpression>
-				</reportElement>
-				<imageExpression><![CDATA[$F{chancela_img}]]></imageExpression>
-			</image>
-			<textField isStretchWithOverflow="true">
-				<reportElement uuid="c17f7e13-188a-437f-8324-10bf67c320a9" x="2" y="160" width="245" height="20"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{destinatario_nome} + " " + $F{aos_cuidados}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement uuid="38e168b4-849b-4a03-995f-d0e176eede57" x="2" y="180" width="245" height="23"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{destinatario_logradouro} + " " + $F{destinatario_numero}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="1cbf7a79-7a85-40bf-85c2-395ceb5d9819" x="2" y="212" width="245" height="11"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{destinatario_bairro}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="996859df-d68b-4b60-9c1f-6f9747df2f5f" x="2" y="222" width="245" height="11"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{destinatario_cidade}.concat("/" + $F{destinatario_uf})]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="26d4ccc4-1829-42e1-9c7f-d89df8949a9c" x="172" y="275" width="69" height="20"/>
-				<textElement>
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[PESO (Kg):]]></text>
-			</staticText>
-			<textField>
-				<reportElement uuid="b6530c8f-54c0-4b8d-b476-259434e6bd8c" x="120" y="288" width="25" height="18">
-					<printWhenExpression><![CDATA[$F{ar} == 1]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["AR"]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="21aed67b-cd0a-42e9-a466-0791ea705380" x="120" y="306" width="25" height="18">
-					<printWhenExpression><![CDATA[$F{mp} == 1]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["MP"]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="362890e0-ca0e-4c2f-bbfb-657a194406f5" x="99" y="335" width="148" height="10"/>
-				<textElement>
-					<font size="7"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{remetente_departamento}+" - "+$F{remetente_complemento}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="d80c38a4-9717-4ca7-a60e-d95d6116bad9" x="2" y="242" width="245" height="11">
-					<printWhenExpression><![CDATA[!$F{nota_fiscal}.equals("")]]></printWhenExpression>
-				</reportElement>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA["N.F.: " + $F{nota_fiscal}]]></textFieldExpression>
-			</textField>
 			<componentElement>
-				<reportElement uuid="a58e1a3e-524a-447d-bfab-d69c4c07cf7d" x="2" y="85" width="245" height="58">
-					<printWhenExpression><![CDATA[$F{sro}.length() == 13]]></printWhenExpression>
-				</reportElement>
-				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barHeight="82">
-					<jr:codeExpression><![CDATA[$F{sro}]]></jr:codeExpression>
-				</jr:barbecue>
-			</componentElement>
-			<componentElement>
-				<reportElement uuid="7284de90-9988-4352-8029-fbb3d35500f5" x="3" y="279" width="114" height="45"/>
-				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128C" drawText="false" checksumRequired="false" barWidth="2" barHeight="75">
-					<jr:codeExpression><![CDATA[$F{destinatario_cep}]]></jr:codeExpression>
-				</jr:barbecue>
-			</componentElement>
-			<textField>
-				<reportElement uuid="8bdca320-2bd1-4730-a35b-6f1922302165" mode="Opaque" x="140" y="81" width="99" height="60" forecolor="#FFFFFF" backcolor="#000000">
-					<printWhenExpression><![CDATA[$F{contrato_ect}.equals("") && $F{sro}.length() < 13]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="40" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{sigla_triagem}]]></textFieldExpression>
-			</textField>
-			<componentElement>
-				<reportElement uuid="3cc0651f-3b90-40c0-8c7d-fd3a329eb306" x="1" y="24" width="141" height="47">
+				<reportElement x="75" y="0" width="97" height="76" uuid="0ec0c7ad-e1e7-4417-a0ab-4c302de50e62">
 					<printWhenExpression><![CDATA[$F{sro}.length() != 13]]></printWhenExpression>
 				</reportElement>
-				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barHeight="80">
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barWidth="2" barHeight="80">
 					<jr:codeExpression><![CDATA[$F{id_pp}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
-			<textField>
-				<reportElement uuid="89e7a17f-fd03-4755-b2ba-1dac3888c17c" x="93" y="149" width="154" height="11">
-					<printWhenExpression><![CDATA[$F{destinatario_documento} != null && !$F{destinatario_documento}.equals("")]]></printWhenExpression>
-				</reportElement>
-				<textElement>
-					<font size="8"/>
+			<rectangle>
+				<reportElement x="0" y="185" width="247" height="138" uuid="2526ee22-c5c4-4600-bfbe-1ae4c7acfa20"/>
+			</rectangle>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="6" y="199" width="240" height="19" uuid="255dd2b2-e37e-4c8f-91ba-b6b0de02073e"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8"/>
+					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA["CPF/CNPJ: " + $F{destinatario_documento}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{destinatario_nome} + " " + $F{aos_cuidados}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="a369a15c-7acd-4b8d-9883-f1edfd7dde78" x="2" y="268" width="115" height="12"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+				<reportElement x="5" y="253" width="52" height="12" uuid="a6063c1a-f05f-44cf-b08e-63020b8d060e"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{destinatario_cep}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="95ab7e9f-7a76-4c48-8ac8-ab36a6c77c23" x="2" y="202" width="245" height="11"/>
-				<textElement>
-					<font size="8"/>
+				<reportElement x="0" y="83" width="82" height="14" uuid="fee85323-759c-4319-8d66-a24f174c71f0"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{destinatario_complemento}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["NF: " + $F{nota_fiscal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="81" y="83" width="165" height="14" uuid="1fd7ffe1-e808-47d1-a597-b5d891183e43">
+					<printWhenExpression><![CDATA[!$F{contrato_ect}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CONTRATO: " + $F{contrato_ect} + " / " + $F{cartao_postagem}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="5" y="218" width="241" height="35" uuid="502d1c84-b3ad-4685-965f-4a5887ff1479"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{destinatario_logradouro}+", "+$F{destinatario_numero}+
+"\n"+$F{destinatario_complemento}+"\n"+$F{destinatario_bairro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="81" y="100" width="88" height="12" uuid="37ece73e-f2ac-4c8a-9973-4d65c966022f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{grupo_servico}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="363" width="209" height="10" uuid="87f6b3bb-72e4-4cd6-9821-a5444e869eba"/>
+				<textElement>
+					<font fontName="Arial" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{remetente_bairro}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="58" y="253" width="188" height="12" uuid="e2e67f05-e1bd-4baf-90f8-808eab694f18"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{destinatario_cidade}.concat(" / " + $F{destinatario_uf})]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="7c16d0fb-3dab-4cab-9f5d-4eb9c13ccab0" x="3" y="74" width="138" height="67">
+				<reportElement x="0" y="325" width="209" height="11" uuid="31acdc31-413b-488b-864a-7c3b4d7cea91"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[REMETENTE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="81" y="83" width="67" height="14" uuid="ca1232da-5c2c-4c17-82db-e60689968f91">
 					<printWhenExpression><![CDATA[$F{contrato_ect}.equals("") && $F{sro}.length() < 13]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font size="32" isBold="true" isUnderline="true"/>
+					<font fontName="Arial" size="10" isBold="true" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[AVISTA]]></text>
 			</staticText>
-			<staticText>
-				<reportElement uuid="0c5a1fe3-3a94-439c-951a-3ee598e234d4" x="2" y="81" width="135" height="60">
-					<printWhenExpression><![CDATA[!$F{contrato_ect}.equals("") && $F{sro}.length() < 13]]></printWhenExpression>
-				</reportElement>
-				<textElement verticalAlignment="Middle">
-					<font size="46" isBold="true" isUnderline="true"/>
-				</textElement>
-				<text><![CDATA[FAT.]]></text>
-			</staticText>
-			<textField>
-				<reportElement uuid="a0ed8ecb-4e47-4fda-96ea-3fb911b21d00" x="172" y="295" width="67" height="18">
-					<printWhenExpression><![CDATA[$F{peso} > 0]]></printWhenExpression>
-				</reportElement>
-				<textElement>
-					<font size="10" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{peso}]]></textFieldExpression>
-			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="76cbf37e-01f1-4b45-ae7a-97238c1d9f01" x="2" y="252" width="245" height="16"/>
+				<reportElement x="121" y="284" width="125" height="39" uuid="90e386d9-964a-491e-a252-1f4f65475373"/>
 				<textElement>
-					<font size="6"/>
+					<font fontName="Arial" size="6"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{observacao}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Obs: "+$F{observacao}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="bf4e4252-8852-48a3-b379-d557bedca395" x="2" y="232" width="160" height="11"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{destinatario_pais}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="7555cb6c-f800-42be-a706-07c09b5b40a3" x="162" y="232" width="85" height="11"/>
-				<textElement textAlignment="Right">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{destinatario_celular}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="708ffae5-52be-4c20-89be-1100a64bf600" x="134" y="270" width="29" height="18">
-					<printWhenExpression><![CDATA[$F{vd} > 0]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["*"]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="69f84d9f-2091-4105-ba71-f22dba24c4e9" x="161" y="27" width="86" height="9">
-					<printWhenExpression><![CDATA[!$F{contrato_ect}.equals("") && !$F{grupo_servico}.equals("CARTA")  && !$F{grupo_servico}.startsWith("MDPB") && !$F{grupo_servico}.equals("SIMPLES") && !$F{grupo_servico}.equals("CARTA_MOD")  && !$F{grupo_servico}.equals("IMPRESSO")]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Center">
-					<font size="6"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{contrato_ect}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="0d7ca476-4182-40d3-9fa9-8d96fd6c1ad0" x="161" y="34" width="86" height="9">
-					<printWhenExpression><![CDATA[!$F{contrato_ect}.equals("") && !$F{grupo_servico}.equals("CARTA")  && !$F{grupo_servico}.startsWith("MDPB") && !$F{grupo_servico}.equals("SIMPLES") && !$F{grupo_servico}.equals("CARTA_MOD")  && !$F{grupo_servico}.equals("IMPRESSO")]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{remetente_nome}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="8a8761b4-e9e8-402e-8163-48bca34b1d2a" x="2" y="73" width="245" height="11">
-					<printWhenExpression><![CDATA[$F{sro}.length() == 13]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Center">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{sro}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="ecfcd708-b420-41d5-93ab-e163bfefec9b" x="0" y="0" width="140" height="12">
+				<reportElement x="169" y="114" width="77" height="13" uuid="cb3cd39d-be4e-4580-a297-3ee0c62d156f">
 					<printWhenExpression><![CDATA[$F{grupo_servico}.equals("SEDEXC") || $F{grupo_servico}.equals("PAC_COB")]]></printWhenExpression>
 				</reportElement>
-				<textElement>
-					<font size="8"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA["A COBRAR: R$ " + $F{valor_cobrar}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="1ce9d215-cab1-42ab-bfd9-a09cca7e3ed2" x="144" y="288" width="25" height="18">
+				<reportElement x="0" y="372" width="46" height="12" uuid="0694f845-5502-433e-9606-ba4fc8946f3d"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{remetente_cep}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="225" y="148" width="21" height="12" uuid="8f0da847-60b9-4326-aba9-5c20fc6196a7">
 					<printWhenExpression><![CDATA[$F{rm} == 1]]></printWhenExpression>
 				</reportElement>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["RM"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="5746a420-3906-4fe1-af2e-15ec510d184e" x="144" y="306" width="25" height="18">
+				<reportElement x="46" y="372" width="163" height="12" uuid="06d8b279-8b9a-4057-8baa-4c4e88f13f2b"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{remetente_cidade}+" / "+$F{remetente_uf}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="335" width="209" height="11" uuid="f7e8955a-44a2-4ee3-b988-9fe559bec94a"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{remetente_nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="185" y="264" width="61" height="11" uuid="bf4be64a-b684-4f09-a3d2-70c7b249b5b7"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{destinatario_celular}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" onErrorType="Blank">
+				<reportElement x="75" y="1" width="97" height="75" uuid="fc10fb80-daa7-47d4-9220-9ca4b87fbd57">
+					<printWhenExpression><![CDATA[$F{sro}.length() == 13]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{dataMatrixEct}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="185" width="80" height="14" forecolor="#FFFFFF" backcolor="#000000" uuid="de5374f5-26ee-4ad5-a4ed-564458c5c118"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DESTINATÁRIO]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="121" y="264" width="64" height="11" uuid="e9f65273-7afa-49d8-8d96-f7453b9d3294"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{destinatario_pais}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="207" y="100" width="39" height="12" uuid="6feb9be9-f72b-46d2-a787-3419bfa70473">
+					<printWhenExpression><![CDATA[$F{peso} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{peso}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="2" y="265" width="119" height="58" uuid="00db670f-a4c7-4559-9e9d-1bd71e1de5a5"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128C" drawText="false" checksumRequired="false" barWidth="2" barHeight="80">
+					<jr:codeExpression><![CDATA[$F{destinatario_cep_dig}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField pattern="">
+				<reportElement x="0" y="354" width="209" height="10" uuid="83eb688f-8bcd-4f2a-97cb-f464743a8983"/>
+				<textElement>
+					<font fontName="Arial" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{remetente_logradouro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="210" y="323" width="37" height="62" forecolor="#FFFFFF" backcolor="#000000" uuid="82cf93b8-a1c2-419c-a604-3513d6b085f8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
+					<font fontName="Arial" size="28" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sigla_triagem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="225" y="128" width="21" height="12" uuid="bcd3f50f-990a-49eb-81f2-64ae30dfabe3">
+					<printWhenExpression><![CDATA[$F{vd} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["*"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="225" y="137" width="21" height="12" uuid="131df785-5abd-43ad-bc9d-b64607a193d8">
+					<printWhenExpression><![CDATA[$F{ar} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["AR"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="345" width="209" height="10" uuid="8f6afc46-58b6-4477-8588-b7458bd70020"/>
+				<textElement>
+					<font fontName="Arial" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{remetente_departamento}+" - "+$F{remetente_complemento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="100" width="82" height="12" uuid="95f5ccaf-a7e8-40f4-b3b0-a1dc30d78a9a"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Código PP: "+$F{id_pp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="81" y="114" width="88" height="13" uuid="e7035278-83b1-455a-8d71-3d75e74b89b4">
+					<printWhenExpression><![CDATA[$F{sro}.length() == 13]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Top">
+					<font fontName="Arial" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="225" y="170" width="21" height="12" uuid="02bfffb7-d38e-4ed3-b67b-ae6a328cd32f">
 					<printWhenExpression><![CDATA[$F{pr} == 1]]></printWhenExpression>
 				</reportElement>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["PR"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="38d567de-bb52-4114-8bab-e411729899b1" x="2" y="13" width="141" height="11">
-					<printWhenExpression><![CDATA[$F{sro}.length() != 13]]></printWhenExpression>
+				<reportElement x="225" y="159" width="21" height="12" uuid="b182c585-4982-4ca2-8592-1e264af8e639">
+					<printWhenExpression><![CDATA[$F{mp} == 1]]></printWhenExpression>
 				</reportElement>
-				<textElement>
-					<font size="8"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Código PP: "+$F{id_pp}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["MP"]]></textFieldExpression>
 			</textField>
+			<componentElement>
+				<reportElement x="0" y="128" width="225" height="54" uuid="6a6f8740-a210-4658-9454-36fabf6cf699">
+					<printWhenExpression><![CDATA[$F{sro}.length() == 13]]></printWhenExpression>
+				</reportElement>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barWidth="2" barHeight="80">
+					<jr:codeExpression><![CDATA[$F{sro}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<image scaleImage="RetainShape" hAlign="Center" vAlign="Middle" isUsingCache="true" onErrorType="Blank">
+				<reportElement x="172" y="1" width="75" height="75" uuid="e70ae53a-7907-4cfc-905f-3f8baa773ec8"/>
+				<imageExpression><![CDATA[$F{simbolo_img}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="121" y="275" width="125" height="9" uuid="0daabb04-6cf2-4d0e-8185-88fa3e14b5bd">
+					<printWhenExpression><![CDATA[$F{destinatario_documento} != null && !$F{destinatario_documento}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CPF/CNPJ: " + $F{destinatario_documento}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Left" vAlign="Middle" isUsingCache="false" onErrorType="Blank">
+				<reportElement x="0" y="1" width="75" height="75" uuid="dd412668-8f2b-40d7-afeb-328349181c6b"/>
+				<imageExpression><![CDATA[$F{url_logo}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="169" y="100" width="38" height="12" uuid="39bf30fd-ba35-4a10-ac12-3bedc796ba3a"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PESO (g):]]></text>
+			</staticText>
 		</band>
 	</detail>
 </jasperReport>

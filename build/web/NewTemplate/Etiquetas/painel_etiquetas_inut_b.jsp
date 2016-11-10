@@ -111,7 +111,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <%
-                                                        ArrayList<PreVenda> lista2 = ContrPreVenda.consultaVendasNaoConsolidadas(nomeBD, vDataInicio, vDataFinal, 1);
+                                                        ArrayList<PreVenda> lista2 = ContrPreVenda.consultaVendasNaoConsolidadas(nomeBD, vDataInicio, vDataFinal, 0, 1);
                                                         for (int i = 0; i < lista2.size(); i++) {
                                                             PreVenda des = lista2.get(i);
                                                             String numObj = des.getNumObjeto();

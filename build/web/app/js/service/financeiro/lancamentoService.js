@@ -40,8 +40,18 @@ app.factory('LancamentoService', function($http, PromiseService, LISTAS) {
     };
     
     var getPeriodos = function() {
-        periodos.splice(0, 1);
-        return periodos;
+        var periodosCustom = [];
+        periodos.map(function(periodo) {
+            if(periodo.id === 1) { periodosCustom.push(periodo); }
+            if(periodo.id === 2) { periodosCustom.push(periodo); }
+            if(periodo.id === 3) { periodosCustom.push(periodo); }
+            if(periodo.id === 4) { periodosCustom.push(periodo); }
+            if(periodo.id === 5) { periodosCustom.push(periodo); }
+            if(periodo.id === 6) { periodosCustom.push(periodo); } 
+            if(periodo.id === 7) { periodosCustom.push(periodo); } 
+            if(periodo.id === 8) { periodosCustom.push(periodo); } 
+        });
+        return periodosCustom;
     };
 
     return {

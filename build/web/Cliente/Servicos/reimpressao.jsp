@@ -359,6 +359,7 @@
                                         <option disabled>----------------</option>
                                         <option value="ETQ_16x10">Etiqueta Adesiva - 16cm x 10cm</option> 
                                         <option value="ETQ_10x10">Etiqueta Adesiva - 10cm x 10cm</option> 
+                                        <option value="ETQ_12x9e5">Etiqueta Adesiva - 12cm x 9,5cm</option> 
                                         <option disabled>----------------</option>
                                         <option value="ENV_DL">Envelope Ofício / DL (Direita) - 11,4cm x 22,9cm</option> 
                                         <option value="ENV_DL_ESQ">Envelope Ofício / DL (Esquerda) - 11,4cm x 22,9cm</option> 

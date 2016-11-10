@@ -2,7 +2,7 @@
 
 app.constant('MESSAGES', {
     
-    VERSION: '08/11/2016 - 16:00',
+    VERSION: '10/11/2016 - 14:00',
 
     conta: { 
         info: {

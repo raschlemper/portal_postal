@@ -2,10 +2,11 @@
 
 app.controller('LancamentoController', 
     ['$scope', 'LancamentoService', 'LancamentoTransferenciaService', 'LancamentoConciliadoService', 'ContaService', 'PlanoContaService', 
-    'CentroCustoService', 'ConfiguracaoService', 'ReportService', 'ModalService', 'DatePickerService', 'ListaService', 'LancamentoHandler', 
-    'LancamentoRateioHandler', 'LancamentoTransferenciaHandler', 'LancamentoConciliadoHandler', 'FinanceiroValidation', 'LISTAS', 'MESSAGES',
+    'CentroCustoService', 'ConfiguracaoService', 'ReportService', 'ModalService', 'DatePickerService', 'ListaService', 'PeriodoService', 
+    'LancamentoHandler', 'LancamentoRateioHandler', 'LancamentoTransferenciaHandler', 'LancamentoConciliadoHandler', 'FinanceiroValidation', 
+    'LISTAS', 'MESSAGES',
     function ($scope, LancamentoService, LancamentoTransferenciaService, LancamentoConciliadoService, ContaService, PlanoContaService, 
-        CentroCustoService, ConfiguracaoService, ReportService, ModalService, DatePickerService, ListaService, LancamentoHandler, 
+        CentroCustoService, ConfiguracaoService, ReportService, ModalService, DatePickerService, ListaService, PeriodoService, LancamentoHandler, 
         LancamentoRateioHandler, LancamentoTransferenciaHandler, LancamentoConciliadoHandler, FinanceiroValidation, LISTAS, MESSAGES) {
 
         var init = function () {
@@ -140,10 +141,15 @@ app.controller('LancamentoController',
             return selected;
         };
         
-        $scope.filterByDays = function(days) {
+        $scope.filterByDays = function(days, businessDay) {
             $scope.lancSearch.periodo = null;
-            setDataInicio(moment().add(days, 'days'));
-            setDataFim(moment().add(days, 'days'));
+            if(businessDay) {
+                setDataInicio(moment().businessAdd(days));
+                setDataFim(moment().businessAdd(days));
+            } else {
+                setDataInicio(moment().add(days, 'days'));
+                setDataFim(moment().add(days, 'days'));                
+            }
             todosByConta($scope.lancSearch.conta);
         };
 
@@ -210,7 +216,17 @@ app.controller('LancamentoController',
         };
 
         var todos = function() {
-            LancamentoService.getAll($scope.lancSearch.dataInicio.format('YYYY-MM-DD'), $scope.lancSearch.dataFim.format('YYYY-MM-DD'))
+            var dataInicio;
+            var dataFim;
+            if($scope.lancSearch.dataInicio) { 
+                setDataInicio($scope.lancSearch.dataInicio); 
+                dataInicio = $scope.lancSearch.dataInicio.format('YYYY-MM-DD');
+            }
+            if($scope.lancSearch.dataFim) { 
+                setDataFim($scope.lancSearch.dataFim); 
+                dataFim = $scope.lancSearch.dataFim.format('YYYY-MM-DD');
+            }
+            LancamentoService.getAll(dataInicio, dataFim)
                 .then(function (data) {
                     $scope.lancamentos = angular.copy(data);
                     $scope.lancamentosLista = criarLancamentosLista(data);
@@ -224,11 +240,19 @@ app.controller('LancamentoController',
         };
 
         var todosByConta = function(conta) {
-            if($scope.lancSearch.dataInicio) { setDataInicio($scope.lancSearch.dataInicio); }
-            if($scope.lancSearch.dataFim) { setDataFim($scope.lancSearch.dataFim); }
+            var dataInicio;
+            var dataFim;
+            if($scope.lancSearch.dataInicio) { 
+                setDataInicio($scope.lancSearch.dataInicio); 
+                dataInicio = $scope.lancSearch.dataInicio.format('YYYY-MM-DD');
+            }
+            if($scope.lancSearch.dataFim) { 
+                setDataFim($scope.lancSearch.dataFim); 
+                dataFim = $scope.lancSearch.dataFim.format('YYYY-MM-DD');
+            }
             if(!conta || !conta.idConta) { todos(); }
             else {  
-                ContaService.getLancamento(conta.idConta, $scope.lancSearch.dataInicio.format('YYYY-MM-DD'), $scope.lancSearch.dataFim.format('YYYY-MM-DD'))
+                ContaService.getLancamento(conta.idConta, dataInicio, dataFim)
                     .then(function (data) {
                         $scope.lancamentos = angular.copy(data.lancamentos);
                         $scope.lancamentosLista = criarLancamentosLista(data.lancamentos);
@@ -244,32 +268,10 @@ app.controller('LancamentoController',
 
         $scope.changePeriodo = function(conta, periodo) {
             if(!periodo) return;
-            var dataInicio = moment();
-            var dataFim = moment();
             $scope.lancSearch.periodo = periodo;
-            switch(periodo.id) {
-                case 1:
-                    dataInicio = dataInicio.startOf('month');
-                    dataFim = dataFim.endOf('month');
-                    break; 
-                case 2:
-                    dataInicio = dataInicio.subtract(7, 'days');
-                    break; 
-                case 3:
-                    dataInicio = dataInicio.subtract(15, 'days');
-                    break; 
-                case 4:
-                    dataInicio = dataInicio.subtract(30, 'days');
-                    break; 
-                case 5:
-                    dataInicio = dataInicio.subtract(60, 'days');
-                    break; 
-                case 6:
-                    dataInicio = dataInicio.subtract(90, 'days');
-                    break; 
-            }           
-            setDataInicio(dataInicio);
-            setDataFim(dataFim);
+            var datas = PeriodoService.dateByPeriodo(periodo); 
+            setDataInicio(datas.dataInicio);
+            setDataFim(datas.dataFim);
             todosByConta(conta);
         };
         
@@ -285,13 +287,11 @@ app.controller('LancamentoController',
             $scope.lancSearch.periodo = null;
             $scope.lancSearch.dataInicio = getDate(dataInicio);
             $scope.lancSearch.dataFim = getDate(dataFim);
-            if($scope.lancSearch.dataInicio && $scope.lancSearch.dataFim) {
-                if(!validaPeriodo($scope.lancSearch.dataInicio, $scope.lancSearch.dataFim)) { 
-                    $scope.outOfRangePeriodo = true;
-                } else {
-                    $scope.outOfRangePeriodo = false;
-                    todosByConta(conta);                        
-                }
+            if(!validaPeriodo($scope.lancSearch.dataInicio, $scope.lancSearch.dataFim)) { 
+                $scope.outOfRangePeriodo = true;
+            } else {
+                $scope.outOfRangePeriodo = false;
+                todosByConta(conta);                        
             }
         };
         
@@ -308,10 +308,14 @@ app.controller('LancamentoController',
         };
         
         var getDate = function(date) {
+            if(!date) return null;
             if(!angular.isDate(date)) {
                 return moment(date, "DD/MM/YYYY"); 
             } 
-            return date;
+            if(moment.isDate(date)) {
+                return date
+            }
+            return null;
         };
 
         var criarLancamentosLista = function(lancamentos) {

@@ -2,10 +2,11 @@
 
 app.controller('LancamentoProgramadoController', 
     ['$scope', '$filter', '$state', 'LancamentoProgramadoService', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoProgramadoTransferenciaService',
-     'FrequenciaLancamentoService', 'ConfiguracaoService', 'ReportService', 'ModalService', 'DatePickerService', 'LancamentoProgramadoHandler', 'LancamentoProgramadoParcelaHandler', 
-     'LancamentoProgramadoRateioHandler', 'LancamentoProgramadoTransferenciaHandler', 'LancamentoHandler', 'FinanceiroValidation', 'ListaService', 'LISTAS', 'MESSAGES',
+     'FrequenciaLancamentoService', 'ConfiguracaoService', 'ReportService', 'ModalService', 'DatePickerService', 'PeriodoService', 'LancamentoProgramadoHandler', 
+     'LancamentoProgramadoParcelaHandler', 'LancamentoProgramadoRateioHandler', 'LancamentoProgramadoTransferenciaHandler', 'LancamentoHandler', 'FinanceiroValidation', 
+     'ListaService', 'LISTAS', 'MESSAGES',
     function ($scope, $filter, $state, LancamentoProgramadoService, ContaService, PlanoContaService, CentroCustoService, LancamentoProgramadoTransferenciaService,
-        FrequenciaLancamentoService, ConfiguracaoService, ReportService, ModalService, DatePickerService, LancamentoProgramadoHandler, LancamentoProgramadoParcelaHandler, 
+        FrequenciaLancamentoService, ConfiguracaoService, ReportService, ModalService, DatePickerService, PeriodoService, LancamentoProgramadoHandler, LancamentoProgramadoParcelaHandler, 
         LancamentoProgramadoRateioHandler, LancamentoProgramadoTransferenciaHandler, LancamentoHandler, FinanceiroValidation, ListaService, LISTAS, MESSAGES) {
 
         var init = function () {
@@ -179,7 +180,17 @@ app.controller('LancamentoProgramadoController',
         };
 
         var todos = function() {
-            LancamentoProgramadoService.getAll($scope.lancSearch.dataInicio.format('YYYY-MM-DD'), $scope.lancSearch.dataFim.format('YYYY-MM-DD'))
+            var dataInicio;
+            var dataFim;
+            if($scope.lancSearch.dataInicio) { 
+                setDataInicio($scope.lancSearch.dataInicio); 
+                dataInicio = $scope.lancSearch.dataInicio.format('YYYY-MM-DD');
+            }
+            if($scope.lancSearch.dataFim) { 
+                setDataFim($scope.lancSearch.dataFim); 
+                dataFim = $scope.lancSearch.dataFim.format('YYYY-MM-DD');
+            }
+            LancamentoProgramadoService.getAll(dataInicio, dataFim)
                 .then(function (data) {
                     $scope.lancamentoProgramados = data;
                     $scope.lancamentoProgramadosLista = criarLancamentoProgramadosLista($scope.lancamentoProgramados);
@@ -191,11 +202,19 @@ app.controller('LancamentoProgramadoController',
         };
 
         var todosByConta = function(conta) {
-            if($scope.lancSearch.dataInicio) { setDataInicio($scope.lancSearch.dataInicio); }
-            if($scope.lancSearch.dataFim) { setDataFim($scope.lancSearch.dataFim); }
+            var dataInicio;
+            var dataFim;
+            if($scope.lancSearch.dataInicio) { 
+                setDataInicio($scope.lancSearch.dataInicio); 
+                dataInicio = $scope.lancSearch.dataInicio.format('YYYY-MM-DD');
+            }
+            if($scope.lancSearch.dataFim) { 
+                setDataFim($scope.lancSearch.dataFim); 
+                dataFim = $scope.lancSearch.dataFim.format('YYYY-MM-DD');
+            }
             if(!conta || !conta.idConta) { todos(); }
             else {  
-                ContaService.getLancamentoProgramado(conta.idConta, $scope.lancSearch.dataInicio.format('YYYY-MM-DD'), $scope.lancSearch.dataFim.format('YYYY-MM-DD'))
+                ContaService.getLancamentoProgramado(conta.idConta, dataInicio, dataFim)
                     .then(function (data) {
                         $scope.lancamentoProgramados = data.lancamentosProgramados;
                         $scope.lancamentoProgramadosLista = criarLancamentoProgramadosLista($scope.lancamentoProgramados);
@@ -209,36 +228,10 @@ app.controller('LancamentoProgramadoController',
 
         $scope.changePeriodo = function(conta, periodo) {
             if(!periodo) return;
-            var dataInicio = moment();
-            var dataFim = moment();
             $scope.lancSearch.periodo = periodo;
-            switch(periodo.id) {
-                case 0:
-                    dataInicio = null;
-                    dataFim = dataFim.subtract(1, 'days').endOf('day');
-                    break; 
-                case 1:
-                    dataInicio = dataInicio.startOf('month');
-                    dataFim = dataFim.endOf('month');
-                    break; 
-                case 2:
-                    dataInicio = dataInicio.subtract(7, 'days');
-                    break; 
-                case 3:
-                    dataInicio = dataInicio.subtract(15, 'days');
-                    break; 
-                case 4:
-                    dataInicio = dataInicio.subtract(30, 'days');
-                    break; 
-                case 5:
-                    dataInicio = dataInicio.subtract(60, 'days');
-                    break; 
-                case 6:
-                    dataInicio = dataInicio.subtract(90, 'days');
-                    break; 
-            }  
-            setDataInicio(dataInicio);
-            setDataFim(dataFim);
+            var datas = PeriodoService.dateByPeriodo(periodo); 
+            setDataInicio(datas.dataInicio);
+            setDataFim(datas.dataFim);
             todosByConta(conta);
         };
         
@@ -254,13 +247,11 @@ app.controller('LancamentoProgramadoController',
             $scope.lancSearch.periodo = null;
             $scope.lancSearch.dataInicio = getDate(dataInicio);
             $scope.lancSearch.dataFim = getDate(dataFim);
-            if($scope.lancSearch.dataInicio && $scope.lancSearch.dataFim) {
-                if(!validaPeriodo($scope.lancSearch.dataInicio, $scope.lancSearch.dataFim)) { 
-                    $scope.outOfRangePeriodo = true;
-                } else {
-                    $scope.outOfRangePeriodo = false;
-                    todosByConta(conta);                        
-                }
+            if(!validaPeriodo($scope.lancSearch.dataInicio, $scope.lancSearch.dataFim)) { 
+                $scope.outOfRangePeriodo = true;
+            } else {
+                $scope.outOfRangePeriodo = false;
+                todosByConta(conta);                        
             }
         };
         
@@ -277,10 +268,14 @@ app.controller('LancamentoProgramadoController',
         };
         
         var getDate = function(date) {
+            if(!date) return null;
             if(!angular.isDate(date)) {
                 return moment(date, "DD/MM/YYYY"); 
             } 
-            return date;
+            if(moment.isDate(date)) {
+                return date
+            }
+            return null;
         };
         
         var criarLancamentoProgramadosLista = function(lancamentosProgramados) {

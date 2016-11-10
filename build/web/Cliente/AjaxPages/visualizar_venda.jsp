@@ -30,7 +30,12 @@
         if(!pv.getNumObjeto().equals("avista")){
             nrObj = pv.getNumObjeto();
         }
+        boolean isPrint = true;
+      if(pv.getDataImpresso() == null){
+          isPrint = false;
+      }
 %>
+
 <div style="width: 100%; margin: 15px 0 15px 0;">
     <div style="width: 95%; text-align: left;">
         <div style='float:right;'><a onclick='chamaDivProtecao();' href='#' class='botaoClose'>Fechar</a></div>
@@ -59,12 +64,18 @@
         <li>
             <dd>
                 <label>Serviços Adicionais</label>
-                <b>VD:</b> R$ <%= pv.getValor_declarado() %>
+                <b>VD:</b> R$ <input id="editVD" value="<%= pv.getValor_declarado() %>" size="4" <% if(isPrint){ %>  readonly<%}%> onkeypress="mascara(this, maskReal);" onblur="editaCampo(this,'valor_declarado',<%= pv.getId()%>, '<%= pv.getNomeServico() %>');"/>
                 <b style='margin:0 20px 0 20px;'>|</b> <b>AR:</b> <% if(pv.getAviso_recebimento() == 1){ %> <img width="12" src="../../imagensNew/tick_circle.png" /> <%}else{%> <img width="12" src="../../imagensNew/cross_circle.png" /> <%}%>
                 <b style='margin:0 20px 0 20px;'>|</b> <b>MP:</b> <% if(pv.getMao_propria() == 1){ %> <img width="12" src="../../imagensNew/tick_circle.png" /> <%}else{%> <img width="12" src="../../imagensNew/cross_circle.png" /> <%}%>
                 <% if(!pv.getNomeServico().trim().equals("SIMPLES")){ %><b style='margin:0 20px 0 20px;'>|</b> <b>REGISTRO:</b> <% if(pv.getRegistro_modico() == 1){ %> REG. MÓDICO <%}else{%> REG. NORMAL <%}}%>
             </dd>
-        </li>        
+        </li>   
+        <li>
+            <dd>
+              <label>Observação</label>
+                <b><input id="editObs" value="<%= pv.getObservacoes() %>" size="100"  <% if(isPrint){ %>  readonly<%}%> onblur="editaCampo(this, 'observacoes',<%= pv.getId()%>, '<%= pv.getNomeServico()%>');"/>
+            </dd>
+        </li>
         <li><dd class="titulo">Dados do Remetente</dd></li>
         <li>
             <dd>

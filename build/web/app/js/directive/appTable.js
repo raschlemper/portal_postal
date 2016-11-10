@@ -162,6 +162,17 @@ app.directive('appTable', function($filter) {
                 coluna.selected = !coluna.selected;
             };
             
+            scope.showFooter = function(footer) {
+                if(!scope.listaFiltrada || !scope.listaFiltrada.length) return false;
+                if(!footer) return false;
+                var show = false;
+                var footers = _.pluck(footer, 'show');
+                footers.map(function(item) {
+                   if(item) { show = true; }
+                });
+                return show;
+            };
+            
             var setColumnsFooter = function(colunas) {
                 scope.footer = {};
                 _.map(colunas, function(coluna) {

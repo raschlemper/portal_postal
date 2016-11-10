@@ -37,18 +37,14 @@
         <link href="../../css/estilo.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="../../javascript/jquery/js/jquery-1.6.2.min.js"></script>
 
-        <!-- Menu -->
+      
         <link rel="stylesheet" href="../../javascript/plugins/dropdown/css/style.css" type="text/css" media="screen, projection"/>
         <script type="text/javascript" language="javascript" src="../../javascript/plugins/dropdown/js/jquery.dropdownPlain.js"></script>
-        <!--[if lte IE 7]>
-        <link rel="stylesheet" type="text/css" href="../../javascript/plugins/dropdown/css/ie.css" media="screen" />
-        <![endif]-->
-        <!-- Menu -->
-
-        <!-- TableSorter -->
+      
         <link rel="stylesheet" href="../../javascript/plugins/TableSorter/styleSorterV3.css" />
         <script type="text/javascript" src="../../javascript/plugins/TableSorter/scriptSorterV3.js"></script>
-        <!-- TableSorter -->
+      
+        
 
         <script type="text/javascript">
             function chamaDivProtecao(){
@@ -197,7 +193,7 @@
         <title>Portal Postal | Importação de Postagens</title>
 
     </head>
-    <body onload="javascript:document.getElementById('nome').focus();">
+    <body >
         <div id="divInteracao" class="esconder" style="top:10%; left:10%; right:10%; bottom:10%;" align="center"><input id="textointeracao" /></div>
         <div id="divProtecao" class="esconder"></div>
 
@@ -210,6 +206,23 @@
 
                     <div id="titulo1">Importação de Pré-Postagens</div>
 
+                <!--    
+                 <ul class="ul_tab" style="width: 1160px;height: 50px;">
+                        <li>
+                            <dl class="ativo" style='width:200px; border-left: 1px solid #CCC;'>
+                                <dd><b class='serv'>Modelo Default</b></dd>
+                            </dl>
+                            <dl style='width:200px;' onclick="location.href='importacaoPrePostagem.jsp'">
+                                <dd><b class='serv'>Modelo Cadastrado</b></dd>
+                            </dl>
+                            <dl style="width: 750px; background: white;border-top: 1px solid white;border-right: 1px solid white; cursor: default;" ></dl>
+                        </li>
+                    </ul>
+                    -->
+                    
+                    
+                    
+                    
                     <form method="post" action="../../ServPreVendaImportar" id="form1" name="form1" accept-charset="ISO-8859-1" enctype="multipart/form-data">
                         <ul class="ul_formulario" style="width: 1140px;">
                             <li class="titulo">

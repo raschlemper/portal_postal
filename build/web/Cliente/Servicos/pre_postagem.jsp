@@ -28,10 +28,10 @@
         Clientes cli = contrCliente.consultaClienteById(idCli, nomeBD);
         boolean isContratoSuspenso = !ContrClienteContrato.consultaStatusContrato(idCli, nomeBD);
         int avista = 1;
-        if(cli.getTemContrato() == 1 && !isContratoSuspenso){
+        if (cli.getTemContrato() == 1 && !isContratoSuspenso) {
             avista = 0;
-        }        
-        
+        }
+
         ArrayList<Integer> acs = (ArrayList<Integer>) session.getAttribute("servicos");
         ArrayList<Integer> dps = (ArrayList<Integer>) session.getAttribute("departamentos");
         int nivel = (Integer) session.getAttribute("nivelUsuarioEmp");
@@ -86,7 +86,7 @@
         <link href="../../css/estilo.css" rel="stylesheet" type="text/css" />
         <link href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" />
         <script src="http://code.jquery.com/jquery-1.10.2.js" type="text/javascript"></script>
-        
+
         <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js" type="text/javascript"></script>
 
         <!-- Menu -->
@@ -103,11 +103,11 @@
         <!-- TableSorter -->
 
         <script type="text/javascript">
-            function pesquisarNFE(){
-                var key = document.getElementById('keyNF').value.replace(/\D/g,"");
-                if(key.length !== 44) {
+            function pesquisarNFE() {
+                var key = document.getElementById('keyNF').value.replace(/\D/g, "");
+                if (key.length !== 44) {
                     alert("A chave da nota deve conter 44 digitos!");
-                } else if(document.getElementById('captcha').value.length !== 6) {
+                } else if (document.getElementById('captcha').value.length !== 6) {
                     alert("Captcha inválido!");
                 } else {
                     abrirTelaEspera();
@@ -115,14 +115,14 @@
                 }
             }
 
-            function getParameter(){
+            function getParameter() {
                 var captcha = document.getElementById('captcha').value;
-                var keyNF = document.getElementById('keyNF').value.replace(/\D/g,"");
-                var parametro = "captcha="+captcha+"&keyNF="+keyNF;
+                var keyNF = document.getElementById('keyNF').value.replace(/\D/g, "");
+                var parametro = "captcha=" + captcha + "&keyNF=" + keyNF;
                 return parametro;
             }
 
-            function carregaResultado(json){       
+            function carregaResultado(json) {
                 var dadosDaNota = JSON.parse(json);
                 $('#nome').val(dadosDaNota.destinatario.nome);
                 $('#notaFiscal').val(dadosDaNota.numero);
@@ -135,12 +135,12 @@
                 $('#cidade').val(dadosDaNota.destinatario.municipio);
                 $('#celular').val(dadosDaNota.destinatario.telefone);
                 $('#uf').val(dadosDaNota.destinatario.uf);
-                $('#uf2').val(dadosDaNota.destinatario.uf);     
-                if(document.getElementById('vdNF').checked){
-                    $('#vd').val(dadosDaNota.valorTotal.replace(',','.'));                    
-                }                
-                      
-                fecharTelaEspera();       
+                $('#uf2').val(dadosDaNota.destinatario.uf);
+                if (document.getElementById('vdNF').checked) {
+                    $('#vd').val(dadosDaNota.valorTotal.replace(',', '.'));
+                }
+
+                fecharTelaEspera();
                 chamaDivProtecao();
                 //$('#obs').val(dadosDaNota.informacoesComplementares);
                 //$('#nfPais').val(dadosDaNota.destinatario.pais);
@@ -347,10 +347,10 @@
                     alert('Escolha o Departamento/Centro de Custo para a Postagem!\n\nCaso não exista o departameto desejado,\npeça para a agência incluir no cadastro!');
                     return false;
                 }
-                
+
                 if (form.servico.value === 'CARTA' && form.tipoCarta.value === '') {
                     alert('Escolha o Tipo da Carta a ser Postado!');
-                    return false;                    
+                    return false;
                 } else if (form.tipoRg.value === '' && form.tipoCarta.value === '1') {
                     alert('Escolha o Tipo do Registro da Carta a ser Postado!');
                     return false;
@@ -383,9 +383,9 @@
                         alert('Preencha o Nº do Processo!');
                         return false;
                     }/* else if (auxOutros[1] === 'PPI') {
-                        form.conteudo.value = form.obs.value;
-                    }*/
-            
+                     form.conteudo.value = form.obs.value;
+                     }*/
+
                     if (auxOutros[3] === 'INT' && form.pais.value === '') {
                         alert('Selecione um país para a postagem!');
                         return false;
@@ -396,27 +396,27 @@
                     form.vd.value = '0.00';
                 }
 
-                if (form.servico.value === 'SEDEX10' && (form.vd.value > 0 &&form.vd.value <= 75)) {
+                if (form.servico.value === 'SEDEX10' && (form.vd.value > 0 && form.vd.value <= 75)) {
                     alert('Para valores inferiores a R$75,00 este serviço já dispõe de seguro automatico!');
                     document.getElementById("vd").focus();
                     return false;
-                } else if (form.servico.value === 'SEDEX12' && (form.vd.value > 0 &&form.vd.value <= 75)) {
+                } else if (form.servico.value === 'SEDEX12' && (form.vd.value > 0 && form.vd.value <= 75)) {
                     alert('Para valores inferiores a R$75,00 este serviço já dispõe de seguro automatico!');
                     document.getElementById("vd").focus();
                     return false;
-                } else if (form.servico.value === 'SEDEXHJ' && (form.vd.value > 0 &&form.vd.value <= 75)) {
+                } else if (form.servico.value === 'SEDEXHJ' && (form.vd.value > 0 && form.vd.value <= 75)) {
                     alert('Para valores inferiores a R$75,00 este serviço já dispõe de seguro automatico!');
                     document.getElementById("vd").focus();
                     return false;
-                } else if (form.servico.value === 'SEDEX' && (form.vd.value > 0 &&form.vd.value <= 50)) {
+                } else if (form.servico.value === 'SEDEX' && (form.vd.value > 0 && form.vd.value <= 50)) {
                     alert('Para valores inferiores a R$50,00 este serviço já dispõe de seguro automatico!');
                     document.getElementById("vd").focus();
                     return false;
-                } else if (form.servico.value === 'ESEDEX' && (form.vd.value > 0 &&form.vd.value <= 50)) {
+                } else if (form.servico.value === 'ESEDEX' && (form.vd.value > 0 && form.vd.value <= 50)) {
                     alert('Para valores inferiores a R$50,00 este serviço já dispõe de seguro automatico!');
                     document.getElementById("vd").focus();
                     return false;
-                } else if (form.servico.value === 'PAC' && (form.vd.value > 0 &&form.vd.value <= 50)) {
+                } else if (form.servico.value === 'PAC' && (form.vd.value > 0 && form.vd.value <= 50)) {
                     alert('Para valores inferiores a R$50,00 este serviço já dispõe de seguro automatico!');
                     document.getElementById("vd").focus();
                     return false;
@@ -428,12 +428,12 @@
                     alert('O Valor Declarado Maximo de Cartas é de R$ 500,00!');
                     document.getElementById("vd").focus();
                     return false;
-                /* A PARTIR DE 22/08/2016*/
-                 } else if (form.servico.value === 'PAC' && form.vd.value > 3000) {
+                    /* A PARTIR DE 22/08/2016*/
+                } else if (form.servico.value === 'PAC' && form.vd.value > 3000) {
                     alert('O Valor Declarado Maximo do PAC é de R$ 3.000,00!');
                     document.getElementById("vd").focus();
                     return false;
-                
+
                 } else if (form.vd.value > 10000) {
                     alert('O Valor Declarado Maximo de Encomendas é de R$ 10.000,00!');
                     document.getElementById("vd").focus();
@@ -471,10 +471,10 @@
                 document.getElementById("v_servico").innerHTML = "<img src='../../imagensNew/chancelas/" + form.servico.value + ".png' />";
                 if (form.tipoCarta.value === '0') {
                     document.getElementById("v_servico").innerHTML = "<img src='../../imagensNew/chancelas/SIMPLES.png' />";
-                     $("#mostraReg").hide();
-                }else{
-                     $("#mostraReg").show();
-                }  
+                    $("#mostraReg").hide();
+                } else {
+                    $("#mostraReg").show();
+                }
                 document.getElementById("v_tipo").innerHTML = "PACOTE";
                 if (form.tipo.value === 'ENV') {
                     document.getElementById("v_tipo").innerHTML = "ENVELOPE";
@@ -482,7 +482,7 @@
                 if (form.tipoRg.value === '1') {
                     document.getElementById("v_regis").innerHTML = "REG. MÓDICO";
                 }
-                
+
                 //VERIFICA ABRANGENCIA DE SERVIÇOS
                 if (form.servico.value === 'ESEDEX') {
                     verPesquisarAbrangenciaServ(form.cep.value, 'ESEDEX');
@@ -495,7 +495,7 @@
                 } else if (form.servico.value === 'PAX') {
                     verPesquisarAbrangenciaServ(form.cep.value, 'PAX');
                 } else if (form.servico.value === 'MDPB') {
-                    var ret = verPesquisarAbrangenciaMDPB(form.cep.value);                    
+                    var ret = verPesquisarAbrangenciaMDPB(form.cep.value);
                     if (ret.trim() === 'erro') {
                         alert('Nao existe MDPB para este CEP!');
                         return false;
@@ -522,7 +522,7 @@
                 });
                 return strReturn;
             }
-            
+
 
             function chamaDivProtecao() {
                 var classe = document.getElementById("divProtecao").className;
@@ -547,7 +547,7 @@
             }
 
             function trocaTipoCarta(tp) {
-                if (tp === '1') {                    
+                if (tp === '1') {
                     document.getElementById("tipoRegis").className = 'mostrar';
                     document.getElementById("tipoRg").selectedIndex = 1;
                     document.getElementById("vlrDecl").className = 'mostrar';
@@ -601,10 +601,10 @@
                 document.getElementById("paisDest").className = 'esconder';
                 document.getElementById("ddUf").className = 'mostrar';
                 document.getElementById("tipo").selectedIndex = 2;
-                
+
                 document.getElementById("tipoRegis").className = 'esconder';
                 document.getElementById("tipoRg").selectedIndex = 0;
-                
+
                 $('#cep').attr('onkeypress', 'mascara(this, maskCep);handleEnter();');
                 $('#cep').attr('onblur', 'verPesquisarCepDest(this.value);');
                 $('#cep').attr('onchange', 'mascara(this, maskCep);');
@@ -627,7 +627,7 @@
                 } else if (serv === 'PAX') {
                     document.getElementById("tipoPacote").className = 'esconder';
                     document.getElementById("tipo").selectedIndex = 2;
-                } else if (serv === 'IMPRESSO') {                    
+                } else if (serv === 'IMPRESSO') {
                     document.getElementById("tipoPacote").className = 'esconder';
                     document.getElementById("vlrDecl").className = 'mostrar';
                     document.getElementById("maoProp").className = 'mostrar';
@@ -636,7 +636,7 @@
                     document.getElementById("tipoCt").className = 'esconder';
                     document.getElementById("tipo").selectedIndex = 1;
                     document.getElementById("tipoCarta").selectedIndex = 1;
-                    
+
                     document.getElementById("alertWrap").className = 'mostrar';
                     document.getElementById("alertMsg").innerHTML = 'O peso máximo aceito para o IMPRESSO é de 2Kg!';
                 } else if (serv === 'ESEDEX') {
@@ -649,8 +649,8 @@
                     document.getElementById("tipo").selectedIndex = 2;
                     document.getElementById("alertWrap").className = 'mostrar';
                     document.getElementById("alertMsg").innerHTML = 'O peso máximo aceito neste serviço é de 10Kg!<br/>Verifique a disponibilidade do serviço para o endereço do destinatário!';
-                } else if (serv === 'SEDEXHJ') { 
-                     document.getElementById("tipoPacote").className = 'esconder';
+                } else if (serv === 'SEDEXHJ') {
+                    document.getElementById("tipoPacote").className = 'esconder';
                     document.getElementById("tipo").selectedIndex = 2;
                     document.getElementById("alertWrap").className = 'mostrar';
                     document.getElementById("alertMsg").innerHTML = 'Este serviço possui horario limite de postagem diferenciado (antecipado)! Entre em contato com sua agência para maiores informações';
@@ -888,10 +888,10 @@
                 var codECT = aux[0];
                 var grupoServ = aux[1];
                 var tipoPostagem = aux[2];
-                
-                if (grupoServ === 'IMPRESSO') {                    
+
+                if (grupoServ === 'IMPRESSO') {
                     document.getElementById("tipoRegis").className = 'mostrar';
-                }                
+                }
                 if (grupoServ === 'PPI') {
                     document.getElementById('labelObs').innerHTML = "Nº do Processo<span style='color:red;'>(APARECE SOMENTE NA ETIQUETA)</span>";
                 } else {
@@ -927,6 +927,50 @@
                     $('#cep').attr('onchange', 'mascara(this, maskCep);');
                 }
             }
+
+            function editaCampo(v, atributo, idpv, servico) {
+                console.log("*****");
+                console.log(">>> " + v.value);
+                console.log(">>> " + atributo);
+                console.log(">>> " + servico);
+
+                if (atributo === 'valor_declarado') {
+                    var iv = parseInt(v.value);
+                    console.log(iv);
+                    if (servico == 'SEDEX10' || servico == 'SEDEX12' || servico == 'SEDEX' || servico == 'SEDEXHJ' || servico == 'SEDEX10' || servico == 'ESEDEX') {
+                        if (iv > 10000 || iv < 50) {
+                            alert('Valor declarado deve ser entre R$50,00 e R$ 10.000,00');
+                            return false;
+                        }
+                    } else if (servico == 'PAC' || servico == 'PAX') {
+                        if (iv > 3000 || iv < 50) {
+                            alert('Valor declarado deve ser entre R$50,00 e R$ 3.000,00');
+                            return false;
+                        }
+                    } else if (servico == 'CARTA' || servico == 'CARTA_NC' || servico.indexOf('MDPB') > 0) {
+                        if (iv > 100 || iv < 17) {
+                            alert('Valor declarado deve ser entre R$17,00 e R$ 100,00');
+                            return false;
+                        }
+                    } else if (servico.indexOf('IMPRESSO') > 0) {
+                        if (iv > 200 || iv < 17) {
+                            alert('Valor declarado deve ser entre R$17,00 e R$ 200,00');
+                            return false;
+                        }
+                    }
+                }
+
+                $.ajax({
+                    method: "POST",
+                    url: "../AjaxPages/alterar_pv.jsp",
+                    data: {atributo: atributo, valor: v.value, idpv: idpv},
+                    dataType: 'text'
+                }).done(function (data) {
+                    alert('Campo - <i>' + atributo + '</i> - alterado com sucesso !');
+                });
+
+            }
+
         </script>
 
         <title>Portal Postal | Pré Postagem</title>
@@ -1034,109 +1078,109 @@
                                 <%
                                     String tabSize = "70px";
                                     Map<String, Integer> mapCodECT = ContrClienteContrato.consultaMapServicosContratoClienteByGrupo(idCli, nomeBD);
-                                    Map<String, Integer> mapQtdEtq = ContrClienteEtiquetas.mapQtdRestantePorGrupoServ(0, idCli, avista, nomeBD);                                    
+                                    Map<String, Integer> mapQtdEtq = ContrClienteEtiquetas.mapQtdRestantePorGrupoServ(0, idCli, avista, nomeBD);
                                     //CONSULTA SE TEM CONTRATO MDPB
                                     int codMDPB = ContrClienteContrato.consultaContratoClienteGruposServicos(idCli, "'MDPB_L' , 'MDPB_E', 'MDPB_N'", nomeBD);
                                     //CONSULTA SE TEM CONTRATO PAC
                                     int codPac = 0;
-                                    if(mapCodECT.containsKey("PAC")){
-                                       codPac =  mapCodECT.get("PAC");
+                                    if (mapCodECT.containsKey("PAC")) {
+                                        codPac = mapCodECT.get("PAC");
                                     }
                                     int qtdPac = 0;
-                                    if(mapQtdEtq.containsKey("PAC")){
+                                    if (mapQtdEtq.containsKey("PAC")) {
                                         qtdPac = mapQtdEtq.get("PAC");
                                     }
                                     //CONSULTA SE TEM CONTRATO PAX
                                     int codPax = 0;
-                                    if(mapCodECT.containsKey("PAX")){
-                                       codPax =  mapCodECT.get("PAX");
+                                    if (mapCodECT.containsKey("PAX")) {
+                                        codPax = mapCodECT.get("PAX");
                                     }
                                     int qtdPax = 0;
-                                    if(mapQtdEtq.containsKey("PAX")){
+                                    if (mapQtdEtq.containsKey("PAX")) {
                                         qtdPax = mapQtdEtq.get("PAX");
                                     }
                                     //CONSULTA SE TEM CONTRATO SEDEX
                                     int codSedex = 0;
-                                    if(mapCodECT.containsKey("SEDEX")){
-                                       codSedex =  mapCodECT.get("SEDEX");
+                                    if (mapCodECT.containsKey("SEDEX")) {
+                                        codSedex = mapCodECT.get("SEDEX");
                                     }
                                     int qtdSedex = 0;
-                                    if(mapQtdEtq.containsKey("SEDEX")){
+                                    if (mapQtdEtq.containsKey("SEDEX")) {
                                         qtdSedex = mapQtdEtq.get("SEDEX");
                                     }
                                     //CONSULTA SE TEM CONTRATO SEDEX 10
                                     int codSedex10 = 0;
-                                    if(mapCodECT.containsKey("SEDEX10")){
-                                       codSedex10 =  mapCodECT.get("SEDEX10");
+                                    if (mapCodECT.containsKey("SEDEX10")) {
+                                        codSedex10 = mapCodECT.get("SEDEX10");
                                     }
                                     int qtdSedex10 = 0;
-                                    if(mapQtdEtq.containsKey("SEDEX10")){
+                                    if (mapQtdEtq.containsKey("SEDEX10")) {
                                         qtdSedex10 = mapQtdEtq.get("SEDEX10");
                                     }
                                     //CONSULTA SE TEM CONTRATO SEDEX 12
                                     int codSedex12 = 0;
-                                    if(mapCodECT.containsKey("SEDEX12")){
-                                       codSedex12 =  mapCodECT.get("SEDEX12");
+                                    if (mapCodECT.containsKey("SEDEX12")) {
+                                        codSedex12 = mapCodECT.get("SEDEX12");
                                     }
                                     int qtdSedex12 = 0;
-                                    if(mapQtdEtq.containsKey("SEDEX12")){
+                                    if (mapQtdEtq.containsKey("SEDEX12")) {
                                         qtdSedex12 = mapQtdEtq.get("SEDEX12");
                                     }
                                     //CONSULTA SE TEM CONTRATO SEDEX HJ
                                     int codSedexHJ = 0;
-                                    if(mapCodECT.containsKey("SEDEXHJ")){
-                                       codSedexHJ =  mapCodECT.get("SEDEXHJ");
+                                    if (mapCodECT.containsKey("SEDEXHJ")) {
+                                        codSedexHJ = mapCodECT.get("SEDEXHJ");
                                     }
                                     int qtdSedexHJ = 0;
-                                    if(mapQtdEtq.containsKey("SEDEXHJ")){
+                                    if (mapQtdEtq.containsKey("SEDEXHJ")) {
                                         qtdSedexHJ = mapQtdEtq.get("SEDEXHJ");
                                     }
                                     //CONSULTA SE TEM CONTRATO ESEDEX
                                     int codEsedex = 0;
-                                    if(mapCodECT.containsKey("ESEDEX")){
-                                       codEsedex =  mapCodECT.get("ESEDEX");
+                                    if (mapCodECT.containsKey("ESEDEX")) {
+                                        codEsedex = mapCodECT.get("ESEDEX");
                                     }
                                     int qtdEsedex = 0;
-                                    if(mapQtdEtq.containsKey("ESEDEX")){
+                                    if (mapQtdEtq.containsKey("ESEDEX")) {
                                         qtdEsedex = mapQtdEtq.get("ESEDEX");
                                     }
                                     //CONSULTA SE TEM CONTRATO CARTA
                                     int codCarta = 0;
-                                    if(mapCodECT.containsKey("CARTA")){
-                                       codCarta =  mapCodECT.get("CARTA");
+                                    if (mapCodECT.containsKey("CARTA")) {
+                                        codCarta = mapCodECT.get("CARTA");
                                     }
                                     int qtdCarta = 0;
-                                    if(mapQtdEtq.containsKey("CARTA")){
+                                    if (mapQtdEtq.containsKey("CARTA")) {
                                         qtdCarta = mapQtdEtq.get("CARTA");
                                     }
                                     //CONSULTA SE TEM CONTRATO IMPRESSO
                                     int codImp = 0;
-                                    if(mapCodECT.containsKey("IMPRESSO")){
-                                       codImp =  mapCodECT.get("IMPRESSO");
+                                    if (mapCodECT.containsKey("IMPRESSO")) {
+                                        codImp = mapCodECT.get("IMPRESSO");
                                     }
                                     int qtdImp = 0;
-                                    if(mapQtdEtq.containsKey("IMPRESSO")){
+                                    if (mapQtdEtq.containsKey("IMPRESSO")) {
                                         qtdImp = mapQtdEtq.get("IMPRESSO");
                                     }
                                     //CONSULTA SE TEM CONTRATO SEDEX A COBRAR
                                     int codSedexc = 0;
-                                    if(mapCodECT.containsKey("SEDEXC")){
-                                       codSedexc =  mapCodECT.get("SEDEXC");
+                                    if (mapCodECT.containsKey("SEDEXC")) {
+                                        codSedexc = mapCodECT.get("SEDEXC");
                                     }
                                     int qtdSedexc = 0;
-                                    if(mapQtdEtq.containsKey("SEDEXC")){
+                                    if (mapQtdEtq.containsKey("SEDEXC")) {
                                         qtdSedexc = mapQtdEtq.get("SEDEXC");
                                     }
                                     //CONSULTA SE TEM CONTRATO PAC A COBRAR
                                     int codPacCob = 0;
-                                    if(mapCodECT.containsKey("PAC_COB")){
-                                       codPacCob =  mapCodECT.get("PAC_COB");
+                                    if (mapCodECT.containsKey("PAC_COB")) {
+                                        codPacCob = mapCodECT.get("PAC_COB");
                                     }
                                     int qtdPacCob = 0;
-                                    if(mapQtdEtq.containsKey("PAC_COB")){
+                                    if (mapQtdEtq.containsKey("PAC_COB")) {
                                         qtdPacCob = mapQtdEtq.get("PAC_COB");
                                     }
-                                                                        
+
                                     if (!acs.contains(1)) {
                                         out.println("<dl style='width:" + tabSize + "; border-left: 1px solid #CCC;' id='PAC' onclick=\"alert('Este usuário não tem permisão para utilizar este serviço!');\">");
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>&nbsp;");//<img src="../../imagensNew/pac.png" border="0" />
@@ -1163,7 +1207,7 @@
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>&nbsp;");
                                         if (qtdPac > 0) {
                                             out.println("<dd><p>QTD.: <b>" + qtdPac + "</b></p></dd>");
-                                        }else{
+                                        } else {
                                             out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
                                         }
                                         out.println("<input type='hidden' name='cod_pac' value='' />");
@@ -1225,7 +1269,7 @@
                                         out.println("<dd><b class='servSmall'>SEDEX</b><br/>&nbsp;");//<img src="../../imagensNew/sedex.png" border="0" />
                                         if (qtdSedex > 0) {
                                             out.println("<dd><p>QTD.: <b>" + qtdSedex + "</b></p></dd>");
-                                        }else{
+                                        } else {
                                             out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
                                         }
                                         out.println("<input type='hidden' name='cod_sedex' value='' />");
@@ -1259,7 +1303,7 @@
                                         out.println("<dd><b class='servSmall'>SEDEX 10</b><br/>&nbsp;</dd>");
                                         if (qtdSedex10 > 0) {
                                             out.println("<dd><p>QTD.: <b>" + qtdSedex10 + "</b></p></dd>");
-                                        }else{
+                                        } else {
                                             out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
                                         }
                                         out.println("<input type='hidden' name='cod_sedex10' value='' />");
@@ -1293,7 +1337,7 @@
                                         out.println("<dd><b class='servSmall'>SEDEX 12</b><br/>&nbsp;</dd>");
                                         if (qtdSedex12 > 0) {
                                             out.println("<dd><p>QTD.: <b>" + qtdSedex12 + "</b></p></dd>");
-                                        }else{
+                                        } else {
                                             out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
                                         }
                                         out.println("<input type='hidden' name='cod_sedex12' value='' />");
@@ -1327,7 +1371,7 @@
                                         out.println("<dd><b class='servSmall'>SEDEX HJ</b><br/>&nbsp;</dd>");
                                         if (qtdSedexHJ > 0) {
                                             out.println("<dd><p>QTD.: <b>" + qtdSedexHJ + "</b></p></dd>");
-                                        }else{
+                                        } else {
                                             out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
                                         }
                                         out.println("<input type='hidden' name='cod_sedexHJ' value='' />");
@@ -1382,7 +1426,7 @@
                                         out.println("<dd><b class='servSmall'>CARTAS</b><br/>&nbsp;</dd>");
                                         if (qtdCarta > 0) {
                                             out.println("<dd><p>QTD.: <b>" + qtdCarta + "</b></p></dd>");
-                                        }else{
+                                        } else {
                                             out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
                                         }
                                         out.println("<input type='hidden' name='cod_carta' value='' />");
@@ -1412,7 +1456,7 @@
                                         out.println("<dd><b class='servSmall'>IMPRESSO</b><br/>&nbsp;</dd>");
                                         if (qtdImp > 0) {
                                             out.println("<dd><p>QTD.: <b>" + qtdImp + "</b></p></dd>");
-                                        }else{
+                                        } else {
                                             out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
                                         }
                                         out.println("<input type='hidden' name='cod_carta' value='' />");
@@ -1442,7 +1486,7 @@
                                         out.println("<dd><b class='servSmall'>SEDEX</b><br/>A COBRAR");//<img src="../../imagensNew/sedex_cobrar.png" border="0" />
                                         if (qtdSedexc > 0) {
                                             out.println("<dd><p>QTD.: <b>" + qtdSedexc + "</b></p></dd>");
-                                        }else{
+                                        } else {
                                             out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
                                         }
                                         out.println("<input type='hidden' name='cod_sedexc' value='' />");
@@ -1472,13 +1516,13 @@
                                         out.println("<dd><b class='servSmall'>PAC</b><br/>A COBRAR");//<img src="../../imagensNew/sedex_cobrar.png" border="0" />
                                         if (qtdPacCob > 0) {
                                             out.println("<dd><p>QTD.: <b>" + qtdPacCob + "</b></p></dd>");
-                                        }else{
+                                        } else {
                                             out.println("<dd><p><b style='color:green;'>À VISTA</b></p></dd>");
                                         }
                                         out.println("<input type='hidden' name='cod_pacc' value='' />");
                                         out.println("</dl>");
                                     }
-                                    
+
                                     if (!acs.contains(12)) {
                                         out.println("<dl style='width:" + tabSize + "; color:gray;' id='MDPB' onclick=\"alert('Este serviço não esta habilitado!');\" >");
                                         out.println("<dd><b class='servSmall'>MDPB</b>");
@@ -1491,7 +1535,8 @@
                                         out.println("<dd><p><b>REGISTRADA</b></p></dd>");
                                         out.println("<input type='hidden' name='cod_mdpb' value='MDPB' />");
                                         out.println("</dl>");
-                                    } /*else {
+                                    }
+                                    /*else {
                                         out.println("<dl style='width:" + tabSize + "; color:gray;' id='MDPB' onclick=\"alert('Este serviço não esta habilitado!');\" >");
                                         out.println("<dd><b class='servSmall'>MDPB</b>");
                                         out.println("<dd><p><b style='color:gray;'>BLOQUEADO</b></p></dd>");
@@ -1538,7 +1583,7 @@
                                         <dd>
                                             <label>Serviço<b class="obg">*</b></label>
                                             <select style="width: 220px;" name="servico_1" id="servico_1" onchange="alteraOutroServ(this.value);">
-                                                <%                                                    
+                                                <%
                                                     ArrayList<ServicoECT> listaServ = ContrServicoECT.consultaServicos(2, 1, "OSV");
                                                     if (listaServ != null) {
                                                         for (int i = 0; i < listaServ.size(); i++) {
@@ -1569,7 +1614,7 @@
                                 <li>
                                     <dd>
                                         <label>Nome / Razão Social<b class="obg">*</b></label>
-                                        <input readonly type="text" name="nomeCli" size="55" value="<%= cli.getNome() %>" />
+                                        <input readonly type="text" name="nomeCli" size="55" value="<%= cli.getNome()%>" />
                                     </dd>
                                     <dd>
                                         <label>Departamento / Centro de Custo</label>
@@ -1750,10 +1795,10 @@
                                     </dd>
                                     <dd>
                                         <label>Nº PEDIDO / NOTA FISCAL</label>
-                                        <%if(nomeUser.equals("SLVMASTER")){%>
-                                            <input type="text" name="notaFiscal" id="notaFiscal" maxlength="40" value="Corporate" />
-                                        <%}else{%>
-                                            <input type="text" name="notaFiscal" id="notaFiscal" maxlength="40" value="" />
+                                        <%if (nomeUser.equals("SLVMASTER")) {%>
+                                        <input type="text" name="notaFiscal" id="notaFiscal" maxlength="40" value="Corporate" />
+                                        <%} else {%>
+                                        <input type="text" name="notaFiscal" id="notaFiscal" maxlength="40" value="" />
                                         <%}%>
                                     </dd>
                                     <%--<dd>
@@ -1815,11 +1860,11 @@
                                         <label>A.R.</label>
                                         <select name="ar" id="ar">
                                             <option value="0">Não</option>
-                                            <%if(cli.getAr_digital()>0){%>
-                                                <option value="1">Normal</option>
-                                                <option value="2">Digital</option>                                                
+                                            <%if (cli.getAr_digital() > 0) {%>
+                                            <option value="1">Normal</option>
+                                            <option value="2">Digital</option>                                                
                                             <%} else {%>
-                                                <option value="1">Sim</option>
+                                            <option value="1">Sim</option>
                                             <%}%>
                                         </select>
                                     </dd>
@@ -1927,15 +1972,15 @@
                             </tbody>
                         </table>
                         <script type="text/javascript">
-                            
-                            function trocaTamanho(tam){
+
+                            function trocaTamanho(tam) {
                                 var x = document.getElementById("posicaoInicial");
                                 x.selectedIndex = 0;
-                                if(tam === 'A4'){
-                                    document.getElementById("ddPosicao").className = "mostrar";    
-                                    x.remove(5);                
+                                if (tam === 'A4') {
+                                    document.getElementById("ddPosicao").className = "mostrar";
+                                    x.remove(5);
                                     x.remove(4);
-                               } else if(tam === 'A4_6'){
+                                } else if (tam === 'A4_6') {
                                     document.getElementById("ddPosicao").className = "mostrar";
                                     var option5 = document.createElement("option");
                                     option5.text = "5ª Etiqueta";
@@ -1943,13 +1988,13 @@
                                     x.add(option5);
                                     var option6 = document.createElement("option");
                                     option6.text = "6ª Etiqueta";
-                                    option6.value = "6";                    
+                                    option6.value = "6";
                                     x.add(option6);
-                                } else{
+                                } else {
                                     document.getElementById("ddPosicao").className = "esconder";
                                 }
                             }
-            
+
                             var sorter2 = new TINY.table.sorter('sorter2', 'table2', {
                                 headclass: 'head',
                                 ascclass: 'asc',
@@ -2010,6 +2055,7 @@
                                         <option disabled>----------------</option>
                                         <option value="ETQ_16x10">Etiqueta Adesiva - 16cm x 10cm</option> 
                                         <option value="ETQ_10x10">Etiqueta Adesiva - 10cm x 10cm</option> 
+                                        <option value="ETQ_12x9e5">Etiqueta Adesiva - 12cm x 9,5cm</option> 
                                         <option disabled>----------------</option>
                                         <option value="ENV_DL">Envelope Ofício / DL (Direita) - 11,4cm x 22,9cm</option> 
                                         <option value="ENV_DL_ESQ">Envelope Ofício / DL (Esquerda) - 11,4cm x 22,9cm</option> 

@@ -3162,24 +3162,24 @@ div.list-category div.list-group-item {
     color: #5cb85c;
     padding: 2px !important;
 }
-table.table-condensed tbody tr td.cel-btn {
+.table-custom tbody tr td.cel-btn {
     padding: 4px;
 }
-table.table-condensed tbody tr td.cel-data {
+.table-custom tbody tr td.cel-data {
     padding: 4px;
     width: 65px;
 }
-table.table-condensed tbody tr td.cel-menu {
+.table-custom tbody tr td.cel-menu {
     padding: 0px;
     width: 20px;
     color: #333;
 }
-table.table-condensed > tfoot {
+.table-custom > tfoot {
     background-color: #DDD;
     color: #000;
     font-weight: bold;
 }
-table.table-condensed tfoot tr td {
+.table-custom tfoot tr td {
     border-color: #B3B3B3 !important;
     padding: 3px 10px;
     font-size: 12px;
