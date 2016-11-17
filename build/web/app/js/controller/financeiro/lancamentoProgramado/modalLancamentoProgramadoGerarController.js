@@ -68,7 +68,7 @@ app.controller('ModalLancamentoProgramadoGerarController',
         // ***** AJUSTAR ***** //
         
         var ajustarLancamento = function(lancamento) { 
-            lancamento.historico = '(' + lancamento.modelo.descricao + ') ' + lancamento.historico || "";
+            lancamento.historico = '(' + lancamento.modelo.descricao + ') ' + (lancamento.historico || "");
             var lancamentoHandle = LancamentoHandler.handle(lancamento);
             lancamentoHandle.rateios = LancamentoRateioHandler.handleList(lancamento.rateios);
             return lancamentoHandle;

@@ -18,6 +18,7 @@ app.controller('LancamentoController',
             $scope.situacoes = LISTAS.situacaoLancamento;
             $scope.statusConta = LISTAS.statusConta;
             $scope.periodos = LancamentoService.periodos;
+            $scope.limites = LISTAS.limites;
 //            $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
 //            $scope.datepickerDataFim = angular.copy(DatePickerService.default);  
             $scope.outOfRangePeriodo = false;  
@@ -207,6 +208,7 @@ app.controller('LancamentoController',
         var configuracao = function() {            
             ConfiguracaoService.get()
                 .then(function(data) { 
+                    $scope.limiteLancamento = data.limiteLancamento || $scope.limites[0];
                     var periodo = data.periodoLancamento || $scope.periodos[1];
                     $scope.changePeriodo($scope.lancSearch.conta, periodo);      
                 })

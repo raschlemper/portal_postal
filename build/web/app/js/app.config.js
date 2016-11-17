@@ -23,3 +23,25 @@ app.config(['$provide', function ($provide) {
         return $delegate;
     });
 }]);
+
+
+
+app.config(['$provide', function ($provide) {
+    var cacheBuster = Date.now().toString();
+
+    function templateFactoryDecorator($delegate) {
+        var fromUrl = angular.bind($delegate, $delegate.fromUrl);
+        $delegate.fromUrl = function (url, params) {
+            if (url !== null && angular.isDefined(url) && angular.isString(url)) {
+                url += (url.indexOf("?") === -1 ? "?" : "&");
+                url += "nocache=" + cacheBuster;
+            }
+
+            return fromUrl(url, params);
+        };
+
+        return $delegate;
+    }
+
+    $provide.decorator('$templateFactory', ['$delegate', templateFactoryDecorator]);
+}]);

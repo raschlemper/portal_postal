@@ -3338,3 +3338,7 @@ div.list-category div.list-group-item {
 .line-vencida {
     background-color: #F6D6D5 !important;
 }
+
+.pb-0 {
+    padding-bottom: 0;
+}

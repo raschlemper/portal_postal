@@ -17,6 +17,7 @@ app.controller('LancamentoProgramadoController',
             $scope.modelos = LISTAS.modeloLancamento;
             $scope.situacoes = LISTAS.situacaoLancamentoProgramado;
             $scope.periodos = LancamentoProgramadoService.periodos;
+            $scope.limites = LISTAS.limites;
             $scope.tiposLancamento = [];
 //            $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
 //            $scope.datepickerDataFim = angular.copy(DatePickerService.default);  
@@ -171,6 +172,7 @@ app.controller('LancamentoProgramadoController',
         var configuracao = function() {            
             ConfiguracaoService.get()
                 .then(function(data) { 
+                    $scope.limiteLancamento = data.limiteLancamento || $scope.limites[0];
                     var periodo = data.periodoLancamentoProgramado || $scope.periodos[1];
                     $scope.changePeriodo($scope.lancSearch.conta, periodo);      
                 })

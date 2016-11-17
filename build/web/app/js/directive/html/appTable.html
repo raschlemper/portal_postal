@@ -32,6 +32,25 @@
     <div class="clearfix"></div>  
     
 </div>
+
+<div style="padding:10px 10px 0 10px; margin-top: -48px;">
+    <div class="clearfix">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="pull-right">
+                    <pagination class="pagination-sm" 
+                                total-items="total" 
+                                items-per-page="limitTo.value"
+                                ng-model="currentPage" 
+                                max-size="maxSize"
+                                num-pages="numPages"
+                                previous-text="Anterior" next-text="Próximo" first-text="Primeiro" last-text="Último"></pagination>
+                </div>
+            </div>    
+        </div>
+    </div>
+</div>
+
 <table class="table-custom table table-striped table-bordered table-hover table-condensed">
     <thead>
         <tr>
@@ -98,7 +117,7 @@
             
         </tr>
     </tbody>
-<!--    <tfoot ng-if="showFooter(footer)">
+    <tfoot ng-if="showFooter(footer)">
         <tr>
             <td ng-show="showMenu"></td>
             <td ng-show="showCheckbox"></td>
@@ -109,7 +128,7 @@
             <td ng-if="linha.events.remove" ng-show="!showMenu"></td>
             <td ng-if="linha.events.view" ng-show="!showMenu"></td>
         </tr>
-    </tfoot>-->
+    </tfoot>
 </table>
 <div class="box-content" style="padding:10px 10px 0 10px">
     <div class="clearfix">

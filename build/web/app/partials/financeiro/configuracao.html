@@ -23,7 +23,7 @@
                                         <h4>Lançamentos e Programações</h4>
                                     </div>    
                                     <div class="row" style="padding: 5px 0;">                    
-                                        <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5 text-right">
+                                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
                                             <label class="small">Favorecido obrigatório?</label>
                                         </div>
                                         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
@@ -33,7 +33,7 @@
                                         </div>
                                     </div> 
                                     <div class="row" style="padding: 5px 0;">                    
-                                        <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5 text-right">
+                                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
                                             <label class="small">Histórico obrigatório?</label>
                                         </div>
                                         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
@@ -43,7 +43,7 @@
                                         </div>
                                     </div> 
                                     <div class="row" style="padding: 5px 0;">                    
-                                        <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5 text-right">
+                                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
                                             <label class="small">Plano de Conta obrigatório?</label>
                                         </div>
                                         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
@@ -53,7 +53,7 @@
                                         </div>
                                     </div> 
                                     <div class="row" style="padding: 5px 0;">                    
-                                        <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5 text-right">
+                                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
                                             <label class="small">Centro de Custo obrigatório?</label>
                                         </div>
                                         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
@@ -63,7 +63,7 @@
                                         </div>
                                     </div>
                                     <div class="row" style="padding: 5px 0;">                    
-                                        <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5 text-right">
+                                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
                                             <label class="small">Filtro padrão período na tela de lançamento</label>
                                         </div>
                                         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
@@ -73,12 +73,22 @@
                                         </div>
                                     </div>
                                     <div class="row" style="padding: 5px 0;">                    
-                                        <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5 text-right">
+                                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
                                             <label class="small">Filtro padrão período na tela de programação</label>
                                         </div>
                                         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
                                             <select class="form-control" name="periodoLancamentoProgramado" ng-model="configuracao.periodoLancamentoProgramado"
                                                     ng-options="periodo.descricao for periodo in lancamentoProgramadoPeriodos track by periodo.id">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="padding: 5px 0;">                    
+                                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
+                                            <label class="small">Número de registros para filtro da tela lançamento e programação</label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                            <select class="form-control" name="limiteLancamento" ng-model="configuracao.limiteLancamento"
+                                                    ng-options="limite.descricao for limite in limites track by limite.id">
                                             </select>
                                         </div>
                                     </div>

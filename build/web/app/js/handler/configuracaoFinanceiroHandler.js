@@ -17,6 +17,7 @@ app.factory('ConfiguracaoFinanceiroHandler', function() {
         configuracaoHandle.centroCusto = getCentroCusto(configuracao);
         configuracaoHandle.periodoLancamento = getPeriodoLancamento(configuracao);
         configuracaoHandle.periodoLancamentoProgramado = getPeriodoLancamentoProgramado(configuracao);
+        configuracaoHandle.limiteLancamento = getLimiteLancamento(configuracao);
         return configuracaoHandle;
     };
     
@@ -48,6 +49,11 @@ app.factory('ConfiguracaoFinanceiroHandler', function() {
     var getPeriodoLancamentoProgramado = function(configuracao) {
         if(!configuracao.periodoLancamentoProgramado) return configuracao.periodoLancamentoProgramado;
         return configuracao.periodoLancamentoProgramado.id; 
+    };
+    
+    var getLimiteLancamento = function(configuracao) {
+        if(!configuracao.limiteLancamento) return configuracao.limiteLancamento;
+        return configuracao.limiteLancamento.id; 
     };
 
     return {

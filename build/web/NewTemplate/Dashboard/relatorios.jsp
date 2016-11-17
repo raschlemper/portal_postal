@@ -255,6 +255,7 @@
                                                 <option value='6'>Vendas - Contrato ECT por período (sintético)</option>
                                                 <option value='8'>Vendas - Contrato/Cartão de postagem ECT por período (sintético)</option>
                                                 <option value='9'>Vendas - Faturamento Cliente/Coleta realizada por período</option>
+                                                <option value='10'>Vendas do Mercado Livre</option>
                                                 <option value='7'>Objetos - Atrasados</option>
                                             </select>
                                         </div>  

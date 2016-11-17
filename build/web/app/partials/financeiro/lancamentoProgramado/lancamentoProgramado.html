@@ -52,7 +52,8 @@
                                             show-checkbox="true"
                                             show-menu="true"
                                             show-column-menu="true"
-                                            last-page="true">
+                                            last-page="true"
+                                            limit="limiteLancamento">
                                     
                                     <filter-content>
                                         <div class="form-inline pull-left">
@@ -96,7 +97,23 @@
                                             </div>
                                                                                         
                                         </div>
-                                    </filter-content>                                    
+                                    </filter-content>  
+                                    
+                                    <title-content>
+                                        <div class="margin-top">
+                                            <div class="title-table" ng-if="!lancSearch.conta">
+                                                <i><strong>Todas as Contas</strong></i>
+                                            </div>
+                                            <div class="title-table" ng-if="lancSearch.conta">
+                                                <strong><i>{{lancSearch.conta.nome}} 
+                                                        <span style="font-size: 11pt;" ng-show="lancSearch.conta.contaCorrente && lancSearch.conta.contaCorrente.banco && lancSearch.conta.contaCorrente.agencia && lancSearch.conta.contaCorrente.contaCorrente"> 
+                                                       - (Banco: {{lancSearch.conta.contaCorrente.banco.nome}} / Agência: {{lancSearch.conta.contaCorrente.agencia}}-{{lancSearch.conta.contaCorrente.agenciaDv}} / Conta: {{lancSearch.conta.contaCorrente.contaCorrente}}-{{lancSearch.conta.contaCorrente.contaCorrenteDv}})
+                                                   </span>
+                                                        <span ng-show="false">/ ({{lancSearch.conta.status.descricao}})</span>
+                                                </i></strong>
+                                            </div>
+                                        </div>
+                                    </title-content>                                   
                                     
                                 </app-table>
                             </div>

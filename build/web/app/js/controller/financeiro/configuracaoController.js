@@ -7,6 +7,7 @@ app.controller('ConfiguracaoController', ['$scope', 'ConfiguracaoService', 'Lanc
         var init = function () {                        
             $scope.lancamentoPeriodos = LancamentoService.periodos;                
             $scope.lancamentoProgramadoPeriodos = LancamentoProgramadoService.periodos;
+            $scope.limites = LISTAS.limites;
             $scope.configuracao = {};
             visualizar();
         };
@@ -25,6 +26,7 @@ app.controller('ConfiguracaoController', ['$scope', 'ConfiguracaoService', 'Lanc
                             //ListaService.getValue($scope.periodos, data.periodoLancamento) || $scope.periodos[1]; 
                     $scope.configuracao.periodoLancamentoProgramado = data.periodoLancamentoProgramado || $scope.lancamentoProgramadoPeriodos[1]; 
                             //ListaService.getValue($scope.periodos, data.periodoLancamentoProgramado) || $scope.periodos[1]; 
+                    $scope.configuracao.limiteLancamento = data.limiteLancamento || $scope.limites[0]; 
                 })
                 .catch(function(e) {
                     modalMessage(e);

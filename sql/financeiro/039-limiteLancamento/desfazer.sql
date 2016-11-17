@@ -1,0 +1,1 @@
+ALTER TABLE `configuracao_financeiro` DROP `limiteLancamento`;

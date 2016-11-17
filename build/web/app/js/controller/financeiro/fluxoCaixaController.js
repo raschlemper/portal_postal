@@ -76,6 +76,10 @@ app.controller('FluxoCaixaController',
 //            $scope.title = MESSAGES.lancamento.title.LISTA; 
         };
         
+        var toFixe = function(value, fixe) {
+            return parseFloat(value.toFixed(fixe));
+        }; 
+        
         var periodos = function(index) {
             $scope.periodos = [];
             $scope.periodos.push({'id': -1, 'codigo': -1, 'descricao': "Selecione o Período"});
@@ -239,8 +243,8 @@ app.controller('FluxoCaixaController',
         }
         
         var changeChartFluxoCaixa = function(lancamentos) {
-            var categorias = getDataChartSaldo(lancamentos, 'dataVencimento');
-            var valores = getDataChartSaldo(lancamentos, 'saldo');
+            var categorias = getDataChartSaldo(lancamentos, 'dataVencimento', formatDate);
+            var valores = getDataChartSaldo(lancamentos, 'saldo', formatSaldo);
             $scope.configChartFluxoCaixa.xAxis.categories = categorias;
             $scope.configChartFluxoCaixa.series[0].data = valores;
         }
@@ -248,8 +252,8 @@ app.controller('FluxoCaixaController',
         var setValoresChart = function(lancamentos) {
             ContaCorrenteService.getAll()
                .then(function(data) { 
-                    var categorias = getDataChartSaldo(lancamentos, 'dataVencimento');
-                    var valores = getDataChartSaldo(lancamentos, 'saldo');
+                    var categorias = getDataChartSaldo(lancamentos, 'dataVencimento', formatDate);
+                    var valores = getDataChartSaldo(lancamentos, 'saldo', formatSaldo);
                     var limiteContaCorrente = getSaldoContaCorrente(data);
                     if($scope.configChartFluxoCaixa) { changeChartFluxoCaixa(lancamentos); }
                     else { configChartFluxoCaixa(categorias, valores, limiteContaCorrente); }
@@ -320,9 +324,27 @@ app.controller('FluxoCaixaController',
             };
         };   
         
-        var getDataChartSaldo = function(saldos, field) {  
+        var getDataChartSaldo = function(saldos, field, callback) {  
             var values = _.pluck(saldos, field);
+            if(callback) { values = applyCallback(values, callback); }
             return _.values(values);
+        };
+        
+        var applyCallback = function(values, callback) {
+            var valuesFormat = [];
+            values.map(function(value) {
+                valuesFormat.push(callback(value));
+            });
+            return valuesFormat;
+        };
+        
+        var formatDate = function(date) {
+            var data = moment(date, 'YYYY-MM-DD');
+            return data.format('DD/MM/YYYY');
+        };
+        
+        var formatSaldo = function(saldo) {
+            return toFixe(saldo, 2);
         };
 
         // ***** VALIDAR ***** //

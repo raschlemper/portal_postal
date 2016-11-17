@@ -1,4 +1,4 @@
-app.directive('appTable', function($filter) {
+app.directive('appTable', function($filter, LISTAS) {
     
     return {
         restrict: 'E',
@@ -10,6 +10,7 @@ app.directive('appTable', function($filter) {
             filter: '=',
             events: '=?',
             search: '=',
+            limit: '=',
             title: '@'
         },
         transclude: {
@@ -17,13 +18,7 @@ app.directive('appTable', function($filter) {
             'titleContent': '?titleContent',
             'rodapeContent': '?rodapeContent'
         },
-        link: function(scope, element, attr, controller, transclude) {            
-                        
-            scope.limits = [
-                {name: '25',  value: 25 },
-                {name: '50',  value: 50 },
-                {name: '75',  value: 75 },
-                {name: '100', value: 100}];
+        link: function(scope, element, attr, controller, transclude) { 
             
             scope.events = scope.events || {};
             
@@ -34,10 +29,10 @@ app.directive('appTable', function($filter) {
                 scope.showColumnMenu = false;        
                 scope.currentPage = 1; 
                 scope.maxSize = 5; 
-                scope.limitTo = scope.limits[0];
                 scope.predicate = getPredicate(scope.colunas);
                 scope.reverse = false; 
                 scope.colunasSelected = [];
+                setLimits();
                 setCheckBox();
                 setMenu();
                 setFilterDefault();
@@ -45,6 +40,21 @@ app.directive('appTable', function($filter) {
                 setSelected();
                 setLastPage();
             };
+            
+            var setLimits = function() {           
+                scope.limits = [];
+                _.map(LISTAS.limites, function(limite) {
+                    scope.limits.push(getLimit(limite));
+                });
+                scope.limitTo = scope.limit || scope.limits[0];
+            };
+            
+            var getLimit = function(limite) {
+                return {
+                    value: limite.codigo,
+                    name: limite.descricao
+                }
+            }
             
             var setSelected = function() {
                 _.map(scope.colunas, function(coluna) {
@@ -222,6 +232,13 @@ app.directive('appTable', function($filter) {
             
             scope.$watch('limitTo', function(newValue, oldValue) {
                 if(newValue === oldValue) return;
+                reset();
+            });
+            
+            scope.$watch('limit', function(newValue, oldValue) {
+                if(newValue === oldValue) return;
+                if(newValue) { scope.limitTo = getLimit(newValue); }
+                else { scope.limitTo = scope.limits[0]; }
                 reset();
             });
             

@@ -27,6 +27,11 @@ app.constant('LISTAS', {
                 
     "lancamento": [{'id': 0, 'codigo': 'receita', 'descricao': 'Receita'},
                    {'id': 1, 'codigo': 'despesa', 'descricao': 'Despesa'}],
+               
+    "limites": [{'id': 0, 'codigo': '25',  'descricao': 25 },
+                {'id': 1, 'codigo': '50',  'descricao': 50 },
+                {'id': 2, 'codigo': '75',  'descricao': 75 },
+                {'id': 3, 'codigo': '100', 'descricao': 100}],
      
     "manutencao": [{'id': 0, 'codigo': 'programada', 'descricao': 'Programada'},
                    {'id': 1, 'codigo': 'rotina', 'descricao': 'Rotina'},

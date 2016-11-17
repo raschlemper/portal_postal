@@ -116,19 +116,54 @@
                                 <h4 class="page-header"><b class="text-primary"><i class="fa fa-dashboard"></i> Dashboard</b> > <small><%= empr.getEmpresa()%></small></h4>
                             </div>
                         </div>
-
                         <div class="row">
+                            <div class="well well-sm">  
+                                <form class="form-inline" action="index.jsp" method="post"> 
+                                    <div class="form-group" >                                                
+                                        <label for="from">Período de </label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                            <input class="form-control" size="8" type="text" id="dateIni" name="dateIni" value="<%= dataAnterior%>" onkeypress="mascara(this, maskData);"/>
+                                        </div>
+                                        <label for="to"> até </label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                            <input class="form-control" size="8" type="text" id="dateFim" name="dateFim" value="<%=vDataAtual%>" onkeypress="mascara(this, maskData);" />
+                                        </div>
+                                        <button type="submit" class="btn btn-sm btn-primary form-control" onclick="waitMsg()"><i class="fa fa-lg fa-search"></i></button>
+                                    </div>
+                                </form>
+                            </div>   
+                        </div>
+
+                                        <div class="row" style="margin-bottom: 5px;">
                             <!-- Mostra Aviso na tela -->
                             <div class="col-lg-12" id="msg" style="display: block">
                                 <%
-                                    ArrayList<ClienteLogEtiqueta> lista = Controle.ContrClienteEtiquetas.consultaQtdEtiquetasRestantes(200, nomeBD);
+                                    ArrayList<Movimentacao> lista = Controle.contrMovimentacao.getQtdObjSemPV(vDataInicio, vDataFinal, nomeBD);
+                                    int total = 0;
+                                    for (Movimentacao mv : lista) {
+                                        total += mv.getQuantidade();
+                                    }
                                     int listaTele = ContrTelegramaPostal.consultaQtdNaoEnviados(nomeBD);
                                     ArrayList<Clientes> listaContr = contrCliente.getClientesComContratoVencendo(90, nomeBD);
                                     if (lista != null && lista.size() > 0) {
                                 %>
-                                <div class="alert alert-danger no-margin">
+                                <div class="alert alert-warning no-margin">
                                     <a href="#" class="close" data-dismiss="alert">&times;</a>
-                                    <a class="text-danger" href="../Etiquetas/painel_etiquetas_b.jsp"><strong>ATENÇÃO!</strong> Existem clientes com poucas etiquetas.</a>
+                                    <strong>ATENÇÃO!</strong> Existem <%=total%> objetos de <%=lista.size()%> clientes que não efeturam pré-venda. <a class="text-danger" href="#" onclick="mostralPV();"><i>+ saiba mais</i></a>
+                                    <h2><b>R$ <%=df.format(total * 0.15)%> </b><small>poderiam ter sido economizados.</small></h2>
+                                    <!--
+                                    custo funcionario com encargos R$2800,00/mes 
+                                    custo funcioanrio por hpra R$14,00/hr  ou  R$ 0,23/min
+                                    considerando em média 40 segundos a mais por objeto 
+                                    equivalente a R$ 0,15(a mais)/objeto                                    
+                                    -->
+                                    <span id="listPV" class="hidden">
+                                        <%  for (Movimentacao mv : lista) {%>
+                                        <h5><%= mv.getCliente()%> - <%=Math.round(mv.getQuantidade())%> objetos</h5> 
+                                        <%}%>
+                                    </span>
                                 </div>
                                 <%}%>
                                 <%if (listaTele > 0) {%>
@@ -137,7 +172,7 @@
                                     <a class="text-danger" href="../Telegrama/telegrama_naoenviados_b.jsp"><strong>ATENÇÃO!</strong> Existem <%= listaTele%> Telegramas para enviar.</a>
                                 </div>
                                 <%}%>
-                                <%if (listaContr!=null && listaContr.size() > 0) {%>
+                                <%if (listaContr != null && listaContr.size() > 0) {%>
                                 <div class="alert alert-danger no-margin">
                                     <a href="#" class="close" data-dismiss="alert">&times;</a>
                                     <strong>ATENÇÃO!</strong> Existem clientes com o contrato a vencer em menos de 90 Dias:<br/>
@@ -210,25 +245,7 @@
                         </div>
 
 
-                        <div class="row">
-                            <div class="well well-sm">  
-                                <form class="form-inline" action="index.jsp" method="post"> 
-                                    <div class="form-group" >                                                
-                                        <label for="from">Período de </label>
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                            <input class="form-control" size="8" type="text" id="dateIni" name="dateIni" value="<%= dataAnterior%>" onkeypress="mascara(this, maskData);"/>
-                                        </div>
-                                        <label for="to"> até </label>
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                            <input class="form-control" size="8" type="text" id="dateFim" name="dateFim" value="<%=vDataAtual%>" onkeypress="mascara(this, maskData);" />
-                                        </div>
-                                        <button type="submit" class="btn btn-sm btn-primary form-control" onclick="waitMsg()"><i class="fa fa-lg fa-search"></i></button>
-                                    </div>
-                                </form>
-                            </div>   
-                        </div>
+
 
                         <!-- /.row -->
                         <div class="row">
@@ -477,6 +494,9 @@
             String nomeContato = (String) session.getAttribute("nome");
         %>
         <script type="text/javascript">
+            function mostralPV() {
+                $('#listPV').toggleClass('hidden');
+            }
             (function (d, src, c) {
                 var t = d.scripts[d.scripts.length - 1], s = d.createElement('script');
                 s.id = 'la_x2s6df8d';
@@ -493,7 +513,7 @@
             })(document,
                     'https://scc4.ladesk.com/scripts/track.js',
                     function (e) {
-                        LiveAgent.setUserDetails('<%=empr.getEmail()%>', '<%=empr.getEmpresa() %>', '[<%=empr.getCidade()+ "/" + empr.getUf()%>]', '<%=empr.getTelefone()%>');
+                        LiveAgent.setUserDetails('<%=empr.getEmail()%>', '<%=empr.getEmpresa()%>', '[<%=empr.getCidade() + "/" + empr.getUf()%>]', '<%=empr.getTelefone()%>');
                         LiveAgent.addContactField('usuario', ' <%=nomeContato%>');
                         LiveAgent.addContactField('telefone', ' <%=empr.getTelefone()%>');
                         LiveAgent.addContactField('sistema', '<%=empr.getTipo_sistema()%>');
