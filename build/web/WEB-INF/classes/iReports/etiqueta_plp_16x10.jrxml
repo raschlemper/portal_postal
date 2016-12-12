@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" printOrder="Horizontal" pageWidth="283" pageHeight="453" columnWidth="243" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a6600087-3a8d-456c-bdc8-19dcbb299119">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="2"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="urlLogoCli" class="java.lang.String"/>
 	<parameter name="nomeBD" class="java.lang.String"/>
 	<parameter name="contratoCli" class="java.lang.String"/>
@@ -212,7 +212,7 @@
 			<componentElement>
 				<reportElement x="3" y="277" width="128" height="55" uuid="7284de90-9988-4352-8029-fbb3d35500f5"/>
 				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128C" drawText="false" checksumRequired="false" barWidth="2" barHeight="95">
-					<jr:codeExpression><![CDATA[$F{cepDestinatario}.replace("-", "")]]></jr:codeExpression>
+					<jr:codeExpression><![CDATA[$F{cepDestinatario}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
 			<textField>
@@ -241,7 +241,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{cepDestinatario}.replace("-", "")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{cepDestinatario}]]></textFieldExpression>
 			</textField>
 			<image hAlign="Center" vAlign="Middle" isUsingCache="false" onErrorType="Blank">
 				<reportElement x="3" y="348" width="97" height="51" uuid="3ac176c4-72f8-4b0a-b36e-349fb739a598"/>
@@ -335,7 +335,7 @@
 				<textElement textAlignment="Center">
 					<font size="6"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{contratoCli}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{contrato}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

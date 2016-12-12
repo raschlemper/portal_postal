@@ -7,8 +7,7 @@ app.controller('ModalLancamentoProgramadoGerarController',
         var init = function () {  
             $scope.favorecidos = [];
             getTitle();
-            initStep($scope.lancamento);
-//            favorecidos();
+            initStep($scope.lancamento);            
         };
         
         // ***** NAVEGAR ***** //
@@ -24,20 +23,6 @@ app.controller('ModalLancamentoProgramadoGerarController',
         var getTitle = function() {
             $scope.titleGerar = $scope.title + " - " + MESSAGES.lancamento.title.GERAR; 
         };
-        
-//        var favorecidos = function() {
-//            FavorecidoService.getAll()
-//                .then(function (data) {
-//                    $scope.favorecidos = data;
-//                })
-//                .catch(function (e) {
-//                    console.log(e);
-//                });
-//        };
-        
-//        $scope.selectFavorecido = function(favorecido) {
-//            $scope.lancamento.favorecido = favorecido;
-//        }
         
         $scope.lancar = function(form, lancamentoProgramado, lancamento) {
             return validarLancamentoProgramado(form, lancamentoProgramado, lancamento);
@@ -159,10 +144,6 @@ app.controller('ModalLancamentoProgramadoGerarController',
                 alert(MESSAGES.lancamento.validacao.VALOR_REQUERIDA);
                 return false;
             }
-//            if (form.historico.$error.required) {
-//                alert(MESSAGES.lancamento.validacao.HISTORICO_REQUERIDA);
-//                return false;
-//            }
             return true;
         }; 
         

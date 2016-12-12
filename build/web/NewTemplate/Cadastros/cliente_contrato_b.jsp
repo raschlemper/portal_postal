@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <%
-    
+
     Usuario usrSessao = (Usuario) session.getAttribute("agf_usuario");
     if (usrSessao == null) {
         response.sendRedirect("../../index.jsp?msgLog=3");
@@ -44,15 +44,108 @@
         int statusCartao = cliInc.getStatusCartaoPostagem();
         if (cliInc.getDtVigenciaFimContrato() != null) {
             dtVig = sdf.format(cliInc.getDtVigenciaFimContrato());
-            SimpleDateFormat sdfa = new SimpleDateFormat("yyyy-MM-dd");       
+            SimpleDateFormat sdfa = new SimpleDateFormat("yyyy-MM-dd");
             Date dateWithoutTime = sdfa.parse(sdfa.format(new Date()));
-            if(cliInc.getDtVigenciaFimContrato().before(dateWithoutTime)){
-                statusCartao = 0; 
+            if (cliInc.getDtVigenciaFimContrato().before(dateWithoutTime)) {
+                statusCartao = 0;
             }
         }
         String ufContrato = cliInc.getUfContrato();
+        if(ufContrato == null){
+            ufContrato = "";
+        }
 
         int codDir = cliInc.getCodDiretoria();
+        
+        switch(ufContrato){
+            case "AC":
+                codDir = 3;
+                break;
+            case "AL":
+                codDir = 4;
+                break;
+            case "AP":
+                codDir = 5;
+                break;
+            case "AM":
+                codDir = 6;
+                break;
+            case "BA":
+                codDir = 8;
+                break;
+            case "CE":
+                codDir = 12;
+                break;
+            case "DF":
+                codDir = 10;
+                break;
+            case "ES":
+                codDir = 14;
+                break;
+            case "GO":
+                codDir = 16;
+                break;
+            case "MA":
+                codDir = 18;
+                break;
+            case "MT":
+                codDir = 24;
+                break;
+            case "MS":
+                codDir = 22;
+                break;
+            case "MG":
+                codDir = 20;
+                break;
+            case "PA":
+                codDir = 28;
+                break;
+            case "PB":
+                codDir = 30;
+                break;
+            case "PR":
+                codDir = 36;
+                break;
+            case "PE":
+                codDir = 32;
+                break;
+            case "PI":
+                codDir = 34;
+                break;
+            case "RJ":
+                codDir = 50;
+                break;
+            case "RN":
+                codDir = 60;
+                break;
+            case "RS":
+                codDir = 64;
+                break;
+            case "RO":
+                codDir = 26;
+                break;
+            case "RR":
+                codDir = 65;
+                break;
+            case "SC":
+                codDir = 68;
+                break;
+            case "SPI":
+                codDir = 74;
+                break;
+            case "SPM":
+                codDir = 72;
+                break;
+            case "SE":
+                codDir = 70;
+                break;
+            case "TO":
+                codDir = 75;
+                break;
+            default:
+                codDir = 0;
+                break;
+        };
         String nomeSara = cliInc.getNome();
         String cnpjSenha = cliInc.getCnpj().replaceAll("[./-]", "").substring(0, 8);
 %>
@@ -164,8 +257,8 @@
                                                 <div class="col-sm-6 col-md-3 col-lg-2">
                                                     <label class="small">UF do Contrato</label>
                                                     <div class="input-group">   
-                                                        <span class="input-group-addon" ><i class="fa fa-asterisk fa-fw"></i></span>                                                     
-                                                        <select class="form-control" name="ufContrato" id="ufContrato">
+                                                        <span class="input-group-addon" ><i class="fa fa-asterisk fa-fw"></i></span>                 
+                                                        <select class="form-control" name="ufContrato" id="ufContrato" onchange="verificaCodigoDiretoria(this.value);">
                                                             <option value="" selected>SELECIONE</option>
                                                             <option value="AC" <%if ("AC".equals(ufContrato)) {%> selected <%}%>>AC</option>
                                                             <option value="AL" <%if ("AL".equals(ufContrato)) {%> selected <%}%>>AL</option>
@@ -191,7 +284,8 @@
                                                             <option value="RO" <%if ("RO".equals(ufContrato)) {%> selected <%}%>>RO</option>
                                                             <option value="RR" <%if ("RR".equals(ufContrato)) {%> selected <%}%>>RR</option>
                                                             <option value="SC" <%if ("SC".equals(ufContrato)) {%> selected <%}%>>SC</option>
-                                                            <option value="SP" <%if ("SP".equals(ufContrato)) {%> selected <%}%>>SP</option>
+                                                            <option value="SPI" <%if ("SPI".equals(ufContrato)) {%> selected <%}%>>SPI</option>
+                                                            <option value="SPM" <%if ("SPM".equals(ufContrato)) {%> selected <%}%>>SPM</option>
                                                             <option value="SE" <%if ("SE".equals(ufContrato)) {%> selected <%}%>>SE</option>
                                                             <option value="TO" <%if ("TO".equals(ufContrato)) {%> selected <%}%>>TO</option>
                                                         </select>
@@ -207,7 +301,7 @@
                                                 <li>
                                                     <ul class="list-unstyled">
                                                         <li class="list-group-item list-group-item-danger">
-                                                            <b>SERVIÇOS ECT FORA DO CONTRATO</b>
+                                                            <b>SERVIÇOS ECT EXISTENTES</b>
                                                         </li>
                                                         <li class="list-group-item list-group-item-danger">
                                                             <select class="form-control" style="width: 300px;" name="servico_1" id="servico_1" size="10">
@@ -229,10 +323,10 @@
                                                     </ul>
                                                 </li>
                                                 <li>  
-                                                    <div style="margin: 15px 10px;">
-                                                        <button onclick="trocaServ('servico_1', 'servico_2');" type="button" class="btn btn-success" style="width: 135px;" ><i class="fa fa-lg fa-spc fa-plus-circle" ></i> ADICIONAR</button>
+                                                    <div style="margin: 5px 5px;">
+                                                        <button onclick="trocaServ('servico_1', 'servico_2');" type="button" class="btn btn-success btn-sm" style="width: 100px;" ><i class="fa fa-lg fa-plus-circle" ></i> ADICIONAR</button>
                                                         <br/><br/>
-                                                        <button onclick="trocaServ('servico_2', 'servico_1');" type="button" class="btn btn-danger" style="width: 135px;" ><i class="fa fa-lg fa-spc fa-minus-circle" ></i> REMOVER</button>
+                                                        <button onclick="trocaServ('servico_2', 'servico_1');" type="button" class="btn btn-danger btn-sm" style="width: 100px;" ><i class="fa fa-lg fa-minus-circle" ></i> REMOVER</button>
                                                     </div>                                                  
                                                 </li>
                                                 <li>  
@@ -256,6 +350,18 @@
                                                         </li>
                                                     </ul>
                                                 </li>
+                                                <li id="liServSigep" class="hidden">  
+                                                    <ul class="list-unstyled">
+                                                        <li class="list-group-item list-group-item-info text-warning" style="background-color: #f7f7f7;">
+                                                            <label>SERVIÇOS CADASTRADOS NO SIGEP</label>
+                                                        </li>
+                                                        <li class="list-group-item list-group-item-info text-warning" style="background-color: #f7f7f7;">   
+                                                            <div class="text-warning" id="servSigep" style="width: 300px; background-color: #f7f7f7;" >
+
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </li>
                                             </ul>
                                         </li>
                                         <li id="divNum4" <%if (cliInc.getTemContrato() == 1) {%> class="list-group-item list-group-heading" <%} else {%> class="esconder" <%}%>>
@@ -274,15 +380,15 @@
                                                     <label class="small">Senha do SigepWeb</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-lock fa-fw"></i></span>                                                     
-                                                        <input class="form-control" type="text" name="senha_sigep" id="senha_sigep" value="<%= cliInc.getSenha_sigep()%>" />
+                                                        <input class="form-control" type="password" name="senha_sigep" id="senha_sigep" value="0000<%= cliInc.getCodigo() %>" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-6 col-lg-6">        
                                                     <%if (cliInc.getLogin_sigep() != null && !cliInc.getLogin_sigep().equals("") && !cliInc.getLogin_sigep().toLowerCase().equals("null")) {%>                                                      
-                                                        <label class="small">Clique para testar a senha</label>                                                    
-                                                        <div>   
-                                                            <button style="width: 300px;" onclick="ajaxTesteSigepWEB();" type="button" class="btn btn-sm btn-warning form-control" ><i class="fa fa-lg fa-spc fa-check-circle"></i> TESTAR FUNCIONAMENTO DO SIGEPWEB</button>                                                        
-                                                        </div>
+                                                    <label class="small">Clique para testar a senha</label>                                                    
+                                                    <div>   
+                                                        <button style="width: 300px;" onclick="ajaxTesteSigepWEB();" type="button" class="btn btn-sm btn-warning form-control" ><i class="fa fa-lg fa-spc fa-check-circle"></i> TESTAR FUNCIONAMENTO DO SIGEPWEB</button>                                                        
+                                                    </div>
                                                     <%}%>
                                                 </div>
                                             </div>   
@@ -304,12 +410,12 @@
                                                     <label class="small">Senha da Log. Reversa</label>
                                                     <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-lock fa-fw"></i></span>                                                     
-                                                        <input class="form-control" type="text" name="senha_reversa" id="senha_reversa" value="<%= cliInc.getSenha_reversa()%>" />
+                                                        <input class="form-control" type="password" name="senha_reversa" id="senha_reversa" value="<%= cliInc.getSenha_reversa()%>" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-5 col-lg-3">        
-                                                        <label class="small">Cartão de Postagem Log. Reversa</label>                                                    
-                                                        <div class="input-group">                                                        
+                                                    <label class="small">Cartão de Postagem Log. Reversa</label>                                                    
+                                                    <div class="input-group">                                                        
                                                         <span class="input-group-addon" ><i class="fa fa-credit-card fa-fw"></i></span>                                                     
                                                         <input class="form-control" type="text" name="cartao_reversa" id="cartao_reversa" value="<%= cliInc.getCartao_reversa()%>" />
                                                     </div>
@@ -339,215 +445,315 @@
         <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet" />
         <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
         <script type="text/javascript">
-            function ajaxTesteSigepWEB() {
-                waitMsg();
-                var contrato = document.getElementById('numContrato').value;
-                var cartao = document.getElementById('cartaoPostagem').value;
-                var loginSigep = document.getElementById('login_sigep').value;
-                var senhaSigep = document.getElementById('senha_sigep').value;
-                //var idCli = document.getElementById('idCliente').value;
-                $.ajax({
-                    method: "POST",
-                    url: "ajax/pesquisaDadosCliSigep.jsp",
-                    data: {numContrato: contrato, cartaoPostagem: cartao, loginSigep: loginSigep, senhaSigep: senhaSigep},
-                    dataType: 'html'
-                }).done(function(retorno) {
-                    var aux = retorno.split(';');
-                    if (aux[0] !== 'erro') {
-                        if (aux[0] === '1') {
-                            document.getElementById('statusCartao').value = '1';
-                        } else {
-                            document.getElementById('statusCartao').value = '2';
-                        }
-                        document.getElementById('codDir').value = aux[1];
-                        document.getElementById('anoContrato').value = aux[2];
-                        document.getElementById('ufContrato').value = aux[3];
-                        document.getElementById('nomeSara').value = aux[4];
-                        document.getElementById('cnpjSara').value = aux[5];
-                        document.getElementById('codAdm').value = aux[6];
-                        document.getElementById('vigenciaFim').value = aux[7];
-                        fechaMsg();
-                        
-                        var msg_dialog = "<label>Verificação concluida com sucesso!</label><br/>"
-                                +"Cód. Administrativo: " + aux[6]+"<br/>"
-                                +"CNPJ do Contrato: " + aux[8]+"<br/>"
-                                +"Vigente até: " + aux[7]+"<br/><br/>"
-                                + aux[9].split('@').join('<br/>') ;
-                        
-                        
-                        bootbox.dialog({                        
-                        title: "<b class='text-success'>SUCESSO!</b>",
-                        message: msg_dialog,
-                        onEscape: true
-                        });
-                    } else {
-                        fechaMsg();
-                        bootbox.dialog({                        
-                        title: "<b class='text-danger'>ATENÇÃO!</b>",
-                        message: "<label>"+aux[1]+"</label>",
-                        onEscape: true
-                        });
-                    }
-                });
+             function verificaCodigoDiretoria(uf){
+                switch(uf){
+                    case "AC":
+                        document.getElementById("codDir").value = "3";
+                        break;
+                    case "AL":
+                        document.getElementById("codDir").value = "4";
+                        break;
+                    case "AP":
+                        document.getElementById("codDir").value = "5";
+                        break;
+                    case "AM":
+                        document.getElementById("codDir").value = "6";
+                        break;
+                    case "BA":
+                        document.getElementById("codDir").value = "8";
+                        break;
+                    case "CE":
+                        document.getElementById("codDir").value = "12";
+                        break;
+                    case "DF":
+                        document.getElementById("codDir").value = "10";
+                        break;
+                    case "ES":
+                        document.getElementById("codDir").value = "14";
+                        break;
+                    case "GO":
+                        document.getElementById("codDir").value = "16";
+                        break;
+                    case "MA":
+                        document.getElementById("codDir").value = "18";
+                        break;
+                    case "MT":
+                        document.getElementById("codDir").value = "24";
+                        break;
+                    case "MS":
+                        document.getElementById("codDir").value = "22";
+                        break;
+                    case "MG":
+                        document.getElementById("codDir").value = "20";
+                        break;
+                    case "PA":
+                        document.getElementById("codDir").value = "28";
+                        break;
+                    case "PB":
+                        document.getElementById("codDir").value = "30";
+                        break;
+                    case "PR":
+                        document.getElementById("codDir").value = "36";
+                        break;
+                    case "PE":
+                        document.getElementById("codDir").value = "32";
+                        break;
+                    case "PI":
+                        document.getElementById("codDir").value = "34";
+                        break;
+                    case "RJ":
+                        document.getElementById("codDir").value = "50";
+                        break;
+                    case "RN":
+                        document.getElementById("codDir").value = "60";
+                        break;
+                    case "RS":
+                        document.getElementById("codDir").value = "64";
+                        break;
+                    case "RO":
+                        document.getElementById("codDir").value = "26";
+                        break;
+                    case "RR":
+                        document.getElementById("codDir").value = "65";
+                        break;
+                    case "SC":
+                        document.getElementById("codDir").value = "68";
+                        break;
+                    case "SPI":
+                        document.getElementById("codDir").value = "74";
+                        break;
+                    case "SPM":
+                        document.getElementById("codDir").value = "72";
+                        break;
+                    case "SE":
+                        document.getElementById("codDir").value = "70";
+                        break;
+                    case "TO":
+                        document.getElementById("codDir").value = "75";
+                        break;
+                    default:
+                        document.getElementById("codDir").value = "0";
+                        break;
+                };
             }
             
-            function trocaServ(listRemove, listAdiciona) {
-                var selIndex = document.getElementById(listRemove).selectedIndex;
-                var idServ = document.getElementById(listRemove).options[selIndex].value;
-                var nomeServ = document.getElementById(listRemove).options[selIndex].text;
+                                                function ajaxTesteSigepWEB() {
+                                                    waitMsg();
+                                                    var contrato = document.getElementById('numContrato').value;
+                                                    var cartao = document.getElementById('cartaoPostagem').value;
+                                                    var loginSigep = document.getElementById('login_sigep').value;
+                                                    var senhaSigep = document.getElementById('senha_sigep').value;
+                                                    var idCliente = document.getElementById('idCliente').value;
+                                                    $.ajax({
+                                                        method: "POST",
+                                                        url: "ajax/pesquisaDadosCliSigep.jsp",
+                                                        data: {numContrato: contrato, cartaoPostagem: cartao, loginSigep: loginSigep, idCliente: idCliente, senhaSigep: senhaSigep},
+                                                        dataType: 'html'
+                                                    }).done(function (retorno) {
+                                                        var aux = retorno.split(';');
+                                                        if (aux[0] !== 'erro') {
+                                                            if ($('#liServSigep').hasClass('hidden')) {
+                                                                $('#liServSigep').toggleClass('hidden');
+                                                            }
+                                                            if (aux[0] === '1') {
+                                                                document.getElementById('statusCartao').value = '1';
+                                                            } else {
+                                                                document.getElementById('statusCartao').value = '2';
+                                                            }
+                                                            document.getElementById('codDir').value = aux[1];
+                                                            document.getElementById('anoContrato').value = aux[2];
+                                                            //document.getElementById('ufContrato').value = aux[3];
+                                                            document.getElementById('nomeSara').value = aux[4];
+                                                            document.getElementById('cnpjSara').value = aux[5];
+                                                            document.getElementById('codAdm').value = aux[6];
+                                                            document.getElementById('vigenciaFim').value = aux[7];
+                                                            fechaMsg();
 
-                if (listAdiciona === 'servico_2') {
-                    var aux = idServ.split(";");
-                    if (verificarGrupoServ(listAdiciona, aux[1])) {
-                        alert('Este serviço já está na lista do contrato!\n\nPara adicionar, remova o serviço mesmo do contrato!');
-                        return false;
-                    }
-                }
+                                                            var msg_dialog = "<label>Verificação concluida com sucesso!</label><br/>"
+                                                                    + "Cód. Administrativo: " + aux[6] + "<br/>"
+                                                                    + "CNPJ do Contrato: " + aux[8] + "<br/>"
+                                                                    + "UF do Contrato: " + aux[3] + " | Código DR: " + aux[1] + "<br/>"
+                                                                    + "Vigente até: " + aux[7] + "<br/><br/>"
+                                                                    + aux[9].split('@').join('<br/>');
 
-                document.getElementById(listRemove).remove(selIndex);
 
-                var novaOpcao = new Option(nomeServ, idServ);
-                document.getElementById(listAdiciona).options[document.getElementById(listAdiciona).length] = novaOpcao;
+                                                            bootbox.dialog({
+                                                                title: "<b class='text-success'>SUCESSO!</b>",
+                                                                message: msg_dialog,
+                                                                onEscape: true
+                                                            });
+                                                             $('#servSigep').html(aux[9].replace('Servicos do Contrato no SigepWEB:', '').split('@').join('<br/>').substring(19));
+                                                        } else {
+                                                            fechaMsg();
+                                                            bootbox.dialog({
+                                                                title: "<b class='text-danger'>ATENÇÃO!</b>",
+                                                                message: "<label>" + aux[1] + "</label>",
+                                                                onEscape: true
+                                                            });
+                                                        }
 
-                OrdenarLista(listRemove);
-                OrdenarLista(listAdiciona);
 
-                document.getElementById(listRemove).focus();
-                if (document.getElementById(listRemove).length === selIndex) {
-                    document.getElementById(listRemove).selectedIndex = selIndex - 1;
-                } else {
-                    document.getElementById(listRemove).selectedIndex = selIndex;
-                }
-            }
+                                                       
+                                                    });
+                                                }
 
-            function verificarGrupoServ(combo, grupo) {
-                var lb = document.getElementById(combo);
-                var flag = false;
-                for (i = 0; i < lb.length; i++) {
-                    var aux = lb.options[i].value.split(";");
-                    if (aux[1] === grupo) {
-                        flag = true;
-                    }
-                }
-                return flag;
-            }
+                                                function trocaServ(listRemove, listAdiciona) {
+                                                    var selIndex = document.getElementById(listRemove).selectedIndex;
+                                                    var idServ = document.getElementById(listRemove).options[selIndex].value;
+                                                    var nomeServ = document.getElementById(listRemove).options[selIndex].text;
 
-            function OrdenarLista(combo) {
-                var lb = document.getElementById(combo);
-                arrTexts = new Array();
+                                                    if (listAdiciona === 'servico_2') {
+                                                        var aux = idServ.split(";");
+                                                        if (verificarGrupoServ(listAdiciona, aux[1])) {
+                                                            alert('Este serviço já está na lista do contrato!\n\nPara adicionar, remova o serviço mesmo do contrato!');
+                                                            return false;
+                                                        }
+                                                    }
 
-                for (i = 0; i < lb.length; i++) {
-                    arrTexts[i] = lb.options[i].text + "@" + lb.options[i].value;
-                }
+                                                    document.getElementById(listRemove).remove(selIndex);
 
-                arrTexts.sort();
+                                                    var novaOpcao = new Option(nomeServ, idServ);
+                                                    document.getElementById(listAdiciona).options[document.getElementById(listAdiciona).length] = novaOpcao;
 
-                for (i = 0; i < lb.length; i++) {
-                    var aux = arrTexts[i].split("@");
-                    lb.options[i].text = aux[0];
-                    lb.options[i].value = aux[1];
-                }
-            }
+                                                    OrdenarLista(listRemove);
+                                                    OrdenarLista(listAdiciona);
 
-            function preencherCampos() {
-                var form = document.form1;
-                if (form.contrato.value === '1') {                    
+                                                    document.getElementById(listRemove).focus();
+                                                    if (document.getElementById(listRemove).length === selIndex) {
+                                                        document.getElementById(listRemove).selectedIndex = selIndex - 1;
+                                                    } else {
+                                                        document.getElementById(listRemove).selectedIndex = selIndex;
+                                                    }
+                                                }
 
-                    if (document.getElementById('numContrato').value === '' || document.getElementById('numContrato').value.length !== 10) {
-                        alert('Digite um Número de Contrato Válido para o Cliente!');
-                        return false;
-                    }
+                                                function verificarGrupoServ(combo, grupo) {
+                                                    var lb = document.getElementById(combo);
+                                                    var flag = false;
+                                                    for (i = 0; i < lb.length; i++) {
+                                                        var aux = lb.options[i].value.split(";");
+                                                        if (aux[1] === grupo) {
+                                                            flag = true;
+                                                        }
+                                                    }
+                                                    return flag;
+                                                }
 
-                    if (document.getElementById('cartaoPostagem').value === '') {
-                        alert('Preencha o Cartão de Postagem do Contrato!');
-                        return false;
-                    }
-                    
-                    if (document.getElementById('codAdm').value === '') {
-                        alert('Preencha o Código Administrativo do Contrtato!');
-                        return false;
-                    }
-                    
-                    if (document.getElementById('vigenciaFim').value === '') {
-                        alert('Preencha a Validade do Contrtato!');
-                        return false;
-                    }
+                                                function OrdenarLista(combo) {
+                                                    var lb = document.getElementById(combo);
+                                                    arrTexts = new Array();
 
-                    if (document.getElementById('nomeContrato').value === '') {
-                        alert('Digite um Nome do Cliente para a Chancela do Contrato!');
-                        return false;
-                    }
+                                                    for (i = 0; i < lb.length; i++) {
+                                                        arrTexts[i] = lb.options[i].text + "@" + lb.options[i].value;
+                                                    }
 
-                    if (document.getElementById('anoContrato').value === '') {
-                        alert('Escolha o Ano do Contrato!');
-                        return false;
-                    }
+                                                    arrTexts.sort();
 
-                    if (document.getElementById('ufContrato').value === '') {
-                        alert('Escolha a Unidade Federativa do Contrato!');
-                        return false;
-                    }
+                                                    for (i = 0; i < lb.length; i++) {
+                                                        var aux = arrTexts[i].split("@");
+                                                        lb.options[i].text = aux[0];
+                                                        lb.options[i].value = aux[1];
+                                                    }
+                                                }
 
-                    var lb = document.getElementById('servico_2');
-                    var servicos = '';
-                    for (i = 0; i < lb.length; i++) {
-                        if (i === 0) {
-                            servicos += lb.options[i].value;
-                        } else {
-                            servicos += "@" + lb.options[i].value;
-                        }
-                    }
-                    document.getElementById('servicos').value = servicos;
+                                                function preencherCampos() {
+                                                    var form = document.form1;
+                                                    if (form.contrato.value === '1') {
 
-                    if (servicos === '') {
-                        alert('Selecione algum serviço para o Contrato do Cliente!');
-                        return false;
-                    }
+                                                        if (document.getElementById('numContrato').value === '' || document.getElementById('numContrato').value.length !== 10) {
+                                                            alert('Digite um Número de Contrato Válido para o Cliente!');
+                                                            return false;
+                                                        }
 
-                }
-                waitMsg();
-                form.submit();
-            }
+                                                        if (document.getElementById('cartaoPostagem').value === '') {
+                                                            alert('Preencha o Cartão de Postagem do Contrato!');
+                                                            return false;
+                                                        }
 
-            function mostraEsconde(){
-                $('#divServ').slideToggle();
-                $('#divNum').slideToggle();
-                $('#divNum2').slideToggle();
-                $('#divNum3').slideToggle();
-                $('#divNum4').slideToggle();
-                $('#divNum5').slideToggle();
-                $('#divNum6').slideToggle();
-                $('#divNum7').slideToggle();
-            }
-            
-            /************************************/
+                                                        if (document.getElementById('codAdm').value === '') {
+                                                            alert('Preencha o Código Administrativo do Contrtato!');
+                                                            return false;
+                                                        }
 
-            $(document).ready(function() {
-                $("#vigenciaFim").datepicker({
-                    showAnim: 'slideDown',
-                    minDate: new Date(),
-                    numberOfMonths: 1
-                });
-                if($('#radioContrato').prop('checked')) {
-                    $('#radio_1').val('1');
-                } else {
-                    mostraEsconde();
-                    $('#radio_1').val('0');
-                }
-                fechaMsg();
-            });
-            
-            $(function() {
-                $('#radioContrato').change(function() {
-                    if ($(this).prop('checked')) {
-                        mostraEsconde();
-                        $('#radio_1').val('1');
-                    } else {
-                        mostraEsconde();
-                        $('#radio_1').val('0');
-                    }
-                });
-            });
+                                                        if (document.getElementById('vigenciaFim').value === '') {
+                                                            alert('Preencha a Validade do Contrtato!');
+                                                            return false;
+                                                        }
+
+                                                        if (document.getElementById('nomeContrato').value === '') {
+                                                            alert('Digite um Nome do Cliente para a Chancela do Contrato!');
+                                                            return false;
+                                                        }
+
+                                                        if (document.getElementById('anoContrato').value === '') {
+                                                            alert('Escolha o Ano do Contrato!');
+                                                            return false;
+                                                        }
+
+                                                        if (document.getElementById('ufContrato').value === '') {
+                                                            alert('Escolha a Unidade Federativa do Contrato!');
+                                                            return false;
+                                                        }
+
+                                                        var lb = document.getElementById('servico_2');
+                                                        var servicos = '';
+                                                        for (i = 0; i < lb.length; i++) {
+                                                            if (i === 0) {
+                                                                servicos += lb.options[i].value;
+                                                            } else {
+                                                                servicos += "@" + lb.options[i].value;
+                                                            }
+                                                        }
+                                                        document.getElementById('servicos').value = servicos;
+
+                                                        if (servicos === '') {
+                                                            alert('Selecione algum serviço para o Contrato do Cliente!');
+                                                            return false;
+                                                        }
+
+                                                    }
+                                                    waitMsg();
+                                                    form.submit();
+                                                }
+
+                                                function mostraEsconde() {
+                                                    $('#divServ').slideToggle();
+                                                    $('#divNum').slideToggle();
+                                                    $('#divNum2').slideToggle();
+                                                    $('#divNum3').slideToggle();
+                                                    $('#divNum4').slideToggle();
+                                                    $('#divNum5').slideToggle();
+                                                    $('#divNum6').slideToggle();
+                                                    $('#divNum7').slideToggle();
+                                                }
+
+                                                /************************************/
+
+                                                $(document).ready(function () {
+                                                    $("#vigenciaFim").datepicker({
+                                                        showAnim: 'slideDown',
+                                                        minDate: new Date(),
+                                                        numberOfMonths: 1
+                                                    });
+                                                    if ($('#radioContrato').prop('checked')) {
+                                                        $('#radio_1').val('1');
+                                                    } else {
+                                                        mostraEsconde();
+                                                        $('#radio_1').val('0');
+                                                    }
+                                                    fechaMsg();
+                                                });
+
+                                                $(function () {
+                                                    $('#radioContrato').change(function () {
+                                                        if ($(this).prop('checked')) {
+                                                            mostraEsconde();
+                                                            $('#radio_1').val('1');
+                                                        } else {
+                                                            mostraEsconde();
+                                                            $('#radio_1').val('0');
+                                                        }
+                                                    });
+                                                });
         </script>
     </body>
 </html>

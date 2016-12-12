@@ -37,6 +37,22 @@ public class LancamentoProgramadoDAO extends GenericDAO {
         return findAll(sql, params, lancamentoProgramadoHandler);
     }
 
+    public List<LancamentoProgramado> findAllById(List<Integer> ids) throws Exception {
+        String sql = "SELECT * FROM conta, tipo_documento, tipo_forma_pagamento, lancamento_programado "
+                   + "LEFT OUTER JOIN favorecido ON(lancamento_programado.idFavorecido = favorecido.idFavorecido) "
+                   + "LEFT OUTER JOIN plano_conta ON(lancamento_programado.idPlanoConta = plano_conta.idPlanoConta) "
+                   + "LEFT OUTER JOIN centro_custo ON(lancamento_programado.idCentroCusto = centro_custo.idCentroCusto) "
+                   + "LEFT OUTER JOIN lancamento_programado_transferencia "
+                                + "ON(lancamento_programado.idLancamentoProgramado = lancamento_programado_transferencia.idLancamentoProgramadoOrigem OR "
+                                   + "lancamento_programado.idLancamentoProgramado = lancamento_programado_transferencia.idLancamentoProgramadoDestino) "
+                   + "WHERE lancamento_programado.idConta = conta.idConta "
+                   + "AND lancamento_programado.idTipoDocumento = tipo_documento.idTipoDocumento " 
+                   + "AND lancamento_programado.idTipoFormaPagamento = tipo_forma_pagamento.idTipoFormaPagamento " 
+                   + "AND lancamento_programado.idLancamentoProgramado in(" + addList(ids) + ") "
+                   + "ORDER BY lancamento_programado.dataVencimento"; 
+        return findAll(sql, null, lancamentoProgramadoHandler);
+    }
+
     public List<LancamentoProgramado> findAllAtivo(Date dataInicio, Date dataFim) throws Exception {
         String sql = "SELECT * FROM conta, lancamento_programado "
                    + "LEFT OUTER JOIN favorecido ON(lancamento_programado.idFavorecido = favorecido.idFavorecido) "

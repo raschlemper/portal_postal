@@ -295,7 +295,7 @@
                                                                                                 <a href="#" onclick="mostraListaColetador();
                                                                                                         return false;">Coletador</a>
                                                                                             </li>
-                                                                                            <li>
+                                                                                            <li id="bxColeta">
                                                                                                 <a href="#" onclick="mostraListaBaixa();
                                                                                                         return false;" >Status da Coleta</a>
                                                                                             </li> 
@@ -676,7 +676,7 @@
                                                                 }
                                                                 mostraBotoes();
                                                                 if ($('#listaColetas input:checked').length > 0) {
-
+                                                                    
                                                                 } else {
                                                                     if (($('#listaBaixa').is(":visible"))) {
                                                                         $('#listaBaixa').toggleClass('hidden');
@@ -690,11 +690,12 @@
                                                             }
 
                                                             function mostraBotoes() {
-
                                                                 if ($('#listaColetas input:checked').length > 0) {
-
                                                                     if (!($('#btMais').is(":visible"))) {
                                                                         $('#btMais').toggleClass('hidden');
+                                                                        if(isW) {
+                                                                            $('#bxColeta').toggleClass('hidden');
+                                                                        }
                                                                     }
                                                                     if (($('#rotaFixa').is(":visible"))) {
                                                                         $('#rotaFixa').toggleClass('hidden');
@@ -710,6 +711,9 @@
                                                                 } else {
                                                                     if (($('#btMais').is(":visible"))) {
                                                                         $('#btMais').toggleClass('hidden');
+                                                                        if ($('#bxColeta').hasClass('hidden')) {
+                                                                            $('#bxColeta').toggleClass('hidden');
+                                                                        }
                                                                     }
                                                                     if (($('#listaColetador').is(":visible"))) {
                                                                         $('#listaColetador').toggleClass('hidden');

@@ -147,4 +147,14 @@ public class GenericDAO {
         }
     }
     
+    public String addList(List<Integer> itens) {
+        StringBuilder sql = new StringBuilder();
+        for (int i = 0; i < itens.size(); i++) {
+            Integer item = itens.get(i);
+            if(i > 0) { sql.append(", "); }
+            sql.append(item);
+        }
+        return sql.toString();
+    }
+    
 }

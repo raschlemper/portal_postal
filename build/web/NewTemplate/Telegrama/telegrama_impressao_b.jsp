@@ -1,3 +1,6 @@
+<%@page import="Entidade.ClientesDeptos"%>
+<%@page import="Controle.ContrClienteDeptos"%>
+<%@page import="Controle.contrCliente"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="Entidade.Endereco"%>
 <%@page import="Entidade.TelegramaPostal"%>
@@ -33,15 +36,27 @@
                                 adicionais += "<br/>- CÓPIA DE TELEGRAMA - VIA " + t.getEnvioCopia() + ": " + t.getEmailCopia();
                             }
                             String msg = t.getMensagem().replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").replace("\n", "<br/>"); 
+                            String nomecliente = contrCliente.consultaNomeById(t.getIdCliente(), nomeBD);
+                            ClientesDeptos dep = ContrClienteDeptos.consultaDeptoById(t.getIdCliente(), t.getIdDepartamento(), nomeBD);
+                            String depto = "---";
+                                        if(dep != null){
+                                            depto = dep.getNomeDepartamento();
+                                        }
                     %>
                     <table width="100%" cellpadding="0" cellspacing="0" border="0">
                         <tbody>     
                             <tr>
                                 <td colspan="2" align="center">
                                     <h2>TELEGRAMA POSTAL</h2>
-                                    <hr/><br/>
+                                    <hr/>
                                 </td>
                             </tr>
+                            <tr>
+                                <td colspan="2">       
+                                    <b>Cliente:</b> <%= nomecliente %><br/>
+                                    <b>Departamento:</b> <%= depto %>
+                                    <hr/>
+                                </td>
                             <tr>
                                 <td style="width: 50%;">
                                     <b>Remetente:</b><br/>

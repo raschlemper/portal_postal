@@ -54,6 +54,17 @@ public class LancamentoDAO extends GenericDAO {
         return (Lancamento) find(sql, params, lancamentoHandler);
     }
 
+    public Lancamento findLastByLancamentoConciliado(Integer idConta) throws Exception {
+        String sql = "SELECT * FROM lancamento "
+                   + "WHERE numeroLoteConciliado IS NOT NULL "
+                   + "AND idConta = :idConta "
+                   + "ORDER BY dataLancamento DESC "
+                   + "LIMIT 1";
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("idConta", idConta);
+        return (Lancamento) find(sql, params, lancamentoHandler);
+    }
+
     public List<Lancamento> findLancamentoNotConciliadoByDataLancamento(Date data) throws Exception {
         String sql = "SELECT * FROM lancamento "
                    + "WHERE lancamento.dataLancamento <= :data";

@@ -61,7 +61,7 @@
                                             filter="filter" 
                                             search="lancSearch" 
                                             default-filter="true" 
-                                            order-by-column="data" 
+                                            order-by-column="dataLancamento" 
                                             show-checkbox="true"
                                             show-menu="true"
                                             show-column-menu="true"
@@ -125,22 +125,48 @@
                                             </div>
                                             <div class="title-table" ng-if="lancSearch.conta">
                                                 <strong><i>{{lancSearch.conta.nome}} 
-                                                        <span style="font-size: 11pt;" ng-show="lancSearch.conta.contaCorrente && lancSearch.conta.contaCorrente.banco && lancSearch.conta.contaCorrente.agencia && lancSearch.conta.contaCorrente.contaCorrente"> 
+                                                    <span style="font-size: 11pt;" ng-show="lancSearch.conta.contaCorrente && lancSearch.conta.contaCorrente.banco && lancSearch.conta.contaCorrente.agencia && lancSearch.conta.contaCorrente.contaCorrente"> 
                                                        - (Banco: {{lancSearch.conta.contaCorrente.banco.nome}} / Agência: {{lancSearch.conta.contaCorrente.agencia}}-{{lancSearch.conta.contaCorrente.agenciaDv}} / Conta: {{lancSearch.conta.contaCorrente.contaCorrente}}-{{lancSearch.conta.contaCorrente.contaCorrenteDv}})
-                                                   </span>
-                                                        <span ng-show="false">/ ({{lancSearch.conta.status.descricao}})</span>
+                                                    </span>
+                                                    <span ng-show="false">/ ({{lancSearch.conta.status.descricao}})</span>
+                                                    <br/>
+                                                    <span ng-if="lastLancamentoConciliado">
+                                                        <small style="font-size: 9pt;">Esta Conta esta reconciliada até a data {{ lastLancamentoConciliado.dataLancamento | date: 'dd/MM/yyyy' }}</small>
+                                                    </span>
                                                 </i></strong>
                                             </div>
                                         </div>
                                     </title-content>
                                     
                                      <rodape-content>
-                                         
-                                         <div class="col-md-12">
-                                             <span class="pull-right">
-                                                <label>Saldo Final:</label> {{saldoTotal | currency : ""}}
-                                             </span>
-                                         </div> 
+                                         <div class="col-md-offset-4 col-md-8" style="font-size: 8pt;">  
+                                            <div class="col-md-5">                                                
+                                                <span class="pull-right"><label>Total Crédito:</label></span>  
+                                            </div> 
+                                            <div class="col-md-1">                                                
+                                                <span class="pull-right">{{saldoCredito | currency : ""}}</span>              
+                                            </div>
+                                            <div class="col-md-5">                                                
+                                                <span class="pull-right"><label>Total Transferência Crédito:</label></span>  
+                                            </div> 
+                                            <div class="col-md-1">                                                
+                                                <span class="pull-right">{{saldoTransferenciaCredito | currency : ""}}</span>              
+                                            </div>
+                                        </div>
+                                        <div class="col-md-offset-4 col-md-8" style="font-size: 8pt; margin-bottom: 10px;">  
+                                            <div class="col-md-5">                                                
+                                                <span class="pull-right"><label>Total Débito:</label></span>  
+                                            </div> 
+                                            <div class="col-md-1">                                                
+                                                <span class="pull-right">{{saldoDebito | currency : ""}}</span>              
+                                            </div>
+                                            <div class="col-md-5">                                                
+                                                <span class="pull-right"><label>Total Transferência Débito:</label></span>  
+                                            </div> 
+                                            <div class="col-md-1">                                                
+                                                <span class="pull-right">{{saldoTransferenciaDebito | currency : ""}}</span>              
+                                            </div>
+                                        </div>
                                          
                                      </rodape-content>                                 
                                     

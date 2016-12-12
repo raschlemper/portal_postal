@@ -202,7 +202,7 @@
 			<staticText>
 				<reportElement x="0" y="222" width="54" height="11" uuid="7b86c7f4-8a23-4cdc-8008-74697eae35b4"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="8" isBold="true" isUnderline="false"/>
+					<font fontName="SansSerif" size="8" isBold="true" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[REMETENTE:]]></text>
 			</staticText>
@@ -211,14 +211,14 @@
 					<printWhenExpression><![CDATA[$F{contrato_ect}.equals("") && $F{sro}.length() < 13]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="8" isBold="true" isUnderline="false"/>
+					<font fontName="SansSerif" size="8" isBold="true" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[AVISTA]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="6" y="138" width="258" height="30" uuid="10f464c6-a219-4114-af05-5f1bd2a5816c"/>
+				<reportElement x="6" y="139" width="258" height="30" uuid="10f464c6-a219-4114-af05-5f1bd2a5816c"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="8"/>
+					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{destinatario_logradouro}+", "+$F{destinatario_numero}+
 "\n"+$F{destinatario_complemento}+"\n"+$F{destinatario_bairro}]]></textFieldExpression>
@@ -228,14 +228,14 @@
 					<printWhenExpression><![CDATA[$F{peso} > 0]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="8" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{peso}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="151" y="0" width="65" height="11" uuid="4649c0dc-aab2-4edb-807e-e798aa3f9324"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="8"/>
+					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA["NF: " + $F{nota_fiscal}]]></textFieldExpression>
 			</textField>
@@ -244,7 +244,7 @@
 					<printWhenExpression><![CDATA[$F{vd} > 0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["*"]]></textFieldExpression>
 			</textField>
@@ -253,7 +253,7 @@
 					<printWhenExpression><![CDATA[!$F{contrato_ect}.equals("")]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="8" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Contrato: " + $F{contrato_ect}]]></textFieldExpression>
 			</textField>
@@ -266,7 +266,7 @@
 			<staticText>
 				<reportElement x="151" y="20" width="35" height="11" uuid="ba7ea76c-e7dc-476c-9d42-c8d692c6b5ec"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="8" isBold="false"/>
+					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Peso (g):]]></text>
 			</staticText>
@@ -275,23 +275,23 @@
 					<printWhenExpression><![CDATA[$F{rm} == 1]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["RM"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="65" y="52" width="121" height="13" uuid="667f230a-4d72-4f50-9eef-730ba473e731">
+				<reportElement x="65" y="51" width="151" height="14" uuid="667f230a-4d72-4f50-9eef-730ba473e731">
 					<printWhenExpression><![CDATA[$F{sro}.length() == 13]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font fontName="Arial" size="11" isBold="true"/>
+					<font fontName="SansSerif" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{sro}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="54" y="222" width="192" height="11" uuid="95b000e1-9133-4377-ac58-02edc3943229"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="8" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{remetente_nome}]]></textFieldExpression>
 			</textField>
@@ -310,28 +310,28 @@
 			<textField>
 				<reportElement mode="Opaque" x="244" y="222" width="23" height="45" forecolor="#FFFFFF" backcolor="#000000" uuid="1c6946ca-1059-485c-919d-65e3101a7a84"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
-					<font fontName="Arial" size="18" isBold="true"/>
+					<font fontName="SansSerif" size="18" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{sigla_triagem}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="47" y="256" width="197" height="10" uuid="6262ee18-0001-4df2-84c7-53e620303e0f"/>
+				<reportElement x="60" y="256" width="184" height="11" uuid="6262ee18-0001-4df2-84c7-53e620303e0f"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="7"/>
+					<font fontName="SansSerif" size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{remetente_cidade}+" / "+$F{remetente_uf}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="6" y="167" width="52" height="12" uuid="96a28a4a-8aad-4233-9768-f6c985c79911"/>
+				<reportElement x="6" y="167" width="70" height="12" uuid="96a28a4a-8aad-4233-9768-f6c985c79911"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="9" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{destinatario_cep}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="200" y="178" width="64" height="11" uuid="2943b549-14c4-45ba-8714-cab4d7b54beb"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial" size="7"/>
+					<font fontName="SansSerif" size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{destinatario_celular}]]></textFieldExpression>
 			</textField>
@@ -340,21 +340,21 @@
 					<printWhenExpression><![CDATA[$F{pr} == 1]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["PR"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="118" width="80" height="10" forecolor="#FFFFFF" backcolor="#000000" uuid="f962cb95-415a-49cc-b66f-a78cc4919820"/>
+				<reportElement mode="Opaque" x="0" y="118" width="90" height="11" forecolor="#FFFFFF" backcolor="#000000" uuid="f962cb95-415a-49cc-b66f-a78cc4919820"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="8" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[DESTINATÁRIO]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="0" y="256" width="47" height="10" uuid="c770d75d-5dd4-4d1b-8dd2-ecbfa0199fd6"/>
+				<reportElement x="0" y="256" width="60" height="11" uuid="c770d75d-5dd4-4d1b-8dd2-ecbfa0199fd6"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="8" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{remetente_cep}]]></textFieldExpression>
 			</textField>
@@ -363,14 +363,14 @@
 					<printWhenExpression><![CDATA[$F{mp} == 1]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["MP"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="151" y="10" width="65" height="11" uuid="31ae9afe-c830-4f47-b76a-ed4a4afda7f2"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="8"/>
+					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA["PP: "+$F{id_pp}]]></textFieldExpression>
 			</textField>
@@ -379,21 +379,21 @@
 					<printWhenExpression><![CDATA[$F{ar} == 1]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["AR"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="114" y="178" width="86" height="11" uuid="c3101cea-0eb4-4100-99e9-201ef4a371dd"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="7"/>
+					<font fontName="SansSerif" size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{destinatario_pais}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="232" width="244" height="10" uuid="3278f18e-05c4-48ae-a4b2-2f2b313bc475"/>
 				<textElement>
-					<font fontName="Arial" size="7"/>
+					<font fontName="SansSerif" size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{remetente_departamento}+" - "+$F{remetente_complemento}]]></textFieldExpression>
 			</textField>
@@ -402,14 +402,14 @@
 					<printWhenExpression><![CDATA[$F{destinatario_documento} != null && !$F{destinatario_documento}.equals("")]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="7"/>
+					<font fontName="SansSerif" size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA["CPF/CNPJ: " + $F{destinatario_documento}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="58" y="167" width="206" height="12" uuid="34bd4214-371e-4e0c-b58f-997d0a8d66d8"/>
+				<reportElement x="76" y="167" width="188" height="12" uuid="34bd4214-371e-4e0c-b58f-997d0a8d66d8"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="8"/>
+					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{destinatario_cidade}.concat(" / " + $F{destinatario_uf})]]></textFieldExpression>
 			</textField>
@@ -424,7 +424,7 @@
 			<textField pattern="">
 				<reportElement x="0" y="241" width="244" height="16" uuid="4feb2349-cd98-406b-9e9b-e53327530f0c"/>
 				<textElement>
-					<font fontName="Arial" size="7"/>
+					<font fontName="SansSerif" size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{remetente_logradouro}+" "+$F{remetente_bairro}]]></textFieldExpression>
 			</textField>
@@ -433,31 +433,31 @@
 					<printWhenExpression><![CDATA[$F{grupo_servico}.equals("SEDEXC") || $F{grupo_servico}.equals("PAC_COB")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial" size="7"/>
+					<font fontName="SansSerif" size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA["COBRAR: R$ " + $F{valor_cobrar}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="65" y="30" width="76" height="11" uuid="a3163ff3-26e0-4375-97b5-c54820ec7216"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="8" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{grupo_servico}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement x="114" y="196" width="150" height="26" uuid="cf0a1d9c-bc70-49c3-b71d-e62adcf793ba"/>
 				<textElement>
-					<font fontName="Arial" size="6"/>
+					<font fontName="SansSerif" size="6"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Obs: "+$F{observacao}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="6" y="127" width="258" height="12" uuid="50567adf-521a-443a-981f-4f0c6a951958"/>
+			<textField>
+				<reportElement x="6" y="128" width="258" height="12" uuid="50567adf-521a-443a-981f-4f0c6a951958"/>
 				<textElement verticalAlignment="Middle" markup="none">
-					<font fontName="Arial" size="8"/>
+					<font fontName="SansSerif" size="8"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{destinatario_nome} + " " + $F{aos_cuidados}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{destinatario_nome} ]]></textFieldExpression>
 			</textField>
 			<image vAlign="Middle" onErrorType="Blank">
 				<reportElement x="65" y="0" width="76" height="20" uuid="941cc194-8779-4521-9a11-8c63164a0ffd"/>
@@ -468,9 +468,17 @@
 					<printWhenExpression><![CDATA[!$F{contrato_ect}.equals("")]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="8" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Cartão Postagem: " + $F{cartao_postagem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="118" width="174" height="11" uuid="1dfb111f-c9d9-407e-9dac-4661d21f4d9d"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{aos_cuidados}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

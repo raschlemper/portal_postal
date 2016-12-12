@@ -34,14 +34,21 @@ public class LancamentoConciliadoService {
         return lancamentoConciliadoDAO.findByData(data);
     } 
 
-    public LancamentoConciliado findByLote(Integer numeroLote) throws Exception {
+    public LancamentoConciliado findLancamentoByLote(Integer numeroLote) throws Exception {
         init();
-        return lancamentoConciliadoDAO.findByLote(numeroLote);
+        return lancamentoConciliadoDAO.findLancamentoByLote(numeroLote);
     }
     
     public LancamentoConciliado find(Integer idLancamentoConciliado) throws Exception {
         init();
         return lancamentoConciliadoDAO.find(idLancamentoConciliado);
+    } 
+    
+    public LancamentoConciliado findLastByConta(Integer idConta) throws Exception {
+        init();
+        Lancamento lancamento = lancamentoService.findLastByLancamentoConciliado(idConta);
+        if(lancamento == null) return null;
+        return lancamentoConciliadoDAO.findByLote(lancamento.getNumeroLoteConciliado());
     } 
     
     public LancamentoConciliado save(LancamentoConciliado lancamentoConciliado) throws Exception {

@@ -78,6 +78,18 @@ public class LancamentoConciliadoController {
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
+    }   
+    
+    @GET
+    @Path("/conta/{idConta}/last")
+    @Produces(MediaType.APPLICATION_JSON)
+    public LancamentoConciliado findLastByConta(@PathParam("idConta") Integer idConta) {
+        try {
+            init();    
+            return lancamentoConciliadoService.findLastByConta(idConta);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
     }  
     
     @POST

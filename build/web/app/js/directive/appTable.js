@@ -204,9 +204,9 @@ app.directive('appTable', function($filter, LISTAS) {
                         if(!scope.footer[key]) return;
                         if(scope.footer[key].show) { 
                             if(scope.footer[key].callback) {
-                                scope.footer[key].value = scope.footer[key].callback(scope.footer[key], value);
+                                scope.footer[key].value = scope.footer[key].callback(scope.footer[key], value, listaFiltrada);
                             } else {
-                                scope.footer[key].value += value;
+                                scope.footer[key].value += (_.isNumber(value) && value) || 0;
                             }
                         } else {
                             scope.footer[key].value = null;                        
@@ -223,7 +223,7 @@ app.directive('appTable', function($filter, LISTAS) {
             
             scope.$watchCollection('listaFiltrada', function(newValue, oldValue) {
                 reset();
-            });
+            }); 
             
             scope.$watch('currentPage', function(newValue, oldValue) {
                 if(newValue === oldValue) return;

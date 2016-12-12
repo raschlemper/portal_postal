@@ -3,11 +3,11 @@
 app.controller('LancamentoProgramadoController', 
     ['$scope', '$filter', '$state', 'LancamentoProgramadoService', 'ContaService', 'PlanoContaService', 'CentroCustoService', 'LancamentoProgramadoTransferenciaService',
      'FrequenciaLancamentoService', 'ConfiguracaoService', 'ReportService', 'ModalService', 'DatePickerService', 'PeriodoService', 'LancamentoProgramadoHandler', 
-     'LancamentoProgramadoParcelaHandler', 'LancamentoProgramadoRateioHandler', 'LancamentoProgramadoTransferenciaHandler', 'LancamentoHandler', 'FinanceiroValidation', 
-     'ListaService', 'LISTAS', 'MESSAGES',
+     'LancamentoProgramadoParcelaHandler', 'LancamentoProgramadoRateioHandler', 'LancamentoProgramadoTransferenciaHandler', 'LancamentoHandler', 'LancamentoRateioHandler',
+     'FinanceiroValidation', 'ListaService', 'LISTAS', 'MESSAGES',
     function ($scope, $filter, $state, LancamentoProgramadoService, ContaService, PlanoContaService, CentroCustoService, LancamentoProgramadoTransferenciaService,
         FrequenciaLancamentoService, ConfiguracaoService, ReportService, ModalService, DatePickerService, PeriodoService, LancamentoProgramadoHandler, LancamentoProgramadoParcelaHandler, 
-        LancamentoProgramadoRateioHandler, LancamentoProgramadoTransferenciaHandler, LancamentoHandler, FinanceiroValidation, ListaService, LISTAS, MESSAGES) {
+        LancamentoProgramadoRateioHandler, LancamentoProgramadoTransferenciaHandler, LancamentoHandler, LancamentoRateioHandler, FinanceiroValidation, ListaService, LISTAS, MESSAGES) {
 
         var init = function () {
             $scope.lancamentoProgramados = [];
@@ -21,7 +21,11 @@ app.controller('LancamentoProgramadoController',
             $scope.tiposLancamento = [];
 //            $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
 //            $scope.datepickerDataFim = angular.copy(DatePickerService.default);  
-            $scope.outOfRangePeriodo = false;
+            $scope.outOfRangePeriodo = false; 
+            $scope.saldoDebito = 0;
+            $scope.saldoCredito = 0;
+            $scope.saldoTransferenciaDebito = 0;
+            $scope.saldoTransferenciaCredito = 0;
             $scope.lancSearch = {};
             getTitle();
             createListTipoLancamento();
@@ -35,15 +39,18 @@ app.controller('LancamentoProgramadoController',
             $scope.colunas = [              
                 {label: '', column: 'tipo', headerClass: 'no-sort', dataClass:'text-center col-tipo', filter: {name: 'tipoLancamento', args: ''}},       
                 {label: 'Conta', column: 'conta.nome', showColumn: true, selected: false},                      
-                {label: 'Vencimento', column: 'dataVencimento', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
+                {label: 'Vencimento', column: 'dataVencimento',dataClass: 'text-center cel-data', filter: {name: 'date', args: 'dd/MM/yyyy'}},                
                 {label: 'Número', column: 'numero'},         
                 {label: 'Plano Conta', column: 'planoConta.descricao'},   
                 {label: 'Centro Custo', column: 'centroCusto.descricao', showColumn: true, selected: false},  
                 {label: 'Usuário', column: 'usuario', showColumn: true, selected: false},           
-                {label: 'Favorecido', column: 'favorecido'},  
-                {label: 'Valor', column: 'valor', headerClass: 'no-sort', filter: {name: 'currency', args: ''}},              
+                {label: 'Favorecido', column: 'favorecido'},   
                 {label: 'Situação', column: 'situacao.descricao'},  
-                {label: 'Frequência', column: 'frequencia.descricao'}
+                {label: 'Frequência', column: 'frequencia.descricao'},
+                {label: 'Crédito', column: 'deposito', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}, 
+                    footer: { show: true, callback: null, dataClass: 'text-right', filter: {name: 'currency', args: '' }} },  
+                {label: 'Débito', column: 'pagamento', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}, 
+                    footer: { show: true, callback: null, dataClass: 'text-right', filter: {name: 'currency', args: '' }} }
             ]            
             $scope.linha = {
                 conditionalClass: function(item) {
@@ -282,6 +289,8 @@ app.controller('LancamentoProgramadoController',
         
         var criarLancamentoProgramadosLista = function(lancamentosProgramados) {
             return _.map(lancamentosProgramados, function(lancamentoProgramado) {  
+
+                defineLancamentosSaldo(lancamentoProgramado);
                 
                 lancamentoProgramado.tipo.modelo = lancamentoProgramado.modelo;
                 
@@ -333,8 +342,27 @@ app.controller('LancamentoProgramadoController',
 //                lancamentoProgramado.tipo.modelo = $scope.modelos;
                 
                 return _.pick(lancamentoProgramado, 'idLancamentoProgramado', 'conta', 'tipo', 'tipoLancamento', 'dataVencimento', 'numero', 
-                'planoConta', 'centroCusto', 'usuario', 'favorecido', 'valor', 'situacao', 'frequencia', 'existeLancamento');
+                'planoConta', 'centroCusto', 'usuario', 'favorecido', 'deposito', 'pagamento', 'situacao', 'frequencia', 'existeLancamento');
             })
+        };
+
+        var defineLancamentosSaldo = function(lancamento) {
+            if(lancamento.tipo.id === $scope.tipos[1].id) { 
+                var valor = (lancamento.valor || lancamento.pagamento * -1);
+                valor = (_.isNumber(valor) && valor) || 0;
+                lancamento.pagamento = valor * -1;
+                lancamento.deposito = null;                
+                if(lancamento.modelo.id === 1 || lancamento.modelo.id === 3) { $scope.saldoTransferenciaDebito += valor; }
+                else { $scope.saldoDebito += valor; }
+            } 
+            else if(lancamento.tipo.id === $scope.tipos[0].id) {                
+                var valor = (lancamento.valor || lancamento.deposito);
+                valor = (_.isNumber(valor) && valor) || 0;
+                lancamento.deposito = valor; 
+                lancamento.pagamento = null;                
+                if(lancamento.modelo.id === 1 || lancamento.modelo.id === 3) { $scope.saldoTransferenciaCredito += valor; }
+                else { $scope.saldoCredito += valor; }
+            }  
         };
         
         var getSaldoLancamentoProgramadoParcelado = function(lancamentoProgramado) {
@@ -475,8 +503,8 @@ app.controller('LancamentoProgramadoController',
         };
         
         var create = function(conta, lancamentoProgramado, showMsg) { 
-            lancamentoProgramado = ajustarLancamentoProgramadoFrequencia(lancamentoProgramado);
-            encerrarLancamentoProgramado(lancamentoProgramado, lancamentoProgramado.lancamentos[0]); 
+            lancamentoProgramado = LancamentoProgramadoService.ajustarLancamentoProgramadoFrequencia(lancamentoProgramado);
+            LancamentoProgramadoService.encerrarLancamentoProgramado(lancamentoProgramado, lancamentoProgramado.lancamentos[0]); 
             LancamentoProgramadoService.create(lancamentoProgramado)
                 .then(function(data) {  
                     if(showMsg) {
@@ -488,6 +516,37 @@ app.controller('LancamentoProgramadoController',
                     modalMessage(e);
                 });
         };
+        
+        // ***** GERAR TODOS ***** //
+
+        $scope.gerarTodos = function(conta, lancamentos) {
+            var lancamentoSelecionados = getLancamentoProgramadosSelecionados(conta, lancamentos);   
+            if(!existeLancamentoSelecionado(lancamentoSelecionados)) return;
+            gerarTodos(conta, lancamentoSelecionados);
+        }; 
+        
+        var gerarTodos = function(conta, lancamentoSelecionados) {
+            modalGerar(conta, lancamentoSelecionados)
+                .then(function(lancamentos) {
+                    createAll(conta, lancamentos);
+                });
+        };
+        
+        var createAll = function(conta, lancamentosProgramados) {
+//            lancamentosProgramados = _.map(lancamentosProgramados, function(lancamentoProgramado) {
+//                var lancamento = $scope.getLancamento(lancamentoProgramado, parcela, $scope.modelos[4]);
+//                return ajustarLancamento(lancamento);
+//                return ajustarDados(lancamentoProgramado);
+//            });
+            LancamentoProgramadoService.createAll(lancamentosProgramados)
+                .then(function(data) { 
+//                    modalMessage(MESSAGES.lancamento.programar.sucesso.GERADO_SUCESSO_TODOS);
+                    todosByConta(conta);                        
+                })
+                .catch(function(e) {
+                    modalMessage(e);
+                });            
+        }
         
         // ***** EXCLUIR ***** //
         
@@ -618,15 +677,6 @@ app.controller('LancamentoProgramadoController',
                     });        
             }
         }
-        
-        var encerrarLancamentoProgramado = function(lancamentoProgramado, lancamento) {
-            if(lancamentoProgramado.frequencia === 0) { // Único
-                lancamentoProgramado.situacao = $scope.situacoes[2].id;
-            }
-            if(lancamento.numeroParcela === lancamentoProgramado.quantidadeParcela) {
-                lancamentoProgramado.situacao = $scope.situacoes[2].id;                
-            }            
-        };
 
         // ***** MOVER ***** //
 
@@ -692,6 +742,13 @@ app.controller('LancamentoProgramadoController',
             return lancamentoProgramado;
         } 
         
+        var ajustarLancamento = function(lancamento) { 
+            lancamento.historico = '(' + lancamento.modelo.descricao + ') ' + (lancamento.historico || "");
+            var lancamentoHandle = LancamentoHandler.handle(lancamento);
+            lancamentoHandle.rateios = LancamentoRateioHandler.handleList(lancamento.rateios);
+            return lancamentoHandle;
+        };
+        
         var ajustarDadosLancamentos = function(lancamentos) {
             var lancamentoList = [];
             _.map(lancamentos, function(lancamento) {
@@ -731,30 +788,6 @@ app.controller('LancamentoProgramadoController',
             lancamentoProgramado.lancamentos = [];
             lancamentoProgramado.lancamentos.push(lancamentoHandle);
         };
-        
-        var ajustarLancamentoProgramadoFrequencia = function(lancamentoProgramado) {             
-            if((lancamentoProgramado.parcelas && lancamentoProgramado.parcelas.length)) {
-                lancamentoProgramado.dataCompetencia = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataCompetencia) || moment();
-                lancamentoProgramado.dataVencimento = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataVencimento) || moment();
-                var parcela = getFirstParcelaAberta(lancamentoProgramado);
-                if(parcela) { lancamentoProgramado.dataVencimento = parcela.dataVencimento || moment(); } 
-            } else {
-                lancamentoProgramado.dataCompetencia = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataCompetencia) || moment();
-                lancamentoProgramado.dataVencimento = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataVencimento) || moment();
-            }
-            return lancamentoProgramado;
-        };
-        
-        var getFirstParcelaAberta = function(lancamentoProgramado) {
-            var numeroParcela = 0
-            if(lancamentoProgramado.lancamentos && lancamentoProgramado.lancamentos.length){
-                numeroParcela = lancamentoProgramado.lancamentos[0].numeroParcela;
-            };
-            var parcelas = lancamentoProgramado.parcelas || [];
-            return _.find(parcelas, function(parcela) { 
-                return !parcela.lancamento && numeroParcela !== parcela.numero; 
-            });
-        }
         
         // ***** MODAL ***** //
         
@@ -804,6 +837,19 @@ app.controller('LancamentoProgramadoController',
                     conta: function() {
                         return conta;
                     }                
+                });
+            return modalInstance.result;
+        };
+
+        var modalGerar = function(conta, lancamentos) {
+            var modalInstance = ModalService.modalDefault('partials/financeiro/lancamentoProgramado/modalLancamentoProgramadoGerarTodos.html', 'ModalLancamentoProgramadoGerarTodosController', 'md', 
+                {
+                    conta: function() {
+                        return conta;
+                    },
+                    lancamentos: function() {
+                        return lancamentos;                        
+                    }
                 });
             return modalInstance.result;
         };

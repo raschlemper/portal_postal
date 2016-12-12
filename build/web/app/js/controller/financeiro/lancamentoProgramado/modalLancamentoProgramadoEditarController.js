@@ -46,7 +46,7 @@ app.controller('ModalLancamentoProgramadoEditarController',
             });
             if(lancamento.numeroParcela) return lancamento.numeroParcela + 1;
             return 1;
-        }
+        };
         
         var contas = function() {
             ContaService.getAll()

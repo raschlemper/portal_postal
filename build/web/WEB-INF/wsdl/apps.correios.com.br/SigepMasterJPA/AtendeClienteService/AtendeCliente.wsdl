@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://cliente.bean.master.sigep.bsb.correios.com.br/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="AtendeClienteService" targetNamespace="http://cliente.bean.master.sigep.bsb.correios.com.br/">
   <wsdl:types>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://cliente.bean.master.sigep.bsb.correios.com.br/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://cliente.bean.master.sigep.bsb.correios.com.br/">
-  <xs:element name="atualizaPLP" type="tns:atualizaPLP"/>
-  <xs:element name="atualizaPLPResponse" type="tns:atualizaPLPResponse"/>
   <xs:element name="bloquearObjeto" type="tns:bloquearObjeto"/>
   <xs:element name="bloquearObjetoResponse" type="tns:bloquearObjetoResponse"/>
   <xs:element name="buscaCliente" type="tns:buscaCliente"/>
@@ -873,20 +871,6 @@
       <xs:element minOccurs="0" name="return" type="xs:boolean"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="atualizaPLP">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="idPlpMaster" type="xs:long"/>
-      <xs:element minOccurs="0" name="numEtiqueta" type="xs:string"/>
-      <xs:element minOccurs="0" name="usuario" type="xs:string"/>
-      <xs:element minOccurs="0" name="senha" type="xs:string"/>
-      <xs:element minOccurs="0" name="xml" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="atualizaPLPResponse">
-    <xs:sequence>
-      <xs:element name="return" type="xs:boolean"/>
-    </xs:sequence>
-  </xs:complexType>
   <xs:complexType name="obterAssuntosPI">
     <xs:sequence/>
   </xs:complexType>
@@ -1015,10 +999,6 @@
     <wsdl:part element="tns:buscaPagamentoEntregaResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="atualizaPLP">
-    <wsdl:part element="tns:atualizaPLP" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="buscaServicosResponse">
     <wsdl:part element="tns:buscaServicosResponse" name="parameters">
     </wsdl:part>
@@ -1069,10 +1049,6 @@
   </wsdl:message>
   <wsdl:message name="Exception">
     <wsdl:part element="tns:Exception" name="Exception">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="atualizaPLPResponse">
-    <wsdl:part element="tns:atualizaPLPResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="obterClienteAtualizacaoResponse">
@@ -1554,16 +1530,6 @@
       <wsdl:fault message="tns:SigepClienteException" name="SigepClienteException">
     </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="atualizaPLP">
-      <wsdl:input message="tns:atualizaPLP" name="atualizaPLP">
-    </wsdl:input>
-      <wsdl:output message="tns:atualizaPLPResponse" name="atualizaPLPResponse">
-    </wsdl:output>
-      <wsdl:fault message="tns:AutenticacaoException" name="AutenticacaoException">
-    </wsdl:fault>
-      <wsdl:fault message="tns:SigepClienteException" name="SigepClienteException">
-    </wsdl:fault>
-    </wsdl:operation>
     <wsdl:operation name="obterAssuntosPI">
       <wsdl:input message="tns:obterAssuntosPI" name="obterAssuntosPI">
     </wsdl:input>
@@ -1999,21 +1965,6 @@
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="integrarUsuarioScolResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-      <wsdl:fault name="AutenticacaoException">
-        <soap:fault name="AutenticacaoException" use="literal"/>
-      </wsdl:fault>
-      <wsdl:fault name="SigepClienteException">
-        <soap:fault name="SigepClienteException" use="literal"/>
-      </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="atualizaPLP">
-      <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="atualizaPLP">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="atualizaPLPResponse">
         <soap:body use="literal"/>
       </wsdl:output>
       <wsdl:fault name="AutenticacaoException">

@@ -152,8 +152,8 @@ public class Conexao {
                 //HOST = props.getProperty("DatabaseHost", "mysql-01.scc4.com.br");
                 HOST = props.getProperty("DatabaseHost", "localhost");
                 PORT = props.getProperty("DatabasePort", "3306");
-                USER = props.getProperty("DatabaseUser", "smart_bd");
-                PASS = props.getProperty("DatabasePass", "33m.SMRT");
+                USER = props.getProperty("DatabaseUser", "root");
+                PASS = props.getProperty("DatabasePass", "123456");
 
             }
         } catch (Exception e) {

@@ -38,7 +38,7 @@
         String lp = request.getParameter("lp");
         String conteudo = request.getParameter("conteudo");
         String observacao = request.getParameter("observacao");
-        
+
         String late = request.getParameter("atrasado");
 
         String tpFat = request.getParameter("tipoFat");
@@ -51,14 +51,12 @@
                 + " FROM movimentacao"
                 + " LEFT JOIN movimentacao_tracking AS mt ON movimentacao.numObjeto = mt.numObjeto"
                 + " WHERE codCliente = " + idCliente;
-        
-       
-        
+
         if (dataInicio.length() == 10 && dataFinal.length() == 10) {
             sql += " AND (dataPostagem BETWEEN '" + vDataInicio + "' AND '" + vDataFinal + "')";
         }
         if (!situacao.equals("")) {
-                //if (!situacao.equals("0")) {
+            //if (!situacao.equals("0")) {
             //sql += " AND status LIKE '" + situacao + "'"; //TROCAR DEPOIS PARA COD_STATUS
             sql += situacao; //TROCAR DEPOIS PARA COD_STATUS
         }
@@ -103,20 +101,17 @@
         }
         if (vd.equals("true")) {
             sql += " AND siglaServAdicionais LIKE '%VD%'";
-        } 
-        if (late.equals("true")) {
-            sql += " AND prazo_cumprido > prazo_estimado ";
-        }
+        }       
         if (!lp.equals("")) {
             sql += " AND idOS = " + lp + "";
         }
-        
-       if(!conteudo.isEmpty()){
-            sql += "AND movimentacao.conteudoObjeto LIKE '%"+conteudo+"%' ";
+
+        if (!conteudo.isEmpty()) {
+            sql += "AND movimentacao.conteudoObjeto LIKE '%" + conteudo + "%' ";
         }
-        
-        if(!observacao.isEmpty()){
-            sql += "AND movimentacao.obs LIKE '%"+observacao+"%' ";
+
+        if (!observacao.isEmpty()) {
+            sql += "AND movimentacao.obs LIKE '%" + observacao + "%' ";
         }
 
         if (!tpFat.equals("")) {
@@ -128,6 +123,11 @@
         BigDecimal vlrTotal = new BigDecimal(0);
         BigDecimal vlrDecTotal = new BigDecimal(0);
         BigDecimal vlrCobTotal = new BigDecimal(0);
+
+        boolean filtraAtrasado = false;
+        if (late.equals("true")) {
+            filtraAtrasado = true;
+        }
 
         if (movimentacao.size() >= 1) {
 %>
@@ -182,35 +182,35 @@
         <thead>
             <tr>
                 <th width='10' class="nosort"><h3></h3></th>
-        <th width='100'><h3>OBJETO</h3></th>
-        <th><h3>SERVIÇO</h3></th>
-        <th width='30'><h3>PESO</h3></th>
-        <th width='30'><h3>QTD</h3></th>
-        <th width='50'><h3>POSTAGEM</h3></th>
-        <th width='120'><h3>DIMENSÕES</h3></th>
-        <%if (acessosUs.contains(3)) {%>
-        <th width='50'><h3>VALOR</h3></th>
-        <th width='50'><h3>DECLARADO</h3></th>
-        <th width='90'><h3>A COBRAR</h3></th>
-        <%}%>
-        <th><h3>DESTINATÁRIO</h3></th>
-        <th width='80'><h3>CEP</h3></th>
-        <th><h3>SITUAÇÃO</h3></th>
-        <th nowrap="true"><h3>DATA SIT.</h3></th>
-        <th width='80'><h3>NF</h3></th>
-        <th width='100'><h3>DEPARTAMENTO</h3></th>
-        <th width='80'><h3>ADICIONAIS</h3></th>
-        <th width='80'><h3>CONTEÚDO</h3></th>
-        <th width='120'><h3>CONTRATO ECT</h3></th>
-        <th width='50'><h3>DESTINO</h3></th>
-        <th width='50'><h3>PV</h3></th>
-        <th width='50'><h3>L. POST</h3></th>
-        <%if (acessosUs.contains(8)) {%>
-        <th width='50'><h3>PRAZO EST.</h3></th>
-        <th width='50'><h3>PRAZO REAL</h3></th>
-        <%}%>
-        <th width='100'><h3>OBS.</h3></th>
-        </tr>
+                <th width='100'><h3>OBJETO</h3></th>
+                <th><h3>SERVIÇO</h3></th>
+                <th width='30'><h3>PESO</h3></th>
+                <th width='30'><h3>QTD</h3></th>
+                <th width='50'><h3>POSTAGEM</h3></th>
+                <th width='120'><h3>DIMENSÕES</h3></th>
+                    <%if (acessosUs.contains(3)) {%>
+                <th width='50'><h3>VALOR</h3></th>
+                <th width='50'><h3>DECLARADO</h3></th>
+                <th width='90'><h3>A COBRAR</h3></th>
+                    <%}%>
+                <th><h3>DESTINATÁRIO</h3></th>
+                <th width='80'><h3>CEP</h3></th>
+                <th><h3>SITUAÇÃO</h3></th>
+                <th nowrap="true"><h3>DATA SIT.</h3></th>
+                <th width='80'><h3>NF</h3></th>
+                <th width='100'><h3>DEPARTAMENTO</h3></th>
+                <th width='80'><h3>ADICIONAIS</h3></th>
+                <th width='80'><h3>CONTEÚDO</h3></th>
+                <th width='120'><h3>CONTRATO ECT</h3></th>
+                <th width='50'><h3>DESTINO</h3></th>
+                <th width='50'><h3>PV</h3></th>
+                <th width='50'><h3>L. POST</h3></th>
+                    <%if (acessosUs.contains(8)) {%>
+                <th width='50'><h3>PRAZO EST.</h3></th>
+                <th width='50'><h3>PRAZO REAL</h3></th>
+                    <%}%>
+                <th width='100'><h3>OBS.</h3></th>
+            </tr>
         </thead>
         <tbody>
             <%
@@ -248,13 +248,13 @@
                     String pz_estimado = "---";
                     String pz_cumprido = "---";
                     String atrasado = "";
-                    
-                    if(acessosUs.contains(8)){
+
+                    if (acessosUs.contains(8)) {
                         if (mov.getPrazo_estimado() != null) {
                             ContrReclamacao cr = new ContrReclamacao();
                             Calendar novadataPrevisaoEntrega = cr.recalculaDataEstimada(cr.dateToCalendar(mov.getDataPostagem()), cr.dateToCalendar(mov.getPrazo_estimado()), "");
-                            if(novadataPrevisaoEntrega != null){
-                                mov.setPrazo_estimado(novadataPrevisaoEntrega.getTime());                    
+                            if (novadataPrevisaoEntrega != null) {
+                                mov.setPrazo_estimado(novadataPrevisaoEntrega.getTime());
                             }
                         }
                         if (mov.getPrazo_estimado() != null && mov.getPrazo_cumprido_date() != null) {
@@ -316,6 +316,13 @@
                     }
 
                     String dimensoes = (int) mov.getAltura() + " x " + (int) mov.getLargura() + " x " + (int) mov.getComprimento() + " cm";
+                  
+                    boolean filtrar = false;
+                    if (filtraAtrasado && atrasado.equals("")) {
+
+                        filtrar = true;
+                    }
+                    if (!filtrar) {
             %>
             <tr align='center' style="font-size: 10px; <%= atrasado%> ">
                 <td><img class="link_img" src="<%= img_status%>" /></td>
@@ -351,9 +358,10 @@
                 <td><%= pz_estimado%></td>
                 <td><%= pz_cumprido%></td>
                 <%}%>
-                <td><%= mov.getObs() %></td>
+                <td><%= mov.getObs()%></td>
             </tr>
-            <%}%>
+            <%}
+                }%>
         </tbody>
         <tfoot>
             <tr style="background: #f0f0f0; color:red; font-size: 12px;">

@@ -54,10 +54,18 @@ public class LancamentoConciliadoDAO extends GenericDAO {
         return (Integer) find(sql, null, Integer.class);
     }
 
-    public LancamentoConciliado findByLote(Integer numeroLote) throws Exception {
+    public LancamentoConciliado findLancamentoByLote(Integer numeroLote) throws Exception {
         String sql = "SELECT * FROM lancamento_conciliado, lancamento "
                    + "WHERE lancamento_conciliado.idLancamento = lancamento.idLancamento "
                    + "AND numeroLote = :numeroLote";
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("numeroLote", numeroLote);
+        return (LancamentoConciliado) find(sql, params, lancamentoConciliadoHandler);
+    }
+
+    public LancamentoConciliado findByLote(Integer numeroLote) throws Exception {
+        String sql = "SELECT * FROM lancamento_conciliado "
+                   + "WHERE numeroLote = :numeroLote";
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("numeroLote", numeroLote);
         return (LancamentoConciliado) find(sql, params, lancamentoConciliadoHandler);

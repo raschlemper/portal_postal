@@ -61,16 +61,32 @@
 		<variableExpression><![CDATA[($F{compensado} ? "C" : "")]]></variableExpression>
 	</variable>
 	<variable name="valorCredito" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[($F{deposito} == null ? 0D : $F{deposito})]]></variableExpression>
-		<initialValueExpression><![CDATA[($F{deposito} == null ? 0D : $F{deposito})]]></initialValueExpression>
+		<variableExpression><![CDATA[($F{modelo}.intValue() == 1 || $F{modelo}.intValue() == 3 ? 0D :
+    ($F{deposito} == null ? 0D : $F{deposito}))]]></variableExpression>
+		<initialValueExpression><![CDATA[($F{modelo}.intValue() == 1 || $F{modelo}.intValue() == 3 ? 0D :
+    ($F{deposito} == null ? 0D : $F{deposito}))]]></initialValueExpression>
 	</variable>
 	<variable name="valorDebito" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[($F{pagamento} == null ? 0D : $F{pagamento})]]></variableExpression>
-		<initialValueExpression><![CDATA[($F{pagamento} == null ? 0D : $F{pagamento})]]></initialValueExpression>
+		<variableExpression><![CDATA[($F{modelo}.intValue() == 1 || $F{modelo}.intValue() == 3 ? 0D :
+    ($F{pagamento} == null ? 0D : $F{pagamento}))]]></variableExpression>
+		<initialValueExpression><![CDATA[($F{modelo}.intValue() == 1 || $F{modelo}.intValue() == 3 ? 0D :
+    ($F{pagamento} == null ? 0D : $F{pagamento}))]]></initialValueExpression>
 	</variable>
 	<variable name="valorSaldoInicial" class="java.lang.Double" calculation="First">
 		<variableExpression><![CDATA[$F{saldo} - ($F{deposito} == null ? 0D : $F{deposito}) - ($F{pagamento} == null ? 0D : $F{pagamento})]]></variableExpression>
 		<initialValueExpression><![CDATA[$F{saldo} - ($F{deposito} == null ? 0D : $F{deposito}) - ($F{pagamento} == null ? 0D : $F{pagamento})]]></initialValueExpression>
+	</variable>
+	<variable name="valorTransferenciaDebito" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[($F{modelo}.intValue() == 1 || $F{modelo}.intValue() == 3 ?
+    ($F{pagamento} == null ? 0D : $F{pagamento}) : 0D)]]></variableExpression>
+		<initialValueExpression><![CDATA[($F{modelo}.intValue() == 1 || $F{modelo}.intValue() == 3 ?
+    ($F{pagamento} == null ? 0D : $F{pagamento}) : 0D)]]></initialValueExpression>
+	</variable>
+	<variable name="valorTransferenciaCredito" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[($F{modelo}.intValue() == 1 || $F{modelo}.intValue() == 3 ?
+    ($F{deposito} == null ? 0D : $F{deposito}) : 0D)]]></variableExpression>
+		<initialValueExpression><![CDATA[($F{modelo}.intValue() == 1 || $F{modelo}.intValue() == 3 ?
+    ($F{deposito} == null ? 0D : $F{deposito}) : 0D)]]></initialValueExpression>
 	</variable>
 	<group name="lancamento">
 		<groupExpression><![CDATA[$F{class}]]></groupExpression>
@@ -219,7 +235,7 @@
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="20">
+			<band height="124">
 				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement uuid="2627a057-3db3-4517-864a-1924f2c57873" x="602" y="0" width="60" height="20"/>
 					<box leftPadding="2" rightPadding="2">
@@ -267,6 +283,110 @@
 					<text><![CDATA[Legenda:
 T - Transferência, D - Despesa e R - Receita]]></text>
 				</staticText>
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
+					<reportElement uuid="d58d80d7-9997-4a3d-b14e-d8d204d83934" key="textField" x="722" y="80" width="60" height="20"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{valorTransferenciaCredito}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
+					<reportElement uuid="d58d80d7-9997-4a3d-b14e-d8d204d83934" key="textField" x="722" y="100" width="60" height="20"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{valorTransferenciaDebito}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="1c83ef3a-accb-4caf-a224-9a480b068d31" x="455" y="100" width="267" height="20"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Total Transferência Débito:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="dca15e80-7b78-4501-8d9a-206832b70b2b" x="455" y="80" width="267" height="20"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Total Transferência Crédito:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="252354ad-1dd2-48f1-8124-2e0a59ca010a" x="455" y="50" width="267" height="20"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Total Débito:]]></text>
+				</staticText>
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
+					<reportElement uuid="d58d80d7-9997-4a3d-b14e-d8d204d83934" key="textField" x="722" y="30" width="60" height="20"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{valorCredito}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="f5c6c6ff-6fe5-47d3-94a8-2a37d0c15d49" x="455" y="30" width="267" height="20"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Total Crédito:]]></text>
+				</staticText>
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
+					<reportElement uuid="d58d80d7-9997-4a3d-b14e-d8d204d83934" key="textField" x="722" y="50" width="60" height="20"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{valorDebito}]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupFooter>
 	</group>

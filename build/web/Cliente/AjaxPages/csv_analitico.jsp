@@ -17,9 +17,9 @@
             
             String cabecalho = "";
             if (us.getAcessos().contains(3)) {
-                cabecalho += "OBJETO;SERVIÇO;PESO;QTD;POSTAGEM;VALOR;DECLARADO;A COBRAR;DESTINATÁRIO;CEP;SITUAÇÃO;DATA SIT.;NF;DEPARTAMENTO;ADICIONAIS;CONTEÚDO;CONTRATO ECT;DESTINO;OBS";
+                cabecalho += "OBJETO;SERVIÇO;PESO;QTD;POSTAGEM;VALOR;DECLARADO;A COBRAR;DESTINATÁRIO;CEP;SITUAÇÃO;DATA SIT.;NF;DEPARTAMENTO;ADICIONAIS;CONTEÚDO;CONTRATO ECT;DESTINO;OBS;COD. PP";
             } else {
-                cabecalho += "OBJETO;SERVIÇO;PESO;QTD;POSTAGEM;DESTINATÁRIO;CEP;SITUAÇÃO;DATA SIT.;NF;DEPARTAMENTO;ADICIONAIS;CONTEÚDO;CONTRATO ECT;DESTINO;OBS";
+                cabecalho += "OBJETO;SERVIÇO;PESO;QTD;POSTAGEM;DESTINATÁRIO;CEP;SITUAÇÃO;DATA SIT.;NF;DEPARTAMENTO;ADICIONAIS;CONTEÚDO;CONTRATO ECT;DESTINO;OBS;COD. PP";
             }
             if(us.getAcessos().contains(8)){
                  cabecalho += ";PREV ENTREGA";
@@ -86,9 +86,9 @@
 
                 String linha = "";
                 if (us.getAcessos().contains(3)) {
-                    linha += numeroRegistro + ";" + servico2 + ";" + peso + ";" + qtd + ";" + vData + ";" + vValor + ";" + vValorDec + ";" + vValorCob + ";" + destinatario + ";" + cepDestino + ";" + status + ";" + dtSit + ";" + notaFiscal + ";" + departamento2 + ";" + mov.getSiglaServAdicionais() + ";" + mov.getConteudoObjeto() + ";" + mov.getContratoEct() + ";" + mov.getPaisDestino()+";"+obs;                    
+                    linha += numeroRegistro + ";" + servico2 + ";" + peso + ";" + qtd + ";" + vData + ";" + vValor + ";" + vValorDec + ";" + vValorCob + ";" + destinatario + ";" + cepDestino + ";" + status + ";" + dtSit + ";" + notaFiscal + ";" + departamento2 + ";" + mov.getSiglaServAdicionais() + ";" + mov.getConteudoObjeto() + ";" + mov.getContratoEct() + ";" + mov.getPaisDestino()+";"+obs+";"+mov.getIdPre_venda();                    
                 } else {
-                    linha += numeroRegistro + ";" + servico2 + ";" + peso + ";" + qtd + ";" + vData + ";" + destinatario + ";" + cepDestino + ";" + status + ";" + dtSit + ";" + notaFiscal + ";" + departamento2 + ";" + mov.getSiglaServAdicionais() + ";" + mov.getConteudoObjeto() + ";" + mov.getContratoEct() + ";" + mov.getPaisDestino()+";"+obs;
+                    linha += numeroRegistro + ";" + servico2 + ";" + peso + ";" + qtd + ";" + vData + ";" + destinatario + ";" + cepDestino + ";" + status + ";" + dtSit + ";" + notaFiscal + ";" + departamento2 + ";" + mov.getSiglaServAdicionais() + ";" + mov.getConteudoObjeto() + ";" + mov.getContratoEct() + ";" + mov.getPaisDestino()+";"+obs+";"+mov.getIdPre_venda();
                 }
                 if(us.getAcessos().contains(8)){
                     String pz_estimado = "---";

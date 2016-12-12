@@ -1,5 +1,4 @@
-<%@page import="Entidade.empresas"%>
-<%@page import="java.util.Date"%><%@page import="java.text.SimpleDateFormat"%><%@page import="java.sql.Timestamp"%><%@page import="java.sql.ResultSet"%><%@page import="java.sql.PreparedStatement"%><%@page import="java.sql.SQLException"%><%@page import="Util.Conexao"%><%@page import="java.sql.Connection"%><%@page import="Controle.ContrlEDI"%><%@page import="java.util.Map"%><%@page import="Controle.contrCliente"%><%@page import="Entidade.Clientes"%><%
+<%@page import="Entidade.empresas"%><%@page import="java.util.Date"%><%@page import="java.text.SimpleDateFormat"%><%@page import="java.sql.Timestamp"%><%@page import="java.sql.ResultSet"%><%@page import="java.sql.PreparedStatement"%><%@page import="java.sql.SQLException"%><%@page import="Util.Conexao"%><%@page import="java.sql.Connection"%><%@page import="Controle.ContrlEDI"%><%@page import="java.util.Map"%><%@page import="Controle.contrCliente"%><%@page import="Entidade.Clientes"%><%
 
     //OCORENddMMyyyyHHmmsss
     SimpleDateFormat sdf1 = new SimpleDateFormat("ddMMyyHHmm");
@@ -41,14 +40,14 @@
     if(idDepto > 0){
         whereDepto = " AND idDepartamento = " + idDepto;
     }
-    String sql = "SELECT m.numObjeto, m.notaFiscal, t.last_status_date, t.last_status_code, t.last_status_type"
+    String sql = "SELECT m.numObjeto, m.notaFiscal, t.last_status_date, t.last_status_code, t.last_status_type, t.last_status_name"
         + " FROM movimentacao AS m"
         + " LEFT JOIN movimentacao_tracking AS t ON t.numObjeto = m.numObjeto"
         + " WHERE idCliente = ? AND dataPostagem >= DATE_SUB(DATE(NOW()), INTERVAL 90 DAY) "
         + " AND (last_edi_date <> last_status_date OR last_edi_date IS NULL)"
         + whereDepto;
     if (tipoPesquisa.equals("1")) {
-        sql = "SELECT m.numObjeto, m.notaFiscal, t.last_status_date, t.last_status_code, t.last_status_type"
+        sql = "SELECT m.numObjeto, m.notaFiscal, t.last_status_date, t.last_status_code, t.last_status_type, t.last_status_name"
             + " FROM movimentacao AS m"
             + " LEFT JOIN movimentacao_tracking AS t ON t.numObjeto = m.numObjeto"
             + " WHERE idCliente = ? AND dataPostagem BETWEEN '" + data + "' AND '" + data2 + "' "
@@ -105,6 +104,58 @@
                 out.print(Util.FormataString.preencheStringCom(sdf3.format(date), "0", 12, -1)); //Data Ocorrencia
                 out.print(Util.FormataString.preencheStringCom("00", "0", 2, -1)); //
                 out.println(Util.FormataString.preencheStringCom(sro, " ", 76, 1)); // FILLER
+            }
+        } else if (modelo.equals("EDI_3.1")) {
+            //HEADER 1
+            out.print("000"); //codigo da linha
+            out.print(Util.FormataString.preencheStringCom(emp.getEmpresa(), " ", 35, 1));//nome AGF
+            out.print(Util.FormataString.preencheStringCom(cli.getNome(), " ", 35, 1));//nome cliente
+            out.print(sdf1.format(new Date()));//data atual 
+            out.print("OCO");
+            out.print(sdf2.format(new Date()));//data atual
+            out.print("0");
+            out.print(Util.FormataString.preencheStringCom("", " ", 25, 1)); // FILLER
+            out.print("\r\n");
+            //HEADER 2
+            out.print("340"); //codigo da linha
+            out.print("OCORR");
+            out.print(sdf2.format(new Date()));//data atual
+            out.print("0");
+            out.print(Util.FormataString.preencheStringCom("", " ", 103, 1)); // FILLER
+            out.print("\r\n");
+            //HEADER 3
+            out.print("341"); //codigo da linha
+            out.print(emp.getCpf_cnpj().replace(".", "").replace("-", "").replace("/", ""));//cnpj AGF
+            out.print(Util.FormataString.preencheStringCom(emp.getEmpresa(), " ", 40, 1)); //nome AGF
+            out.print(Util.FormataString.preencheStringCom("", " ", 63, 1)); // FILLER
+            out.print("\r\n");
+
+            while (result.next()) {
+                Timestamp date = result.getTimestamp("t.last_status_date");
+                int code = result.getInt("t.last_status_code");
+                String names = result.getString("t.last_status_name");
+                String type = result.getString("t.last_status_type");
+                String nf = result.getString("m.notaFiscal");
+                if(nf != null && nf.length() > 8){
+                    nf = nf.substring(nf.length()-8, nf.length());
+                }
+                String sro = result.getString("m.numObjeto");
+                int edi_code = 0;
+                if (mapOcor.containsKey(code + ";" + type)) {
+                    edi_code = mapOcor.get(code + ";" + type);
+                }
+
+                //BODY EDI 3.1
+                out.print("342"); // codigo da linha
+                out.print(Util.FormataString.preencheStringCom(cli.getCnpj(), " ", 14, 1));//cnpj do cliente
+                out.print(Util.FormataString.preencheStringCom("2", " ", 3, 1)); //Serie NF
+                out.print(Util.FormataString.preencheStringCom(nf, "0", 8, -1)); //Numero NF
+                out.print(Util.FormataString.preencheStringCom(edi_code + "", " ", 2, 1)); //Código Ocorrencia EDI
+                out.print(Util.FormataString.preencheStringCom(sdf3.format(date), "0", 12, -1)); //Data Ocorrencia
+                out.print(Util.FormataString.preencheStringCom("00", "0", 2, -1)); //
+                out.print(Util.FormataString.preencheStringCom(names, " ", 70, 1)); // FILLER
+                out.print(Util.FormataString.preencheStringCom(" ", " ", 115, 1)); // FILLER
+                out.print("\r\n"); // breakline
             }
         } else if (modelo.equals("EDI_5.0")) {
             //HEADER 1

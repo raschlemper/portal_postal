@@ -10,6 +10,7 @@ import com.portalpostal.service.LancamentoService;
 import com.portalpostal.validation.LancamentoProgramadoValidation;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -59,6 +60,18 @@ public class LancamentoProgramadoController {
             Date inicio = formatDate(dataInicio);
             Date fim = formatDate(dataFim);   
             return lancamentoProgramadoService.findAll(inicio, fim);
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    } 
+    
+    @POST
+    @Path("/id")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<LancamentoProgramado> findAllById(List<Integer> ids) {
+        try {
+            init();    
+            return lancamentoProgramadoService.findAllById(ids);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
@@ -203,16 +216,37 @@ public class LancamentoProgramadoController {
     public LancamentoProgramado create(LancamentoProgramado lancamentoProgramado) {
         try {
             init();
-            validation(lancamentoProgramado);
-            lancamentoProgramado.setUsuario(usuario);
-            for (Lancamento lancamento : lancamentoProgramado.getLancamentos()) {
-                lancamento.setUsuario(usuario);
-            }
-            return lancamentoProgramadoService.createLancamento(lancamentoProgramado);
+            return createLancamento(lancamentoProgramado);
         } catch (Exception ex) {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     } 
+    
+    @POST
+    @Path("/create/all")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void createAll(List<LancamentoProgramado> lancamentoProgramados) {
+        try {
+            init();
+            for (LancamentoProgramado lancamentoProgramado : lancamentoProgramados) {
+                createLancamento(lancamentoProgramado);
+            }
+            
+        } catch (Exception ex) {
+            throw new WebApplicationException(getMessageError(ex.getMessage()));
+        }
+    } 
+    
+    private LancamentoProgramado createLancamento(LancamentoProgramado lancamentoProgramado) throws Exception {
+        validation(lancamentoProgramado);
+        lancamentoProgramado.setUsuario(usuario);
+        for (Lancamento lancamento : lancamentoProgramado.getLancamentos()) {
+            lancamento.setUsuario(usuario);
+        }
+        return lancamentoProgramadoService.createLancamento(lancamentoProgramado);
+        
+    }
     
     @DELETE
     @Path("/{idLancamentoProgramado}")
@@ -240,6 +274,14 @@ public class LancamentoProgramadoController {
             throw new WebApplicationException(getMessageError(ex.getMessage()));
         }
     } 
+    
+    private List<Integer> getIds(List<LancamentoProgramado> lancamentoProgramados) {
+        List<Integer> ids = new ArrayList<Integer>();
+        for(LancamentoProgramado lancamento : lancamentoProgramados) {
+            ids.add(lancamento.getIdLancamentoProgramado());
+        }
+        return ids;
+    }
     
     private void validation(LancamentoProgramado lancamentoProgramado) throws Exception {  
         Validation validacao = new LancamentoProgramadoValidation();

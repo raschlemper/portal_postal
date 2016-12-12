@@ -79,8 +79,8 @@ public class ServLogin extends HttpServlet {
             throws ServletException, IOException {
 
         String caminho = request.getParameter("caminho");
-        String login = request.getParameter("login");
-        String senha = request.getParameter("senha");
+        String login = "test"; //request.getParameter("login");
+        String senha = "test"; //request.getParameter("senha");
         Usuario user = contrLogin.login(login, senha);
 
         if (user != null) {

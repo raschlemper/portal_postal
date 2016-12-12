@@ -7,6 +7,8 @@
     String login = request.getParameter("loginSigep");
     String senha = request.getParameter("senhaSigep");
     //int idCliente = Integer.parseInt(request.getParameter("idCliente"));
+    
+    
 
     int statusC = 0;
     int codDir = 0;
@@ -70,14 +72,18 @@
 
                 nomeSara = cli.getNome().trim();
                 cnpjSenha = cli.getCnpj().replaceAll("[./-]", "").substring(0, 8);
+                
+                
                 String servicos = "<b>Servicos do Contrato no SigepWEB:</b> @ ";
                 for (ContratoERP c : cli.getContratos()) {
                     anoContrato = c.getDataVigenciaInicio().getYear();
                     dtVgFim = c.getDataVigenciaFim().toGregorianCalendar().getTime();
                     codDir = Integer.parseInt(c.getCodigoDiretoria().trim());
+                    
                     ufContrato = FormataString.getUfDiretoria(codDir);
                     for (CartaoPostagemERP cp : c.getCartoesPostagem()) {
                         codAdm = cp.getCodigoAdministrativo();
+                        
                         statusC = Integer.parseInt(cp.getStatusCartaoPostagem().trim());
                         if( cp.getServicos() != null){
                             List<ServicoERP> listaServico = cp.getServicos();

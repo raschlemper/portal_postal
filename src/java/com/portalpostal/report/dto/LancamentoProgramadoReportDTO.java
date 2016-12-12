@@ -13,7 +13,8 @@ public class LancamentoProgramadoReportDTO {
     private String planoConta;
     private String historico;
     private String frequencia;
-    private Double valor;
+    private Double deposito;
+    private Double pagamento;
 
     public Integer getTipo() {
         return tipo;
@@ -87,12 +88,20 @@ public class LancamentoProgramadoReportDTO {
         this.frequencia = frequencia;
     }
 
-    public Double getValor() {
-        return valor;
+    public Double getDeposito() {
+        return deposito;
     }
 
-    public void setValor(Double valor) {
-        this.valor = valor;
+    public void setDeposito(Double deposito) {
+        this.deposito = deposito;
     }
+
+    public Double getPagamento() {
+        return pagamento;
+    }
+
+    public void setPagamento(Double pagamento) {
+        this.pagamento = pagamento;
+    }   
     
 }

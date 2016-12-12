@@ -26,9 +26,27 @@
     String nomeBD = (String) session.getAttribute("empresa");
     String numContrato = request.getParameter("numContrato");
     String cartaoPostagem = request.getParameter("cartaoPostagem");
-    String login = request.getParameter("loginSigep");
-    String senha = request.getParameter("senhaSigep");
-    //int idCliente = Integer.parseInt(request.getParameter("idCliente"));
+    String login = request.getParameter("loginSigep").trim();
+
+    String senhaSigep = request.getParameter("senhaSigep").trim();
+    int idCliente = Integer.valueOf(request.getParameter("idCliente"));
+    
+   /* System.out.println(senhaSigep);
+    System.out.println(login);
+    System.out.println(idCliente);*/
+
+    try {
+        int codSenha = Integer.valueOf(senhaSigep);
+        if (codSenha == idCliente) {
+            Clientes cliente = Controle.contrCliente.consultaClienteById(Integer.valueOf(idCliente), nomeBD);
+            senhaSigep = cliente.getSenha_sigep();
+           // System.out.println("senha consultada "+senhaSigep);
+        }
+    } catch (NumberFormatException e) {
+
+    }
+
+    
 
     int statusC = 0;
     int codDir = 0;
@@ -45,38 +63,40 @@
 
     if (nomeBD != null) {
         //Clientes clie = contrCliente.consultaClienteById(idCliente, nomeBD);
-        if (!login.equals("") && !senha.equals("")) {
+        if (!login.equals("") && !senhaSigep.equals("")) {
             //String login = clie.getLogin_sigep();
             //String senha = clie.getSenha_sigep();
             //start web service invocation --
             try {
                 // Create a trust manager that does not validate certificate chains
-		TrustManager[] trustAllCerts = new TrustManager[] {
+                TrustManager[] trustAllCerts = new TrustManager[]{
                     new X509TrustManager() {
                         public java.security.cert.X509Certificate[] getAcceptedIssuers() {
                             return null;
                         }
+
                         public void checkClientTrusted(X509Certificate[] certs, String authType) {
                         }
+
                         public void checkServerTrusted(X509Certificate[] certs, String authType) {
                         }
                     }
-		};
+                };
 
-		// Install the all-trusting trust manager
-		SSLContext sc = SSLContext.getInstance("SSL");
-		sc.init(null, trustAllCerts, new java.security.SecureRandom());
-		HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+                // Install the all-trusting trust manager
+                SSLContext sc = SSLContext.getInstance("SSL");
+                sc.init(null, trustAllCerts, new java.security.SecureRandom());
+                HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 
-		// Create all-trusting host name verifier
-		HostnameVerifier allHostsValid = new HostnameVerifier() {
+                // Create all-trusting host name verifier
+                HostnameVerifier allHostsValid = new HostnameVerifier() {
                     public boolean verify(String hostname, SSLSession session) {
                         return true;
                     }
-		};
+                };
 
-		// Install the all-trusting host verifier
-		HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);   
+                // Install the all-trusting host verifier
+                HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
 
                 try {
                     numContrato = Long.parseLong(numContrato) + "";
@@ -92,7 +112,7 @@
 
                 br.com.correios.bsb.sigep.master.bean.cliente.AtendeClienteService service = new br.com.correios.bsb.sigep.master.bean.cliente.AtendeClienteService();
                 br.com.correios.bsb.sigep.master.bean.cliente.AtendeCliente port = service.getAtendeClientePort();
-                br.com.correios.bsb.sigep.master.bean.cliente.ClienteERP cli = port.buscaCliente(numContrato, cartao, login, senha);
+                br.com.correios.bsb.sigep.master.bean.cliente.ClienteERP cli = port.buscaCliente(numContrato, cartao, login, senhaSigep);
 
                 nomeSara = cli.getNome().trim();
                 cnpjSenha = cli.getCnpj().replaceAll("[./-]", "").substring(0, 8);
@@ -105,10 +125,10 @@
                     for (CartaoPostagemERP cp : c.getCartoesPostagem()) {
                         codAdm = cp.getCodigoAdministrativo();
                         statusC = Integer.parseInt(cp.getStatusCartaoPostagem().trim());
-                        if( cp.getServicos() != null){
+                        if (cp.getServicos() != null) {
                             List<ServicoERP> listaServico = cp.getServicos();
-                            for(ServicoERP s: listaServico){
-                                servicos += "@"+s.getCodigo().trim()+" | "+s.getDescricao() +" [" + s.getId()+"]";                                
+                            for (ServicoERP s : listaServico) {
+                                servicos += "@" + s.getCodigo().trim() + " | " + s.getDescricao() + " [" + s.getId() + "]";
                                 /*
                                 System.out.println("vvvvvvvvvvvv");
                                 System.out.println(s.getCodigo()+" - "+s.getId()+" | "+s.getDescricao());
@@ -132,13 +152,13 @@
                                 System.out.println(s.getServicoSigep().isExigeDimensoes());
                                 System.out.println(s.getServicoSigep().isExigeValorCobrar());                                  
                                 System.out.println("^^^^^^^^^^^^");
-                                */
+                                 */
                             }
                         }
                     }
                 }
 
-                resultado = statusC + ";" + codDir + ";" + anoContrato + ";" + ufContrato + ";" + nomeSara + ";" + cnpjSenha + ";" + codAdm + ";" + sdf.format(dtVgFim)+";"+cli.getCnpj()+";"+servicos;
+                resultado = statusC + ";" + codDir + ";" + anoContrato + ";" + ufContrato + ";" + nomeSara + ";" + cnpjSenha + ";" + codAdm + ";" + sdf.format(dtVgFim) + ";" + cli.getCnpj() + ";" + servicos;
             } catch (SigepClienteException ex) {
                 resultado = "erro;Mensagem do SigepWEB:<br/><br/>" + ex.getMessage();
             } catch (AutenticacaoException ex) {

@@ -139,6 +139,7 @@
                                     <label>Modelo do Arquivo</label>
                                     <select name="modelo">
                                         <option value='EDI_3.0'>[OCORREN] EDI 3.0</option>
+                                        <option value='EDI_3.1'>[OCORREN] EDI 3.1</option>
                                         <option value='EDI_5.0'>[OCORREN] EDI 5.0</option>
                                         <option value='EDI_EMBARC_3.0'>[CONEMB] EDI EMBARQUE 3.0</option>
                                     </select>

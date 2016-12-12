@@ -78,7 +78,7 @@
                     var indexB = form.arquivo.value.length;
                     var ext = form.arquivo.value.substring(indexA, indexB).toUpperCase();
                     var tipo = document.getElementById('tipo').value;
-                    if((tipo === 'CSV' || tipo === 'INTERLOGIC' || tipo === 'RTSYS_SGI' || tipo === 'TRAY' || tipo === 'LINX' || tipo === 'ECOMPLETO') && ext !== ".CSV") {
+                    if((tipo === 'CSV' || tipo === 'INTERLOGIC' || tipo === 'RTSYS_SGI' || tipo === 'TRAY' || tipo === 'LINX' || tipo === 'ECOMPLETO'|| tipo === 'TINY') && ext !== ".CSV") {
                         fecharTelaEspera();
                         alert("O arquivo a ser importado deve ser '.CSV' !");
                         return false;
@@ -121,6 +121,7 @@
             }
             
             function mudaFileOpts(tipo){
+                $('#tipo_serv').unbind('mousedown');
                 document.getElementById('dd_endereconf').className = 'esconder'; 
                 if(tipo === 'CSV' || tipo === 'INTERLOGIC' || tipo === 'WEBVENDAS' || tipo === 'ECOMPLETO' || tipo === 'RTSYS_SGI'){
                     document.getElementById('arquivo').accept = '.csv';
@@ -137,7 +138,7 @@
                     document.getElementById('dd_endereconf').className = 'mostrar'; 
                     document.getElementById('form1').action = '../../ServPreVendaImportarNFe';   
                     $('#tipo_serv option[value="ARQUIVO"]').text("SELECIONE UM SERVIÇO");    
-                }else if (tipo === 'TRAY' || tipo === 'LINX'){
+                }else if (tipo === 'TRAY' || tipo === 'LINX' ){
                     document.getElementById('arquivo').accept = '.csv'; 
                     document.getElementById('arquivo').multiple = false;                   
                     document.getElementById('dd_vd').className = 'mostrar'; 
@@ -186,6 +187,19 @@
                     document.getElementById('dd_ar').className = 'esconder'; 
                     document.getElementById('form1').action = '../../ServPreVendaImportar';  
                     $('#tipo_serv option[value="ARQUIVO"]').text("DEFINIDO NO ARQUIVO");
+                    
+                
+                }else if( tipo == "TINY"){
+                    document.getElementById('arquivo').accept = '.csv'; 
+                    document.getElementById('arquivo').multiple = false;                   
+                    document.getElementById('dd_vd').className = 'esconder'; 
+                    document.getElementById('dd_ar').className = 'esconder'; 
+                    document.getElementById('form1').action = '../../ServPreVendaImportar';  
+                    $('#tipo_serv option[value="ARQUIVO"]').text("DEFINIDO NO ARQUIVO");
+                    $('#tipo_serv').mousedown(function(e) {
+                        e.preventDefault();
+                    });
+                    
                 }
             }
         </script>
@@ -206,20 +220,17 @@
 
                     <div id="titulo1">Importação de Pré-Postagens</div>
 
-                <!--    
                  <ul class="ul_tab" style="width: 1160px;height: 50px;">
                         <li>
                             <dl class="ativo" style='width:200px; border-left: 1px solid #CCC;'>
-                                <dd><b class='serv'>Modelo Default</b></dd>
+                                <dd><b class='serv' onclick="location.href='imp_postagem.jsp'">Modelo Padrão</b></dd>
                             </dl>
                             <dl style='width:200px;' onclick="location.href='importacaoPrePostagem.jsp'">
                                 <dd><b class='serv'>Modelo Cadastrado</b></dd>
                             </dl>
-                            <dl style="width: 750px; background: white;border-top: 1px solid white;border-right: 1px solid white; cursor: default;" ></dl>
+                            
                         </li>
                     </ul>
-                    -->
-                    
                     
                     
                     
@@ -231,8 +242,8 @@
                             <li>
                               
                                 <dd>
-                                    <label>TIPO DE IMPORTÇÃO:</label>
-                                    <select style="width: 300px;" name="tipo" id="tipo" onchange="mudaFileOpts(this.value);">
+                                    <label>TIPO DE IMPORTAÇÃO:</label>
+                                    <select style="width: 300px;" name="tipo" id="tipo" onchange="mudaFileOpts(this.value); ">
                                         <option value="CSV">ARQUIVO .CSV PORTAL POSTAL</option>
                                         <option value="XML">ARQUIVO .XML PORTAL POSTAL</option>
                                         <option value="NFE">ARQUIVO .XML NF-e</option>
@@ -247,6 +258,7 @@
                                         <option value="VIPP">ARQUIVO VIPP</option>
                                         <option value="PSN">ARQUIVO PS SERVICE</option>
                                         <option value="LK">ARQUIVO LK TEL</option>
+                                        <option value="TINY">ARQUIVO TINY - ERP</option>
                                         
                                         <%if(idEmp == 236505){%><option value="LADOAVESSO">ARQUIVO LADOAVESSO</option><%}%>
                                         <%if(idEmp == 236505){%><option value="INTERLOGIC">ARQUIVO INTERLOGIC</option><%}%>

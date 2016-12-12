@@ -1,4 +1,6 @@
 
+<%@page import="Entidade.ClientesDeptos"%>
+<%@page import="Controle.ContrClienteDeptos"%>
 <%@page import="Entidade.Endereco"%>
 <%@page import="Entidade.TelegramaPostal"%>
 <%@page import="Emporium.Controle.ContrTelegramaPostal"%>
@@ -87,9 +89,23 @@
                                         if (t.getAdicionais().contains("CP")) {
                                             adicionais += "<br/>- CÓPIA DE TELEGRAMA - VIA " + t.getEnvioCopia() + ": " + t.getEmailCopia();
                                         }
+                                        String nomecliente = contrCliente.consultaNomeById(t.getIdCliente(), agf.getCnpj());
+                                        ClientesDeptos dep = ContrClienteDeptos.consultaDeptoById(t.getIdCliente(), t.getIdDepartamento(), agf.getCnpj());
+                                        String depto = "---";
+                                        if(dep != null){
+                                            depto = dep.getNomeDepartamento();
+                                        }
                                 %>
                                 <form action="../../ServTelegramaEnvia">
                                     <ul class="list-unstyled text-12px">
+                                        <li class="list-group-item list-group-heading">
+                                            <div class="row">
+                                                <div class="col-xs-12">                                                   
+                                                    <b>Cliente:</b> <%= nomecliente %><br/>
+                                                    <b>Departamento:</b> <%= depto %>
+                                                </div>
+                                            </div>
+                                        </li>
                                         <li class="list-group-item list-group-heading">
                                             <div class="row vdivide">
                                                 <div class="col-xs-6">

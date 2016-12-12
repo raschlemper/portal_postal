@@ -738,6 +738,14 @@
         <servlet-name>ServDadosNFE</servlet-name>
         <servlet-class>Emporium.Servlet.ServDadosNFE</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ServletLayoutImportacao</servlet-name>
+        <servlet-class>br.com.portalpostal.servelet.ServletLayoutImportacao</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletPreVendaImportar</servlet-name>
+        <servlet-class>br.com.portalpostal.servelet.ServletPreVendaImportar</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ServLogin</servlet-name>
         <url-pattern>/ServLogin</url-pattern>
@@ -1446,6 +1454,14 @@
     <servlet-mapping>
         <servlet-name>ServDadosNFE</servlet-name>
         <url-pattern>/ServDadosNFE</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletLayoutImportacao</servlet-name>
+        <url-pattern>/ServletLayoutImportacao</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletPreVendaImportar</servlet-name>
+        <url-pattern>/ServletPreVendaImportar</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

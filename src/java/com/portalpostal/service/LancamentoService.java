@@ -58,7 +58,12 @@ public class LancamentoService {
         lancamento.setLancamentoTransferencia(lancamentoTransferenciaService.find(
                 lancamento.getLancamentoTransferencia().getIdLancamentoTransferencia()));
         return lancamento;
-    }  
+    }   
+
+    public Lancamento findLastByLancamentoConciliado(Integer idConta) throws Exception {
+        init();
+        return lancamentoDAO.findLastByLancamentoConciliado(idConta);
+    }
 
     public List<Lancamento> findLancamentoNotConciliadoByDataLancamento(Date data) throws Exception {
         init();

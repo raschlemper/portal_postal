@@ -96,15 +96,15 @@
         if (vd.equals("true")) {
             sql += " AND siglaServAdicionais LIKE '%VD%'";
         }
-        if (late.equals("true")) {
-            sql += " AND prazo_cumprido > prazo_estimado ";
-        }
         if (!tpFat.equals("")) {
             sql += tpFat;
         }
         sql += " ORDER BY dataPostagem DESC";
-
         ArrayList movimentacao = Controle.contrMovimentacao.getConsultaSintetica(sql, nomeBD);
+        boolean filtraAtrasado = false;
+        if (late.equals("true")) {
+            filtraAtrasado = true;
+        }
 
         if (movimentacao.size() >= 1) {
 %>
@@ -120,7 +120,7 @@
 
 <%}%>
 
-<div style="padding:8px 5px; background: white;">
+<div style="padding:8px 5px; background: white;"> 
     <%--<a href="../AjaxPages/print_sintetico.jsp?sql=<%= sql%>"><img class="link_img" src="../../imagensNew/printer.png" /> IMPRIMIR</a>
     <b style="margin:0 12px 0 10px;">|</b>--%>
     <a href="#" onclick="document.formEXP.action = '../AjaxPages/xls_sintetico.jsp';
@@ -160,24 +160,24 @@
         <thead>
             <tr>
                 <th width='10' class="nosort"><h3></h3></th>
-        <th width='100'><h3>OBJETO</h3></th>
-        <th><h3>SERVIÇO</h3></th>
-        <th width='30'><h3>PESO</h3></th>
-        <th width='30'><h3>QTD</h3></th>
-        <th width='50'><h3>POSTAGEM</h3></th>
-        <%if (acessosUs.contains(3)) {%>
-        <th width='50'><h3>VALOR</h3></th>
-        <%}%>
-        <th><h3>DESTINATÁRIO</h3></th>
-        <th width='80'><h3>CEP</h3></th>
-        <th><h3>SITUAÇÃO</h3></th>
-        <th width='60'><h3>NF</h3></th>
-        <th width='100'><h3>DEPARTAMENTO</h3></th>
-        <%if (acessosUs.contains(8)) {%>
-        <th width='50'><h3>PRAZO EST.</h3></th>
-        <th width='50'><h3>PRAZO REAL</h3></th>
-        <%}%>
-        </tr>
+                <th width='100'><h3>OBJETO</h3></th>
+                <th><h3>SERVIÇO</h3></th>
+                <th width='30'><h3>PESO</h3></th>
+                <th width='30'><h3>QTD</h3></th>
+                <th width='50'><h3>POSTAGEM</h3></th>
+                    <%if (acessosUs.contains(3)) {%>
+                <th width='50'><h3>VALOR</h3></th>
+                    <%}%>
+                <th><h3>DESTINATÁRIO</h3></th>
+                <th width='80'><h3>CEP</h3></th>
+                <th><h3>SITUAÇÃO</h3></th>
+                <th width='60'><h3>NF</h3></th>
+                <th width='100'><h3>DEPARTAMENTO</h3></th>
+                    <%if (acessosUs.contains(8)) {%>
+                <th width='50'><h3>PRAZO EST.</h3></th>
+                <th width='50'><h3>PRAZO REAL</h3></th>
+                    <%}%>
+            </tr>
         </thead>
         <tbody>
             <%
@@ -208,8 +208,8 @@
                         if (mov.getPrazo_estimado() != null) {
                             ContrReclamacao cr = new ContrReclamacao();
                             Calendar novadataPrevisaoEntrega = cr.recalculaDataEstimada(cr.dateToCalendar(mov.getDataPostagem()), cr.dateToCalendar(mov.getPrazo_estimado()), "");
-                            if(novadataPrevisaoEntrega != null){
-                                mov.setPrazo_estimado(novadataPrevisaoEntrega.getTime());                    
+                            if (novadataPrevisaoEntrega != null) {
+                                mov.setPrazo_estimado(novadataPrevisaoEntrega.getTime());
                             }
                         }
                         if (mov.getPrazo_estimado() != null && mov.getPrazo_cumprido_date() != null) {
@@ -259,6 +259,12 @@
                         img_status = "../../imagensNew/mail_send.png";
                         qtdEnc++;
                     }
+                    boolean filtrar = false;
+                    if (filtraAtrasado && atrasado.equals("")) {
+
+                        filtrar = true;
+                    }
+                    if (!filtrar) {
             %>
             <tr align='center' style="font-size: 10px; <%= atrasado%> ">
                 <td><img class="link_img" src="<%= img_status%>" /></td>
@@ -288,7 +294,8 @@
                 <td><%= pz_cumprido%></td>
                 <%}%>
             </tr>
-            <%}%>
+            <%}
+                }%>
         </tbody>
         <tfoot>
             <tr style="background: #f0f0f0; color:red; font-size: 12px;">

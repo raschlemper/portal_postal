@@ -51,7 +51,7 @@
 
 %>
 
- <form name='form5' action='../../ServEditarLoginPortal' method='post'>
+<form name='form5' action='../../ServEditarLoginPortal' method='post'>
     <div class="row">
         <div class="col-xs-12">
             <ul class="list-group">
@@ -112,6 +112,7 @@
                                 <option value="7" <%if (listAcc.contains("7")) {%> selected <%}%> >CADASTRO DE DESTINATÁRIOS</option>
                                 <option value="8" <%if (listAcc.contains("8")) {%> selected <%}%> >VISUALIZAR PRAZOS ESTIMADOS DOS CORREIOS</option>
                                 <option value="9" <%if (listAcc.contains("9")) {%> selected <%}%> >REIMPRIMIR ETIQUETAS ANTIGAS</option>
+                                <option value="10"<%if (listAcc.contains("10")) {%> selected <%}%>  >INCLUIR PESOS NA DIGITAÇÃO PRE-POSTAGEM</option>
                             </select>
                             <script language="">
                                 function selectAllCombo(combo, flag) {
@@ -198,18 +199,18 @@
                     </div>
                 </li>
             </ul>
-                            
-                    <div class="alert alert-danger">
-                    <i style='width: 100%; padding-top: 30px;color:red;'>*Obs.: Caso não queira mudar a senha deixe os campos da senha em branco!</i>
-                    <input type="hidden" name="id" value="<%= id%>" />
-                    <input type="hidden" name="local" value="<%= local%>" />
-                    <input type='hidden' name='idCliente' value='<%= sc.getCodigo()%>' />
-                    <input type='hidden' name='loginOld' value='<%= login%>' />
-                    <input type='hidden' name='senhaOld' value='<%= senha%>' />
-                    </div>
+
+            <div class="alert alert-danger">
+                <i style='width: 100%; padding-top: 30px;color:red;'>*Obs.: Caso não queira mudar a senha deixe os campos da senha em branco!</i>
+                <input type="hidden" name="id" value="<%= id%>" />
+                <input type="hidden" name="local" value="<%= local%>" />
+                <input type='hidden' name='idCliente' value='<%= sc.getCodigo()%>' />
+                <input type='hidden' name='loginOld' value='<%= login%>' />
+                <input type='hidden' name='senhaOld' value='<%= senha%>' />
+            </div>
         </div>
     </div>
 </form>
-<%}else{%>
+<%} else {%>
 sessaoexpirada
 <%}%>

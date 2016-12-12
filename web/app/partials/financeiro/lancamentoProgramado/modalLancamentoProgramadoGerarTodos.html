@@ -1,0 +1,48 @@
+<form name="lancamentoForm" novalidate>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
+        <h4 class="modal-title">{{titleGerar}}</h4>
+    </div>
+    <div class="modal-body">
+        <div class="bootbox-body">
+            <ul class="list-unstyled">
+                <li class="list-group-item">
+                    <div class="row form-horizontal">
+                        <div class="col-md-12">
+                            <label>Selecione a conta e data de lançamento para os registros selecionados</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <label class="small">Conta</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" ><i class="fa fa-info"></i></span>
+                                <select class="form-control" name="conta" style="max-width: 70%;"
+                                        ng-options="conta.nome for conta in contas track by conta.idConta" ng-model="conta"></select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <label class="small">Data</label>
+                            <div class="input-group" style="max-width: 50%;">
+                                <input type="text" autocomplete="off" class="form-control" id="dataLancamento" name="dataLancamento" datepicker-custom  placeholder="Data do lançamento"
+                                       ng-model="dataLancamento"/>
+                                <label for="dataLancamento" class='input-group-addon'><i class='fa fa-calendar'></i></label>
+                            </div>
+                        </div> 
+                        <div class="col-md-12" style="margin-top: 20px;">
+                            <label>* Os registros com conta diferente da conta acima selecionada serão atualizadas para a mesma</label>
+                        </div>
+                    </div>
+                </li>
+            </ul>     
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">
+            <i class="fa fa-lg fa-times fa-spc"></i> CANCELAR
+        </button>
+        <button type="button" class="btn btn-success" ng-click="lancar(this.lancamentoForm, conta, dataLancamento)">
+            <i class="fa fa-lg fa-save fa-spc"></i> LANÇAR
+        </button>
+    </div>
+</form>    
+
+  

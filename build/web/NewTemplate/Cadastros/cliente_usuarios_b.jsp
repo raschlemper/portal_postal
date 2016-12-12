@@ -106,6 +106,7 @@
                                                         <option value="7" >CADASTRO DE DESTINATÁRIOS</option>
                                                         <option value="8" >VISUALIZAR PRAZOS ESTIMADOS</option>
                                                         <option value="9" >REIMPRIMIR ETIQUETAS ANTIGAS</option>
+                                                        <option value="10" >INCLUIR PESOS NA DIGITAÇÃO PRE-POSTAGEM</option>
                                                     </select>
                                                     <script language="">
                                                         function selectAllCombo(combo, flag) {

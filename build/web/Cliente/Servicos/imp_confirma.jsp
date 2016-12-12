@@ -162,7 +162,7 @@
                                     <th>CONTEÚDO</th>
                                     <th>CELULAR</th>
                                     <th>E-MAIL</th>
-                                        <%if (pv0.getPeso() > 0) {%>                                    
+                                        <%if (pv0.getPeso() >= 0) {%>                                    
                                     <th>PESO</th>
                                     <th>ALT.</th>
                                     <th>LAR.</th>

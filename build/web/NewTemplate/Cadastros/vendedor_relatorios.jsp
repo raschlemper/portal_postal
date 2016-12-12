@@ -15,12 +15,13 @@
 
 <%
     Usuario usrSessao = (Usuario) session.getAttribute("agf_usuario");
+      empresas agf_empresa = (empresas) session.getAttribute("agf_empresa");
+
     if (usrSessao == null) {
         response.sendRedirect("../../index.jsp?msgLog=3");
     } else if (usrSessao.getListaAcessosPortalPostal().contains("408")) {
         response.sendRedirect("../../NewTemplate/Dashboard/index.jsp?msg=Usuario sem permissao!");
     } else {
-
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String vDataAtual = sdf.format(new Date());
@@ -31,7 +32,8 @@
         if (request.getParameter("data2") != null) {
             vData2 = request.getParameter("data2");
         }
-        String idVendedor = request.getParameter("idVendedor");
+        int idVendedor = Integer.parseInt(request.getParameter("idVendedor"));
+        String nomeVendedor = Vendedor.Controle.contrVendedores.consultaNomeVendedoreById(idVendedor, agf_empresa.getCnpj());
 
 %>
 
@@ -56,8 +58,8 @@
 
 
 
-       <!-- data table css fix -->
-       <link href="../../NewTemplate/dist/css/jquery.dataTables.css" rel="stylesheet"/>
+        <!-- data table css fix -->
+        <link href="../../NewTemplate/dist/css/jquery.dataTables.css" rel="stylesheet"/>
         <script>
 
             function callTableJs() {
@@ -122,10 +124,10 @@
                         .done(function (ret) {
 
                             if (jQuery.isEmptyObject(ret)) {
-                                $("#tbWrapper").html(" <div class='dataTable_wrapper no-padding'> <table id='excelDataTable' class='display compact'>"+
-                                                        "<thead id='excelDataTableThead'> <th>"+
-                                                        "<div class='alert alert-danger'>  <strong>OPS!</strong> NÃO HOUVERAM RESULTADOS PARA A PESQUISA</div>"+
-                                                        "</th> </thead></table></div>");
+                                $("#tbWrapper").html(" <div class='dataTable_wrapper no-padding'> <table id='excelDataTable' class='display compact'>" +
+                                        "<thead id='excelDataTableThead'> <th>" +
+                                        "<div class='alert alert-danger'>  <strong>OPS!</strong> NÃO HOUVERAM RESULTADOS PARA A PESQUISA</div>" +
+                                        "</th> </thead></table></div>");
                             } else {
                                 buildHtmlTable(ret);
                                 callTableJs();
@@ -133,7 +135,7 @@
                             }
                             $('.dt-button').switchClass('dt-button', 'btn btn-default pad pull-left');
                             // $('#excelDataTable_filter').find('input').addClass('form-control');
-                            
+
                         });
 
             }
@@ -215,21 +217,21 @@
                             <div class="well well-md"> 
 
                                 <div>
-                                    <h4 class="subtitle">Selecione o Relatório e o Periodo</h4>
+                                    <h4 class="subtitle">[ Relatórios de <%=nomeVendedor %> - cod.  <%=idVendedor %>]</h4>
                                 </div> 
                                 <form action="" method="post" name="form2">
                                     <div class="row">
                                         <div class="form-group col-md-8" >
-                                            <label class="small">Selecione um dos Relatórios</label>
+                                            <label class="small">Selecione um dos Relatórios </label>
                                             <select class="populate placeholder" name="tipoRel" id="tipoRel" onchange="validaCampos(this)">
                                                 <option value="0">-- Selecione um Relatório --</option>                                                
                                                 <option value='1'>Vendas - Cliente por período sintético</option>
                                                 <option value='2'>Vendas - Cliente por período analítico</option>
-                                              <!--    <option value='3'>Vendas - Serviço por Periodo</option>
-                                                <option value='4'>Vendas - Serviço comparativo mês a mês</option>
-                                                <option value='5'>Vendas - Faturado AGF por período (sintético)</option>
-                                                <option value='6'>Vendas - Contrato ECT por período (sintético)</option>
-                                              -->
+                                                <!--    <option value='3'>Vendas - Serviço por Periodo</option>
+                                                  <option value='4'>Vendas - Serviço comparativo mês a mês</option>
+                                                  <option value='5'>Vendas - Faturado AGF por período (sintético)</option>
+                                                  <option value='6'>Vendas - Contrato ECT por período (sintético)</option>
+                                                -->
                                             </select>
                                         </div>  
                                     </div>
@@ -247,7 +249,7 @@
                                                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                                 <input type="text" id="data2" name="data2" size="10" class="form-control" value="<%= vData2%>"  maxlength="10" onkeypress="mascara(this, maskData)" />
                                             </div>
-                                                <input type="hidden" id="idVend" name="idVend" value="<%= idVendedor %>" />
+                                            <input type="hidden" id="idVend" name="idVend" value="<%= idVendedor%>" />
                                             <button type="button" class="btn btn-sm btn-primary form-control" onclick="ajaxtable();">
                                                 <i class="fa fa-lg fa-spc fa-file-text"></i>GERAR
                                             </button>
@@ -257,20 +259,20 @@
                             </div>   
                         </div>  
                         <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="panel panel-default">  
-                                        <div class="panel-heading" >Resultado da Pesquisa</div>
-                                        <div class="panel-body" id="tbWrapper" style="margin-left: 10px; margin-right: 10px; ">
-                                            <div class="dataTable_wrapper no-padding" >                                                
-                                                <table id="excelDataTable" class="display compact">
-                                                    <thead id="excelDataTableThead"> 
-                                                        <th>SELECIONE UM RELATÓRIO E CLIQUE NO BOTÃO GERAR</th>
-                                                    </thead>
-                                                </table>                                          
-                                            </div>
+                            <div class="col-lg-12">
+                                <div class="panel panel-default">  
+                                    <div class="panel-heading" >Resultado da Pesquisa</div>
+                                    <div class="panel-body" id="tbWrapper" style="margin-left: 10px; margin-right: 10px; ">
+                                        <div class="dataTable_wrapper no-padding" >                                                
+                                            <table id="excelDataTable" class="display compact">
+                                                <thead id="excelDataTableThead"> 
+                                                    <th>SELECIONE UM RELATÓRIO E CLIQUE NO BOTÃO GERAR</th>
+                                                </thead>
+                                            </table>                                          
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                         </div>
                     </div>
                 </div>

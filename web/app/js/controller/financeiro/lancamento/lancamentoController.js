@@ -1,11 +1,11 @@
 'use strict';
 
 app.controller('LancamentoController', 
-    ['$scope', 'LancamentoService', 'LancamentoTransferenciaService', 'LancamentoConciliadoService', 'ContaService', 'PlanoContaService', 
+    ['$scope', '$filter', 'LancamentoService', 'LancamentoTransferenciaService', 'LancamentoConciliadoService', 'ContaService', 'PlanoContaService', 
     'CentroCustoService', 'ConfiguracaoService', 'ReportService', 'ModalService', 'DatePickerService', 'ListaService', 'PeriodoService', 
     'LancamentoHandler', 'LancamentoRateioHandler', 'LancamentoTransferenciaHandler', 'LancamentoConciliadoHandler', 'FinanceiroValidation', 
     'LISTAS', 'MESSAGES',
-    function ($scope, LancamentoService, LancamentoTransferenciaService, LancamentoConciliadoService, ContaService, PlanoContaService, 
+    function ($scope, $filter, LancamentoService, LancamentoTransferenciaService, LancamentoConciliadoService, ContaService, PlanoContaService, 
         CentroCustoService, ConfiguracaoService, ReportService, ModalService, DatePickerService, ListaService, PeriodoService, LancamentoHandler, 
         LancamentoRateioHandler, LancamentoTransferenciaHandler, LancamentoConciliadoHandler, FinanceiroValidation, LISTAS, MESSAGES) {
 
@@ -13,6 +13,7 @@ app.controller('LancamentoController',
             $scope.lancamentos = [];
             $scope.lancamentosLista = [];    
             $scope.lancamentosListaTable = [];
+            $scope.lastLancamentoConciliado;
             $scope.tipos = LISTAS.lancamento;
             $scope.modelos = LISTAS.modeloLancamento;
             $scope.situacoes = LISTAS.situacaoLancamento;
@@ -22,7 +23,10 @@ app.controller('LancamentoController',
 //            $scope.datepickerDataInicio = angular.copy(DatePickerService.default);      
 //            $scope.datepickerDataFim = angular.copy(DatePickerService.default);  
             $scope.outOfRangePeriodo = false;  
-            $scope.saldoTotal = 0;
+            $scope.saldoDebito = 0;
+            $scope.saldoCredito = 0;
+            $scope.saldoTransferenciaDebito = 0;
+            $scope.saldoTransferenciaCredito = 0;
             $scope.lancSearch = {};
             getTitle();
             contas();
@@ -45,9 +49,12 @@ app.controller('LancamentoController',
                 {label: 'Usuário', column: 'usuario', showColumn: true, selected: false},
                 {label: 'Favorecido', column: 'favorecido'},                
                 {label: 'Histórico', column: 'historico'},
-                {label: 'Crédito', column: 'deposito', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}, footer: { show: true, callback: null, dataClass: 'text-right', filter: {name: 'currency', args: '' }} },  
-                {label: 'Débito', column: 'pagamento', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}, footer: { show: true, callback: null, dataClass: 'text-right', filter: {name: 'currency', args: '' }} },  
-                {label: 'Saldo', column: 'saldo', selected: true, headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'saldoLancamento', args: ''}}
+                {label: 'Crédito', column: 'deposito', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}, 
+                    footer: { show: true, callback: null, dataClass: 'text-right', filter: {name: 'currency', args: '' }} },  
+                {label: 'Débito', column: 'pagamento', headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'currency', args: ''}, 
+                    footer: { show: true, callback: null, dataClass: 'text-right', filter: {name: 'currency', args: '' }} },  
+                {label: 'Saldo', column: 'saldo', selected: true, headerClass: 'no-sort', dataClass:'text-right', filter: {name: 'saldoLancamento', args: ''},
+                    footer: { show: true, callback: getSaldoTotal, dataClass: 'text-right', filter: {name: 'currency', args: '' }} }
             ]            
             $scope.linha = {
                 conditionalClass: function(item) {
@@ -90,9 +97,9 @@ app.controller('LancamentoController',
             };
             $scope.events = { 
                 table: function(lancamentos) {
-                    calculateSaldo(lancamentos);
+//                    calculateSaldo(lancamentos, criarLancamentosListaSaldo);
                     $scope.lancamentosListaTable = angular.copy(lancamentos);
-                    calculateSaldo($scope.lancamentosListaTable);
+                    calculateSaldo($scope.lancamentosListaTable, criarLancamentosListaSaldo);
                 }
             }
         };
@@ -231,8 +238,8 @@ app.controller('LancamentoController',
             LancamentoService.getAll(dataInicio, dataFim)
                 .then(function (data) {
                     $scope.lancamentos = angular.copy(data);
-                    $scope.lancamentosLista = criarLancamentosLista(data);
-                    if(!$scope.lancamentosLista.length) { calculateSaldo($scope.lancamentosLista); }
+                    calculateSaldo($scope.lancamentos, criarLancamentosLista);
+//                    else { $scope.lancamentosLista = criarLancamentosLista($scope.lancamentos, 0); }
                     ListaService.getTableValue($scope.colunas, 'saldo').selected = false;
                     ListaService.getTableValue($scope.colunas, 'conta.nome').selected = true;
                 })
@@ -257,15 +264,28 @@ app.controller('LancamentoController',
                 ContaService.getLancamento(conta.idConta, dataInicio, dataFim)
                     .then(function (data) {
                         $scope.lancamentos = angular.copy(data.lancamentos);
-                        $scope.lancamentosLista = criarLancamentosLista(data.lancamentos);
-                        if(!$scope.lancamentosLista.length) { calculateSaldo($scope.lancamentosLista); }
+                        calculateSaldo($scope.lancamentos, criarLancamentosLista);
+//                        $scope.lancamentosLista = criarLancamentosLista(data.lancamentos);
+//                        if(!$scope.lancamentosLista.length) { calculateSaldo($scope.lancamentosLista, criarLancamentosLista); }
                         ListaService.getTableValue($scope.colunas, 'saldo').selected = true;
                         ListaService.getTableValue($scope.colunas, 'conta.nome').selected = false;
+                        lastLancamentoConciliado(conta);
                     })
                     .catch(function(e) {
                         console.log(e);
                     });
             }
+        };
+        
+        var lastLancamentoConciliado = function(conta) {
+            LancamentoConciliadoService.getLastByConta(conta.idConta)
+                .then(function (data) {
+                    if(data) { $scope.lastLancamentoConciliado = data; }
+                    else { $scope.lastLancamentoConciliado = null; }
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
         };
 
         $scope.changePeriodo = function(conta, periodo) {
@@ -320,17 +340,11 @@ app.controller('LancamentoController',
             return null;
         };
 
-        var criarLancamentosLista = function(lancamentos) {
+        var criarLancamentosLista = function(lancamentos, saldo) {
+            $scope.lancamentosLista = [];
+            var saldoInicial = saldo;
             return _.map(lancamentos, function(lancamento) { 
-
-                if(lancamento.tipo.id === $scope.tipos[1].id) { 
-                    lancamento.pagamento = lancamento.valor * -1;
-                    lancamento.deposito = null;
-                } 
-                else if(lancamento.tipo.id === $scope.tipos[0].id) { 
-                    lancamento.deposito = lancamento.valor; 
-                    lancamento.pagamento = null;
-                }  
+                saldoInicial = defineLancamentosSaldo(lancamento, lancamento.modelo, saldoInicial);
 
                 if(lancamento.numeroParcela) { lancamento.numero = (lancamento.numero ? lancamento.numero : '') + '-' + lancamento.numeroParcela; }
 
@@ -363,8 +377,43 @@ app.controller('LancamentoController',
                 
                 if(lancamento.favorecido) { lancamento.favorecido = lancamento.favorecido.nome; }
 
-                return _.pick(lancamento, 'idLancamento', 'tipo', 'anexo', 'conta', 'dataLancamento', 'numero', 'planoConta', 'centroCusto', 'usuario', 'favorecido', 'deposito', 'pagamento', 'saldo', 'historico', 'situacao', 'numeroLoteConciliado');
+                $scope.lancamentosLista.push(
+                        _.pick(lancamento, 'idLancamento', 'tipo', 'anexo', 'conta', 'dataLancamento', 'numero', 'planoConta', 'centroCusto', 'usuario', 
+                'favorecido', 'deposito', 'pagamento', 'saldo', 'historico', 'situacao', 'numeroLoteConciliado'));
             })
+        };
+
+        var criarLancamentosListaSaldo = function(lancamentos, saldo) { 
+            $scope.saldoDebito = 0;
+            $scope.saldoCredito = 0;
+            $scope.saldoTransferenciaDebito = 0;
+            $scope.saldoTransferenciaCredito = 0;
+            var saldoInicial = saldo;
+            return _.map(lancamentos, function(lancamento) { 
+                saldoInicial = defineLancamentosSaldo(lancamento, lancamento.tipo.modelo, saldoInicial);                
+            })
+        };
+
+        var defineLancamentosSaldo = function(lancamento, modelo, saldo) {
+            if(lancamento.tipo.id === $scope.tipos[1].id) { 
+                var valor = (lancamento.valor || lancamento.pagamento * -1);
+                valor = (_.isNumber(valor) && valor) || 0;
+                lancamento.pagamento = valor * -1;
+                lancamento.deposito = null;
+                if(modelo.id === 1 || modelo.id === 3) { $scope.saldoTransferenciaDebito += valor; }
+                else { $scope.saldoDebito += valor; }
+                lancamento.saldo = saldo + lancamento.pagamento;
+            } 
+            else if(lancamento.tipo.id === $scope.tipos[0].id) {                
+                var valor = (lancamento.valor || lancamento.deposito);
+                valor = (_.isNumber(valor) && valor) || 0;
+                lancamento.deposito = valor; 
+                lancamento.pagamento = null;
+                if(modelo.id === 1 || modelo.id === 3) { $scope.saldoTransferenciaCredito += valor; }
+                else { $scope.saldoCredito += valor; }
+                lancamento.saldo = saldo + lancamento.deposito;
+            }  
+            return lancamento.saldo;
         };
         
         var getIdsPlanoConta = function(value) {
@@ -395,17 +444,17 @@ app.controller('LancamentoController',
             return centroCustos;
         };
 
-        var calculateSaldo = function(lancamentos) {
+        var calculateSaldo = function(lancamentos, createList) {
             if(!$scope.lancSearch.dataInicio) {
-                calculateSaldoInicial(0, lancamentos);
+                calculateSaldoInicial(0, lancamentos, createList);
             } else {
                 var conta = 0;
                 if($scope.lancSearch.conta && $scope.lancSearch.conta.idConta) { conta = $scope.lancSearch.conta.idConta; }
                 LancamentoService.getSaldoByConta(conta, null, 
                         moment($scope.lancSearch.dataInicio).subtract(1, 'days').format('YYYY-MM-DD'))
                     .then(function (data) {
-                        if(!data || !data.length) { calculateSaldoInicial(0, lancamentos); }
-                        else { calculateSaldoInicial(data[0].valor, lancamentos); }
+                        if(!data || !data.length) { calculateSaldoInicial(0, lancamentos, createList); }
+                        else { calculateSaldoInicial(data[0].valor, lancamentos, createList); }
                     })
                     .catch(function(e) {
                         console.log(e);
@@ -413,21 +462,22 @@ app.controller('LancamentoController',
             }
         };
 
-        var calculateSaldoInicial = function(saldoInicial, lancamentos) {
+        var calculateSaldoInicial = function(saldoInicial, lancamentos, createList) {
             var saldo = calculateSaldoInicialContas(saldoInicial);
-            $scope.saldoTotal = 0;
-            $scope.saldoTotal += saldo;
-            _.map(lancamentos, function(lancamento) {
-                if(lancamento.pagamento) { 
-                    saldo += lancamento.pagamento;
-                    $scope.saldoTotal += lancamento.pagamento;
-                } 
-                else if(lancamento.deposito) {
-                    saldo += lancamento.deposito;
-                    $scope.saldoTotal += lancamento.deposito;
-                }
-                lancamento.saldo = saldo;
-            });
+//            $scope.saldoTotal = 0;
+//            $scope.saldoTotal += saldo;
+//            _.map(lancamentos, function(lancamento) {
+//                if(lancamento.pagamento) { 
+//                    saldo += lancamento.pagamento;
+//                    $scope.saldoTotal += lancamento.pagamento;
+//                } 
+//                else if(lancamento.deposito) {
+//                    saldo += lancamento.deposito;
+//                    $scope.saldoTotal += lancamento.deposito;
+//                }
+//                lancamento.saldo = saldo;
+//            });
+            createList(lancamentos, saldo);
         };
         
         var calculateSaldoInicialContas = function(saldoInicial) {
@@ -440,6 +490,11 @@ app.controller('LancamentoController',
                 return saldo;
             }
             return saldoInicial;
+        };
+        
+        var getSaldoTotal = function(column, value, lista) {
+            var lastItem = angular.copy(lista).slice(-1)[0];
+            return lastItem.saldo;
         };
 
         var getLancamentoSelecionados = function(conta, lancamentos, callback) {            

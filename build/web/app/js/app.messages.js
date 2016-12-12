@@ -81,6 +81,7 @@ app.constant('MESSAGES', {
             sucesso: {
                 INSERIDO_SUCESSO: "Lançamento Programado Inserido com sucesso!",
                 ALTERADO_SUCESSO: "Lançamento Programado Alterado com sucesso!",
+                GERADO_SUCESSO_TODOS: "Lançamentos Programados Gerados com sucesso!",
                 REMOVIDO_SUCESSO: "Lançamento Programado Removido com sucesso!",
                 REMOVIDO_SUCESSO_TODOS: "Lançamentos Programados Removidos com sucesso!"
             },

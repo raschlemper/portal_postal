@@ -34,6 +34,7 @@
 
         ArrayList<Integer> acs = (ArrayList<Integer>) session.getAttribute("servicos");
         ArrayList<Integer> dps = (ArrayList<Integer>) session.getAttribute("departamentos");
+        ArrayList<Integer> acessosUs = (ArrayList<Integer>) session.getAttribute("acessos");
         int nivel = (Integer) session.getAttribute("nivelUsuarioEmp");
         int idUser = (Integer) session.getAttribute("idUsuarioEmp");
         String nomeUser = (String) session.getAttribute("nomeUser");
@@ -154,7 +155,45 @@
                         $('nome').val('');
                     }, 20);
                 });
+
+                $('#cep').keydown(function (event) {
+                    if (event.ctrlKey == true && (event.which == '118' || event.which == '86')) {
+                        alert('Neste campo não é possivel COPY/PASTE!');
+                        event.preventDefault();
+                    }
+                });
+                $('#vd').keydown(function (event) {
+                    if (event.ctrlKey == true && (event.which == '118' || event.which == '86')) {
+                        alert('Neste campo não é possivel COPY/PASTE!');
+                        event.preventDefault();
+                    }
+                });
+                $('#peso').keydown(function (event) {
+                    if (event.ctrlKey == true && (event.which == '118' || event.which == '86')) {
+                        alert('Neste campo não é possivel COPY/PASTE!');
+                        event.preventDefault();
+                    }
+                });
+                $('#altura').keydown(function (event) {
+                    if (event.ctrlKey == true && (event.which == '118' || event.which == '86')) {
+                        alert('Neste campo não é possivel COPY/PASTE!');
+                        event.preventDefault();
+                    }
+                });
+                $('#largura').keydown(function (event) {
+                    if (event.ctrlKey == true && (event.which == '118' || event.which == '86')) {
+                        alert('Neste campo não é possivel COPY/PASTE!');
+                        event.preventDefault();
+                    }
+                });
+                $('#comprimento').keydown(function (event) {
+                    if (event.ctrlKey == true && (event.which == '118' || event.which == '86')) {
+                        alert('Neste campo não é possivel COPY/PASTE!');
+                        event.preventDefault();
+                    }
+                });
             });
+
             function habilitaMedidas() {
 
                 if ($('#listPeso').hasClass('esconder')) {
@@ -438,8 +477,7 @@
                     alert('O Valor Declarado Maximo de Encomendas é de R$ 10.000,00!');
                     document.getElementById("vd").focus();
                     return false;
-                }
-
+                } 
                 //PREENCHIMENTO DA CONFIRMAÇÃO                
                 document.getElementById("v_nome").innerHTML = form.nome.value;
                 document.getElementById("v_cuidados").innerHTML = form.aoscuidados.value;
@@ -448,6 +486,7 @@
                 document.getElementById("v_rua").innerHTML = form.endereco.value + ", " + form.numero.value + ", " + form.complemento.value;
                 document.getElementById("v_bairro").innerHTML = form.bairro.value + " - " + form.cidade.value + " / " + form.uf.value;
                 document.getElementById("v_remetente").innerHTML = form.nomeCli.value;
+                document.getElementById("v_obs").innerHTML = form.obs.value;
                 var aux = form.departamento.value.split(';');
                 document.getElementById("v_departamento").innerHTML = aux[1];
                 if (form.servico.value === 'SEDEXC' || form.servico.value === 'PAC_COB') {
@@ -507,7 +546,8 @@
                     //chamaDivProtecao2();
                 }
             }
-
+            
+         
 
             function verPesquisarAbrangenciaMDPB(cep) {
                 // strUrl is whatever URL you need to call
@@ -751,6 +791,24 @@
                     document.getElementById('numObjetoDel').value = '';
                     return false;
                 }
+            }
+
+            function excluirSelecionados() {
+                if (confirm('Tem certeza que deseja excluir as estiquetas selecionadas?')) {
+                    var itensSelecionados = "";
+                    $("[name='ids']:checked").each(function () {
+                        itensSelecionados += $(this).val() + ",";
+                    });
+
+                    if (itensSelecionados == "") {
+                        alert("Nenhum item selecionado para exclusão.");
+                        return;
+                    }
+                    itensSelecionados = itensSelecionados.substring(0, itensSelecionados.length - 1);
+                    document.getElementById('idVendaDel').value = itensSelecionados;
+                    document.formDel.submit();
+                }
+
             }
 
             function semNumero() {
@@ -1039,6 +1097,12 @@
                         <dd style="width: 20%;">
                             <label>CEP</label>
                             <span id="v_cep"></span>
+                        </dd>
+                    </li>
+                    <li>
+                        <dd style="width: 40%;">
+                            <label>Observações</label>
+                            <span id="v_obs"></span>
                         </dd>
                     </li>
                     <li><dd class="titulo"> </dd></li>
@@ -1869,26 +1933,27 @@
                                         </select>
                                     </dd>
                                 </li>
-                                <li class="esconder" id="listPeso">
+                                <li class="esconder" id="listPeso" <% if (acessosUs.contains(10)) {%>style="padding-top: 10px; height: 55px; background-color: lavender;"<% }
+                                    %> >
                                     <dd id="vlrPeso">
                                         <label>Peso<span style="color:red;"> (Kg)</span></label>
-                                        <input type="text" name="peso" id="peso" style="width: 80px;" value="0" onkeypress="mascara(this, maskKilo)" />
+                                        <input type="text" name="peso" id="peso" style="width: 80px;" maxlength="6" value="0" onkeypress="mascara(this, maskKilo)" />
                                     </dd>
                                     <dd id="vlrAltura">
                                         <label>Altura <span style="color:red;"> (cm)</span></label>
-                                        <input type="text" name="altura" id="altura" style="width: 80px;"  value="0" onkeypress="mascara(this, maskNumero)" />
+                                        <input type="text" name="altura" id="altura" style="width: 80px;" maxlength="3" value="0" onkeypress="mascara(this, maskNumero)" />
                                     </dd>
                                     <dd id="vlrLargura"></label>
                                         <label>Largura<span style="color:red;"> (cm)</span></label>
-                                        <input type="text" name="largura" id="largura" style="width: 80px;" value="0" onkeypress="mascara(this, maskNumero)" />
+                                        <input type="text" name="largura" id="largura" style="width: 80px;" maxlength="3" value="0" onkeypress="mascara(this, maskNumero)" />
                                     </dd>
                                     <dd id="vlrCompr">
                                         <label>Comprimento<span style="color:red;"> (cm)</span></label>
-                                        <input type="text" name="comprimento" id="comprimento" style="width: 80px;" value="0" onkeypress="mascara(this, maskNumero)" />
+                                        <input type="text" name="comprimento" id="comprimento" style="width: 80px;" maxlength="3" value="0" onkeypress="mascara(this, maskNumero)" />
                                     </dd>  
                                     <dd>
-                                        <div class="buttons">
-                                            <button type="button" class="negative" onclick="fazCotacao();">MOSTRAR PREÇOS</button>
+                                        <div class="buttons" >
+                                            <button type="button" class="negative" style="margin-top: 10px;" onclick="fazCotacao();">MOSTRAR PREÇOS</button>
                                         </div>
                                     </dd>
 
@@ -2077,10 +2142,8 @@
                             <li>
                                 <dd>
                                     <div class="buttons">
+                                        <button type="button" class="negative" style="float:right;" onclick="excluirSelecionados()" ><img src="../../imagensNew/cross_circle.png" />EXCLUIR SELECIONADOS</button>
                                         <button type="submit" class="regular" onClick="return verificaSelecao('A4');"><img src="../../imagensNew/printer.png" /> IMPRIMIR ETIQUETAS SELECIONADAS</button>
-                                        <%--<input type="hidden" name="formato" id="formato" value="A4" />                                        
-                                        <button type="submit" class="regular" onClick="return verificaSelecao('A4');"><img src="../../imagensNew/printer.png" /> IMPRIMIR EM FOLHA A4</button>
-                                        <button style="float: right;" type="submit" class="positive" onClick="return verificaSelecao('ETQ_16x10');"><img src="../../imagensNew/printer.png" /> IMPRIMIR EM ETIQUETAS 16 x 10</button>--%>
                                     </div>                                    
                                 </dd>
                             </li>

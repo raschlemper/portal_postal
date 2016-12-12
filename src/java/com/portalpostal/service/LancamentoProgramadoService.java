@@ -44,9 +44,29 @@ public class LancamentoProgramadoService {
         return lancamentoProgramados;
     }  
     
+    public List<LancamentoProgramado> findAllById(List<Integer> ids) throws Exception {
+        init();
+        List<LancamentoProgramado> lancamentoProgramados = lancamentoProgramadoDAO.findAllById(ids);
+        for (LancamentoProgramado lancamentoProgramado : lancamentoProgramados) {
+            lancamentoProgramado = setParcelas(lancamentoProgramado);
+            lancamentoProgramado = setRateios(lancamentoProgramado);
+            lancamentoProgramado = setLancamentos(lancamentoProgramado);
+        }
+        return lancamentoProgramados;
+    }  
+    
     public LancamentoProgramado find(Integer idLancamentoProgramado) throws Exception {
         init();
         LancamentoProgramado lancamentoProgramado = lancamentoProgramadoDAO.find(idLancamentoProgramado);
+        if(lancamentoProgramado == null) return lancamentoProgramado;
+        lancamentoProgramado = setParcelas(lancamentoProgramado);
+        lancamentoProgramado = setRateios(lancamentoProgramado);
+        lancamentoProgramado = setLancamentos(lancamentoProgramado);
+        return lancamentoProgramado;
+    }  
+    
+    public LancamentoProgramado populate(LancamentoProgramado lancamentoProgramado) throws Exception {
+        init();
         if(lancamentoProgramado == null) return lancamentoProgramado;
         lancamentoProgramado = setParcelas(lancamentoProgramado);
         lancamentoProgramado = setRateios(lancamentoProgramado);

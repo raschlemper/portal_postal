@@ -14,7 +14,7 @@
     ArrayList<PreVenda> lista = ContrPreVenda.consultaVendasReimpressao(idCli, 1, -1, nivel, idUser, true, dataIni, dataFim, nomeBD);
 
     if (lista.size() >= 1) {
-%>NUM. DO OBJETO;SERVIÇO;DEPARTAMENTO;DESTINATÁRIO;EMPRESA;CPF/CNPJ;AOS CUIDADOS;ENDEREÇO;BAIRRO;CIDADE;UF;CEP;NOTA FISCAL / ID PEDIDO;AR;MP;VD;CONTEÚDO;OBSERVAÇÕES;CHAVE;DATA IMPRESSÃO;E-MAIL
+%>NUM. DO OBJETO;SERVIÇO;DEPARTAMENTO;DESTINATÁRIO;EMPRESA;CPF/CNPJ;AOS CUIDADOS;ENDEREÇO;BAIRRO;CIDADE;UF;CEP;NOTA FISCAL / ID PEDIDO;AR;MP;VD;CONTEÚDO;OBSERVAÇÕES;CHAVE;DATA IMPRESSÃO;E-MAIL;COD. PP
 <%
             for (int i = 0; i < lista.size(); i++) {
                 PreVenda des = lista.get(i);
@@ -34,7 +34,7 @@
                 if (des.getMao_propria() == 0) {
                     mp = "NÃO";
                 }
-%><%= numObj%>;<%= des.getNomeServico()%>;<%= des.getDepartamento() %>;<%= des.getNomeDes()%>;<%= des.getEmpresaDes() %>;<%= des.getCpfDes() %>;<%= des.getAos_cuidados() %>;<%= des.getEnderecoDes() + ", " + des.getNumeroDes() + ", " + des.getComplementoDes() %>;<%= des.getBairroDes() %>;<%= des.getCidadeDes() + ";" + des.getUfDes()%>;<%= des.getCepDes()%>;<%= des.getNotaFiscal()%>;<%= ar%>;<%= mp%>;<%= vd%>;<%= des.getConteudo() %>;<%= des.getObservacoes() %>;<%= des.getNomeVenda() %>;<%= des.getDataImpressoFormatada() %>;<%= des.getEmail_destinatario() %>
+%><%= numObj%>;<%= des.getNomeServico()%>;<%= des.getDepartamento() %>;<%= des.getNomeDes()%>;<%= des.getEmpresaDes() %>;<%= des.getCpfDes() %>;<%= des.getAos_cuidados() %>;<%= des.getEnderecoDes() + ", " + des.getNumeroDes() + ", " + des.getComplementoDes() %>;<%= des.getBairroDes() %>;<%= des.getCidadeDes() + ";" + des.getUfDes()%>;<%= des.getCepDes()%>;<%= des.getNotaFiscal()%>;<%= ar%>;<%= mp%>;<%= vd%>;<%= des.getConteudo() %>;<%= des.getObservacoes() %>;<%= des.getNomeVenda() %>;<%= des.getDataImpressoFormatada() %>;<%= des.getEmail_destinatario() %>;<%= des.getId() %>
 <% }} else {%>
 Nenhum Objeto Encontrado!
 <%}%>

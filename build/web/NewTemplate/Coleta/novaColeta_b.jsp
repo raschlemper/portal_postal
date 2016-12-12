@@ -1,4 +1,6 @@
 
+<%@page import="Util.FormatarData"%>
+<%@page import="Controle.contrEmpresa"%>
 <%@page import="Coleta.Entidade.TipoColeta"%>
 <%@page import="Coleta.Controle.contrTipoColeta"%>
 <%@page import="Coleta.Controle.contrColetador"%>
@@ -27,6 +29,7 @@
 
     SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
     SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
+    
     String nomeBD = (String) session.getAttribute("empresa");
     if (nomeBD == null) {
         response.sendRedirect("../index.jsp?msgLog=3");
@@ -37,6 +40,10 @@
         int idCliente = 0;
         if (request.getParameter("idCliente") != null && !request.getParameter("idCliente").equals("")) {
             idCliente = Integer.parseInt(request.getParameter("idCliente"));
+        }
+        Date dataAtual = new Date();
+        if (contrEmpresa.consultaoSemHrVerao(idEmpresa)) {
+            dataAtual = FormatarData.somarHorasNaData(new Date(), -1);
         }
 
         Map<Integer, ArrayList<Coleta>> lsC = contrColetaFixa.verificaExistenciaRotaParaCliente(nomeBD);
@@ -213,14 +220,14 @@
                                                 <div class="col-sm-6 col-md-3">
                                                     <label class="small">Data da Coleta</label>
                                                     <div class="input-group">
-                                                        <input class="form-control" type="text" name="dataColeta" id="dataColeta"  value="<%= sdf1.format(new Date())%>" maxlength="10" onKeyPress="mascara(this, maskData)" />
+                                                        <input class="form-control" type="text" name="dataColeta" id="dataColeta"  value="<%= sdf1.format(dataAtual)%>" maxlength="10" onKeyPress="mascara(this, maskData)" />
                                                         <span class="input-group-addon" ><i class="fa fa-calendar"></i></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-md-3">
                                                     <label class="small">Hora da Coleta</label>
                                                     <div class="input-group">
-                                                        <input class="form-control" type="text" name="horaColeta" id="horaColeta" value="<%= sdf2.format(new Date())%>" maxlength="5" onKeyPress="mascara(this, maskHora)" />
+                                                        <input class="form-control" type="text" name="horaColeta" id="horaColeta" value="<%= sdf2.format(dataAtual)%>" maxlength="5" onKeyPress="mascara(this, maskHora)" />
                                                         <span class="input-group-addon" ><i class="fa fa-clock-o"></i></span>
                                                     </div>
                                                 </div>

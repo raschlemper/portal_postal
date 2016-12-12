@@ -18,7 +18,8 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
             report.planoConta = lancamento.planoConta.descricao;
             report.historico = lancamento.historico;
             report.frequencia = lancamento.frequencia.descricao;
-            report.valor = lancamento.valor;
+            report.deposito = lancamento.deposito;
+            report.pagamento = lancamento.pagamento;
             dados.push(report);
         });
         return dados;
@@ -76,6 +77,26 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
         if(parcelaLancamento && parcelaLancamento.lancamento) { lancamento.baixado = true; }
         return lancamento;
     };
+        
+    var getFirstParcelaAberta = function(lancamentoProgramado) {
+        var numeroParcela = 0
+        if(lancamentoProgramado.lancamentos && lancamentoProgramado.lancamentos.length){
+            numeroParcela = lancamentoProgramado.lancamentos[0].numeroParcela;
+        };
+        var parcelas = lancamentoProgramado.parcelas || [];
+        return _.find(parcelas, function(parcela) { 
+            return !parcela.lancamento && numeroParcela !== parcela.numero; 
+        });
+    };
+    
+    var encerrarLancamentoProgramado = function(lancamentoProgramado, lancamento) {
+        if(lancamentoProgramado.frequencia === 0) { // Único
+            lancamentoProgramado.situacao = situacoes[2].id;
+        }
+        if(lancamento.numeroParcela === lancamentoProgramado.quantidadeParcela) {
+            lancamentoProgramado.situacao = situacoes[2].id;                
+        }            
+    };
     
     var getPeriodos = function() {
         var periodosCustom = [];
@@ -90,6 +111,19 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
             if(periodo.id === 14) { periodosCustom.push(periodo); }    
         });
         return periodosCustom;
+    };
+            
+    var ajustarLancamentoProgramadoFrequencia = function(lancamentoProgramado) {             
+        if((lancamentoProgramado.parcelas && lancamentoProgramado.parcelas.length)) {
+            lancamentoProgramado.dataCompetencia = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataCompetencia) || moment();
+            lancamentoProgramado.dataVencimento = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataVencimento) || moment();
+            var parcela = getFirstParcelaAberta(lancamentoProgramado);
+            if(parcela) { lancamentoProgramado.dataVencimento = parcela.dataVencimento || moment(); } 
+        } else {
+            lancamentoProgramado.dataCompetencia = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataCompetencia) || moment();
+            lancamentoProgramado.dataVencimento = FrequenciaLancamentoService.addData(lancamentoProgramado.frequencia, lancamentoProgramado.dataVencimento) || moment();
+        }
+        return lancamentoProgramado;
     };
     
 //    var setNumeroParcelaLancamento = function(lancamento) {
@@ -106,6 +140,11 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
             if(dataInicio && dataFim) url += "&";
             if(dataFim) url += "dataFim=" + dataFim;
             return PromiseService.execute($http.get(url));
+        },
+
+        getAllById: function(ids) {
+            return PromiseService.execute(
+                    $http.post(_contextPath + "/api/financeiro/lancamento/programado/id", ids));
         },
 
         getAllAtivo: function(dataInicio, dataFim) {
@@ -166,6 +205,11 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
                     $http.post(_contextPath + "/api/financeiro/lancamento/programado/create", data));
         },
 
+        createAll: function(data) {
+            return PromiseService.execute(
+                    $http.post(_contextPath + "/api/financeiro/lancamento/programado/create/all", data));
+        },
+
         delete: function(idLancamentoProgramado) {
             return PromiseService.execute(
                     $http.delete(_contextPath + "/api/financeiro/lancamento/programado/" + idLancamentoProgramado));
@@ -191,6 +235,12 @@ app.factory('LancamentoProgramadoService', function($http, PromiseService, Frequ
             lancamentoProgramadoVencido(lista, lancamento, data)
             return lista;
         },
+        
+        getFirstParcelaAberta: getFirstParcelaAberta,
+        
+        encerrarLancamentoProgramado: encerrarLancamentoProgramado,
+        
+        ajustarLancamentoProgramadoFrequencia: ajustarLancamentoProgramadoFrequencia,
         
         report: report,
         

@@ -75,7 +75,18 @@
                             + " WHERE dataPostagem >= '" + dataIni + "' "
                             + " AND dataPostagem <= '" + dataFim + "' "
                             + " AND idVendedor = " + idVendedor + " "
-                            + "GROUP BY codCliente, descServico  ORDER BY codCliente; ";
+                            + " GROUP BY codCliente, descServico  "
+                            + " UNION"
+                            + " SELECT '' , 'TOTAL',"
+                            + " 'SERVICO',"
+                            + " CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT(SUM(valorServico), 2),'.',';'),',','.'),';',',')) AS $TOTAL,"
+                            + " '', "
+                            + " CONCAT('R$ ', REPLACE(REPLACE(REPLACE(FORMAT((SUM(valorServico) * (percentual/100)), 2),'.',';'),',','.'),';',',')) AS $COMISSAO"
+                            + " FROM movimentacao"
+                            + " LEFT JOIN cliente ON codCliente = codigo  JOIN vendedor_cliente ON codCliente = idCliente"
+                            + " WHERE dataPostagem >= '" + dataIni + "' "
+                            + " AND dataPostagem <= '" + dataFim + "'  "
+                            + " AND idVendedor = " + idVendedor + " ;";
                     break;
 
 
