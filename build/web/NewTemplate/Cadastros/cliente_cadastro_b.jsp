@@ -85,12 +85,7 @@
                     document.getElementById("lng").value = point.lng().toFixed(6);
                 });
 
-                /*google.maps.event.addListener(map, "center_changed", function() {
-                 var center = map.getCenter();
-                 marker.setPosition(center);
-                 document.getElementById("lat").value = center.lat().toFixed(6);
-                 document.getElementById("lng").value = center.lng().toFixed(6); 
-                 });*/
+             
 
             <%if (lat == 0 && lng == 0) {%>
                 showAddress("<%= endereco%>");
@@ -514,94 +509,12 @@
                             </div>
                         </div>
                         <form name="form2" action="../../ServCriaSMTP" method="post">
-                             <!-- <div class="row hidden" id="mostra_smtp">
-                                <div class="col-md-12"> 
-                                    <ul class="list-group">
-                                        <li class="list-group-item list-group-item-warning">
-                                          <div class="form-inline">
-                                                <label>&nbsp;</label>
-                                                <label><input type="radio" name="is_smtp_client" value="1" id="is_smtp_client" onclick="mostraCampos2()"/> CADASTRAR SERVIDOR SMTP (CUSTO DE R$ 0,10/Objeto)</label>
-                                            </div> 
-                                            <div class="form-inline">
-                                                <label>&nbsp;</label>
-                                             </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>-->
+                            
                             <div class="row" >
                                 <div class="col-md-12">   
                                     <input type="hidden" name="is_smtp_client" value="0" id="is_smtp_client" checked="checked" onclick="mostraCampos2()"/> 
                                            
-                                 <!--   <ul class="list-group hidden" id="camposSMTP">
-                                        <li class="list-group-item list-group-heading">
-                                            <label>CADASTRE O SERVIDOR SMTP DO CLIENTE OU DA AGF</label>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <div class="row form-horizontal">
-                                                <div class="col-sm-6 col-md-3 col-lg-3">
-                                                    <label class="small">SMTP</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-envelope"></i></span>
-                                                        <input class="form-control" type="text" autocomplete="off" placeholder="smtp.provedor.com.br" name="smtp" />
-                                                    </div>   
-                                                    <div id="foo"></div>
-                                                </div>
-                                                <div class="col-sm-6 col-md-3 col-lg-2">
-                                                    <label class="small">PORTA</label>                                            
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-globe"></i></span>
-                                                        <input class="form-control" placeholder="porta smtp" type="text" name="porta_smtp" onkeypress="mascara(this, maskNumero)" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li> 
-                                        <li class="list-group-item list-group-item-warning">
-                                            <div class="form-inline">
-                                                <label>&nbsp;</label>
-                                                <label><input type="checkbox" name="is_autenticacao"  id="is_autenticacao" value="1" onclick="mostraCampos()"/> UTILIZA AUTENTICAÇÃO</label>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item hidden" id="campos">
-                                            <div class="row form-horizontal">   
-                                                <div class="col-sm-6 col-md-3 col-lg-3">
-                                                    <label class="small">USUARIO</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-user"></i></span>
-                                                        <input class="form-control" type="text" autocomplete="off" placeholder="usuario" name="usuario" />
-                                                    </div>   
-                                                    <div id="foo"></div>
-                                                </div>
-                                                <div class="col-sm-6 col-md-3 col-lg-2">
-                                                    <label class="small">SENHA</label>                                            
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-globe"></i></span>
-                                                        <input class="form-control" placeholder="senha" type="password" name="senha" />
-                                                    </div>
-                                                </div> 
-                                                <div class="col-sm-6 col-md-3 col-lg-2">
-                                                    <label class="small">TIPO SEGURANÇA</label>                                                   
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-lock"></i></span>
-                                                        <select class="form-control" name="tipo_seg" >
-                                                            <option value="NENHUMA">NENHUMA</option>
-                                                            <option value="SSL">SSL</option>
-                                                            <option value="TLS">TLS</option>
-                                                            <option value="STARTTLS">STARTTLS</option>
-                                                        </select>
-                                                    </div> 
-                                                </div>
-                                                <div class="col-sm-6 col-md-3 col-lg-2">
-                                                    <label class="small">PORTA SSL*</label>                                            
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-globe"></i></span>
-                                                        <input class="form-control" placeholder="porta ssl/tsl" type="text" name="porta_ssl" onkeypress="mascara(this, maskNumero)" />
-                                                    </div>
-                                                </div>
-                                            </div>                                        
-                                        </li>
-                                    </ul> -->
-                                    <!-- verificar se ja esta cadastrado -->
+                                
                                     <%
                                     boolean dest = true;
                                     if(cliSmtp != null){
@@ -622,56 +535,7 @@
                                                 <label><input type="radio" name="is_destinatario" value="0" id="is_destinatario" <%if(!dest){%> checked="checked" <%}%>/> ENVIAR PARA O E-MAIL DESTE CLIENTE (deve estar cadastrado acima) </label>
                                             </div>
                                         </li>
-                                      <%--    <li class="list-group-item" id="campos">
-                                            <div class="row form-horizontal">                                             
-                                                <div class="col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small"> ADICIONAR OUTROS E-MAILS (separados por ;)</label>                                            
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon" ><i class="fa fa-inbox"></i></span>
-                                                        <input class="form-control" placeholder="digite os e-mails (separe por ;)" type="text" name="add_mail"  />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                      <li class="list-group-item">
-                                            <div class="row form-horizontal">
-
-                                                <div class="col-sm-12 col-md-4 col-lg-4">
-                                                    <label class="small">
-                                                        DEPARTAMENTOS:<br/>
-                                                        <a style="color:blue;font-size: 9px;" onclick="selectAllCombo(document.getElementById('departamentos'), true);">MARCAR TUDO</a><br/>
-                                                        <a style="color:red;font-size: 9px;" onclick="selectAllCombo(document.getElementById('departamentos'), false);">DESMARCAR TUDO</a>
-                                                    </label>
-                                                    <select class="form-control" name='departamentos' id='departamentos' multiple='true' onclick="controleCombobox1(this)" size=10 >
-                                                        <%
-                                                            ArrayList<ClientesDeptos> listaDep = ContrClienteDeptos.consultaDeptos(idClienteInc, agf_empresa.getCnpj());
-                                                            for (int i = 0; i < listaDep.size(); i++) {
-                                                                ClientesDeptos cd = listaDep.get(i);
-                                                        %>
-                                                        <option value="<%=cd.getIdDepartamento()%>"><%= cd.getNomeDepartamento()%></option>
-                                                        <%}%>
-                                                    </select>
-                                                    <script language="javascript">
-                                                        function selectAllCombo(combo, flag) {
-                                                            for (i = 0; i < combo.length; i++) {
-                                                                combo.options[i].selected = flag;
-                                                            }
-                                                        }
-                                                        function controleCombobox1(combo) {
-                                                            combo_aux1[combo.selectedIndex] = !combo_aux1[combo.selectedIndex];
-                                                            for (i = 0; i < combo.length; i++) {
-                                                                combo.options[i].selected = combo_aux1[i];
-                                                            }
-                                                        }
-                                                        var combo_aux1 = new Array(document.getElementById("departamentos").options.length);
-                                                        for (i = 0; i < document.getElementById("departamentos").options.length; i++) {
-                                                            combo_aux1[i] = document.getElementById("departamentos").options[i].selected;
-                                                        }
-                                                    </script>
-                                                </div>
-
-                                            </div>
-                                        </li> --%>
+                                    
                                         <li class="list-group-item">
                                             <input type="hidden" name="local" value="1" />
                                             <input type="hidden" name="idCliente" value="<%= idClienteInc%>" />
@@ -684,46 +548,7 @@
                                     </ul>
                                     </form>
   
-                                  <%--<div class="panel panel-default">
-                                        <div class="panel-heading"><label>Lista dos SMTP/Departamentos Cadastrados</label></div>
-                                        <div class="panel-body">
-                                            <div class="dataTable_wrapper no-padding">
-                                                <table class="table table-striped table-bordered table-hover table-condensed" style="table-layout: fixed;word-wrap: break-word;" id="dataTables-example">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>SMTP SERVER</th>
-                                                            <th style="width: 125px;">AUTENTICAÇÃO </th>
-                                                            <th>DEPARTAMENTOS</th>
-                                                            <th class="no-sort" style="width: 65px;">Excluir</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <%
-                                                            ArrayList<ClienteSMTP> lista = Controle.ContrClienteSMTP.consultaCadastroSMTP(idClienteInc, agf_empresa.getCnpj());
-                                                            for (int i = 0; i < lista.size(); i++) {
-                                                                ClienteSMTP smtp = lista.get(i);
-
-                                                        %>
-                                                        <tr>
-                                                            <td><%= smtp.getSmtp()%></td>
-                                                            <td><%= smtp.getTipo_seguranca()%></td>
-                                                            <td style="max-width: 200px;"><%= smtp.getIdDepartamento()%></td>                                
-
-
-                                                            <td align="center">
-                                                                <form action="../../ServExcluirSMTP" method="post" name="formDel">
-                                                                    <input type="hidden" name="local" value="1" />
-                                                                    <input type="hidden" name="id_smtp" value="<%= smtp.getId()%>" />  
-                                                                    <button type="button" class="btn btn-sm btn-danger" onClick="confirmExcluir(this);" ><i class="fa fa-trash fa-lg"></i></button>
-                                                                </form>
-                                                            </td>
-                                                        </tr>
-                                                        <%}%>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div> --%>
+                                
                                 </div>
                             </div>
                             <div class="row spacer-xlg"></div>

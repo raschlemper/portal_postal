@@ -36,7 +36,7 @@
                     <div id="page-wrapper">
                         <div class="row">
                             <div class="col-md-12">
-                                <h4 class="page-header"><b class="text-primary"><i class="fa fa-truck"></i> Coleta</b> > <small>Coletadores</small></h4>
+                                <h4 class="page-header"><b class="text-primary"><i class="fa fa-truck"></i> Coleta</b> > <small>Cadastro de Rotas</small></h4>
                             </div>
                         </div>
                         <div class="col-lg-12">
@@ -45,19 +45,19 @@
 
                                     <ul class="list-unstyled">
                                         <li class="list-group-item list-group-heading">
-                                            <label>Cadastrar novo coletador</label>
+                                            <label>Cadastrar Rota</label>
                                         </li>
                                         <li class="list-group-item">
                                             <div class="row form-horizontal">
                                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                                                    <label class="small">Nome do Coletador</label>
+                                                    <label class="small">Nome da Rota</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-user"></i></span>
-                                                        <input type="text" name="nome"  class="form-control" placeholder="Nome do Coletador" />
+                                                        <input type="text" name="Nome"  class="form-control" placeholder="Nome" />
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-6 col-sm-5 col-md-3 col-lg-3">
-                                                    <label class="small">Celular do Coletador</label>
+                                                    <label class="small">Telefone de Contato</label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon" ><i class="fa fa-phone"></i></span>
                                                         <input type="text" name="telefone" onKeyPress="mascara(this, maskTelefone)"  class="form-control" placeholder="Telefone" />
@@ -67,7 +67,7 @@
                                         </li>
 
                                         <li class="list-group-item">
-                                                <button type="button" class="btn btn-success" onclick="return preencherCampos();"><i class="fa fa-save fa-lg fa-spc"></i>&nbsp; INSERIR NOVO COLETADOR</button>
+                                                <button type="button" class="btn btn-success" onclick="return preencherCampos();"><i class="fa fa-save fa-lg fa-spc"></i>&nbsp; INSERIR NOVA ROTA</button>
                                         </li>
                                     </ul>
                                     <input type="hidden" type="password" name="senha"/>
@@ -81,7 +81,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="panel panel-default">
-                                    <div class="panel-heading" >Lista com todos os coletadores</div>
+                                    <div class="panel-heading" >Lista com todas as rotas</div>
                                     <div class="panel-body no-padding">
                                         <div class="dataTable_wrapper">
                                             <table class="table table-striped table-bordered table-hover table-condensed" id="dataTables-example">
@@ -89,7 +89,7 @@
                                                     <tr>
                                                         <th style="width: 80px;">Nº</th>
                                                         <th>Nome</th>
-                                                        <th>Telefone</th>
+                                                        <th>Celular</th>
                                                         <th style="width: 100px;" class="no-sort">Rota</th>
                                                         <th style="width: 100px;" class="no-sort">Editar</th>
                                                         <th style="width: 100px;" class="no-sort">Excluir</th>
@@ -173,7 +173,7 @@
             
             function editarColetador(retorno) {
                 bootbox.dialog({
-                    title: "Editar Coletador",
+                    title: "Editar Rota",
                     message: retorno,
                     animate: true,
                     onEscape: true,
@@ -209,8 +209,8 @@
             
             function confirmExcluir(button) {                
                 bootbox.confirm({
-                    title: 'Excluir Coletador?',
-                    message: 'Ao excluir o coletador a rota será perdida!<br/><br/>Deseja realmente excluir este coletador?',
+                    title: 'Excluir Rota?',
+                    message: 'Deseja realmente excluir esta rota?',
                     buttons: {
                         'cancel': {
                             label: '<i class="fa fa-lg fa-times fa-spc"></i> CANCELAR',

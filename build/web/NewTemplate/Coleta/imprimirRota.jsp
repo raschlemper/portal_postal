@@ -46,7 +46,7 @@
         <meta http-equiv="cache-control" content="no-cache">
         <meta http-equiv="Expires" content="-1">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Coletador: <%= coletador%></title>
+        <title><%= coletador%></title>
         <style>
             body{font-family:Verdana, Geneva, sans-serif; font-size:12px;}
         </style>
@@ -54,7 +54,7 @@
     <body>
         <div style="margin-top:20px;">
             <div style="font-weight:bold;font-size:medium;padding-bottom:10px;">
-                Coletador: <%= coletador%> - Rota das Coletas, gerado em <%= sdf2.format(new Date())%><br/><br/>
+               <%= coletador%> - Rota das Coletas, gerado em <%= sdf2.format(new Date())%><br/><br/>
                 * HORÁRIO DE CHEGADA NA AGF ATÉ ÀS ____:____ h SEM FALTA!
             </div>
             <table border="1" style="border: 1px solid black;" width="100%" cellspacing="0">

@@ -94,7 +94,14 @@ function handleHttpResponse() {
             }
 
         } else {
-            alert("Erro: " + http.status + " <br><br>Informa&ccedil;&atilde;o n&atilde;o dispon&iacute;vel em nosso banco de dados.<br><br> Verifique com a sua Ag&ecirc;ncia!");
+            if (http.status == 500) {
+                alert("Erro: " + http.status + " <br><br>Pagina da Receita Federal fora do AR !<br><br> Tente novamente em alguns minutos!");
+
+            } else {
+                alert("Erro: " + http.status + " <br><br>Informa&ccedil;&atilde;o n&atilde;o dispon&iacute;vel em nosso banco de dados.<br><br> Verifique com a sua Ag&ecirc;ncia!");
+
+            }
+
         }
     }
 }
@@ -235,7 +242,7 @@ function copiaDadosDestMulti(cks) {
             var nrLinha = document.getElementById('tableMultiDest').rows.length;
             var linha = document.getElementById('tableMultiDest').insertRow(nrLinha);
             linha.insertCell(0).innerHTML = "<input type='text' id='multi_qtd_" + id + "' name='multi_qtd_" + id + "' value='1' size='1' onkeypress='mascara(this, maskNumero)' />";
-            linha.insertCell(1).innerHTML = "<span style='white-space: nowrap;' id='multi_serv_label_" + id + "' >"+servico + "</span>" +
+            linha.insertCell(1).innerHTML = "<span style='white-space: nowrap;' id='multi_serv_label_" + id + "' >" + servico + "</span>" +
                     "<input type='hidden' id='multi_id' name='multi_id' class='multi_id' value='" + id + "' />" +
                     "<input type='hidden' id='multi_serv_" + id + "' name='multi_serv_" + id + "' value='" + s.value + "' />" +
                     "<input type='hidden' id='multi_nome_" + id + "' name='multi_nome_" + id + "' value='" + nome + "' />" +
@@ -251,7 +258,7 @@ function copiaDadosDestMulti(cks) {
             linha.insertCell(2).appendChild(document.createTextNode(nome));
             linha.insertCell(3).appendChild(document.createTextNode(end + ", " + num + " " + compl));
             linha.insertCell(4).appendChild(document.createTextNode(cidade + " / " + uf));
-            linha.insertCell(5).innerHTML = "<span style='white-space: nowrap;' id='multi_cep_label_" + id + "' >"+cep+"</label>";
+            linha.insertCell(5).innerHTML = "<span style='white-space: nowrap;' id='multi_cep_label_" + id + "' >" + cep + "</label>";
             linha.insertCell(6).innerHTML = "<input type='text' id='multi_nf_" + id + "' name='multi_nf_" + id + "' size='4' value='' />";
             linha.insertCell(7).innerHTML = "<select name='multi_ar_" + id + "' id='multi_ar_" + id + "'>" +
                     "<option value='0'>Nao</option>" +
@@ -412,7 +419,7 @@ function pesquisaPI(idCliente, nomeBD) {
     var servico = document.getElementById("servico").value;
     var status_pi = document.getElementById("status_pi").value;
     var departamento = document.getElementById("departamento").value;
-    http.open("GET", "../AjaxPages/consulta_reclamacoes.jsp?idCliente=" + idCliente + "&nomeBD=" + nomeBD + "&dataIni=" + dataInicio + "&dataFim=" + dataFinal + "&situacao=" + situacao + "&servico=" + servico + "&departamento=" + departamento+"&status_pi="+status_pi, true);
+    http.open("GET", "../AjaxPages/consulta_reclamacoes.jsp?idCliente=" + idCliente + "&nomeBD=" + nomeBD + "&dataIni=" + dataInicio + "&dataFim=" + dataFinal + "&situacao=" + situacao + "&servico=" + servico + "&departamento=" + departamento + "&status_pi=" + status_pi, true);
     http.onreadystatechange = handleHttpResponsePesquisaCustomizadaObjetos;
     http.send(null);
 }
@@ -452,7 +459,7 @@ function pesquisaAnalitica(idCliente, nomeBD) {
     var conteudo = document.getElementById("idConteudo").value;
     var observacao = document.getElementById("idObservacao").value;
     http.open("GET", "../AjaxPages/consulta_analitico.jsp?idCliente=" + idCliente + "&nomeBD=" + nomeBD + "&dataIni=" + dataInicio + "&dataFim=" + dataFinal + "&situacao=" + situacao + "&servico=" + servico + "&departamento=" + departamento + "&objeto=" + objeto + "&notaFiscal="
-            + notafiscal + "&destinatario=" + destinatario + "&cep=" + cep + "&ar=" + ar + "&vd=" + vd + "&uf=" + uf + "&lp=" + lp + "&tipoFat=" + tpFat + "&atrasado=" + atrasado+"&conteudo="+conteudo+"&observacao="+observacao, true);
+            + notafiscal + "&destinatario=" + destinatario + "&cep=" + cep + "&ar=" + ar + "&vd=" + vd + "&uf=" + uf + "&lp=" + lp + "&tipoFat=" + tpFat + "&atrasado=" + atrasado + "&conteudo=" + conteudo + "&observacao=" + observacao, true);
     http.onreadystatechange = handleHttpResponsePesquisaCustomizadaObjetos;
     http.send(null);
 }
@@ -700,8 +707,7 @@ function retirarAcentos(texto) {
     for (i = 0; i < texto.length; i++) {
         if (acento.search(texto.substr(i, 1)) >= 0) {
             nova += semacento.substr(acento.search(texto.substr(i, 1)), 1);
-        }
-        else {
+        } else {
             nova += texto.substr(i, 1);
         }
     }

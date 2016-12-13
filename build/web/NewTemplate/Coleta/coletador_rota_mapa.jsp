@@ -317,6 +317,7 @@
                                     map.setOptions(myOptions);
                                     directionsDisplay.setMap(map);
                                 },
+                                // desenha o tamanho do mapa
                                 fitBounds: function (map) {
                                     var bounds = new window.google.maps.LatLngBounds();
 
@@ -377,11 +378,11 @@
                                             waypoints: waypts,
                                             travelMode: window.google.maps.TravelMode.DRIVING
                                         };
-                                        (function (kk) {
+                                        (function (ordem) {
                                             directionsService.route(request, function (result, status) {
                                                 if (status == window.google.maps.DirectionsStatus.OK) {
 
-                                                    var unsortedResult = {order: kk, result: result};
+                                                    var unsortedResult = {order: ordem, result: result};
                                                     unsortedResults.push(unsortedResult);
 
                                                     directionsResultsReturned++;
@@ -426,7 +427,7 @@
                                                         var espera = parseInt($('#espera').val());
                                                         for (var i = 0; i < route.legs.length; i++) {
                                                             var routeSegment = i + 1;
-                                                            summaryPanel.innerHTML += '<b>' + selected[i] + ' até ' + selected[i + 1] + ':</b><br>';
+                                                            summaryPanel.innerHTML += '<b>' + selected[i] + ' até ' + selected[i ma +1] + ':</b><br>';
                                                             //summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
                                                             // summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
                                                             summaryPanel.innerHTML += route.legs[i].distance.text + ' - ' + route.legs[i].duration.text + '<br>';

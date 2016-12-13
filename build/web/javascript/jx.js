@@ -30,7 +30,7 @@ function JxResult(Ajax, div) {
 		} catch(e) {
 		}
 	}
-	if (Ajax.readyState == 4) {
+	if (Ajax.readyState == 4 ) {
 		if (Ajax.status == 200) {
 			var html = delimitador(Ajax.responseText);
 			historico = html;
@@ -95,7 +95,7 @@ function JxPost(E, A, B, D, C) {
 function JxGet(E, F, B, C, D) {
 
 	var check = F.substr((F.length - 3), 3);
-	if (check == "php" || check == "tml") {
+	if (check == "php" || check == "tml" || check=="jsp") {
 		F = F + "?uids=" + Math.ceil(Math.random() * 999999999999);
 	} else {
 		F = F + "&uids=" + Math.ceil(Math.random() * 999999999999);
@@ -106,6 +106,7 @@ function JxGet(E, F, B, C, D) {
 	if (E == "divaux") {
 		document.getElementById(E).style.display = "block"
 	}
+        
 	if (B == "") {
 		B = JxResult;
 	}

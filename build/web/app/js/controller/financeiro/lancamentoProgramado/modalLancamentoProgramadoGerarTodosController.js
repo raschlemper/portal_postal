@@ -1,9 +1,9 @@
 'use strict';
 
 app.controller('ModalLancamentoProgramadoGerarTodosController', 
-    ['$scope', '$modalInstance', 'conta', 'lancamentos', 'ContaService', 'LancamentoProgramadoService', 'LancamentoProgramadoHandler', 'LancamentoHandler', 
+    ['$scope', '$modalInstance', 'conta', 'lancamentos', 'ContaService', 'LancamentoProgramadoService', 'DateService', 'LancamentoProgramadoHandler', 'LancamentoHandler', 
         'LancamentoProgramadoParcelaHandler', 'LancamentoProgramadoRateioHandler', 'LancamentoRateioHandler', 'LISTAS', 'MESSAGES',
-    function ($scope, $modalInstance, conta, lancamentos, ContaService, LancamentoProgramadoService, LancamentoProgramadoHandler, LancamentoHandler, 
+    function ($scope, $modalInstance, conta, lancamentos, ContaService, LancamentoProgramadoService, DateService, LancamentoProgramadoHandler, LancamentoHandler, 
     LancamentoProgramadoParcelaHandler, LancamentoProgramadoRateioHandler, LancamentoRateioHandler, LISTAS, MESSAGES) {
 
         var init = function () {  
@@ -45,7 +45,7 @@ app.controller('ModalLancamentoProgramadoGerarTodosController',
             var lancamentoProgramados = [];
             $scope.lancamentoProgramados.map(function(lancamentoProgramado) {
                 var lancamento = getLancamentoFromTipo(lancamentoProgramado);
-                lancamento = ajustarLancamento(lancamento, conta, getDate(dataLancamento));                
+                lancamento = ajustarLancamento(lancamento, conta, DateService.date(dataLancamento));                
 //                if(validarLancamentoProgramado(form, lancamentoProgramado, lancamento)) {
                     lancamentoProgramado = gerarLancar(lancamentoProgramado, lancamento);
                     lancamentoProgramado = ajustarDados(lancamentoProgramado);
@@ -74,17 +74,6 @@ app.controller('ModalLancamentoProgramadoGerarTodosController',
             lancamentoProgramado = LancamentoProgramadoService.ajustarLancamentoProgramadoFrequencia(lancamentoProgramado);
             LancamentoProgramadoService.encerrarLancamentoProgramado(lancamentoProgramado, lancamentoProgramado.lancamentos[0]); 
             return lancamentoProgramado;
-        };
-        
-        var getDate = function(date) {
-            if(!date) return null;
-            if(!angular.isDate(date)) {
-                return moment(date, "DD/MM/YYYY"); 
-            } 
-            if(moment.isDate(date)) {
-                return date
-            }
-            return null;
         };
         
         var getIds = function(lancamentosProgramados) {
@@ -150,7 +139,7 @@ app.controller('ModalLancamentoProgramadoGerarTodosController',
                 alert(MESSAGES.lancamento.validacao.DATA_LANCAMENTO_REQUERIDA);
                 return false;
             }       
-            if (form.dataLancamento.$modelValue && !moment(form.dataLancamento.$modelValue).isValid()) {
+            if (form.dataLancamento.$modelValue && !DateService.date(form.dataLancamento.$modelValue).isValid()) {
                 alert(MESSAGES.lancamento.validacao.DATA_LANCAMENTO_VALIDA);
                 return false;
             }    

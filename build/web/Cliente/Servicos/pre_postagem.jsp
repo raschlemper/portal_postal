@@ -156,12 +156,12 @@
                     }, 20);
                 });
 
-                $('#cep').keydown(function (event) {
+                /*$('#cep').keydown(function (event) {
                     if (event.ctrlKey == true && (event.which == '118' || event.which == '86')) {
                         alert('Neste campo não é possivel COPY/PASTE!');
                         event.preventDefault();
                     }
-                });
+                });*/
                 $('#vd').keydown(function (event) {
                     if (event.ctrlKey == true && (event.which == '118' || event.which == '86')) {
                         alert('Neste campo não é possivel COPY/PASTE!');
@@ -521,7 +521,12 @@
                 if (form.tipoRg.value === '1') {
                     document.getElementById("v_regis").innerHTML = "REG. MÓDICO";
                 }
-
+                var pesoMax = form.peso.value; 
+                if(parseFloat(pesoMax).toFixed(3) > 30){
+                    alert('Peso máximo 30kg!');
+                    return false;                   
+                }
+ 
                 //VERIFICA ABRANGENCIA DE SERVIÇOS
                 if (form.servico.value === 'ESEDEX') {
                     verPesquisarAbrangenciaServ(form.cep.value, 'ESEDEX');

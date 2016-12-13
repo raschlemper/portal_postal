@@ -22,8 +22,7 @@
     <head>
         <title>Portal Postal</title>
         <%@ include file="../includes/Css_js.jsp" %>
-    </head>        
-    <body>   
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAL_k0FNw7cnO7iJrBaW8g_GisFpBuPyQo&sensor=false"></script>
         <script type="text/javascript">
             waitMsg();
 
@@ -50,6 +49,8 @@
             }
 
         </script> 
+    </head>        
+    <body>   
         <jsp:include page="../includes/navBarTop.jsp"></jsp:include>
             <div id="wrapper">
             <%@ include file="../includes/menu_agencia_bootstrap.jsp" %>
@@ -241,6 +242,8 @@
                     message: retorno,
                     animate: true,
                     onEscape: true,
+                    size: 'large',
+                    
                     buttons: {
                         "Cancelar": {
                             label: "<i class='fa fa-lg fa-times fa-spc'></i>CANCELAR",
@@ -273,6 +276,8 @@
             $(document).ready(function () {
                 LoadDataTablesScripts(AllTables);
             });
+            
+            
                         
         </script>
     </body>

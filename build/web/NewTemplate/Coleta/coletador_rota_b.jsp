@@ -55,7 +55,7 @@
                     <div id="page-wrapper">
                         <div class="row">
                             <div class="col-md-12">
-                                <h4 class="page-header"><b class="text-primary"><i class="fa fa-truck"></i> Coleta</b> > <a href="coletador_lista_b.jsp">Coletadores</a> > <small><i class="fa fa-road fa-fw"></i> Rota <i class="fa fa-long-arrow-right fa-fw"></i> <%= nomeColetador%></small></h4>
+                                <h4 class="page-header"><b class="text-primary"><i class="fa fa-truck"></i> Coleta</b> > <a href="coletador_lista_b.jsp">Cadastro de Rotas</a> > <small><i class="fa fa-road fa-fw"></i> Rota <i class="fa fa-long-arrow-right fa-fw"></i> <%= nomeColetador%></small></h4>
                             </div>
                         </div>
                         <div class="row">
@@ -231,9 +231,9 @@
                                     </ul>
                                     <ul class="list-unstyled">
                                         <li class="list-group-item list-group-heading">
-                                            <label>ESCOLHA UM COLETADOR PARA TRANSFERIR AS ROTAS SELECIONADAS</label>
+                                            <label>ESCOLHA UMA NOVA ROTA PARA TRANSFERIR O CLIENTE SELECIONADO</label>
                                             <select class="form-control" name="idColetador2" style="width:300px;">
-                                                <option value="0">-- SELECIONE UM COLETADOR --</option>
+                                                <option value="0">-- SELECIONE UMA ROTA --</option>
                                                 <%
                                                     ArrayList listaColetadores = contrColetador.consultaTodosColetadores(nomeBD);
                                                     for (int i = 0; i < listaColetadores.size(); i++) {
@@ -246,7 +246,7 @@
                                             </select><br/>
                                             <button type="submit" class="btn btn-warning" <%if (listaTipo.size() <= 0) {%> disabled <%}%> onclick="javascript:document.form1.target = '';
                                                     document.form1.action = '../../ServAlterarBoyColetaFixa';
-                                                    return validateRow();" ><i class="fa fa-lg fa-spc fa-exchange"></i> ALTERAR COLETADOR</button>
+                                                    return validateRow();" ><i class="fa fa-lg fa-spc fa-exchange"></i> TRANSFERIR</button>
                                         </li>
                                     </ul>
                                 </form>

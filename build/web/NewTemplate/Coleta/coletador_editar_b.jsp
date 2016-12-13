@@ -28,7 +28,7 @@
         <li class="list-group-item ">
             <div class="row">
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                <label class="small">Nome do Coletador</label>
+                <label class="small">Nome da Rota</label>
                 <div class="input-group">
                     <span class="input-group-addon" ><i class="fa fa-user"></i></span>
                     <input type="text" name="nome"  class="form-control" placeholder="Nome do Coletador"  value='<%= nome%>' />
@@ -39,7 +39,7 @@
         <li class="list-group-item">
             <div class="row">
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                <label class="small">Celular do Coletador</label>
+                <label class="small">Telefone de Contato</label>
                 <div class="input-group">
                     <span class="input-group-addon" ><i class="fa fa-phone"></i></span>
                     <input type="text" name="telefone" onKeyPress="mascara(this, maskTelefone)"  class="form-control" placeholder="Celular" value='<%= telefone%>' />

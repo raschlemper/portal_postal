@@ -29,7 +29,7 @@
 
     SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
     SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
-    
+
     String nomeBD = (String) session.getAttribute("empresa");
     if (nomeBD == null) {
         response.sendRedirect("../index.jsp?msgLog=3");
@@ -46,7 +46,6 @@
             dataAtual = FormatarData.somarHorasNaData(new Date(), -1);
         }
 
-        Map<Integer, ArrayList<Coleta>> lsC = contrColetaFixa.verificaExistenciaRotaParaCliente(nomeBD);
 
 %>
 
@@ -55,6 +54,7 @@
     <head>
         <title>Portal Postal</title>
         <%@ include file="../includes/Css_js.jsp" %>
+        <script src="../../javascript/jx.js" type="text/javascript"></script>
     </head>
     <body>
         <script>
@@ -84,49 +84,38 @@
                                         <li class="list-group-item">
                                             <div class="row form-horizontal">
                                                 <div class="col-xs-6">
-                                                    <select name="idCliente" id="idCliente">
+                                                    <select  name="idCliente" id="idCliente" onchange="carregaDepartamento(this.value)">
                                                         <option value="sel">-- Selecione um Cliente --</option>
                                                         <%
                                                             ArrayList<Clientes> listaCliente = Controle.contrCliente.getNomeCodigoMetodo(nomeBD, false);
                                                             for (int i = 0; i < listaCliente.size(); i++) {
-                                                                if (idCliente == listaCliente.get(i).getCodigo()) {
-                                                                    out.println("<option  selected value='" + listaCliente.get(i).getCodigo() + "'>[" + listaCliente.get(i).getCodigo() + "] " + listaCliente.get(i).getNome() + "</option>");
-                                                                } else {
-                                                                    out.println("<option  value='" + listaCliente.get(i).getCodigo() + "'>[" + listaCliente.get(i).getCodigo() + "] " + listaCliente.get(i).getNome() + "</option>");
+                                                                if (listaCliente.get(i).getCodigo() > 0 ) {
+
+                                                                    if (idCliente == listaCliente.get(i).getCodigo()) {
+                                                                        out.println("<option  selected value='" + listaCliente.get(i).getCodigo() + "'>[" + listaCliente.get(i).getCodigo() + "] " + listaCliente.get(i).getNome() + "</option>");
+                                                                    } else {
+                                                                        out.println("<option  value='" + listaCliente.get(i).getCodigo() + "'>[" + listaCliente.get(i).getCodigo() + "] " + listaCliente.get(i).getNome() + "</option>");
+                                                                    }
                                                                 }
                                                             }
                                                         %>
                                                     </select>
-                                                </div>                                              
+                                                </div> 
+                                                <div class="col-xs-6">
+                                                    <select  name="idDepartamento" id="idDepartamento" onchange="carregaEnderecoDepartamento(this)">
+                                                        <option value="sel">-- Selecione um Departamento --</option>
+                                                        <%
+
+                                                        %>
+                                                    </select>
+                                                </div>        
                                             </div>
                                         </li>   
-                                        <%
-                                            for (int i = 0; i < listaCliente.size(); i++) {
-                                        %>
-                                        <li class="list-group-item hidden" id="end<%=listaCliente.get(i).getCodigo()%>">
-                                            <div class="row form-horizontal">
-                                                <div class="col-xs-6">
-                                                    <div><strong><%= listaCliente.get(i).getNome()%></strong></div>
-                                                    <div><%=  listaCliente.get(i).getEndereco()%> - <%=  listaCliente.get(i).getBairro()%></div>
-                                                    <div>Fone:<%=  listaCliente.get(i).getTelefone()%></div>
-                                                    <div><a href="mailto:#"><%= listaCliente.get(i).getEmail()%></a></div>
-                                                    <div><strong>Rota(s):</strong></div>
-                                                    <%
-                                                        if (lsC.containsKey(listaCliente.get(i).getCodigo())) {
-                                                            ArrayList<Coleta> colts = lsC.get(listaCliente.get(i).getCodigo());
-                                                            for (Coleta cl : colts) {
-                                                                String fx = "eventual";
-                                                                if (cl.getIdTipo() == 1) {
-                                                                    fx = "fixo";
-                                                                }%>
-                                                    <div><%= cl.getNomeColetador()%> - <%= cl.getTipoColeta()%> - <%=fx%></div>
-                                                    <% }
-                                                                    }%>
 
-                                                </div>
-                                            </div>
+                                        <li class="list-group-item" id="idEndereco">
+
                                         </li>
-                                        <%}%>
+
                                     </ul>
                                 </div>
                             </div>            
@@ -138,7 +127,7 @@
                                         </li>
                                         <li class="list-group-item">
                                             <div id="divSelectContato" class="row form-horizontal">
-                                                <div id="selectContato" class="col-xs-6">
+                                                <div id="selectContato" class="col-xs-3">
                                                     <select name="contato" id="contato" disabled >
                                                         <option value="">-- Selecione primeiro um cliente --</option>
                                                     </select>
@@ -190,8 +179,7 @@
                                                     <label class="small">Coletador</label>
                                                     <select name="idColetador" id="idColetador">
                                                         <option value="0">-- SELECIONE --</option>
-                                                        <%
-                                                            int coletadorEventual = contrColetaFixa.consultaColetadorEventualDoCliente(idCliente, nomeBD);
+                                                        <%                                                            int coletadorEventual = contrColetaFixa.consultaColetadorEventualDoCliente(idCliente, nomeBD);
                                                             ArrayList listaColetador = contrColetador.consultaTodosColetadores(nomeBD);
                                                             for (int i = 0; i < listaColetador.size(); i++) {
                                                                 Coletador col = (Coletador) listaColetador.get(i);
@@ -258,83 +246,6 @@
                             <input type="hidden" name="idUsuario" id="idUsuario" value="<%= idUsuario%>" />
                         </form>
                     </div>
-
-                    <%--
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="panel panel-default">
-                                <div class="panel-heading" >Resultado da Pesquisa</div>
-                                <div class="panel-body">
-
-                                    <div class="dataTable_wrapper">
-
-                                        <table class="table table-striped table-bordered table-hover table-condensed" id="dataTables-etqPend">
-                                            <thead>
-                                                <tr>
-                                                    <th>Nº</th>
-                                                    <th>Tipo</th>
-                                                    <th>Coletador</th>
-                                                    <th>Solicitado em</th>
-                                                    <th>Coleta para</th>
-                                                    <th>Status da Coleta</th>
-                                                    <th>Obs</th>
-                                                    <th>Cadastrado por</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <%
-                                                    ArrayList listaColetas = Coleta.Controle.contrColeta.consultaUltimasColetasDoCliente(idCliente, nomeBD);
-                                                    for (int j = 0; j < listaColetas.size(); j++) {
-                                                        Coleta.Entidade.Coleta col = (Coleta.Entidade.Coleta) listaColetas.get(j);
-                                                        int idColeta = col.getIdColeta();
-                                                        int idTipo = col.getIdTipo();
-                                                        String tipo = Coleta.Controle.contrTipoColeta.consultaNomeTipoColetaById(idTipo, nomeBD);
-                                                        int idColetador = col.getIdColetador();
-                                                        String coletador = Coleta.Controle.contrColetador.consultaNomeColetadoresById(idColetador, nomeBD);
-                                                        int idUsuarios = col.getIdUsuario();
-                                                        String obs = col.getObs();
-                                                        String user = Controle.contrUsuario.consultaNomeUsuarioById(idUsuarios, nomeBD);
-                                                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                                                        String dataSolicitacao = sdf.format(col.getDataHoraSolicitacao());
-                                                        String dataColeta = sdf.format(col.getDataHoraColeta());
-                                                        String dataBaixa = "";
-                                                        if (col.getDataHoraBaixa() != null) {
-                                                            dataBaixa = sdf.format(col.getDataHoraBaixa());
-                                                        }
-                                                        int status = col.getStatus();
-                                                        String nomeStatus = "";
-                                                        switch (status) {
-                                                            case 1:
-                                                                nomeStatus = "Solicitada";
-                                                                break;
-                                                            case 2:
-                                                                nomeStatus = "Aguardando Coleta";
-                                                                break;
-                                                            case 3:
-                                                                nomeStatus = "Coletado em " + dataBaixa;
-                                                                break;
-                                                        }
-                                                %>
-                                                <tr>
-                                                    <td><b><%= idColeta%></b></td>
-                                                    <td><%= tipo%></td>
-                                                    <td><%= coletador%></td>
-                                                    <td><%= dataSolicitacao%></td>
-                                                    <td><%= dataColeta%></td>
-                                                    <td><%= nomeStatus%></td>
-                                                    <td><%= obs%></td>
-                                                    <td><%= user%></td>
-                                                </tr>
-                                                <%}%>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    --%>                    
-
                 </div>
             </div>
         </div>
@@ -443,15 +354,17 @@
             });
 
             function ajaxPreencherComboContato(idCliente) {
-                $.ajax({
-                    method: "POST",
-                    url: "ajax/montaComboContato.jsp",
-                    data: {id: idCliente},
-                    dataType: 'html'
-                }).done(function (data) {
-                    $('#selectContato').html(data);
-                    LoadSelect2Script(selectCliente);
-                });
+                if (idCliente != "sel") {
+                    $.ajax({
+                        method: "POST",
+                        url: "ajax/montaComboContato.jsp",
+                        data: {id: idCliente},
+                        dataType: 'html'
+                    }).done(function (data) {
+                        $('#selectContato').html(data);
+                        LoadSelect2Script(selectCliente);
+                    });
+                }
             }
             function ajaxDadosDoContato(idCliente) {
                 $.ajax({
@@ -474,6 +387,7 @@
                 $('#contato').select2();
                 $('#idColetador').select2();
                 $('#idTipo').select2();
+                $('#idDepartamento').select2();
             }
 
             function AllTables() {
@@ -497,8 +411,34 @@
 
             });
 
-        </script>
+            function carregaDepartamento(idCliente) {
+                if (idCliente != "sel") {
+                    var parameter = 'idCliente=' + idCliente+
+                                    '&idDepartamento='+0;
+                    JxGet('idDepartamento', 'ajax/comboDepartamento.jsp?'+parameter, false);
+                    JxGet('idEndereco', 'ajax/divEndereco.jsp?'+parameter, false);
+                } else {
+                    $("#idEndereco").html('');
+                }
+            }
+            
+            function carregaEnderecoDepartamento(elemento){
+                var temEndereco = $(elemento).find(':selected').attr('data');
+                var idCliente = $('#idCliente').val();
+                var idDepartamento = elemento.value;
+                if(temEndereco==1){
+                    var parameter = 'idCliente=' + idCliente+
+                                    '&idDepartamento='+idDepartamento;
+                    JxGet('idEndereco', 'ajax/divEndereco.jsp?'+parameter, false);
+                }else{
+                    var parameter = 'idCliente=' + idCliente+
+                                    '&idDepartamento=0';
+                    JxGet('idEndereco', 'ajax/divEndereco.jsp?'+parameter, false);
+                    
+                }
+            }
 
+        </script>
     </body>
 </html>
 <%}%>

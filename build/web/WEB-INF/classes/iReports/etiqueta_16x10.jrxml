@@ -359,9 +359,9 @@
 				<textFieldExpression><![CDATA[$F{remetente_logradouro}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Opaque" x="210" y="323" width="37" height="62" forecolor="#FFFFFF" backcolor="#000000" uuid="82cf93b8-a1c2-419c-a604-3513d6b085f8"/>
+				<reportElement mode="Opaque" x="210" y="323" width="37" height="61" forecolor="#FFFFFF" backcolor="#000000" uuid="82cf93b8-a1c2-419c-a604-3513d6b085f8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
-					<font fontName="SansSerif" size="28" isBold="true"/>
+					<font fontName="SansSerif" size="22" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{sigla_triagem}]]></textFieldExpression>
 			</textField>

@@ -58,7 +58,7 @@
             <ul class="nav-pills nav-stacked" style="list-style-type:none;">
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(206)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Coleta/pesquisar_b_1.jsp">Acompanhamento<%if (!qtdWeb.equals("0")) {%><span class="label label-danger"><%= qtdWeb%></span><%}%> </a></li>  <%}%>
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(202)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Coleta/novaColeta_b.jsp">Nova Coleta</a></li><%}%>
-                <%if (usrMenu.getListaAcessosPortalPostal().contains(203)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Coleta/coletador_lista_b.jsp">Coletadores</a></li><%}%>
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(203)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Coleta/coletador_lista_b.jsp">Cadastro de Rotas</a></li><%}%>
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(204)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Coleta/tipo_coleta_lista_b.jsp">Tipos de Coleta</a></li><%}%>
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(205)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Cadastros/config_hora_coleta_b.jsp">Horários da Coleta</a></li><%}%>
             </ul>
@@ -76,14 +76,17 @@
         </li>
         <li><a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-gears fa-stack-1x "></i></span> Cadastros <span style="margin: 5px 20px 0 0;" class="fa-stack fa-fw pull-right"><i id="arrow" class="fa fa-chevron-down fa-stack-1x "></i></span></a>
             <ul class="nav-pills nav-stacked" style="list-style-type:none;">
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(405)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Cadastros/cliente_lista_b.jsp">Clientes</a></li><%}%>
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(401)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Cadastros/servicos_prefixos_b.jsp">Prefixos de Etiquetas</a></li><%}%>
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(402)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Cadastros/servicos_abrangencia_b.jsp">Abrangência de Serviços</a></li><%}%>
-                <%if (usrMenu.getListaAcessosPortalPostal().contains(403)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Cadastros/amarracao_lista_b.jsp">Amarrações</a></li><%}%>
-                <%if (usrMenu.getListaAcessosPortalPostal().contains(404)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Cadastros/usuario_lista_b.jsp">Usuários da Agência</a></li><%}%>
-                <%if (usrMenu.getListaAcessosPortalPostal().contains(405)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Cadastros/cliente_lista_b.jsp">Clientes</a></li><%}%>
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(403)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Cadastros/amarracao_lista_b.jsp">Amarrações</a></li><%}%>                             
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(407)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Cadastros/grupo_faturamento_lista_b.jsp">Grupos de Faturamento</a></li><%}%>
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(406)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Cadastros/cliente_log_contrato_b.jsp">Verificação de Contratos</a></li><%}%>
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(408)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Cadastros/vendedor_lista_b.jsp">Vendedores</a></li><%}%>
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(404)) {%><li><a href="${pageContext.request.contextPath}/NewTemplate/Cadastros/usuario_lista_b.jsp">Usuários da Agência</a></li><%}%>   
+                
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(605)) {%><li><a href="${pageContext.request.contextPath}/app/financeiro/colaborador">Colaboradores</a></li><%}%>
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(605)) {%><li><a href="${pageContext.request.contextPath}/app/financeiro/fornecedor">Fornecedores</a></li><%}%>
             </ul>
         </li>
 
@@ -123,21 +126,20 @@
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(603)) {%><li><a href="${pageContext.request.contextPath}/app/financeiro/lancamento/programado">Programação</a></li><%}%>
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(604)) {%><li><a href="${pageContext.request.contextPath}/app/financeiro/demonstrativo">Demonstrativo</a></li><%}%>
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(604)) {%><li><a href="${pageContext.request.contextPath}/app/financeiro/fluxocaixa">Fluxo de Caixa</a></li><%}%>
+                <%if (usrMenu.getListaAcessosPortalPostal().contains(605)) {%><li><a href="${pageContext.request.contextPath}/app/financeiro/configuracao">Configuração</a></li><%}%>
                 <%if (usrMenu.getListaAcessosPortalPostal().contains(605)) {%><li>
                     <a href="#">
                         Cadastros <span style="margin: 5px 20px 0 0;" class="fa-stack fa-fw pull-right"><i id="arrow" class="fa fa-chevron-down fa-stack-1x "></i></span>
                     </a> 
                     <ul class="nav-pills nav-stacked" style="list-style-type:none;">
-                        <li style="display:none;"><a href="${pageContext.request.contextPath}/app/financeiro/banco">Banco</a></li>
-                        <li><a href="${pageContext.request.contextPath}/app/financeiro/configuracao">Configuração</a></li>
-                        <li><a href="${pageContext.request.contextPath}/app/financeiro/colaborador">Colaborador</a></li>
-                        <li><a href="${pageContext.request.contextPath}/app/financeiro/fornecedor">Fornecedor</a></li>
+                        <li><a href="${pageContext.request.contextPath}/app/financeiro/conta">Conta</a></li>
                         <li><a href="${pageContext.request.contextPath}/app/financeiro/planoconta">Plano Conta</a></li>
                         <li><a href="${pageContext.request.contextPath}/app/financeiro/centrocusto">Centro Custo</a></li>
                         <li><a href="${pageContext.request.contextPath}/app/financeiro/contacorrente">Conta Corrente</a></li>
-                        <li><a href="${pageContext.request.contextPath}/app/financeiro/carteiracobranca">Carteira Cobrança</a></li>
+                        <li style="display:none;"><a href="${pageContext.request.contextPath}/app/financeiro/banco">Banco</a></li>
                         <li><a href="${pageContext.request.contextPath}/app/financeiro/cartaocredito">Cartão Crédito</a></li>
-                        <li><a href="${pageContext.request.contextPath}/app/financeiro/conta">Conta</a></li>
+                        <li><a href="${pageContext.request.contextPath}/app/financeiro/carteiracobranca">Carteira Cobrança</a></li>
+
                     </ul>
                 </li>
                 <%}%>

@@ -350,7 +350,7 @@
 			<textField>
 				<reportElement mode="Opaque" x="217" y="334" width="37" height="65" forecolor="#FFFFFF" backcolor="#000000" uuid="f6b53fd2-f1fa-48da-98bd-d0d4a686762b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
-					<font fontName="SansSerif" size="27" isBold="true"/>
+					<font fontName="SansSerif" size="23" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{sigla_triagem}]]></textFieldExpression>
 			</textField>
