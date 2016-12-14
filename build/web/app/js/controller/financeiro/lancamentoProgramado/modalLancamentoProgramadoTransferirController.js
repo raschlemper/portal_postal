@@ -117,7 +117,7 @@ app.controller('ModalLancamentoProgramadoTransferirController',
         // ***** VALIDAR ***** //
         
         var validarLancamento = function(form, lancamentoProgramadoTransferencia) {
-            if (!validarForm(form, lancamentoProgramadoTransferencia)) return;
+            if (!$scope.validarForm(form, lancamentoProgramadoTransferencia)) return;
             ConfiguracaoService.get()
                 .then(function(data) {
                     if(!validarLancamentoByConfiguracao(data, lancamentoProgramadoTransferencia)) return;

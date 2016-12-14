@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-  <persistence-unit name="Portal_Postal" transaction-type="RESOURCE_LOCAL">
+  <persistence-unit name="Portal_Postal_WebPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>br.com.portalpostal.entity.PreVenda</class>
-    <class>br.com.portalpostal.entity.PreVendaDestinatario</class>
-    <class>br.com.portalpostal.entity.LayoutImportacao</class>
-    <class>br.com.portalpostal.entity.Testejoin</class>
-    <class>br.com.portalpostal.entity.Cliente</class>
-    <class>br.com.portalpostal.entity.ClienteContrato</class>
-    <class>br.com.portalpostal.entity.ServicosEct</class>
-    <class>br.com.portalpostal.entity.ClienteDestinatario</class>
-    <class>br.com.portalpostal.entity.Coleta</class>
-    <class>br.com.portalpostal.entity.ClienteDepartamento</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://scc4-ricardinho:3306/pp_06895434000183?zeroDateTimeBehavior=convertToNull"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="1s2c3c4"/>
+    </properties>
   </persistence-unit>
 </persistence>

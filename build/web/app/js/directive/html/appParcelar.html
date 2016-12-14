@@ -35,7 +35,7 @@
                     <!--<th>Competência</th>-->
                     <th class="col-md-3 text-center">Vencimento</th>
                     <th>Valor</th>
-                    <th class="col-md-1 text-center" ng-if="!onlyView"></th>
+                    <th class="col-md-1 text-center" ng-if="!onlyView" ng-hide="true"></th>
                 </tr>
             </thead>     
             <tbody>
@@ -52,7 +52,7 @@
                     <td ng-if="!parcela.lancamento">
                         <input type="text" autocomplete="off" name="valor" class="form-control text-right" ui-number-mask="2" ng-model="parcela.valor" ng-required="true"/>
                     </td>
-                    <td class="text-center" ng-if="!onlyView">
+                    <td class="text-center" ng-if="!onlyView" ng-hide="true">
                         <button type="button" class="btn btn-sm btn-primary" 
                                 ng-click="lancar(form, lancamentoParcelar, parcela)"
                                 ng-show="lancamentoParcelar.situacao.codigo === 'ativo'" 

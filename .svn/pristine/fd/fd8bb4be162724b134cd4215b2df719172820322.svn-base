@@ -1,0 +1,67 @@
+<div class="row subtitle-modal" style="padding: 5px;">   
+    <div class="col-lg-9">           
+        <div style="font-size: 14pt; margin-top: 5px;"><strong>Parcelas</strong></div>
+    </div>  
+    <div class="col-lg-3" ng-if="!onlyView"> 
+        <button type="button" class="btn btn-default pull-right" ng-click="parcelar(lancamentoParcelar)" ng-hide="show" 
+                ng-disabled="(lancamentoParcelar.lancamentos.length || !lancamentoParcelar.valor)">
+            <i class="fa fa-lg fa-plus fa-spc"></i> PARCELAR
+        </button>      
+        <button type="button" class="btn btn-default pull-right" ng-click="cancelarParcelar(lancamentoParcelar);" ng-show="show" 
+                ng-disabled="(lancamentoParcelar.lancamentos.length || !lancamentoParcelar.valor)">
+            <i class="fa fa-lg fa-minus fa-spc"></i> CANCELAR PARCELAR
+        </button>      
+    </div>
+</div>
+
+<div class="row " ng-show="show" style="margin-top: 10px;">  
+    <div class="col-xs-12 col-sm-6 col-md-12 col-lg-12 form-inline" ng-if="!onlyView">
+        <label class="small">Selecione a quantidade de parcelas</label>
+        <div class="input-group" for="quantidadeParcela">
+            <input class="form-control" type="text" id="quantidadeParcela" name="quantidadeParcela" ng-model="lancamentoParcelar.quantidadeParcela" ng-change="createParcelas(lancamentoParcelar)"
+                   placeholder="Quantidade de parcelas" ng-disabled="disabledNumeroParcela(lancamentoParcelar.parcelas)"/>  
+        </div>
+    </div> 
+
+    <hr ng-if="!onlyView"/>
+    
+    <div class="table-responsive container-fluid">
+        <table class="table table-striped table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th>Número</th>
+                    <th>Plano Conta</th>
+                    <th>Centro Custo</th>
+                    <!--<th>Competência</th>-->
+                    <th class="col-md-3 text-center">Vencimento</th>
+                    <th>Valor</th>
+                    <th class="col-md-1 text-center" ng-if="false || !onlyView"></th>
+                </tr>
+            </thead>     
+            <tbody>
+                <tr ng-repeat="parcela in lancamentoParcelar.parcelas track by $index">
+                    <td>{{parcela.numeroLancamento}} - {{parcela.numero}}</td>
+                    <td>{{parcela.planoConta.descricao}}</td>
+                    <td>{{parcela.centroCusto.descricao}}</td>
+                    <!--<td>{{parcela.dataCompetencia | date : 'dd/MM/yyyy'}}</td>-->
+                    <td class="text-center" ng-if="parcela.lancamento">{{parcela.dataVencimento | date : 'dd/MM/yyyy'}}</td>
+                    <td class="col-md-2 text-center" ng-if="!parcela.lancamento">
+                        <app-datepicker class="input-group-modal" placeholder="Data do vencimento" name="dataVencimento" datepicker-model="parcela.dataVencimento"></app-datepicker>
+                    </td>
+                    <td class="text-right" ng-if="parcela.lancamento">{{parcela.valor | currency : 'R$ '}}</td>
+                    <td ng-if="!parcela.lancamento">
+                        <input type="text" autocomplete="off" name="valor" class="form-control text-right" ui-number-mask="2" ng-model="parcela.valor" ng-required="true"/>
+                    </td>
+                    <td class="text-center" ng-if="false || !onlyView">
+                        <button type="button" class="btn btn-sm btn-primary" 
+                                ng-click="lancar(form, lancamentoParcelar, parcela)"
+                                ng-show="lancamentoParcelar.situacao.codigo === 'ativo'" 
+                                ng-if="!parcela.lancamento">
+                            <i class="fa fa-sm fa-plus fa-spc"></i>Lançar
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
